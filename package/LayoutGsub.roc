@@ -144,8 +144,13 @@ LayoutGsub := {
 	## `idx`, and, when `output`, the output written so far. `serial`
 	## numbers ligatures, `random` is the `rand` feature's state, `ops`
 	## the nested lookups applied so far and `stopped` the bounds that
-	## stopped work so far (see `Applied`).
-	Buf : { info : List(Item), out : List(Item), idx : U64, output : Bool, serial : U64, random : U64, ops : U64, stopped : U64 }
+	## stopped work so far (see `Applied`). HarfBuzz writes its output over
+	## its input until a multiple substitution needs room, and only then
+	## copies it apart; `aliased` says the output still shares the input's
+	## storage, so the input's first `out.len()` items are the output's.
+	## Only `rand`'s unsafe-to-break range reads that region, which
+	## otherwise holds consumed input.
+	Buf : { info : List(Item), out : List(Item), idx : U64, output : Bool, serial : U64, random : U64, ops : U64, stopped : U64, aliased : Bool }
 
 	## A contextual rule being applied (HarfBuzz's `apply_lookup`): its
 	## nested lookup records, the next one, how many matched positions it
@@ -397,8 +402,8 @@ LayoutGsub := {
 			if lookup.count > 0 and LayoutGsub.any_start(lookup, $run, step.mask) {
 				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index }
 				if lookup.reverse {
-					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped }, limits, $work)
-					{ info, out: _, idx: _, output: _, serial, random, ops, stopped } = buf
+					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
+					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
 					$run = info
 					$serial = serial
 					$random = random
@@ -408,8 +413,8 @@ LayoutGsub := {
 				} else if lookup.mode == 0 {
 					$run = LayoutGsub.apply_singles(shape, lookup, ctx, $run)
 				} else {
-					{ buf, work } = LayoutGsub.apply_forward(shape, lookup, ctx, { info: $run, out: $spare.clear().reserve($run.len()), idx: 0, output: True, serial: $serial, random: $random, ops: $ops, stopped: $stopped }, limits, $work)
-					{ info, out, idx, output: _, serial, random, ops, stopped } = buf
+					{ buf, work } = LayoutGsub.apply_forward(shape, lookup, ctx, { info: $run, out: $spare.clear().reserve($run.len()), idx: 0, output: True, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: True }, limits, $work)
+					{ info, out, idx, output: _, serial, random, ops, stopped, aliased: _ } = buf
 					# Sync: the rest of the input follows the output.
 					$run = if (idx < info.len()) out.concat(info.drop_first(idx)) else out
 					$spare = info
@@ -605,14 +610,14 @@ LayoutGsub := {
 	replace_glyph : LayoutGsub, Buf, U64, U64 -> Buf
 	replace_glyph = |shape, buf, glyph, step| {
 		# Destructured, so the lists are not also held by `buf`.
-		{ info, out, idx, output, serial, random, ops, stopped } = buf
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 		cur = info.get(idx) ?? LayoutGsub.no_item
 		item = LayoutGsub.resubstituted({ ..LayoutGsub.set_glyph_class(shape, cur, glyph, 0, False, False), glyph }, step)
 		if output {
-			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops, stopped }
+			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops, stopped, aliased }
 		} else {
 			# The cursor is inside the input.
-			{ info: info.set(idx, item) ?? [], out, idx: idx + 1, output, serial, random, ops, stopped }
+			{ info: info.set(idx, item) ?? [], out, idx: idx + 1, output, serial, random, ops, stopped, aliased }
 		}
 	}
 
@@ -635,7 +640,7 @@ LayoutGsub := {
 				# Over the growth bound: not made, and said so.
 				{ buf: { ..buf, stopped: buf.stopped.bitwise_or(LayoutGsub.stopped_growth) }, work, outcome: NotApplied }
 			} else {
-				{ info, out, idx, output, serial, random, ops, stopped } = buf
+				{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 				cur = info.get(idx) ?? LayoutGsub.no_item
 				klass = if (LayoutGsub.gprops(cur).bitwise_and(LayoutGsub.ligature) != 0) LayoutGsub.base_glyph else 0
 				attached = LayoutGsub.lig_id(cur) != 0
@@ -648,7 +653,9 @@ LayoutGsub := {
 					kind = if (i == 0) LayoutGsub.origin_multiple else LayoutGsub.origin_inserted
 					$out = $out.append(LayoutGsub.with_origin({ ..$cur, glyph }, kind, ctx.step, 0))
 				}
-				{ buf: { info, out: $out, idx: idx + 1, output, serial, random, ops, stopped }, work, outcome: Applied }
+				# HarfBuzz copies its output apart once it would overtake
+				# the input: before the cursor moves past the replaced glyph.
+				{ buf: { info, out: $out, idx: idx + 1, output, serial, random, ops, stopped, aliased: aliased and $out.len() <= idx }, work, outcome: Applied }
 			}
 		}
 	}
@@ -674,9 +681,8 @@ LayoutGsub := {
 					# HarfBuzz's state is 32 bits: the product wraps before the
 					# remainder.
 					next = (buf.random * 48271).bitwise_and(0xFFFFFFFF) % 2147483647
-					n = buf.info.len()
-					{ info, out, idx, output, serial, random: _, ops, stopped } = LayoutGsub.unsafe_to_break(buf, 0, n)
-					{ index: next % count + 1, after: { info, out, idx, output, serial, random: next, ops, stopped } }
+					{ info, out, idx, output, serial, random: _, ops, stopped, aliased } = LayoutGsub.unsafe_to_break_all(buf)
+					{ index: next % count + 1, after: { info, out, idx, output, serial, random: next, ops, stopped, aliased } }
 				} else {
 					{ index: chosen, after: buf }
 				}
@@ -780,12 +786,12 @@ LayoutGsub := {
 			before = LayoutGsub.match_backtrack(shape, ctx, buf, back, sub.back_len)
 			after = LayoutGsub.match_lookahead(shape, ctx, buf, ahead, sub.ahead_len, buf.idx + 1)
 			if before.ok and after.ok {
-				{ info, out, idx, output, serial, random, ops, stopped } = LayoutGsub.unsafe_to_break_from_outbuffer(buf, before.start, after.end)
+				{ info, out, idx, output, serial, random, ops, stopped, aliased } = LayoutGsub.unsafe_to_break_from_outbuffer(buf, before.start, after.end)
 				cur = info.get(idx) ?? LayoutGsub.no_item
 				glyph = shape.values.get(sub.data + at) ?? 0
 				item = LayoutGsub.resubstituted({ ..LayoutGsub.set_glyph_class(shape, cur, glyph, 0, False, False), glyph }, ctx.step)
 				# The cursor is inside the input.
-				{ buf: { info: info.set(idx, item) ?? [], out, idx, output, serial, random, ops, stopped }, work, outcome: Applied }
+				{ buf: { info: info.set(idx, item) ?? [], out, idx, output, serial, random, ops, stopped, aliased }, work, outcome: Applied }
 			} else {
 				{ buf, work, outcome: NotApplied }
 			}
@@ -1291,7 +1297,7 @@ LayoutGsub := {
 		lig_glyph = made.glyph
 		total = made.total
 		merged = LayoutGsub.merge_clusters(start, start.idx, match_end)
-		{ info: info_in, out: out_in, idx: idx_in, output, serial: serial_in, random, ops, stopped } = merged
+		{ info: info_in, out: out_in, idx: idx_in, output, serial: serial_in, random, ops, stopped, aliased } = merged
 		first = info_in.get(positions.get(0) ?? 0) ?? LayoutGsub.no_item
 		var $is_base = LayoutGsub.gprops(first).bitwise_and(LayoutGsub.base_glyph) != 0
 		var $is_mark = LayoutGsub.is_mark_item(first)
@@ -1359,7 +1365,7 @@ LayoutGsub := {
 				}
 			}
 		}
-		{ info: $info, out: $out, idx: $idx, output, serial, random, ops, stopped }
+		{ info: $info, out: $out, idx: $idx, output, serial, random, ops, stopped, aliased }
 	}
 
 	## The next ligature id (HarfBuzz's `_hb_allocate_lig_id`: an 8-bit
@@ -1383,26 +1389,26 @@ LayoutGsub := {
 	## Copy the item at the cursor to the output and move on.
 	next_glyph : Buf -> Buf
 	next_glyph = |buf| {
-		{ info, out, idx, output, serial, random, ops, stopped } = buf
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 		if output {
 			item = info.get(idx) ?? LayoutGsub.no_item
-			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops, stopped }
+			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops, stopped, aliased }
 		} else {
-			{ info, out, idx: idx + 1, output, serial, random, ops, stopped }
+			{ info, out, idx: idx + 1, output, serial, random, ops, stopped, aliased }
 		}
 	}
 
 	next_glyphs : Buf, U64 -> Buf
 	next_glyphs = |buf, n| {
-		{ info, out, idx, output, serial, random, ops, stopped } = buf
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 		if output {
 			var $out = out
 			for k in idx..<(idx + n) {
 				$out = $out.append(info.get(k) ?? LayoutGsub.no_item)
 			}
-			{ info, out: $out, idx: idx + n, output, serial, random, ops, stopped }
+			{ info, out: $out, idx: idx + n, output, serial, random, ops, stopped, aliased }
 		} else {
-			{ info, out, idx: idx + n, output, serial, random, ops, stopped }
+			{ info, out, idx: idx + n, output, serial, random, ops, stopped, aliased }
 		}
 	}
 
@@ -1411,31 +1417,31 @@ LayoutGsub := {
 	## output to the input.
 	move_to : Buf, U64 -> Buf
 	move_to = |buf, i| {
-		{ info, out, idx, output, serial, random, ops, stopped } = buf
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 		written = out.len()
 		if !output {
-			{ info, out, idx: i, output, serial, random, ops, stopped }
+			{ info, out, idx: i, output, serial, random, ops, stopped, aliased }
 		} else if written < i {
 			count = (i - written).min(info.len() - idx.min(info.len()))
 			var $out = out
 			for k in idx..<(idx + count) {
 				$out = $out.append(info.get(k) ?? LayoutGsub.no_item)
 			}
-			{ info, out: $out, idx: idx + count, output, serial, random, ops, stopped }
+			{ info, out: $out, idx: idx + count, output, serial, random, ops, stopped, aliased }
 		} else if written > i {
 			count = written - i
 			if idx < count {
-				{ info: out.sublist({ start: i, len: count }).concat(info.drop_first(idx)), out: out.take_first(i), idx: 0, output, serial, random, ops, stopped }
+				{ info: out.sublist({ start: i, len: count }).concat(info.drop_first(idx)), out: out.take_first(i), idx: 0, output, serial, random, ops, stopped, aliased }
 			} else {
 				var $info = info
 				for k in 0..<count {
 					# `idx - count + k < idx <= len`.
 					$info = $info.set(idx - count + k, out.get(i + k) ?? LayoutGsub.no_item) ?? []
 				}
-				{ info: $info, out: out.take_first(i), idx: idx - count, output, serial, random, ops, stopped }
+				{ info: $info, out: out.take_first(i), idx: idx - count, output, serial, random, ops, stopped, aliased }
 			}
 		} else {
-			{ info, out, idx, output, serial, random, ops, stopped }
+			{ info, out, idx, output, serial, random, ops, stopped, aliased }
 		}
 	}
 
@@ -1454,7 +1460,7 @@ LayoutGsub := {
 		if end_in <= start + 1 {
 			buf
 		} else {
-			{ info, out, idx, output, serial, random, ops, stopped } = buf
+			{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 			n = info.len()
 			end0 = end_in.min(n)
 			cluster = LayoutGsub.min_cluster(info, start, end0, (info.get(start) ?? LayoutGsub.no_item).cluster)
@@ -1485,7 +1491,7 @@ LayoutGsub := {
 				# `i < $end <= n`.
 				$info = $info.set(i, LayoutGsub.set_cluster($info.get(i) ?? LayoutGsub.no_item, cluster)) ?? []
 			}
-			{ info: $info, out: $out, idx, output, serial, random, ops, stopped }
+			{ info: $info, out: $out, idx, output, serial, random, ops, stopped, aliased }
 		}
 
 	## Delete the item at the cursor, merging its cluster as HarfBuzz's
@@ -1508,7 +1514,7 @@ LayoutGsub := {
 			} else if has_last and smaller {
 				old = (last ?? LayoutGsub.no_item).cluster
 				# Destructured, so the output is not also held by `buf`.
-				{ info, out, idx, output, serial, random, ops, stopped } = buf
+				{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 				var $out = out
 				var $i = $out.len()
 				while $i > 0 and ($out.get($i - 1) ?? LayoutGsub.no_item).cluster == old {
@@ -1517,14 +1523,14 @@ LayoutGsub := {
 					$out = $out.set($i - 1, { ..item, cluster: c, mask: item.mask.bitwise_and(0x7FFFFFFFFFFFFFFF).bitwise_or(cur.mask.bitwise_and(LayoutGsub.unsafe)) }) ?? []
 					$i = $i - 1
 				}
-				{ info, out: $out, idx, output, serial, random, ops, stopped }
+				{ info, out: $out, idx, output, serial, random, ops, stopped, aliased }
 			} else if !has_last and buf.idx + 1 < buf.info.len() {
 				LayoutGsub.merge_clusters(buf, buf.idx, buf.idx + 2)
 			} else {
 				buf
 			}
-		{ info, out, idx, output, serial, random, ops, stopped } = merged
-		{ info, out, idx: idx + 1, output, serial, random, ops, stopped }
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = merged
+		{ info, out, idx: idx + 1, output, serial, random, ops, stopped, aliased }
 	}
 
 	## The smallest cluster of `run[start ..< end]` and `init`.
@@ -1598,9 +1604,37 @@ LayoutGsub := {
 		if end_in < start or end_in - start > 255 or end < start + 2 {
 			buf
 		} else {
-			{ info, out, idx, output, serial, random, ops, stopped } = buf
+			{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 			cluster = LayoutGsub.end_cluster(info, start, end, 0xFFFFFFFFFFFFFFFF)
-			{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops, stopped }
+			{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops, stopped, aliased }
+		}
+	}
+
+	## HarfBuzz's `unsafe_to_break(0, len)` for `rand`, over HarfBuzz's
+	## input array: while the output shares the input's storage, its first
+	## `out.len()` items are the output's (see `Buf`), so they are flagged
+	## with the rest of the input as one range; the consumed input between
+	## them and the cursor is flagged as HarfBuzz flags it and then
+	## discarded. Once separate, the output is not flagged.
+	unsafe_to_break_all : Buf -> Buf
+	unsafe_to_break_all = |buf| {
+		written = buf.out.len()
+		if !buf.output or !buf.aliased or written == 0 {
+			LayoutGsub.unsafe_to_break(buf, 0, buf.info.len())
+		} else {
+			{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
+			n = info.len()
+			# The output never overtakes the cursor while aliased:
+			# `written <= idx <= n`.
+			if n > 255 or n < 2 {
+				{ info, out, idx, output, serial, random, ops, stopped, aliased }
+			} else {
+				cluster = (out.get(0) ?? LayoutGsub.no_item).cluster.min((info.get(n - 1) ?? LayoutGsub.no_item).cluster)
+				# HarfBuzz's array: the output, then the input after it.
+				joined = out.concat(info.drop_first(written))
+				flagged = LayoutGsub.flag_range(joined, 0, n, cluster)
+				{ info: info.take_first(written).concat(flagged.drop_first(written)), out: flagged.take_first(written), idx, output, serial, random, ops, stopped, aliased }
+			}
 		}
 	}
 
@@ -1612,11 +1646,11 @@ LayoutGsub := {
 		if end_in < start or end_in - start > 255 {
 			buf
 		} else {
-			{ info, out, idx, output, serial, random, ops, stopped } = buf
+			{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
 			end = end_in.min(info.len())
 			if !output {
 				cluster = LayoutGsub.end_cluster(info, start, end, 0xFFFFFFFFFFFFFFFF)
-				{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops, stopped }
+				{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops, stopped, aliased }
 			} else {
 				written = out.len()
 				c1 = LayoutGsub.end_cluster(info, idx, end, 0xFFFFFFFFFFFFFFFF)
@@ -1625,7 +1659,7 @@ LayoutGsub := {
 				# call that consumes it would keep it shared and force a copy.
 				flagged_info = LayoutGsub.flag_range(info, idx, end, cluster)
 				flagged_out = LayoutGsub.flag_range(out, start, written, cluster)
-				{ info: flagged_info, out: flagged_out, idx, output, serial, random, ops, stopped }
+				{ info: flagged_info, out: flagged_out, idx, output, serial, random, ops, stopped, aliased }
 			}
 		}
 	}

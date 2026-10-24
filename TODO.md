@@ -9,13 +9,6 @@ repositories are relative to `~/Documents/Github/`.
 
 ### Browser parity (§6)
 
-- [ ] A conformance case for the `rand` alternate's unsafe-to-break range
-  (HarfBuzz's output aliases its input until a multiple substitution
-  needs room; roc-font's buffer is always separate).
-- [ ] Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
-  `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
-  they now read as rejected by design; regenerate valid fonts with the
-  same lookups.
 
 
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the
@@ -24,20 +17,9 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Tests and measurement
 
-- [ ] Verify `LayoutVar.delta` against HarfBuzz's `em_scalef` float step
-  (`v * upem / upem`) for large deltas just off a .5 boundary; the fuzz
-  recipes cannot reach it.
 - [ ] `adv-huge-cmap/read` got slower (188 to 222 µs) when strictly less
   work was done: a code-generation effect of the nightly; re-check on the
   next nightly.
-- [ ] Optional speed-up: U64 fast paths for TableVar's single-precision
-  multiply and add (85 % of gvar extents time).
-- [ ] Variable fonts check their glyph outlines twice while reading (the
-  required `glyf` check and again for `gvar`); share the one result.
-- [ ] Reading cost: about 150x HarfBuzz (geometric mean; HarfBuzz checks
-  lazily, roc-font validates everything up front as OTS does, every glyph
-  outline included). Profile the OTS checks and the outline walk; the
-  default fonts are prepared at compile time and unaffected.
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
   `bench/roc/alloc.roc`, ratchet `requested_bytes` and `peak_live_bytes`.
 
@@ -67,6 +49,17 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] Every check in `AGENTS.md` on interpreter and native; tag 0.1.0.
 
 ## After 0.1.0
+
+- Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
+  `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
+  they now read as rejected by design; regenerate valid fonts with the
+  same lookups.
+- Optional speed-up: U64 fast paths for TableVar's single-precision
+  multiply and add (85 % of gvar extents time).
+- Reading cost: about 150x HarfBuzz (geometric mean; HarfBuzz checks
+  lazily, roc-font validates everything up front as OTS does, every glyph
+  outline included). Profile the OTS checks and the outline walk; the
+  default fonts are prepared at compile time and unaffected.
 
 1. roc-ray measurement and terrocotta's measurer.
 2. roc-pdf's strict checks (checksums, overlap, composite cycles, `fsType`,

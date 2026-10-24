@@ -597,8 +597,11 @@ LayoutVar := {
 	default_location = { active: False, scalars: [] }
 
 	## The delta of a `VariationIndex` (outer and inner index) at a
-	## location, rounded half up as HarfBuzz rounds it (`em_scalef` at a
-	## scale of units per em). `no_variation` has none.
+	## location, rounded half up as HarfBuzz rounds it: `em_scalef`
+	## multiplies the single-precision sum by `x_scale / upem`, which is
+	## exactly 1 at a scale of units per em whatever the units per em, then
+	## takes `floorf(v + 0.5f)`, so the only roundings are the sum's and
+	## that addition's. `no_variation` has none.
 	delta : LayoutVar, Location, U64, U64 -> I64
 	delta = |lv, loc, outer, inner|
 		if loc.active {

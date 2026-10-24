@@ -142,8 +142,10 @@ check! = |font| {
 	var $tag = []
 	for tag in Font.features(font) {
 		bytes = tag.to_utf8()
-		if bytes.len() > 4 {
-			crash "a feature tag is longer than four bytes"
+		# Four ISO 8859-1 characters: at most eight bytes of UTF-8 (UTF-8
+		# keeps code point order, so the order check below still holds).
+		if bytes.len() > 8 {
+			crash "a feature tag is longer than four characters"
 		}
 		if !$tag.is_empty() and !before($tag, bytes) {
 			crash "the feature listing is not in increasing order without repeats"

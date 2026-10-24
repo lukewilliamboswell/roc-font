@@ -171,18 +171,27 @@ Face := {
 				$required = Face.collect($required, boxes)
 				# Every glyph's outline is checked as OTS checks it (flags,
 				# instruction lengths, coordinates, composites), whether or not
-				# the font varies: a broken `glyf` rejects the font.
-				if boxes.is_ok() {
-					when_glyf = match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
-						(Found(glyf), Found(loca), Found(hmtx)) =>
-							match TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count) {
-								Ok(_) => []
-								Err(problems) => problems.take_first(1).map(|q| Sfnt.bad(q.table, (if (q.table == "glyf") glyf.offset else loca.offset) + q.offset))
+				# the font varies: a broken `glyf` rejects the font. The points
+				# read here are the ones `gvar` moves, so a variable font reads
+				# its outlines once.
+				points =
+					if boxes.is_ok() {
+						match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
+							(Found(glyf), Found(loca), Found(hmtx)) => {
+								checked = TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count)
+								match checked {
+									Ok(_) => {}
+									Err(problems) => {
+										$required = $required.concat(problems.take_first(1).map(|q| Sfnt.bad(q.table, (if (q.table == "glyf") glyf.offset else loca.offset) + q.offset)))
+									}
+								}
+								Read(checked)
 							}
-						_ => []
+							_ => Unread
+						}
+					} else {
+						Unread
 					}
-					$required = $required.concat(when_glyf)
-				}
 				post = TablePost.from_tables(bytes, tables, glyph_count)
 				$required = Face.collect_all($required, post)
 				# A layout table over the lookup limit is dropped; a broken one
@@ -197,7 +206,7 @@ Face := {
 					}
 					Ok(_) => {}
 				}
-				variations = Face.read_variations(bytes, tables, glyph_count, h.long_offsets, hh.metric_count)
+				variations = Face.read_variations(bytes, tables, glyph_count, h.long_offsets, hh.metric_count, points)
 				var $var_problems = variations.problems
 				axes = match variations.space {
 					Present(space) => Present(TableVar.axis_total(space))
@@ -435,9 +444,11 @@ Face := {
 	## (with the outline points it moves) when `fvar` reads. A bad `avar`
 	## drops itself (`avar_problems`); every other problem drops them all.
 	## Without `fvar` the others mean nothing and are not read. Problems
-	## name each table and the byte offset in the file.
-	read_variations : List(U8), List(Sfnt.Table), U64, Bool, U64 -> Variations
-	read_variations = |bytes, tables, glyph_count, long_offsets, metric_count| {
+	## name each table and the byte offset in the file. `points_read` is the
+	## outline points already read from `glyf`, `loca` and `hmtx` as found
+	## here, or `Unread` when they were not.
+	read_variations : List(U8), List(Sfnt.Table), U64, Bool, U64, [Read(Try(TableGlyfPoints, List(TableGlyfPoints.Problem))), Unread] -> Variations
+	read_variations = |bytes, tables, glyph_count, long_offsets, metric_count, points_read| {
 		nothing = { space: Absent, hvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent }
 		# Each problem in the file: its table's offset plus its own.
 		placed = |ps| ps.map(|p| Sfnt.bad(p.table, Face.table_offset(tables, p.table) + p.offset))
@@ -480,8 +491,12 @@ Face := {
 							Found(found) => TableVar.read_mvar(found.data, axes).map_ok(|value| Present(value)).map_err(placed)
 						}
 						outlines = match (Sfnt.located(bytes, tables, "gvar", 0), Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
-							(Found(gvar), Found(glyf), Found(loca), Found(hmtx)) =>
-								match TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count) {
+							(Found(gvar), Found(glyf), Found(loca), Found(hmtx)) => {
+								checked = match points_read {
+									Read(already) => already
+									Unread => TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count)
+								}
+								match checked {
 									Err(problems) => Err(placed(problems))
 									Ok(points) =>
 										match TableGvar.read(gvar.data, axes, points) {
@@ -489,6 +504,7 @@ Face := {
 											Ok(moves) => Ok(Present({ points, gvar: moves }))
 										}
 								}
+							}
 							_ => Ok(Absent)
 						}
 						unusable = match avar {

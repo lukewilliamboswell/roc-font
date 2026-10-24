@@ -1199,6 +1199,131 @@ FontBuild :: {}.{
 		moved = |at| FontBuild.u16(((plain.get(at) ?? 0).to_u64() * 256 + (plain.get(at + 1) ?? 0).to_u64()) + 4)
 		FontBuild.u32(0x00010001).concat(moved(4)).concat(moved(6)).concat(moved(8)).concat(FontBuild.u32(plain.len() + 4)).concat(plain.drop_first(10)).concat(variations)
 	}
+
+	# ------------------------------------------------------------ parity fonts
+
+	## An `ItemVariationStore` (see `variation_store`) of one data subtable
+	## whose rows hold 32-bit deltas (`LONG_WORDS`), one per region.
+	variation_store_long : U64, List(List({ start : I64, peak : I64, end : I64 })), List(List(I64)) -> List(U8)
+	variation_store_long = |axis_count, regions, rows| {
+		region_list = FontBuild.u16(axis_count).concat(FontBuild.u16(regions.len())).concat(regions.join_map(|r| r.join_map(|t| FontBuild.i16(t.start).concat(FontBuild.i16(t.peak)).concat(FontBuild.i16(t.end)))))
+		columns = regions.len()
+		i32 = |v| FontBuild.u32((if (v < 0) v + 4294967296 else v).to_u64_wrap())
+		data =
+			FontBuild.u16(rows.len())
+				.concat(FontBuild.u16((0x8000).bitwise_or(columns)))
+				.concat(FontBuild.u16(columns))
+				.concat(FontBuild.counting(columns).join_map(FontBuild.u16))
+				.concat(rows.join_map(|row| row.concat(List.repeat(0, columns)).take_first(columns).join_map(i32)))
+		FontBuild.pack([U16(1), Ref32(region_list), U16(1), Ref32(data)])
+	}
+
+	## A variable font for device deltas: `units` per em, one axis `TEST`
+	## from 0 (the default) to 16384, so design value `v` is the normalised
+	## coordinate `v` / 16384, and `kern` adjusting glyph 1 before glyph 2
+	## by 0 plus the delta of row 0 of a `GDEF` store with 32-bit deltas:
+	## one region per peak (from 0, through the peak, to 16384), the
+	## region's delta from `deltas`. Glyphs are as in `parity_font`.
+	device_delta_font : U64, List(I64), List(I64) -> List(U8)
+	device_delta_font = |units, peaks, deltas| {
+		store = FontBuild.variation_store_long(1, peaks.map(|p| [{ start: 0, peak: p, end: 16384 }]), [deltas])
+		pairs = FontBuild.pair1_devices(0x44, [{ glyph: 1, pairs: [{ second: 2, value: 0, device: Index(0, 0) }] }])
+		FontBuild.parity_font_units(
+			units,
+			[
+				{ tag: "fvar", data: FontBuild.fvar([{ tag: "TEST", min: 0, default: 0, max: 16384 }]) },
+				{ tag: "GDEF", data: FontBuild.gdef_store(store) },
+				{ tag: "GPOS", data: FontBuild.layout("DFLT", [{ tag: "kern", lookups: [0] }], [{ kind: 2, subtables: [pairs] }]) },
+			],
+		)
+	}
+
+	## A font of 64 glyphs, glyph `g` (from 1) drawing U+10000 + `g`, every
+	## advance 500 and 1000 units per em, with further tables: the smallest
+	## font that shows one shaping step on its own glyph ids.
+	parity_font : List({ tag : Str, data : List(U8) }) -> List(U8)
+	parity_font = |extra| FontBuild.parity_font_units(1000, extra)
+
+	## `parity_font` with `units` per em.
+	parity_font_units : U64, List({ tag : Str, data : List(U8) }) -> List(U8)
+	parity_font_units = |units, extra|
+		FontBuild.file(
+			[
+				{ tag: "head", data: FontBuild.head(units, False) },
+				{ tag: "hhea", data: FontBuild.hhea(800, -200, 64) },
+				{ tag: "maxp", data: FontBuild.maxp(64) },
+				{ tag: "hmtx", data: FontBuild.hmtx(List.repeat(500, 64)) },
+				{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1003F, glyph: 1 }]) }]) },
+			].concat(extra),
+		)
+
+	## Alternate substitution, format 1: glyph 1 has the alternates 20, 21
+	## and 22.
+	rand_alternates : List(U8)
+	rand_alternates = FontBuild.pack([U16(1), Ref(FontBuild.coverage1([1])), U16(1), Ref(FontBuild.pack([U16(3), U16(20), U16(21), U16(22)]))])
+
+	## The fonts that place the `rand` feature's alternates (glyph 1 to 20,
+	## 21 or 22) after other substitutions, by name:
+	##
+	## - `rand-plain`: `rand` alone.
+	## - `rand-after-ligature`: `rand` calls a context rule on 2 3 1 that
+	##   ligates 2 3 to 9, then picks the alternate of 1, in the same lookup.
+	## - `rand-after-multiple`: the rule on 2 1 replaces 2 with 4 5 first
+	##   (the inserted glyph takes a match position, so 1 is at position 2).
+	## - `rand-multiple-ligature`: the rule on 2 3 6 1 replaces 2 with 4 5,
+	##   ligates 3 6 to 9, then picks the alternate of 1: the run is as long
+	##   as its input again before the alternate.
+	## - `rand-ligature-multiple`: the rule on 2 3 6 1 ligates 2 3 to 9,
+	##   replaces 6 with 4 5, then picks the alternate of 1: the run is
+	##   again as long as its input, but the second glyph of 4 5 needed
+	##   room.
+	## - `rand-after-liga`: `liga` (2 3 to 9) in a lookup before `rand`'s.
+	rand_fonts : List({ name : Str, data : List(U8) })
+	rand_fonts = {
+		gsub = |features, lookups| [{ tag: "GSUB", data: FontBuild.layout("DFLT", features, lookups) }]
+		alternate_lookup = { kind: 3, subtables: [FontBuild.rand_alternates] }
+		ligature_lookup = { kind: 4, subtables: [FontBuild.ligature([2], [[{ glyph: 9, rest: [3] }]])] }
+		[
+			{ name: "rand-plain", data: FontBuild.parity_font(gsub([{ tag: "rand", lookups: [0] }], [alternate_lookup])) },
+			{
+				name: "rand-after-ligature",
+				data: FontBuild.parity_font(gsub([{ tag: "rand", lookups: [0] }], [{ kind: 5, subtables: [FontBuild.context3([[2], [3], [1]], [{ at: 0, lookup: 1 }, { at: 1, lookup: 2 }])] }, ligature_lookup, alternate_lookup])),
+			},
+			{
+				name: "rand-after-multiple",
+				data: FontBuild.parity_font(gsub([{ tag: "rand", lookups: [0] }], [{ kind: 5, subtables: [FontBuild.context3([[2], [1]], [{ at: 0, lookup: 1 }, { at: 2, lookup: 2 }])] }, { kind: 2, subtables: [FontBuild.multiple([2], [[4, 5]])] }, alternate_lookup])),
+			},
+			{
+				name: "rand-multiple-ligature",
+				data: FontBuild.parity_font(
+					gsub(
+						[{ tag: "rand", lookups: [0] }],
+						[
+							{ kind: 5, subtables: [FontBuild.context3([[2], [3], [6], [1]], [{ at: 0, lookup: 1 }, { at: 2, lookup: 2 }, { at: 3, lookup: 3 }])] },
+							{ kind: 2, subtables: [FontBuild.multiple([2], [[4, 5]])] },
+							{ kind: 4, subtables: [FontBuild.ligature([3], [[{ glyph: 9, rest: [6] }]])] },
+							alternate_lookup,
+						],
+					),
+				),
+			},
+			{
+				name: "rand-ligature-multiple",
+				data: FontBuild.parity_font(
+					gsub(
+						[{ tag: "rand", lookups: [0] }],
+						[
+							{ kind: 5, subtables: [FontBuild.context3([[2], [3], [6], [1]], [{ at: 0, lookup: 1 }, { at: 1, lookup: 2 }, { at: 3, lookup: 3 }])] },
+							ligature_lookup,
+							{ kind: 2, subtables: [FontBuild.multiple([6], [[4, 5]])] },
+							alternate_lookup,
+						],
+					),
+				),
+			},
+			{ name: "rand-after-liga", data: FontBuild.parity_font(gsub([{ tag: "liga", lookups: [0] }, { tag: "rand", lookups: [1] }], [ligature_lookup, alternate_lookup])) },
+		]
+	}
 }
 
 expect FontBuild.u16(0x1234) == [0x12, 0x34]
