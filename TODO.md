@@ -9,8 +9,6 @@ repositories are relative to `~/Documents/Github/`.
 
 ### Internal structure and API (§5.1, §5.9)
 
-- [ ] Split `Font.roc` into specification-named internal modules; `roc docs`
-  shows only public items (in progress).
 - [ ] The §5.9 surface: `ReadOptions`/`Limits`, `ShapeOptions`/`ShapeLimits`,
   integer font units, `U32` glyph ids, `Run`, `ShapePlan`, `plan`, `shape`,
   `shape_planned`, `shape_scalars`, `width`, `metrics` (line gap, cap and x
