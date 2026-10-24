@@ -64,8 +64,8 @@ roc-font is compared with reference implementations through recorded
 results, so every check runs without the references installed.
 
 * **Shaping matches HarfBuzz 14.6.0** on the cases every change must pass:
-  of 441 recorded cases (HarfBuzz shaping, Chrome widths, OTS reading and
-  font facts), 423 agree, 16 are documented differences, 2 use
+  of 463 recorded cases (HarfBuzz shaping, Chrome widths, OTS reading and
+  font facts), 445 agree, 16 are documented differences, 2 use
   options the test driver cannot express yet, and none fail.
 * **On HarfBuzz's own test suites**, roc-font's glyphs and positions equal
   HarfBuzz's in 4,087 of the 4,961 in-house cases it runs (82 %); most of
