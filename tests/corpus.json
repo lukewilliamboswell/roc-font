@@ -30,6 +30,31 @@
       "verified": true
     },
     {
+      "id": "fonttools-4.61.1-tests",
+      "kind": "archive",
+      "url": "https://files.pythonhosted.org/packages/ec/ca/cf17b88a8df95691275a3d77dc0a5ad9907f328ae53acbe6795da1b2f5ed/fonttools-4.61.1.tar.gz",
+      "sha256": "6675329885c44657f826ef01d9e4fb33b9158e9d93c537d84ad8399539bc6f69",
+      "size": 3565756,
+      "strip_components": 1,
+      "include": [
+        "LICENSE",
+        "LICENSE.external",
+        "Tests/"
+      ],
+      "licence": {
+        "url": "https://raw.githubusercontent.com/fonttools/fonttools/4.61.1/LICENSE",
+        "sha256": "6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383"
+      },
+      "tags": [
+        "fonttools-tests",
+        "glyf",
+        "cff",
+        "variable"
+      ],
+      "notes": "fontTools' test suite and data from the PyPI sdist of 4.61.1, the oracle's fontTools version (the sdist is immutable on files.pythonhosted.org). Only Tests/, LICENSE (MIT) and LICENSE.external are extracted; some test fonts are covered by LICENSE.external rather than LICENSE.",
+      "verified": true
+    },
+    {
       "id": "hb-in-house-trak",
       "kind": "file",
       "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/test/shape/data/in-house/fonts/TRAK.ttf",
@@ -45,6 +70,26 @@
         "trak",
         "small"
       ],
+      "verified": true
+    },
+    {
+      "id": "hb-in-house-jellee-kern",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/test/shape/data/in-house/fonts/e39391c77a6321c2ac7a2d644de0396470cd4bfe.ttf",
+      "sha256": "299d0f1c7a297724cc5eec72a89fd6857532a983ac649130fd0ac128b6500b8b",
+      "size": 34116,
+      "filename": "Jellee-Roman.ttf",
+      "licence": {
+        "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
+        "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+      },
+      "tags": [
+        "latin",
+        "glyf",
+        "kern-only",
+        "small"
+      ],
+      "notes": "Jellee Roman 1.000 (Alfredo Marco Pradil, OFL-1.1 with Reserved Font Name, as its name table states), a real font used by HarfBuzz's in-house kern-format2.tests. Its only positioning is a legacy `kern` table: no GPOS, no GSUB. The table uses the Apple header (version 1.0, three subtables: one format 0 with a single pair, two format 2 class tables), not the Microsoft version 0 header.",
       "verified": true
     },
     {
@@ -128,6 +173,135 @@
       "verified": true
     },
     {
+      "id": "inter-4.1-ttc",
+      "kind": "archive",
+      "url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip",
+      "sha256": "9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e",
+      "size": 33707794,
+      "members": {
+        "Inter.ttc": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt",
+        "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "ttc",
+        "gsub",
+        "gpos"
+      ],
+      "notes": "Inter.ttc from the same release archive as inter-4.1: a TrueType collection of 36 static faces (Inter and Inter Display, 9 weights each, upright and italic), Inter Regular first.",
+      "verified": true
+    },
+    {
+      "id": "merriweather-4.009",
+      "kind": "archive",
+      "url": "https://github.com/EbenSorkin/Merriweather4/releases/download/4.009/Merriweather4-4.009.zip",
+      "sha256": "526473e3bc1c98fc962207eaaed92487f126c3ac4238d50e279462a43b22da40",
+      "size": 12880085,
+      "members": {
+        "Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/EbenSorkin/Merriweather4/e586023aa0fe1dba9a7d4ec80fa8b9e546cb7ecf/OFL.txt",
+        "sha256": "715bd349bfa6116f99e351e1548321dcfa25b91df65502d22ca8d624557697d2"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "variable",
+        "gsub",
+        "gpos",
+        "default-font"
+      ],
+      "notes": "The default serif: the same bytes as package/fonts/Merriweather-Variable.ttf, pinned in tools/default-fonts/pins.json.",
+      "verified": true
+    },
+    {
+      "id": "fira-code-6.2",
+      "kind": "archive",
+      "url": "https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip",
+      "sha256": "0949915ba8eb24d89fd93d10a7ff623f42830d7c5ffc3ecbf960e4ecad3e3e79",
+      "size": 2462987,
+      "members": {
+        "variable_ttf/FiraCode-VF.ttf": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/tonsky/FiraCode/eee6db993696aba61ff4eef03698e2987d79910c/LICENSE",
+        "sha256": "1d41e10031ab125302780a05ec4c91d218e47db0c7e37cf315cce5e608cdc25c"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "variable",
+        "gsub",
+        "gpos",
+        "monospace",
+        "default-font",
+        "cmap12"
+      ],
+      "notes": "The default monospace: the same bytes as package/fonts/FiraCode-Variable.ttf, pinned in tools/default-fonts/pins.json. The release archive carries no licence; the licence is the repository's LICENSE at the release commit.",
+      "verified": true
+    },
+    {
+      "id": "noto-sans-2.015",
+      "kind": "archive",
+      "url": "https://github.com/notofonts/latin-greek-cyrillic/releases/download/NotoSans-v2.015/NotoSans-v2.015.zip",
+      "sha256": "0c34df072a3fa7efbb7cbf34950e1f971a4447cffe365d3a359e2d4089b958f5",
+      "size": 117491253,
+      "members": {
+        "NotoSans/unhinted/ttf/NotoSans-Regular.ttf": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/notofonts/latin-greek-cyrillic/NotoSans-v2.015/OFL.txt",
+        "sha256": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "gsub",
+        "gpos",
+        "cmap12"
+      ],
+      "notes": "Static unhinted Noto Sans Regular (Latin, Greek, Cyrillic). The archive is large (117 MB); only this face is extracted.",
+      "verified": true
+    },
+    {
+      "id": "noto-serif-2.015",
+      "kind": "archive",
+      "url": "https://github.com/notofonts/latin-greek-cyrillic/releases/download/NotoSerif-v2.015/NotoSerif-v2.015.zip",
+      "sha256": "0e9a43c8a4b94ac76f55069ed1d7385bbcaf6b99527a94deb5619e032b7e76c1",
+      "size": 70637713,
+      "members": {
+        "NotoSerif/unhinted/ttf/NotoSerif-Regular.ttf": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/notofonts/latin-greek-cyrillic/NotoSerif-v2.015/OFL.txt",
+        "sha256": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "gsub",
+        "gpos",
+        "cmap12"
+      ],
+      "notes": "Static unhinted Noto Serif Regular (Latin, Greek, Cyrillic). The archive is large (71 MB); only this face is extracted.",
+      "verified": true
+    },
+    {
       "id": "noto-sans-arabic-2.013",
       "kind": "archive",
       "url": "https://github.com/notofonts/arabic/releases/download/NotoSansArabic-v2.013/NotoSansArabic-v2.013.zip",
@@ -147,6 +321,50 @@
         "cursive",
         "rtl"
       ],
+      "verified": true
+    },
+    {
+      "id": "noto-sans-devanagari-2.007",
+      "kind": "archive",
+      "url": "https://github.com/notofonts/devanagari/releases/download/NotoSansDevanagari-v2.007/NotoSansDevanagari-v2.007.zip",
+      "sha256": "820c7da45b1e63562cb41c0a8cac5d9a4202312043a3a040ed1325857ef469b1",
+      "size": 18449254,
+      "members": {
+        "NotoSansDevanagari/unhinted/ttf/NotoSansDevanagari-Regular.ttf": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/notofonts/devanagari/NotoSansDevanagari-v2.007/OFL.txt",
+        "sha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331"
+      },
+      "tags": [
+        "devanagari",
+        "glyf",
+        "gsub",
+        "gpos",
+        "cmap12"
+      ],
+      "notes": "Static unhinted Noto Sans Devanagari Regular.",
+      "verified": true
+    },
+    {
+      "id": "noto-emoji-3.002",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/google/fonts/b979dba422e445492b0eb9951ac52ee0b4d648c3/ofl/notoemoji/NotoEmoji%5Bwght%5D.ttf",
+      "sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+      "size": 1982596,
+      "filename": "NotoEmoji[wght].ttf",
+      "licence": {
+        "url": "https://raw.githubusercontent.com/google/fonts/b979dba422e445492b0eb9951ac52ee0b4d648c3/ofl/notoemoji/OFL.txt",
+        "sha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b"
+      },
+      "tags": [
+        "emoji",
+        "glyf",
+        "variable",
+        "gsub",
+        "cmap12"
+      ],
+      "notes": "Monochrome Noto Emoji 3.002 (variable, wght 300-700) at the google/fonts commit that added that release. Most of its code points are beyond U+FFFF, reached only through its cmap format 12 subtables. No GPOS.",
       "verified": true
     },
     {

@@ -5,7 +5,9 @@
 //   node tools/oracle/chrome/width.mjs run < req.jsonl one JSON response per request line, in order
 //
 // A request is `{"kind": "width", "font": <path>, "options": [...],
-// "unicodes": [...]}`; a response is `{"status": "ok"|"unsupported"|"error",
+// "unicodes": [...], "location": null or {"axes": [[tag, value], ...], ...}}`
+// (`location` as scripts/_common.py resolve_location gives it: every axis of
+// a variable font, values as decimal strings); a response is `{"status": "ok"|"unsupported"|"error",
 // "result": "width:<n>" or null, "backend": <str>, "detail": <object>}`, the
 // same shape tools/oracle/extract.py answers.
 //
@@ -39,8 +41,16 @@
 // `--no-glyph-names`; code points the font's cmap does not map (Chrome would
 // draw them with a fallback font, so the width would not be this font's);
 // control characters (tabs and line breaks would be laid out, not shaped);
-// cmap formats other than 0, 4, 6 and 12; variable fonts (Chrome applies
-// automatic optical sizing, so the instance depends on the font size).
+// cmap formats other than 0, 4, 6 and 12; a face of a collection other than
+// the first (`--face-index`; FontFace cannot choose one).
+//
+// Variable fonts. The span lists *every* axis in `font-variation-settings`
+// at the request's location, with `font-optical-sizing: none` and
+// `font-synthesis: none`: otherwise `font-weight: normal` would set `wght`
+// and automatic optical sizing would set `opsz` from the font size (here the
+// units per em). Chrome keeps each glyph's advance to 1/64 unit there while
+// HarfBuzz at the units per em rounds each to an integer, so the review
+// compares variable-font widths within half a unit per glyph.
 import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline';
@@ -71,10 +81,12 @@ function fontFacts(bytes) {
 	};
 	const u16 = o => (need(o, 2), b.readUInt16BE(o));
 	const u32 = o => (need(o, 4), b.readUInt32BE(o));
+	// A collection: FontFace loads its first face, so read that face's directory.
+	const base = b.toString('latin1', 0, 4) === 'ttcf' ? u32(12) : 0;
 	const tables = new Map();
-	const count = u16(4);
+	const count = u16(base + 4);
 	for (let i = 0; i < count; i++) {
-		const r = 12 + 16 * i;
+		const r = base + 12 + 16 * i;
 		need(r, 16);
 		tables.set(b.toString('latin1', r, r + 4), { offset: u32(r + 8), length: u32(r + 12) });
 	}
@@ -163,7 +175,8 @@ async function loadFontInPage(base64, family) {
 }
 
 // Runs in the page: the width of `text` at `size` px, by canvas and by a span.
-function measureInPage(family, text, size) {
+// `settings` is a font-variation-settings value, or '' for a static font.
+function measureInPage(family, text, size, settings) {
 	const font = `${size}px "${family}"`;
 	if (!document.fonts.check(font)) return { error: 'font not available' };
 	const canvas = document.createElement('canvas');
@@ -172,7 +185,8 @@ function measureInPage(family, text, size) {
 	if (!context.font.includes(family)) return { error: `canvas refused font ${font}` };
 	const canvasWidth = context.measureText(text).width;
 	const span = document.createElement('span');
-	span.style.cssText = `font-family:"${family}";font-size:${size}px;white-space:pre;position:absolute;left:0;top:0`;
+	const variable = settings ? `;font-variation-settings:${settings};font-optical-sizing:none;font-synthesis:none` : '';
+	span.style.cssText = `font-family:"${family}";font-size:${size}px;white-space:pre;position:absolute;left:0;top:0${variable}`;
 	span.textContent = text;
 	document.body.appendChild(span);
 	const domWidth = span.getBoundingClientRect().width;
@@ -219,7 +233,7 @@ async function answer(session, fonts, request) {
 	const unsupported = reason => ({ status: 'unsupported', result: null, backend: '', detail: { option: reason } });
 	const error = reason => ({ status: 'error', result: null, backend: BACKEND, detail: { error: reason } });
 	if (request.kind !== 'width') return error(`unknown kind ${request.kind}`);
-	const bad = request.options.find(option => !ALLOWED_OPTIONS.has(option));
+	const bad = request.options.find(option => !ALLOWED_OPTIONS.has(option) && option !== '--face-index=0');
 	if (bad !== undefined) return unsupported(bad);
 
 	let font = fonts.get(request.font);
@@ -241,7 +255,13 @@ async function answer(session, fonts, request) {
 	if (font.factsError instanceof Unsupported) return unsupported(font.factsError.message);
 	if (font.factsError) return error(`font facts: ${font.factsError.message}`);
 	const { upem, variable, maps } = font.facts;
-	if (variable) return unsupported('variable font');
+	const axes = request.location && request.location.axes;
+	if (variable && !(axes && axes.length)) return unsupported('variable font without a location');
+	if (request.location && !axes) return error(`location: ${request.location.problem}`);
+	for (const [tag, value] of axes || []) {
+		if (!/^[\x21-\x7e]{4}$/.test(tag) || /["\\]/.test(tag) || !/^-?\d+(\.\d+)?$/.test(value)) return unsupported(`axis ${tag}=${value}`);
+	}
+	const settings = variable ? axes.map(([tag, value]) => `"${tag}" ${value}`).join(',') : '';
 	const control = request.unicodes.find(cp => cp < 0x20 || (cp >= 0x7f && cp < 0xa0));
 	if (control !== undefined) return unsupported(`control character U+${control.toString(16).toUpperCase().padStart(4, '0')}`);
 	const unmapped = request.unicodes.find(cp => !maps(cp));
@@ -249,13 +269,15 @@ async function answer(session, fonts, request) {
 		return unsupported(`U+${unmapped.toString(16).toUpperCase().padStart(4, '0')} not in cmap (Chrome would use a fallback font)`);
 	}
 	const text = String.fromCodePoint(...request.unicodes);
-	const measured = await session.page.evaluate(measureInPage, font.family, text, upem);
+	const measured = await session.page.evaluate(measureInPage, font.family, text, upem, settings);
 	if (measured.error) return error(measured.error);
 	return {
 		status: 'ok',
 		result: formatWidth(measured.dom),
 		backend: BACKEND,
-		detail: { canvas_px: measured.canvas, font_size_px: upem, span_px: measured.dom },
+		detail: settings
+			? { canvas_px: measured.canvas, font_size_px: upem, font_variation_settings: settings, span_px: measured.dom }
+			: { canvas_px: measured.canvas, font_size_px: upem, span_px: measured.dom },
 	};
 }
 

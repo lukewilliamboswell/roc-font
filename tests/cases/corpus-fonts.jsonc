@@ -1,0 +1,50 @@
+// Cases on the pinned corpus fonts (tests/corpus.json; fetch them with
+// `scripts/fetch_corpus.py fetch`, otherwise these cases are skipped):
+// reading every new entry, Latin, Greek and Cyrillic shaping in Noto Sans
+// and Serif, a supplementary-plane emoji through cmap format 12 in Noto
+// Emoji (a variable font: `wght` 300-700, default 400), Apple-style legacy
+// `kern` tables (Jellee Roman, HarfBuzz's kern-format2 font: no GPOS), and
+// fontTools' test fonts, including an `avar` version 2 font roc-font does
+// not interpret (docs/variable-fonts.adoc §1).
+{
+  "schema": 1,
+  "cases": [
+    // The defaults, committed in package/fonts/ (the same bytes as the corpus entries).
+    { "id": "inter-variable-read", "kind": "read", "font": "../../package/fonts/Inter-Variable.ttf", "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf", "expected": "read:accept" },
+    { "id": "merriweather-read", "kind": "read", "font": "../../package/fonts/Merriweather-Variable.ttf", "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422", "expected": "read:accept" },
+    { "id": "fira-code-read", "kind": "read", "font": "../../package/fonts/FiraCode-Variable.ttf", "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26", "expected": "read:accept" },
+    { "id": "merriweather-corpus-read", "kind": "read", "font": "../corpus/merriweather-4.009/Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf", "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422", "expected": "read:accept" },
+    { "id": "fira-code-corpus-read", "kind": "read", "font": "../corpus/fira-code-6.2/variable_ttf/FiraCode-VF.ttf", "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26", "expected": "read:accept" },
+    // Noto Sans and Serif 2.015 (static; cmap formats 4 and 12).
+    { "id": "noto-sans-read", "kind": "read", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "expected": "read:accept" },
+    { "id": "noto-sans-latin", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "text": "AVATAR office Wave To", "expected": "[36=0+599|57=1+560|36=2+569|55=3+486|36=4+639|53=5+622|3=6+260|82=7+605|1656=8+946|70=11+480|72=12+564|3=13+260|58=14+910|68=15+561|89=16+508|72=17+564|3=18+260|55=19+486|82=20+605]" },
+    { "id": "noto-sans-greek", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "text": "Καλημέρα κόσμε", "expected": "[359=0+619|381=1+623|391=2+519|387=3+608|392=4+606|377=5+470|397=6+600|381=7+623|3=8+260|390=9+534|407=10+605|398=11+614|392=12+606|385=13+470]" },
+    { "id": "noto-sans-cyrillic", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "text": "Съешь же ещё этих", "expected": "[441=0+640|482=1+623|461=2+551|480=3+894|484=4+545|3=5+260|462=6+739|461=7+551|3=8+260|461=9+551|481=10+897|488=11+551|3=12+260|485=13+484|474=14+465|464=15+621|477=16+511]" },
+    { "id": "noto-sans-metrics", "kind": "metrics", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "expected": "metrics:ascent=1069,descent=-293,line_gap=0,cap_height=714,x_height=536,underline_position=-100,underline_thickness=50,strikeout_position=322,strikeout_thickness=50" },
+    { "id": "noto-sans-coords-static", "kind": "coords", "font": "../corpus/noto-sans-2.015/NotoSans/unhinted/ttf/NotoSans-Regular.ttf", "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8", "expected": "coords:" },
+    { "id": "noto-serif-read", "kind": "read", "font": "../corpus/noto-serif-2.015/NotoSerif/unhinted/ttf/NotoSerif-Regular.ttf", "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1", "expected": "read:accept" },
+    { "id": "noto-serif-greek", "font": "../corpus/noto-serif-2.015/NotoSerif/unhinted/ttf/NotoSerif-Regular.ttf", "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1", "text": "Καλημέρα κόσμε", "expected": "[359=0+735|381=1+639|391=2+533|387=3+614|392=4+587|377=5+493|397=6+572|381=7+639|3=8+260|390=9+520|408=10+577|399=11+596|392=12+587|385=13+493]" },
+    { "id": "noto-serif-cyrillic", "font": "../corpus/noto-serif-2.015/NotoSerif/unhinted/ttf/NotoSerif-Regular.ttf", "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1", "text": "Съешь же ещё этих", "expected": "[442=0+613|483=1+620|462=2+535|481=3+942|485=4+537|3=5+260|463=6+800|462=7+535|3=8+260|462=9+535|482=10+942|489=11+535|3=12+260|486=13+495|475=14+530|465=15+675|478=16+578]" },
+    { "id": "noto-serif-width", "kind": "width", "font": "../corpus/noto-serif-2.015/NotoSerif/unhinted/ttf/NotoSerif-Regular.ttf", "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1", "text": "Wave To AVATAR", "expected": "width:8093" },
+    // Noto Sans Devanagari 2.007: reading only until the Indic shaper (after 0.1.0).
+    { "id": "noto-devanagari-read", "kind": "read", "font": "../corpus/noto-sans-devanagari-2.007/NotoSansDevanagari/unhinted/ttf/NotoSansDevanagari-Regular.ttf", "font_sha256": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd", "expected": "read:accept" },
+    { "id": "noto-devanagari-metrics", "kind": "metrics", "font": "../corpus/noto-sans-devanagari-2.007/NotoSansDevanagari/unhinted/ttf/NotoSansDevanagari-Regular.ttf", "font_sha256": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd", "expected": "metrics:ascent=896,descent=-408,line_gap=0,cap_height=622,x_height=536,underline_position=-100,underline_thickness=50,strikeout_position=322,strikeout_thickness=50" },
+    // Noto Emoji 3.002 (monochrome, variable, cmap format 12).
+    { "id": "noto-emoji-read", "kind": "read", "font": "../corpus/noto-emoji-3.002/NotoEmoji[wght].ttf", "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551", "expected": "read:accept" },
+    { "id": "noto-emoji-cmap12", "font": "../corpus/noto-emoji-3.002/NotoEmoji[wght].ttf", "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551", "unicodes": "U+1F600,U+1F680,U+1F9E1", "expected": "[895=0+2600|975=1+2600|1308=2+2600]" },
+    { "id": "noto-emoji-cmap12-bold", "font": "../corpus/noto-emoji-3.002/NotoEmoji[wght].ttf", "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551", "unicodes": "U+1F600,U+1F680,U+1F9E1", "variation": {"weight": "Bold"}, "expected": "[895=0+2600|975=1+2600|1308=2+2600]" },
+    { "id": "noto-emoji-coords-regular", "kind": "coords", "font": "../corpus/noto-emoji-3.002/NotoEmoji[wght].ttf", "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551", "expected": "coords:wght=0" },
+    { "id": "noto-emoji-coords-light", "kind": "coords", "font": "../corpus/noto-emoji-3.002/NotoEmoji[wght].ttf", "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551", "variation": {"weight": "Light"}, "expected": "coords:wght=-16384" },
+    // Jellee Roman: an Apple-style `kern` table (version 1.0; formats 0 and 2), no GPOS.
+    { "id": "jellee-kern-read", "kind": "read", "font": "../corpus/hb-in-house-jellee-kern/Jellee-Roman.ttf", "font_sha256": "299d0f1c7a297724cc5eec72a89fd6857532a983ac649130fd0ac128b6500b8b", "expected": "read:drop=kern" },
+    { "id": "jellee-kern-pairs", "font": "../corpus/hb-in-house-jellee-kern/Jellee-Roman.ttf", "font_sha256": "299d0f1c7a297724cc5eec72a89fd6857532a983ac649130fd0ac128b6500b8b", "text": "AVATAR To", "expected": "[36=0+701|57=1@-40,0+663|36=2@-40,0+651|55=3@-50,0+552|36=4@-50,0+691|53=5+723|3=6+250|55=7+587|81=8@-65,0+579]" },
+    // fontTools 4.61.1 test data.
+    { "id": "fonttools-test-ttf-read", "kind": "read", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTF.ttf", "font_sha256": "c4e8ce309f44a131d061d73b2580e922a7f5ecc8d7109797ac0ff58bf8723b7b", "expected": "read:accept" },
+    { "id": "fonttools-bogus-post-read", "kind": "read", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttLib/data/bogus_post_format_1.ttf", "font_sha256": "96c7d521ce85c32eedb37aa6d5313651340029306a766a7248248e343ed01e67", "expected": "read:reject" },
+    { "id": "fonttools-noto-vf-subset-read", "kind": "read", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttLib/tables/data/NotoSans-VF-cubic.subset.ttf", "font_sha256": "dede9d39ec0406aadabacd5ddb40b0df1aa8c2d86aa48e87fe3d6b7f3a8b9d4d", "expected": "read:reject" },
+    { "id": "fonttools-noto-vf-subset-coords-bold", "kind": "coords", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttLib/tables/data/NotoSans-VF-cubic.subset.ttf", "font_sha256": "dede9d39ec0406aadabacd5ddb40b0df1aa8c2d86aa48e87fe3d6b7f3a8b9d4d", "variation": {"weight": "Bold", "width": "Condensed"}, "expected": "coords:wght=9995,wdth=-11469,CTGR=0" },
+    { "id": "fonttools-avar2-read", "kind": "read", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttLib/tables/data/Amstelvar-avar2.subset.ttf", "font_sha256": "47e0ccaa0787b1fc3bdbe1b0d77779098ae75e07941da3fd425d073d744a3090", "expected": "read:accept" },
+    { "id": "fonttools-avar2-coords", "kind": "coords", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttLib/tables/data/Amstelvar-avar2.subset.ttf", "font_sha256": "47e0ccaa0787b1fc3bdbe1b0d77779098ae75e07941da3fd425d073d744a3090", "variations": {"wght": 700}, "expected": "coords:GRAD=8552,XTRA=439,XOPQ=8552,YOPQ=2107,YTLC=2107,YTUC=2107,YTAS=0,YTDE=0,YTFI=0,wght=9831,wdth=0,opsz=0",
+      "reason": "avar version 2 is out of scope for 0.1.0: roc-font drops the variation space (default instance) where HarfBuzz applies avar2; expect a known failure once the driver runs coords" }
+  ]
+}

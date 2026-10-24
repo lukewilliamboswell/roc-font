@@ -25,13 +25,20 @@ compared.
 
 Cases come only from scripts/_common.py (parse_case_file and the Case
 dataclass); this script never parses case files. Each case's `kind` selects
-its oracle: `shape` and `read` go to tools/oracle/extract.py, and `width`
+its oracle: `shape`, `read` and the font-fact kinds (`coords`, `advances`,
+`metrics`, `extents`) go to tools/oracle/extract.py, and `width`
 cases are answered by a pinned Chrome
 through Puppeteer (tools/oracle/chrome/width.mjs): the text's advance width
 in font units with the browser's default features, `width:<n>`. Their keys
 come from tools/oracle/chrome/pin.json, so `--check` needs no Node. When Node
 or the pinned Puppeteer is not installed, width cases keep their records and
 are reported as skipped.
+
+Every request on a variable font, and every case with location fields,
+carries the resolved location (scripts/_common.py, resolve_location): each
+axis at the value the case selects, `wght` 400 and `wdth` 100 when it
+selects none (roc-font's Regular default, not HarfBuzz's default instance).
+The location is part of the record and its key.
 
 A case file named by path outside tests/cases keeps its records beside it,
 in `<name>-records.jsonl`.
@@ -67,6 +74,7 @@ from _common import (  # noqa: E402
     parse_unicodes,
     record_key,
     rel,
+    resolve_location,
     sha256_bytes,
     sha256_file,
     write_records,
@@ -82,7 +90,7 @@ CHROME_EXTRACT = CHROME_DIR / "width.mjs"
 
 # Case kinds and the oracle that answers each. The kind is a field of the
 # Case that scripts/_common.py parses; this script never reads case files.
-ORACLE_KINDS = ("shape", "read")
+ORACLE_KINDS = ("shape", "read", "coords", "advances", "metrics", "extents")
 CHROME_KINDS = ("width",)
 
 
@@ -285,8 +293,8 @@ def run_chrome(requests: list[dict]) -> list[dict]:
     return responses
 
 
-def make_record(case: Case, key: str, font_sha: str, tools: dict, extractor: int, response: dict) -> dict:
-    return {
+def make_record(case: Case, key: str, font_sha: str, tools: dict, extractor: int, response: dict, location: dict | None) -> dict:
+    record = {
         "detail": response["detail"],
         "font": rel(case.font_path),
         "font_sha256": font_sha,
@@ -299,6 +307,12 @@ def make_record(case: Case, key: str, font_sha: str, tools: dict, extractor: int
         "status": response["status"],
         "unicodes": format_unicodes(parse_unicodes(case.unicodes)),
     }
+    # Only cases that have them carry these, so older records keep their bytes.
+    if case.glyphs is not None:
+        record["glyphs"] = case.glyphs if isinstance(case.glyphs, str) else list(case.glyphs)
+    if location is not None:
+        record["location"] = location
+    return record
 
 
 def fill_expected(path: Path, results: dict[str, str]) -> int:
@@ -347,6 +361,7 @@ def main() -> int:
         return 1
 
     font_hashes: dict[Path, str] = {}
+    locations: dict[tuple[Path, int, str], dict | None] = {}
     plan: list[tuple[Path, dict, list]] = []  # (case file, kept records, pending work)
     requests: list[dict] = []
     width_requests: list[dict] = []
@@ -375,8 +390,12 @@ def main() -> int:
                 problems.append(f"{case.id}: no oracle answers case kind {kind!r}")
                 continue
             tools = chrome["tools"] if kind in CHROME_KINDS else tools_for[kind]
-            case_extractor = chrome["extractor"] if kind in CHROME_KINDS else extractor
-            key = record_key(case, font_hashes[font], tools, case_extractor)
+            case_extractor = chrome["extractor"] if kind in CHROME_KINDS else extractor[kind]
+            location_key = (font, case.face, canonical_json(case.location))
+            if location_key not in locations:
+                locations[location_key] = resolve_location(case, font.read_bytes())
+            location = locations[location_key]
+            key = record_key(case, font_hashes[font], tools, case_extractor, location)
             existing = old.get(case.id)
             if existing and existing["key"] == key and not args.force:
                 kept[case.id] = existing
@@ -386,6 +405,10 @@ def main() -> int:
                 problems.append(f"{case.id}: record {'stale' if existing else 'missing'}")
                 continue
             request = {"font": str(font), "kind": kind, "options": list(case.options), "unicodes": parse_unicodes(case.unicodes)}
+            if location is not None:
+                request["location"] = location
+            if case.glyphs is not None:
+                request["glyphs"] = case.glyphs if isinstance(case.glyphs, str) else list(case.glyphs)
             if kind in CHROME_KINDS:
                 if not chrome_checked:
                     chrome_missing, chrome_checked = chrome_unavailable(), True
@@ -394,10 +417,10 @@ def main() -> int:
                     if existing:
                         kept[case.id] = existing
                     continue
-                pending.append((case, key, font_hashes[font], tools, case_extractor, "width", len(width_requests)))
+                pending.append((case, key, font_hashes[font], tools, case_extractor, "width", len(width_requests), location))
                 width_requests.append(request)
                 continue
-            pending.append((case, key, font_hashes[font], tools, case_extractor, "oracle", len(requests)))
+            pending.append((case, key, font_hashes[font], tools, case_extractor, "oracle", len(requests), location))
             requests.append(request)
         counts["pruned"] += len(set(old) - {c.id for c in cases})
         plan.append((path, kept, pending))
@@ -416,8 +439,8 @@ def main() -> int:
     for path, kept, pending in plan:
         records = dict(kept)
         fills: dict[str, str] = {}
-        for case, key, font_sha, tools, case_extractor, source, index in pending:
-            records[case.id] = make_record(case, key, font_sha, tools, case_extractor, answers[source][index])
+        for case, key, font_sha, tools, case_extractor, source, index, location in pending:
+            records[case.id] = make_record(case, key, font_sha, tools, case_extractor, answers[source][index], location)
             counts["recorded"] += 1
         cases, _ = parse_case_file(path)
         for case in cases:
@@ -444,7 +467,8 @@ def main() -> int:
         f"{counts['pruned']} records pruned, {changed_files} record files changed"
     )
     tools_text = ", ".join(f"{k} {v}" for kind in ("shape", "read") for k, v in sorted(tools_for[kind].items()))
-    print(f"oracle: extractor {extractor}; {tools_text}")
+    versions_text = ", ".join(f"{kind} {v}" for kind, v in sorted(extractor.items()))
+    print(f"oracle: extractor {versions_text}; {tools_text}")
     if width_requests or counts["width-skipped"]:
         chrome_text = ", ".join(f"{k} {v}" for k, v in sorted(chrome["tools"].items()))
         print(f"width oracle: extractor {chrome['extractor']}; {chrome_text}")

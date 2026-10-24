@@ -863,8 +863,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef1 (classdef1_font4); the test feature selects the lookup"
     },
@@ -878,8 +877,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef1 (classdef1_font2): an empty class definition; the test feature selects the lookup"
     },
@@ -893,8 +891,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef1 (classdef1_font3): several alternates or sequences; the test feature selects the lookup"
     },
@@ -908,8 +905,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef1 (classdef2_font1): a single-class definition; the test feature selects the lookup"
     },
@@ -923,8 +919,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef2 (classdef2_font4); the test feature selects the lookup"
     },
@@ -938,8 +933,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef2 (classdef2_font2): an empty class definition; the test feature selects the lookup"
     },
@@ -953,8 +947,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef2 (classdef2_font3): several alternates or sequences; the test feature selects the lookup"
     },
@@ -968,8 +961,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS classdef2 (classdef2_font1): a single-class definition; the test feature selects the lookup"
     },
@@ -984,8 +976,7 @@
       "gating": false,
       "needs": [
         "cmap format 0",
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap0 (cmap0_font1); the test feature selects the lookup"
     },
@@ -1000,8 +991,7 @@
       "gating": false,
       "needs": [
         "cmap format 10",
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap10 (cmap10_font1); the test feature selects the lookup"
     },
@@ -1016,8 +1006,7 @@
       "gating": false,
       "needs": [
         "cmap format 10",
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap10 (cmap10_font2); the test feature selects the lookup"
     },
@@ -1031,8 +1020,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap12 (cmap12_font1); the test feature selects the lookup"
     },
@@ -1046,8 +1034,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap4 (cmap4_font1); the test feature selects the lookup"
     },
@@ -1061,8 +1048,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap4 (cmap4_font2); the test feature selects the lookup"
     },
@@ -1077,8 +1063,7 @@
       "gating": false,
       "needs": [
         "cmap format 6",
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap6 (cmap6_font1); the test feature selects the lookup"
     },
@@ -1093,8 +1078,7 @@
       "gating": false,
       "needs": [
         "cmap format 6",
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS cmap6 (cmap6_font2); the test feature selects the lookup"
     },
@@ -1109,8 +1093,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos1 (gpos1_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1125,8 +1108,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos1 (gpos1_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -1141,8 +1123,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos1 (gpos1_1_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -1157,8 +1138,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos1 (gpos1_2_font1); the test feature selects the lookup"
     },
@@ -1173,8 +1153,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos1 (gpos1_2_font2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1189,8 +1168,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_1_font6); the test feature selects the lookup"
     },
@@ -1205,8 +1183,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_1_font7); the test feature selects the lookup"
     },
@@ -1221,8 +1198,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos2 (gpos2_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1237,8 +1213,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos2 (gpos2_1_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1253,8 +1228,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_1_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -1269,8 +1243,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_1_next_glyph_f2): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -1285,8 +1258,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -1301,8 +1273,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_2_font1); the test feature selects the lookup"
     },
@@ -1317,8 +1288,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS pair placement",
-        "oracle --single-par"
+        "GPOS pair placement"
       ],
       "reason": "AOTS gpos2 (gpos2_2_font2); the test feature selects the lookup"
     },
@@ -1333,8 +1303,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos3 (gpos3_font1); the test feature selects the lookup"
     },
@@ -1349,8 +1318,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos3 (gpos3_font3); the test feature selects the lookup"
     },
@@ -1365,8 +1333,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos4 (gpos4_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1381,8 +1348,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos4 (gpos4_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1397,8 +1363,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos4 (gpos4_simple_1): the basic case; the test feature selects the lookup"
     },
@@ -1413,8 +1378,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos5 (gpos5_font1); the test feature selects the lookup"
     },
@@ -1429,8 +1393,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos6 (gpos6_font1); the test feature selects the lookup"
     },
@@ -1445,8 +1408,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos7 (gpos7_1_font1); the test feature selects the lookup"
     },
@@ -1461,8 +1423,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos9 (gpos9_font1); the test feature selects the lookup"
     },
@@ -1477,8 +1438,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos9 (gpos9_font2); the test feature selects the lookup"
     },
@@ -1493,8 +1453,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1509,8 +1468,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1525,8 +1483,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_chaining1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1541,8 +1498,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -1557,8 +1513,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -1573,8 +1528,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -1589,8 +1543,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -1605,8 +1558,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -1621,8 +1573,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining1_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -1637,8 +1588,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1653,8 +1603,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1669,8 +1618,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_chaining2_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1685,8 +1633,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -1701,8 +1648,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -1717,8 +1663,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -1733,8 +1678,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -1749,8 +1693,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -1765,8 +1708,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining2_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -1781,8 +1723,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1797,8 +1738,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1813,8 +1753,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_chaining3_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1829,8 +1768,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -1845,8 +1783,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -1861,8 +1798,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -1877,8 +1813,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_chaining3_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -1893,8 +1828,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1909,8 +1843,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -1925,8 +1858,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_expansion_f1): a nested lookup grows the run; the test feature selects the lookup"
     },
@@ -1941,8 +1873,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1957,8 +1888,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context1_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -1973,8 +1903,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -1989,8 +1918,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2005,8 +1933,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2021,8 +1948,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2037,8 +1963,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -2053,8 +1978,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context1_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -2069,8 +1993,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2085,8 +2008,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2101,8 +2023,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_classes_f1): class-based rules; the test feature selects the lookup"
     },
@@ -2117,8 +2038,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_classes_f2): class-based rules; the test feature selects the lookup"
     },
@@ -2133,8 +2053,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_expansion_f1): a nested lookup grows the run; the test feature selects the lookup"
     },
@@ -2149,8 +2068,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context2_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2165,8 +2083,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context2_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2181,8 +2098,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2197,8 +2113,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2213,8 +2128,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2229,8 +2143,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2245,8 +2158,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -2261,8 +2173,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context2_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -2277,8 +2188,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context3_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2293,8 +2203,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context3_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2309,8 +2218,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context3_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2325,8 +2233,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gpos (gpos_context3_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2341,8 +2248,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context3_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2357,8 +2263,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context3_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2373,8 +2278,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GPOS beyond pair kerning",
-        "oracle --single-par"
+        "GPOS beyond pair kerning"
       ],
       "reason": "AOTS gpos (gpos_context3_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -2389,8 +2293,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub1 (gsub1_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2404,8 +2307,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub1 (gsub1_1_modulo_f1): delta arithmetic wraps modulo 65536; the test feature selects the lookup"
     },
@@ -2419,8 +2321,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub1 (gsub1_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2435,8 +2336,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub1 (gsub1_2_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2450,8 +2350,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub1 (gsub1_2_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2466,8 +2365,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub2 (gsub2_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2481,8 +2379,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub2 (gsub2_1_multiple_sequences_f1): several output sequences; the test feature selects the lookup"
     },
@@ -2496,8 +2393,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub2 (gsub2_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2512,8 +2408,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub3 (gsub3_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2528,8 +2423,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GSUB 3",
-        "oracle --single-par"
+        "GSUB 3"
       ],
       "reason": "AOTS gsub3 (gsub3_1_multiple_f1): several alternates or sequences; the test feature selects the lookup"
     },
@@ -2544,8 +2438,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GSUB 3",
-        "oracle --single-par"
+        "GSUB 3"
       ],
       "reason": "AOTS gsub3 (gsub3_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2560,8 +2453,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub4 (gsub4_1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2575,8 +2467,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub4 (gsub4_1_multiple_ligatures_f1): several ligatures in one set; the test feature selects the lookup"
     },
@@ -2590,8 +2481,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub4 (gsub4_1_multiple_ligatures_f2): several ligatures in one set; the test feature selects the lookup"
     },
@@ -2605,8 +2495,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub4 (gsub4_1_multiple_ligsets_f1): several ligature sets; the test feature selects the lookup"
     },
@@ -2620,8 +2509,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub4 (gsub4_1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2635,8 +2523,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub7 (gsub7_font1); the test feature selects the lookup"
     },
@@ -2650,8 +2537,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub7 (gsub7_font2); the test feature selects the lookup"
     },
@@ -2665,8 +2551,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2680,8 +2565,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2696,8 +2580,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_chaining1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2711,8 +2594,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2726,8 +2608,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2741,8 +2622,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2756,8 +2636,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2771,8 +2650,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -2786,8 +2664,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining1_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -2801,8 +2678,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2816,8 +2692,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2832,8 +2707,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_chaining2_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2847,8 +2721,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2862,8 +2735,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -2877,8 +2749,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2892,8 +2763,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -2907,8 +2777,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -2922,8 +2791,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining2_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -2937,8 +2805,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2952,8 +2819,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -2968,8 +2834,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_chaining3_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -2983,8 +2848,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -2998,8 +2862,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -3013,8 +2876,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -3028,8 +2890,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_chaining3_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -3043,8 +2904,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3058,8 +2918,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3073,8 +2932,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_expansion_f1): a nested lookup grows the run; the test feature selects the lookup"
     },
@@ -3089,8 +2947,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context1_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3105,8 +2962,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context1_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3120,8 +2976,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -3135,8 +2990,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -3150,8 +3004,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -3165,8 +3018,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -3180,8 +3032,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -3195,8 +3046,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context1_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -3210,8 +3060,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3225,8 +3074,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3240,8 +3088,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_classes_f1): class-based rules; the test feature selects the lookup"
     },
@@ -3255,8 +3102,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_classes_f2): class-based rules; the test feature selects the lookup"
     },
@@ -3270,8 +3116,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_expansion_f1): a nested lookup grows the run; the test feature selects the lookup"
     },
@@ -3286,8 +3131,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context2_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3302,8 +3146,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context2_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3317,8 +3160,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_multiple_subrules_f1): several rules, first match wins; the test feature selects the lookup"
     },
@@ -3332,8 +3174,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_multiple_subrules_f2): several rules, first match wins; the test feature selects the lookup"
     },
@@ -3347,8 +3188,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -3362,8 +3202,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -3377,8 +3216,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_simple_f2): the basic case; the test feature selects the lookup"
     },
@@ -3392,8 +3230,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context2_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -3407,8 +3244,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context3_boundary_f1): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3422,8 +3258,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context3_boundary_f2): matching stops at the run boundary; the test feature selects the lookup"
     },
@@ -3438,8 +3273,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context3_lookupflag_f1): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3454,8 +3288,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS gsub (gsub_context3_lookupflag_f2): lookup flags skip glyphs by GDEF class; the test feature selects the lookup"
     },
@@ -3469,8 +3302,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context3_next_glyph_f1): matching resumes at the next glyph; the test feature selects the lookup"
     },
@@ -3484,8 +3316,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context3_simple_f1): the basic case; the test feature selects the lookup"
     },
@@ -3499,8 +3330,7 @@
       "milestone": "M3",
       "gating": false,
       "needs": [
-        "feature selection",
-        "oracle --single-par"
+        "feature selection"
       ],
       "reason": "AOTS gsub (gsub_context3_successive_f1): successive matches in one run; the test feature selects the lookup"
     },
@@ -3515,8 +3345,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS lookupflag (lookupflag_ignore_attach_f1); the test feature selects the lookup"
     },
@@ -3531,8 +3360,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS lookupflag (lookupflag_ignore_base_f1); the test feature selects the lookup"
     },
@@ -3547,8 +3375,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS lookupflag (lookupflag_ignore_combination_f1); the test feature selects the lookup"
     },
@@ -3563,8 +3390,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS lookupflag (lookupflag_ignore_ligatures_f1); the test feature selects the lookup"
     },
@@ -3579,8 +3405,7 @@
       "gating": false,
       "needs": [
         "feature selection",
-        "GDEF lookup flags",
-        "oracle --single-par"
+        "GDEF lookup flags"
       ],
       "reason": "AOTS lookupflag (lookupflag_ignore_marks_f1); the test feature selects the lookup"
     },

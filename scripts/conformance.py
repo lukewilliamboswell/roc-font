@@ -14,7 +14,8 @@ a path prefix under tests/cases, such as `harfbuzz/` for the full HarfBuzz
 import or `hb-pending/` for curated cases a later milestone will make
 pass). Outcomes per gating case:
 
-    agree           the driver's result equals the record
+    agree           the driver's result equals the record (a width on a
+                    variable font: within half a unit per glyph of Chrome's)
     known           differs, and tests/known-failures.json lists the case
     FAIL            differs and is not listed
     STALE           listed in known-failures.json but now agrees (remove it)
@@ -89,8 +90,10 @@ from _common import (  # noqa: E402
     load_known_failures,
     load_records,
     parse_case_file,
+    canonical_json,
     record_key,
     rel,
+    resolve_location,
     roc_command,
     roc_version,
     sha256_bytes,
@@ -144,7 +147,45 @@ def build_driver(roc: str, force: bool) -> int:
     return 0
 
 
-def run_driver(command_prefix: list[str], cases: list, explain: bool) -> tuple[dict[str, str], dict[str, str], dict]:
+class Locations:
+    """resolve_location per (font, face, location fields), each font read once."""
+
+    def __init__(self) -> None:
+        self.cache: dict[tuple, dict | None] = {}
+
+    def of(self, case) -> dict | None:
+        key = (case.font_path, case.face, canonical_json(case.location))
+        if key not in self.cache:
+            self.cache[key] = resolve_location(case, case.font_path.read_bytes())
+        return self.cache[key]
+
+
+def width_tolerance(case, record: dict) -> float:
+    """How far a width may be from Chrome's and still agree. Exact for a
+    static font. At a variable font's location Chrome keeps each glyph's
+    advance to 1/64 unit while HarfBuzz (and roc-font) round each to an
+    integer, so the two agree within half a unit per glyph; the code point
+    count stands for the glyph count (ligatures only lower it)."""
+    location = record.get("location")
+    if case.kind != "width" or not location or not location.get("axes"):
+        return 0.0
+    return len(case.scalars) / 2
+
+
+def results_agree(case, record: dict, actual: str) -> bool:
+    expected = record["result"]
+    if actual == expected:
+        return True
+    tolerance = width_tolerance(case, record)
+    if tolerance and expected.startswith("width:") and actual.startswith("width:"):
+        try:
+            return abs(float(actual[6:]) - float(expected[6:])) <= tolerance
+        except ValueError:
+            return False
+    return False
+
+
+def run_driver(command_prefix: list[str], cases: list, explain: bool, locations: Locations) -> tuple[dict[str, str], dict[str, str], dict]:
     """Send every runnable case to the driver in one process (the line
     protocol of tools/driver/Case.roc, written by _common.driver_request).
     Returns results and explanations by case id, and timing figures. A case
@@ -155,7 +196,7 @@ def run_driver(command_prefix: list[str], cases: list, explain: bool) -> tuple[d
     for case in cases:
         if not case.font_path.is_file():
             continue
-        line, unsupported = driver_request(case, str(case.font_path))
+        line, unsupported = driver_request(case, str(case.font_path), locations.of(case))
         if line is None:
             results[case.id] = f"unsupported:{unsupported}"
         else:
@@ -226,7 +267,7 @@ def score_line(name: str, score: dict) -> str:
 # --------------------------------------------------------------------- main
 
 
-def classify(case, record, actual: str, font_hashes: dict[Path, str]) -> tuple[str, str]:
+def classify(case, record, actual: str, font_hashes: dict[Path, str], locations: Locations) -> tuple[str, str]:
     """Outcome before known-failures are applied: one of agree, differ,
     unsupported, skipped, MISSING-RECORD, MISSING-FONT, BAD-EXPECTATION."""
     font = case.font_path
@@ -243,7 +284,7 @@ def classify(case, record, actual: str, font_hashes: dict[Path, str]) -> tuple[s
     if record is None:
         return "MISSING-RECORD", "no record"
     provenance = record["provenance"]
-    if record["key"] != record_key(case, font_hashes[font], provenance["tools"], provenance["extractor"]):
+    if record["key"] != record_key(case, font_hashes[font], provenance["tools"], provenance["extractor"], locations.of(case)):
         return "MISSING-RECORD", "record key is stale (case or font changed)"
     if record["status"] != "ok":
         return "unsupported", f"oracle: {record['detail']}"
@@ -253,7 +294,7 @@ def classify(case, record, actual: str, font_hashes: dict[Path, str]) -> tuple[s
         return "BAD-EXPECTATION", f"case says {written}, record says {expected}"
     if actual.startswith("unsupported:"):
         return "unsupported", f"driver: {actual}"
-    return ("agree", "") if actual == expected else ("differ", "")
+    return ("agree", "") if results_agree(case, record, actual) else ("differ", "")
 
 
 def main() -> int:
@@ -293,7 +334,8 @@ def main() -> int:
         parsed, file_problems = parse_case_file(path)
         cases += parsed
         problems += file_problems
-    results, explanations, timing = run_driver(prefix, cases, args.explain)
+    locations = Locations()
+    results, explanations, timing = run_driver(prefix, cases, args.explain, locations)
 
     outcomes: list[tuple[str, object, str]] = []  # gating: (outcome, case, note)
     scored: dict[str, Counter] = {}
@@ -305,7 +347,7 @@ def main() -> int:
     for case in cases:
         record = records_by_file[case.file].get(case.id)
         actual = results.get(case.id, "error:no-driver-output")
-        outcome, note = classify(case, record, actual, font_hashes)
+        outcome, note = classify(case, record, actual, font_hashes, locations)
         suite = every_file_suite.get(case.file)
         if outcome == "differ":
             why = explanations.get(case.id)

@@ -2,6 +2,42 @@
   "about": "Cases where roc-font deliberately or knowingly differs from its recorded oracle result. scripts/conformance.py fails on any unlisted difference and on any listed case that now agrees; it never edits this file. Keep entries sorted by id; every entry needs a reason a reader can act on.",
   "entries": [
     {
+      "id": "collections/inter-ttc-read-face0",
+      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
+    },
+    {
+      "id": "collections/inter-ttc-shape-face0",
+      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
+    },
+    {
+      "id": "collections/inter-ttc-width-face0",
+      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
+    },
+    {
+      "id": "collections/test-ttc-read-face0",
+      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
+    },
+    {
+      "id": "collections/test-ttc-shape-face0",
+      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
+    },
+    {
+      "id": "corpus-fonts/fonttools-bogus-post-read",
+      "reason": "OTS rejects the font because it has no `OS/2` table. roc-font treats `OS/2` as optional (architecture §4.4), so accepting the font is deliberate."
+    },
+    {
+      "id": "corpus-fonts/fonttools-noto-vf-subset-read",
+      "reason": "OTS rejects the subset because it has no `name` table. roc-font does not require `name`, so accepting the font is deliberate."
+    },
+    {
+      "id": "corpus-fonts/jellee-kern-pairs",
+      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset; roc-font reads only the OpenType version 0 `kern` table and returns no offsets yet (architecture §6.2, `kern` values split as HarfBuzz does)."
+    },
+    {
+      "id": "corpus-fonts/jellee-kern-read",
+      "reason": "OTS discards an Apple-style `kern` table (version 1.0: 'Unsupported table version: 1'); roc-font ignores that version without reporting it, so it accepts the font. Lenient reading with `Font.dropped` (architecture §4.4) should report the table as dropped."
+    },
+    {
       "id": "inter/soft-hyphen-hidden",
       "reason": "Default-ignorable characters are not hidden yet (architecture §6.2). HarfBuzz draws U+00AD with the space glyph at zero advance; the driver maps it through the cmap and gets glyph 0."
     },

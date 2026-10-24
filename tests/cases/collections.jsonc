@@ -1,0 +1,38 @@
+// Collections (`ttcf`) and the `face` field (architecture §4.1: ReadOptions.face,
+// NoSuchFace past the last face). `face` is sent to the oracle as
+// `--face-index=N`; a face past the font is `read:reject` (the extractor's
+// rule: roc-font refuses it where HarfBuzz would use an empty face and OTS
+// ignores the index of a single font). Driver protocol 1 has no faces, so
+// cases with a face other than 0 report `unsupported:face` until the driver
+// speaks protocol 2.
+//
+// Fonts: Inter 4.1's Inter.ttc (36 static faces: 0 Regular, 1 Black,
+// 3 Italic, 4 Thin, ...; corpus entry inter-4.1-ttc), fontTools' TestTTC.ttc
+// (two faces; the same bytes as HarfBuzz's in-house TTC.ttc; corpus entry
+// fonttools-4.61.1-tests) and the crafted single font fixtures/tiny.ttf.
+{
+  "schema": 1,
+  "cases": [
+    { "id": "inter-ttc-read-face0", "kind": "read", "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "read:accept" },
+    { "id": "inter-ttc-read-face1", "kind": "read", "face": 1, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "read:accept" },
+    { "id": "inter-ttc-read-face35", "kind": "read", "face": 35, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "read:accept" },
+    { "id": "inter-ttc-read-past-last-face", "kind": "read", "face": 36, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "read:reject",
+      "reason": "NoSuchFace: the collection has 36 faces" },
+    { "id": "inter-ttc-shape-face0", "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "text": "AVATAR office", "expected": "[2=0+1273|456=1+1273|2=2+1239|411=3+1148|2=4+1413|384=5+1318|1777=6+576|790=7+1228|647=8+678|647=9+758|689=10+496|586=11+1170|614=12+1194]" },
+    { "id": "inter-ttc-shape-black", "face": 1, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "text": "AVATAR office", "expected": "[2=0+1448|456=1+1448|2=2+1439|411=3+1217|2=4+1628|384=5+1368|1777=6+408|790=7+1280|647=8+774|647=9+896|689=10+606|586=11+1235|614=12+1242]" },
+    { "id": "inter-ttc-shape-italic", "face": 3, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "text": "Wave To", "expected": "[459=0+1914|507=1+1227|949=2+1111|583=3+1179|1746=4+576|411=5+1164|759=6+1229]" },
+    { "id": "inter-ttc-shape-past-last-face", "face": 36, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "text": "A", "expected": "read:reject" },
+    { "id": "inter-ttc-metrics-thin", "kind": "metrics", "face": 4, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "metrics:ascent=1984,descent=-494,line_gap=0,cap_height=1490,x_height=1118,underline_position=-395,underline_thickness=46,strikeout_position=671,strikeout_thickness=46" },
+    { "id": "inter-ttc-coords-static", "kind": "coords", "face": 1, "variations": {"wght": 700}, "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "expected": "coords:",
+      "reason": "a static face ignores variations" },
+    { "id": "inter-ttc-width-face0", "kind": "width", "font": "../corpus/inter-4.1-ttc/Inter.ttc", "font_sha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef", "text": "AVATAR", "expected": "width:7664" },
+    { "id": "test-ttc-read-face0", "kind": "read", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTC.ttc", "font_sha256": "a8521588045ed5f1f8b07eecaac06ed3186c644655bfac00dd4507cd316fbdc5", "expected": "read:accept" },
+    { "id": "test-ttc-read-face1", "kind": "read", "face": 1, "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTC.ttc", "font_sha256": "a8521588045ed5f1f8b07eecaac06ed3186c644655bfac00dd4507cd316fbdc5", "expected": "read:accept" },
+    { "id": "test-ttc-read-face2", "kind": "read", "face": 2, "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTC.ttc", "font_sha256": "a8521588045ed5f1f8b07eecaac06ed3186c644655bfac00dd4507cd316fbdc5", "expected": "read:reject" },
+    { "id": "test-ttc-shape-face0", "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTC.ttc", "font_sha256": "a8521588045ed5f1f8b07eecaac06ed3186c644655bfac00dd4507cd316fbdc5", "unicodes": "U+2026,U+0020,U+002E", "expected": "[5=0+723|3=1+250|4=2+241]" },
+    { "id": "test-ttc-shape-face1", "face": 1, "font": "../corpus/fonttools-4.61.1-tests/Tests/ttx/data/TestTTC.ttc", "font_sha256": "a8521588045ed5f1f8b07eecaac06ed3186c644655bfac00dd4507cd316fbdc5", "unicodes": "U+2026,U+0020,U+002E", "expected": "[5=0+723|3=1+250|4=2+241]" },
+    { "id": "single-font-face1", "kind": "read", "face": 1, "font": "fixtures/tiny.ttf", "expected": "read:reject",
+      "reason": "a single font has only face 0 (NoSuchFace)" },
+    { "id": "single-font-face0", "kind": "read", "face": 0, "font": "fixtures/tiny.ttf", "expected": "read:accept" }
+  ]
+}

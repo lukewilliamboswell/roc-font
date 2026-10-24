@@ -34,7 +34,10 @@ HarfBuzz's test syntax. HarfBuzz's `.tests` files are only an import source.
 |Path |Role
 
 |`tests/cases/*.jsonc`
-|Our own cases (the authority), in the JSONC case format below.
+|Our own cases (the authority), in the JSONC case format below. Among them:
+`default-fonts.jsonc` (the three default fonts at several locations),
+`collections.jsonc` (faces of `ttcf` files), `corpus-fonts.jsonc` (the
+pinned corpus fonts) and `chrome.jsonc` (Chrome widths).
 
 |`tests/cases/hb-curated/`, `tests/cases/hb-pending/`, `tests/cases/hb-fonts/`
 |Cases curated from HarfBuzz's suites: gating, scored (not passing yet), and
@@ -130,8 +133,10 @@ A case file is an object:
 ----
 
 `defaults` merges into each case; an `options` object merges key by key, and
-a case clears a default by setting the field to `null` (only `font_sha256`
-is nullable). Every problem in a file is reported at once (unknown fields,
+a case clears a default by setting the field to `null` (`font_sha256`,
+`face`, `glyphs` and the location fields). Decimal numbers are parsed
+exactly (as Python `Decimal`), so an axis value such as `87.5` reaches keys
+and the driver as written. Every problem in a file is reported at once (unknown fields,
 bad values, duplicate ids); a case with a problem is left out and the run
 fails.
 
@@ -150,10 +155,12 @@ starting with `line-`.
 
 |`kind`
 |no (`shape`)
-|`shape` (glyphs and positions), `read` (does the font read?) or `width`
-(the text's total advance as Chrome lays it out). The format is extensible:
-another lower-case word parses, and is `unsupported` until an oracle and the
-driver answer it.
+|`shape` (glyphs and positions), `read` (does the font read?), `width`
+(the text's total advance as Chrome lays it out), or a font-fact kind:
+`coords` (normalised variation coordinates), `advances` (per-glyph
+advances), `metrics` (line and decoration metrics) or `extents` (glyph ink
+boxes); see "Font-fact kinds". The format is extensible: another lower-case
+word parses, and is `unsupported` until an oracle and the driver answer it.
 
 |`font`
 |yes
@@ -170,12 +177,29 @@ fails the run (`FONT-CHANGED`).
 |The text, as a string and/or as code points in hb-shape `--unicodes` syntax
 (`"U+0041,U+0056"`; `U+`, `u+`, `0x` or no prefix, separated by commas or
 spaces; also a list of such strings). When both are given they must agree.
-Surrogates and values past U+10FFFF are rejected. Reading cases take no
-text.
+Surrogates and values past U+10FFFF are rejected. Only `shape` and `width`
+cases take text.
+
+|`glyphs`
+|for `advances`, `extents`
+|Glyph ids, `[0, 2, 456]`, or `"all"` (every glyph of the font, in order).
+Other kinds take none.
+
+|`face`
+|no (0)
+|The face of a collection (`ttcf`), as `ReadOptions.face`. Sent to the
+oracle as `--face-index=N`; imported HarfBuzz cases spell it that way in
+`hb_options`, and a case gives it only once. A face past the font reads as
+`read:reject` (roc-font's `NoSuchFace`), also for a single font and face 1.
+
+|`variations`, `variation`, `instance`
+|no (Regular)
+|Where a variable font is measured; see "Locations". Reading cases take
+none; a static font ignores them.
 
 |`options`
 |no
-|Structured shaping options (next table). Reading and width cases take none.
+|Structured shaping options (next table). Only `shape` cases take them.
 
 |`expected`
 |no (`"oracle"`)
@@ -202,13 +226,105 @@ area, and the capabilities still missing.
 (the release) and `expected` (HarfBuzz's own expectation).
 |===
 
+=== Locations
+
+Three case fields select a variable font's location, mirroring roc-font's
+`Font.Variation` (architecture §5.7, `docs/variable-fonts.adoc` §5.1):
+
+[source,jsonc]
+----
+{ "id": "office-bold", "text": "office", "variations": {"wght": 700, "opsz": 32} }   // axis tag -> design value
+{ "id": "office-named", "text": "office", "variation": {"weight": "Bold", "width": 87.5, "optical_size": 12} }
+{ "id": "office-black", "text": "office", "instance": 8 }                             // a named instance index
+----
+
+* `variations`: an object of axis tag (1-8 printable characters other than
+  space, `,`, `:`, `=`, `\` and quotes) to a number with at most 18
+  decimal places (a Roc `Dec`; magnitude at most 10^9). It becomes
+  `Font.Variation.{ axes: [...] }` in written order; a later entry wins. A
+  tag that is not four bytes, or that the font lacks, is ignored, as
+  roc-font ignores it, so a case can show that.
+* `variation`: the named-field form, testing roc-font's mapping itself.
+  `weight` is `Thin` ... `Black` (CSS 100-900) or an integer 0-65535;
+  `width` is `UltraCondensed` ... `UltraExpanded` (CSS `font-stretch`
+  percentages, `SemiCondensed` = 87.5) or a percentage; `optical_size` is
+  `"FontDefault"` or a size in CSS px (sets `opsz`). `variations` entries
+  are applied after these and win per tag.
+* `instance`: a named instance index, set on the oracle with
+  `hb_font_set_var_named_instance`. It cannot be combined with the other
+  two. An index past the font's instances is an oracle `error`.
+
+*The default is Regular, not the default instance.* A case without any of
+the three measures at `Font.Variation.{}`: `wght` 400, `wdth` 100 and the
+font's default optical size, as a browser does. HarfBuzz's own default is
+the font's default instance, which is Light for Merriweather and Fira
+Code, so the oracle is never left to its default: `_common.resolve_location`
+reads the face's `fvar` and gives the oracle *every* axis at the value the
+case selects (unclamped; HarfBuzz clamps as the format defines). The
+resolved location is written into the record as `location`:
+
+[source,json]
+----
+"location":{"axes":[["wght","400"],["wdth","87.5"],["opsz","18"]],"default":false,
+            "fields":{"variation":{"width":"SemiCondensed"}}}
+----
+
+`fields` are the case's location fields in canonical form (decimal
+strings), `axes` the resolved values in `fvar` order, and `default` says
+whether every axis is at its default (the protocol 1 driver runs only
+those). A static font without location fields gets no `location`, so
+records made before locations existed keep their keys. Values are passed
+to HarfBuzz as the single-precision number nearest the decimal, as
+roc-font converts a `Dec`. At a non-default location every HarfBuzz query
+is made twice and the second answer recorded: HarfBuzz quantises a region
+scalar in a cache from its second evaluation on, the steady state roc-font
+models (`docs/variable-fonts.adoc` §3.3).
+
+=== Font-fact kinds
+
+[cols="1,2,3",options="header"]
+|===
+|Kind |Takes |Result
+
+|`coords`
+|a location
+|`coords:<tag>=<F2Dot14>,...`: HarfBuzz's normalised coordinates
+(`hb_font_get_var_coords_normalized`, units of 1/16384) in `fvar` axis
+order, after `avar`. A static font gives `coords:`.
+
+|`advances`
+|`glyphs`, a location
+|`advances:<a>,<b>,...`: `hb_font_get_glyph_h_advance` per listed glyph
+(`HVAR` at a location).
+
+|`metrics`
+|a location
+|`metrics:ascent=..,descent=..,line_gap=..,cap_height=..,x_height=..,underline_position=..,underline_thickness=..,strikeout_position=..,strikeout_thickness=..`:
+`hb_ot_metrics_get_position_with_fallback` for the horizontal ascender,
+descender (negative below the baseline) and line gap, cap and x height,
+underline and strikeout offset and size (`MVAR` at a location). The record's
+`detail` keeps the values without fallback (null where the font has none).
+
+|`extents`
+|`glyphs`, a location
+|`extents:<gid>=<x_min>,<y_min>,<x_max>,<y_max>\|<gid>=empty\|...`: the ink box
+from `hb_font_get_glyph_extents` (y up), or `empty` for a glyph without
+outline (HarfBuzz reports a zero box or fails). At a non-default location
+this needs `gvar` (phase 3).
+|===
+
+All values are font units at a scale of the units per em. Kinds other than
+`shape` take no options; `coords`, `metrics`, `advances` and `extents`
+take no text.
+
 === Options
 
 Options are structured; `scripts/_common.py` turns them into the equivalent
 hb-shape options, in the fixed order below, for the oracle and the record
-key. Shaping cases always carry `--no-glyph-names`; reading cases are sent
-as `--read-outcome` and width cases as `--width` (each kind's selecting
-option, part of its key).
+key. Shaping cases always carry `--no-glyph-names`; every other kind is sent with its selecting option
+(`--read-outcome`, `--width`, `--coords`, `--advances`, `--metrics`,
+`--extents`), part of its key, followed by `--face-index=N` for a face
+other than 0.
 
 [cols="2,2,1,1",options="header"]
 |===
@@ -226,7 +342,7 @@ option, part of its key).
 
 |`features`, `variations` (lists of hb-shape items, e.g. `"-kern"`, `"salt=2"`, `"wght=700"`)
 |`--features=`, `--variations=` (comma-joined)
-|no
+|`variations` from protocol 2 (as `axis=` flags)
 |yes
 
 |`font_size` (integer)
@@ -256,9 +372,14 @@ option, part of its key).
 
 |`hb_options` (list)
 |verbatim (anything else hb-shape takes, e.g. `--single-par`, `--show-flags`)
-|`--font-funcs=ot/ft` and `--single-par` (no effect on roc-font)
-|some
+|`--font-funcs=ot/ft` and `--single-par` (no effect on roc-font);
+`--face-index=N` from protocol 2
+|some (`--single-par` is a no-op: one buffer is always one paragraph)
 |===
+
+The `variations` option exists for imported HarfBuzz cases; our own cases
+use the `variations` case field, which every kind but `read` takes. Both
+end up in the resolved location (the option's items after the field's).
 
 When the driver cannot honour an option the review reports
 `unsupported:<hb-shape option>` without running the case; when the oracle
@@ -293,6 +414,13 @@ sorted). A shaping case whose font is rejected prints `read:reject`.
 Width results are `width:<n>`: the advance width of the whole text in font
 units with the browser's default features. The driver answers with the sum
 of its run's advances (advance plus kerning, as in its shaping result).
+On a variable font Chrome keeps each glyph's advance to 1/64 unit, where
+HarfBuzz and roc-font round each advance to an integer, so a width case
+whose record has a `location` with axes agrees when the two differ by at
+most half a unit per glyph (the code point count stands for the glyph
+count); everywhere else results compare as strings.
+
+The font-fact results are in "Font-fact kinds" above.
 
 Driver-only results: `unsupported:<option>`, `error:font-file` (the font
 could not be read from disk) and `error:malformed-request:<why>`.
@@ -304,18 +432,70 @@ It reads requests on stdin, one per line, reads each distinct font once (a
 cache keyed by path), and prints one line per request in order:
 
 ----
-request:  <tag> TAB <font path> TAB <kind> TAB <code points> TAB <flags>
+request:  <tag> TAB <font path> TAB <kind> TAB <items> TAB <flags>
 answer:   <tag> TAB <result> [TAB <reader's problems, with --explain>]
 ----
 
 * `tag`: an opaque name echoed back; `conformance.py` sends the case id.
 * `font path`: as the driver should open it (absolute from the review).
-* `kind`: `shape`, `read` or `width`.
-* `code points`: lower-case hexadecimal without prefix, comma-separated;
-  empty for empty text.
+* `kind`: `shape`, `read` or `width`; from protocol 2 also `coords`,
+  `advances`, `metrics` and `extents`.
+* `items`: lower-case hexadecimal without prefix, comma-separated: the code
+  points for `shape` and `width` (empty for empty text), the glyph ids for
+  `advances` and `extents` (or the word `all`: every glyph, `0` to the glyph
+  count minus one), empty for the other kinds.
 * `flags`: comma-separated, from `no-clusters`, `no-positions`,
   `no-advances`, `utf8-clusters` and `font-size=<n>` (the driver answers
   `unsupported:--font-size=<n>` when `n` is not the font's units per em).
+
+*Protocol 2* adds the font-fact kinds and these flags, which only ever
+carry the case's own fields (resolving them to axes is roc-font's job, so
+the driver tests the mapping):
+
+[cols="1,3",options="header"]
+|===
+|Flag |Meaning for the driver
+
+|`face=<n>`
+|`Font.from_bytes(bytes, ReadOptions.{ face: n })`; absent means face 0.
+A face past the font prints `read:reject` like any rejected font.
+
+|`instance=<n>`
+|the font at named instance `n` (all its coordinates); never combined with
+the flags below.
+
+|`weight=<w>`
+|`Font.Variation.weight`: `Thin`, `ExtraLight`, `Light`, `Regular`,
+`Medium`, `SemiBold`, `Bold`, `ExtraBold`, `Black`, or a decimal integer
+for `Weight(n)`.
+
+|`width=<w>`
+|`Font.Variation.width`: `UltraCondensed`, `ExtraCondensed`, `Condensed`,
+`SemiCondensed`, `Normal`, `SemiExpanded`, `Expanded`, `ExtraExpanded`,
+`UltraExpanded`, or a decimal for `Percent(d)`.
+
+|`optical-size=<s>`
+|`Font.Variation.optical_size`: `FontDefault` or a decimal for `Size(d)`.
+
+|`axis=<tag>:<value>`
+|one `Font.Variation.axes` entry `{ tag, value }`, `value` a decimal
+(`-?[0-9]+(.[0-9]+)?`, at most 18 places); repeatable, in order, a later
+entry winning. The tag is passed through unchanged even when it is not four
+bytes (roc-font ignores it).
+|===
+
+With no location flag the driver measures at `Font.Variation.{}`
+(Regular), never at the default instance. Results of the new kinds use the
+notation of "Font-fact kinds" exactly: `coords:` lists every `fvar` axis by
+tag in `fvar` order; `advances:` one decimal per requested glyph;
+`metrics:` the nine fields in the order shown; `extents:` `|`-separated
+entries in request order. Under protocol 1 `_common.driver_request`
+answers `unsupported:kind=<kind>`, `unsupported:face` or
+`unsupported:location` without sending the case; it runs a case on a
+variable font only when every resolved axis is at its default (Inter at
+Regular, Merriweather and Fira Code at `wght` 300). `DRIVER_PROTOCOL` in
+`scripts/_common.py` names the protocol the driver speaks; setting it to 2
+is the whole switch on the Python side.
 
 `_common.driver_request` writes requests; `Case.request` parses them (with
 expects for every field and error). By hand:
@@ -384,7 +564,7 @@ System Node 18 is too old; Node 23 from nvm works.
 
 |uharfbuzz (bundles HarfBuzz)
 |0.56.3 (HarfBuzz 14.6.0)
-|`shape` cases
+|`shape`, `coords`, `advances`, `metrics` and `extents` cases
 
 |OTS `ots-sanitize`
 |9.3.0 (Linux x86-64 release build)
@@ -401,6 +581,11 @@ required table rejects, any other failing table is dropped)
 font units. Canvas `measureText` is not the reference: it shapes word by
 word. A code point the font does not map would fall back to another font,
 so such cases are `unsupported`; a font Chrome's OTS refuses is `error`.
+On a variable font the span sets every axis of the resolved location in
+`font-variation-settings`, with `font-optical-sizing: none` and
+`font-synthesis: none` (otherwise `font-weight: normal` sets `wght` and
+automatic optical sizing sets `opsz` from the font size). A collection
+loads its first face; another `face` is `unsupported`.
 
 |freetype-py
 |2.5.1
@@ -437,11 +622,19 @@ input) or `error` (the oracle failed on this case); the review counts both
 non-ok statuses as `unsupported`. `detail` is diagnostic only and never
 compared. Records carry no timestamps or machine paths.
 
+Records of `advances` and `extents` cases also carry `glyphs`, and records
+on a variable font or with location fields carry `location` (see
+"Locations"); other records do not have these fields.
+
 The `key` is a SHA-256 over the canonical JSON of: the font's SHA-256, the
 kind, the hb-shape options (derived from the structured options, so their
-spelling in the file does not matter), the code points as numbers, the tools
-that answer this kind with their versions, and the extractor version
-(`EXTRACTOR_VERSION` in `extract.py`, `extractor` in `chrome/pin.json`).
+spelling in the file does not matter; they include the face), the code
+points as numbers, the glyph ids (when the kind takes them), the resolved
+location (when there is one), the tools that answer this kind with their
+versions, and the extractor version of the kind (`EXTRACTOR_VERSIONS` in
+`extract.py`: `shape` 2 since `--single-par`, faces and locations, `read`
+1, the font-fact kinds 1; `extractor` 2 in `chrome/pin.json` since variable
+fonts and collections).
 The review recomputes the key from the case, the font and the record's own
 provenance, so a stale record is caught without the oracle installed.
 
@@ -459,8 +652,8 @@ python3 scripts/record_oracle.py --force           # re-record everything
 Records whose key is unchanged are kept; records for cases that no longer
 exist are pruned; a case whose font is missing keeps its old record.
 `--force` must reproduce every file byte for byte (checked on 2026-10-24 for
-every committed record file, including the Chrome width records), and any
-difference is a reproducibility bug. `--fill-expected` calls
+every record file, 6706 records including the Chrome width records at
+variable-font locations), and any difference is a reproducibility bug. `--fill-expected` calls
 `_common.fill_expected(path, {case id: result})`, which finds each case by
 its `"id"` text and replaces the first `"expected": "?"` after it, keeping
 comments and layout.
@@ -560,7 +753,9 @@ id. The policy, as in roc-parser:
 
 === Committed fixtures
 
-`tests/fonts/` holds small real fonts with their licences (today Inter's
+`package/fonts/` holds the three default fonts; `default-fonts.jsonc` and
+`corpus-fonts.jsonc` read them in place, pinned with `font_sha256`, so their
+cases always run. `tests/fonts/` holds small real fonts with their licences (today Inter's
 metrics-only subset: hmtx, cmap, GSUB, GPOS and glyph bounding boxes, but no
 outlines, `name` or `post`). `tests/cases/fixtures/` holds tiny crafted
 fonts for unhappy paths, all derived from one generated font with one
@@ -607,6 +802,35 @@ python3 scripts/fetch_corpus.py verify
 Downloads go to `tests/corpus/<id>/` (ignored by git) beside
 `LICENCE-<name>`. Any hash mismatch fails the run.
 
+Entries (verified by download on 2026-10-24; sizes are the download, then
+the font used):
+
+[cols="2,3,2,1",options="header"]
+|===
+|Id |What |Size |Licence
+
+|`harfbuzz-14.6.0` |HarfBuzz release: shaping test suites and fuzzing fonts |20.3 MB |MIT-style (HarfBuzz `COPYING`)
+|`fonttools-4.61.1-tests` |fontTools' `Tests/` from the PyPI sdist of the oracle's version (about 230 fonts, incl. `TestTTC.ttc` and `avar` 2 subsets) |3.6 MB |MIT (some fonts: `LICENSE.external`)
+|`hb-in-house-trak` |HarfBuzz's `TRAK.ttf` (AAT `trak`) |2.5 KB |HarfBuzz `COPYING`
+|`hb-in-house-jellee-kern` |Jellee Roman: only a legacy `kern` table (Apple version 1.0, formats 0 and 2), no GPOS; the font of HarfBuzz's `kern-format2.tests` |34 KB |HarfBuzz `COPYING` (font: OFL-1.1)
+|`hb-fuzzing-037322204d9b`, `ots-bad-0014256514b2` |malformed fonts |12 KB, 57 KB |HarfBuzz `COPYING`, OTS BSD-style
+|`inter-variable-4.1` |Inter 4.1 variable (the default sans) |880 KB |OFL-1.1
+|`inter-4.1` |static Inter 4.1 Regular (Chrome width cases) |33.7 MB, 411 KB |OFL-1.1
+|`inter-4.1-ttc` |`Inter.ttc` from the same archive: 36 static faces |33.7 MB, 13.2 MB |OFL-1.1
+|`merriweather-4.009` |Merriweather 4.009 variable (the default serif) |12.9 MB, 4.6 MB |OFL-1.1 (RFN "Merriweather")
+|`fira-code-6.2` |Fira Code 6.2 variable (the default mono; cmap formats 4 and 12) |2.5 MB, 286 KB |OFL-1.1
+|`noto-sans-2.015`, `noto-serif-2.015` |Noto Sans and Serif Regular, Latin, Greek and Cyrillic (static; cmap 4 and 12) |117 MB, 431 KB; 71 MB, 483 KB |OFL-1.1
+|`noto-sans-arabic-2.013` |Noto Sans Arabic Regular |18.8 MB |OFL-1.1
+|`noto-sans-devanagari-2.007` |Noto Sans Devanagari Regular |18.4 MB, 184 KB |OFL-1.1
+|`noto-emoji-3.002` |Noto Emoji (monochrome, variable `wght` 300-700, cmap format 12 for 1300 code points) |2.0 MB |OFL-1.1
+|`source-sans-3.052` |Source Sans 3 Regular (CFF) |2.4 MB |OFL-1.1
+|===
+
+`merriweather-4.009`, `fira-code-6.2` and `inter-variable-4.1` reuse the
+upstream pins of `tools/default-fonts/pins.json`; the fetched fonts are
+byte-identical to `package/fonts/`. `inter-4.1-ttc` downloads its own copy
+of the Inter archive.
+
 === Importing all of HarfBuzz's shaping tests
 
 [source,sh]
@@ -630,8 +854,12 @@ get `-2`, `-3`. The result is git-ignored and scored. Cases naming macOS
 system fonts are skipped where those fonts are absent.
 
 Measured on 2026-10-24: 6203 cases in 308 files; the oracle recorded 6058
-(312 use options the extractor does not support, 271 of them AOTS's
-`--single-par`; 4 make HarfBuzz fail; 145 name macOS system fonts). The
+(35 use options the extractor does not support, such as `--font-ptem`,
+`--shaper=` and `--unicodes-before`, and the space-separated
+`--variations wght=700`; 4 make HarfBuzz fail; 145 name macOS system
+fonts). AOTS's `--single-par` and the collections' `--face-index` are
+supported since extractor `shape` 2; 264 records are on variable fonts and
+carry a resolved location. The
 driver agreed on 204, 1011 were unsupported (an option the driver or the oracle cannot honour yet), and 4843
 differed, 3825 of them because AdobeBlank2 maps everything through cmap
 format 13, which the reader rejects.
@@ -702,7 +930,7 @@ The first slice (2026-10-24, 288 cases):
   format 0 cmap (TestCMAPMacTurkish), which the reader rejects today.
 * M3: every AOTS GSUB 1, 2, 4, 5, 6 and 7 file and class definitions, and
   AOTS cmap 0, 4, 6, 10 and 12 (they need user
-  features, and the oracle's `--single-par`); legacy `kern` values split
+  features); legacy `kern` values split
   into advance and offset (needs offsets in the run); fonts with a GSUB
   roc-font rejects but HarfBuzz tolerates (lenient reading).
 * M4: lookup flags (all AOTS `lookupflag` files), GSUB 3 and 8, GPOS pair
@@ -727,11 +955,12 @@ suite, with the upstream version in `source`. Declare it scored in
 `tests/scores.json` until it can gate.
 
 Adding an oracle or case kind:: pin the tool, report its version, add the
-kind to `KNOWN_KINDS` and its selecting option to `hb_options` in
-`scripts/_common.py`, teach `record_oracle.py` which oracle answers it, add
-a result notation that cannot be confused with hb-shape output, support it
-in the driver protocol (`Case.roc`, `_common.driver_request`), and document
-it here. Re-record with `--force` twice and confirm the second run changes
+kind to `KNOWN_KINDS` and its selecting option to `hb_options` (via
+`FACT_OPTIONS` for a font fact) in `scripts/_common.py`, give it an
+extractor version in `EXTRACTOR_VERSIONS`, teach `record_oracle.py` which
+oracle answers it, add a result notation that cannot be confused with
+hb-shape output, support it in the driver protocol (`Case.roc`,
+`_common.driver_request`), and document it here. Re-record with `--force` twice and confirm the second run changes
 nothing.
 
 == Known environment issues

@@ -1,6 +1,6 @@
 {
-  "about": "The Chrome width oracle's pins. record_oracle.py reads this file to compute record keys, so keys (and staleness) are known without Node installed. `puppeteer` must equal the version in package-lock.json; `chrome` is the browser build that Puppeteer release downloads (puppeteer-core lib/puppeteer/revisions.js) and width.mjs refuses to run on any other; `extractor` is bumped whenever width.mjs can change a record. Width cases (tests/cases/chrome.jsonc) use the static Inter 4.1 Regular from the corpus entry inter-4.1; Chrome refuses tests/fonts/Inter-Regular-metrics.ttf because it has no `name` table.",
+  "about": "The Chrome width oracle's pins. record_oracle.py reads this file to compute record keys, so keys (and staleness) are known without Node installed. `puppeteer` must equal the version in package-lock.json; `chrome` is the browser build that Puppeteer release downloads (puppeteer-core lib/puppeteer/revisions.js) and width.mjs refuses to run on any other; `extractor` is bumped whenever width.mjs can change a record (2: variable fonts at an explicit location, the first face of a collection). Width cases (tests/cases/chrome.jsonc) use the static Inter 4.1 Regular from the corpus entry inter-4.1; Chrome refuses tests/fonts/Inter-Regular-metrics.ttf because it has no `name` table.",
   "chrome": "156.0.8078.47",
-  "extractor": 1,
+  "extractor": 2,
   "puppeteer": "25.16.0"
 }

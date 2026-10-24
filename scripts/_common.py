@@ -10,6 +10,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import struct
+from decimal import Decimal, InvalidOperation
+from fractions import Fraction
 import os
 import re
 import shutil
@@ -33,6 +36,8 @@ DRIVER_DIR = ROOT / "tools" / "driver"
 READ_OPTION = "--read-outcome"
 # The option that selects a Chrome width case (part of its record key).
 WIDTH_OPTION = "--width"
+# The options that select the font-fact kinds (part of their record keys).
+FACT_OPTIONS = {"coords": "--coords", "advances": "--advances", "metrics": "--metrics", "extents": "--extents"}
 
 
 # ----------------------------------------------------------------- commands
@@ -148,18 +153,23 @@ def strip_jsonc(text: str) -> str:
 def load_jsonc(path: Path) -> object:
     text = path.read_text(encoding="utf-8")
     try:
-        return json.loads(strip_jsonc(text))
+        # Decimals stay exact (axis values such as 87.5 are part of keys).
+        return json.loads(strip_jsonc(text), parse_float=Decimal)
     except (ValueError, json.JSONDecodeError) as error:
         raise ValueError(f"{rel(path)}: {error}") from None
 
 
 # -------------------------------------------------------------------- cases
 
-# Case kinds this repository knows. `shape` and `read` are answered by
-# tools/oracle/extract.py and run by the driver; `width` by the Chrome
-# oracle. Other lower-case kinds parse (the format is extensible) and are
-# reported as unsupported until an oracle and the driver handle them.
-KNOWN_KINDS = ("shape", "read", "width")
+# Case kinds this repository knows. `shape`, `read` and the font-fact kinds
+# (`coords`, `advances`, `metrics`, `extents`) are answered by
+# tools/oracle/extract.py; `width` by the Chrome oracle. Other lower-case
+# kinds parse (the format is extensible) and are reported as unsupported
+# until an oracle and the driver handle them.
+KNOWN_KINDS = ("shape", "read", "width", "coords", "advances", "metrics", "extents")
+# Kinds that take text (`text`/`unicodes`), and kinds that take glyph ids.
+TEXT_KINDS = ("shape", "width")
+GLYPH_KINDS = ("advances", "extents")
 
 # Structured shaping options, in the order they become hb-shape options.
 OPTION_FIELDS = (
@@ -180,7 +190,9 @@ DIRECTIONS = {"l": "ltr", "r": "rtl", "t": "ttb", "b": "btt"}
 CASE_FIELDS = {
     "id", "kind", "font", "font_sha256", "unicodes", "text", "options", "expected",
     "reason", "comment", "source", "milestone", "needs", "area",
+    "face", "variations", "variation", "instance", "glyphs",
 }
+LOCATION_FIELDS = ("variations", "variation", "instance")
 
 
 @dataclass(frozen=True)
@@ -206,6 +218,13 @@ class Case:
     source: dict | None = field(default=None, compare=False, hash=False)
     milestone: str | None = None
     reason: str | None = None
+    # The face of a collection (`face`, or `--face-index=N` in hb_options).
+    face: int = 0
+    # The location fields as written, canonical (see parse_location): empty
+    # when the case gives none. Values are decimal strings.
+    location: dict = field(default_factory=dict, compare=False, hash=False)
+    # Glyph ids for `advances` and `extents` cases, or "all"; None otherwise.
+    glyphs: tuple[int, ...] | str | None = None
 
     @property
     def font_path(self) -> Path:
@@ -312,10 +331,12 @@ def parse_hb_options(words: Sequence[str]) -> dict:
     return settings
 
 
-def hb_options(kind: str, settings: dict) -> tuple[str, ...]:
-    """The hb-shape options equivalent to a case's kind and structured
+def hb_options(kind: str, settings: dict, face: int = 0) -> tuple[str, ...]:
+    """The hb-shape options equivalent to a case's kind, face and structured
     options, in OPTION_FIELDS order. Shaping cases always carry
-    `--no-glyph-names`; reading cases are `--read-outcome`."""
+    `--no-glyph-names`; every other kind carries its selecting option
+    (`--read-outcome`, `--width`, `--coords`, ...). A face other than 0
+    follows as `--face-index=N`."""
     out: list[str] = []
     if kind == "shape":
         out.append("--no-glyph-names")
@@ -323,6 +344,10 @@ def hb_options(kind: str, settings: dict) -> tuple[str, ...]:
         out.append(READ_OPTION)
     elif kind == "width":
         out.append(WIDTH_OPTION)
+    elif kind in FACT_OPTIONS:
+        out.append(FACT_OPTIONS[kind])
+    if face:
+        out.append(f"--face-index={face}")
     for name in OPTION_FIELDS:
         if name not in settings:
             continue
@@ -371,6 +396,255 @@ def check_settings(settings: object) -> list[str]:
         elif name in ("utf8_clusters", "remove_default_ignorables") and not isinstance(value, bool):
             problems.append(f"{name} must be true or false")
     return problems
+
+
+# ---------------------------------------------------------------- locations
+#
+# A case selects a variable font's location with one of:
+#
+#   "variations": {"wght": 450, "opsz": 14}     axis tag -> design value
+#   "variation": {"weight": "Bold", "width": 87.5, "optical_size": 12}
+#   "instance": 3                                a named instance index
+#
+# `variation` and `variations` combine as roc-font's `Font.Variation` does
+# (the named fields first, then `variations` entries winning per tag);
+# `instance` stands alone. Without any of them a case measures at
+# `Font.Variation.{}`: Regular weight (`wght` 400), Normal width (`wdth`
+# 100) and the font's default optical size. HarfBuzz's own default is the
+# font's default instance, which for some fonts (Merriweather, Fira Code)
+# is Light, so the oracle is always given the resolved location of every
+# axis (resolve_location).
+
+# CSS weights (font-weight) and widths (font-stretch percentages), as
+# docs/variable-fonts.adoc §5.1 maps Font.Weight and Font.Width.
+WEIGHTS = {
+    "Thin": 100, "ExtraLight": 200, "Light": 300, "Regular": 400, "Medium": 500,
+    "SemiBold": 600, "Bold": 700, "ExtraBold": 800, "Black": 900,
+}
+WIDTHS = {
+    "UltraCondensed": Decimal("50"), "ExtraCondensed": Decimal("62.5"), "Condensed": Decimal("75"),
+    "SemiCondensed": Decimal("87.5"), "Normal": Decimal("100"), "SemiExpanded": Decimal("112.5"),
+    "Expanded": Decimal("125"), "ExtraExpanded": Decimal("150"), "UltraExpanded": Decimal("200"),
+}
+VARIATION_FIELDS = ("weight", "width", "optical_size")
+# Axis values are Roc `Dec`s: at most 18 decimal places. The magnitude bound
+# keeps them far inside Dec and single precision.
+MAX_AXIS_VALUE = Decimal(10) ** 9
+
+
+def dec_text(value: Decimal | int) -> str:
+    """The canonical decimal spelling: no exponent, no trailing zeros, no
+    `-0` (`Decimal("87.50")` -> `87.5`, `400.0` -> `400`)."""
+    d = Decimal(value)
+    if d == d.to_integral_value():
+        return str(int(d))
+    text = format(d.normalize(), "f")
+    return text
+
+
+def parse_axis_number(value: object) -> Decimal | None:
+    """A JSON number usable as a `Dec` axis value, or None."""
+    if isinstance(value, bool) or not isinstance(value, (int, Decimal)):
+        return None
+    d = Decimal(value)
+    if not d.is_finite() or abs(d) > MAX_AXIS_VALUE:
+        return None
+    exponent = d.normalize().as_tuple().exponent
+    if isinstance(exponent, int) and exponent < -18:
+        return None
+    return d
+
+
+def good_axis_tag(tag: object) -> bool:
+    """Axis tags in cases: 1 to 8 printable ASCII characters other than
+    space, `,`, `:`, `=`, `\\` and quotes. Tags that are not exactly four
+    bytes are allowed so a case can show that roc-font ignores them."""
+    return isinstance(tag, str) and 1 <= len(tag) <= 8 and all(0x21 <= ord(c) <= 0x7E and c not in ',:="\\' for c in tag)
+
+
+def parse_location(merged: dict) -> tuple[dict, list[str]]:
+    """The canonical location fields of a merged case object, and problems.
+
+    The result holds only the fields given: `variations` as a list of
+    `[tag, value]` in written order, `variation` as an object of names or
+    decimal strings, `instance` as an integer."""
+    location: dict = {}
+    errors: list[str] = []
+    variations = merged.get("variations")
+    if variations is not None:
+        if not isinstance(variations, dict):
+            errors.append("`variations` must be an object of axis tag to design value, such as {\"wght\": 450}")
+        else:
+            entries = []
+            for tag, value in variations.items():
+                number = parse_axis_number(value)
+                if not good_axis_tag(tag):
+                    errors.append(f"`variations`: bad axis tag {tag!r}")
+                elif number is None:
+                    errors.append(f"`variations`: {tag} needs a number with at most 18 decimal places")
+                else:
+                    entries.append([tag, dec_text(number)])
+            location["variations"] = entries
+    variation = merged.get("variation")
+    if variation is not None:
+        if not isinstance(variation, dict) or set(variation) - set(VARIATION_FIELDS):
+            errors.append("`variation` must be an object with `weight`, `width` and/or `optical_size`")
+        else:
+            canon: dict = {}
+            weight = variation.get("weight")
+            if weight is not None:
+                if isinstance(weight, str) and weight in WEIGHTS:
+                    canon["weight"] = weight
+                elif isinstance(weight, int) and not isinstance(weight, bool) and 0 <= weight <= 0xFFFF:
+                    canon["weight"] = str(weight)
+                else:
+                    errors.append(f"`variation.weight` must be one of {', '.join(WEIGHTS)} or an integer 0-65535")
+            width = variation.get("width")
+            if width is not None:
+                number = parse_axis_number(width)
+                if isinstance(width, str) and width in WIDTHS:
+                    canon["width"] = width
+                elif number is not None and number >= 0:
+                    canon["width"] = dec_text(number)
+                else:
+                    errors.append(f"`variation.width` must be one of {', '.join(WIDTHS)} or a percentage")
+            size = variation.get("optical_size")
+            if size is not None:
+                number = parse_axis_number(size)
+                if size == "FontDefault":
+                    canon["optical_size"] = size
+                elif number is not None and number >= 0:
+                    canon["optical_size"] = dec_text(number)
+                else:
+                    errors.append("`variation.optical_size` must be \"FontDefault\" or a size in CSS px")
+            location["variation"] = canon
+    instance = merged.get("instance")
+    if instance is not None:
+        if isinstance(instance, int) and not isinstance(instance, bool) and 0 <= instance <= 0xFFFF:
+            location["instance"] = instance
+        else:
+            errors.append("`instance` must be a named instance index (an integer 0-65535)")
+        if variations is not None or variation is not None:
+            errors.append("`instance` cannot be combined with `variation` or `variations`")
+    return location, errors
+
+
+def sfnt_face_tables(data: bytes, face: int) -> dict[str, tuple[int, int]] | None:
+    """The table directory (tag -> offset, length) of one face of an sfnt or
+    `ttcf` collection, or None when the bytes are not one or the face does
+    not exist. Every offset is checked against the data."""
+    def u32(offset: int) -> int | None:
+        return struct.unpack_from(">I", data, offset)[0] if 0 <= offset and offset + 4 <= len(data) else None
+
+    start = 0
+    if data[:4] == b"ttcf":
+        count = u32(8)
+        if count is None or face >= count or face < 0:
+            return None
+        start = u32(12 + 4 * face)
+        if start is None:
+            return None
+    elif face != 0:
+        return None
+    if start + 12 > len(data) or data[start:start + 4] not in (b"\x00\x01\x00\x00", b"true", b"OTTO"):
+        return None
+    tables_count = struct.unpack_from(">H", data, start + 4)[0]
+    if start + 12 + 16 * tables_count > len(data):
+        return None
+    tables = {}
+    for i in range(tables_count):
+        record = start + 12 + 16 * i
+        tag = data[record:record + 4].decode("latin-1")
+        offset, length = struct.unpack_from(">II", data, record + 8)
+        if offset + length <= len(data):
+            tables.setdefault(tag, (offset, length))
+    return tables
+
+
+def font_axes(data: bytes, face: int = 0) -> tuple[list[tuple[str, int, int, int]], list[list[int]]]:
+    """The `fvar` axes (tag, min, default, max as Fixed 16.16 integers) and
+    named instances (coordinates as Fixed) of a face. A face without a
+    readable `fvar` has no axes: HarfBuzz ignores a table that fails its
+    checks and roc-font's lenient reading drops it, so both then use the
+    default instance."""
+    tables = sfnt_face_tables(data, face) or {}
+    if "fvar" not in tables:
+        return [], []
+    offset, length = tables["fvar"]
+    fvar = data[offset:offset + length]
+    if len(fvar) < 16:
+        return [], []
+    major, _, axes_offset, _, axis_count, axis_size, instance_count, instance_size = struct.unpack_from(">HHHHHHHH", fvar, 0)
+    if major != 1 or axis_size != 20 or axes_offset < 16 or instance_size not in (4 * axis_count + 4, 4 * axis_count + 6):
+        return [], []
+    if axes_offset + axis_count * axis_size + instance_count * instance_size > len(fvar):
+        return [], []
+    axes = []
+    for i in range(axis_count):
+        record = axes_offset + 20 * i
+        tag = fvar[record:record + 4].decode("latin-1")
+        low, default, high = struct.unpack_from(">iii", fvar, record + 4)
+        axes.append((tag, low, default, high))
+    instances = []
+    base = axes_offset + axis_count * axis_size
+    for i in range(instance_count):
+        record = base + instance_size * i + 4
+        instances.append(list(struct.unpack_from(f">{axis_count}i", fvar, record)))
+    return axes, instances
+
+
+def fixed_dec(value: int) -> Decimal:
+    """A Fixed 16.16 value as an exact decimal."""
+    return Decimal(value) / Decimal(65536)
+
+
+def resolve_location(case: Case, data: bytes) -> dict | None:
+    """Where the oracle measures a case: None for a static font and a case
+    without location fields (old record keys stay valid), otherwise
+    `{"fields": <the case's location fields>, "axes": [[tag, value], ...]
+    in fvar order, "default": <every axis at its default>}`. A named
+    instance index past the font's instances gives `"axes": null` and a
+    `"problem"`. Values outside an axis's range are passed on unclamped;
+    the oracle clamps them as the format defines."""
+    axes, instances = font_axes(data, case.face)
+    fields = case.location
+    if not axes:
+        return {"fields": fields, "axes": [], "default": True} if fields else None
+    values = [fixed_dec(default) for _, _, default, _ in axes]
+    if "instance" in fields:
+        index = fields["instance"]
+        if index >= len(instances):
+            return {"fields": fields, "axes": None, "default": False, "problem": f"no named instance {index} (the font has {len(instances)})"}
+        values = [fixed_dec(v) for v in instances[index]]
+    else:
+        variation = fields.get("variation", {})
+        weight = variation.get("weight", "Regular")
+        width = variation.get("width", "Normal")
+        size = variation.get("optical_size", "FontDefault")
+        settings = [
+            ("wght", Decimal(WEIGHTS[weight]) if weight in WEIGHTS else Decimal(weight)),
+            ("wdth", WIDTHS[width] if width in WIDTHS else Decimal(width)),
+        ]
+        if size != "FontDefault":
+            settings.append(("opsz", Decimal(size)))
+        settings += [(tag, Decimal(value)) for tag, value in fields.get("variations", [])]
+        for tag, value in settings:
+            if len(tag.encode("latin-1", "replace")) != 4:
+                continue  # roc-font ignores tags that are not four bytes
+            for i, (axis_tag, _, _, _) in enumerate(axes):
+                if axis_tag == tag:
+                    values[i] = value
+    default = all(value == fixed_dec(axis[2]) for value, axis in zip(values, axes))
+    return {"fields": fields, "axes": [[axis[0], dec_text(v)] for axis, v in zip(axes, values)], "default": default}
+
+
+def parse_glyphs(value: object) -> tuple[tuple[int, ...] | str | None, str | None]:
+    """`glyphs`: a list of glyph ids (integers 0 to 2^32-1) or "all"."""
+    if value == "all":
+        return "all", None
+    if isinstance(value, list) and all(isinstance(g, int) and not isinstance(g, bool) and 0 <= g <= 0xFFFFFFFF for g in value):
+        return tuple(value), None
+    return None, "`glyphs` must be a list of glyph ids or \"all\""
 
 
 def bad_name(name: object) -> bool:
@@ -441,7 +715,7 @@ def parse_case_file(path: Path) -> tuple[list[Case], list[str]]:
             errors.append("`font` is required (a path relative to the case file)")
         settings = merged.get("options", {})
         errors += check_settings(settings)
-        if kind in ("read", "width") and settings:
+        if kind in KNOWN_KINDS and kind != "shape" and settings:
             errors.append(f"{kind} cases take no options")
         unicodes = merged.get("unicodes")
         scalars: list[int] = []
@@ -465,8 +739,31 @@ def parse_case_file(path: Path) -> tuple[list[Case], list[str]]:
                 scalars = [ord(c) for c in sample]
                 if any(0xD800 <= s <= 0xDFFF for s in scalars):
                     errors.append("`text` holds a lone surrogate")
-        if kind == "read" and scalars:
-            errors.append("reading cases take no text")
+        if kind in KNOWN_KINDS and kind not in TEXT_KINDS and scalars:
+            errors.append(f"{kind} cases take no text")
+        location, location_errors = parse_location(merged)
+        errors += location_errors
+        if kind == "read" and location:
+            errors.append("reading cases take no location (`variations`, `variation`, `instance`)")
+        face = merged.get("face")
+        if face is not None and not (isinstance(face, int) and not isinstance(face, bool) and 0 <= face <= 0xFFFF):
+            errors.append("`face` must be a face index (an integer 0-65535)")
+            face = None
+        # Imported cases spell the face as hb-shape does, in hb_options.
+        hb_face = [o.split("=", 1)[1] for o in (settings.get("hb_options", []) if isinstance(settings, dict) else []) if isinstance(o, str) and o.startswith("--face-index=")]
+        face_index = face or 0
+        if hb_face:
+            if merged.get("face") is not None or len(hb_face) > 1 or not hb_face[0].isdigit():
+                errors.append("give the face once: `face`, or one --face-index=N in an imported case's hb_options")
+            else:
+                face_index = int(hb_face[0])
+        glyphs = None
+        if kind in GLYPH_KINDS:
+            glyphs, glyph_error = parse_glyphs(merged.get("glyphs"))
+            if glyph_error:
+                errors.append(glyph_error)
+        elif merged.get("glyphs") is not None:
+            errors.append(f"{kind} cases take no `glyphs` (only {' and '.join(GLYPH_KINDS)} do)")
         expected = merged.get("expected", "oracle")
         if not isinstance(expected, str) or "\n" in expected or "\t" in expected:
             errors.append("`expected` must be a one-line string")
@@ -492,7 +789,7 @@ def parse_case_file(path: Path) -> tuple[list[Case], list[str]]:
                 file=path.resolve(),
                 line=line,
                 font=font,
-                options=hb_options(kind, settings),
+                options=hb_options(kind, settings, face or 0),
                 unicodes=format_unicodes(scalars),
                 expected="*" if expected == "oracle" else expected,
                 kind=kind,
@@ -501,6 +798,9 @@ def parse_case_file(path: Path) -> tuple[list[Case], list[str]]:
                 source=merged.get("source"),
                 milestone=merged.get("milestone"),
                 reason=merged.get("reason", merged.get("comment")),
+                face=face_index,
+                location=location,
+                glyphs=glyphs,
             )
         )
     return cases, problems
@@ -579,21 +879,58 @@ def has_glyph_names(expected: str) -> bool:
 
 # The request line the Roc driver reads (tools/driver/Case.roc), one per line:
 #
-#     <tag> TAB <font path> TAB <kind> TAB <code points> TAB <flags>
+#     <tag> TAB <font path> TAB <kind> TAB <items> TAB <flags>
 #
 # tag: an opaque name echoed back (the case id); font path: as the driver
-# should open it; kind: shape, read or width (the run's total advance); code points: lower-case hex without
-# prefix, comma-separated (empty for none); flags: comma-separated, from
-# no-clusters, no-positions, no-advances, utf8-clusters and font-size=<n>.
-# The driver answers `<tag> TAB <result>` per request, in order, plus a third
-# column with the reader's problems under --explain.
+# should open it; kind: shape, read or width (the run's total advance), and
+# from protocol 2 coords, advances, metrics or extents; items: the code
+# points (shape, width) or glyph ids (advances, extents, or `all`), lower-case
+# hex without prefix, comma-separated, empty for none; flags:
+# comma-separated, from no-clusters, no-positions, no-advances,
+# utf8-clusters and font-size=<n>, and from protocol 2 face=<n>,
+# instance=<n>, weight=<name or n>, width=<name or percent>,
+# optical-size=<FontDefault or px> and axis=<tag>:<value> (repeatable, in
+# order; later wins). The driver answers `<tag> TAB <result>` per request,
+# in order, plus a third column with the reader's problems under --explain.
+# docs/conformance.adoc ("The driver") is the full description.
 DRIVER_NOOP_HB_OPTIONS = ("--font-funcs=ot", "--font-funcs=ft", "--single-par")
 
+# The protocol tools/driver speaks. 1: shape, read and width at the font's
+# default location, face 0. 2: also the font-fact kinds, faces and
+# locations (the flags above). Set to 2 when tools/driver/Case.roc parses
+# protocol 2; until then such cases are reported as unsupported without
+# being sent.
+DRIVER_PROTOCOL = 1
+PROTOCOL_1_KINDS = ("shape", "read", "width")
 
-def driver_request(case: Case, font: str) -> tuple[str | None, str]:
-    """The protocol line for a case, or None and the hb-shape option the
-    driver cannot honour (reported as `unsupported:<option>`)."""
-    if case.kind not in ("shape", "read", "width"):
+
+def driver_location_flags(case: Case) -> list[str]:
+    """Protocol 2 flags for a case's location fields, in the order roc-font
+    applies them: the named fields, then each axis setting (an imported
+    case's `--variations=` items after its `variations`)."""
+    flags: list[str] = []
+    location = case.location
+    if "instance" in location:
+        flags.append(f"instance={location['instance']}")
+    variation = location.get("variation", {})
+    for name in VARIATION_FIELDS:
+        if name in variation:
+            flags.append(f"{name.replace('_', '-')}={variation[name]}")
+    for tag, value in location.get("variations", []):
+        flags.append(f"axis={tag}:{value}")
+    for item in case.settings.get("variations", []):
+        tag, _, value = item.partition("=")
+        flags.append(f"axis={tag}:{value}")
+    return flags
+
+
+def driver_request(case: Case, font: str, location: dict | None = None, protocol: int | None = None) -> tuple[str | None, str]:
+    """The protocol line for a case, or None and what the driver cannot
+    honour (reported as `unsupported:<what>`: an hb-shape option, `kind=<k>`,
+    `face`, or `location`). `location` is resolve_location's result for the
+    case's font."""
+    protocol = DRIVER_PROTOCOL if protocol is None else protocol
+    if case.kind not in (KNOWN_KINDS if protocol >= 2 else PROTOCOL_1_KINDS):
         return None, f"kind={case.kind}"
     flags: list[str] = []
     s = case.settings
@@ -603,6 +940,8 @@ def driver_request(case: Case, font: str) -> tuple[str | None, str]:
                 continue
             if name == "direction" and s[name] == "ltr":
                 continue
+            if name == "variations" and protocol >= 2:
+                continue  # sent as axis= flags
             return None, hb_options("", {name: s[name]})[0]
         if "font_size" in s:
             flags.append(f"font-size={s['font_size']}")
@@ -613,22 +952,39 @@ def driver_request(case: Case, font: str) -> tuple[str | None, str]:
         if s.get("remove_default_ignorables") and any(is_default_ignorable(c) for c in case.scalars):
             return None, "--remove-default-ignorables"
         for option in s.get("hb_options", []):
-            if option not in DRIVER_NOOP_HB_OPTIONS:
+            if option not in DRIVER_NOOP_HB_OPTIONS and not (protocol >= 2 and option.startswith("--face-index=")):
                 return None, option
+    if case.face:
+        if protocol < 2:
+            return None, "face"
+        flags.append(f"face={case.face}")
+    if protocol >= 2:
+        flags += driver_location_flags(case)
+    elif (location is None and (case.location or s.get("variations"))) or (location is not None and not location["default"]):
+        # Protocol 1 measures at the font's default location only: a case
+        # runs when every axis the oracle is given is at its default (Inter
+        # at Regular, Merriweather at `wght` 300, any static font).
+        return None, "location"
     if "\t" in case.id or "\t" in font or "\n" in font:
         return None, "font-path"
-    points = ",".join(f"{c:x}" for c in case.scalars)
-    return f"{case.id}\t{font}\t{case.kind}\t{points}\t{','.join(dict.fromkeys(flags))}", ""
+    if case.kind in GLYPH_KINDS:
+        items = "all" if case.glyphs == "all" else ",".join(f"{g:x}" for g in case.glyphs or ())
+    else:
+        items = ",".join(f"{c:x}" for c in case.scalars)
+    return f"{case.id}\t{font}\t{case.kind}\t{items}\t{','.join(dict.fromkeys(flags))}", ""
 
 
 # ------------------------------------------------------------------ records
 
 
-def record_key(case: Case, font_sha256: str, tools: dict[str, str], extractor: int) -> str:
+def record_key(case: Case, font_sha256: str, tools: dict[str, str], extractor: int, location: dict | None = None) -> str:
     """SHA-256 over everything that can change a record: the font bytes (by
     hash), the case kind, options and code points (normalised, so spelling
     `U+41` or `U+0041` does not matter; the font path does not matter
-    either), the versions of the oracle tools used, and the extractor
+    either), the glyph ids of `advances` and `extents` cases, the location
+    (resolve_location: the case's location fields and the resolved axes;
+    absent for a static font without location fields, so such keys are
+    unchanged), the versions of the oracle tools used, and the extractor
     version."""
     material = {
         "extractor": extractor,
@@ -638,6 +994,10 @@ def record_key(case: Case, font_sha256: str, tools: dict[str, str], extractor: i
         "tools": tools,
         "unicodes": parse_unicodes(case.unicodes),
     }
+    if case.glyphs is not None:
+        material["glyphs"] = case.glyphs if isinstance(case.glyphs, str) else list(case.glyphs)
+    if location is not None:
+        material["location"] = location
     return sha256_bytes(canonical_json(material).encode("ascii"))
 
 
