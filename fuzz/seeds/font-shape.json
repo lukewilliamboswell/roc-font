@@ -1,0 +1,17 @@
+{
+  "about": "Reviewed starting inputs for the font-shape target. Each input is UTF-8 text (invalid sequences are replaced), optionally followed by a 0xFF byte and a font or font recipe as font-read takes it; without a usable font the text is shaped with Inter. scripts/run_fuzz.py also adds each real font from tests/fonts/ and tests/corpus/ after a short text and the 0xFF marker.",
+  "seeds": [
+    {"why": "empty text", "parts": []},
+    {"why": "plain Latin text", "parts": [{"text": "Hello, world!"}]},
+    {"why": "ligature candidates", "parts": [{"text": "office affine ffi ffl fl fi"}]},
+    {"why": "Inter's arrow ligatures", "parts": [{"text": "-> --> <- <-> => <=> |> ::"}]},
+    {"why": "Inter's contextual asterisk raised beside capitals", "parts": [{"text": "A*B *a* X*"}]},
+    {"why": "accents, punctuation, an emoji and a combining mark", "parts": [{"text": "naïve café — “quotes” 😀 é"}]},
+    {"why": "long ligature run", "parts": [{"text": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}]},
+    {"why": "invalid UTF-8: lone continuation, truncated sequence, surrogate encoding", "parts": [{"hex": "80 c3 28 e2 82 ed a0 80 f4 90 80 80"}]},
+    {"why": "text with the synthetic sample font, which has every lookup kind", "parts": [{"text": "abc -> office"}, {"hex": "ff 01"}]},
+    {"why": "text with Inter through a recipe", "parts": [{"text": "A*B -> fi"}, {"hex": "ff 00"}]},
+    {"why": "text with a font that cannot be read: falls back to Inter", "parts": [{"text": "fallback"}, {"hex": "ff 02 00 20"}]},
+    {"why": "marker with no text and no font", "parts": [{"hex": "ff"}]}
+  ]
+}

@@ -1,0 +1,89 @@
+# Byte tokens for the font reading and shaping targets (libFuzzer dictionary
+# format). Mutations splice these into inputs so table directories, tags and
+# common field values appear far more often than random bytes would make
+# them.
+
+# File signatures (sfnt version and collection tag)
+sfnt_truetype="\x00\x01\x00\x00"
+sfnt_otto="OTTO"
+sfnt_true="true"
+sfnt_typ1="typ1"
+collection="ttcf"
+collection_v2="\x00\x02\x00\x00"
+
+# Required and commonly read tables
+tag_head="head"
+tag_hhea="hhea"
+tag_hmtx="hmtx"
+tag_maxp="maxp"
+tag_cmap="cmap"
+tag_name="name"
+tag_os2="OS/2"
+tag_post="post"
+tag_loca="loca"
+tag_glyf="glyf"
+tag_cff="CFF "
+tag_cff2="CFF2"
+tag_kern="kern"
+tag_gsub="GSUB"
+tag_gpos="GPOS"
+tag_gdef="GDEF"
+tag_vhea="vhea"
+tag_vmtx="vmtx"
+tag_fvar="fvar"
+tag_avar="avar"
+tag_hvar="HVAR"
+
+# Layout scripts, languages and features
+script_dflt="DFLT"
+script_latn="latn"
+script_cyrl="cyrl"
+script_arab="arab"
+lang_dflt="dflt"
+feat_liga="liga"
+feat_clig="clig"
+feat_calt="calt"
+feat_ccmp="ccmp"
+feat_locl="locl"
+feat_rlig="rlig"
+feat_rclt="rclt"
+feat_rvrn="rvrn"
+feat_ltra="ltra"
+feat_ltrm="ltrm"
+feat_kern="kern"
+feat_mark="mark"
+
+# head magic number, and layout table versions
+head_magic="\x5F\x0F\x3C\xF5"
+version_1_0="\x00\x01\x00\x00"
+version_1_1="\x00\x01\x00\x01"
+
+# cmap platform/encoding records and subtable formats
+cmap_unicode_bmp="\x00\x03\x00\x01"
+cmap_unicode_full="\x00\x03\x00\x0A"
+cmap_mac_roman="\x00\x01\x00\x00"
+cmap_unicode_20="\x00\x00\x00\x03"
+cmap_unicode_full_20="\x00\x00\x00\x04"
+cmap_format_4="\x00\x04"
+cmap_format_6="\x00\x06"
+cmap_format_12="\x00\x0C\x00\x00"
+cmap_format_14="\x00\x0E"
+cmap_end_segment="\xFF\xFF"
+
+# Coverage and class definition formats, lookup types
+format_1="\x00\x01"
+format_2="\x00\x02"
+format_3="\x00\x03"
+lookup_extension_gsub="\x00\x07"
+lookup_extension_gpos="\x00\x09"
+
+# Edge values for counts, offsets and metrics
+u16_zero="\x00\x00"
+u16_max="\xFF\xFF"
+u16_high="\x80\x00"
+u32_max="\xFF\xFF\xFF\xFF"
+u32_high="\x80\x00\x00\x00"
+upem_1000="\x03\xE8"
+upem_2048="\x08\x00"
+upem_16="\x00\x10"
+upem_16384="\x40\x00"

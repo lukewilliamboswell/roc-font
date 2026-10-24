@@ -1,0 +1,19 @@
+{
+  "about": "Reviewed starting inputs for the font-read target. Each input is either a font file (it starts with a font signature) or a recipe read by FontTest.fuzz_font: the first byte modulo 4 picks a base (0 Inter, 1 the synthetic sample, 2 the sample cut short at the length in the next two bytes, 3 no base) and each following group of four bytes patches one byte (three-byte position, wrapped to the length, then the new value). The same bytes also choose the contents of the scaled fonts used for the allocation check. Real font files from tests/fonts/ and tests/corpus/ are added by scripts/run_fuzz.py.",
+  "seeds": [
+    {"why": "Inter, unpatched: the ordinary success path", "parts": [{"hex": "00"}]},
+    {"why": "the synthetic sample font, unpatched: every table kind FontTest builds", "parts": [{"hex": "01"}]},
+    {"why": "sample cut to the 12-byte directory header: tables missing", "parts": [{"hex": "02 00 0c"}]},
+    {"why": "sample cut to 64 bytes: table records truncated", "parts": [{"hex": "02 00 40"}]},
+    {"why": "sample cut to 256 bytes: tables past the end", "parts": [{"hex": "02 01 00"}]},
+    {"why": "no base and no bytes: an empty file", "parts": [{"hex": "03"}]},
+    {"why": "sample with numTables raised to 0xFF..: table count larger than the data", "parts": [{"hex": "01 00 00 04 ff"}]},
+    {"why": "Inter with the first table record's offset high byte set: GPOS lies outside the file", "parts": [{"hex": "00 00 00 14 ff"}]},
+    {"why": "Inter with the low bytes of the second table record's length zeroed: a table shorter than its contents (in this Inter file, GSUB becomes empty)", "parts": [{"hex": "00 00 00 2a 00 00 00 2b 00"}]},
+    {"why": "scaled-font choices covering all six item kinds, format 4 cmap", "parts": [{"hex": "00 00 01 02 03 04 05 00 01 02 03 04 05"}]},
+    {"why": "scaled-font choices with an odd first byte: format 12 cmap, GPOS instead of kern", "parts": [{"hex": "01 01 02 03 04 05 00"}]},
+    {"why": "a collection header whose only font offset points past the end", "parts": [{"text": "ttcf"}, {"hex": "00 01 00 00 00 00 00 01 00 00 ff f0"}]},
+    {"why": "a CFF-flavoured directory with no tables", "parts": [{"text": "OTTO"}, {"hex": "00 00 00 00 00 00 00 00"}]},
+    {"why": "an Apple 'true' directory with one table record pointing nowhere", "parts": [{"text": "true"}, {"hex": "00 01 00 10 00 00 00 00"}, {"text": "kern"}, {"hex": "00 00 00 00 7f ff ff ff 00 00 00 10"}]}
+  ]
+}

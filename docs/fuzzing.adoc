@@ -1,0 +1,233 @@
+= Fuzzing roc-font
+:toc: left
+:toclevels: 2
+
+This chapter is for contributors. It explains what each fuzz target
+promises, how to run the targets, where their inputs come from, and what to
+do with a failure. The reasons behind fuzzing as a verification layer are
+in architecture §7.3; the rule that every reading or shaping stage gets a
+target is in `AGENTS.md` ("Verify the contract").
+
+== Why fuzz a font library
+
+Font bytes are hostile input. Unit expects check the cases someone thought
+of; fuzzing checks the contract on inputs nobody thought of: truncated
+tables, offsets that point outside the file, counts that overflow, lookups
+that recurse, runs that grow. A successfully read font must make every
+later query and shaping call total (architecture §3), and only generated
+input tests that claim at scale.
+
+== Targets and their contracts
+
+Each target is a roc-fuzz app built natively with `roc build --fuzz`. Its
+`test!` function crashes, with a message naming the broken promise, when
+the contract does not hold. `python3 scripts/run_fuzz.py list` prints the
+current list.
+
+[cols="1,3,3",options="header"]
+|===
+|Target |Input |Contract
+
+|`font-read`
+|A font file (input starting with a font signature: `00 01 00 00`,
+`OTTO`, `true` or `ttcf`), or a recipe read by `FontTest.fuzz_font`: the
+first byte picks a base (Inter, the synthetic sample, the sample cut short,
+or nothing) and each following four bytes patch one byte. The same bytes
+choose the contents of `FontTest.scaled` fonts.
+|Reading never crashes and is deterministic (two reads give identical
+results). A rejection names at least one problem. An accepted font has
+finite metrics, `units_per_em` in 16..16384 and at least one glyph;
+character lookups give glyphs the font has; advances are finite and
+non-negative; outline extents are finite and ordered; kerning gives one
+finite value per glyph; substitution keeps clusters inside the run and
+gives at most `4 n + 32` glyphs. Queries are probed past the font's own
+glyph range, at plane edges and with empty runs.
+
+|`font-shape`
+|UTF-8 text (invalid sequences replaced), optionally a `0xFF` byte and a
+font or recipe as `font-read` takes it. Without a readable font the text is
+shaped with Inter.
+|Substitution is deterministic, keeps every cluster inside the run, and
+gives at most `4 n + 32` glyphs and at most 36 per character. Kerning gives
+one finite value per glyph. A run's width (advances plus kerning) is
+deterministic and finite.
+|===
+
+Both targets also check *cost*:
+
+* *Allocation linearity.* `Fuzz.measure_allocs!` counts the allocations of
+  the operation at two sizes: reading `FontTest.scaled` fonts built from 2
+  and 16 copies of the input's choices, and shaping the text repeated 2 and
+  16 times. The larger may take at most `10 × small + 256` allocations: an
+  8-fold input with headroom for constant overhead. Quadratic behaviour
+  (a list copied per item, a sort on sorted input) fails quickly.
+* *Leaks.* `Fuzz.expect_no_leaks!` runs the larger operation and fails if
+  anything it allocated is still live afterwards. roc-fuzz also checks
+  every input for leaks unless `--no-detect-leaks` is passed; the scripts
+  never pass it.
+
+=== Planned targets
+
+Architecture §7.3 calls for more targets as the stages they cover land:
+one per reading stage (container and directory, each table reader), one
+per shaping stage (cmap mapping, GSUB, GPOS, kerning, cluster handling),
+and a differential target that shapes fuzzed text on corpus fonts and
+compares with recorded HarfBuzz output. A new stage is not finished until
+its target exists, is seeded and is registered in `scripts/run_fuzz.py`.
+
+== Layout
+
+The targets live in `fuzz/` as `font-read.roc` and `font-shape.roc`. They
+need `FontTest`, which `package/main.roc` deliberately does not expose, so
+they import the package through a second package root,
+`package/testing.roc`, which exposes `Font` and `FontTest`:
+
+[source,roc]
+----
+app [target] {
+	font: "../package/testing.roc",
+	fuzz: platform "<pinned roc-fuzz URL>",
+}
+
+import font.Font
+import font.FontTest
+----
+
+`package/main.roc` never reaches `testing.roc`, so `roc bundle` and `roc
+docs` are unchanged. Simpler routes do not work on the current nightly:
+importing `font.FontTest` through `main.roc` fails with "package module is
+private", pointing a dependency directly at `package/FontTest.roc` does not
+make its items available, and a symlink fails with "resolves outside this
+package's source root".
+
+Everything else lives in `fuzz/`:
+
+----
+fuzz/
+  <target>.roc              roc-fuzz targets
+  seeds/<target>.json       reviewed starting inputs, each with a reason
+  dictionaries/font.dict    tags, signatures and edge values
+scripts/run_fuzz.py         build, seed, run, harvest
+----
+
+== Running
+
+The scripts use `$ROC`, or `roc` on `PATH`. Use the compiler pinned in
+`.roc-version`: the interpreter, the native backend and different compiler
+builds can disagree, and a fuzz binary is always native.
+
+[source,sh]
+----
+python3 scripts/run_fuzz.py smoke                  # every target, 4000 inputs, seed 1
+python3 scripts/run_fuzz.py smoke font-shape --runs=20000
+python3 scripts/run_fuzz.py campaign --seconds=600 # each target, persistent corpus
+python3 scripts/run_fuzz.py nightly                # 1800 s per target
+python3 scripts/run_fuzz.py check-pin              # targets use the pinned roc-fuzz
+----
+
+`smoke` starts each target from a fresh corpus holding only the seeds and
+passes a fixed libFuzzer seed, so its result depends only on the sources,
+seeds, fonts present and compiler. It is the CI check and runs as a step of
+`scripts/all_tests.py`. `campaign` and `nightly` grow one persistent corpus
+per target and are for finding new failures.
+
+Each run uses the target binary's supervised `ci` command, which records
+provenance (commit, compiler version, roc-fuzz release and bundle digest)
+and keeps evidence even when the target crashes. Working state goes under
+the ignored `.roc-font-tmp/fuzz/` (or `$ROC_FONT_TMPDIR/fuzz/`):
+
+----
+bin/<target>              built binaries
+corpus/<target>/          campaign corpus
+smoke-corpus/<target>/    recreated for each smoke run
+runs/<target>/<mode>/     report.json, summary.md, run.log, failures/
+crashes/<target>/<sha256> harvested failure inputs
+----
+
+The roc-fuzz platform is pinned by release, bundle hash and asset SHA-256
+in `ROC_FUZZ_RELEASE` in `scripts/run_fuzz.py`. Every target must declare
+exactly that platform URL; `check-pin` (and every run) verifies it, and
+verifies the cached download's digest when it is present. To upgrade,
+change the URL in every target and the record in the script together.
+
+== Seeds and corpus
+
+A seed is useful when it reaches behaviour other seeds do not. Each entry
+in `fuzz/seeds/<target>.json` says why it is there, and is built from
+parts: `{"text": ...}` (UTF-8), `{"hex": ...}` or `{"file": ...}` (a path
+under the repository). Because the targets read recipes, a few bytes can
+stand for a nearly valid font; keep hand-written seeds small.
+
+`run_fuzz.py` also adds every `.ttf`, `.otf`, `.ttc` and `.otc` file found
+in `tests/fonts/` and in the fetched corpus `tests/corpus/` (architecture
+§7.2; fetch it with `scripts/fetch_corpus.py`). `font-shape` gets each font
+after a short text and the `0xFF` marker. Files larger than the target's
+input bound (256 KiB) are skipped and counted. When `tests/corpus/` is
+absent, runs still work from the committed fixtures and say so.
+
+The dictionary helps mutations produce table tags, signatures and boundary
+values (`0xFFFF`, `0x8000`, common `unitsPerEm`) that random bytes rarely
+hit.
+
+== Distilling failures
+
+A failing run prints the target's last lines and copies each reproducing
+input to `.roc-font-tmp/fuzz/crashes/<target>/<sha256>`. Every failure
+becomes a permanent unit expect before or with its fix; the fuzz corpus is
+not a regression suite.
+
+. *Show and replay* in a fresh process:
++
+[source,sh]
+----
+python3 scripts/run_fuzz.py show font-read <input>
+python3 scripts/run_fuzz.py replay font-read <input>
+----
++
+If replay does not reproduce, suspect a changed target or generator, a
+truncated input, or a compiler difference before suspecting the library.
+. *Minimise* it:
++
+[source,sh]
+----
+python3 scripts/run_fuzz.py minimize font-read <input> .roc-font-tmp/fuzz/minimized/<name>
+----
+. *Distil* the minimal input into the smallest structure that still fails,
+  preferably built with `FontTest` so the test reads as a font, otherwise
+  as literal bytes. Add it as a top-level `expect` in the unit test module
+  for the stage (`package/FontTests.roc`, `package/FontShapeTests.roc`),
+  preceded by a doc comment that starts `## fuzz regression:` and names the
+  target, the contract that broke and the cause:
++
+[source,roc]
+----
+## fuzz regression: font-read. The sample font cut to 64 bytes, its table
+## records pointing past the end, must be rejected with a problem.
+expect
+	match Font.from_bytes(FontTest.sample.take_first(64)) {
+		Err(problems) => problems.len() > 0
+		Ok(_) => False
+	}
+----
++
+. *Confirm* the expect fails before the fix and passes after, with both
+  `roc test` and `roc test --opt=interpreter`.
+. *Fix* the reader or shaper. If the target's contract itself was wrong,
+  change the target and its doc comment in the same commit and say why.
+. *Rerun* the target on its corpus to make sure nothing nearby still fails.
+
+Do not commit crash inputs, corpora or run directories; only distilled
+expects and reviewed seeds. A seed that represents an interesting fixed
+crash may be added to `fuzz/seeds/` with its reason.
+
+== Adding a target
+
+. Write the target app with a doc comment stating its input format and its
+  contract, and make every broken promise `crash` with a specific message.
+. Include an allocation check at two sizes and `Fuzz.expect_no_leaks!` when
+  the stage allocates in proportion to its input.
+. Add `fuzz/seeds/<target>.json` and, if useful, a dictionary.
+. Register it in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
+  timeout and a one-line contract.
+. Run `python3 scripts/run_fuzz.py smoke <target>` and a short campaign
+  before landing it.
