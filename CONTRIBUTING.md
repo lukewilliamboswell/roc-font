@@ -56,6 +56,7 @@ The other tasks in `Blueprint.roc`:
 | `conformance` | `scripts/conformance.py`: compare with the recorded oracle results |
 | `bench-quick` | `scripts/bench.py --quick`: a timing smoke run against the comparison programs present |
 | `docs` | render the manual in `docs/` into `.docs-out/` |
+| `examples` | build and run every example in `examples/` against its recorded output (`-- --update` re-records) |
 
 Pull-request CI runs `blueprint run check -- --smoke` with the nightly in
 `.roc-version` (`.github/workflows/ci.yml`). `--smoke` keeps CI fast:

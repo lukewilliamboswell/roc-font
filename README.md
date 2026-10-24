@@ -1,68 +1,130 @@
 # roc-font
 
-A pure Roc font library: font file bytes in, metrics, glyphs and kerning
-out. It needs no host, no system fonts and no file access, so it works the
-same in a package, an app, a test or a browser.
+Read font files and turn text into positioned glyphs, in pure Roc.
 
-**Status: pre-0.1.0. The API is provisional and will change.** The design
-it is moving towards is described in `docs/architecture.adoc`.
+Give roc-font the bytes of a TrueType or OpenType font, or use one of its
+three built-in fonts, and it tells you how wide text is and which glyphs to
+draw where: font facts (units per em, ascent and descent, the glyph for
+each character, advances and glyph boxes) and shaped runs (glyph ids,
+advances, offsets, and clusters pointing back into your text), all in font
+units. It needs no host, no system fonts and no file access, so it works
+the same in an application, a package, a test or a browser.
 
-Today it reads TrueType and OpenType (`glyf` or `CFF`) files and gives:
+It is for programs that lay out text themselves: diagram and chart
+renderers, PDF writers, layout engines and games. Drawing glyphs, wrapping
+lines and choosing fallback fonts stay with your program.
 
-- units per em, ascent and descent;
-- the glyph for each Unicode code point (character maps 4 and 12);
-- each glyph's advance width and outline extent;
-- pair kerning (`GPOS`, or the older `kern` table);
-- the default ligatures and contextual forms (`GSUB`).
+## Status
 
-The bytes are never trusted: a file that cannot be used is reported with
-every problem found, and every query on a font that was read succeeds.
+**0.1.0, the first release.** Text is shaped as HarfBuzz's default shaper
+shapes it, which covers Latin, Greek, Cyrillic and other scripts that need
+no script-specific shaper, plus HarfBuzz's Hebrew shaper. Variable fonts are
+measured at any weight, width or optical size. Scripts that need their own
+shaper (Arabic joining, the Indic scripts, Thai, Khmer and others) are shaped
+by the default shaper for now, and mark attachment, cursive and contextual
+positioning are not applied yet. The API may still change before 1.0.
 
 ## Example
 
+How wide is "Hello, world!" at 16 px? This is
+[`examples/measure.roc`](examples/measure.roc), which CI runs and checks:
+
 ```roc
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.25.0/CZsY7tYZwR3rj9kYbpaCfxki2yVAaRL8bBwMLvB2xkbA.tar.zst",
+	font: "{package-url}",
+}
+
+import cli.Stdout
 import font.Font
 
-# The width of "AV" in font units, shaped with the browser default
-# features (ligatures, contextual forms and kerning).
-width : List(U8) -> Try(I32, List(Font.Problem))
-width = |bytes| {
-	font = Font.from_bytes(bytes, Font.ReadOptions.{})?
-	Ok(Font.width(font, "AV"))
-}
+# How wide is a string, in pixels, at a given font size?
+#
+#     roc examples/measure.roc
+#
+# `Font.sans` is a font built into roc-font (Inter), so no font file is
+# needed. `Font.width` shapes the text as a browser would, with the font's
+# default ligatures and kerning, and adds up the glyphs' advances.
+main! = |_args| {
+	text = "Hello, world!"
+	size = 16.I32 # the font size in pixels: the height of one em
 
-# Glyphs, their advances and offsets, and the UTF-8 byte offset of the text
-# each draws, for Bold text in English.
-shaped : List(U8) -> Try(Font.Run, List(Font.Problem))
-shaped = |bytes| {
-	font = Font.at(Font.from_bytes(bytes, Font.ReadOptions.{})?, Font.Variation.{ weight: Bold })
-	Ok(Font.shape(font, "office -> home", Font.ShapeOptions.{ script: "Latn", language: "en" }))
+	# roc-font measures in font units, integers on the font's own grid of
+	# `units_per_em` units to the em.
+	units = Font.width(Font.sans, text)
+	units_per_em = Font.units_per_em(Font.sans)
+
+	# Scale to pixels. Rounding, if you want it, is yours to choose.
+	pixels = (units * size).to_dec() / units_per_em.to_dec()
+
+	Stdout.line!("\"${text}\" is ${units.to_str()} font units wide (${units_per_em.to_str()} to the em),")?
+	Stdout.line!("which is ${pixels.to_str()} px at ${size.to_str()} px.")?
+	Ok({})
 }
 ```
 
-Divide font units by `Font.units_per_em(font)` and multiply by the font
-size to get pixels. Rounding to a pixel grid is left to the caller.
+It prints:
 
-No font is bundled; pass the bytes of the font you use.
-
-## Development
-
-Checks run with the Roc nightly named in `.roc-version` (set `ROC` to its
-`roc` binary if it is not first on your `PATH`).
-
-```sh
-python3 scripts/all_tests.py           # every check: fmt, check, tests, fuzz smoke, docs, bundle
-python3 scripts/run_fuzz.py smoke      # just the fuzz targets in fuzz/
-roc test tests/api/main.roc            # tests of the public API
+```text
+"Hello, world!" is 12111 font units wide (2048 to the em),
+which is 94.6171875 px at 16 px.
 ```
 
-Tests live in `tests/api/` and `tests/support/`, which `package/main.roc`
-does not reach, so neither they nor the test fonts are part of the
-published package.
+[`examples/`](examples/) has more: shaping text into glyphs and clusters,
+reading your own font file and reporting what is wrong with it, measuring
+a variable font at several weights, turning features such as ligatures on
+and off, and right-to-left text.
+
+## Setup
+
+Add the package to your application's header. `{package-url}` stands for
+the bundle URL of the release you choose; each release's notes on the
+[releases page](https://github.com/lukewilliamboswell/roc-font/releases)
+give it in full.
+
+```roc
+app [main!] {
+	font: "{package-url}",
+	# ... your platform
+}
+
+import font.Font
+```
+
+Use the Roc nightly the release notes name. To use a font of your own, load
+its bytes however your platform allows and read them once with
+`Font.from_bytes`; reading is the only step that can fail, and it reports
+every problem it finds. Every query and every shaping call on a font that
+was read succeeds.
+
+The API reference (generated with `roc docs`) and the manual, which covers
+the design, conformance testing and the built-in fonts, are attached to
+each release.
+
+## What is included
+
+The package carries three variable fonts, ready to use as `Font.sans`,
+`Font.serif` and `Font.mono` with no font file:
+
+- **Inter** 4.1, a sans for interfaces and diagrams;
+- **Merriweather** 4.009, a serif for running text;
+- **Fira Code** 6.2, a monospaced font with programming ligatures.
+
+Each is unmodified and under the SIL Open Font License 1.1. Their exact
+bytes (`Font.sans_bytes`, ...) and licences (`Font.sans_licence`, ...) are
+available too, for embedding the font you measured with, say, a PDF; keep
+the licence with the font when you pass it on. A program that never names a
+built-in font carries none of it. See
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for their copyright
+notices and provenance.
+
+## Contributing
+
+[CONTRIBUTING.md](CONTRIBUTING.md) says what to install and how to run the
+checks. The manual in [`docs/`](docs/index.adoc) explains the design and
+how roc-font is tested against HarfBuzz, OTS and Chrome.
 
 ## Licence
 
-The package is under the Universal Permissive License 1.0 (`LICENSE`).
-The test font `tests/fonts/Inter-Regular-metrics.ttf` is a metrics-only
-copy of Inter, under the SIL Open Font License 1.1
-(`tests/fonts/Inter-OFL.txt`).
+roc-font is under the Universal Permissive License 1.0 ([LICENSE](LICENSE)).
+The built-in fonts are under the SIL Open Font License 1.1, as above.

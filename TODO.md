@@ -95,10 +95,14 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Release
 
-- [ ] `roc docs` reviewed as the API; README example compiles against it.
+- [ ] Final API review with consumer and example evidence: `width` with
+  options (or a run-width helper), listing a font's features, named tests
+  for run flags, a cluster-range helper, a plain-language rendering of
+  `Problem`, telling "draws nothing" from "CFF outlines not read" in
+  `extents`; then `roc docs` reviewed as the API.
+- [ ] Refresh the figures in `docs/releases/0.1.0.adoc` just before tagging.
+
 - [ ] Bundle: package modules plus the default fonts and licences only.
-- [ ] Examples (`examples/` with `spec.json` and the archive step) so the
-  release and nightly workflows have something to check.
 - [ ] Just before tagging: the default-branch ruleset from roc-automation's
   settings chapter (pull request, required checks `check` and the release
   dry-run build, signed commits, no bot bypass), verified with a pull

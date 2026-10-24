@@ -3,6 +3,7 @@
 #
 #     blueprint run check          # everything a pull request must pass
 #     blueprint run check -- --only fmt,test
+#     blueprint run examples       # build and run examples/, compare with tests/examples.json
 #     blueprint run docs           # the manual as a site, Markdown and PDF in .docs-out/
 #     blueprint update             # refresh Blueprint.lock after changing a recipe
 #
@@ -32,6 +33,9 @@ config = [
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
 	# Replay the recorded HarfBuzz, Chrome and reading oracle results.
 	Task("conformance", [Use("package"), Run(["python3", "scripts/conformance.py"])]),
+	# Build and run every example under examples/ and compare its output with
+	# tests/examples.json. After an intended change: blueprint run examples -- --update
+	Task("examples", [Use("package"), Run(["python3", "scripts/examples.py", "check"])]),
 	# Timing smoke run against the comparison implementations that are present.
 	Task("bench-quick", [Use("package"), Run(["python3", "scripts/bench.py", "--quick"])]),
 	# The manual: docs/index.adoc rendered as a site, static Markdown and a PDF.

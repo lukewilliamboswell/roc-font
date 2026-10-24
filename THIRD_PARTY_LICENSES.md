@@ -25,9 +25,9 @@ The fonts' `name` tables carry these trademark notices: "Inter UI and Inter
 is a trademark of rsms.", "Merriweather is a trademark of Sorkin Type Co."
 and "Fira Mono is a trademark of The Mozilla Corporation."
 
-No module reaches these files yet, so the current bundle holds only Roc
-modules. When the default fonts become part of the public API, each font
-and its licence text are bundled together, unmodified.
+`Font.sans`, `Font.serif` and `Font.mono` read these files, and the
+package bundle carries each font with its licence text, unmodified
+(`Font.sans_licence` and its siblings expose the texts).
 
 ## Test fonts and test data
 

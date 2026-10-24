@@ -1,0 +1,113 @@
+{
+  "about": "The expected output of every example under examples/, read by scripts/examples.py: the arguments and standard input of each case, run from the repository root, and its exact standard output, standard error and exit status. Rewrite after an intended change with: python3 scripts/examples.py check --update. A release copies these cases into the spec.json of its examples archive.",
+  "apps": [
+    {
+      "path": "examples/measure.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "\"Hello, world!\" is 12111 font units wide (2048 to the em),\nwhich is 94.6171875 px at 16 px.\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/shape.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "Shaping \"Office fit\" gives 8 glyphs for 10 bytes of text:\n\nglyph  name       cluster  text  advance\n205    O          0        \"O\"   1440\n502    f          1        \"f\"   781\n801    fi         2        \"fi\"  1425\n439    c          4        \"c\"   999\n466    e          5        \"e\"   1043\n1858   space      6        \" \"   474\n801    fi         7        \"fi\"  1409\n689    t          9        \"t\"   780\n\nTotal advance: 8351 font units (2000 to the em).\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/font-file.roc",
+      "cases": [
+        {
+          "name": "built-in-font",
+          "args": [],
+          "stdin": "",
+          "stdout": "Checking the file of Font.sans\nFamily: Inter Variable\nGlyphs: 2937, 2048 units to the em\nCharacters mapped: 2852\nVariable along: opsz, wght\nNothing was left out.\nStrict reading accepts it too.\n",
+          "stderr": "",
+          "exit_code": 0
+        },
+        {
+          "name": "not-a-font",
+          "args": [
+            "examples/shape.roc"
+          ],
+          "stdin": "",
+          "stdout": "Checking examples/shape.roc\nThis font cannot be used:\n  - not a TrueType or OpenType font file\n",
+          "stderr": "",
+          "exit_code": 1
+        },
+        {
+          "name": "missing-file",
+          "args": [
+            "examples/no-such-font.ttf"
+          ],
+          "stdin": "",
+          "stdout": "",
+          "stderr": "Could not read examples/no-such-font.ttf\n",
+          "exit_code": 1
+        }
+      ]
+    },
+    {
+      "path": "examples/weights.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "Font.sans varies along: opsz 14.0 to 32.0, wght 100.0 to 900.0\n\nLight        \"Hello, world!\" is 11918 font units wide\nRegular      \"Hello, world!\" is 12111 font units wide\nWeight(550)  \"Hello, world!\" is 12356 font units wide\nBold         \"Hello, world!\" is 12595 font units wide\n\nFont.mono Light  \"Hello, world!\" is 15600 font units wide\nFont.mono Bold   \"Hello, world!\" is 15600 font units wide\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/features.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "Ligatures in Font.serif\n  default: o f fi c e space fi t\n  liga 0:  o f f i c e space f i t\n\nProgramming ligatures in Font.mono\n  default: a space hyphen_start.seq greater_hyphen_end.seq space b space exclam.spacer exclam_equal.liga space c\n  liga 0:  a space hyphen_start.seq greater_hyphen_end.seq space b space exclam.spacer exclam_equal.liga space c\n  calt 0:  a space hyphen greater space b space exclam equal space c\n\nFigures in Font.sans, in font units\n  default: \"1111\" is 3332 wide, \"0000\" is 5168 wide\n  tnum:     \"1111\" is 5312 wide, \"0000\" is 5312 wide\n\nSmall capitals on part of \"see the readme first\" in Font.serif\n  s e e space t h e space r.sc e.sc a.sc d.sc m.sc e.sc space fi r s t\n\nStylistic alternates in Font.sans\n  default: a one\n  salt:    a.1 one.ss01\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/right-to-left.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "glyph  name         cluster  missing\n1437   parenleft    18       no\n0      .notdef      16       yes\n0      .notdef      14       yes\n0      .notdef      12       yes\n0      .notdef      10       yes\n1438   parenright   9        no\n1777   space        8        no\n0      .notdef      6        yes\n0      .notdef      4        yes\n0      .notdef      2        yes\n0      .notdef      0        yes\n\n8 of 11 glyphs need a fallback font.\n",
+          "stderr": "",
+          "exit_code": 0
+        },
+        {
+          "name": "missing-file",
+          "args": [
+            "examples/no-such-font.ttf"
+          ],
+          "stdin": "",
+          "stdout": "",
+          "stderr": "Could not read examples/no-such-font.ttf\n",
+          "exit_code": 1
+        }
+      ]
+    }
+  ]
+}

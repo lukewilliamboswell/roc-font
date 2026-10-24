@@ -12,6 +12,7 @@ Steps (select with --only, drop with --skip, list with --list):
     test-interpreter  the same with --opt=interpreter
     fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded;
                       200 inputs per target with --smoke)
+    examples          scripts/examples.py check: every example's recorded output
     conformance       scripts/conformance.py, when present
     bench             scripts/bench.py --check --quick, when present (with
                       --smoke: one Roc-only pass over Inter, no ratchet)
@@ -247,6 +248,10 @@ def optional_script(ctx: Context, script: str, arguments: Sequence[str], why_mis
     return Result(status, f"exit {completed.returncode}", completed.stdout or "")
 
 
+def step_examples(ctx: Context) -> Result:
+    return optional_script(ctx, "examples.py", ["check"], "the examples' recorded output")
+
+
 def step_conformance(ctx: Context) -> Result:
     return optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
 
@@ -408,6 +413,7 @@ STEPS: dict[str, Callable[[Context], Result]] = {
     "test": step_test,
     "test-interpreter": step_test_interpreter,
     "fuzz-smoke": step_fuzz_smoke,
+    "examples": step_examples,
     "conformance": step_conformance,
     "bench": step_bench,
     "docs": step_docs,
