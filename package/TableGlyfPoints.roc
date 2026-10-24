@@ -39,6 +39,7 @@ TableGlyfPoints := {
 		TooShort,
 		ContourOrder,
 		FlagRepeat,
+		ReservedFlag,
 		GlyphIndex,
 		Cycle,
 		TooDeep,
@@ -205,6 +206,11 @@ TableGlyfPoints := {
 		}
 		points = $previous + 1
 		instructions = TableVar.u16(glyf, ends_at + 2 * contours)
+		# OTS: the instructions must fit in the glyph (glyf.cc, "Can't read
+		# bytecode").
+		if !TableVar.fits(ends_at + 2 * contours + 2, instructions, end) {
+			return Err((ends_at + 2 * contours, Truncated))
+		}
 		flags_at = ends_at + 2 * contours + 2 + instructions
 		# Each point needs at least a flag byte, so the point count bounds
 		# the walk.
@@ -217,6 +223,11 @@ TableGlyfPoints := {
 				return Err(($at, Truncated))
 			}
 			flag = TableVar.u8(glyf, $at)
+			# OTS: bit 7 of a point flag is reserved and must be zero
+			# (glyf.cc, "Bad glyph flag"), which also refuses the cubic flag.
+			if flag.bitwise_and(0x80) != 0 {
+				return Err(($at, ReservedFlag))
+			}
 			repeat =
 				if flag.bitwise_and(0x08) != 0 {
 					if $at + 1 >= end {

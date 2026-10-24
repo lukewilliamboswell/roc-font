@@ -261,6 +261,14 @@ expect {
 	glyf_problems([repeat]) == [{ table: "glyf", offset: 14, reason: FlagRepeat }]
 }
 
+# OTS refuses a point flag with reserved bit 7 set (the cubic flag), and
+# instructions that run past the glyph.
+expect {
+	cubic = i16(1).concat(List.repeat(0.U8, 8)).concat(u16(0)).concat(u16(0)).concat([0x81, 0, 0])
+	short = i16(1).concat(List.repeat(0.U8, 8)).concat(u16(0)).concat(u16(48)).concat([0, 1, 2])
+	glyf_problems([cubic]).map(|p| p.reason) == [ReservedFlag] and glyf_problems([short]).map(|p| p.reason) == [Truncated]
+}
+
 # Coordinates past the end of the glyph.
 expect glyf_problems([square.drop_last(2)]) == [{ table: "glyf", offset: 18, reason: Truncated }]
 

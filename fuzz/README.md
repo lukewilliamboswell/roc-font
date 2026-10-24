@@ -13,8 +13,11 @@ narrow targets each build fonts exercising one feature at two sizes and
 check its contract and allocation growth: `font-cmap.roc` (character map
 formats), `font-coverage.roc` (coverage and class definitions),
 `font-gsub.roc` (one substitution lookup type at a time), `font-gpos.roc`
-(pair kerning formats and `kern`) and `font-var.roc` (variable fonts and
-`Font.at`). All of them import the package through `package/main.roc`, exactly what ships, and the test-only
+(pair kerning formats and `kern`), `font-var.roc` (variable fonts and
+`Font.at`), `font-gvar.roc` (glyph variations and `Font.extents`) and
+`font-layout-var.roc` (kerning device deltas and feature variations) and
+`font-ots.roc` (the checks reading shares with OTS, one damaged table at a
+time). All of them import the package through `package/main.roc`, exactly what ships, and the test-only
 byte builders (`FontBuild`) through `tests/support/main.roc`, which
 `package/main.roc` never reaches.
 

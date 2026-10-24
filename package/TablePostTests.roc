@@ -47,7 +47,7 @@ v2 = |indices, stored| {
 	$out
 }
 
-# A version 2.5 table with signed offsets.
+# A version 2.5 table with signed offsets (deprecated; OTS refuses it).
 v25 : List(I64) -> List(U8)
 v25 = |offsets| header(0x00025000).concat(u16(offsets.len())).concat(offsets.map(|o| o.to_u64_wrap().bitwise_and(0xFF).to_u8_wrap()))
 
@@ -172,9 +172,10 @@ expect name_of(ranking_file, 4) == Ok("caf\u(e9)")
 expect name_of(ranking_file, 5) == Ok("uni1F600")
 expect facts(ranking_file) == Ok({ underline: { position: -100, thickness: 50 }, angle: 0, fixed: Bool.False })
 
-# Version 2.5 (fontTools cannot read it): .notdef, A, B, space, a.
-expect ids(6).map(|g| name_of(format1_file, g)) == [Ok(".notdef"), Ok("A"), Ok("B"), Ok("space"), Ok("a"), Err(Missing)]
-expect facts(format1_file) == Ok({ underline: { position: -120, thickness: 40 }, angle: 0, fixed: Bool.False })
+# Version 2.5 (deprecated): OTS 9.3.0 refuses it ("Unsupported table
+# version", post.cc lines 21-26), so reading does too.
+expect name_of(format1_file, 1) == Err(Rejected)
+expect facts(format1_file) == Err(Rejected)
 
 # Version 3.0: metrics, no names. 11.25 degrees is 737280 in 16.16.
 expect name_of(japanese_file, 0) == Err(Missing)
@@ -192,17 +193,17 @@ expect
 # Version 1.0 names the first 258 glyphs only.
 expect names(header(0x00010000), 300, 260).drop_first(256) == [Ok("ccaron"), Ok("dcroat"), Err(Missing), Err(Missing)]
 
-# Version 2.0: an empty stored name is no name; glyphs the table does not
-# list have no name; entries past the font's glyph count are not read.
-expect names(v2([0, 258, 259, 3], ["", "b.alt"]), 6, 6) == [Ok(".notdef"), Err(Missing), Ok("b.alt"), Ok("space"), Err(Missing), Err(Missing)]
-expect names(v2([3, 0xFFFF], []), 1, 2) == [Ok("space"), Err(Missing)]
+# Version 2.0: an empty stored name is no name; glyphs past the font have
+# no name.
+expect names(v2([0, 258, 259, 3], ["", "b.alt"]), 4, 6) == [Ok(".notdef"), Err(Missing), Ok("b.alt"), Ok("space"), Err(Missing), Err(Missing)]
 
-# Stored names nothing refers to, and trailing bytes, are allowed.
-expect names(v2([259], ["a", "b", "c"]).concat([0, 0, 7]), 1, 1) == [Ok("b")]
+# Stored names nothing refers to, and trailing empty names, are allowed.
+expect names(v2([259], ["a", "b", "c"]).concat([0, 0]), 1, 1) == [Ok("b")]
 
-# Version 2.5: positive and negative offsets, up to the last standard name.
-expect names(v25([0, 127, -2]), 3, 3) == [Ok(".notdef"), Ok("ucircumflex"), Ok(".notdef")]
-expect names(v25(List.repeat(0, 130).append(127)), 131, 131).drop_first(130) == [Ok("dcroat")]
+# A table listing no glyphs gives no names; OTS allows it for fonts of up
+# to 258 glyphs (post.cc lines 59-68).
+expect names(header(0x00020000).concat(u16(0)), 258, 2) == [Err(Missing), Err(Missing)]
+expect problems(header(0x00020000).concat(u16(0)), 500, 259) == [bad(532)]
 
 expect
 	match read(header(0x00020000).concat(u16(0)), 0) {
@@ -215,31 +216,29 @@ expect TablePost.underline(TablePost.none) == { position: 0, thickness: 0 }
 
 # ------------------------------------------------------------ problems
 
-# Too short for the header, and versions this module does not read (4.0,
-# 2.0 spelt wrongly). Offsets are in the file (the table is at 500).
+# Too short for the header, and versions OTS does not read (4.0, 2.0 spelt
+# wrongly, the deprecated 2.5). Offsets are in the file (the table is at 500).
 expect problems(List.repeat(0, 31), 500, 1) == [bad(500)]
 expect problems(header(0x00040000), 500, 1) == [bad(500)]
 expect problems(header(0x00000002), 500, 1) == [bad(500)]
+expect problems(v25([0, 127, -2]), 500, 3) == [bad(500)]
 
 # Version 2.0: indices past the end of the table (placed at the count).
 expect problems(header(0x00020000).concat(u16(3)).concat(u16(0)), 500, 3) == [bad(532)]
 
-# Version 2.0: a glyph refers to a stored name that is not there (placed
-# where the table ran out), or to more names than the table has bytes.
-expect problems(v2([258, 260], ["a", "b"]), 500, 2) == [bad(500 + 38 + 4)]
+# Version 2.0: each glyph that refers to a stored name that is not there
+# (placed at its index); a stored name that runs past the end of the table
+# or holds a zero byte (placed at its length byte, post.cc lines 91-103).
+expect problems(v2([258, 260], ["a", "b"]), 500, 2) == [bad(500 + 36)]
+expect problems(v2([0xFFFF, 0, 0xFFFF], ["a"]), 500, 3) == [bad(500 + 34), bad(500 + 38)]
 expect problems(v2([258], []).concat([5, 0x41]), 500, 1) == [bad(500 + 36)]
-expect problems(v2([0xFFFF], ["a"]), 500, 1) == [bad(500 + 38)]
+expect problems(v2([258], ["a"]).concat([5, 0x41]), 500, 1) == [bad(500 + 38)]
+expect problems(v2([258], ["a\u(0)b"]), 500, 1) == [bad(500 + 36)]
 
-# A reference past the font's glyph count is never read, so it is no
-# problem.
-expect problems(v2([0, 0xFFFF], []), 500, 1) == []
-
-# Version 2.5: every offset that selects no standard name is reported, at
-# its byte; the count must fit.
-expect problems(v25([0, -2, 300 - 256, 0]), 500, 4) == [bad(500 + 35)]
-expect problems(v25([-1, 127, 0, 127]), 500, 4) == [bad(500 + 34)]
-expect problems(v25([-1].concat(List.repeat(0, 134)).append(127).concat(List.repeat(0, 4))), 0, 140) == [bad(34), bad(34 + 135)]
-expect problems(header(0x00025000).concat(u16(5)).concat([0, 0]), 500, 5) == [bad(532)]
+# A count other than the font's glyph count (post.cc lines 70-73), reported
+# with any bad index.
+expect problems(v2([0, 0xFFFF], []), 500, 1) == [bad(532), bad(536)]
+expect problems(v2([3], []), 500, 2) == [bad(532)]
 
 # A table that lies outside the file is placed at its offset.
 expect {

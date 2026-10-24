@@ -213,14 +213,34 @@ and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
 `OS/2`, `name`, `post`, ...).
 
 * *Lenient* (the default) accepts exactly what browsers accept, which is
-  what OTS accepts: OTS is the oracle for every reading case. A broken
-  required table rejects the font, and so does a broken GSUB, GPOS, GDEF,
-  OS/2, `post`, `name` or structurally broken `kern`, because OTS rejects
-  those fonts and a browser would never draw them. OTS drops the variation
-  tables as one unit and an unsorted `kern`; roc-font drops the same, and
-  the font reports what was dropped and why (`Font.dropped`). (Measured
-  with OTS 9.3.0; an earlier draft dropped every broken optional table,
-  which would measure fonts no browser can show.)
+  what OTS accepts: OTS 9.3.0 is the oracle for every reading case. The
+  font header, character map, glyph substitutions, PostScript and naming
+  tables, and the glyph outlines' instruction lengths and flags are
+  checked exactly as OTS checks them (`ots/src/head.cc`, `cmap.cc`,
+  `layout.cc`, `gsub.cc`, `post.cc`, `name.cc`, `glyf.cc`). In particular a `cmap` format 4, 12 or 13 subtable, or a
+  `GSUB` lookup, naming a glyph at or past `maxp`'s glyph count rejects
+  the font; so does a format 4 subtable whose binary-search fields are not
+  exactly those its segment count gives, a `cmap` with no Unicode or
+  Windows map OTS passes on (a Macintosh-only map), a `DFLT` script
+  without a default language system, a `post` table of version 2.5 or
+  whose version 2.0 glyph count is not `maxp`'s, a `name` table whose
+  storage overlaps its records or that OTS could not write back, and a
+  point flag with its reserved bit set (the cubic flag). Name records OTS
+  discards (unknown platforms, strings outside the table) do not reject
+  the font; a query never chooses them. A broken required table rejects the
+  font, and so does a broken GSUB, GPOS, GDEF, OS/2, `post`, `name` or
+  structurally broken `kern`, because OTS rejects those fonts and a
+  browser would never draw them. OTS drops the variation tables as one
+  unit and an unsorted `kern`; roc-font drops the same, and the font
+  reports what was dropped and why (`Font.dropped`). Deliberate
+  divergences: roc-font does not require `OS/2`, `name`, `post` or
+  outlines to be present, so metrics-only and synthetic fonts read; an
+  `avar` version 2, which OTS keeps, is dropped with the variations
+  because roc-font cannot apply it; and checking `GSUB` is bounded (64
+  steps per byte plus 2^20). Measured over the 1,278-font corpus, no
+  other font is read differently. Fonts whose test data OTS refuses (the
+  AOTS suite's format 4 `cmap` fields, for example) are therefore refused
+  too, by design.
 * *Strict* (`ReadOptions.{ strict: True }`, wanted by roc-pdf) rejects
   the font for any problem, including checksum mismatches and overlapping or
   unordered tables.

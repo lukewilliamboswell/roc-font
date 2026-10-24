@@ -17,7 +17,8 @@ empty, and only the `name` and `post` tables matter.
   Unicode platform with the language tags `de` and `EN-us`; `post` version
   2.5 (deprecated) for five glyphs. Both tables are assembled by hand:
   fontTools writes only format 0 naming tables and cannot read or write
-  version 2.5.
+  version 2.5. OTS 9.3.0 refuses `post` version 2.5, so roc-font refuses
+  the font; its naming table is tested on its own.
 - `japanese-v3.ttf`: a family name only in Windows Japanese; `post` version
   3.0 (no glyph names).
 

@@ -8,6 +8,7 @@ import ShaperNormalize
 import ShaperTags
 import ShaperUnicode
 import Sorted
+import TablePost
 import TableCmap
 
 ## Shaping as HarfBuzz 14.6.0's default and Hebrew shapers shape: choosing
@@ -1116,8 +1117,10 @@ Shaper :: {}.{
 
 	## A four-byte tag as text, as the font stores it (bytes that are not
 	## UTF-8 become U+FFFD).
+	# A tag's four bytes as ISO 8859-1, so every tag is four characters and
+	# distinct tags stay distinct (OTS does not limit tags to ASCII).
 	tag_text : U64 -> Str
-	tag_text = |t| Str.from_utf8_lossy([24, 16, 8, 0].map(|s| t.shr_zf_wrap(s).bitwise_and(0xFF).to_u8_wrap()))
+	tag_text = |t| TablePost.latin1([24, 16, 8, 0].map(|s| t.shr_zf_wrap(s).bitwise_and(0xFF).to_u8_wrap()), 0, 4)
 
 	## The origin of every glyph of a finished run (`Shaped.items`): what
 	## made it, and the feature of the plan step that made it. A step's

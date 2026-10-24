@@ -339,7 +339,7 @@ expect {
 
 # The `x` and `O` estimates: the top of `x`, the top plus the bottom of `O`.
 expect {
-	glyphs = [[], FontBuild.pack([I16(1), I16(0), I16(-10), I16(100), I16(510)]), FontBuild.pack([I16(1), I16(0), I16(-12), I16(100), I16(712)]), []]
+	glyphs = [[], FontBuild.boxed(0, -10, 100, 510), FontBuild.boxed(0, -12, 100, 712), []]
 	boxes = FontBuild.outlines(glyphs, False)
 	cmap = FontBuild.cmap([{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 'O', last: 'O', delta: 65536 + 2 - 'O', glyphs: [] }, { first: 'x', last: 'x', delta: 65536 + 1 - 'x', glyphs: [] }]) }])
 	font = read_or_crash(FontBuild.file(basic_with("cmap", cmap).concat([{ tag: "loca", data: boxes.loca }, { tag: "glyf", data: boxes.glyf }])))
@@ -375,14 +375,15 @@ expect Font.code_points(read_or_crash(FontBuild.file(FontBuild.basic))) == [0x41
 # The sample font's preferred map (format 12): A to Z and U+1F600.
 expect Font.code_points(read_or_crash(FontBuild.sample)) == counting(0x41, 0x5B).append(0x1F600)
 
-# Code points whose glyphs the font does not have, and code points mapped
-# to glyph 0, are not listed; a format 13 group lists every code point.
+# Code points mapped to glyph 0 are not listed; a format 13 group lists
+# every code point. (A map naming glyphs the font does not have is refused,
+# as OTS refuses it.)
 expect {
-	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x41, last: 0x43, glyph: 0 }, { first: 0x50, last: 0x55, glyph: 2 }]) }])
+	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x41, last: 0x43, glyph: 0 }, { first: 0x50, last: 0x51, glyph: 2 }]) }])
 	Font.code_points(read_or_crash(FontBuild.file(basic_with("cmap", cmap)))) == [0x42, 0x43, 0x50, 0x51]
 }
 expect {
-	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap13([{ first: 0x10000, last: 0x10003, glyph: 3 }, { first: 0x20000, last: 0x20001, glyph: 4 }]) }])
+	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap13([{ first: 0x10000, last: 0x10003, glyph: 3 }, { first: 0x20000, last: 0x20001, glyph: 0 }]) }])
 	Font.code_points(read_or_crash(FontBuild.file(basic_with("cmap", cmap)))) == [0x10000, 0x10001, 0x10002, 0x10003]
 }
 

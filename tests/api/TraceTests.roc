@@ -19,7 +19,7 @@ many_glyphs = [
 	{ tag: "hhea", data: FontBuild.hhea(800, -200, 1) },
 	{ tag: "maxp", data: FontBuild.maxp(65535) },
 	{ tag: "hmtx", data: FontBuild.hmtx([500]) },
-	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFF, glyph: 1 }]) }]) },
+	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFE, glyph: 1 }]) }]) },
 ]
 
 font_with : List(U8) -> Font
@@ -180,7 +180,7 @@ expect {
 		[
 			{ kind: 5, subtables: [FontBuild.context3([[1]], [{ at: 0, lookup: 1 }])] },
 			{ kind: 5, subtables: [FontBuild.context3([[1]], [{ at: 0, lookup: 2 }])] },
-			{ kind: 1, subtables: [FontBuild.single1([1], 10)] },
+			{ kind: 1, subtables: [FontBuild.single1([1], 2)] },
 		],
 	)
 	bytes = FontBuild.file(FontBuild.replace(FontBuild.basic, "GSUB", gsub))
@@ -193,7 +193,7 @@ expect {
 				}
 			Err(_) => NotRead
 		}
-	checked(64) == Complete([11]) and checked(1) == Stopped([1], [Depth])
+	checked(64) == Complete([3]) and checked(1) == Stopped([1], [Depth])
 }
 
 # Empty text is never over budget.

@@ -714,7 +714,16 @@ LayoutGsub := {
 			{ scratch: scratch_in, frames, positions } = work_in
 			var $scratch = scratch_in
 			var $found = NoLigature
-			var $p = shape.values.get(sub.data + at) ?? 0
+			# Ligatures whose second component is not the next input glyph
+			# cannot match; they are passed without matching, as HarfBuzz does.
+			{ target, any } = match LayoutGsub.next_input(shape, ctx, buf) {
+				Next(g) => { target: g, any: False }
+				# No glyph has this value: every ligature of two or more
+				# components is passed.
+				End => { target: 0xFFFFFFFFFFFFFFFF, any: False }
+				Unknown => { target: 0, any: True }
+			}
+			var $p = LayoutGsub.scan_ligatures(shape.values, shape.values.get(sub.data + at) ?? 0, end, target, any)
 			while $p < end {
 				glyph = shape.values.get($p) ?? 0
 				components = shape.values.get($p + 1) ?? 0
@@ -729,7 +738,7 @@ LayoutGsub := {
 						$found = Ligature({ glyph, count: components + 1, match_end, total })
 						$p = end
 					} else {
-						$p = $p + 2 + components
+						$p = LayoutGsub.scan_ligatures(shape.values, $p + 2 + components, end, target, any)
 					}
 				}
 			}
@@ -739,6 +748,24 @@ LayoutGsub := {
 				NoLigature => { buf, work: { scratch: $scratch, frames, positions }, outcome: NotApplied }
 			}
 		}
+	}
+
+	## The first ligature of a set, from `values[p]` up to `end`, that may
+	## match: a single glyph, or one whose second component is `target`
+	## (any ligature when `any`).
+	scan_ligatures : List(U64), U64, U64, U64, Bool -> U64
+	scan_ligatures = |values, p, end, target, any| {
+		var $p = p
+		var $scanning = True
+		while $scanning and $p < end {
+			components = values.get($p + 1) ?? 0
+			if components == 0 or any or (values.get($p + 2) ?? 0) == target {
+				$scanning = False
+			} else {
+				$p = $p + 2 + components
+			}
+		}
+		$p
 	}
 
 	# Reverse chaining single substitution (HarfBuzz's
@@ -998,14 +1025,7 @@ LayoutGsub := {
 	## lookahead, which ignore masks and skip ZWJ always.
 	step_item : LayoutGsub, Ctx, Item, Bool, Bool -> [Match, NoMatch, Skip]
 	step_item = |shape, ctx, item, context, matched| {
-		skip =
-			if !LayoutGsub.check_glyph_property(shape, item, ctx.props) {
-				SkipYes
-			} else if LayoutGsub.is_default_ignorable(item) and ((context and ctx.auto_zwnj) or !ShaperUnicode.is_zwnj(item.props)) and (context or ctx.auto_zwj or !ShaperUnicode.is_zwj(item.props)) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 {
-				SkipMaybe
-			} else {
-				SkipNo
-			}
+		skip = LayoutGsub.skip_of(shape, ctx, item, context)
 		match skip {
 			SkipYes => Skip
 			_ => {
@@ -1020,6 +1040,49 @@ LayoutGsub := {
 				}
 			}
 		}
+	}
+
+	## HarfBuzz's `may_skip` for one item: skipped outright (`SkipYes`,
+	## the lookup flags hide it), skipped unless it matches (`SkipMaybe`, a
+	## default ignorable the joiner rules let pass) or never (`SkipNo`).
+	skip_of : LayoutGsub, Ctx, Item, Bool -> [SkipYes, SkipMaybe, SkipNo]
+	skip_of = |shape, ctx, item, context|
+		if !LayoutGsub.check_glyph_property(shape, item, ctx.props) {
+			SkipYes
+		} else if LayoutGsub.is_default_ignorable(item) and ((context and ctx.auto_zwnj) or !ShaperUnicode.is_zwnj(item.props)) and (context or ctx.auto_zwj or !ShaperUnicode.is_zwj(item.props)) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 {
+			SkipMaybe
+		} else {
+			SkipNo
+		}
+
+	## The item input matching after the cursor stops at whatever it is
+	## asked to match (HarfBuzz's fast path in `LigatureSet::apply`): past
+	## the items the lookup flags hide, `Next(glyph)` when that item cannot
+	## be skipped, so an input whose next entry is another glyph cannot
+	## match; `End` when the run ends first, so no input of two or more
+	## entries can match; `Unknown` when the item may be skipped.
+	next_input : LayoutGsub, Ctx, Buf -> [Next(U64), End, Unknown]
+	next_input = |shape, ctx, buf| {
+		n = buf.info.len()
+		var $at = buf.idx + 1
+		var $result = End
+		while $at < n {
+			item = buf.info.get($at) ?? LayoutGsub.no_item
+			match LayoutGsub.skip_of(shape, ctx, item, False) {
+				SkipYes => {
+					$at = $at + 1
+				}
+				SkipMaybe => {
+					$result = Unknown
+					$at = n
+				}
+				SkipNo => {
+					$result = Next(item.glyph)
+					$at = n
+				}
+			}
+		}
+		$result
 	}
 
 	## Whether the skipping iterator would skip an item outright (HarfBuzz's
@@ -1712,21 +1775,750 @@ LayoutGsub := {
 	}
 
 	## The lookups of a font file's `GSUB` that features reach (none for a
-	## font without `GSUB`). A table listing more than `max_lookups` lookups
-	## is over the limit. The result has no `GDEF` glyph classes until
-	## `with_gdef` gives it the font's.
+	## font without `GSUB`). The table is first checked whole as OTS checks
+	## it (`ots_check`), against `maxp`'s glyph count and the mark glyph
+	## sets of the font's `GDEF`. A table listing more than `max_lookups`
+	## lookups is over the limit. The result has no `GDEF` glyph classes
+	## until `with_gdef` gives it the font's.
 	from_tables : List(U8), List(Sfnt.Table), U64 -> Try(LayoutGsub, [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
 	from_tables = |bytes, tables, max_lookups|
 		match Sfnt.located(bytes, tables, "GSUB", 10) {
 			Missing => Ok(LayoutGsub.none)
 			Bad(at) => Err(Sfnt.bad("GSUB", at))
-			Found({ data: gsub, offset }) =>
-				if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
-					Err(OverLimit("max_lookups"))
-				} else {
-					LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
+			Found({ data: gsub, offset }) => {
+				# `numGlyphs` as stored (`Face` reads `GSUB` only when `maxp`
+				# reads). Tables are found by their tags as numbers (`maxp`
+				# 0x6D617870, `GDEF` 0x47444546), which costs no allocation.
+				glyphs = match tables.find_first(|t| t.tag == 0x6D617870) {
+					Ok(t) if LayoutGsub.fits(t.offset, t.length, bytes.len()) and t.length >= 6 => LayoutGsub.u16(bytes, t.offset + 4)
+					_ => 0
 				}
+				match LayoutGsub.ots_check(gsub, glyphs, LayoutGsub.mark_sets(bytes, tables)) {
+					Err(Bad(at)) => Err(Sfnt.bad("GSUB", offset + at))
+					Ok(_) =>
+						if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
+							Err(OverLimit("max_lookups"))
+						} else {
+							LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
+						}
+				}
+			}
 		}
+
+	## How many mark glyph sets the font's `GDEF` defines, as OTS counts
+	## them (`ots/src/gdef.cc`, `ParseMarkGlyphSetsDefTable`): 0 before
+	## version 1.2 or without the table of sets; `Absent` without `GDEF`.
+	## A `GDEF` too broken to say is refused by its own check.
+	mark_sets : List(U8), List(Sfnt.Table) -> [Present(U64), Absent]
+	mark_sets = |bytes, tables|
+		match tables.find_first(|t| t.tag == 0x47444546) {
+			Ok(t) if LayoutGsub.fits(t.offset, t.length, bytes.len()) and t.length >= 4 => {
+				inside = |at, len| LayoutGsub.fits(at, len, t.length)
+				field = |at| LayoutGsub.u16(bytes, t.offset + at)
+				at = if (field(2) >= 2 and inside(12, 2)) field(12) else 0
+				Present(if (at != 0 and inside(at, 4)) field(at + 2) else 0)
+			}
+			_ => Absent
+		}
+
+	# ------------------------------------------------------------ OTS checks
+
+	## What the OTS checks of a `GSUB` table compare with: the table, the
+	## font's glyph count (`maxp`), the table's lookup count, the number of
+	## mark glyph sets in the font's `GDEF` (when it has one) and the work
+	## allowed (see `ots_check`).
+	OtsContext : { data : List(U8), glyphs : U64, lookups : U64, sets : [Present(U64), Absent], budget : U64 }
+
+	## Check a `GSUB` table exactly as OTS 9.3.0 does (`ots/src/layout.cc`,
+	## `OpenTypeLayoutTable::Parse`, and `ots/src/gsub.cc`; line numbers
+	## below are those files'), so a font reads exactly when a browser
+	## accepts its substitutions. OTS checks every lookup, script, language
+	## system and feature, not only those a feature reaches:
+	##
+	## - the header: version 1.0 or 1.1, and the lookup, feature and script
+	##   lists (each may be absent) after the header and inside the table
+	##   (layout.cc 1648-1708);
+	## - every lookup (`ots_lookup`), feature (`ots_feature`), script and
+	##   language system (`ots_script`), with every glyph id below the glyph
+	##   count, every lookup index below the lookup count and every feature
+	##   index below the feature count;
+	## - every offset past the fixed part of the table it is in (OTS's
+	##   "end" of each table) and inside the `GSUB` table.
+	##
+	## OTS only warns about script and feature records out of tag order, so
+	## they are accepted. The `FeatureVariations` table (version 1.1) is
+	## checked where its variations are read (`LayoutVar`), not here.
+	##
+	## Offsets alias, so a few bytes can describe a great deal of work. The
+	## work is counted in steps, one per table visited and one per entry,
+	## and a table needing more than 64 steps per byte plus 2^20 is refused:
+	## a roc-font limit (OTS has none), more than 30 times what any font of
+	## the 1,278-font conformance corpus needs (under 2 steps per byte).
+	##
+	## A problem gives the offset in the table of the structure that is
+	## wrong.
+	ots_check : List(U8), U64, [Present(U64), Absent] -> Try({}, [Bad(U64)])
+	ots_check = |data, glyphs, sets| {
+		size = data.len()
+		major = LayoutGsub.u16(data, 0)
+		minor = LayoutGsub.u16(data, 2)
+		# layout.cc 1656-1672: version 1.0 (10-byte header) or 1.1 (14).
+		if !LayoutGsub.fits(0, 10, size) or major != 1 or minor > 1 or (minor == 1 and !LayoutGsub.fits(0, 14, size)) {
+			return Err(Bad(0))
+		}
+		header = if (minor == 0) 10 else 14
+		script_list = LayoutGsub.u16(data, 4)
+		feature_list = LayoutGsub.u16(data, 6)
+		lookup_list = LayoutGsub.u16(data, 8)
+		base = { data, glyphs, lookups: 0, sets, budget: 64 * size + 1048576 }
+		# Each list may be absent; one present lies past the header and
+		# inside the table (1677-1708). Lookups first, whose count features
+		# use, then features, whose count language systems use.
+		if lookup_list != 0 and (lookup_list < header or lookup_list >= size) {
+			return Err(Bad(8))
+		}
+		if feature_list != 0 and (feature_list < header or feature_list >= size) {
+			return Err(Bad(6))
+		}
+		if script_list != 0 and (script_list < header or script_list >= size) {
+			return Err(Bad(4))
+		}
+		lookups = if (lookup_list != 0 and LayoutGsub.fits(lookup_list, 2, size)) LayoutGsub.u16(data, lookup_list) else 0
+		ctx = { ..base, lookups }
+		after_lookups = if (lookup_list != 0) LayoutGsub.ots_lookup_list(ctx, lookup_list, 0)? else 0
+		features = if (feature_list != 0) LayoutGsub.ots_feature_list(ctx, feature_list, after_lookups)? else { count: 0, steps: after_lookups }
+		if script_list != 0 {
+			LayoutGsub.ots_script_list(ctx, script_list, features.count, features.steps).map_ok(|_| {})
+		} else {
+			Ok({})
+		}
+	}
+
+	ots_spend : OtsContext, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_spend = |ctx, steps, cost, at| {
+		total = steps + cost + 1
+		if (total > ctx.budget) Err(Bad(at)) else Ok(total)
+	}
+
+	# The offsets of a list: `count` 16-bit offsets at `at`, from `base`,
+	# each at least `end` and inside the table (OTS's recurring check).
+	ots_offsets : OtsContext, U64, U64, U64, U64 -> Try({}, [Bad(U64)])
+	ots_offsets = |ctx, base, at, count, end| {
+		size = ctx.data.len()
+		if !LayoutGsub.fits(at, 2 * count, size) {
+			return Err(Bad(base))
+		}
+		for i in 0..<count {
+			o = LayoutGsub.u16(ctx.data, at + 2 * i)
+			if o < end or base + o >= size {
+				return Err(Bad(at + 2 * i))
+			}
+		}
+		Ok({})
+	}
+
+	# `count` 16-bit glyph ids at `at`, each inside the table and below the
+	# glyph count; `table` is reported.
+	ots_glyphs : OtsContext, U64, U64, U64 -> Try({}, [Bad(U64)])
+	ots_glyphs = |ctx, table, at, count| {
+		if !LayoutGsub.fits(at, 2 * count, ctx.data.len()) {
+			return Err(Bad(table))
+		}
+		for i in 0..<count {
+			if LayoutGsub.u16(ctx.data, at + 2 * i) >= ctx.glyphs {
+				return Err(Bad(at + 2 * i))
+			}
+		}
+		Ok({})
+	}
+
+	# layout.cc 1364-1400 (`ParseLookupListTable`): the lookup offsets,
+	# then every lookup.
+	ots_lookup_list : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_lookup_list = |ctx, at, steps| {
+		count = ctx.lookups
+		if !LayoutGsub.fits(at, 2, ctx.data.len()) or 2 * count + 2 > 65535 {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_offsets(ctx, at, at + 2, count, 2 * count + 2)?
+		var $steps = LayoutGsub.ots_spend(ctx, steps, count, at)?
+		for i in 0..<count {
+			$steps = LayoutGsub.ots_lookup(ctx, at + LayoutGsub.u16(ctx.data, at + 2 + 2 * i), $steps)?
+		}
+		Ok($steps)
+	}
+
+	# layout.cc 1292-1359 (`ParseLookupTable`): a lookup type 1 to 8, its
+	# subtable offsets, a mark filtering set the font's `GDEF` has (when it
+	# has a `GDEF`), then every subtable.
+	ots_lookup : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_lookup = |ctx, at, steps| {
+		data = ctx.data
+		kind = LayoutGsub.u16(data, at)
+		flag = LayoutGsub.u16(data, at + 2)
+		count = LayoutGsub.u16(data, at + 4)
+		filtering = flag.bitwise_and(0x10) != 0
+		end = 2 * count + (if (filtering) 8 else 6)
+		if !LayoutGsub.fits(at, 6, data.len()) or kind < 1 or kind > 8 or end > 65535 {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_offsets(ctx, at, at + 6, count, end)?
+		if filtering {
+			set_at = at + 6 + 2 * count
+			if !LayoutGsub.fits(set_at, 2, data.len()) {
+				return Err(Bad(at))
+			}
+			match ctx.sets {
+				Present(sets) if sets == 0 or LayoutGsub.u16(data, set_at) >= sets => return Err(Bad(set_at))
+				_ => {}
+			}
+		}
+		var $steps = LayoutGsub.ots_spend(ctx, steps, count, at)?
+		for i in 0..<count {
+			$steps = LayoutGsub.ots_subtable(ctx, kind, at + LayoutGsub.u16(data, at + 6 + 2 * i), $steps)?
+		}
+		Ok($steps)
+	}
+
+	# gsub.cc 502-523 (`ParseLookupSubtable`): one subtable of a lookup type.
+	ots_subtable : OtsContext, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_subtable = |ctx, kind, at, steps| {
+		data = ctx.data
+		size = data.len()
+		after = LayoutGsub.ots_spend(ctx, steps, 0, at)?
+		format = LayoutGsub.u16(data, at)
+		coverage = LayoutGsub.u16(data, at + 2)
+		if kind == 1 {
+			# gsub.cc 145-204: format 1, a delta smaller than the glyph count;
+			# format 2, substitutes below it; then the coverage.
+			if !LayoutGsub.fits(at, 6, size) {
+				return Err(Bad(at))
+			}
+			end =
+				if format == 1 {
+					delta = LayoutGsub.u16(data, at + 4)
+					magnitude = if (delta >= 32768) 65536 - delta else delta
+					if magnitude >= ctx.glyphs {
+						return Err(Bad(at + 4))
+					}
+					6
+				} else if format == 2 {
+					count = LayoutGsub.u16(data, at + 4)
+					if count > ctx.glyphs {
+						return Err(Bad(at + 4))
+					}
+					LayoutGsub.ots_glyphs(ctx, at, at + 6, count)?
+					6 + 2 * count
+				} else {
+					return Err(Bad(at))
+				}
+			LayoutGsub.ots_coverage_at(ctx, at, coverage, end, LayoutGsub.ots_spend(ctx, after, (end - 6) // 2, at)?)
+		} else if kind == 2 or kind == 3 or kind == 4 {
+			# gsub.cc 208-378: format 1; sequences and alternate sets of
+			# glyphs below the glyph count, or ligature sets; then the
+			# coverage.
+			count = LayoutGsub.u16(data, at + 4)
+			end = 6 + 2 * count
+			if !LayoutGsub.fits(at, 6, size) or format != 1 or end > 65535 {
+				return Err(Bad(at))
+			}
+			LayoutGsub.ots_offsets(ctx, at, at + 6, count, end)?
+			var $steps = LayoutGsub.ots_spend(ctx, after, count, at)?
+			for i in 0..<count {
+				set = at + LayoutGsub.u16(data, at + 6 + 2 * i)
+				n = LayoutGsub.u16(data, set)
+				if !LayoutGsub.fits(set, 2, size) {
+					return Err(Bad(set))
+				}
+				$steps = LayoutGsub.ots_spend(ctx, $steps, n, set)?
+				if kind == 4 {
+					# gsub.cc 107-137 and 75-105: ligatures of a glyph below the
+					# glyph count and at least one component, each below it.
+					if 2 + 2 * n > 65535 {
+						return Err(Bad(set))
+					}
+					LayoutGsub.ots_offsets(ctx, set, set + 2, n, 2 + 2 * n)?
+					for l in 0..<n {
+						lig = set + LayoutGsub.u16(data, set + 2 + 2 * l)
+						components = LayoutGsub.u16(data, lig + 2)
+						if !LayoutGsub.fits(lig, 4, size) or LayoutGsub.u16(data, lig) >= ctx.glyphs or components == 0 {
+							return Err(Bad(lig))
+						}
+						LayoutGsub.ots_glyphs(ctx, lig, lig + 4, components - 1)?
+						$steps = LayoutGsub.ots_spend(ctx, $steps, components, lig)?
+					}
+				} else {
+					# gsub.cc 32-73: glyphs below the glyph count.
+					LayoutGsub.ots_glyphs(ctx, set, set + 2, n)?
+				}
+			}
+			LayoutGsub.ots_coverage_at(ctx, at, coverage, end, $steps)
+		} else if kind == 5 {
+			LayoutGsub.ots_context(ctx, format, at, after)
+		} else if kind == 6 {
+			LayoutGsub.ots_chain(ctx, format, at, after)
+		} else if kind == 7 {
+			# layout.cc 1546-1580: format 1 pointing at a subtable of another
+			# valid type, past the 8-byte header and inside the table.
+			real = LayoutGsub.u16(data, at + 2)
+			offset = LayoutGsub.u32(data, at + 4)
+			if !LayoutGsub.fits(at, 8, size) or format != 1 or real < 1 or real > 8 or real == 7 or offset < 8 or at + offset >= size {
+				return Err(Bad(at))
+			}
+			LayoutGsub.ots_subtable(ctx, real, at + offset, after)
+		} else {
+			# gsub.cc 394-493: backtrack and lookahead coverages, substitutes
+			# below the glyph count, then the coverages. OTS does not check
+			# the format.
+			if !LayoutGsub.fits(at, 6, size) {
+				return Err(Bad(at))
+			}
+			back = LayoutGsub.u16(data, at + 4)
+			ahead_at = at + 6 + 2 * back
+			if !LayoutGsub.fits(ahead_at, 2, size) {
+				return Err(Bad(at))
+			}
+			ahead = LayoutGsub.u16(data, ahead_at)
+			glyphs_at = ahead_at + 2 + 2 * ahead
+			if !LayoutGsub.fits(glyphs_at, 2, size) {
+				return Err(Bad(at))
+			}
+			count = LayoutGsub.u16(data, glyphs_at)
+			LayoutGsub.ots_glyphs(ctx, at, glyphs_at + 2, count)?
+			end = 10 + 2 * (back + ahead + count)
+			if end > 65535 {
+				return Err(Bad(at))
+			}
+			var $steps = LayoutGsub.ots_coverage_at(ctx, at, coverage, end, LayoutGsub.ots_spend(ctx, after, back + ahead + count, at)?)?
+			for i in 0..<back {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 6 + 2 * i), end, $steps)?
+			}
+			for i in 0..<ahead {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, ahead_at + 2 + 2 * i), end, $steps)?
+			}
+			Ok($steps)
+		}
+	}
+
+	# A coverage at `offset` from `base`: at least `end` and inside the
+	# table, then checked.
+	ots_coverage_at : OtsContext, U64, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_coverage_at = |ctx, base, offset, end, steps|
+		if offset < end or base + offset >= ctx.data.len() {
+			Err(Bad(base))
+		} else {
+			LayoutGsub.ots_coverage(ctx, base + offset, steps)
+		}
+
+	# layout.cc 1421-1438, 261-346 (`ParseCoverageTable`): format 1, at most
+	# as many glyphs as the font has, each below the glyph count; format 2,
+	# at most that many ranges, each in order (a range may start on the
+	# previous range's end) and starting at the coverage index the previous
+	# ranges reach (counted in 16 bits, as OTS counts).
+	ots_coverage : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_coverage = |ctx, at, steps| {
+		data = ctx.data
+		format = LayoutGsub.u16(data, at)
+		count = LayoutGsub.u16(data, at + 2)
+		if !LayoutGsub.fits(at, 4, data.len()) or (format != 1 and format != 2) or count > ctx.glyphs {
+			return Err(Bad(at))
+		}
+		after = LayoutGsub.ots_spend(ctx, steps, count, at)?
+		if format == 1 {
+			LayoutGsub.ots_glyphs(ctx, at, at + 4, count)?
+		} else {
+			if !LayoutGsub.fits(at + 4, 6 * count, data.len()) {
+				return Err(Bad(at))
+			}
+			var $last_end = 0
+			var $index = 0
+			for i in 0..<count {
+				r = at + 4 + 6 * i
+				first = LayoutGsub.u16(data, r)
+				last = LayoutGsub.u16(data, r + 2)
+				if first > last or ($last_end != 0 and first < $last_end) or LayoutGsub.u16(data, r + 4) != $index {
+					return Err(Bad(r))
+				}
+				$last_end = last
+				$index = ($index + last - first + 1) % 65536
+			}
+		}
+		Ok(after)
+	}
+
+	# layout.cc 1402-1419, 178-259 (`ParseClassDefTable`): format 1, a start
+	# glyph below the glyph count and at most that many classes; format 2,
+	# at most that many ranges, each in order and not overlapping the
+	# previous one. Class values are not limited in `GSUB`.
+	ots_classes_at : OtsContext, U64, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_classes_at = |ctx, base, offset, end, steps| {
+		data = ctx.data
+		size = data.len()
+		if offset < end or base + offset >= size {
+			return Err(Bad(base))
+		}
+		at = base + offset
+		format = LayoutGsub.u16(data, at)
+		if format == 1 {
+			first = LayoutGsub.u16(data, at + 2)
+			count = LayoutGsub.u16(data, at + 4)
+			if !LayoutGsub.fits(at, 6, size) or first >= ctx.glyphs or count > ctx.glyphs or !LayoutGsub.fits(at + 6, 2 * count, size) {
+				return Err(Bad(at))
+			}
+			LayoutGsub.ots_spend(ctx, steps, count, at)
+		} else if format == 2 {
+			count = LayoutGsub.u16(data, at + 2)
+			if !LayoutGsub.fits(at, 4, size) or count > ctx.glyphs or !LayoutGsub.fits(at + 4, 6 * count, size) {
+				return Err(Bad(at))
+			}
+			var $last_end = 0
+			for i in 0..<count {
+				r = at + 4 + 6 * i
+				first = LayoutGsub.u16(data, r)
+				last = LayoutGsub.u16(data, r + 2)
+				if first > last or ($last_end != 0 and first <= $last_end) {
+					return Err(Bad(r))
+				}
+				$last_end = last
+			}
+			LayoutGsub.ots_spend(ctx, steps, count, at)
+		} else {
+			Err(Bad(at))
+		}
+	}
+
+	# layout.cc 350-366 (`ParseLookupRecord`): `count` records at `at`, each
+	# a sequence index below the font's glyph count (as OTS compares it)
+	# and a lookup index below the lookup count.
+	ots_records : OtsContext, U64, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_records = |ctx, table, at, count, steps| {
+		if !LayoutGsub.fits(at, 4 * count, ctx.data.len()) {
+			return Err(Bad(table))
+		}
+		for i in 0..<count {
+			r = at + 4 * i
+			if LayoutGsub.u16(ctx.data, r) >= ctx.glyphs or LayoutGsub.u16(ctx.data, r + 2) >= ctx.lookups {
+				return Err(Bad(r))
+			}
+		}
+		LayoutGsub.ots_spend(ctx, steps, count, at)
+	}
+
+	# The rule sets of a contextual subtable: `count` offsets at `at` from
+	# `base`, each at least `end` (absent sets allowed when `nullable`),
+	# each set's rules checked by `rule`.
+	ots_rule_sets : OtsContext, U64, U64, U64, U64, Bool, U64, (OtsContext, U64, U64 -> Try(U64, [Bad(U64)])) -> Try(U64, [Bad(U64)])
+	ots_rule_sets = |ctx, base, at, count, end, nullable, steps, rule| {
+		data = ctx.data
+		size = data.len()
+		if !LayoutGsub.fits(at, 2 * count, size) {
+			return Err(Bad(base))
+		}
+		var $steps = LayoutGsub.ots_spend(ctx, steps, count, base)?
+		for i in 0..<count {
+			o = LayoutGsub.u16(data, at + 2 * i)
+			if !(nullable and o == 0) {
+				if o < end or base + o >= size {
+					return Err(Bad(at + 2 * i))
+				}
+				# A rule set (layout.cc 402-432 and its kin): rule offsets past
+				# the count and the offsets, inside the table.
+				set = base + o
+				rules = LayoutGsub.u16(data, set)
+				if !LayoutGsub.fits(set, 2, size) or 2 * rules + 2 > 65535 {
+					return Err(Bad(set))
+				}
+				LayoutGsub.ots_offsets(ctx, set, set + 2, rules, 2 * rules + 2)?
+				$steps = LayoutGsub.ots_spend(ctx, $steps, rules, set)?
+				for r in 0..<rules {
+					$steps = rule(ctx, set + LayoutGsub.u16(data, set + 2 + 2 * r), $steps)?
+				}
+			}
+		}
+		Ok($steps)
+	}
+
+	# layout.cc 1476-1509 (`ParseContextSubtable`) with formats 1 (434-477),
+	# 2 (544-600) and 3 (602-643).
+	ots_context : OtsContext, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_context = |ctx, format, at, steps| {
+		data = ctx.data
+		size = data.len()
+		if format == 1 {
+			count = LayoutGsub.u16(data, at + 4)
+			end = 6 + 2 * count
+			if !LayoutGsub.fits(at, 6, size) or end > 65535 {
+				return Err(Bad(at))
+			}
+			after = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 2), end, steps)?
+			LayoutGsub.ots_rule_sets(ctx, at, at + 6, count, end, False, after, LayoutGsub.ots_rule)
+		} else if format == 2 {
+			count = LayoutGsub.u16(data, at + 6)
+			end = 8 + 2 * count
+			if !LayoutGsub.fits(at, 8, size) or end > 65535 {
+				return Err(Bad(at))
+			}
+			with_coverage = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 2), end, steps)?
+			classed = LayoutGsub.ots_classes_at(ctx, at, LayoutGsub.u16(data, at + 4), end, with_coverage)?
+			LayoutGsub.ots_rule_sets(ctx, at, at + 8, count, end, True, classed, LayoutGsub.ots_class_rule)
+		} else if format == 3 {
+			count = LayoutGsub.u16(data, at + 2)
+			records = LayoutGsub.u16(data, at + 4)
+			end = 2 * count + 4 * records + 6
+			if !LayoutGsub.fits(at, 6, size) or end > 65535 or !LayoutGsub.fits(at + 6, 2 * count, size) {
+				return Err(Bad(at))
+			}
+			var $steps = steps
+			for i in 0..<count {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 6 + 2 * i), end, $steps)?
+			}
+			LayoutGsub.ots_records(ctx, at, at + 6 + 2 * count, records, $steps)
+		} else {
+			Err(Bad(at))
+		}
+	}
+
+	# layout.cc 368-400 (`ParseRuleSubtable`): at least one input glyph,
+	# those after the first below the glyph count, then lookup records.
+	ots_rule : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_rule = |ctx, at, steps| {
+		count = LayoutGsub.u16(ctx.data, at)
+		if !LayoutGsub.fits(at, 4, ctx.data.len()) or count == 0 {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_glyphs(ctx, at, at + 4, count - 1)?
+		LayoutGsub.ots_records(ctx, at, at + 4 + 2 * (count - 1), LayoutGsub.u16(ctx.data, at + 2), LayoutGsub.ots_spend(ctx, steps, count, at)?)
+	}
+
+	# layout.cc 479-509 (`ParseClassRuleTable`): at least one input class
+	# (classes are not checked), then lookup records.
+	ots_class_rule : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_class_rule = |ctx, at, steps| {
+		count = LayoutGsub.u16(ctx.data, at)
+		if !LayoutGsub.fits(at, 4, ctx.data.len()) or count == 0 or !LayoutGsub.fits(at + 4, 2 * (count - 1), ctx.data.len()) {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_records(ctx, at, at + 4 + 2 * (count - 1), LayoutGsub.u16(ctx.data, at + 2), LayoutGsub.ots_spend(ctx, steps, count, at)?)
+	}
+
+	# layout.cc 1511-1544 (`ParseChainingContextSubtable`) with formats 1
+	# (744-789), 2 (874-963) and 3 (965-1074).
+	ots_chain : OtsContext, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_chain = |ctx, format, at, steps| {
+		data = ctx.data
+		size = data.len()
+		if format == 1 {
+			count = LayoutGsub.u16(data, at + 4)
+			end = 6 + 2 * count
+			if !LayoutGsub.fits(at, 6, size) or end > 65535 {
+				return Err(Bad(at))
+			}
+			after = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 2), end, steps)?
+			LayoutGsub.ots_rule_sets(ctx, at, at + 6, count, end, False, after, LayoutGsub.ots_chain_rule)
+		} else if format == 2 {
+			count = LayoutGsub.u16(data, at + 10)
+			end = 12 + 2 * count
+			if !LayoutGsub.fits(at, 12, size) or end > 65535 {
+				return Err(Bad(at))
+			}
+			var $steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 2), end, steps)?
+			# Backtrack and lookahead classes may be absent; input classes
+			# may not.
+			back = LayoutGsub.u16(data, at + 4)
+			if back != 0 {
+				$steps = LayoutGsub.ots_classes_at(ctx, at, back, end, $steps)?
+			}
+			$steps = LayoutGsub.ots_classes_at(ctx, at, LayoutGsub.u16(data, at + 6), end, $steps)?
+			ahead = LayoutGsub.u16(data, at + 8)
+			if ahead != 0 {
+				$steps = LayoutGsub.ots_classes_at(ctx, at, ahead, end, $steps)?
+			}
+			LayoutGsub.ots_rule_sets(ctx, at, at + 12, count, end, True, $steps, LayoutGsub.ots_chain_class_rule)
+		} else if format == 3 {
+			# The offsets and lookup records first, then the coverages, each
+			# past all of them.
+			back = LayoutGsub.u16(data, at + 2)
+			input_at = at + 4 + 2 * back
+			input = LayoutGsub.u16(data, input_at)
+			ahead_at = input_at + 2 + 2 * input
+			ahead = LayoutGsub.u16(data, ahead_at)
+			records_at = ahead_at + 2 + 2 * ahead
+			records = LayoutGsub.u16(data, records_at)
+			if !LayoutGsub.fits(at, 4, size) or !LayoutGsub.fits(input_at, 2, size) or !LayoutGsub.fits(ahead_at, 2, size) or !LayoutGsub.fits(records_at, 2, size) {
+				return Err(Bad(at))
+			}
+			after = LayoutGsub.ots_records(ctx, at, records_at + 2, records, steps)?
+			end = 2 * (back + input + ahead) + 4 * records + 10
+			if end > 65535 {
+				return Err(Bad(at))
+			}
+			var $steps = after
+			for i in 0..<back {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, at + 4 + 2 * i), end, $steps)?
+			}
+			for i in 0..<input {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, input_at + 2 + 2 * i), end, $steps)?
+			}
+			for i in 0..<ahead {
+				$steps = LayoutGsub.ots_coverage_at(ctx, at, LayoutGsub.u16(data, ahead_at + 2 + 2 * i), end, $steps)?
+			}
+			Ok($steps)
+		} else {
+			Err(Bad(at))
+		}
+	}
+
+	# layout.cc 647-709 (`ParseChainRuleSubtable`): backtrack glyphs, at
+	# least one input glyph and lookahead glyphs, all below the glyph count,
+	# then lookup records.
+	ots_chain_rule : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_chain_rule = |ctx, at, steps| {
+		data = ctx.data
+		size = data.len()
+		back = LayoutGsub.u16(data, at)
+		if !LayoutGsub.fits(at, 2, size) {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_glyphs(ctx, at, at + 2, back)?
+		input_at = at + 2 + 2 * back
+		input = LayoutGsub.u16(data, input_at)
+		if !LayoutGsub.fits(input_at, 2, size) or input == 0 {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_glyphs(ctx, at, input_at + 2, input - 1)?
+		ahead_at = input_at + 2 * input
+		ahead = LayoutGsub.u16(data, ahead_at)
+		if !LayoutGsub.fits(ahead_at, 2, size) {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_glyphs(ctx, at, ahead_at + 2, ahead)?
+		records_at = ahead_at + 2 + 2 * ahead
+		if !LayoutGsub.fits(records_at, 2, size) {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_records(ctx, at, records_at + 2, LayoutGsub.u16(data, records_at), LayoutGsub.ots_spend(ctx, steps, back + input + ahead, at)?)
+	}
+
+	# layout.cc 791-838 (`ParseChainClassRuleSubtable`): backtrack classes,
+	# at least one input class and lookahead classes (not checked), then
+	# lookup records.
+	ots_chain_class_rule : OtsContext, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_chain_class_rule = |ctx, at, steps| {
+		data = ctx.data
+		size = data.len()
+		back = LayoutGsub.u16(data, at)
+		input_at = at + 2 + 2 * back
+		input = LayoutGsub.u16(data, input_at)
+		if !LayoutGsub.fits(at, 2, size) or !LayoutGsub.fits(input_at, 2, size) or input == 0 {
+			return Err(Bad(at))
+		}
+		ahead_at = input_at + 2 * input
+		ahead = LayoutGsub.u16(data, ahead_at)
+		records_at = ahead_at + 2 + 2 * ahead
+		if !LayoutGsub.fits(ahead_at, 2, size) or !LayoutGsub.fits(records_at, 2, size) {
+			return Err(Bad(at))
+		}
+		LayoutGsub.ots_records(ctx, at, records_at + 2, LayoutGsub.u16(data, records_at), LayoutGsub.ots_spend(ctx, steps, back + input + ahead, at)?)
+	}
+
+	# layout.cc 1246-1290 (`ParseFeatureListTable`) and 141-176
+	# (`ParseFeatureTable`): feature offsets past the records, inside the
+	# table; each feature's parameters (when present) past its lookup
+	# indices, and each lookup index below the lookup count.
+	ots_feature_list : OtsContext, U64, U64 -> Try({ count : U64, steps : U64 }, [Bad(U64)])
+	ots_feature_list = |ctx, at, steps| {
+		data = ctx.data
+		size = data.len()
+		count = LayoutGsub.u16(data, at)
+		end = 6 * count + 2
+		if !LayoutGsub.fits(at, 2, size) or end > 65535 or !LayoutGsub.fits(at + 2, 6 * count, size) {
+			return Err(Bad(at))
+		}
+		for i in 0..<count {
+			o = LayoutGsub.u16(data, at + 2 + 6 * i + 4)
+			if o < end or at + o >= size {
+				return Err(Bad(at + 2 + 6 * i))
+			}
+		}
+		var $steps = LayoutGsub.ots_spend(ctx, steps, count, at)?
+		for i in 0..<count {
+			feature = at + LayoutGsub.u16(data, at + 2 + 6 * i + 4)
+			params = LayoutGsub.u16(data, feature)
+			lookups = LayoutGsub.u16(data, feature + 2)
+			feature_end = 2 * lookups + 4
+			if !LayoutGsub.fits(feature, 4, size) or feature_end > 65535 or (params != 0 and (params < feature_end or feature + params >= size)) or !LayoutGsub.fits(feature + 4, 2 * lookups, size) {
+				return Err(Bad(feature))
+			}
+			for k in 0..<lookups {
+				if LayoutGsub.u16(data, feature + 4 + 2 * k) >= ctx.lookups {
+					return Err(Bad(feature + 4 + 2 * k))
+				}
+			}
+			$steps = LayoutGsub.ots_spend(ctx, $steps, lookups, feature)?
+		}
+		Ok({ count, steps: $steps })
+	}
+
+	# layout.cc 1192-1242 (`ParseScriptListTable`), 83-139
+	# (`ParseScriptTable`) and 48-81 (`ParseLangSysTable`): script offsets
+	# past the records, inside the table; a `DFLT` script with a default
+	# language system; language system records in tag order, past the
+	# records and inside the table; and each language system's reserved
+	# lookup order 0, its required feature (if any) and feature indices
+	# below the feature count, and no more indices than features. OTS does
+	# not check the default language system table itself.
+	ots_script_list : OtsContext, U64, U64, U64 -> Try(U64, [Bad(U64)])
+	ots_script_list = |ctx, at, features, steps| {
+		data = ctx.data
+		size = data.len()
+		count = LayoutGsub.u16(data, at)
+		end = 6 * count + 2
+		if !LayoutGsub.fits(at, 2, size) or end > 65535 or !LayoutGsub.fits(at + 2, 6 * count, size) {
+			return Err(Bad(at))
+		}
+		for i in 0..<count {
+			o = LayoutGsub.u16(data, at + 2 + 6 * i + 4)
+			if o < end or at + o >= size {
+				return Err(Bad(at + 2 + 6 * i))
+			}
+		}
+		var $steps = LayoutGsub.ots_spend(ctx, steps, count, at)?
+		for i in 0..<count {
+			script = at + LayoutGsub.u16(data, at + 2 + 6 * i + 4)
+			script_tag = LayoutGsub.u32(data, at + 2 + 6 * i)
+			langs = LayoutGsub.u16(data, script + 2)
+			langs_end = 6 * langs + 4
+			if !LayoutGsub.fits(script, 4, size) or (script_tag == 0x44464C54 and LayoutGsub.u16(data, script) == 0) or langs_end > 65535 or !LayoutGsub.fits(script + 4, 6 * langs, size) {
+				return Err(Bad(script))
+			}
+			var $last_tag = 0
+			for l in 0..<langs {
+				rec = script + 4 + 6 * l
+				lang_tag = LayoutGsub.u32(data, rec)
+				o = LayoutGsub.u16(data, rec + 4)
+				if ($last_tag != 0 and $last_tag > lang_tag) or o < langs_end or script + o >= size {
+					return Err(Bad(rec))
+				}
+				$last_tag = lang_tag
+			}
+			$steps = LayoutGsub.ots_spend(ctx, $steps, langs, script)?
+			for l in 0..<langs {
+				lang = script + LayoutGsub.u16(data, script + 4 + 6 * l + 4)
+				required = LayoutGsub.u16(data, lang + 2)
+				indices = LayoutGsub.u16(data, lang + 4)
+				if !LayoutGsub.fits(lang, 6, size) or LayoutGsub.u16(data, lang) != 0 or (required != 0xFFFF and required >= features) or indices > features or !LayoutGsub.fits(lang + 6, 2 * indices, size) {
+					return Err(Bad(lang))
+				}
+				for k in 0..<indices {
+					if LayoutGsub.u16(data, lang + 6 + 2 * k) >= features {
+						return Err(Bad(lang + 6 + 2 * k))
+					}
+				}
+				$steps = LayoutGsub.ots_spend(ctx, $steps, indices, lang)?
+			}
+		}
+		Ok($steps)
+	}
 
 	## Read a `GSUB` table: its script and feature lists, every lookup a
 	## feature lists, and every lookup their rules call. Problems give their
@@ -1904,7 +2696,11 @@ LayoutGsub := {
 				Ok({ subtables: subtables.append(sub), ranges: cov.ranges, values: $values, rules, steps: $steps })
 			} else if kind == 5 or kind == 6 {
 				LayoutGsub.read_context(data, kind == 6, format, at, { subtables, ranges, values, rules, steps })
-			} else if kind == 8 and format == 1 {
+			} else if kind == 8 and format != 1 {
+				# OTS does not check the format (gsub.cc 394-493); HarfBuzz
+				# applies only format 1, so another never applies.
+				Ok({ subtables: subtables.append({ ..LayoutGsub.no_sub, kind: 8, coverage: ranges.len(), coverage_len: 0, data: values.len(), data_len: 0, match_kind: 2, back: values.len(), ahead: values.len() }), ranges, values, rules, steps })
+			} else if kind == 8 {
 				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
 				back = LayoutGsub.append_coverages(data, at, at + 4, cov.steps, cov.ranges, values)?
 				ahead_at = at + 6 + 2 * back.count
@@ -1935,7 +2731,9 @@ LayoutGsub := {
 				ahead = LayoutGsub.append_coverages(data, at, ahead_at, input.steps, input.ranges, input.values)?
 				records = LayoutGsub.append_records(data, ahead_at + 2 + 2 * ahead.count, ahead.steps, ahead.values)?
 				if input.count == 0 {
-					Err(Bad(at))
+					# OTS accepts a rule with no input (layout.cc 991-1006);
+					# with no first coverage it never applies, as in HarfBuzz.
+					LayoutGsub.inert_context(1, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
 				} else {
 					rule = { back: back.start, back_len: back.count, input: input.start + 2, input_len: input.count - 1, ahead: ahead.start, ahead_len: ahead.count, records: records.start, records_len: records.count }
 					LayoutGsub.context3_of(input.start, rule, 1, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
@@ -1943,8 +2741,12 @@ LayoutGsub := {
 			} else {
 				count = LayoutGsub.u16(data, at + 2)
 				record_count = LayoutGsub.u16(data, at + 4)
-				if count == 0 or !LayoutGsub.fits(at, 6 + 2 * count, data.len()) {
+				if !LayoutGsub.fits(at, 6 + 2 * count, data.len()) {
 					Err(Bad(at))
+				} else if count == 0 {
+					# OTS accepts a rule with no input (layout.cc 602-643); with
+					# no first coverage it never applies, as in HarfBuzz.
+					LayoutGsub.inert_context(0, { subtables, ranges, values, rules, steps })
 				} else {
 					var $steps = steps
 					var $ranges = ranges
@@ -2030,6 +2832,14 @@ LayoutGsub := {
 		} else {
 			Err(Bad(at))
 		}
+	}
+
+	# A context subtable that never applies: no coverage and no rule sets.
+	# `chained` is 1 for a chained subtable.
+	inert_context : I64, Built -> Try(Built, [Bad(U64)])
+	inert_context = |chained, { subtables, ranges, values, rules, steps }| {
+		sub = { ..LayoutGsub.no_sub, kind: 5, coverage: ranges.len(), coverage_len: 0, delta: chained, data: values.len(), data_len: 0, match_kind: 2 }
+		Ok({ subtables: subtables.append(sub), ranges, values: values.append(rules.len()), rules, steps })
 	}
 
 	# A context subtable of format 3: one rule set holding one rule, whose

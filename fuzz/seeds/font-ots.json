@@ -1,0 +1,33 @@
+{
+  "about": "Reviewed starting inputs for the font-ots target. The first byte picks the damaged table (low three bits modulo 5: head, cmap, GSUB, post, name), the post version (bits 3-4: 2.0, 1.0, 3.0, 2.0), a format 1 naming table (bit 5) and cutting the table short (bit 6, to the next byte's fraction of 256); the rest are three-byte patches: position in the table (two bytes, wrapped) and value.",
+  "seeds": [
+    {"why": "head undamaged (no patches), post 2.0", "parts": [{"hex": "00"}]},
+    {"why": "cmap undamaged (no patches), post 2.0", "parts": [{"hex": "01"}]},
+    {"why": "GSUB undamaged (no patches), post 2.0", "parts": [{"hex": "02"}]},
+    {"why": "post undamaged (no patches), post 2.0", "parts": [{"hex": "03"}]},
+    {"why": "name undamaged (no patches), post 2.0", "parts": [{"hex": "04"}]},
+    {"why": "head: unitsPerEm 0 (bytes 18-19)", "parts": [{"hex": "00 00 12 00 00 13 00"}]},
+    {"why": "head: magic number broken (byte 12)", "parts": [{"hex": "00 00 0c 00"}]},
+    {"why": "head: indexToLocFormat 2 (byte 51)", "parts": [{"hex": "00 00 33 02"}]},
+    {"why": "head: version 2.0 (byte 0)", "parts": [{"hex": "00 00 01 02"}]},
+    {"why": "cmap: version 1", "parts": [{"hex": "01 00 01 01"}]},
+    {"why": "cmap: format 4 glyph past the font through a delta (first segment's delta high byte)", "parts": [{"hex": "01 00 30 7f"}]},
+    {"why": "cmap: subtable offset past the table", "parts": [{"hex": "01 00 08 ff"}]},
+    {"why": "cmap: cut short", "parts": [{"hex": "41 60"}]},
+    {"why": "GSUB: version 2.0", "parts": [{"hex": "02 00 00 02"}]},
+    {"why": "GSUB: lookup list offset past the table", "parts": [{"hex": "02 00 08 ff"}]},
+    {"why": "GSUB: cut short", "parts": [{"hex": "42 80"}]},
+    {"why": "post 2.0: version 2.5", "parts": [{"hex": "03 00 01 02 00 02 50"}]},
+    {"why": "post 2.0: glyph count other than maxp's (byte 33)", "parts": [{"hex": "03 00 21 01"}]},
+    {"why": "post 2.0: a stored name with a zero byte, or past the end (patched in the strings)", "parts": [{"hex": "03 01 f0 00"}]},
+    {"why": "post 2.0: cut short inside the stored names", "parts": [{"hex": "43 f0"}]},
+    {"why": "post 1.0 patched in its header", "parts": [{"hex": "0b 00 05 80"}]},
+    {"why": "post 3.0 with version 4", "parts": [{"hex": "13 00 01 04"}]},
+    {"why": "name: format 2", "parts": [{"hex": "04 00 01 02"}]},
+    {"why": "name: string storage inside the records (byte 5)", "parts": [{"hex": "04 00 04 00 00 05 06"}]},
+    {"why": "name: a record's string past the end (accepted; never chosen)", "parts": [{"hex": "04 00 10 ff"}]},
+    {"why": "name format 1: language tag past the end (its offset, byte 94 in the smaller font)", "parts": [{"hex": "24 00 5e ff"}]},
+    {"why": "name format 1: cut short", "parts": [{"hex": "64 c0"}]},
+    {"why": "name: unknown platform on the Windows family record (accepted)", "parts": [{"hex": "04 00 1e 09"}]}
+  ]
+}

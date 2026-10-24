@@ -4,10 +4,10 @@ import Bytes
 ## The naming table (`name`): the font's human-readable strings, such as its
 ## family name, stored once per platform, encoding and language.
 ##
-## Internal. Reading checks the header, every name record and every
-## language-tag record (format 1) once, and reports every independent
-## problem. After a successful read every query here is total and returns a
-## valid `Str`. Nothing is decoded or copied when reading: the prepared
+## Internal. Reading checks the table exactly as OTS 9.3.0 does (see
+## `read`), so a font reads exactly when a browser accepts its names, and
+## reports every independent problem. After a successful read every query
+## here is total and returns a valid `Str`. Nothing is decoded or copied when reading: the prepared
 ## table is the checked table bytes, and a query decodes the one string it
 ## chooses.
 ##
@@ -15,22 +15,20 @@ import Bytes
 ##
 ## - UTF-16BE, for the Unicode platform (0; encodings 0 to 4 and 6) and the
 ##   Windows platform's symbol, BMP and full-repertoire encodings (3, 0),
-##   (3, 1) and (3, 10). Reading refuses such a string with an odd number
-##   of bytes or a surrogate that is not part of a high-low pair: there is
-##   no `Str` that holds it, and replacing the bad code unit would be a
-##   repair. Every font in the corpus passes this check.
+##   (3, 1) and (3, 10). A query never chooses such a string with an odd
+##   number of bytes or a surrogate that is not part of a high-low pair:
+##   there is no `Str` that holds it, and replacing the bad code unit would
+##   be a repair. (OTS accepts such strings, so reading does too.)
 ## - Mac OS Roman, for the Macintosh platform's Roman encoding (1, 0), where
 ##   every byte is a character.
 ##
 ## Strings in other encodings (other Macintosh scripts, the Windows
 ## ShiftJIS, PRC, Big5, Wansung and Johab encodings, and anything unknown)
-## are checked to lie inside the table but are never decoded, so a query
-## never chooses them.
+## are never decoded, so a query never chooses them; nor does it choose a
+## record whose string lies outside the table, which OTS discards.
 ##
 ## Problems name the table and the byte offset in the file of what was
-## wrong: the header field, the record whose string lies outside the table
-## or whose language tag does not exist, or the first byte of a string that
-## is not well-formed UTF-16BE.
+## wrong: the header field, or the language-tag record outside the table.
 TableName := {
 	# The checked table.
 	bytes : List(U8),
@@ -105,14 +103,20 @@ TableName := {
 	unranked : U64
 	unranked = 99
 
-	# The rank of the record at `at` as `family_name` lists them, from 0; a
-	# record in an encoding this module does not decode is unranked.
+	# The rank of the record at `at` as `family_name` lists them, from 0. A
+	# record OTS discards (`kept`), in an encoding this module does not
+	# decode, or whose UTF-16BE string is not well-formed is unranked, so
+	# a chosen string always decodes.
 	rank : TableName, U64 -> U64
 	rank = |name, at| {
 		platform_id = Bytes.u16(name.bytes, at)
 		encoding = Bytes.u16(name.bytes, at + 2)
 		language = Bytes.u16(name.bytes, at + 4)
-		if platform_id == 3 and TableName.utf16_encoding(platform_id, encoding) {
+		utf16 = TableName.utf16_encoding(platform_id, encoding)
+		usable = TableName.kept(name, at) and (!utf16 or TableName.well_formed(name.bytes, name.storage + Bytes.u16(name.bytes, at + 10), Bytes.u16(name.bytes, at + 8)))
+		if !usable {
+			TableName.unranked
+		} else if platform_id == 3 and TableName.utf16_encoding(platform_id, encoding) {
 			if language == 0x0409 {
 				0
 			} else if TableName.english(name, language) {
@@ -179,8 +183,33 @@ TableName := {
 		}
 	}
 
-	## Check a `name` table's bytes. `base` is the table's offset in the
-	## file, used only to place problems.
+	## Check a `name` table's bytes exactly as OTS 9.3.0 does
+	## (`ots/src/name.cc`, `OpenTypeNAME::Parse` and `Serialize`; line
+	## numbers below are that file's), so a font reads exactly when a
+	## browser accepts its names. `base` is the table's offset in the file,
+	## used only to place problems.
+	##
+	## OTS refuses a table whose header, name records or language-tag
+	## records do not fit, whose string storage starts inside those records,
+	## or whose language tag lies outside the table or is longer than 200
+	## bytes. It also refuses one it cannot write back: more than 5460 name
+	## records, or more than 65535 bytes of strings, counting only the
+	## records it keeps and the names it adds (below). Each problem gives the
+	## byte offset in the file of the field that was wrong.
+	##
+	## OTS keeps a font whose individual records are unusable, discarding
+	## those records: an unknown platform or encoding, a string outside the
+	## table, or a PostScript name (ID 6) that is too long or, in UTF-16, not
+	## Latin-1. roc-font accepts the same fonts and never chooses such a
+	## record, nor a UTF-16BE string that is not well-formed (an odd length
+	## or an unpaired surrogate, which no `Str` holds) or a language ID past
+	## the language tags; OTS keeps those, but a query cannot decode them.
+	## OTS also adds placeholder names ("OTS derived font") for name IDs 1,
+	## 2, 4, 5 and 6 when no kept Macintosh or Windows record has them; they
+	## count towards its size limit here, but a query never returns them.
+	## (OTS can add further placeholder names for IDs that `fvar` or `STAT`
+	## refer to; they are not counted, and no corpus font comes near the
+	## limit.)
 	read : List(U8), U64 -> Try(TableName, List([BadTable({ table : Str, offset : U32 })]))
 	read = |data, base| {
 		size = data.len()
@@ -188,12 +217,19 @@ TableName := {
 		count = Bytes.u16(data, 2)
 		storage = Bytes.u16(data, 4)
 		tags_at = 6 + 12 * count
+		# Lines 69-82: the format (0 or 1), the count and the string offset,
+		# which lies inside the table.
 		if size < 6 or format > 1 {
 			return Err([TableName.bad(base, 0)])
 		}
+		if storage > size {
+			return Err([TableName.bad(base, 4)])
+		}
+		# Lines 92-102: every name record readable.
 		if !Bytes.fits(6, 12 * count, size) {
 			return Err([TableName.bad(base, 2)])
 		}
+		# Lines 166-177: the language-tag count and records readable.
 		if format == 1 and !Bytes.fits(tags_at, 2, size) {
 			return Err([TableName.bad(base, tags_at)])
 		}
@@ -201,40 +237,114 @@ TableName := {
 		if format == 1 and !Bytes.fits(tags_at + 2, 4 * tag_count, size) {
 			return Err([TableName.bad(base, tags_at)])
 		}
-		if storage > size {
-			return Err([TableName.bad(base, 4)])
-		}
+		# Lines 178-190: each tag inside the table and at most 200 bytes.
 		var $problems = []
-		for i in 0..<count {
-			at = 6 + 12 * i
-			platform_id = Bytes.u16(data, at)
-			encoding = Bytes.u16(data, at + 2)
-			language = Bytes.u16(data, at + 4)
-			length = Bytes.u16(data, at + 8)
-			start = storage + Bytes.u16(data, at + 10)
-			if !Bytes.fits(start, length, size) {
-				$problems = $problems.append(TableName.bad(base, at))
-			} else if TableName.utf16_encoding(platform_id, encoding) and !TableName.well_formed(data, start, length) {
-				$problems = $problems.append(TableName.bad(base, start))
-			} else if format == 1 and language >= 0x8000 and language - 0x8000 >= tag_count {
-				$problems = $problems.append(TableName.bad(base, at + 4))
-			}
-		}
+		var $tag_bytes = 0
 		for k in 0..<tag_count {
 			at = tags_at + 2 + 4 * k
 			length = Bytes.u16(data, at)
-			start = storage + Bytes.u16(data, at + 2)
-			if !Bytes.fits(start, length, size) {
+			if storage + Bytes.u16(data, at + 2) + length > size or length > 200 {
 				$problems = $problems.append(TableName.bad(base, at))
-			} else if !TableName.well_formed(data, start, length) {
-				$problems = $problems.append(TableName.bad(base, start))
+			}
+			$tag_bytes = $tag_bytes + length
+		}
+		# Lines 196-200: the string storage starts after the records.
+		records_end = if (format == 1) tags_at + 2 + 4 * tag_count else tags_at
+		if records_end > storage {
+			$problems = $problems.append(TableName.bad(base, 4))
+		}
+		if !$problems.is_empty() {
+			return Err($problems)
+		}
+		name = { bytes: data, count, storage, tag_count, tags_at: if (format == 1) tags_at else 0 }
+		# Serialize, lines 266-314: what OTS writes back. Lines 202-257: the
+		# names OTS adds, for each of IDs 1, 2, 4, 5 and 6 (whose texts are
+		# 16, 11, 16, 5 and 16 bytes) without a kept Macintosh or Windows
+		# record, a Macintosh copy and a Windows copy of twice the length.
+		var $kept = 0
+		var $string_bytes = 0
+		var $standard = 0
+		for i in 0..<count {
+			at = 6 + 12 * i
+			if TableName.kept(name, at) {
+				platform_id = Bytes.u16(data, at)
+				id = Bytes.u16(data, at + 6)
+				$kept = $kept + 1
+				$string_bytes = $string_bytes + Bytes.u16(data, at + 8)
+				if (platform_id == 1 or platform_id == 3) and id <= 6 {
+					$standard = $standard.bitwise_or((1.U64).shl_wrap(id.to_u8_wrap()))
+				}
 			}
 		}
-		if $problems.is_empty() {
-			Ok({ bytes: data, count, storage, tag_count, tags_at: if (format == 1) tags_at else 0 })
-		} else {
-			Err($problems)
+		var $names = $kept
+		var $added_bytes = 0
+		for std in [{ id: 1, length: 16 }, { id: 2, length: 11 }, { id: 4, length: 16 }, { id: 5, length: 5 }, { id: 6, length: 16 }] {
+			if $standard.bitwise_and((1.U64).shl_wrap(std.id.to_u8_wrap())) == 0 {
+				$names = $names + 2
+				$added_bytes = $added_bytes + 3 * std.length
+			}
 		}
+		# Lines 267-279: the string offset OTS would write (its record count
+		# is a 16-bit number) fits 16 bits; lines 286-313: so does the
+		# string storage, names first, then language tags.
+		string_offset = 6 + 12 * ($names % 65536) + (if (tag_count > 0) 2 + 4 * tag_count else 0)
+		if string_offset > 0xFFFF {
+			return Err([TableName.bad(base, 2)])
+		}
+		if $string_bytes + $added_bytes + $tag_bytes > 0xFFFF {
+			return Err([TableName.bad(base, 4)])
+		}
+		Ok(name)
+	}
+
+	# Whether OTS keeps the name record at `at` (name.cc lines 103-155): a
+	# known platform and encoding, a string inside the table, and a
+	# PostScript name (ID 6) of at most 63 characters, all Latin-1 in
+	# UTF-16.
+	kept : TableName, U64 -> Bool
+	kept = |name, at| {
+		platform_id = Bytes.u16(name.bytes, at)
+		encoding = Bytes.u16(name.bytes, at + 2)
+		id = Bytes.u16(name.bytes, at + 6)
+		length = Bytes.u16(name.bytes, at + 8)
+		start = name.storage + Bytes.u16(name.bytes, at + 10)
+		known =
+			if platform_id == 0 {
+				encoding <= 6
+			} else if platform_id == 1 {
+				encoding <= 32
+			} else if platform_id == 2 {
+				encoding <= 2
+			} else if platform_id == 3 {
+				encoding <= 6 or encoding == 10
+			} else {
+				platform_id == 4 and encoding <= 255
+			}
+		inside = start + length <= name.bytes.len()
+		postscript =
+			if id != 6 {
+				Bool.True
+			} else if platform_id == 1 {
+				length <= 63
+			} else if platform_id == 0 or platform_id == 3 {
+				length % 2 == 0 and length <= 126 and TableName.latin1_utf16(name.bytes, start, length)
+			} else {
+				Bool.True
+			}
+		known and inside and postscript
+	}
+
+	# Whether every UTF-16BE code unit of `length` bytes from `start` (an
+	# even length inside `data`) has a zero high byte.
+	latin1_utf16 : List(U8), U64, U64 -> Bool
+	latin1_utf16 = |data, start, length| {
+		var $ok = Bool.True
+		var $i = 0
+		while $ok and $i < length {
+			$ok = Bytes.u8(data, start + $i) == 0
+			$i = $i + 2
+		}
+		$ok
 	}
 
 	# A problem at byte `at` of a table at `base` in the file. Fonts larger

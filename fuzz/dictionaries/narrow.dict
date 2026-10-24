@@ -1,9 +1,10 @@
 # Byte tokens for the narrow targets (font-cmap, font-coverage, font-gsub,
-# font-gpos, font-var; libFuzzer dictionary format). Their input is a choice
-# byte and bytes that choose a font's contents, not font bytes, so tags are
-# useless here; these are the values that select edge cases: zero and full
-# bytes (empty gaps, longest runs, extreme deltas), the sign boundary of
-# signed choices, and runs of one value (identical ranges and lookups).
+# font-gpos, font-var, font-gvar, font-layout-var, font-ots; libFuzzer dictionary
+# format). Their input is a choice byte and bytes that choose a font's
+# contents, not font bytes, so tags are useless here; these are the values
+# that select edge cases: zero and full bytes (empty gaps, longest runs,
+# extreme deltas), the sign boundary of signed choices, and runs of one
+# value (identical ranges and lookups).
 
 zero="\x00"
 full="\xFF"
@@ -18,3 +19,18 @@ alternating="\x00\xFF\x00\xFF"
 location_bold="\x06\x00\x05\x80\x00\x03\x01\x01"
 location_huge="\x40\x10\x30\x7F\xFF\x02\x82\x81"
 location_odd_tag="\x09\x00\x09\x00\x00\x00\x83\x02"
+# font-gvar and font-layout-var locations (bytes 1 to 3 of each four):
+# every axis at its maximum, at its default, and at fractions
+location_corner_max="\x00\x02\x02\x02"
+location_default="\x00\x01\x01\x01"
+location_fractions="\x00\x83\x43\xC3"
+# font-gvar: three tuples for a glyph (4 modulo 5), word deltas (0 modulo 11)
+three_tuples="\x09"
+word_delta="\x0B"
+# every option of the choice byte
+every_option="\x7F"
+# font-ots: values that break the checks OTS applies (a version 2.5, the
+# head magic number, a 16-bit count of 0xFFFF)
+post_v25="\x00\x02\x50\x00"
+head_magic="\x5F\x0F\x3C\xF5"
+count_full="\xFF\xFF"

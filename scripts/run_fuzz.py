@@ -69,6 +69,9 @@ PLATFORM_RE = re.compile(r'platform\s+"([^"]+)"')
 FONT_DIRS = (ROOT / "tests" / "fonts", ROOT / "tests" / "corpus")
 FONT_SUFFIXES = (".ttf", ".otf", ".ttc", ".otc")
 
+# Inputs per target in a smoke run, unless the target sets its own.
+SMOKE_RUNS = 4000
+
 
 @dataclass(frozen=True)
 class TargetConfig:
@@ -87,6 +90,10 @@ class TargetConfig:
     # Whether real font files from tests/fonts/ and tests/corpus/ seed the
     # target (only for targets that read whole font files).
     font_files: bool = True
+    # Inputs a smoke run gives the target, when --runs does not say;
+    # targets whose every input builds and checks large fonts take fewer,
+    # so that smoke stays a few seconds per target.
+    smoke_runs: int = SMOKE_RUNS
 
     def source(self) -> Path:
         for candidate in self.sources:
@@ -203,10 +210,60 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-gvar": TargetConfig(
+        sources=(FUZZ_ROOT / "font-gvar.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-gvar.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=72,
+        timeout=10,
+        contract=(
+            "glyf outlines (simple, composite, nested) with gvar at 16 and 128 "
+            "glyphs: read strictly in full; extents total and deterministic, "
+            "the header box at the default, the recipe's model at -1/0/1 "
+            "corners, within the deltas elsewhere; sizes agree; reading "
+            "linear, at() and extents constant per query; no leaks"
+        ),
+        font_files=False,
+        smoke_runs=1500,
+    ),
+    "font-layout-var": TargetConfig(
+        sources=(FUZZ_ROOT / "font-layout-var.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-layout-var.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=72,
+        timeout=10,
+        contract=(
+            "GPOS pair kerning with GDEF store devices and GSUB/GPOS "
+            "FeatureVariations at 24 and 192 glyphs: read strictly in full; "
+            "glyphs and width equal the recipe's model at every location; "
+            "sizes agree; reading linear, shaping constant per call, "
+            "planning plus one per extra record; no leaks"
+        ),
+        font_files=False,
+        smoke_runs=1500,
+    ),
+    "font-ots": TargetConfig(
+        sources=(FUZZ_ROOT / "font-ots.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-ots.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=96,
+        timeout=10,
+        contract=(
+            "head, cmap, GSUB, post or name damaged in a valid font at 2 and "
+            "16 copies: undamaged fonts read in full; reading deterministic; "
+            "every problem names exactly the damaged table; strict agrees; "
+            "accepted fonts total for queries and shaping; reading linear; "
+            "no leaks"
+        ),
+        font_files=False,
+        smoke_runs=1500,
+    ),
 }
 TARGET_ORDER = tuple(TARGETS)
 
-SMOKE_RUNS = 4000
 SMOKE_SEED = 1
 
 
@@ -488,7 +545,7 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
         f"--platform-sha256={ROC_FUZZ_RELEASE['sha256']}",
     ]
     if mode == "smoke":
-        command += [f"--runs={args.runs}", f"--seed={args.seed}"]
+        command += [f"--runs={args.runs or config.smoke_runs}", f"--seed={args.seed}"]
     else:
         command += [f"--time={args.seconds}"]
         if args.seed is not None:
@@ -615,7 +672,8 @@ def make_parser() -> argparse.ArgumentParser:
 
     smoke = sub.add_parser("smoke", help="short seeded run of every target (CI)")
     add_run_options(smoke)
-    smoke.add_argument("--runs", type=positive_int, default=SMOKE_RUNS, help=f"inputs per target (default {SMOKE_RUNS})")
+    smoke.add_argument("--runs", type=positive_int, default=None,
+                       help=f"inputs per target (default: the target's smoke_runs, {SMOKE_RUNS} for most)")
     smoke.add_argument("--seed", type=int, default=SMOKE_SEED, help=f"libFuzzer seed (default {SMOKE_SEED})")
 
     campaign = sub.add_parser("campaign", help="time-bounded run (default 600 s per target)")

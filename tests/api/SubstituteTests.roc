@@ -32,7 +32,7 @@ many_glyphs = [
 	{ tag: "hhea", data: FontBuild.hhea(800, -200, 1) },
 	{ tag: "maxp", data: FontBuild.maxp(65535) },
 	{ tag: "hmtx", data: FontBuild.hmtx([500]) },
-	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFF, glyph: 1 }]) }]) },
+	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFE, glyph: 1 }]) }]) },
 ]
 
 # The font with the given `GSUB` table.
@@ -209,8 +209,10 @@ expect {
 	shaped(gsub, [2, 3, 1, 1, 3]) == [12, 3, 1, 11, 3]
 }
 
-# Context of format 3 with no input is a bad table.
-expect refused(first_active([{ kind: 5, subtables: [FontBuild.context3([], [])] }]))
+# Context of format 3 with no input is read, as OTS reads it, and never
+# applies.
+expect readable(first_active([{ kind: 5, subtables: [FontBuild.context3([], [])] }]))
+expect shaped(first_active([{ kind: 5, subtables: [FontBuild.context3([], [])] }]), [1, 2]) == [1, 2]
 
 # ------------------------------------------------------------ chained context
 
@@ -362,10 +364,10 @@ expect {
 	shaped(FontBuild.layout_listing("latn", [1], 0xFFFF, features, lookups), [5]) == [15] and shaped(FontBuild.layout_listing("latn", [], 0, features, lookups), [5]) == [6]
 }
 
-# A listed feature past the feature list is a bad table; a feature's
-# lookup past the lookup list is ignored.
+# A listed feature past the feature list, or a feature's lookup past the
+# lookup list, is a bad table, as OTS refuses it.
 expect refused(FontBuild.layout_listing("latn", [3], 0xFFFF, [{ tag: "liga", lookups: [0] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }]))
-expect shaped(FontBuild.layout("latn", [{ tag: "liga", lookups: [0, 7] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }]), [5]) == [6]
+expect refused(FontBuild.layout("latn", [{ tag: "liga", lookups: [0, 7] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }]))
 
 # A lookup reached only from a rule does not apply on its own; one that a
 # rule calls past the lookup list is a bad table.
@@ -431,7 +433,7 @@ expect {
 
 expect refused([])
 expect refused(List.repeat(0, 9))
-expect shaped(List.repeat(0, 10), [5]) == [5]
+expect refused(List.repeat(0, 10))
 expect readable(FontBuild.layout("latn", [], []))
 
 # Unknown subtable, coverage and class formats, and coverage tables past
@@ -442,19 +444,16 @@ expect refused(all_active([{ kind: 1, subtables: [FontBuild.patch(FontBuild.sing
 expect refused(all_active([{ kind: 1, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.pack([U16(3), U16(0)])), I16(1)])] }]))
 expect refused(first_active([{ kind: 5, subtables: [FontBuild.context2([1], FontBuild.pack([U16(3)]), [])] }]))
 
-# Coverage and class ranges that overlap or are out of order are read, as
-# browsers read them (Noto Sans Adlam Unjoined has a coverage whose ranges
-# share a glyph); lookups in them stay total and deterministic.
+# A coverage range may start on the previous range's last glyph, as OTS
+# allows (Noto Sans Adlam Unjoined has such a coverage); coverage ranges
+# out of order and class ranges that overlap are bad tables, as OTS refuses
+# them.
 expect {
 	gsub = all_active([{ kind: 1, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.coverage2([{ first: 1, last: 6, index: 0 }, { first: 6, last: 19, index: 6 }])), I16(100)])] }])
 	shaped(gsub, [1, 6, 19, 20]) == [101, 106, 119, 20]
 }
-expect {
-	gsub = all_active([{ kind: 1, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.coverage2([{ first: 5, last: 9, index: 0 }, { first: 2, last: 3, index: 5 }, { first: 12, last: 11, index: 0 }])), I16(1)])] }])
-	result = shaped(gsub, [2, 5, 7, 11, 12])
-	result.len() == 5 and result == shaped(gsub, [2, 5, 7, 11, 12])
-}
-expect readable(first_active([{ kind: 5, subtables: [FontBuild.context2([1], FontBuild.classes2([{ first: 5, last: 9, class: 1 }, { first: 9, last: 10, class: 2 }]), [])] }]))
+expect refused(all_active([{ kind: 1, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.coverage2([{ first: 5, last: 9, index: 0 }, { first: 2, last: 3, index: 5 }, { first: 12, last: 11, index: 0 }])), I16(1)])] }]))
+expect refused(first_active([{ kind: 5, subtables: [FontBuild.context2([1], FontBuild.classes2([{ first: 5, last: 9, class: 1 }, { first: 9, last: 10, class: 2 }]), [])] }]))
 
 ## fuzz regression: a chained context of format 2 may leave its backtrack
 ## and lookahead class definitions out (a null offset), putting every

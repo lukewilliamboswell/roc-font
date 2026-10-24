@@ -169,6 +169,20 @@ Face := {
 				boxes = TableGlyf.from_tables(bytes, tables, h.long_offsets, glyph_count, hh.metric_count)
 				$required = Face.collect($required, advances)
 				$required = Face.collect($required, boxes)
+				# Every glyph's outline is checked as OTS checks it (flags,
+				# instruction lengths, coordinates, composites), whether or not
+				# the font varies: a broken `glyf` rejects the font.
+				if boxes.is_ok() {
+					when_glyf = match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
+						(Found(glyf), Found(loca), Found(hmtx)) =>
+							match TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count) {
+								Ok(_) => []
+								Err(problems) => problems.take_first(1).map(|q| Sfnt.bad(q.table, (if (q.table == "glyf") glyf.offset else loca.offset) + q.offset))
+							}
+						_ => []
+					}
+					$required = $required.concat(when_glyf)
+				}
 				post = TablePost.from_tables(bytes, tables, glyph_count)
 				$required = Face.collect_all($required, post)
 				# A layout table over the lookup limit is dropped; a broken one

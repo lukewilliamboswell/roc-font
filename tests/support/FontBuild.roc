@@ -112,10 +112,18 @@ FontBuild :: {}.{
 	}
 
 	## A `head` table: 54 bytes with units per em at 18 and the `loca` format
-	## at 50.
+	## at 50, version 1.0 and the magic number OTS requires; other fields
+	## are zero.
 	head : U64, Bool -> List(U8)
 	head = |units, long_loca|
-		List.repeat(0, 18).concat(FontBuild.u16(units)).concat(List.repeat(0, 30)).concat(FontBuild.u16(if (long_loca) 1 else 0)).concat(FontBuild.u16(0))
+		FontBuild.u32(0x00010000)
+			.concat(List.repeat(0, 8))
+			.concat(FontBuild.u32(0x5F0F3CF5))
+			.concat(FontBuild.u16(0))
+			.concat(FontBuild.u16(units))
+			.concat(List.repeat(0, 30))
+			.concat(FontBuild.u16(if (long_loca) 1 else 0))
+			.concat(FontBuild.u16(0))
 
 	## An `hhea` table: ascent, descent (negative below the baseline) and the
 	## number of long metrics.
@@ -171,10 +179,17 @@ FontBuild :: {}.{
 				$array = $array.concat(seg.glyphs.join_map(FontBuild.u16))
 			}
 		}
+		# The binary search fields, as OTS requires them: the largest power
+		# of two not above the segment count, its log, and the rest.
+		var $log = 0
+		while (2.U64).shl_wrap($log.to_u8_wrap()) <= n {
+			$log = $log + 1
+		}
+		search = (2.U64).shl_wrap($log.to_u8_wrap())
 		body = FontBuild.u16(2 * n)
-			.concat(FontBuild.u16(0))
-			.concat(FontBuild.u16(0))
-			.concat(FontBuild.u16(0))
+			.concat(FontBuild.u16(search))
+			.concat(FontBuild.u16($log))
+			.concat(FontBuild.u16(2 * n - search))
 			.concat(all.join_map(|seg| FontBuild.u16(seg.last)))
 			.concat(FontBuild.u16(0))
 			.concat(all.join_map(|seg| FontBuild.u16(seg.first)))
@@ -338,7 +353,17 @@ FontBuild :: {}.{
 
 	## A TrueType glyph header with the given horizontal extent.
 	outline : I64, I64 -> List(U8)
-	outline = |left, right| FontBuild.pack([I16(1), I16(left), I16(0), I16(right), I16(100)])
+	outline = |left, right|
+		# One contour of one on-curve point at (left, 0), with the header box
+		# given: a glyph OTS accepts (flags 0x01: on curve, word deltas), padded
+		# to an even length for short `loca` offsets.
+		FontBuild.pack([I16(1), I16(left), I16(0), I16(right), I16(100), U16(0), U16(0)]).concat([0x01]).concat(FontBuild.i16(left)).concat(FontBuild.i16(0)).concat([0])
+
+	## A glyph OTS accepts with the given header box: one contour of one
+	## on-curve point at (x_min, y_min), padded to an even length.
+	boxed : I64, I64, I64, I64 -> List(U8)
+	boxed = |x_min, y_min, x_max, y_max|
+		FontBuild.pack([I16(1), I16(x_min), I16(y_min), I16(x_max), I16(y_max), U16(0), U16(0)]).concat([0x01]).concat(FontBuild.i16(x_min)).concat(FontBuild.i16(y_min)).concat([0])
 
 	## `loca` and `glyf` tables for glyphs given as their bytes (empty for a
 	## glyph without an outline), with short or long offsets.
@@ -554,12 +579,15 @@ FontBuild :: {}.{
 		glyph_count = 16 + 4 * items.len()
 		first = (picks.first() ?? 0).to_u64()
 		mapped = of_kind(0)
+		# Formats 12 and 13 need at least one group (OTS refuses none): U+F000
+		# maps to glyph 1 when nothing else is mapped.
+		groups = if (mapped.is_empty()) [{ first: 0xF000, last: 0xF000, glyph: 1 }] else mapped.map(|base| { first: 0x10000 + 2 * base, last: 0x10001 + 2 * base, glyph: base })
 		subtable = if first % 2 == 0 {
 			FontBuild.cmap4(mapped.map(|base| { first: 0x400 + 2 * base, last: 0x401 + 2 * base, delta: (65536 + base - (0x400 + 2 * base)) % 65536, glyphs: [] }))
 		} else if first % 8 == 7 {
-			FontBuild.cmap13(mapped.map(|base| { first: 0x10000 + 2 * base, last: 0x10001 + 2 * base, glyph: base }))
+			FontBuild.cmap13(groups)
 		} else {
-			FontBuild.cmap12(mapped.map(|base| { first: 0x10000 + 2 * base, last: 0x10001 + 2 * base, glyph: base }))
+			FontBuild.cmap12(groups)
 		}
 		legacy = FontBuild.kern([{ coverage: 1, pairs: of_kind(1).map(|base| { left: base, right: base + 1, value: -3 }) }])
 		pair_sets = of_kind(2).map(|base| { glyph: base, pairs: [{ second: base + 1, values: [-1] }, { second: base + 2, values: [-2] }] })
@@ -759,6 +787,52 @@ FontBuild :: {}.{
 		FontBuild.u32(0x00010001).concat(moved(4)).concat(moved(6)).concat(moved(8)).concat(FontBuild.u32(plain.len() + 4)).concat(plain.drop_first(10)).concat(variations)
 	}
 
+	# ------------------------------------------------------------ names
+
+	## A `post` table of `version` (0x00010000, 0x00020000 or 0x00030000)
+	## with an underline at -100, 50 thick. For version 2.0, `indices` are
+	## the glyph name indices (one per glyph; from 258 they select a stored
+	## name) and `stored` the stored names, each a length byte and its bytes.
+	post : U64, List(U64), List(Str) -> List(U8)
+	post = |version, indices, stored| {
+		header = FontBuild.u32(version).concat(FontBuild.u32(0)).concat(FontBuild.i16(-100)).concat(FontBuild.i16(50)).concat(List.repeat(0, 20))
+		if version == 0x00020000 {
+			header
+				.concat(FontBuild.u16(indices.len()))
+				.concat(indices.join_map(FontBuild.u16))
+				.concat(stored.join_map(|n| [n.to_utf8().len().to_u8_wrap()].concat(n.to_utf8())))
+		} else {
+			header
+		}
+	}
+
+	## A `name` table of format 0, or of format 1 when `tags` (language
+	## tags, as UTF-16BE bytes) is not empty: the records in order (platform
+	## as `system`), each string stored once, then the tags.
+	naming : List({ system : U64, encoding : U64, language : U64, id : U64, text : List(U8) }), List(List(U8)) -> List(U8)
+	naming = |entries, tags| {
+		format = if (tags.is_empty()) 0 else 1
+		storage = 6 + 12 * entries.len() + (if (format == 1) 2 + 4 * tags.len() else 0)
+		var $head = FontBuild.u16(format).concat(FontBuild.u16(entries.len())).concat(FontBuild.u16(storage))
+		var $strings = []
+		for r in entries {
+			$head = $head.concat(FontBuild.u16(r.system)).concat(FontBuild.u16(r.encoding)).concat(FontBuild.u16(r.language)).concat(FontBuild.u16(r.id)).concat(FontBuild.u16(r.text.len())).concat(FontBuild.u16($strings.len()))
+			$strings = $strings.concat(r.text)
+		}
+		if format == 1 {
+			$head = $head.concat(FontBuild.u16(tags.len()))
+			for t in tags {
+				$head = $head.concat(FontBuild.u16(t.len())).concat(FontBuild.u16($strings.len()))
+				$strings = $strings.concat(t)
+			}
+		}
+		$head.concat($strings)
+	}
+
+	## ASCII text as UTF-16BE, for `naming`.
+	utf16 : Str -> List(U8)
+	utf16 = |text| text.to_utf8().join_map(|b| [0, b])
+
 	## A `FeatureVariations` table (version 1.0): records of axis range
 	## conditions (axis, minimum and maximum, F2Dot14), all of which must
 	## hold, and feature substitutions (feature index and the lookups of its
@@ -782,9 +856,358 @@ FontBuild :: {}.{
 		table = |r| FontBuild.pack([U16(1), U16(0), U16(if (r.keep) 1 else 0), U32(r.conditions.len())].concat(r.conditions.join_map(|c| [Ref32(condition(c)), Ref32(indices(c.lookups))])))
 		FontBuild.pack([U16(1), U16(1), U32(0), U32(entries.len())].concat(entries.join_map(|r| [U16(r.feature), Ref32(table(r))])))
 	}
+
+	# ============================================================ outline and layout variations
+	#
+	# Builders for the `font-gvar` and `font-layout-var` fuzz targets:
+	# TrueType outlines (`glyf`, `loca`, `hmtx` with side bearings), glyph
+	# variations (`gvar`), a `GDEF` item variation store, pair adjustments
+	# with device tables, and `FeatureVariations` with condition formats 1
+	# and 3 to 5 and lookup variation records.
+
+	## A simple TrueType glyph: contours of points (on-curve or not), its
+	## header box computed from the points, no instructions. Coordinates are
+	## written as short vectors, repeated values (same-coordinate flags) and
+	## words where they fit, and runs of equal flags use the repeat flag.
+	## Padded to an even length, so short `loca` offsets can address it.
+	## No contours: an empty glyph (no bytes).
+	simple_glyph : List(List({ x : I64, y : I64, on : Bool })) -> List(U8)
+	simple_glyph = |contours| {
+		points = contours.join_map(|c| c)
+		if points.is_empty() {
+			return []
+		}
+		first = points.first() ?? { x: 0, y: 0, on: True }
+		x_min = points.fold(first.x, |m, p| m.min(p.x))
+		x_max = points.fold(first.x, |m, p| m.max(p.x))
+		y_min = points.fold(first.y, |m, p| m.min(p.y))
+		y_max = points.fold(first.y, |m, p| m.max(p.y))
+		var $ends = []
+		var $total = 0
+		for c in contours {
+			$total = $total + c.len()
+			$ends = $ends.concat(FontBuild.u16($total - 1))
+		}
+		var $flags = []
+		var $xs = []
+		var $ys = []
+		var $px = 0
+		var $py = 0
+		for p in points {
+			dx = p.x - $px
+			dy = p.y - $py
+			$px = p.x
+			$py = p.y
+			fx = if (dx == 0) 0x10 else if (dx >= -255 and dx <= 255) (if (dx > 0) 0x12 else 0x02) else 0
+			fy = if (dy == 0) 0x20 else if (dy >= -255 and dy <= 255) (if (dy > 0) 0x24 else 0x04) else 0
+			$xs = $xs.concat(if (dx == 0) [] else if (fx != 0) [dx.abs().to_u8_wrap()] else FontBuild.i16(dx))
+			$ys = $ys.concat(if (dy == 0) [] else if (fy != 0) [dy.abs().to_u8_wrap()] else FontBuild.i16(dy))
+			$flags = $flags.append((if (p.on) 1.U64 else 0) + fx + fy)
+		}
+		# Runs of equal flags, each written once with a repeat count.
+		var $packed = []
+		var $i = 0
+		n = $flags.len()
+		while $i < n {
+			f = $flags.get($i) ?? 0
+			var $j = $i + 1
+			while $j < n and $j - $i < 256 and ($flags.get($j) ?? 0) == f {
+				$j = $j + 1
+			}
+			run = $j - $i
+			$packed = $packed.concat(if (run > 1) [(f + 0x08).to_u8_wrap(), (run - 1).to_u8_wrap()] else [f.to_u8_wrap()])
+			$i = $j
+		}
+		body = FontBuild.pack([I16(contours.len().to_i64_wrap()), I16(x_min), I16(y_min), I16(x_max), I16(y_max)]).concat($ends).concat(FontBuild.u16(0)).concat($packed).concat($xs).concat($ys)
+		if (body.len() % 2 == 1) body.append(0) else body
+	}
+
+	## A composite TrueType glyph: components (glyph, x and y offset,
+	## optionally an explicit scale of 1.0) and the header box, which the
+	## caller computes. Offsets are bytes or words as they fit.
+	composite_glyph : List({ glyph : U64, dx : I64, dy : I64, scale : Bool }), { x_min : I64, y_min : I64, x_max : I64, y_max : I64 } -> List(U8)
+	composite_glyph = |components, box| {
+		count = components.len()
+		component_records = components.map_with_index(
+			|c, k| {
+				words = c.dx < -128 or c.dx > 127 or c.dy < -128 or c.dy > 127
+				flags = 0x0002 + (if (words) 0x0001 else 0) + (if (k + 1 < count) 0x0020 else 0) + (if (c.scale) 0x0008 else 0)
+				args = if (words) FontBuild.i16(c.dx).concat(FontBuild.i16(c.dy)) else [(c.dx + 256).to_u8_wrap(), (c.dy + 256).to_u8_wrap()]
+				FontBuild.u16(flags).concat(FontBuild.u16(c.glyph)).concat(args).concat(if (c.scale) FontBuild.u16(0x4000) else [])
+			},
+		)
+		FontBuild.pack([I16(-1), I16(box.x_min), I16(box.y_min), I16(box.x_max), I16(box.y_max)]).concat(component_records.join_map(|r| r))
+	}
+
+	## A font of TrueType outlines: glyph `g` has the bytes `glyphs[g]`
+	## (`simple_glyph`, `composite_glyph`, or empty), advance `advances[g]`
+	## and left side bearing `bearings[g]`; the first `long_metrics` glyphs
+	## have long metrics, the rest only bearings. `loca` offsets are long
+	## or short (glyphs must then have even lengths). 1000 units per em.
+	outline_font : List(List(U8)), List(U64), List(I64), U64, Bool, List(U8), List({ tag : Str, data : List(U8) }) -> List(U8)
+	outline_font = |glyphs, advances, bearings, long_metrics, long_loca, characters, extra| {
+		count = glyphs.len()
+		boxes = FontBuild.outlines(glyphs, long_loca)
+		metrics = FontBuild.counting(count).join_map(
+			|g| {
+				bearing = FontBuild.i16(bearings.get(g) ?? 0)
+				if (g < long_metrics) FontBuild.u16(advances.get(g) ?? 0).concat(bearing) else bearing
+			},
+		)
+		FontBuild.file(
+			[
+				{ tag: "head", data: FontBuild.head(1000, long_loca) },
+				{ tag: "hhea", data: FontBuild.hhea(800, -200, long_metrics) },
+				{ tag: "maxp", data: FontBuild.maxp(count) },
+				{ tag: "hmtx", data: metrics },
+				{ tag: "cmap", data: characters },
+				{ tag: "loca", data: boxes.loca },
+				{ tag: "glyf", data: boxes.glyf },
+			].concat(extra),
+		)
+	}
+
+	## Packed point numbers (`gvar`): a count, then runs of increments of
+	## up to 128, as bytes or words. Points must ascend; none means all.
+	gvar_points : List(U64) -> List(U8)
+	gvar_points = |points| {
+		n = points.len()
+		var $out = if (n < 128) [n.to_u8_wrap()] else [(0x80 + n.shr_zf_wrap(8)).to_u8_wrap(), n.bitwise_and(0xFF).to_u8_wrap()]
+		var $increments = List.with_capacity(n)
+		var $previous = 0
+		for p in points {
+			$increments = $increments.append(p - $previous)
+			$previous = p
+		}
+		var $i = 0
+		while $i < n {
+			words = ($increments.get($i) ?? 0) > 255
+			var $j = $i
+			while $j < n and $j - $i < 128 and (($increments.get($j) ?? 0) > 255) == words {
+				$j = $j + 1
+			}
+			run = $increments.sublist({ start: $i, len: $j - $i })
+			$out = $out.append(((if (words) 0x80 else 0) + run.len() - 1).to_u8_wrap()).concat(run.join_map(|v| if (words) FontBuild.u16(v) else [v.to_u8_wrap()]))
+			$i = $j
+		}
+		$out
+	}
+
+	## Packed deltas (`gvar`): runs of up to 64 zeros, bytes or words.
+	gvar_deltas : List(I64) -> List(U8)
+	gvar_deltas = |values| {
+		kind = |v| if (v == 0) 0 else if (v >= -128 and v <= 127) 1 else 2
+		n = values.len()
+		var $out = []
+		var $i = 0
+		while $i < n {
+			k = kind(values.get($i) ?? 0)
+			var $j = $i
+			while $j < n and $j - $i < 64 and kind(values.get($j) ?? 0) == k {
+				$j = $j + 1
+			}
+			run = values.sublist({ start: $i, len: $j - $i })
+			control = (if (k == 0) 0x80 else if (k == 2) 0x40 else 0) + run.len() - 1
+			data = if (k == 0) [] else if (k == 1) run.map(|v| (v + 256).to_u8_wrap()) else run.join_map(FontBuild.i16)
+			$out = $out.append(control.to_u8_wrap()).concat(data)
+			$i = $j
+		}
+		$out
+	}
+
+	## One tuple variation of a glyph: its peak (a shared tuple by index,
+	## or embedded coordinates, F2Dot14 per axis), optionally an
+	## intermediate region (start and end per axis), the points it moves
+	## (`Inherit`: the glyph's shared points, or every point when it has
+	## none; `All`; or private point numbers, ascending, counting the four
+	## phantom points after the glyph's own) and one x and y delta per
+	## point moved.
+	GvarTuple : { peak : [Shared(U64), Embedded(List(I64))], between : [Peak, Range(List(I64), List(I64))], points : [Inherit, All, Own(List(U64))], xs : List(I64), ys : List(I64) }
+
+	## One glyph's variation data (empty without tuples).
+	gvar_glyph : { shared : [None, Points(List(U64))], tuples : List(GvarTuple) } -> List(U8)
+	gvar_glyph = |glyph| {
+		if glyph.tuples.is_empty() {
+			return []
+		}
+		shared_bytes = match glyph.shared {
+			None => []
+			Points(points) => FontBuild.gvar_points(points)
+		}
+		parts = glyph.tuples.map(
+			|t| {
+				own = match t.points {
+					Inherit => []
+					All => [0]
+					Own(points) => FontBuild.gvar_points(points)
+				}
+				data = own.concat(FontBuild.gvar_deltas(t.xs)).concat(FontBuild.gvar_deltas(t.ys))
+				peak_index = match t.peak {
+					Shared(k) => k
+					Embedded(_) => 0x8000
+				}
+				intermediate = match t.between {
+					Peak => 0
+					Range(_, _) => 0x4000
+				}
+				private = match t.points {
+					Inherit => 0
+					_ => 0x2000
+				}
+				index = peak_index + intermediate + private
+				embedded = match t.peak {
+					Shared(_) => []
+					Embedded(coords) => coords.join_map(FontBuild.i16)
+				}
+				range = match t.between {
+					Peak => []
+					Range(start, end) => start.join_map(FontBuild.i16).concat(end.join_map(FontBuild.i16))
+				}
+				{ header: FontBuild.u16(data.len()).concat(FontBuild.u16(index)).concat(embedded).concat(range), data }
+			},
+		)
+		headers = parts.join_map(|p| p.header)
+		count = glyph.tuples.len() + (
+			match glyph.shared {
+				None => 0
+				Points(_) => 0x8000
+			}
+		)
+		FontBuild.u16(count).concat(FontBuild.u16(4 + headers.len())).concat(headers).concat(shared_bytes).concat(parts.join_map(|p| p.data))
+	}
+
+	## A `gvar` table for `axis_count` axes: shared tuples (peaks, F2Dot14
+	## per axis) and every glyph's variations (see `gvar_glyph`), with long
+	## or short (even-padded) offsets.
+	gvar : U64, List(List(I64)), List({ shared : [None, Points(List(U64))], tuples : List(GvarTuple) }), Bool -> List(U8)
+	gvar = |axis_count, shared, glyphs, long| {
+		datas = glyphs.map(
+			|g| {
+				d = FontBuild.gvar_glyph(g)
+				if (!long and d.len() % 2 == 1) d.append(0) else d
+			},
+		)
+		n = glyphs.len()
+		var $offsets = []
+		var $at = 0
+		for d in datas {
+			$offsets = $offsets.concat(if (long) FontBuild.u32($at) else FontBuild.u16($at // 2))
+			$at = $at + d.len()
+		}
+		$offsets = $offsets.concat(if (long) FontBuild.u32($at) else FontBuild.u16($at // 2))
+		tuples = shared.join_map(|t| t.join_map(FontBuild.i16))
+		shared_at = 20 + $offsets.len()
+		FontBuild.u16(1)
+			.concat(FontBuild.u16(0))
+			.concat(FontBuild.u16(axis_count))
+			.concat(FontBuild.u16(shared.len()))
+			.concat(FontBuild.u32(shared_at))
+			.concat(FontBuild.u16(n))
+			.concat(FontBuild.u16(if (long) 1 else 0))
+			.concat(FontBuild.u32(shared_at + tuples.len()))
+			.concat($offsets)
+			.concat(tuples)
+			.concat(datas.join_map(|d| d))
+	}
+
+	## A `GDEF` table (version 1.3) holding only an item variation store
+	## (`variation_store`).
+	gdef_store : List(U8) -> List(U8)
+	gdef_store = |store| FontBuild.pack([U32(0x00010003), U16(0), U16(0), U16(0), U16(0), U16(0), Ref32(store)])
+
+	## A device offset of a value record: none, a `VariationIndex` table
+	## (outer and inner index into the `GDEF` store; 0xFFFF and 0xFFFF for
+	## no variation), or a hinting device (start and end size, delta format
+	## 1 to 3, every delta word `fill`), which adds nothing in font units.
+	Device : [NoDevice, Index(U64, U64), Hinting(U64, U64, U64, U64)]
+
+	device_field : Device -> Field
+	device_field = |device|
+		match device {
+			NoDevice => U16(0)
+			Index(outer, inner) => Ref(FontBuild.pack([U16(outer), U16(inner), U16(0x8000)]))
+			Hinting(start, end, format, fill) => {
+				bits = (1.U64).shl_wrap(format.to_u8_wrap())
+				words = ((end - start + 1) * bits + 15) // 16
+				Ref(FontBuild.pack([U16(start), U16(end), U16(format)].concat(List.repeat(U16(fill), words))))
+			}
+		}
+
+	## A value record of `format` holding at most an x advance (0x04) and
+	## its device (0x40).
+	advance_fields : U64, I64, Device -> List(Field)
+	advance_fields = |format, value, device|
+		(if (format.bitwise_and(0x04) != 0) [I16(value)] else []).concat(if (format.bitwise_and(0x40) != 0) [FontBuild.device_field(device)] else [])
+
+	## A pair adjustment subtable of format 1 whose first value records
+	## have `format` (0x04 x advance, 0x40 its device, or both) and second
+	## value records none; device offsets count from each pair set.
+	pair1_devices : U64, List({ glyph : U64, pairs : List({ second : U64, value : I64, device : Device }) }) -> List(U8)
+	pair1_devices = |format, sets| {
+		set_tables = sets.map(|s| Ref(FontBuild.pack([U16(s.pairs.len())].concat(s.pairs.join_map(|p| [U16(p.second)].concat(FontBuild.advance_fields(format, p.value, p.device)))))))
+		FontBuild.pack([U16(1), Ref(FontBuild.coverage1(sets.map(|s| s.glyph))), U16(format), U16(0), U16(sets.len())].concat(set_tables))
+	}
+
+	## A pair adjustment subtable of format 2 (see `pair2`) whose cells
+	## have first value records of `format` (see `pair1_devices`); device
+	## offsets count from the subtable.
+	pair2_devices : U64, List(U8), List(U8), List(U8), U64, U64, List({ value : I64, device : Device }) -> List(U8)
+	pair2_devices = |format, coverage, class1, class2, height, width, cells|
+		FontBuild.pack([U16(2), Ref(coverage), U16(format), U16(0), Ref(class1), Ref(class2), U16(height), U16(width)].concat(cells.join_map(|c| FontBuild.advance_fields(format, c.value, c.device))))
+
+	## A condition of a `FeatureVariations` table: an axis range (format 1,
+	## `kind` 1, the first range), or the and (3), or (4) of its ranges, or
+	## not (5) of its first range.
+	VarCondition : { kind : U64, ranges : List({ axis : U64, min : I64, max : I64 }) }
+
+	var_condition : VarCondition -> List(U8)
+	var_condition = |c| {
+		range = |r| FontBuild.pack([U16(1), U16(r.axis), I16(r.min), I16(r.max)])
+		first = c.ranges.first() ?? { axis: 0, min: 0, max: 0 }
+		if c.kind == 3 or c.kind == 4 {
+			n = c.ranges.len()
+			offsets = FontBuild.counting(n).join_map(|k| [0].concat(FontBuild.u16(3 + 3 * n + 8 * k)))
+			FontBuild.u16(c.kind).concat([n.to_u8_wrap()]).concat(offsets).concat(c.ranges.join_map(range))
+		} else if c.kind == 5 {
+			FontBuild.u16(5).concat([0, 0, 5]).concat(range(first))
+		} else {
+			range(first)
+		}
+	}
+
+	## A `FeatureVariations` table: records (conditions that must all
+	## hold, and feature substitutions: feature index and the lookups of
+	## its alternate feature table) and, when there are any, lookup
+	## variation records (version 1.1: a feature, whether it keeps its own
+	## lookups, and conditions each with the lookups it adds).
+	layout_variations : List({ conditions : List(VarCondition), substitutions : List({ feature : U64, lookups : List(U64) }) }), List({ feature : U64, keep : Bool, conditions : List({ condition : VarCondition, lookups : List(U64) }) }) -> List(U8)
+	layout_variations = |entries, lookup_records| {
+		indices = |lookups| FontBuild.pack([U16(lookups.len())].concat(lookups.map(|l| U16(l))))
+		condition_set = |conditions| FontBuild.pack([U16(conditions.len())].concat(conditions.map(|c| Ref32(FontBuild.var_condition(c)))))
+		substitution = |subs| FontBuild.pack([U16(1), U16(0), U16(subs.len())].concat(subs.join_map(|f| [U16(f.feature), Ref32(FontBuild.pack([U16(0), U16(f.lookups.len())].concat(f.lookups.map(|l| U16(l)))))])))
+		lookup_table = |r| FontBuild.pack([U16(1), U16(0), U16(if (r.keep) 1 else 0), U32(r.conditions.len())].concat(r.conditions.join_map(|c| [Ref32(FontBuild.var_condition(c.condition)), Ref32(indices(c.lookups))])))
+		minor = if (lookup_records.is_empty()) 0 else 1
+		tail = if (minor == 0) [] else [U32(lookup_records.len())].concat(lookup_records.join_map(|r| [U16(r.feature), Ref32(lookup_table(r))]))
+		FontBuild.pack([U16(1), U16(minor), U32(entries.len())].concat(entries.join_map(|r| [Ref32(condition_set(r.conditions)), Ref32(substitution(r.substitutions))])).concat(tail))
+	}
+
+	## `layout` as version 1.1, with a `FeatureVariations` table
+	## (`layout_variations`).
+	layout_varied : Str, List({ tag : Str, lookups : List(U64) }), List({ kind : U64, subtables : List(List(U8)) }), List(U8) -> List(U8)
+	layout_varied = |script, features, lookups, variations| {
+		plain = FontBuild.layout(script, features, lookups)
+		moved = |at| FontBuild.u16(((plain.get(at) ?? 0).to_u64() * 256 + (plain.get(at + 1) ?? 0).to_u64()) + 4)
+		FontBuild.u32(0x00010001).concat(moved(4)).concat(moved(6)).concat(moved(8)).concat(FontBuild.u32(plain.len() + 4)).concat(plain.drop_first(10)).concat(variations)
+	}
 }
 
 expect FontBuild.u16(0x1234) == [0x12, 0x34]
 expect FontBuild.i16(-2) == [0xFF, 0xFE]
 expect FontBuild.pack([U16(1), Ref([9, 9]), U16(2), Ref([7])]) == [0, 1, 0, 8, 0, 2, 0, 10, 9, 9, 7]
 expect FontBuild.file([{ tag: "abc", data: [1] }]).len() == 12 + 16 + 4
+
+# `gvar` packing: zeros, bytes and words in their own runs; point numbers
+# as increments, bytes then words.
+expect FontBuild.gvar_deltas([0, 0, 0, 5, -3, 300]) == [0x82, 0x01, 5, 0xFD, 0x40, 0x01, 0x2C]
+expect FontBuild.gvar_points([1, 2, 300]) == [3, 0x01, 1, 1, 0x80, 0x01, 0x2A]
+expect FontBuild.gvar_points([]) == [0]

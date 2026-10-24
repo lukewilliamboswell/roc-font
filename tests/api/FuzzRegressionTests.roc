@@ -2,7 +2,8 @@ import font.Font
 import build.FontBuild
 
 ## Failures found by the narrow fuzz targets (`fuzz/font-cmap.roc`,
-## `font-coverage.roc`, `font-gsub.roc`, `font-gpos.roc`, `font-var.roc`),
+## `font-coverage.roc`, `font-gsub.roc`, `font-gpos.roc`, `font-var.roc`,
+## `font-gvar.roc`, `font-layout-var.roc`, `font-ots.roc`),
 ## each distilled into the smallest font that shows it, through the public
 ## `Font` API exactly as the package ships it. Run with
 ## `roc test tests/api/main.roc`.
@@ -48,6 +49,24 @@ expect {
 				and [1, 2, 3].map(|g| Font.advance(home, g)) == [600, 700, 800]
 				and Font.metrics(heavy).ascent == 850
 				and Font.metrics(home).ascent == 800
+		}
+		Err(_) => False
+	}
+}
+
+## fuzz regression: font-read and font-ots. OTS does not check feature
+## tags, so a font whose `GSUB` names a feature with a byte past ASCII
+## reads; `Font.features` must still list four-character tags in increasing
+## order without repeats. Two tags that differ only in such a byte (0xAC
+## and 0xAD) were both listed as `lig` and U+FFFD, six bytes each.
+expect {
+	gsub = FontBuild.layout("latn", [{ tag: "liga", lookups: [0] }, { tag: "ligb", lookups: [0] }], [{ kind: 1, subtables: [FontBuild.single1([1], 1)] }])
+	list = (gsub.get(6) ?? 0).to_u64() * 256 + (gsub.get(7) ?? 0).to_u64()
+	patched = FontBuild.patch(FontBuild.patch(gsub, list + 5, [0xAC]), list + 11, [0xAD])
+	match Font.from_bytes(FontBuild.file(FontBuild.replace(FontBuild.basic, "GSUB", patched)), Font.ReadOptions.{}) {
+		Ok(font) => {
+			tags = Font.features(font)
+			tags.len() == 2 and tags.all(|t| t.to_utf8().len() <= 8) and tags.get(0) != tags.get(1)
 		}
 		Err(_) => False
 	}

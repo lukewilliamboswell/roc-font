@@ -103,6 +103,18 @@ glyphs_for = |tables, code_points|
 cmap_only : U64, U64, List(U8) -> List({ tag : Str, data : List(U8) })
 cmap_only = |system, encoding, subtable| basic_with("cmap", FontBuild.cmap([{ system, encoding, subtable }]))
 
+# A font whose character map holds the given subtable and an empty format 4
+# map for platform 0, encoding 0, which every other map outranks: OTS
+# refuses a font without a map it passes on, so a map OTS does not pass on
+# (formats 6 and 10, a Macintosh map) needs it beside.
+cmap_beside : U64, U64, List(U8) -> List({ tag : Str, data : List(U8) })
+cmap_beside = |system, encoding, subtable| basic_with("cmap", FontBuild.cmap([{ system: 0, encoding: 0, subtable: FontBuild.cmap4([]) }, { system, encoding, subtable }]))
+
+# A valid format 14 subtable: one variation selector (U+FE00) whose
+# default table holds U+0041.
+variations : List(U8)
+variations = FontBuild.pack([U16(14), U32(29), U32(1), Raw([0x00, 0xFE, 0x00]), U32(21), U32(0), U32(1), Raw([0x00, 0x00, 0x41, 0x00])])
+
 # The problems of a font as short names: those that rejected it, or those
 # lenient reading dropped. `BadTable` loses its offset here; tests of
 # offsets compare problems whole.
@@ -229,10 +241,11 @@ expect {
 	glyphs_for(cmap_only(3, 1, cmap), [0xFFFD, 0xFFFE, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 9999, 9999, 9999]
 }
 
-# A delta segment whose glyphs wrap past 65535 to 0 mid-segment: the
-# character drawn by glyph 0 is unmapped and the next ones continue from
-# glyph 1. Glyph 0 at the start of a segment is unmapped too.
-expect glyphs_for(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x41, last: 0x45, delta: 65536 - 0x43, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44, 0x45, 0x46]) == [9999, 9999, 9999, 1, 2, 9999]
+# A delta segment whose glyphs wrap past 65535 to 0 mid-segment names
+# glyphs 65534 and 65535, which the font does not have: a bad table, as OTS
+# refuses it (no font has glyph 65535, so a wrapping segment is always
+# refused). Glyph 0 at the start of a segment is unmapped.
+expect kinds_of(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x41, last: 0x45, delta: 65536 - 0x43, glyphs: [] }]))) == ["BadTable(cmap)"]
 expect glyphs_for(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x41, last: 0x43, delta: 65536 - 0x41, glyphs: [] }, { first: 0x44, last: 0x44, delta: 65536 + 3 - 0x44, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44]) == [9999, 1, 2, 3]
 
 # A glyph array segment that ends at U+FFFF needs no entry for it.
@@ -244,12 +257,13 @@ expect {
 # Platform 0 (Unicode) is a Unicode mapping too.
 expect glyphs_for(cmap_only(0, 3, FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 - 0x40, glyphs: [] }])), [0x41]) == [1]
 
-# A character mapped to a glyph the font does not have is unmapped, and a
-# run that only partly fits keeps the characters whose glyphs exist.
+# A character mapped to a glyph the font does not have is a bad table, as
+# OTS refuses it, by a delta or through the glyph array.
 expect {
-	cmap = FontBuild.cmap4([{ first: 0x44, last: 0x44, delta: 65536 + 9 - 0x44, glyphs: [] }, { first: 0x45, last: 0x48, delta: 65536 + 2 - 0x45, glyphs: [] }])
-	glyphs_for(cmap_only(3, 1, cmap), [0x44, 0x45, 0x46, 0x47, 0x48]) == [9999, 2, 3, 9999, 9999]
+	cmap = FontBuild.cmap4([{ first: 0x44, last: 0x44, delta: 65536 + 9 - 0x44, glyphs: [] }])
+	kinds_of(cmap_only(3, 1, cmap)) == ["BadTable(cmap)"]
 }
+expect kinds_of(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x45, last: 0x46, delta: 0, glyphs: [2, 4] }]))) == ["BadTable(cmap)"]
 
 # Segments out of order are a bad table.
 expect {
@@ -281,11 +295,10 @@ expect {
 	glyphs_for(cmap_only(3, 10, cmap), [0x40, 0x41, 0x43, 0x44, 0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0x10FFFF]) == [9999, 1, 3, 9999, 9999, 2, 3, 9999, 9999]
 }
 
-# Groups whose glyphs run past the last glyph keep the glyphs that exist.
-expect {
-	cmap = FontBuild.cmap12([{ first: 0x50, last: 0x55, glyph: 2 }, { first: 0x60, last: 0x60, glyph: 4 }])
-	glyphs_for(cmap_only(3, 10, cmap), [0x50, 0x51, 0x52, 0x55, 0x60]) == [2, 3, 9999, 9999, 9999]
-}
+# A group whose glyphs run past the last glyph is a bad table, as OTS
+# refuses it.
+expect kinds_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x50, last: 0x55, glyph: 2 }]))) == ["BadTable(cmap)"]
+expect kinds_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x60, last: 0x60, glyph: 4 }]))) == ["BadTable(cmap)"]
 
 # A group starting at glyph 0 maps its first character to nothing and the
 # rest from glyph 1.
@@ -318,10 +331,11 @@ expect {
 # ------------------------------------------------------------ cmap format 0
 
 # Character codes up to 255 index a byte array; glyph 0 and glyphs the font
-# does not have leave a code unmapped.
+# does not have leave a code unmapped (OTS does not check this format's
+# glyph ids outside the Macintosh Roman map).
 expect {
 	glyphs = List.repeat(0, 0x41).concat([1, 0, 3, 9])
-	glyphs_for(cmap_only(0, 3, FontBuild.cmap0(glyphs)), [0x40, 0x41, 0x42, 0x43, 0x44, 0xFF, 0x100, 0x141]) == [9999, 1, 9999, 3, 9999, 9999, 9999, 9999]
+	glyphs_for(cmap_beside(0, 3, FontBuild.cmap0(glyphs)), [0x40, 0x41, 0x42, 0x43, 0x44, 0xFF, 0x100, 0x141]) == [9999, 1, 9999, 3, 9999, 9999, 9999, 9999]
 }
 
 # A truncated byte array is a bad table.
@@ -330,19 +344,26 @@ expect kinds_of(cmap_only(3, 1, FontBuild.cmap0([1, 2, 3]).drop_last(1))) == ["B
 # ------------------------------------------------------------ cmap formats 6 and 10
 
 # A trimmed array maps consecutive codes from its first; codes before or
-# after it are unmapped.
-expect glyphs_for(cmap_only(3, 1, FontBuild.cmap6(0x41, [1, 0, 3, 7])), [0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x10041]) == [9999, 1, 9999, 3, 9999, 9999, 9999]
-expect glyphs_for(cmap_only(3, 10, FontBuild.cmap10(0x1F600, [2, 3])), [0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0xF600]) == [9999, 2, 3, 9999, 9999]
+# after it are unmapped. OTS does not check these formats, so their glyph
+# ids may name glyphs the font does not have; those are unmapped.
+expect glyphs_for(cmap_beside(3, 1, FontBuild.cmap6(0x41, [1, 0, 3, 7])), [0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x10041]) == [9999, 1, 9999, 3, 9999, 9999, 9999]
+expect glyphs_for(cmap_beside(3, 10, FontBuild.cmap10(0x1F600, [2, 3])), [0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0xF600]) == [9999, 2, 3, 9999, 9999]
 
 # An empty array maps nothing.
-expect glyphs_for(cmap_only(3, 1, FontBuild.cmap6(0x41, [])), [0x41]) == [9999]
+expect glyphs_for(cmap_beside(3, 1, FontBuild.cmap6(0x41, [])), [0x41]) == [9999]
 
 # An array past the end of the table, or a count larger than the table
-# (checked before anything is read), is a bad table.
-expect kinds_of(cmap_only(3, 1, FontBuild.cmap6(0x41, [1, 2]).drop_last(1))) == ["BadTable(cmap)"]
-expect kinds_of(cmap_only(3, 1, FontBuild.cmap6(0x41, []).take_first(8))) == ["BadTable(cmap)"]
-expect kinds_of(cmap_only(3, 10, FontBuild.cmap10(0x41, [1, 2]).drop_last(1))) == ["BadTable(cmap)"]
-expect kinds_of(cmap_only(3, 10, FontBuild.patch(FontBuild.cmap10(0x41, [1]), 16, FontBuild.u32(0xFFFFFFFF)))) == ["BadTable(cmap)"]
+# (checked before anything is read), is a bad table when the map is
+# chosen. (OTS does not check these formats, so this is stricter than OTS;
+# no font of the corpus has such a map.)
+expect kinds_of(cmap_beside(3, 1, FontBuild.cmap6(0x41, [1, 2]).drop_last(1))) == ["BadTable(cmap)"]
+expect kinds_of(cmap_beside(3, 1, FontBuild.cmap6(0x41, []).take_first(8))) == ["BadTable(cmap)"]
+expect kinds_of(cmap_beside(3, 10, FontBuild.cmap10(0x41, [1, 2]).drop_last(1))) == ["BadTable(cmap)"]
+expect kinds_of(cmap_beside(3, 10, FontBuild.patch(FontBuild.cmap10(0x41, [1]), 16, FontBuild.u32(0xFFFFFFFF)))) == ["BadTable(cmap)"]
+
+# A map of a format OTS does not pass on (here 6), with no map it does, is
+# no map to use, as OTS refuses the font.
+expect kinds_of(cmap_only(3, 1, FontBuild.cmap6(0x41, [1]))) == ["NoUnicodeMapping"]
 
 # ------------------------------------------------------------ cmap format 13
 
@@ -352,8 +373,11 @@ expect {
 	glyphs_for(cmap_only(3, 10, cmap), [0x40, 0x41, 0x50, 0x5A, 0x5B, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 2, 2, 9999, 9999, 3, 3]
 }
 
-# A group whose glyph the font does not have maps nothing.
-expect glyphs_for(cmap_only(0, 6, FontBuild.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }])), [0x41, 0x43]) == [9999, 9999]
+# A group whose glyph the font does not have maps nothing, in a format 13
+# map OTS does not check (platform 0, encoding 6); for platform 3,
+# encoding 10 OTS refuses it.
+expect kinds_of(cmap_only(3, 10, FontBuild.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }]))) == ["BadTable(cmap)"]
+expect glyphs_for(cmap_beside(0, 6, FontBuild.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }])), [0x41, 0x43]) == [9999, 9999]
 
 # Groups out of order, overlapping or past Unicode, and a truncated table,
 # are bad tables.
@@ -376,7 +400,7 @@ expect {
 }
 
 # A symbol map in any format works the same way.
-expect glyphs_for(cmap_only(3, 0, FontBuild.cmap12([{ first: 0xF041, last: 0xF042, glyph: 1 }])), [0x41, 0x42, 0x43]) == [1, 2, 9999]
+expect glyphs_for(cmap_beside(3, 0, FontBuild.cmap12([{ first: 0xF041, last: 0xF042, glyph: 1 }])), [0x41, 0x42, 0x43]) == [1, 2, 9999]
 
 # A symbol font in a Windows 3.1 Arabic font page holds Arabic in the
 # private use area: U+0020 is at U+F120 in the simplified page and U+F220
@@ -397,13 +421,13 @@ expect {
 	glyphs_for(basic_with("cmap", cmap).append({ tag: "OS/2", data: os2 }), [0x20]) == [9999]
 }
 
-# A Macintosh Roman map is read directly for ASCII and through Mac Roman
-# for the rest: U+00C4 is 0x80 there and U+00A0 is 0xCA; U+0080 is not in
-# Mac Roman. Another Macintosh encoding maps ASCII only.
+# A Macintosh map alone is no map to use: OTS refuses a font without a
+# Unicode or Windows map it can pass on, and every such map outranks a
+# Macintosh one.
 expect {
-	glyphs = List.repeat(0, 0x41).concat([1]).concat(List.repeat(0, 0x80 - 0x42)).concat([2]).concat(List.repeat(0, 0xCA - 0x81)).concat([3])
-	glyphs_for(cmap_only(1, 0, FontBuild.cmap0(glyphs)), [0x41, 0xC4, 0xA0, 0x80, 0xCA]) == [1, 2, 3, 9999, 9999]
-		and glyphs_for(cmap_only(1, 1, FontBuild.cmap0(glyphs)), [0x41, 0xC4, 0x80]) == [1, 9999, 9999]
+	glyphs = List.repeat(0, 0x41).concat([1])
+	kinds_of(cmap_only(1, 0, FontBuild.cmap0(glyphs))) == ["NoUnicodeMapping"]
+		and kinds_of(cmap_only(1, 1, FontBuild.cmap0(glyphs))) == ["NoUnicodeMapping"]
 }
 
 # The order of preference, whatever the record order: full Unicode maps
@@ -414,7 +438,7 @@ expect {
 	pick([{ system: 1, encoding: 0, glyph: 3 }, { system: 0, encoding: 0, glyph: 2 }]) == [2]
 		and pick([{ system: 0, encoding: 3, glyph: 2 }, { system: 3, encoding: 1, glyph: 1 }]) == [1]
 		and pick([{ system: 3, encoding: 1, glyph: 1 }, { system: 0, encoding: 4, glyph: 3 }]) == [3]
-		and pick([{ system: 0, encoding: 4, glyph: 3 }, { system: 3, encoding: 10, glyph: 2 }]) == [2]
+		and pick([{ system: 0, encoding: 4, glyph: 3 }, { system: 3, encoding: 10, glyph: 2 }, { system: 3, encoding: 1, glyph: 1 }]) == [2]
 		and pick([{ system: 0, encoding: 1, glyph: 3 }, { system: 0, encoding: 2, glyph: 1 }]) == [1]
 }
 
@@ -422,9 +446,9 @@ expect {
 # variation sequences) is passed over for the next preferred one.
 expect {
 	table = FontBuild.cmap([
+		{ system: 0, encoding: 3, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 2 - 0x41, glyphs: [] }]) },
+		{ system: 0, encoding: 5, subtable: variations },
 		{ system: 3, encoding: 1, subtable: FontBuild.u16(8).concat(List.repeat(0, 30)) },
-		{ system: 0, encoding: 5, subtable: FontBuild.u16(14).concat(List.repeat(0, 8)) },
-		{ system: 1, encoding: 0, subtable: FontBuild.cmap0(List.repeat(0, 0x41).append(2)) },
 	])
 	glyphs_for(basic_with("cmap", table), [0x41]) == [2]
 }
@@ -433,7 +457,7 @@ expect {
 # read, or no subtables at all.
 expect kinds_of(cmap_only(2, 1, FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == ["NoUnicodeMapping"]
 expect kinds_of(cmap_only(3, 2, FontBuild.cmap12([{ first: 0x41, last: 0x41, glyph: 1 }]))) == ["NoUnicodeMapping"]
-expect kinds_of(cmap_only(0, 5, FontBuild.u16(14).concat(List.repeat(0, 8)))) == ["NoUnicodeMapping"]
+expect kinds_of(cmap_only(0, 5, variations)) == ["NoUnicodeMapping"]
 expect kinds_of(cmap_only(3, 1, FontBuild.u16(2).concat(List.repeat(0, 8)))) == ["NoUnicodeMapping"]
 expect kinds_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(0)))) == ["NoUnicodeMapping"]
 
@@ -441,18 +465,19 @@ expect kinds_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(0)))) =
 # a missing map.
 expect kinds_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(1)).concat(FontBuild.u16(3)).concat(FontBuild.u16(1)).concat(FontBuild.u32(5000)))) == ["BadTable(cmap)"]
 
-# A broken map that is not chosen is not read.
+# A broken map is a bad table even when it is not chosen: OTS checks every
+# map it passes on.
 expect {
 	table = FontBuild.cmap([
 		{ system: 1, encoding: 0, subtable: FontBuild.cmap0([]).take_first(10) },
 		{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 1 - 0x41, glyphs: [] }]) },
 	])
-	glyphs_for(basic_with("cmap", table), [0x41]) == [1]
+	kinds_of(basic_with("cmap", table)) == ["BadTable(cmap)"]
 }
 
 # A bad character map is reported with the other tables' problems.
 expect {
-	tables = basic_with("cmap", FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap13([{ first: 0x50, last: 0x41, glyph: 1 }]) }]))
+	tables = basic_with("cmap", FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]) }]))
 		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontBuild.maxp(0) } else t)
 	kinds_of(tables) == ["BadTable(maxp)", "BadTable(cmap)"]
 }
@@ -529,10 +554,11 @@ expect {
 	inks_of(tables) == [Empty, Extents({ x_min: 25, y_min: 0, x_max: 505, y_max: 100 }), Empty, Extents({ x_min: -40, y_min: 0, x_max: 665, y_max: 100 }), Empty]
 }
 
-# A glyph shorter than its header has no ink; one whose header box is
-# inverted is measured from its smaller to its larger edge, as HarfBuzz
-# measures it.
-expect inks_of(with_outlines(False, FontBuild.outlines([[], [1, 2, 3, 4], FontBuild.outline(5, 4), []], False))) == [Empty, Empty, Extents({ x_min: 0, y_min: 0, x_max: 1, y_max: 100 }), Empty, Empty]
+# A glyph shorter than its header rejects the font, as OTS rejects it; one
+# whose header box is inverted is measured from its smaller to its larger
+# edge, as HarfBuzz measures it.
+expect kinds_of(with_outlines(False, FontBuild.outlines([[], [1, 2, 3, 4], FontBuild.outline(5, 4), []], False))) == ["BadTable(glyf)"]
+expect inks_of(with_outlines(False, FontBuild.outlines([[], [], FontBuild.outline(5, 4), []], False))) == [Empty, Empty, Extents({ x_min: 0, y_min: 0, x_max: 1, y_max: 100 }), Empty, Empty]
 
 # The `loca` format must match `head`: short offsets read as long ones
 # run past the end of `loca`.
@@ -540,7 +566,7 @@ expect kinds_of(with_outlines(True, FontBuild.outlines(outline_glyphs, False))) 
 
 # Too few offsets, an offset past `glyf`, and offsets that go backwards.
 expect kinds_of(with_outlines(False, { loca: FontBuild.outlines(outline_glyphs, False).loca.drop_last(2), glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
-expect kinds_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 10, 0, 11], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
+expect kinds_of(with_outlines(False, { loca: [0, 0, 0, 10, 0, 10, 0, 20, 0, 25], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
 expect kinds_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 2, 0, 10], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
 
 # `loca` without `glyf` (or the reverse) is no outlines: every glyph of the

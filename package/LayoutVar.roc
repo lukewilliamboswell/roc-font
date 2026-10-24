@@ -1344,9 +1344,14 @@ LayoutVar := {
 		# Value conditions use unquantised scalars, as HarfBuzz evaluates
 		# them without its scalar cache; with no coordinates they are zero.
 		scalars = if (fv.uses_values and !coords.is_empty()) LayoutVar.exact_scalars(lv.store, coords) else []
+		# One stack serves every record, so planning allocates the same
+		# however many records fail to match.
+		var $stack = []
 		var $r = 0
 		while $r < records {
-			if LayoutVar.holds(fv, lv, coords, scalars, fv.starts.get($r) ?? 0, fv.starts.get($r + 1) ?? 0) {
+			checked = LayoutVar.holds(fv, lv, coords, scalars, fv.starts.get($r) ?? 0, fv.starts.get($r + 1) ?? 0, $stack)
+			$stack = checked.stack
+			if checked.result {
 				return Ok($r)
 			}
 			$r = $r + 1
@@ -1405,10 +1410,13 @@ LayoutVar := {
 		}
 		scalars = if (fv.uses_values and !coords.is_empty()) LayoutVar.exact_scalars(lv.store, coords) else []
 		var $out = List.with_capacity(count)
+		var $stack = []
 		for v in 0..<count {
 			var $lookups = []
 			for q in (fv.lookup_record_starts.get(v) ?? 0)..<(fv.lookup_record_starts.get(v + 1) ?? 0) {
-				if LayoutVar.holds(fv, lv, coords, scalars, fv.condition_starts.get(q) ?? 0, fv.condition_starts.get(q + 1) ?? 0) {
+				checked = LayoutVar.holds(fv, lv, coords, scalars, fv.condition_starts.get(q) ?? 0, fv.condition_starts.get(q + 1) ?? 0, $stack)
+				$stack = checked.stack
+				if checked.result {
 					at = fv.condition_lookups.get(q) ?? 0
 					if at != 0 {
 						for j in 0..<TableVar.u16(fv.data, at) {
@@ -1513,10 +1521,12 @@ LayoutVar := {
 	# condition set, or a lookup variation's condition) on a stack of
 	# booleans. A checked program leaves exactly one value; each
 	# operation's operands are on the stack, so every index below is in
-	# bounds.
-	holds : FeatureVariations, LayoutVar, List(I16), List(U32), U64, U64 -> Bool
-	holds = |fv, lv, coords, scalars, first, last| {
-		var $stack = List.repeat(False, last - first)
+	# bounds. The caller's stack is reused, grown only when this program
+	# needs more room, and handed back for the next program.
+	holds : FeatureVariations, LayoutVar, List(I16), List(U32), U64, U64, List(Bool) -> { result : Bool, stack : List(Bool) }
+	holds = |fv, lv, coords, scalars, first, last, given| {
+		need = last - first
+		var $stack = if (given.len() >= need) given else given.concat(List.repeat(False, need - given.len()))
 		var $top = 0
 		for i in first..<last {
 			kind = fv.kinds.get(i) ?? 0
@@ -1552,7 +1562,7 @@ LayoutVar := {
 				$top = $top + 1
 			}
 		}
-		$stack.get(0) ?? False
+		{ result: $stack.get(0) ?? False, stack: $stack }
 	}
 
 	# Every region's scalar without HarfBuzz's cache quantisation.

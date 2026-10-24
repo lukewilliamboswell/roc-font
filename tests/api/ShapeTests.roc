@@ -226,7 +226,7 @@ expect {
 }
 
 # Contextual lookups nest as deep as `Limits.max_depth` allows: lookup 0
-# calls 1, which calls 2, which adds 10.
+# calls 1, which calls 2, which adds 2.
 expect {
 	gsub = FontBuild.layout(
 		"latn",
@@ -234,7 +234,7 @@ expect {
 		[
 			{ kind: 5, subtables: [FontBuild.context3([[1]], [{ at: 0, lookup: 1 }])] },
 			{ kind: 5, subtables: [FontBuild.context3([[1]], [{ at: 0, lookup: 2 }])] },
-			{ kind: 1, subtables: [FontBuild.single1([1], 10)] },
+			{ kind: 1, subtables: [FontBuild.single1([1], 2)] },
 		],
 	)
 	bytes = FontBuild.file(FontBuild.replace(FontBuild.basic, "GSUB", gsub))
@@ -243,7 +243,7 @@ expect {
 			Ok(font) => Font.shape(font, "A", Font.ShapeOptions.{}).glyphs
 			Err(_) => []
 		}
-	glyphs_with(64) == [11] and glyphs_with(2) == [11] and glyphs_with(1) == [1] and glyphs_with(0) == [1]
+	glyphs_with(64) == [3] and glyphs_with(2) == [3] and glyphs_with(1) == [1] and glyphs_with(0) == [1]
 }
 
 # ------------------------------------------------------------ the README example

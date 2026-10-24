@@ -1,6 +1,7 @@
 import Sfnt
 import TableOs2
 import Bytes
+import Sorted
 
 ## The character map (`cmap`): which glyph draws each character.
 ##
@@ -22,6 +23,13 @@ import Bytes
 ## formats 12 and 13; amortised growth for the others), never one per
 ## character or group. A subtable whose fields do not fit, or whose
 ## segments or groups are out of order or overlap, is a bad table.
+##
+## Before choosing, the whole table is checked exactly as OTS 9.3.0 checks
+## it (`check`), so a font reads exactly when a browser accepts its map.
+## In particular a format 4, 12 or 13 subtable that names a glyph at or
+## past `maxp`'s glyph count refuses the font, as OTS refuses it. Formats
+## OTS does not check (0 outside the Macintosh Roman map, 6 and 10) may
+## still name such glyphs; a lookup treats them as missing.
 ##
 ## Why an index rather than reading the subtable in place: on the
 ## `scripts/bench.py --ops cmap` sweeps (every BMP code point against Inter,
@@ -288,17 +296,435 @@ TableCmap := {
 	# ------------------------------------------------------------ reading
 
 	## The character map of a font file. A symbol map's encoding depends on
-	## the Windows 3.1 font page of a version 0 `OS/2` table.
+	## the Windows 3.1 font page of a version 0 `OS/2` table. The table is
+	## first checked as OTS checks it (`check`), against the glyph count of
+	## `maxp`; then the chosen subtable is read.
 	from_tables : List(U8), List(Sfnt.Table) -> Try(TableCmap, [MissingTable(Str), BadTable({ table : Str, offset : U32 }), NoUnicodeMapping])
 	from_tables = |bytes, tables| {
 		found = Sfnt.required(bytes, tables, "cmap", 4)?
 		page = TableOs2.font_page(bytes, tables)
-		match TableCmap.read(found.data, page) {
+		# OTS compares glyph ids with `maxp`'s glyph count. A `maxp` that
+		# cannot be used (missing, short, or no glyphs) is reported by its
+		# own reader and refuses the font whatever the glyph ids are, so the
+		# glyph ids are not compared with it.
+		# (`maxp` found by its tag as a number, 0x6D617870, which costs no
+		# allocation; as `TableMaxp` reads it: the first record, at least 6
+		# bytes inside the file, a glyph count other than 0.)
+		glyph_count = match tables.find_first(|t| t.tag == 0x6D617870) {
+			Ok(t) if Bytes.fits(t.offset, t.length, bytes.len()) and t.length >= 6 and Bytes.u16(bytes, t.offset + 4) != 0 => Present(Bytes.u16(bytes, t.offset + 4))
+			_ => Absent
+		}
+		read = match TableCmap.check(found.data, glyph_count) {
+			Ok(_) => TableCmap.read(found.data, page)
+			Err(problem) => Err(problem)
+		}
+		match read {
 			Ok(map) => Ok(map)
 			Err(NoUnicodeMapping) => Err(NoUnicodeMapping)
 			Err(Bad(at)) => Err(Sfnt.bad("cmap", found.offset + at))
 		}
 	}
+
+	## Check a `cmap` table exactly as OTS 9.3.0 does (`ots/src/cmap.cc`,
+	## `OpenTypeCMAP::Parse` and `Serialize`; line numbers below are that
+	## file's), so a font reads exactly when a browser accepts its map. OTS
+	## checks every subtable it can pass on, not only the one a shaper
+	## chooses:
+	##
+	## - the header (version 0, lines 570-582) and every encoding record:
+	##   each subtable offset past the records, inside the table and below
+	##   1 GiB (603-611), each subtable's header readable (615-658), its
+	##   stated length below 1 GiB and inside the table (679-691), and no two
+	##   distinct subtables overlapping (694-719; subtables sharing exactly
+	##   the same bytes are allowed);
+	## - with `maxp`'s glyph count, the subtables OTS passes on (755-835):
+	##   format 4 for platform 0 encodings 0, 1 and 3 and platform 3
+	##   encodings 0 and 1 (`check_format4`), format 12 for platform 0
+	##   encodings 3 and 4 and platform 3 encoding 10 and format 13 for
+	##   platform 3 encoding 10 (`check_groups`), format 14 for platform 0
+	##   encoding 5 (`check_format14`) and format 0 for platform 1
+	##   encoding 0 (`check_format0`). Other subtables are not checked;
+	## - at least one of those format 4, 12 or 13 subtables (Serialize,
+	##   lines 859-863); otherwise, and for a table with no subtables (580),
+	##   there is no map to use (`NoUnicodeMapping`).
+	##
+	## Each format's checks follow OTS: format 4 and 12 and 13 glyph ids
+	## must be below the glyph count (so a map never names a glyph the font
+	## lacks), format 4's binary search fields must be exactly those the
+	## segment count gives, and so on. A subtable OTS only warns about (an
+	## odd final `idRangeOffset`, two final 0xFFFF segments, a format 0
+	## language) is accepted, as OTS accepts it.
+	##
+	## Deliberate divergence: OTS refuses a format 4 subtable when the font
+	## has no `OS/2` table (line 72); roc-font does not require `OS/2`.
+	##
+	## A problem gives the offset in the table of the header (0), of the
+	## encoding record (a bad subtable offset), or of the subtable.
+	check : List(U8), [Present(U64), Absent] -> Try({}, [Bad(U64), NoUnicodeMapping])
+	check = |cmap, glyphs| {
+		size = cmap.len()
+		count = Bytes.u16(cmap, 2)
+		# Lines 570-582: version 0 and at least one subtable.
+		if !Bytes.fits(0, 4, size) or Bytes.u16(cmap, 0) != 0 {
+			return Err(Bad(0))
+		}
+		if count == 0 {
+			return Err(NoUnicodeMapping)
+		}
+		# Lines 588-598: the encoding records.
+		if !Bytes.fits(4, 8 * count, size) {
+			return Err(Bad(0))
+		}
+		data_start = 4 + 8 * count
+		gib = 1024 * 1024 * 1024
+		# Lines 603-611: every offset past the records and inside the table.
+		for i in 0..<count {
+			offset = Bytes.u32(cmap, 4 + 8 * i + 4)
+			if offset > gib or offset < data_start or offset >= size {
+				return Err(Bad(4 + 8 * i))
+			}
+		}
+		# Lines 615-658 and 679-691: each subtable's header readable, and
+		# its stated length (0 for formats OTS does not pass on) below 1 GiB
+		# and inside the table.
+		#
+		# Lines 694-719: OTS sweeps the start and end of every distinct
+		# (offset, end) pair, ends before starts at one position, and refuses
+		# more than one subtable open at once: two distinct non-empty spans
+		# that share a byte. Spans are keyed `offset * 2^32 + end` (both
+		# below 2^32). Records usually list subtables in increasing order,
+		# which needs one pass and no allocation; otherwise a few records
+		# (64 or fewer) are compared pairwise, and more are sorted without
+		# repeats first.
+		var $in_order = True
+		var $previous = 0
+		var $open_until = 0
+		for i in 0..<count {
+			offset = Bytes.u32(cmap, 4 + 8 * i + 4)
+			length = TableCmap.stated_length(cmap, offset)?
+			key = offset * 0x100000000 + offset + length
+			if key < $previous {
+				$in_order = False
+			} else if $in_order and key != $previous and length != 0 {
+				if offset < $open_until {
+					return Err(Bad(offset))
+				}
+				$open_until = $open_until.max(offset + length)
+			}
+			$previous = $previous.max(key)
+		}
+		if !$in_order and count <= 64 {
+			# A few records: compare every pair, without allocating.
+			for i in 0..<count {
+				a = Bytes.u32(cmap, 4 + 8 * i + 4)
+				a_end = a + (TableCmap.stated_length(cmap, a) ?? 0)
+				for j in (i + 1)..<count {
+					b = Bytes.u32(cmap, 4 + 8 * j + 4)
+					b_end = b + (TableCmap.stated_length(cmap, b) ?? 0)
+					distinct = a != b or a_end != b_end
+					if distinct and a < a_end and b < b_end and a < b_end and b < a_end {
+						return Err(Bad(a.max(b)))
+					}
+				}
+			}
+		} else if !$in_order {
+			var $spans = List.with_capacity(count)
+			for i in 0..<count {
+				offset = Bytes.u32(cmap, 4 + 8 * i + 4)
+				$spans = $spans.append(offset * 0x100000000 + offset + (TableCmap.stated_length(cmap, offset) ?? 0))
+			}
+			var $until = 0
+			for span in Sorted.unique($spans) {
+				start = span // 0x100000000
+				end = span % 0x100000000
+				if end > start {
+					if start < $until {
+						return Err(Bad(start))
+					}
+					$until = $until.max(end)
+				}
+			}
+		}
+		match glyphs {
+			Absent => Ok({})
+			Present(glyph_count) => {
+				# Lines 755-835: the subtables OTS passes on.
+				var $usable = False
+				for i in 0..<count {
+					rec = 4 + 8 * i
+					system = Bytes.u16(cmap, rec)
+					encoding = Bytes.u16(cmap, rec + 2)
+					offset = Bytes.u32(cmap, rec + 4)
+					format = Bytes.u16(cmap, offset)
+					data = cmap.sublist({ start: offset, len: TableCmap.stated_length(cmap, offset) ?? 0 })
+					checked =
+						if format == 4 and ((system == 0 and (encoding <= 1 or encoding == 3)) or (system == 3 and encoding <= 1)) {
+							$usable = True
+							TableCmap.check_format4(data, glyph_count)
+						} else if format == 12 and ((system == 0 and (encoding == 3 or encoding == 4)) or (system == 3 and encoding == 10)) {
+							$usable = True
+							TableCmap.check_groups(data, glyph_count, False)
+						} else if format == 13 and system == 3 and encoding == 10 {
+							$usable = True
+							TableCmap.check_groups(data, glyph_count, True)
+						} else if format == 14 and system == 0 and encoding == 5 {
+							TableCmap.check_format14(data)
+						} else if format == 0 and system == 1 and encoding == 0 {
+							TableCmap.check_format0(data)
+						} else {
+							Ok({})
+						}
+					if checked.is_err() {
+						return Err(Bad(offset))
+					}
+				}
+				# Serialize, lines 859-863: a map OTS can pass on.
+				if ($usable) Ok({}) else Err(NoUnicodeMapping)
+			}
+		}
+	}
+
+	# The length a subtable states (cmap.cc lines 615-691): 0 for formats
+	# OTS does not pass on; refused when its header does not fit, or when
+	# it is 1 GiB or more or runs past the table.
+	stated_length : List(U8), U64 -> Try(U64, [Bad(U64)])
+	stated_length = |cmap, offset| {
+		size = cmap.len()
+		format = Bytes.u16(cmap, offset)
+		header = if (format == 0 or format == 4 or format == 14) 6 else if (format == 12 or format == 13) 12 else 2
+		if !Bytes.fits(offset, header, size) {
+			return Err(Bad(offset))
+		}
+		length =
+			if format == 0 or format == 4 {
+				Bytes.u16(cmap, offset + 2)
+			} else if format == 12 or format == 13 {
+				Bytes.u32(cmap, offset + 4)
+			} else if format == 14 {
+				Bytes.u32(cmap, offset + 2)
+			} else {
+				0
+			}
+		if (length != 0 and (length > 1024 * 1024 * 1024 or offset + length > size)) Err(Bad(offset)) else Ok(length)
+	}
+
+	# A format 4 subtable as OTS checks it (`ParseFormat4`, cmap.cc lines
+	# 62-265). `data` holds the subtable's stated length.
+	check_format4 : List(U8), U64 -> Try({}, [Bad])
+	check_format4 = |data, glyph_count| {
+		length = data.len()
+		# Lines 76-95: the header; the language must be 0.
+		if length < 14 or Bytes.u16(data, 4) != 0 {
+			return Err(Bad)
+		}
+		count_x2 = Bytes.u16(data, 6)
+		search_range = Bytes.u16(data, 8)
+		entry_selector = Bytes.u16(data, 10)
+		range_shift = Bytes.u16(data, 12)
+		# Lines 97-104: an even segment count of at least one.
+		if count_x2 % 2 != 0 or search_range % 2 != 0 or count_x2 < 2 {
+			return Err(Bad)
+		}
+		count = count_x2 // 2
+		# Lines 106-124: the binary search fields exactly as the segment
+		# count gives them (`log` is the largest x with 2^x <= count).
+		var $log = 0
+		while (2.U64).shl_wrap($log.to_u8_wrap()) <= count {
+			$log = $log + 1
+		}
+		if search_range != (2.U64).shl_wrap($log.to_u8_wrap()) or entry_selector != $log or range_shift != (count_x2 + 65536 - search_range) % 65536 {
+			return Err(Bad)
+		}
+		# Lines 126-171: end codes, a zero pad, start codes, deltas and
+		# range offsets inside the subtable.
+		ends = 14
+		starts = 16 + 2 * count
+		deltas = 16 + 4 * count
+		range_offsets = 16 + 6 * count
+		if !Bytes.fits(0, 16 + 8 * count, length) or Bytes.u16(data, 14 + 2 * count) != 0 {
+			return Err(Bad)
+		}
+		# An odd range offset is refused except on the last segment, where
+		# OTS takes it as 0 (lines 158-170).
+		range_offset_of = |s| {
+			raw = Bytes.u16(data, range_offsets + 2 * s)
+			if (raw % 2 == 1 and s == count - 1) 0 else raw
+		}
+		for s in 0..<count {
+			if range_offset_of(s) % 2 == 1 {
+				return Err(Bad)
+			}
+		}
+		# Lines 173-208: end codes increasing, each start past the previous
+		# end; two final 0xFFFF segments are allowed.
+		for s in 1..<count {
+			last = Bytes.u16(data, ends + 2 * s)
+			first = Bytes.u16(data, starts + 2 * s)
+			previous_last = Bytes.u16(data, ends + 2 * (s - 1))
+			previous_first = Bytes.u16(data, starts + 2 * (s - 1))
+			terminators = s == count - 1 and previous_first == 0xFFFF and previous_last == 0xFFFF and first == 0xFFFF and last == 0xFFFF
+			if !terminators and (last <= previous_last or first <= previous_last) {
+				return Err(Bad)
+			}
+		}
+		# Lines 210-214: the last segment is 0xFFFF alone.
+		if Bytes.u16(data, starts + 2 * (count - 1)) != 0xFFFF or Bytes.u16(data, ends + 2 * (count - 1)) != 0xFFFF {
+			return Err(Bad)
+		}
+		# Lines 216-247: every character of every segment maps to a glyph
+		# below the glyph count, through entries inside the subtable. Glyph
+		# array entries are checked as stored (OTS does not add the delta).
+		# Segments do not overlap, so this visits at most 65537 characters.
+		for s in 0..<count {
+			first = Bytes.u16(data, starts + 2 * s)
+			last = Bytes.u16(data, ends + 2 * s)
+			range_offset = range_offset_of(s)
+			if first <= last {
+				if range_offset == 0 {
+					# The glyphs run up from `(first + delta) mod 65536`; one
+					# past 65535 wraps through 65535, which is never below the
+					# glyph count.
+					lowest = (first + Bytes.u16(data, deltas + 2 * s)) % 65536
+					if lowest + (last - first) >= glyph_count {
+						return Err(Bad)
+					}
+				} else {
+					at = range_offsets + 2 * s + range_offset
+					for c in first..<(last + 1) {
+						entry = at + 2 * (c - first)
+						if entry + 1 >= length or Bytes.u16(data, entry) >= glyph_count {
+							return Err(Bad)
+						}
+					}
+				}
+			}
+		}
+		Ok({})
+	}
+
+	# A format 12 or 13 subtable as OTS checks it (`Parse31012` and
+	# `Parse31013`, cmap.cc lines 267-401). `data` holds the subtable's
+	# stated length.
+	check_groups : List(U8), U64, Bool -> Try({}, [Bad])
+	check_groups = |data, glyph_count, same| {
+		length = data.len()
+		count = Bytes.u32(data, 12)
+		# Lines 274-290: language 0, and at least one group, all inside.
+		if length < 16 or Bytes.u32(data, 8) != 0 or count == 0 or (length - 16) // 12 < count {
+			return Err(Bad)
+		}
+		for i in 0..<count {
+			g = 16 + 12 * i
+			first = Bytes.u32(data, g)
+			last = Bytes.u32(data, g + 4)
+			drawn = Bytes.u32(data, g + 8)
+			# Lines 304-309 and 379-383: within Unicode and 16-bit glyph ids.
+			if first > 0x10FFFF or last > 0x10FFFF or drawn > 0xFFFF {
+				return Err(Bad)
+			}
+			if same {
+				# Lines 385-387: the one glyph below the glyph count. OTS
+				# does not require `first <= last` here.
+				if drawn >= glyph_count {
+					return Err(Bad)
+				}
+			} else if last < first or (last - first) + drawn >= glyph_count {
+				# Lines 313-320: ordered, and every glyph below the count.
+				return Err(Bad)
+			}
+			# Lines 324-333 and 391-398: starts increasing, each past the
+			# previous group's end.
+			if i > 0 {
+				previous = g - 12
+				if first <= Bytes.u32(data, previous) or first <= Bytes.u32(data, previous + 4) {
+					return Err(Bad)
+				}
+			}
+		}
+		Ok({})
+	}
+
+	# A format 14 subtable as OTS checks it (`Parse0514`, cmap.cc lines
+	# 403-537). `data` holds the subtable's stated length.
+	check_format14 : List(U8) -> Try({}, [Bad])
+	check_format14 = |data| {
+		length = data.len()
+		count = Bytes.u32(data, 6)
+		# Lines 411-421: 1 to 259 records (one per variation selector).
+		if length < 10 or count == 0 or count > 259 or !Bytes.fits(10, 11 * count, length) {
+			return Err(Bad)
+		}
+		for i in 0..<count {
+			rec = 10 + 11 * i
+			selector = Bytes.u16(data, rec) * 256 + Bytes.u8(data, rec + 2)
+			default_at = Bytes.u32(data, rec + 3)
+			mapping_at = Bytes.u32(data, rec + 7)
+			# Lines 433-445: a variation selector, increasing.
+			valid = (selector >= 0x180B and selector <= 0x180D) or (selector >= 0xFE00 and selector <= 0xFE0F) or (selector >= 0xE0100 and selector <= 0xE01EF)
+			if !valid or (i > 0 and Bytes.u16(data, rec - 11) * 256 + Bytes.u8(data, rec - 9) >= selector) {
+				return Err(Bad)
+			}
+			# Lines 447-458: at least one table, each starting inside.
+			if (default_at == 0 and mapping_at == 0) or (default_at != 0 and default_at >= length) or (mapping_at != 0 and mapping_at >= length) {
+				return Err(Bad)
+			}
+		}
+		# Lines 461-530: each table, ending where the next is read.
+		var $end = 10 + 11 * count
+		for i in 0..<count {
+			rec = 10 + 11 * i
+			default_at = Bytes.u32(data, rec + 3)
+			mapping_at = Bytes.u32(data, rec + 7)
+			if default_at != 0 {
+				n = Bytes.u32(data, default_at)
+				# Lines 465-471: 1 or more ranges, all inside.
+				if !Bytes.fits(default_at, 4, length) or n == 0 or (length - default_at - 4) // 4 < n {
+					return Err(Bad)
+				}
+				# Lines 478-493: a start in Unicode (not 0), the range below
+				# 2^24, and each start past the previous range's end.
+				var $last = 0
+				for k in 0..<n {
+					r = default_at + 4 + 4 * k
+					value = Bytes.u16(data, r) * 256 + Bytes.u8(data, r + 2)
+					ends = value + Bytes.u8(data, r + 3)
+					if value == 0 or value > 0x10FFFF or ends > 0xFFFFFF or ($last != 0 and value <= $last) {
+						return Err(Bad)
+					}
+					$last = ends
+				}
+				$end = default_at + 4 + 4 * n
+			}
+			if mapping_at != 0 {
+				n = Bytes.u32(data, mapping_at)
+				# Lines 499-505: 1 or more mappings, all inside.
+				if !Bytes.fits(mapping_at, 4, length) or n == 0 or (length - mapping_at - 4) // 5 < n {
+					return Err(Bad)
+				}
+				# Lines 512-528: a character in Unicode (not 0), a glyph
+				# other than 0, characters increasing.
+				var $last = 0
+				for k in 0..<n {
+					m = mapping_at + 4 + 5 * k
+					value = Bytes.u16(data, m) * 256 + Bytes.u8(data, m + 2)
+					if Bytes.u16(data, m + 3) == 0 or value == 0 or value > 0x10FFFF or ($last != 0 and value <= $last) {
+						return Err(Bad)
+					}
+					$last = value
+				}
+				$end = mapping_at + 4 + 5 * n
+			}
+		}
+		# Lines 532-534: the last table read ends the subtable exactly.
+		if ($end != length) Err(Bad) else Ok({})
+	}
+
+	# A format 0 subtable (platform 1, encoding 0) as OTS checks it
+	# (`Parse100`, cmap.cc lines 539-565): 256 glyph ids inside its stated
+	# length. OTS only warns about a language other than 0, and does not
+	# compare these glyph ids with the glyph count.
+	check_format0 : List(U8) -> Try({}, [Bad])
+	check_format0 = |data| if (data.len() < 6 + 256) Err(Bad) else Ok({})
 
 	## Choose and check a subtable of a `cmap` table. `font_page` is the
 	## `OS/2` table's Windows 3.1 font page (0 for none).
@@ -546,6 +972,7 @@ TableCmap := {
 			Err(Bad)
 		} else {
 			var $bad = False
+			var $previous_first = 0
 			var $previous_end = 0
 			var $runs = List.with_capacity(count)
 			var $open = TableCmap.closed
@@ -556,7 +983,12 @@ TableCmap := {
 				range_offset = Bytes.u16(data, range_offsets + 2 * s)
 				# U+FFFF is never mapped.
 				top = if (last == 0xFFFF) last - 1 else last
-				if last < first or (s > 0 and first <= $previous_end) {
+				# The order OTS requires (cmap.cc lines 173-194): end codes
+				# increasing, each start past the previous end, except for two
+				# final 0xFFFF segments. A segment whose start is past its end
+				# maps nothing, as OTS allows.
+				terminators = s > 0 and s == count - 1 and $previous_first == 0xFFFF and $previous_end == 0xFFFF and first == 0xFFFF and last == 0xFFFF
+				if s > 0 and !terminators and (last <= $previous_end or first <= $previous_end) {
 					$bad = True
 				} else if first > top {
 					{}
@@ -590,6 +1022,7 @@ TableCmap := {
 						}
 					}
 				}
+				$previous_first = first
 				$previous_end = last
 			}
 			if ($bad) Err(Bad) else Ok(TableCmap.push($runs, Done($open)))
@@ -628,13 +1061,18 @@ TableCmap := {
 			Err(Bad)
 		} else {
 			var $bad = False
+			var $previous_first = 0
 			var $previous = 0
 			var $ranges = List.with_capacity(count)
 			for i in 0..<count {
 				g = 16 + 12 * i
 				first = Bytes.u32(data, g)
 				last = Bytes.u32(data, g + 4)
-				if last < first or (i > 0 and first <= $previous) or last > 0x10FFFF {
+				# The order OTS requires (cmap.cc lines 304-333 and 379-398):
+				# starts increasing, each past the previous group's end. A
+				# format 13 group whose start is past its end maps nothing, as
+				# OTS allows.
+				if (!same and last < first) or (i > 0 and (first <= $previous_first or first <= $previous)) or first > 0x10FFFF or last > 0x10FFFF {
 					$bad = True
 				}
 				start = Bytes.u32(data, g + 8)
@@ -642,11 +1080,14 @@ TableCmap := {
 				# starts one character later at glyph 1; a format 13 group
 				# drawn by it is left out. No range then holds a character
 				# that maps nothing.
-				if start != 0 {
+				if first > last {
+					{}
+				} else if start != 0 {
 					$ranges = $ranges.append({ first: first.to_u32_wrap(), last: last.to_u32_wrap(), glyph: start.to_u32_wrap() })
 				} else if !same and first < last {
 					$ranges = $ranges.append({ first: (first + 1).to_u32_wrap(), last: last.to_u32_wrap(), glyph: 1 })
 				}
+				$previous_first = first
 				$previous = last
 			}
 			if ($bad) Err(Bad) else Ok($ranges)

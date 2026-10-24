@@ -8,65 +8,65 @@
   "suites": {
     "harfbuzz/aots": {
       "cases": 276,
-      "agree": 203,
-      "differ": 71,
+      "agree": 0,
+      "differ": 274,
       "unsupported": 2,
       "skipped": 0,
-      "agree_ids": "d89ec94758c666e7",
+      "agree_ids": "e3b0c44298fc1c14",
       "case_ids": "44b4173cdfd7b6e6"
     },
     "harfbuzz/in-house": {
       "cases": 5174,
-      "agree": 4091,
-      "differ": 870,
+      "agree": 4087,
+      "differ": 874,
       "unsupported": 68,
       "skipped": 145,
-      "agree_ids": "842cba21b6f6554d",
+      "agree_ids": "8259ed916ebc2786",
       "case_ids": "3c811eff499e4cc5"
     },
     "harfbuzz/text-rendering-tests": {
       "cases": 753,
-      "agree": 232,
-      "differ": 116,
-      "unsupported": 405,
+      "agree": 212,
+      "differ": 140,
+      "unsupported": 401,
       "skipped": 0,
-      "agree_ids": "8ef4014588e2f5c8",
+      "agree_ids": "0cdc0802a2578f66",
       "case_ids": "55452f88535d02f1"
     },
     "hb-pending/M1-next": {
       "cases": 4,
       "agree": 0,
-      "differ": 0,
-      "unsupported": 4,
+      "differ": 4,
+      "unsupported": 0,
       "skipped": 0,
       "agree_ids": "e3b0c44298fc1c14",
       "case_ids": "f21a354b7ac5d16b"
     },
     "hb-pending/M3": {
       "cases": 84,
-      "agree": 73,
-      "differ": 11,
+      "agree": 0,
+      "differ": 84,
       "unsupported": 0,
       "skipped": 0,
-      "agree_ids": "b3172fc68cf340dc",
+      "agree_ids": "e3b0c44298fc1c14",
       "case_ids": "0ae8aa3fdb95f3d9"
     },
     "hb-pending/M4": {
       "cases": 54,
-      "agree": 32,
-      "differ": 18,
+      "agree": 0,
+      "differ": 50,
       "unsupported": 4,
       "skipped": 0,
-      "agree_ids": "885b5d835c3b9ac9",
+      "agree_ids": "e3b0c44298fc1c14",
       "case_ids": "60bc1cf5fbea7d06"
     },
     "hb-pending/post-0.1": {
       "cases": 65,
-      "agree": 11,
-      "differ": 52,
+      "agree": 0,
+      "differ": 63,
       "unsupported": 2,
       "skipped": 0,
-      "agree_ids": "f120ec21269e83da",
+      "agree_ids": "e3b0c44298fc1c14",
       "case_ids": "b4cef44b6ace1f86"
     }
   }

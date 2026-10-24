@@ -9,10 +9,14 @@ repositories are relative to `~/Documents/Github/`.
 
 ### Browser parity (§6)
 
-- [ ] Restore an in-place fast path for ligature lookups (the adversarial
-  100-lookup case went from 7.7x to 10.8x HarfBuzz).
-- [ ] Decide the policy for cmap glyph ids past `numGlyphs` (HarfBuzz
-  outputs them; roc-font treats them as missing; AOTS cmap4).
+- [ ] A conformance case for the `rand` alternate's unsafe-to-break range
+  (HarfBuzz's output aliases its input until a multiple substitution
+  needs room; roc-font's buffer is always separate).
+- [ ] Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
+  `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
+  they now read as rejected by design; regenerate valid fonts with the
+  same lookups.
+
 
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the
 in-house and text-rendering-tests suites, except listed known failures;
@@ -20,13 +24,16 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Tests and measurement
 
-- [ ] Narrow fuzz targets still to add: gvar extents, LayoutVar kerning
-  deltas and FeatureVariations.
+- [ ] Verify `LayoutVar.delta` against HarfBuzz's `em_scalef` float step
+  (`v * upem / upem`) for large deltas just off a .5 boundary; the fuzz
+  recipes cannot reach it.
 - [ ] `adv-huge-cmap/read` got slower (188 to 222 µs) when strictly less
   work was done: a code-generation effect of the nightly; re-check on the
   next nightly.
 - [ ] Optional speed-up: U64 fast paths for TableVar's single-precision
   multiply and add (85 % of gvar extents time).
+- [ ] Variable fonts check their glyph outlines twice while reading (the
+  required `glyf` check and again for `gvar`); share the one result.
 - [ ] Record time ratios on an idle machine (`bench.py --check
   --update-baseline`, full run).
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch

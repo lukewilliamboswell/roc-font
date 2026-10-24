@@ -7,6 +7,7 @@ app [main!] {
 import FontTests
 import SubstituteTests
 import ReadTests
+import ReadOtsTests
 import ShapeTests
 import ShapeParityTests
 import VariationTests

@@ -11,33 +11,47 @@ import build.FontBuild
 ## Character maps, one subtable format at a time. The first input byte
 ## picks the format (0, 4, 6, 10, 12 or 13, by its value modulo 6; for
 ## format 4 its bit 3 picks glyph arrays over deltas, for formats 10 and 12
-## its bit 4 moves the map past U+FFFF); every further byte chooses a range
-## of the map: its distance from the last one, its length and its first
-## glyph (some ranges reach glyph 0 or glyphs past the font). The same
-## choices build a font at two sizes, 2 and 16 copies of the ranges.
+## its bit 4 moves the map past U+FFFF, and for formats 4, 12 and 13 its
+## bit 5 adds a final range drawn by a glyph past the font); every further
+## byte chooses a range of the map: its distance from the last one, its
+## length and its first glyph. The same choices build a font at two sizes,
+## 2 and 16 copies of the ranges.
 ##
-## Contract: both fonts read; every character lookup agrees with the map
-## the recipe describes (a character the map lacks, or that maps to glyph
-## 0 or a glyph past the font, is missing); the code point listing is that
-## map, ascending; reading and lookups are deterministic. Reading the larger
-## font takes at most `10 × small + 256` allocations (linear), looking up
-## the same characters costs no more allocations in the larger font
-## (constant per call), listing the code points is linear, and nothing
-## leaks.
+## The fonts follow what OTS 9.3.0 accepts, as reading does. A browser
+## needs a format 4, 12 or 13 map it can pass on, so formats 0, 6 and 10
+## sit beside an empty format 4 map (platform 0, encoding 0), which they
+## outrank when a map is chosen; their glyphs may be glyph 0 or past the
+## font, which OTS does not check. Formats 4, 12 and 13 name only glyphs
+## the font has (OTS refuses any other), and their groups are never empty.
+##
+## Contract: both fonts read (or, with a glyph past the font, both are
+## refused with exactly one problem, a bad `cmap`); every character lookup
+## agrees with the map the recipe describes (a character the map lacks, or
+## that maps to glyph 0 or a glyph past the font, is missing); the code
+## point listing is that map, ascending; reading and lookups are
+## deterministic. Reading the larger font takes at most `10 × small + 256`
+## allocations (linear), looking up the same characters costs no more
+## allocations in the larger font (constant per call), listing the code
+## points is linear, and nothing leaks.
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	choice = bytes.first() ?? 0
 	picks = bytes.drop_first(1).take_first(32)
 	small = recipe(choice, picks, 2)
 	large = recipe(choice, picks, 16)
-	small_font = check!(small)
-	large_font = check!(large)
 	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small.file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
 	if large_read.allocations > 10 * small_read.allocations + 256 {
 		crash "reading a character map 8 times larger took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
 	}
+	if small.past {
+		refused!(small)
+		refused!(large)
+		return Fuzz.keep
+	}
+	small_font = check!(small)
+	large_font = check!(large)
 	small_look = Fuzz.measure_allocs!(|{}| lookups(small_font))
 	large_look = Fuzz.measure_allocs!(|{}| lookups(large_font))
 	Fuzz.expect_no_leaks!(|{}| lookups(large_font))
@@ -57,8 +71,9 @@ test! = |bytes| {
 ## `glyph`, or all by `glyph` when `same`.
 MapRange : { first : U64, last : U64, glyph : U64, same : Bool }
 
-## The font a recipe builds, and the map it describes.
-Built : { file : List(U8), ranges : List(MapRange), glyphs : U64 }
+## The font a recipe builds, the map it describes, and whether that map
+## names a glyph past the font (so the font must be refused).
+Built : { file : List(U8), ranges : List(MapRange), glyphs : U64, past : Bool }
 
 pick : List(U8), U64 -> U64
 pick = |bytes, i| if (bytes.is_empty()) 0 else (bytes.get(i % bytes.len()) ?? 0).to_u64()
@@ -69,14 +84,25 @@ recipe = |choice, picks, copies| {
 	glyphs = 32 * copies
 	count = picks.len().max(1) * copies
 	start = if (format == 0) 0 else if ((format == 3 or format == 4) and choice.bitwise_and(0x10) != 0) 0x10000 else 0x20
+	# Formats 4, 12 and 13 are checked by OTS: every glyph below the count.
+	checked = format == 1 or format == 4 or format == 5
+	past = checked and choice.bitwise_and(0x20) != 0
 	var $ranges = []
 	var $next = start
 	for j in 0..<count {
 		b = pick(picks, j)
 		first = $next + b % 4
 		len = 1 + b.shr_zf_wrap(2) % 8
-		# Mostly glyphs in the font, sometimes glyph 0 or glyphs past it.
-		glyph = if (b % 11 == 0) 0 else (b * 7 + 3 * j) % (glyphs + 16)
+		glyph =
+			if b % 11 == 0 {
+				0
+			} else if checked {
+				# A range of up to 8 glyphs ends below the count.
+				(b * 7 + 3 * j) % (glyphs - 8)
+			} else {
+				# Unchecked formats sometimes name glyphs past the font.
+				(b * 7 + 3 * j) % (glyphs + 16)
+			}
 		# Format 0 holds byte-sized glyph ids for 256 characters.
 		fits = format != 0 or (first + len <= 256 and glyph + len <= 256)
 		if fits {
@@ -84,7 +110,10 @@ recipe = |choice, picks, copies| {
 		}
 		$next = first + len
 	}
-	ranges = $ranges
+	# The refused branch: a final range whose last glyph is past the font
+	# (format 13's one glyph is the count itself).
+	ranges = if (past) $ranges.append({ first: $next + 1, last: $next + 2, glyph: if (format == 5) glyphs else glyphs - 1, same: format == 5 }) else $ranges
+	groups = ranges.map(|r| { first: r.first, last: r.last, glyph: r.glyph })
 	subtable =
 		match format {
 			0 => FontBuild.cmap0(dense(ranges, 0))
@@ -96,12 +125,28 @@ recipe = |choice, picks, copies| {
 				}
 			2 => FontBuild.cmap6(start, dense(ranges, start))
 			3 => FontBuild.cmap10(start, dense(ranges, start))
-			4 => FontBuild.cmap12(ranges.map(|r| { first: r.first, last: r.last, glyph: r.glyph }))
-			_ => FontBuild.cmap13(ranges.map(|r| { first: r.first, last: r.last, glyph: r.glyph }))
+			4 => FontBuild.cmap12(groups)
+			_ => FontBuild.cmap13(groups)
 		}
 	full = format >= 3
-	file = FontBuild.glyphs_font(FontBuild.counting(glyphs).map(|g| 100 + g % 400), FontBuild.cmap([{ system: 3, encoding: if (full) 10 else 1, subtable }]), [])
-	{ file, ranges, glyphs }
+	own = { system: 3, encoding: if (full) 10 else 1, subtable }
+	# A browser needs a map it passes on: an empty format 4 map beside the
+	# formats OTS does not pass on, which outrank it.
+	records = if (checked) [own] else [{ system: 0, encoding: 0, subtable: FontBuild.cmap4([]) }, own]
+	file = FontBuild.glyphs_font(FontBuild.counting(glyphs).map(|g| 100 + g % 400), FontBuild.cmap(records), [])
+	{ file, ranges, glyphs, past }
+}
+
+## A font whose map names a glyph past the font is refused, strictly or
+## not, with exactly one problem: a bad `cmap`.
+refused! : Built => {}
+refused! = |built| {
+	for options in [Font.ReadOptions.{}, Font.ReadOptions.{ strict: True }] {
+		match Font.from_bytes(built.file, options) {
+			Err([BadTable({ table: "cmap", offset: _ })]) => {}
+			other => crash "a map naming a glyph past the font was not refused as a bad cmap: ${Str.inspect(other.map_ok(|_| {}))}"
+		}
+	}
 }
 
 ## The glyphs of consecutive characters from `start` (0 between ranges).

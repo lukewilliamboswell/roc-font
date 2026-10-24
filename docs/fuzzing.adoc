@@ -54,12 +54,27 @@ deterministic and finite.
 
 |`font-cmap`
 |A choice byte (the character map format: 0, 4, 6, 10, 12 or 13; glyph
-arrays or deltas for format 4; code points past U+FFFF for 10 and 12),
-then up to 32 bytes, each choosing one range of the map (gap, length,
-first glyph, sometimes glyph 0 or past the font).
-|Both sizes read strictly. Every lookup of every range's characters, their
-neighbours and plane edges agrees with the map the recipe describes; the
-code point listing is that map, ascending; two reads agree.
+arrays or deltas for format 4; code points past U+FFFF for 10 and 12; a
+final range drawn by a glyph past the font for 4, 12 and 13), then up to
+32 bytes, each choosing one range of the map (gap, length, first glyph,
+sometimes glyph 0). The maps follow what OTS accepts: formats 0, 6 and 10
+sit beside an empty format 4 map (they outrank it, and may name glyphs
+past the font); formats 4, 12 and 13 name only glyphs the font has.
+|Both sizes read strictly (with a glyph past the font, both are refused
+with one problem, a bad `cmap`). Every lookup of every range's characters,
+their neighbours and plane edges agrees with the map the recipe describes;
+the code point listing is that map, ascending; two reads agree.
+
+|`font-ots`
+|A choice byte (the damaged table: `head`, `cmap`, `GSUB`, `post` or
+`name`; the `post` version; a format 1 naming table; whether the table is
+cut short), then three-byte patches (a position in the damaged table and
+its new value) applied to a valid font with all five tables.
+|The undamaged fonts read strictly in full. Reading a damaged font is
+deterministic; strict reading succeeds exactly when lenient reading
+succeeds with nothing dropped; every problem names exactly the damaged
+table. An accepted font's lookups, listings, advances, extents, glyph and
+family names and shaping are total and keep their promises.
 
 |`font-coverage`
 |A choice byte (coverage format, single substitution format, both class
@@ -97,16 +112,64 @@ built. `at` and every query on its result are total and deterministic;
 advances are finite, never negative and 0 past the font; every axis at its
 default gives the `hmtx` advances; every glyph and metric of the smaller
 font measures the same in the larger at every location.
+
+|`font-gvar`
+|A choice byte (1 to 3 axes, long `loca` and `gvar` offsets, short
+horizontal metrics, side bearings away from the outlines), 48 bytes
+choosing 16 glyphs (empty, simple with one to three contours, composites
+nested up to four deep) and their `gvar` tuples (shared or embedded peaks,
+intermediate regions, shared, all or private points, phantom points), then
+up to four locations of four bytes.
+|Both sizes read strictly in full. `extents` is total and deterministic,
+`Empty` for the empty glyph and past the font. At the default location it
+is the header-box rule (left edge at the side bearing, the header's width
+and heights). Where every coordinate is -1, 0 or 1 it equals a model of
+the recipe (each tuple moves by its whole delta or not at all, every point
+of a contour or component it touches, measured from the moved left phantom
+point); elsewhere a glyph without variations keeps its default box and
+every edge of any other stays within twice its deltas of it. Both sizes
+measure the smaller font's glyphs the same.
+
+|`font-layout-var`
+|A choice byte (1 to 3 axes, value records with or without a stored
+advance, `GSUB` lookup variation records, `GPOS` feature variations,
+and/or/not conditions, class counts), 48 bytes choosing the `GDEF` store's
+single-axis regions and deltas, three pair kerning lookups (formats 1, 2,
+1) with `VariationIndex`, no-variation and hinting devices, the lookups of
+`kern`, `calt` and `rvrn`, feature and lookup variation records and the
+text, then up to four locations of four bytes.
+|Both sizes read strictly in full. Shaping is deterministic, index-aligned
+and gives exactly the model's glyphs and width at every location: each
+substitution applies exactly where the first matching feature variation
+record and the lookup variation records say, and each kerned pair adds the
+stored value plus its device's delta (region scalars, exact because every
+region spans a power of two, weighted by the deltas, rounded half up;
+nothing for hinting devices or at the default location). Both sizes give
+the same run.
 |===
 
-The last five are *narrow* targets (architecture §7.3): the input chooses
+The last eight are *narrow* targets (architecture §7.3): the input chooses
 the contents of a font that exercises one feature, built with `FontBuild`
 at two sizes, so a failure names its cause. The sizes are 2 and 16 copies
 of the chosen items (`font-cmap`, `font-coverage`, `font-gpos`), 8 and 64
-lookups (`font-gsub`), and 32 and 256 glyphs with 8 times the regions
-(`font-var`). Each builds valid fonts only (apart from `font-var`'s raw
-mode), so it can compare against what the recipe means: a differential
-check against the builder, without an oracle. Real font files are not
+lookups (`font-gsub`), 32 and 256 glyphs with 8 times the regions
+(`font-var`), 16 and 128 glyphs with 8 times the shared tuples
+(`font-gvar`), 24 and 192 glyphs with 8 times the regions, pairs,
+substitution lookups and (never matching) feature variation records
+(`font-layout-var`), and 32 and 256 glyphs with 8 times the character
+map ranges, substitution lookups, stored glyph names and name records
+(`font-ots`). Each builds valid fonts only (apart from `font-var`'s raw
+mode, `font-cmap`'s glyph past the font and `font-ots`'s damage), so it
+can compare against what the recipe means: a differential check against
+the builder, without an oracle. `font-ots` instead checks the reading
+checks ported from OTS 9.3.0 (architecture §4.4): a damaged table is
+either accepted, and then every query is total, or refused naming that
+table alone. The recipes
+of `font-gvar` and `font-layout-var` are chosen so that the model is exact
+in integers: `font-gvar` checks its model where every coordinate is -1, 0
+or 1 (every tuple's scalar is then 0 or 1) and bounds elsewhere, and
+`font-layout-var` uses regions on one axis whose sides span a power of
+two, so every scalar is an exact binary fraction at any location. Real font files are not
 their seeds, and they use `fuzz/dictionaries/narrow.dict`.
 
 Every target also checks *cost*:
@@ -119,16 +182,23 @@ Every target also checks *cost*:
   (a list copied per item, a sort on sorted input) fails quickly. The
   narrow targets apply the same bound to reading their two fonts, to
   planning (`font-gsub`, linear in lookups) and to listing code points
-  (`font-cmap`).
+  (`font-cmap`). `font-ots` compares reading the larger damaged font with
+  reading the smaller one undamaged, in full, so damage that makes
+  reading allocate more than its size accounts for fails.
 * *Constant cost per call.* The narrow targets also run one query or
   shaping call on both fonts with the same arguments: character lookups
   (`font-cmap`), `shape_planned` on the same text with a plan made
-  beforehand (`font-coverage`, `font-gsub`, `font-gpos`), and `at` and
-  advance lookups at the same location (`font-var`). The larger font may
-  take at most 8 more allocations (4 for `font-var`) than the smaller:
-  per-call work must not grow with the font's tables. On the seeds,
-  lookups take 0 allocations at both sizes, shaping 10 to 14, and `at` 5
-  to 16.
+  beforehand (`font-coverage`, `font-gsub`, `font-gpos`,
+  `font-layout-var`), `at` and advance lookups at the same location
+  (`font-var`), and `at` and the extents of the smaller font's glyphs
+  (`font-gvar`). The larger font may take at most 8 more allocations (4
+  for `font-var` and `font-gvar`) than the smaller: per-call work must not
+  grow with the font's tables. On the seeds, lookups take 0 allocations at
+  both sizes, shaping 10 to 14, `at` 5 to 18, and the extents of 16 glyphs
+  515 to 924 (the same at both sizes). `font-layout-var` also measures
+  planning at one location: planning evaluates every feature variation
+  record before the one that matches on one reused stack, so the larger
+  font's 7 extra records must add no allocations.
 * *Leaks.* `Fuzz.expect_no_leaks!` runs the larger operation and fails if
   anything it allocated is still live afterwards. roc-fuzz also checks
   every input for leaks unless `--no-detect-leaks` is passed; the scripts
@@ -137,9 +207,8 @@ Every target also checks *cost*:
 === Planned targets
 
 Architecture §7.3 calls for more targets as the stages they cover land:
-narrow targets for the stages not yet covered (mark positioning, `gvar`
-and outline extents, `GDEF` device variations, `FeatureVariations`,
-cluster levels), and a differential target that shapes fuzzed text on
+narrow targets for the stages not yet covered (mark positioning, cluster
+levels), and a differential target that shapes fuzzed text on
 corpus fonts and compares with recorded HarfBuzz output. A new stage is
 not finished until its target exists, is seeded and is registered in
 `scripts/run_fuzz.py`.
@@ -187,7 +256,7 @@ builds can disagree, and a fuzz binary is always native.
 
 [source,sh]
 ----
-python3 scripts/run_fuzz.py smoke                  # every target, 4000 inputs, seed 1
+python3 scripts/run_fuzz.py smoke                  # every target, seed 1
 python3 scripts/run_fuzz.py smoke font-cmap font-var  # some targets
 python3 scripts/run_fuzz.py smoke font-shape --runs=20000
 python3 scripts/run_fuzz.py campaign --seconds=600 # each target, persistent corpus
@@ -195,8 +264,10 @@ python3 scripts/run_fuzz.py nightly                # 1800 s per target
 python3 scripts/run_fuzz.py check-pin              # targets use the pinned roc-fuzz
 ----
 
-`smoke` starts each target from a fresh corpus holding only the seeds and
-passes a fixed libFuzzer seed, so its result depends only on the sources,
+`smoke` starts each target from a fresh corpus holding only the seeds,
+runs 4000 inputs (1500 for `font-gvar`, `font-layout-var` and
+`font-ots`, whose every input builds, reads and checks several fonts; `smoke_runs` in
+`TargetConfig`, overridden by `--runs`) and passes a fixed libFuzzer seed, so its result depends only on the sources,
 seeds, fonts present and compiler. It is the CI check and runs as a step of
 `scripts/all_tests.py`. `campaign` and `nightly` grow one persistent corpus
 per target and are for finding new failures.

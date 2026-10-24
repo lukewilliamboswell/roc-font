@@ -202,51 +202,118 @@ expect family(build(0, [win(0x409, 2, "Regular")], [])) == Err(Missing)
 # storage past the end. Offsets are in the file (the table is at 1000).
 expect problems([0, 0, 0], 1000) == [bad(1000)]
 expect problems(build(2, [], []), 1000) == [bad(1000)]
-expect problems(u16(0).concat(u16(2)).concat(u16(30)).concat(List.repeat(0, 20)), 1000) == [bad(1002)]
+expect problems(u16(0).concat(u16(2)).concat(u16(26)).concat(List.repeat(0, 20)), 1000) == [bad(1002)]
 expect problems(u16(0).concat(u16(0)).concat(u16(7)), 1000) == [bad(1004)]
 
 # A format 1 table too short for its language-tag count, or for its tags.
 expect problems(u16(1).concat(u16(0)).concat(u16(6)), 0) == [bad(6)]
 expect problems(u16(1).concat(u16(0)).concat(u16(8)).concat(u16(1)), 0) == [bad(6)]
 
-# Every bad record is reported: a string past the end (placed at its
-# record), an odd-length UTF-16 string, a lone low surrogate and a high
-# surrogate at the end (placed at the string).
+# OTS keeps a table whose records are unusable, and so does reading; a
+# query never chooses them: a string past the end, an odd-length UTF-16
+# string, a lone low surrogate and a high surrogate at the end.
 expect {
 	records = [
 		win(0x409, 1, "Good"),
-		win(0x409, 2, "Odd"),
-		{ pid: 0, encoding: 3, language: 0, id: 3, text: [0, 0x41, 0xDC, 0x00] },
-		{ pid: 3, encoding: 10, language: 0x409, id: 4, text: [0, 0x41, 0xD8, 0x00] },
+		win(0x409, 1, "Odd"),
+		{ pid: 0, encoding: 3, language: 0, id: 1, text: [0, 0x41, 0xDC, 0x00] },
+		{ pid: 3, encoding: 10, language: 0x409, id: 1, text: [0, 0x41, 0xD8, 0x00] },
+		{ pid: 1, encoding: 0, language: 0, id: 1, text: "Mac".to_utf8() },
 	]
 	table = build(0, records, [])
 	# Make record 1 odd (length 5 of its 6 bytes) and record 0 run past
 	# the end (offset 0xFF00).
 	odd = put(table, 6 + 12 + 9, 5)
 	broken = put(odd, 6 + 10, 0xFF)
-	storage = 6 + 12 * 4
-	problems(broken, 0) == [bad(6), bad((storage + 8).to_u32()), bad((storage + 14).to_u32()), bad((storage + 18).to_u32())]
+	problems(broken, 0) == [] and family(broken) == Ok("Mac")
 }
 
 # A high surrogate followed by something other than a low surrogate.
-expect problems(build(0, [{ pid: 3, encoding: 1, language: 0x409, id: 1, text: [0xD8, 0x3D, 0, 0x41] }], []), 0) == [bad(18)]
+expect {
+	table = build(0, [{ pid: 3, encoding: 1, language: 0x409, id: 1, text: [0xD8, 0x3D, 0, 0x41] }], [])
+	problems(table, 0) == [] and family(table) == Err(Missing)
+}
 
-# Strings in encodings this module does not decode are checked to lie in
-# the table, and nothing more.
+# Records OTS discards are never chosen: an unknown platform or encoding,
+# and a PostScript name (ID 6) in UTF-16 that is not Latin-1.
+expect {
+	records = [
+		{ pid: 5, encoding: 0, language: 0, id: 1, text: "Five".to_utf8() },
+		{ pid: 3, encoding: 7, language: 0x409, id: 1, text: utf16("Seven") },
+		{ pid: 3, encoding: 1, language: 0x409, id: 6, text: [0x01, 0x41] },
+	]
+	table = build(0, records, [])
+	match TableName.read(table, 0) {
+		Ok(name) => TableName.family_name(name) == Err(Missing) and TableName.string(name, 6) == Err(Missing)
+		Err(_) => Bool.False
+	}
+}
+expect {
+	match TableName.read(build(0, [win(0x409, 6, "Name-PS")], []), 0) {
+		Ok(name) => TableName.string(name, 6) == Ok("Name-PS")
+		Err(_) => Bool.False
+	}
+}
+
+# Strings in encodings this module does not decode are accepted, even past
+# the end of the table (OTS discards them).
 expect problems(build(0, [{ pid: 3, encoding: 2, language: 0x411, id: 1, text: [0x93, 0xFA, 0x41] }], []), 0) == []
 expect {
 	table = build(0, [{ pid: 1, encoding: 1, language: 11, id: 1, text: [0x93] }], [])
-	problems(put(table, 16, 0xFF), 0) == [bad(6)]
+	problems(put(table, 16, 0xFF), 0) == []
 }
 
-# A language tag that does not exist (placed at the record's language), a
-# tag past the end (placed at the tag record), and a tag that is not
-# well-formed UTF-16 (placed at the string).
+# A language tag past the end is placed at its tag record; one that is
+# not well-formed UTF-16, or a language ID past the tags, is accepted (as
+# OTS accepts it) and is not English.
 expect {
 	records = [{ pid: 0, encoding: 4, language: 0x8002, id: 1, text: utf16("A") }]
 	table = build(1, records, [utf16("en"), [0xDC, 0x00]])
 	broken = put(table, 6 + 12 + 2 + 2, 0xFF)
-	problems(broken, 0) == [bad(10), bad(20), bad(34)]
+	problems(broken, 0) == [bad(20)] and family(table) == Ok("A")
+}
+
+# A language tag longer than 200 bytes (name.cc lines 188-190).
+expect {
+	records = [win(0x409, 1, "A")]
+	problems(build(1, records, [List.repeat(0x41, 200)]), 0) == [] and problems(build(1, records, [List.repeat(0x41, 202)]), 0) == [bad(20)]
+}
+
+# String storage that starts inside the name records (lines 196-200),
+# placed at the string offset; both tag problems and this are reported.
+expect problems(u16(0).concat(u16(1)).concat(u16(6)).concat(List.repeat(0, 12)), 0) == [bad(4)]
+expect {
+	table = build(1, [], [utf16("en")])
+	# Storage moved back to 8, inside the tag record; the tag (at 4 from
+	# there) still fits.
+	problems(put(table, 5, 8), 0) == [bad(4)]
+}
+
+# A table OTS cannot write back: more than 5460 records once it adds its
+# 10 placeholder names (lines 267-279), or more than 65535 bytes of strings
+# with its 192 bytes of placeholders (lines 286-313), records sharing one
+# string counted once each.
+shared : List(U64), U64 -> List(U8)
+shared = |lengths, id| {
+	storage = 6 + 12 * lengths.len()
+	longest = lengths.fold(0, |m, l| if (l > m) l else m)
+	var $out = u16(0).concat(u16(lengths.len())).concat(u16(storage))
+	for l in lengths {
+		$out = $out.concat(u16(3)).concat(u16(1)).concat(u16(0x409)).concat(u16(id)).concat(u16(l)).concat(u16(0))
+	}
+	$out.concat(List.repeat(0x41, longest))
+}
+expect problems(shared(List.repeat(0, 5450), 0), 0) == []
+expect problems(shared(List.repeat(0, 5451), 0), 0) == [bad(2)]
+expect problems(shared(List.repeat(250, 261).append(93), 0), 0) == []
+expect problems(shared(List.repeat(250, 261).append(94), 0), 0) == [bad(4)]
+
+# Kept Windows names for IDs 1, 2, 4, 5 and 6 mean OTS adds none, so the
+# same strings fit with 192 bytes more.
+expect {
+	standard = [1, 2, 4, 5, 6].map(|id| { pid: 3, encoding: 1, language: 0x409, id, text: utf16("A") })
+	table = build(0, standard, [])
+	problems(table, 0) == []
 }
 
 # A naming table that lies outside the file is placed at its offset.

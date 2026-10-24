@@ -1,5 +1,5 @@
 {
-  "about": "Reviewed starting inputs for the font-cmap target. The first byte picks the character map format (value modulo 6: 0, 4, 6, 10, 12, 13; bit 3 glyph arrays for format 4; bit 4 code points past U+FFFF for formats 10 and 12); each further byte (up to 32) chooses one range: its distance from the last (low 2 bits), its length (next 3 bits) and its first glyph. The font is built from 2 and 16 copies of the ranges.",
+  "about": "Reviewed starting inputs for the font-cmap target. The first byte picks the character map format (value modulo 6: 0, 4, 6, 10, 12, 13; bit 3 glyph arrays for format 4; bit 4 code points past U+FFFF for formats 10 and 12; bit 5 a final range drawn by a glyph past the font for formats 4, 12 and 13, which must be refused as a bad cmap); each further byte (up to 32) chooses one range: its distance from the last (low 2 bits), its length (next 3 bits) and its first glyph. Formats 0, 6 and 10 sit beside an empty format 4 map, as OTS requires. The font is built from 2 and 16 copies of the ranges.",
   "seeds": [
     {"why": "format 0, no ranges chosen: one range from byte 0", "parts": [{"hex": "00"}]},
     {"why": "format 0 with ranges, some past 255 dropped", "parts": [{"hex": "00 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
@@ -11,8 +11,13 @@
     {"why": "format 12", "parts": [{"hex": "04 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
     {"why": "format 12 past U+FFFF", "parts": [{"hex": "14 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
     {"why": "format 13: whole ranges to one glyph", "parts": [{"hex": "05 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
-    {"why": "ranges that map to glyph 0 (bytes divisible by 11) and glyphs past the font", "parts": [{"hex": "04 00 0b 16 fe fd 21"}]},
+    {"why": "format 12 ranges that map to glyph 0 (bytes divisible by 11); formats 4, 12 and 13 keep every other glyph inside the font", "parts": [{"hex": "04 00 0b 16 fe fd 21"}]},
     {"why": "adjacent one-character ranges (byte 0: no gap, length 1)", "parts": [{"hex": "01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"}]},
-    {"why": "long ranges with gaps", "parts": [{"hex": "02 ff ff ff ff ff ff ff ff"}]}
+    {"why": "long ranges with gaps", "parts": [{"hex": "02 ff ff ff ff ff ff ff ff"}]},
+    {"why": "format 4 by deltas with a final glyph past the font: refused as a bad cmap", "parts": [{"hex": "25 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "format 4 by glyph arrays with a final glyph past the font: refused", "parts": [{"hex": "2b 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "format 12 with a final group past the font: refused", "parts": [{"hex": "22 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "format 13 with a final group drawn by the glyph count: refused", "parts": [{"hex": "23 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "format 0 beside the empty format 4 map, mapping glyph 0 and glyphs past the font", "parts": [{"hex": "06 00 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]}
   ]
 }
