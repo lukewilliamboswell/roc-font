@@ -84,6 +84,9 @@ class TargetConfig:
     max_input_size: int
     timeout: int
     contract: str
+    # Whether real font files from tests/fonts/ and tests/corpus/ seed the
+    # target (only for targets that read whole font files).
+    font_files: bool = True
 
     def source(self) -> Path:
         for candidate in self.sources:
@@ -123,6 +126,82 @@ TARGETS: dict[str, TargetConfig] = {
             "value per glyph; widths are deterministic and finite; shaping "
             "cost grows linearly (2 vs 16 copies) and leaks nothing"
         ),
+    ),
+    # Narrow targets (architecture §7.3): the input chooses the contents of
+    # a font exercising one feature, built at two sizes. Real fonts are not
+    # seeds (font_files=False): their bytes would only be read as choices.
+    "font-cmap": TargetConfig(
+        sources=(FUZZ_ROOT / "font-cmap.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-cmap.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=64,
+        timeout=10,
+        contract=(
+            "one cmap format (0, 4, 6, 10, 12, 13) at 2 and 16 copies: reads; "
+            "every lookup and the code point listing agree with the built map; "
+            "reading linear, lookups constant per call, listing linear; no leaks"
+        ),
+        font_files=False,
+    ),
+    "font-coverage": TargetConfig(
+        sources=(FUZZ_ROOT / "font-coverage.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-coverage.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=64,
+        timeout=10,
+        contract=(
+            "coverage and class definition formats via GSUB single and GPOS "
+            "class kerning at 2 and 16 copies: substitutes and width match the "
+            "recipe; runs aligned, clusters in range; reading linear, shaping "
+            "constant per call; no leaks"
+        ),
+        font_files=False,
+    ),
+    "font-gsub": TargetConfig(
+        sources=(FUZZ_ROOT / "font-gsub.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-gsub.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=96,
+        timeout=10,
+        contract=(
+            "one GSUB lookup kind (1, 2, 4, 5, 6, 7) at 8 and 64 lookups: "
+            "lookups that never match leave the run unchanged; runs aligned, "
+            "deterministic, clusters in range and order; reading and planning "
+            "O(lookups), shaping constant per call; no leaks"
+        ),
+        font_files=False,
+    ),
+    "font-gpos": TargetConfig(
+        sources=(FUZZ_ROOT / "font-gpos.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-gpos.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=64,
+        timeout=10,
+        contract=(
+            "GPOS pair formats 1 and 2 and kern at 2 and 16 copies: the width "
+            "is the advances plus the recipe's kerning; both sizes agree; runs "
+            "aligned; reading linear, shaping constant per call; no leaks"
+        ),
+        font_files=False,
+    ),
+    "font-var": TargetConfig(
+        sources=(FUZZ_ROOT / "font-var.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-var.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=128,
+        timeout=10,
+        contract=(
+            "fvar/avar/HVAR/MVAR at 32 and 256 glyphs: read in full; at() and "
+            "queries total and deterministic at fuzzed locations; advances "
+            "finite, non-negative, hmtx at the default; sizes agree; reading "
+            "linear, at() and advances constant per query; no leaks"
+        ),
+        font_files=False,
     ),
 }
 TARGET_ORDER = tuple(TARGETS)
@@ -300,10 +379,10 @@ def prepare_corpus(name: str, max_input_size: int, fresh: bool) -> Path:
 
     for data in load_seeds(config.seeds):
         add(data, "seed")
-    fonts = font_files()
+    fonts = font_files() if config.font_files else []
     for font in fonts:
         add(config.font_prefix + font.read_bytes(), "font")
-    corpus_note = "" if (ROOT / "tests" / "corpus").is_dir() else "; tests/corpus/ absent (run scripts/fetch_corpus.py for more seeds)"
+    corpus_note = "" if not config.font_files or (ROOT / "tests" / "corpus").is_dir() else "; tests/corpus/ absent (run scripts/fetch_corpus.py for more seeds)"
     print(
         f"{name}: corpus {display(destination)}: {written} seeds present"
         f" ({len(fonts)} font files found, {skipped} over the {max_input_size}-byte input bound skipped){corpus_note}",

@@ -1,0 +1,20 @@
+# Byte tokens for the narrow targets (font-cmap, font-coverage, font-gsub,
+# font-gpos, font-var; libFuzzer dictionary format). Their input is a choice
+# byte and bytes that choose a font's contents, not font bytes, so tags are
+# useless here; these are the values that select edge cases: zero and full
+# bytes (empty gaps, longest runs, extreme deltas), the sign boundary of
+# signed choices, and runs of one value (identical ranges and lookups).
+
+zero="\x00"
+full="\xFF"
+sign_low="\x7F"
+sign_high="\x80"
+eleven="\x0B"
+zeros_4="\x00\x00\x00\x00"
+fulls_4="\xFF\xFF\xFF\xFF"
+signs_4="\x80\x80\x80\x80"
+alternating="\x00\xFF\x00\xFF"
+# font-var locations: a named weight and width, a huge or fractional value
+location_bold="\x06\x00\x05\x80\x00\x03\x01\x01"
+location_huge="\x40\x10\x30\x7F\xFF\x02\x82\x81"
+location_odd_tag="\x09\x00\x09\x00\x00\x00\x83\x02"

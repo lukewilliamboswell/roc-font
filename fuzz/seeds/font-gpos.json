@@ -1,0 +1,12 @@
+{
+  "about": "Reviewed starting inputs for the font-gpos target. The first byte picks the kerning format (value modulo 3: GPOS pairs by glyph, by class, or a kern table) and, for classes, the class counts (2 to 4 first classes by the byte shifted right 2, modulo 3; 1 to 4 second classes by bits 4 and 5). Each further byte (up to 32) chooses the pairs of one first glyph and the text. The font is built from 2 and 16 copies of the first glyphs.",
+  "seeds": [
+    {"why": "GPOS pairs by glyph (format 1)", "parts": [{"hex": "00 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "GPOS pairs by class (format 2), two first and one second class", "parts": [{"hex": "01 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "GPOS pairs by class, four first and four second classes", "parts": [{"hex": "3a 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
+    {"why": "TrueType kern table, format 0", "parts": [{"hex": "02 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "kern table with many pairs per first glyph", "parts": [{"hex": "02 00 05 0a 0f 00 05 0a 0f 00 05 0a 0f 00 05 0a 0f"}]},
+    {"why": "pairs by glyph with one first glyph", "parts": [{"hex": "03 40"}]},
+    {"why": "pairs by class, no further bytes", "parts": [{"hex": "04"}]}
+  ]
+}

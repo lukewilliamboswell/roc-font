@@ -1,0 +1,15 @@
+{
+  "about": "Reviewed starting inputs for the font-coverage target. The first byte picks the formats: bit 0 coverage format 2, bit 1 single substitution format 2, bits 2 and 3 class definition format 2 for the first and second glyph, bits 4 and 5 a third class of each. Each further byte (up to 32) chooses a run of covered glyphs, kerning values and the text. The font is built from 2 and 16 copies of the runs.",
+  "seeds": [
+    {"why": "coverage format 1, delta substitution, class definitions format 1, two classes", "parts": [{"hex": "00 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "coverage format 2 (ranges)", "parts": [{"hex": "01 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "single substitution by list", "parts": [{"hex": "02 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "first class definition format 2", "parts": [{"hex": "04 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "second class definition format 2", "parts": [{"hex": "08 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "both class definitions format 2, three classes each", "parts": [{"hex": "3c 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
+    {"why": "every format 2, three classes each", "parts": [{"hex": "3f 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
+    {"why": "one long run (byte 0xff: gap 0, longest run)", "parts": [{"hex": "15 ff"}]},
+    {"why": "one-glyph runs, no gaps", "parts": [{"hex": "2a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"}]},
+    {"why": "no choice bytes: one run from byte 0", "parts": [{"hex": "01"}]}
+  ]
+}

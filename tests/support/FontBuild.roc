@@ -316,13 +316,21 @@ FontBuild :: {}.{
 		FontBuild.pack([U16(2), Ref(coverage), U16(format1), U16(format2), Ref(class1), Ref(class2), U16(height), U16(width)].concat(values.map(|v| I16(v))))
 
 	## A TrueType `kern` table of format 0 subtables, each with its coverage
-	## field (1 for horizontal kerning) and pairs in the order given.
+	## field (1 for horizontal kerning) and pairs in the order given, and its
+	## binary search fields (`searchRange`, `entrySelector`, `rangeShift`)
+	## filled in as the format defines them: OTS, and so lenient reading,
+	## rejects a font whose `entrySelector` is wrong.
 	kern : List({ coverage : U64, pairs : List({ left : U64, right : U64, value : I64 }) }) -> List(U8)
 	kern = |subtables| {
 		body = subtables.join_map(
 			|s| {
 				n = s.pairs.len()
-				FontBuild.pack([U16(0), U16(14 + 6 * n), U16(s.coverage), U16(n), U16(0), U16(0), U16(0)].concat(s.pairs.join_map(|p| [U16(p.left), U16(p.right), I16(p.value)])))
+				var $power = 0
+				while (1.U64).shl_wrap(($power + 1).to_u8_wrap()) <= n {
+					$power = $power + 1
+				}
+				range = 6 * (1.U64).shl_wrap($power.to_u8_wrap())
+				FontBuild.pack([U16(0), U16(14 + 6 * n), U16(s.coverage), U16(n), U16(range), U16($power), U16(6 * n - range.min(6 * n))].concat(s.pairs.join_map(|p| [U16(p.left), U16(p.right), I16(p.value)])))
 			},
 		)
 		FontBuild.u16(0).concat(FontBuild.u16(subtables.len())).concat(body)
@@ -597,6 +605,96 @@ FontBuild :: {}.{
 		}
 		$out
 	}
+
+	# ------------------------------------------------------------ narrow fonts
+
+	## A font of `advances.len()` glyphs (glyph `g` advancing by entry `g`,
+	## 1000 units per em) with the given `cmap` table and further tables:
+	## the smallest font that exercises one table or one lookup kind.
+	glyphs_font : List(U64), List(U8), List({ tag : Str, data : List(U8) }) -> List(U8)
+	glyphs_font = |advances, characters, extra| {
+		count = advances.len()
+		FontBuild.file(
+			[
+				{ tag: "head", data: FontBuild.head(1000, False) },
+				{ tag: "hhea", data: FontBuild.hhea(800, -200, count) },
+				{ tag: "maxp", data: FontBuild.maxp(count) },
+				{ tag: "hmtx", data: FontBuild.hmtx(advances) },
+				{ tag: "cmap", data: characters },
+			].concat(extra),
+		)
+	}
+
+	## Single substitution, format 1, over a coverage table given as bytes
+	## (`coverage1` or `coverage2`): add `delta` to covered glyphs.
+	single1_over : List(U8), I64 -> List(U8)
+	single1_over = |coverage, delta| FontBuild.pack([U16(1), Ref(coverage), I16(delta)])
+
+	## Single substitution, format 2, over a coverage table given as bytes:
+	## the covered glyphs replaced in coverage order.
+	single2_over : List(U8), List(U64) -> List(U8)
+	single2_over = |coverage, replacements| FontBuild.pack([U16(2), Ref(coverage), U16(replacements.len())].concat(replacements.map(|g| U16(g))))
+
+	## A TrueType `kern` table of one horizontal format 0 subtable (see
+	## `kern`). Pairs are written in the order given (the format requires
+	## increasing left, then right, glyph).
+	kern_searchable : List({ left : U64, right : U64, value : I64 }) -> List(U8)
+	kern_searchable = |pairs| FontBuild.kern([{ coverage: 1, pairs }])
+
+	# ------------------------------------------------------------ variations
+
+	## An `fvar` table (version 1.0) of axes, with no named instances. Axis
+	## values are whole design units, written as 16.16 fixed-point numbers.
+	fvar : List({ tag : Str, min : I64, default : I64, max : I64 }) -> List(U8)
+	fvar = |axes| {
+		fixed = |v| FontBuild.u32((if (v < 0) v * 65536 + 4294967296 else v * 65536).to_u64_wrap())
+		header = FontBuild.u16(1).concat(FontBuild.u16(0)).concat(FontBuild.u16(16)).concat(FontBuild.u16(2)).concat(FontBuild.u16(axes.len())).concat(FontBuild.u16(20)).concat(FontBuild.u16(0)).concat(FontBuild.u16(4 * axes.len() + 4))
+		header.concat(axes.join_map(|a| a.tag.to_utf8().concat([' ', ' ', ' ', ' ']).take_first(4).concat(fixed(a.min)).concat(fixed(a.default)).concat(fixed(a.max)).concat(FontBuild.u16(0)).concat(FontBuild.u16(256))))
+	}
+
+	## An `avar` table (version 1.0): one segment map per axis, each a list
+	## of (from, to) pairs in F2Dot14 units (16384 is 1.0), written as given.
+	avar : List(List({ from : I64, to : I64 })) -> List(U8)
+	avar = |maps|
+		FontBuild.u16(1)
+			.concat(FontBuild.u16(0))
+			.concat(FontBuild.u16(0))
+			.concat(FontBuild.u16(maps.len()))
+			.concat(maps.join_map(|m| FontBuild.u16(m.len()).concat(m.join_map(|p| FontBuild.i16(p.from).concat(FontBuild.i16(p.to))))))
+
+	## An `ItemVariationStore` for `axis_count` axes: regions (per region,
+	## one start, peak, end triple per axis, in F2Dot14 units) and data
+	## subtables, each naming the regions its columns use and holding rows of
+	## 16-bit deltas, one per column.
+	variation_store : U64, List(List({ start : I64, peak : I64, end : I64 })), List({ regions : List(U64), rows : List(List(I64)) }) -> List(U8)
+	variation_store = |axis_count, regions, subtables| {
+		region_list = FontBuild.u16(axis_count).concat(FontBuild.u16(regions.len())).concat(regions.join_map(|r| r.join_map(|t| FontBuild.i16(t.start).concat(FontBuild.i16(t.peak)).concat(FontBuild.i16(t.end)))))
+		data = |s| {
+			columns = s.regions.len()
+			FontBuild.u16(s.rows.len())
+				.concat(FontBuild.u16(columns))
+				.concat(FontBuild.u16(columns))
+				.concat(s.regions.join_map(FontBuild.u16))
+				.concat(s.rows.join_map(|row| row.concat(List.repeat(0, columns)).take_first(columns).join_map(FontBuild.i16)))
+		}
+		FontBuild.pack([U16(1), Ref32(region_list), U16(subtables.len())].concat(subtables.map(|s| Ref32(data(s)))))
+	}
+
+	## An `HVAR` table over a store. With no mapping, glyph `g` takes row `g`
+	## of the store's first subtable; otherwise glyph `g` takes mapping entry
+	## `g` (the last entry past the end), as a format 0 delta-set index map
+	## with 32-bit entries.
+	hvar : List(U8), List({ outer : U64, inner : U64 }) -> List(U8)
+	hvar = |store, mapping| {
+		map = FontBuild.u16(0x003F).concat(FontBuild.u16(mapping.len())).concat(mapping.join_map(|e| FontBuild.u16(e.outer).concat(FontBuild.u16(e.inner))))
+		FontBuild.pack([U16(1), U16(0), Ref32(store), if (mapping.is_empty()) U32(0) else Ref32(map), U32(0), U32(0)])
+	}
+
+	## An `MVAR` table: value records (tag, delta-set outer and inner index),
+	## which must come in increasing tag order, over a store.
+	mvar : List(U8), List({ tag : Str, outer : U64, inner : U64 }) -> List(U8)
+	mvar = |store, values|
+		FontBuild.pack([U16(1), U16(0), U16(0), U16(8), U16(values.len()), Ref(store)].concat(values.join_map(|r| [Tag(r.tag), U16(r.outer), U16(r.inner)])))
 }
 
 expect FontBuild.u16(0x1234) == [0x12, 0x34]

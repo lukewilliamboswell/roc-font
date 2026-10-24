@@ -51,16 +51,84 @@ shaped with Inter.
 gives at most `4 n + 32` glyphs and at most 36 per character. Kerning gives
 one finite value per glyph. A run's width (advances plus kerning) is
 deterministic and finite.
+
+|`font-cmap`
+|A choice byte (the character map format: 0, 4, 6, 10, 12 or 13; glyph
+arrays or deltas for format 4; code points past U+FFFF for 10 and 12),
+then up to 32 bytes, each choosing one range of the map (gap, length,
+first glyph, sometimes glyph 0 or past the font).
+|Both sizes read strictly. Every lookup of every range's characters, their
+neighbours and plane edges agrees with the map the recipe describes; the
+code point listing is that map, ascending; two reads agree.
+
+|`font-coverage`
+|A choice byte (coverage format, single substitution format, both class
+definition formats, class counts), then up to 32 bytes choosing runs of
+covered glyphs, kerning values and the text.
+|With kerning off the glyphs are the text's, with exactly the covered ones
+substituted as the recipe says; with ligatures off the width is the
+advances plus the class kerning of every adjacent pair whose first glyph
+is covered. Runs are index-aligned with clusters in range.
+
+|`font-gsub`
+|A choice byte (lookup type 1, 2, 4, 5, 6, or 7 holding 1, 2 or 4), then
+two bytes per lookup choosing its coverage, format, outputs and context.
+Lookup `i` reads only its own band of eight glyphs and writes only glyphs
+1 to 15.
+|With ligatures off the glyphs are the text's. Both sizes give the same
+run (the extra lookups never match the text), deterministically, with
+clusters in range and in order and growth within HarfBuzz's bound.
+
+|`font-gpos`
+|A choice byte (`GPOS` pair format 1 or 2, or `kern`, and class counts),
+then up to 32 bytes choosing each first glyph's pairs and the text.
+|The glyphs are the text's; the width is the advances plus the recipe's
+kerning of every adjacent pair; both sizes give the same run; runs are
+index-aligned with clusters in range and in order.
+
+|`font-var`
+|A choice byte (1 to 4 axes, 2 to 5 regions, `OS/2`, an `HVAR` index map,
+raw maps and regions), 48 bytes choosing axes (tags may repeat), `avar`
+maps, regions, deltas and the metrics `MVAR` varies, then up to eight
+locations of eight bytes (named weights and widths, optical sizes, axis
+values: huge, fractional, for tags the font lacks).
+|Both sizes read; unless raw, nothing is dropped and the axes are those
+built. `at` and every query on its result are total and deterministic;
+advances are finite, never negative and 0 past the font; every axis at its
+default gives the `hmtx` advances; every glyph and metric of the smaller
+font measures the same in the larger at every location.
 |===
 
-Both targets also check *cost*:
+The last five are *narrow* targets (architecture §7.3): the input chooses
+the contents of a font that exercises one feature, built with `FontBuild`
+at two sizes, so a failure names its cause. The sizes are 2 and 16 copies
+of the chosen items (`font-cmap`, `font-coverage`, `font-gpos`), 8 and 64
+lookups (`font-gsub`), and 32 and 256 glyphs with 8 times the regions
+(`font-var`). Each builds valid fonts only (apart from `font-var`'s raw
+mode), so it can compare against what the recipe means: a differential
+check against the builder, without an oracle. Real font files are not
+their seeds, and they use `fuzz/dictionaries/narrow.dict`.
+
+Every target also checks *cost*:
 
 * *Allocation linearity.* `Fuzz.measure_allocs!` counts the allocations of
   the operation at two sizes: reading `FontBuild.scaled` fonts built from 2
   and 16 copies of the input's choices, and shaping the text repeated 2 and
   16 times. The larger may take at most `10 × small + 256` allocations: an
   8-fold input with headroom for constant overhead. Quadratic behaviour
-  (a list copied per item, a sort on sorted input) fails quickly.
+  (a list copied per item, a sort on sorted input) fails quickly. The
+  narrow targets apply the same bound to reading their two fonts, to
+  planning (`font-gsub`, linear in lookups) and to listing code points
+  (`font-cmap`).
+* *Constant cost per call.* The narrow targets also run one query or
+  shaping call on both fonts with the same arguments: character lookups
+  (`font-cmap`), `shape_planned` on the same text with a plan made
+  beforehand (`font-coverage`, `font-gsub`, `font-gpos`), and `at` and
+  advance lookups at the same location (`font-var`). The larger font may
+  take at most 8 more allocations (4 for `font-var`) than the smaller:
+  per-call work must not grow with the font's tables. On the seeds,
+  lookups take 0 allocations at both sizes, shaping 10 to 14, and `at` 5
+  to 16.
 * *Leaks.* `Fuzz.expect_no_leaks!` runs the larger operation and fails if
   anything it allocated is still live afterwards. roc-fuzz also checks
   every input for leaks unless `--no-detect-leaks` is passed; the scripts
@@ -69,16 +137,16 @@ Both targets also check *cost*:
 === Planned targets
 
 Architecture §7.3 calls for more targets as the stages they cover land:
-one per reading stage (container and directory, each table reader), one
-per shaping stage (cmap mapping, GSUB, GPOS, kerning, cluster handling),
-and a differential target that shapes fuzzed text on corpus fonts and
-compares with recorded HarfBuzz output. A new stage is not finished until
-its target exists, is seeded and is registered in `scripts/run_fuzz.py`.
+narrow targets for the stages not yet covered (mark positioning, `gvar`
+and outline extents, `GDEF` device variations, `FeatureVariations`,
+cluster levels), and a differential target that shapes fuzzed text on
+corpus fonts and compares with recorded HarfBuzz output. A new stage is
+not finished until its target exists, is seeded and is registered in
+`scripts/run_fuzz.py`.
 
 == Layout
 
-The targets live in `fuzz/` as `font-read.roc` and `font-shape.roc`. They
-import the package through `package/main.roc`, exactly what ships, so they
+The targets live in `fuzz/` as `<target>.roc`. They import the package through `package/main.roc`, exactly what ships, so they
 exercise the same root every consumer uses. The byte builders they need
 live in a separate test-only package, `tests/support/` (module
 `FontBuild`), which imports nothing from roc-font:
@@ -107,6 +175,7 @@ fuzz/
   <target>.roc              roc-fuzz targets
   seeds/<target>.json       reviewed starting inputs, each with a reason
   dictionaries/font.dict    tags, signatures and edge values
+  dictionaries/narrow.dict  choice bytes for the narrow targets
 scripts/run_fuzz.py         build, seed, run, harvest
 ----
 
@@ -119,6 +188,7 @@ builds can disagree, and a fuzz binary is always native.
 [source,sh]
 ----
 python3 scripts/run_fuzz.py smoke                  # every target, 4000 inputs, seed 1
+python3 scripts/run_fuzz.py smoke font-cmap font-var  # some targets
 python3 scripts/run_fuzz.py smoke font-shape --runs=20000
 python3 scripts/run_fuzz.py campaign --seconds=600 # each target, persistent corpus
 python3 scripts/run_fuzz.py nightly                # 1800 s per target
@@ -160,9 +230,11 @@ stand for a nearly valid font; keep hand-written seeds small.
 
 `run_fuzz.py` also adds every `.ttf`, `.otf`, `.ttc` and `.otc` file found
 in `tests/fonts/` and in the fetched corpus `tests/corpus/` (architecture
-§7.2; fetch it with `scripts/fetch_corpus.py`). `font-shape` gets each font
+§7.2; fetch it with `scripts/fetch_corpus.py`) to the targets that read
+whole fonts (`font-read`, `font-shape`; `font_files` in `TargetConfig`). `font-shape` gets each font
 after a short text and the `0xFF` marker. Files larger than the target's
-input bound (256 KiB) are skipped and counted. When `tests/corpus/` is
+input bound (256 KiB) are skipped and counted. The narrow targets take
+short inputs (64 to 128 bytes) and only their reviewed seeds. When `tests/corpus/` is
 absent, runs still work from the committed fixtures and say so.
 
 The dictionary helps mutations produce table tags, signatures and boundary
@@ -196,8 +268,9 @@ python3 scripts/run_fuzz.py minimize font-read <input> .roc-font-tmp/fuzz/minimi
   preferably built with `FontBuild` so the test reads as a font, otherwise
   as literal bytes. Add it as a top-level `expect` in the public API test
   module for the stage (`tests/api/FontTests.roc` for reading and queries,
-  `tests/api/SubstituteTests.roc` for substitution), going through `Font`
-  as a consumer would. Only a failure the public API cannot observe goes in
+  `tests/api/SubstituteTests.roc` for substitution, and
+  `tests/api/FuzzRegressionTests.roc` for failures of the narrow targets),
+  going through `Font` as a consumer would. Only a failure the public API cannot observe goes in
   an in-package `package/<Module>Tests.roc`, built from inline bytes or a
   committed fixture, never the builders. Precede it with a doc comment that starts `## fuzz regression:` and names the
   target, the contract that broke and the cause:
@@ -231,6 +304,7 @@ crash may be added to `fuzz/seeds/` with its reason.
   the stage allocates in proportion to its input.
 . Add `fuzz/seeds/<target>.json` and, if useful, a dictionary.
 . Register it in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
-  timeout and a one-line contract.
+  timeout and a one-line contract; a narrow target, whose input is choices
+  rather than a font file, sets `font_files=False`.
 . Run `python3 scripts/run_fuzz.py smoke <target>` and a short campaign
   before landing it.

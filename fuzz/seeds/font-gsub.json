@@ -1,0 +1,16 @@
+{
+  "about": "Reviewed starting inputs for the font-gsub target. The first byte picks the lookup kind (value modulo 6: single, multiple, ligature, contextual, chained contextual, extension; bits 3 and 4 the extension's inner kind: single, multiple, ligature). Each pair of further bytes (up to 64 bytes) chooses one lookup: the glyphs of its band it covers and its format, outputs and context; bytes also choose the text. The font is built with 8 and 64 lookups.",
+  "seeds": [
+    {"why": "single substitutions", "parts": [{"hex": "00 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "single substitutions, format 2 lists (odd second bytes)", "parts": [{"hex": "00 3f 01 7c 13 a5 55 0f 2b 3f 01 7c 13 a5 55 0f 2b"}]},
+    {"why": "multiple substitutions, including deletions", "parts": [{"hex": "01 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "ligatures of two and three glyphs", "parts": [{"hex": "02 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
+    {"why": "contextual, formats 1, 2 and 3 by the second byte modulo 3", "parts": [{"hex": "03 11 00 22 01 33 02 44 04 55 05 66 06"}]},
+    {"why": "chained contextual with backtrack and lookahead", "parts": [{"hex": "04 11 08 22 0d 33 8e 44 0c 55 89 66 0a"}]},
+    {"why": "chained contextual, formats 1 to 3", "parts": [{"hex": "04 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b 2c d0 77 01 e5 38 4f b2 19 80 63 fe 0a 95 3d c1"}]},
+    {"why": "extension holding single substitutions", "parts": [{"hex": "05 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "extension holding multiple substitutions", "parts": [{"hex": "0d 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "extension holding ligatures", "parts": [{"hex": "15 05 91 33 a7 10 ff 00 42 07 13 88 c4 5e 21 9a 6b"}]},
+    {"why": "no choice bytes: every lookup from byte 0", "parts": [{"hex": "02"}]}
+  ]
+}

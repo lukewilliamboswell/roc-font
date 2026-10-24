@@ -23,9 +23,6 @@ repositories are relative to `~/Documents/Github/`.
 - [ ] `Font.instances` and `Font.coordinates` (named instances and the
   normalised coordinates `at` resolves to); then the driver answers
   `instance=` and `coords` (20 + 35 recorded cases wait on them).
-- [ ] Fuzz targets for the variation readers (`TableVar`, `LayoutVar`,
-  `TableGvar`): totality, determinism, bounded steps, differential values
-  at fuzzed locations.
 
 ### Default fonts (§5.8, `docs/default-fonts.adoc`)
 
@@ -56,9 +53,8 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Tests and measurement
 
-- [ ] Narrow fuzz targets with allocation scaling (§7.3): cmap formats;
-  coverage and class definitions; GSUB per lookup type; GPOS pair and
-  `kern`; item variation store and HVAR; gvar.
+- [ ] Narrow fuzz targets still to add: gvar extents, LayoutVar kerning
+  deltas and FeatureVariations (once wired).
 - [ ] Optional speed-up: U64 fast paths for TableVar's single-precision
   multiply and add (85 % of gvar extents time).
 - [ ] Record time ratios on an idle machine (`bench.py --check
