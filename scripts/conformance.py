@@ -154,7 +154,7 @@ class Locations:
         self.cache: dict[tuple, dict | None] = {}
 
     def of(self, case) -> dict | None:
-        key = (case.font_path, case.face, canonical_json(case.location))
+        key = (case.font_path, case.face, canonical_json(case.location), tuple(case.settings.get("variations", [])))
         if key not in self.cache:
             self.cache[key] = resolve_location(case, case.font_path.read_bytes())
         return self.cache[key]

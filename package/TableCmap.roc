@@ -10,8 +10,8 @@ import Bytes
 ## (0, 4), then the Basic Multilingual Plane maps (3, 1), (0, 3), (0, 2),
 ## (0, 1) and (0, 0), and last a Macintosh map (1, 0) or any other
 ## Macintosh encoding. Within one rank the first record wins. Subtables in
-## formats 0, 4, 6, 10, 12 and 13 are read; a record in another format
-## (2 or 8, or 14, which holds variation sequences rather than a map) is
+## formats 0, 4, 6, 10, 12 and 13 are read as the map; a record in another
+## format (2 or 8, or 14, which holds variation sequences, read below) is
 ## passed over.
 ##
 ## Reading checks every field of the chosen subtable and turns it, whatever
@@ -47,10 +47,182 @@ import Bytes
 ##
 ## In every case a character that maps to glyph 0, the missing glyph, is
 ## not in the list.
+##
+## Variation sequences (a character followed by a variation selector) come
+## from the Unicode variation sequences subtable (platform 0, encoding 5,
+## format 14), as HarfBuzz finds it. Reading checks that its records and
+## every default and non-default table they point to lie inside the `cmap`
+## table, and flattens them into three lists (`Variants`); a lookup is two
+## binary searches. A broken format 14 subtable is a bad `cmap`, as OTS
+## refuses it.
 TableCmap := {
 	ranges : List({ first : U32, last : U32, glyph : U32 }),
 	same : Bool,
+	variants : Variants,
 }.{
+
+	## A font's variation sequences: per variation selector (in the
+	## subtable's order) the spans of its default ranges and non-default
+	## mappings in `defaults` and `mappings`.
+	Variants : {
+		records : List({ selector : U32, defaults : U64, defaults_end : U64, mappings : U64, mappings_end : U64 }),
+		defaults : List({ first : U32, last : U32 }),
+		mappings : List({ code : U32, glyph : U32 }),
+	}
+
+	no_variants : Variants
+	no_variants = { records: [], defaults: [], mappings: [] }
+
+	## The variation sequences of a map.
+	variants_of : TableCmap -> Variants
+	variants_of = |cmap| cmap.variants
+
+	## The glyph of a variation sequence, as HarfBuzz's
+	## `get_glyph_variant` gives it: `Found` (a glyph of its own), `UseDefault`
+	## (the character's usual glyph) or `NotFound`. The selector's records
+	## and ranges are searched as stored: the format asks for increasing
+	## order, which reading does not check, so a font that breaks it gets
+	## what a binary search finds, as in HarfBuzz.
+	variant : Variants, U32, U32 -> [Found(U64), UseDefault, NotFound]
+	variant = |variants, code_point, selector| {
+		var $low = 0
+		var $high = variants.records.len()
+		var $record = Err(NotFound)
+		while $low < $high {
+			mid = ($low + $high) // 2
+			r = variants.records.get(mid) ?? { selector: 0, defaults: 0, defaults_end: 0, mappings: 0, mappings_end: 0 }
+			if selector < r.selector {
+				$high = mid
+			} else if selector > r.selector {
+				$low = mid + 1
+			} else {
+				$record = Ok(r)
+				$low = $high
+			}
+		}
+		match $record {
+			Err(_) => NotFound
+			Ok(r) => {
+				var $lo = r.defaults
+				var $hi = r.defaults_end
+				var $default = False
+				while $lo < $hi {
+					mid = ($lo + $hi) // 2
+					d = variants.defaults.get(mid) ?? { first: 1, last: 0 }
+					if code_point < d.first {
+						$hi = mid
+					} else if code_point > d.last {
+						$lo = mid + 1
+					} else {
+						$default = True
+						$lo = $hi
+					}
+				}
+				if $default {
+					UseDefault
+				} else {
+					var $l = r.mappings
+					var $h = r.mappings_end
+					var $found = NotFound
+					while $l < $h {
+						mid = ($l + $h) // 2
+						m = variants.mappings.get(mid) ?? { code: 0, glyph: 0 }
+						if code_point < m.code {
+							$h = mid
+						} else if code_point > m.code {
+							$l = mid + 1
+						} else {
+							$found = Found(m.glyph.to_u64())
+							$l = $h
+						}
+					}
+					$found
+				}
+			}
+		}
+	}
+
+	## The variation sequences of a font file's `cmap`, for a font whose
+	## `cmap` has been read (and so checked): none when the table is absent
+	## or, which reading has already refused, broken.
+	variants_from_tables : List(U8), List(Sfnt.Table) -> Variants
+	variants_from_tables = |bytes, tables|
+		match Sfnt.located(bytes, tables, "cmap", 4) {
+			Found(found) => TableCmap.read_variants(found.data) ?? TableCmap.no_variants
+			_ => TableCmap.no_variants
+		}
+
+	## Find and check the format 14 subtable of a `cmap` table (the first
+	## record for platform 0, encoding 5, whose subtable has format 14).
+	read_variants : List(U8) -> Try(Variants, [Bad(U64)])
+	read_variants = |cmap| {
+		count = Bytes.u16(cmap, 2)
+		var $at = Err(NotFound)
+		var $i = 0
+		while $i < count {
+			rec = 4 + 8 * $i
+			offset = Bytes.u32(cmap, rec + 4)
+			if Bytes.u16(cmap, rec) == 0 and Bytes.u16(cmap, rec + 2) == 5 and Bytes.fits(offset, 2, cmap.len()) and Bytes.u16(cmap, offset) == 14 {
+				$at = Ok(offset)
+				$i = count
+			} else {
+				$i = $i + 1
+			}
+		}
+		match $at {
+			Err(_) => Ok(TableCmap.no_variants)
+			Ok(at) => TableCmap.read_format14(Bytes.rest(cmap, at)).map_err(|_| Bad(at))
+		}
+	}
+
+	# A format 14 subtable (`data` runs to the end of the `cmap` table):
+	# records of an increasing variation selector, each with offsets from
+	# the subtable's start to a default table (ranges of a 24-bit start and
+	# an 8-bit count of further characters) and a non-default table
+	# (mappings of a 24-bit character to a glyph). Allocation is sized by
+	# counts checked against the data.
+	read_format14 : List(U8) -> Try(Variants, [Bad])
+	read_format14 = |data| {
+		size = data.len()
+		count = Bytes.u32(data, 6)
+		if !Bytes.fits(0, 10, size) or !Bytes.fits(10, 11 * count, size) {
+			return Err(Bad)
+		}
+		var $records = List.with_capacity(count)
+		var $defaults = []
+		var $mappings = []
+		for i in 0..<count {
+			rec = 10 + 11 * i
+			selector = Bytes.u16(data, rec) * 256 + Bytes.u8(data, rec + 2)
+			default_at = Bytes.u32(data, rec + 3)
+			mapping_at = Bytes.u32(data, rec + 7)
+			defaults_start = $defaults.len()
+			if default_at != 0 {
+				n = Bytes.u32(data, default_at)
+				if !Bytes.fits(default_at, 4, size) or !Bytes.fits(default_at + 4, 4 * n, size) {
+					return Err(Bad)
+				}
+				for k in 0..<n {
+					r = default_at + 4 + 4 * k
+					first = Bytes.u16(data, r) * 256 + Bytes.u8(data, r + 2)
+					$defaults = $defaults.append({ first: first.to_u32_wrap(), last: (first + Bytes.u8(data, r + 3)).to_u32_wrap() })
+				}
+			}
+			mappings_start = $mappings.len()
+			if mapping_at != 0 {
+				n = Bytes.u32(data, mapping_at)
+				if !Bytes.fits(mapping_at, 4, size) or !Bytes.fits(mapping_at + 4, 5 * n, size) {
+					return Err(Bad)
+				}
+				for k in 0..<n {
+					m = mapping_at + 4 + 5 * k
+					$mappings = $mappings.append({ code: (Bytes.u16(data, m) * 256 + Bytes.u8(data, m + 2)).to_u32_wrap(), glyph: Bytes.u16(data, m + 3).to_u32_wrap() })
+				}
+			}
+			$records = $records.append({ selector: selector.to_u32_wrap(), defaults: defaults_start, defaults_end: $defaults.len(), mappings: mappings_start, mappings_end: $mappings.len() })
+		}
+		Ok({ records: $records, defaults: $defaults, mappings: $mappings })
+	}
 
 	## Every code point the map gives a glyph below `glyph_count`, in
 	## increasing order. Glyphs rise with the code points of a range (or are
@@ -91,7 +263,7 @@ TableCmap := {
 
 	## A map that has no characters.
 	none : TableCmap
-	none = { ranges: [], same: False }
+	none = { ranges: [], same: False, variants: TableCmap.no_variants }
 
 	## The glyph of a code point, if the map has one that is not glyph 0 and
 	## is below `glyph_count`.
@@ -185,7 +357,8 @@ TableCmap := {
 					} else {
 						Unicode
 					}
-				Ok({ ranges: TableCmap.resolve(subtable.ranges, subtable.same, remap), same: subtable.same })
+				variants = TableCmap.read_variants(cmap)?
+				Ok({ ranges: TableCmap.resolve(subtable.ranges, subtable.same, remap), same: subtable.same, variants })
 			}
 		}
 	}

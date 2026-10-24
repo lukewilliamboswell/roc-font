@@ -5,10 +5,10 @@ import ShaperLanguages
 ## font's layout tables use, as HarfBuzz maps them (`hb-ot-tag.cc`,
 ## `hb-common.cc`), and each script's natural direction.
 ##
-## Internal. Tags are big-endian four-byte numbers. Not mapped (HarfBuzz's
-## `hb_ot_tags_from_complex_language`): language tags whose meaning
-## depends on a region or variant subtag, such as `zh-HK` or `ro-MD`; their
-## primary subtag maps as usual.
+## Internal. Tags are big-endian four-byte numbers. Language tags whose
+## meaning depends on a region, script or variant subtag (`zh-HK`,
+## `zh-Hant`, `el-polyton`) map first through HarfBuzz's multi-subtag rules
+## (`ShaperLanguages.complex`), then by their primary subtag.
 ShaperTags :: {}.{
 
 	tag_of : Str -> U64
@@ -159,9 +159,107 @@ ShaperTags :: {}.{
 		}
 		languages = match ShaperTags.private_tag(split.private, "-hbot", Upper) {
 			Ok(t) => [t]
-			Err(_) => ShaperTags.from_language(lang.take_first(split.limit))
+			Err(_) =>
+				match ShaperTags.complex_tags(lang, split.limit) {
+					Ok(tags) => tags
+					Err(_) => ShaperTags.from_language(lang.take_first(split.limit))
+				}
 		}
 		{ languages, scripts }
+	}
+
+	## The tags of HarfBuzz's multi-subtag rules for a language tag (lower
+	## case) whose plain part ends at `limit`, as
+	## `hb_ot_tags_from_complex_language` tests them.
+	complex_tags : List(U8), U64 -> Try(List(U64), [NoRule])
+	complex_tags = |lang, limit| {
+		first = lang.first() ?? 0
+		dash = lang.find_first_index(|b| b == '-')
+		variant_ok = match dash {
+			Ok(p) => limit >= 7 and p < limit and limit - p >= 5
+			Err(_) => False
+		}
+		after = lang.drop_first(1)
+		matched = ShaperLanguages.complex.find_first(
+			|rule| {
+				a = rule.a.to_utf8()
+				b = rule.b.to_utf8()
+				if rule.kind == 0 {
+					match dash {
+						Ok(p) => variant_ok and ShaperTags.subtag_matches(lang, p, limit, b)
+						Err(_) => False
+					}
+				} else if rule.first.to_utf8() != [first] {
+					False
+				} else if rule.kind == 1 {
+					after == a
+				} else if rule.kind == 2 {
+					next = after.get(a.len())
+					limit >= 1 + a.len() and after.take_first(a.len()) == a and (next == Err(OutOfBounds) or next == Ok('-'))
+				} else {
+					after.take_first(a.len()) == a and ShaperTags.subtag_matches(lang, 0, limit, b)
+				}
+			},
+		)
+		match matched {
+			Ok(rule) => {
+				t = rule.tags.to_utf8()
+				Ok(ShaperTags.indices(t.len() // 4).map(|k| ShaperTags.tag_at(t, 4 * k)))
+			}
+			Err(_) => Err(NoRule)
+		}
+	}
+
+	indices : U64 -> List(U64)
+	indices = |n| {
+		var $out = List.with_capacity(n)
+		for k in 0..<n {
+			$out = $out.append(k)
+		}
+		$out
+	}
+
+	## HarfBuzz's `subtag_matches`: `subtag` occurs in `lang` from `from`,
+	## starts before `limit`, and is not followed by a letter or digit.
+	subtag_matches : List(U8), U64, U64, List(U8) -> Bool
+	subtag_matches = |lang, from, limit, subtag| {
+		n = subtag.len()
+		if limit < from + n {
+			False
+		} else {
+			var $at = from
+			var $result = False
+			var $going = True
+			while $going {
+				# The next occurrence from `$at`.
+				var $k = $at
+				var $found = Err(NotFound)
+				while $k + n <= lang.len() {
+					if lang.sublist({ start: $k, len: n }) == subtag {
+						$found = Ok($k)
+						$k = lang.len()
+					} else {
+						$k = $k + 1
+					}
+				}
+				match $found {
+					Ok(s) if s < limit => {
+						c = lang.get(s + n) ?? 0
+						alnum = (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c >= '0' and c <= '9')
+						if alnum {
+							$at = s + n
+						} else {
+							$result = True
+							$going = False
+						}
+					}
+					_ => {
+						$going = False
+					}
+				}
+			}
+			$result
+		}
 	}
 
 	## A raw tag after `prefix` in a private-use subtag: eight hexadecimal

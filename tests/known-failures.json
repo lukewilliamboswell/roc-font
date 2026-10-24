@@ -34,14 +34,6 @@
       "reason": "The font is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture §4.4) where HarfBuzz applies it. Deliberate."
     },
     {
-      "id": "inter/soft-hyphen-hidden",
-      "reason": "Default-ignorable characters are not hidden yet (architecture §6.2). HarfBuzz draws U+00AD with the space glyph at zero advance; the driver maps it through the cmap and gets glyph 0."
-    },
-    {
-      "id": "inter/zwj-hidden",
-      "reason": "Default-ignorable characters are not hidden yet (architecture §6.2). HarfBuzz draws U+200D with the space glyph at zero advance and merges it into the previous cluster."
-    },
-    {
       "id": "reading/inter-metrics-subset",
       "reason": "OTS rejects the metrics-only subset because it has no `name` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `name` as OTS does (architecture §4.4) but does not require one, so accepting the font is a deliberate divergence."
     }

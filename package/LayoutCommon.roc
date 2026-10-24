@@ -168,6 +168,17 @@ LayoutCommon := {
 		$found
 	}
 
+	## The tag of the script `select_script` chooses for candidate tags, or
+	## 0 when the table has none of them (HarfBuzz's `chosen_script`).
+	select_script_tag : LayoutCommon, List(U64) -> U64
+	select_script_tag = |common, candidates| {
+		all = candidates.concat([LayoutCommon.tag("DFLT"), LayoutCommon.tag("dflt"), LayoutCommon.tag("latn")])
+		match all.find_first(|key| LayoutCommon.bsearch(common.data, common.script_list + 2, common.script_count, 6, key).is_ok()) {
+			Ok(key) => key
+			Err(_) => 0
+		}
+	}
+
 	## The language system chosen in a script for candidate tags, then
 	## `dflt`, then the script's default language system: its offset, or
 	## `no_langsys` for none.

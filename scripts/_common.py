@@ -297,12 +297,24 @@ def is_default_ignorable(code_point: int) -> bool:
     return any(lo <= code_point <= hi for lo, hi in DEFAULT_IGNORABLE)
 
 
+VALUE_OPTIONS = ("--direction", "--script", "--language", "--features", "--variations",
+                 "--font-size", "--cluster-level", "--face-index")
+
+
 def parse_hb_options(words: Sequence[str]) -> dict:
     """Structured options from hb-shape command-line options (already split,
     quotes removed). Options with no structured field are kept verbatim in
     `hb_options`; `--no-glyph-names` is implied and dropped."""
     settings: dict = {}
+    # HarfBuzz's test files write some options as two words
+    # (`--variations wght=700`); join them so they are not lost.
+    joined: list[str] = []
     for word in words:
+        if joined and joined[-1] in VALUE_OPTIONS and not word.startswith("--"):
+            joined[-1] = f"{joined[-1]}={word}"
+        else:
+            joined.append(word)
+    for word in joined:
         name, has_value, value = word.partition("=")
         if word == "--no-glyph-names":
             continue
@@ -628,6 +640,14 @@ def resolve_location(case: Case, data: bytes) -> dict | None:
         if size != "FontDefault":
             settings.append(("opsz", Decimal(size)))
         settings += [(tag, Decimal(value)) for tag, value in fields.get("variations", [])]
+        # An imported case's `--variations=` items apply last, as the driver
+        # applies them (driver_flags).
+        for item in case.settings.get("variations", []):
+            tag, _, value = item.partition("=")
+            try:
+                settings.append((tag, Decimal(value)))
+            except (InvalidOperation, ValueError):
+                pass
         for tag, value in settings:
             if len(tag.encode("latin-1", "replace")) != 4:
                 continue  # roc-font ignores tags that are not four bytes

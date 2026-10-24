@@ -2,20 +2,26 @@ import Face
 import LayoutCommon
 import LayoutGsub
 import LayoutKerning
+import LayoutVar
+import ShaperNormalize
 import ShaperTags
+import ShaperUnicode
 
-## Shaping with HarfBuzz's default shaper: choosing lookups for a script,
-## language, direction and features (a plan, as `hb-ot-map.cc` and
-## `hb-ot-shape.cc` build one), then mapping text to glyphs, substituting,
-## positioning and finishing the run.
+## Shaping as HarfBuzz 14.6.0's default and Hebrew shapers shape: choosing
+## lookups for a script, language, direction and features (a plan, as
+## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
+## (Unicode properties, grapheme clusters, the script's own direction,
+## mirroring, normalisation by what the font maps, automatic fractions),
+## substituting, positioning (with HarfBuzz's fallbacks for spaces and
+## for marks in fonts without `GPOS`) and finishing the run (hiding
+## default-ignorable characters, unsafe-to-break flags).
 ##
-## Internal. What is not done yet, each a documented difference from
-## HarfBuzz: Unicode-based steps (normalisation, default ignorables, space
-## fallbacks, mirroring for right-to-left text, grapheme clusters, mark
-## classes without `GDEF`), lookup flags, GSUB types 3 and 8, GPOS types
-## other than pair adjustment, automatic fractions and `rand`. Features
-## beyond 62 that vary across the text are dropped, as HarfBuzz drops
-## features when its mask bits run out.
+## Internal. Not done, each a documented difference from HarfBuzz: the
+## shapers of complex scripts (Arabic joining, Indic, Khmer, Myanmar, the
+## Universal Shaping Engine, Thai, Hangul; their text shapes as the
+## default shaper shapes it), vertical text, GPOS lookups other than pair
+## adjustment and the character cluster level. Features beyond the 27
+## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
 Shaper :: {}.{
 
 	Options : {
@@ -27,30 +33,50 @@ Shaper :: {}.{
 		operations : U64,
 	}
 
-	## A plan: the lookups to apply in order with their masks, the ranges of
-	## text where features that vary are on or off, and the direction.
+	## A plan: the lookups to apply in order with their masks, the mask
+	## every glyph starts with and the ranges of text where features that
+	## vary are set, the masks the shaper sets itself, the direction, and
+	## which of HarfBuzz's fallbacks apply.
 	Plan : {
-		reverse_input : Bool,
-		reverse_output : Bool,
-		gsub : List({ index : U64, mask : U64 }),
+		backward : Bool,
+		native : [Ltr, Rtl, Either],
+		gsub : List(LayoutGsub.Step),
 		gpos : List({ index : U64, mask : U64 }),
 		kern : [Kern(U64), NoKern],
-		default_mask : U64,
-		ranges : List({ bit : U64, on : Bool, start : U64, end : U64 }),
+		global_mask : U64,
+		ranges : List({ mask : U64, value : U64, start : U64, end : U64 }),
+		frac_mask : U64,
+		numr_mask : U64,
+		dnom_mask : U64,
+		rtlm_mask : U64,
+		hebrew : Bool,
+		characters : Bool,
+		has_gpos_mark : Bool,
+		fallback_marks : Bool,
 		growth : U64,
 		operations : U64,
 	}
 
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U32), flags : List(U8) }
 
-	## A requested feature: `global` when it covers all text.
-	Request : { tag : U64, value : U64, global : Bool, stage : U64 }
+	## A requested feature (HarfBuzz's `feature_info_t`): its largest and
+	## default values, whether it is global, falls back to `kern`, joins
+	## manually (mark positioning) or is `rand`, and its `GSUB` stage.
+	Request : { tag : U64, max : U64, default : U64, global : Bool, fallback : Bool, manual : Bool, random : Bool, stage : U64 }
 
-	## A feature after merging requests for its tag.
-	Merged : { tag : U64, max : U64, default : U64, global : Bool, stage : U64 }
+	## A feature given mask bits (HarfBuzz's `feature_map_t`).
+	Mapped : { tag : U64, gsub : U64, gpos : U64, stage : U64, mask : U64, shift : U64, manual : Bool, random : Bool }
 
+	## HarfBuzz's global mask bit, and the bits feature values may use
+	## (bits 0 to 3 hold glyph flags in HarfBuzz).
 	global_bit : U64
-	global_bit = 1
+	global_bit = 0x80000000
+
+	first_bit : U64
+	first_bit = 4
+
+	global_shift : U64
+	global_shift = 31
 
 	empty_run : Run
 	empty_run = { glyphs: [], advances: [], offsets: [], clusters: [], flags: [] }
@@ -64,8 +90,18 @@ Shaper :: {}.{
 	feature_tag : Str -> U64
 	feature_tag = |name| ShaperTags.tag_from_bytes(name.to_utf8())
 
+	request : Str, U64, Bool -> Request
+	request = |name, value, global| { tag: Shaper.tag(name), max: value, default: if (global) value else 0, global, fallback: False, manual: False, random: False, stage: 1 }
+
 	plan : Face, Options -> Plan
-	plan = |face, options| {
+	plan = |face, options| Shaper.plan_with_clusters(face, options, Graphemes)
+
+	## A plan at a cluster level: `Graphemes` (HarfBuzz's level 0, monotone
+	## graphemes: a grapheme's characters share its first character's
+	## cluster) or `Characters` (level 1, monotone characters: each
+	## character keeps its own cluster, and only substitutions merge them).
+	plan_with_clusters : Face, Options, [Graphemes, Characters] -> Plan
+	plan_with_clusters = |face, options, clusters| {
 		requested = match options.direction {
 			LeftToRight => Ltr
 			RightToLeft => Rtl
@@ -76,161 +112,247 @@ Shaper :: {}.{
 				}
 		}
 		native = ShaperTags.script_direction(options.script)
-		reverse_input = match (native, requested) {
-			(Ltr, Rtl) => True
-			(Rtl, Ltr) => True
-			_ => False
-		}
-		shaped_rtl = match (reverse_input, requested) {
-			(True, Rtl) => False
-			(True, Ltr) => True
-			(False, Rtl) => True
-			(False, Ltr) => False
-		}
+		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Hebr")
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		direction_features = match requested {
-			Ltr => [{ tag: Shaper.tag("ltra"), value: 1, global: True, stage: 1 }, { tag: Shaper.tag("ltrm"), value: 1, global: True, stage: 1 }]
-			Rtl => [{ tag: Shaper.tag("rtla"), value: 1, global: True, stage: 1 }, { tag: Shaper.tag("rtlm"), value: 1, global: False, stage: 1 }]
+			Ltr => [Shaper.request("ltra", 1, True), Shaper.request("ltrm", 1, True)]
+			Rtl => [Shaper.request("rtla", 1, True), Shaper.request("rtlm", 1, False)]
 		}
-		defaults = ["abvm", "blwm", "ccmp", "locl", "mark", "mkmk", "rlig", "calt", "clig", "curs", "dist", "kern", "liga", "rclt"].map(|t| { tag: Shaper.tag(t), value: 1, global: True, stage: 1 })
-		user = options.features.map(|f| { tag: Shaper.feature_tag(f.tag), value: f.value.to_u64(), global: f.start == 0 and f.end == 0xFFFFFFFF, stage: 1 })
-		requests = [{ tag: Shaper.tag("rvrn"), value: 1, global: True, stage: 0 }].concat(direction_features).concat(defaults).concat(user)
-		merged = Shaper.merge(requests)
-		# Masks: the global bit for features on everywhere with value 1, else
-		# a bit of their own (HarfBuzz gives them a field; only on and off
-		# matter here). Features with no value anywhere are left out.
-		var $bits = []
-		var $next_bit = 1
-		var $default_mask = Shaper.global_bit
-		for f in merged {
-			bit = if f.max == 0 {
-				0
-			} else if f.global and f.max == 1 {
-				Shaper.global_bit
-			} else if $next_bit < 63 {
-				b = (1.U64).shl_wrap($next_bit.to_u8_wrap())
-				$next_bit = $next_bit + 1
-				if f.default != 0 {
-					$default_mask = $default_mask.bitwise_or(b)
-				}
-				b
-			} else {
-				0
-			}
-			$bits = $bits.append(bit)
-		}
+		fractions = [Shaper.request("frac", 1, False), Shaper.request("numr", 1, False), Shaper.request("dnom", 1, False)]
+		random = [{ ..Shaper.request("rand", 255, True), random: True }]
+		markers = ["Harf", "HARF", "Buzz", "BUZZ"].map(|t| Shaper.request(t, 1, True))
+		common = ["abvm", "blwm", "ccmp", "locl"].map(|t| Shaper.request(t, 1, True)).concat(["mark", "mkmk"].map(|t| { ..Shaper.request(t, 1, True), manual: True })).append(Shaper.request("rlig", 1, True))
+		horizontal = ["calt", "clig", "curs", "dist"].map(|t| Shaper.request(t, 1, True)).append({ ..Shaper.request("kern", 1, True), fallback: True }).concat(["liga", "rclt"].map(|t| Shaper.request(t, 1, True)))
+		user = options.features.map(
+			|f| {
+				global = f.start == 0 and f.end == 0xFFFFFFFF
+				v = f.value.to_u64()
+				{ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: 1 }
+			},
+		)
+		requests = [{ ..Shaper.request("rvrn", 1, True), stage: 0 }].concat(direction_features).concat(fractions).concat(random).concat(markers).concat(common).concat(horizontal).concat(user)
+		merged = Shaper.merge(if (user.is_empty()) requests else Shaper.sort_by_tag(requests))
 		lang = ShaperTags.language_tags(options.language)
 		script_tags = match lang.scripts {
 			Given(t) => [t]
 			NotGiven => ShaperTags.script_tags(options.script)
 		}
-		gsub_common = LayoutGsub.common_of(Face.gsub(face))
+		gsub_table = Face.gsub(face)
+		gsub_common = LayoutGsub.common_of(gsub_table)
 		kerning = Face.kerning(face)
 		gpos_common = LayoutKerning.common_of(kerning)
 		gsub_langsys = LayoutCommon.select_langsys(gsub_common, LayoutCommon.select_script(gsub_common, script_tags), lang.languages)
 		gpos_langsys = LayoutCommon.select_langsys(gpos_common, LayoutCommon.select_script(gpos_common, script_tags), lang.languages)
-		gsub = Shaper.lookups(gsub_common, gsub_langsys, merged, $bits, 2)
-		gpos = Shaper.lookups(gpos_common, gpos_langsys, merged, $bits, 1)
+		gsub_required = LayoutCommon.required_feature(gsub_common, gsub_langsys)
+		gpos_required = LayoutCommon.required_feature(gpos_common, gpos_langsys)
+		gsub_required_tag = if (gsub_required == LayoutCommon.no_feature) 0 else LayoutCommon.feature_tag(gsub_common, gsub_required)
+		# Allocate mask bits as HarfBuzz's map builder does.
+		var $mapped = []
+		var $next_bit = Shaper.first_bit
+		var $global_mask = Shaper.global_bit
+		var $gsub_required_stage = 0
+		for f in merged {
+			bits = if (f.global and f.max == 1) 0 else Shaper.bit_storage(f.max).min(8)
+			if f.max != 0 and $next_bit + bits < Shaper.global_shift {
+				if gsub_required_tag == f.tag {
+					$gsub_required_stage = f.stage
+				}
+				gsub_index = LayoutCommon.find_feature(gsub_common, gsub_langsys, f.tag)
+				gpos_index = LayoutCommon.find_feature(gpos_common, gpos_langsys, f.tag)
+				found = gsub_index != LayoutCommon.no_feature or gpos_index != LayoutCommon.no_feature
+				if found or f.fallback {
+					{ shift, mask } =
+						if f.global and f.max == 1 {
+							{ shift: Shaper.global_shift, mask: Shaper.global_bit }
+						} else {
+							s = $next_bit
+							m = (1.U64).shl_wrap((s + bits).to_u8_wrap()) - (1.U64).shl_wrap(s.to_u8_wrap())
+							$next_bit = $next_bit + bits
+							$global_mask = $global_mask.bitwise_or(f.default.shl_wrap(s.to_u8_wrap()).bitwise_and(m))
+							{ shift: s, mask: m }
+						}
+					$mapped = $mapped.append({ tag: f.tag, gsub: gsub_index, gpos: gpos_index, stage: f.stage, mask, shift, manual: f.manual, random: f.random })
+				}
+			}
+		}
+		mapped = $mapped
+		mask_of = |wanted|
+			match mapped.find_first(|m| m.tag == wanted) {
+				Ok(m) => m.mask
+				Err(_) => 0
+			}
+		one_mask_of = |wanted|
+			match mapped.find_first(|m| m.tag == wanted) {
+				Ok(m) => (1.U64).shl_wrap(m.shift.to_u8_wrap()).bitwise_and(m.mask)
+				Err(_) => 0
+			}
+		# Feature variations at the face's location replace the lookups of
+		# the features they name (HarfBuzz's `variations_index`).
+		variations = Face.feature_variations(face)
+		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub }
+		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos }
+		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, 2, Gsub, gsub_varied)
+		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
+		# script.
+		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.tag("hebr")
+		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
+		gpos =
+			if apply_gpos {
+				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied).map(|s| { index: s.index, mask: s.mask })
+			} else {
+				[]
+			}
 		kern_tag = Shaper.tag("kern")
-		kern_mask = Shaper.mask_of(merged, $bits, kern_tag)
-		has_gpos_kern = LayoutCommon.find_feature(gpos_common, gpos_langsys, kern_tag) != LayoutCommon.no_feature
-		kern = if (LayoutKerning.has_kern(kerning) and kern_mask != 0 and (!has_gpos_kern or !LayoutKerning.has_gpos(kerning))) Kern(kern_mask) else NoKern
+		kern_mask = mask_of(kern_tag)
+		has_gpos_kern = match mapped.find_first(|m| m.tag == kern_tag) {
+			Ok(m) => m.gpos != LayoutCommon.no_feature
+			Err(_) => False
+		}
+		apply_kern = (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
+		kern = if (apply_kern and kern_mask != 0) Kern(kern_mask) else NoKern
 		# Ranges, in the caller's order: a later one wins where they overlap.
 		var $ranges = []
 		for f in options.features {
 			if !(f.start == 0 and f.end == 0xFFFFFFFF) {
-				bit = Shaper.mask_of(merged, $bits, Shaper.feature_tag(f.tag))
-				if bit != 0 and bit != Shaper.global_bit {
-					$ranges = $ranges.append({ bit, on: f.value != 0, start: f.start.to_u64(), end: f.end.to_u64() })
+				t = Shaper.feature_tag(f.tag)
+				match mapped.find_first(|m| m.tag == t) {
+					Ok(m) => {
+						$ranges = $ranges.append({ mask: m.mask, value: f.value.to_u64().shl_wrap(m.shift.to_u8_wrap()).bitwise_and(m.mask), start: f.start.to_u64(), end: f.end.to_u64() })
+					}
+					Err(_) => {}
 				}
 			}
 		}
 		{
-			reverse_input,
-			reverse_output: shaped_rtl,
+			backward: requested == Rtl,
+			native,
 			gsub,
 			gpos,
 			kern,
-			default_mask: $default_mask,
+			global_mask: $global_mask,
 			ranges: $ranges,
+			frac_mask: one_mask_of(Shaper.tag("frac")),
+			numr_mask: one_mask_of(Shaper.tag("numr")),
+			dnom_mask: one_mask_of(Shaper.tag("dnom")),
+			rtlm_mask: one_mask_of(Shaper.tag("rtlm")),
+			hebrew,
+			characters: clusters == Characters,
+			has_gpos_mark: one_mask_of(Shaper.tag("mark")) != 0,
+			# HarfBuzz positions marks itself when nothing else does: no
+			# `GPOS` and no `kern` with cross-stream kerning (which
+			# roc-font does not read).
+			fallback_marks: !apply_gpos,
 			growth: options.growth,
 			operations: options.operations,
 		}
 	}
 
-	## Merge requests by tag, as HarfBuzz's map builder merges them: a
-	## global request sets the value everywhere, a ranged one makes the
-	## feature vary and raises its largest value; the earliest stage wins.
-	## Tags keep the order of their first request.
-	merge : List(Request) -> List(Merged)
+	## The bits a value needs.
+	bit_storage : U64 -> U64
+	bit_storage = |v| {
+		var $n = 0
+		var $x = v
+		while $x != 0 {
+			$x = $x.shr_zf_wrap(1)
+			$n = $n + 1
+		}
+		$n
+	}
+
+	## Requests sorted by tag, keeping the order of requests for one tag
+	## (HarfBuzz sorts by tag, then by the order of adding). Insertion sort:
+	## the list is short.
+	sort_by_tag : List(Request) -> List(Request)
+	sort_by_tag = |requests| {
+		var $out = []
+		for r in requests {
+			var $at = $out.len()
+			while $at > 0 and ($out.get($at - 1) ?? r).tag > r.tag {
+				$at = $at - 1
+			}
+			$out = $out.take_first($at).append(r).concat($out.drop_first($at))
+		}
+		$out
+	}
+
+	## Merge adjacent requests for one tag, as HarfBuzz's map builder merges
+	## them: a global request sets the value everywhere, a ranged one makes
+	## the feature vary and raises its largest value; the earliest stage
+	## wins.
+	merge : List(Request) -> List(Request)
 	merge = |requests| {
 		var $out = []
 		for r in requests {
-			match $out.find_first_index(|m| m.tag == r.tag) {
-				Err(_) => {
-					$out = $out.append({ tag: r.tag, max: r.value, default: if (r.global) r.value else 0, global: r.global, stage: r.stage })
-				}
-				Ok(i) => {
-					m = $out.get(i) ?? { tag: 0, max: 0, default: 0, global: False, stage: 0 }
+			match $out.last() {
+				Ok(m) if m.tag == r.tag => {
 					updated =
 						if r.global {
-							{ ..m, global: True, max: r.value, default: r.value, stage: m.stage.min(r.stage) }
+							{ ..m, global: True, max: r.max, default: r.default, fallback: m.fallback or r.fallback, stage: m.stage.min(r.stage) }
 						} else {
-							{ ..m, global: False, max: m.max.max(r.value), stage: m.stage.min(r.stage) }
+							{ ..m, global: False, max: m.max.max(r.max), fallback: m.fallback or r.fallback, stage: m.stage.min(r.stage) }
 						}
-					# `find_first_index` gave an index in the list.
-					$out = $out.set(i, updated) ?? []
+					# The list is not empty: it holds `m`.
+					$out = $out.set($out.len() - 1, updated) ?? []
+				}
+				_ => {
+					$out = $out.append(r)
 				}
 			}
 		}
 		$out
 	}
 
-	mask_of : List(Merged), List(U64), U64 -> U64
-	mask_of = |merged, bits, wanted|
-		match merged.find_first_index(|m| m.tag == wanted) {
-			Ok(i) => bits.get(i) ?? 0
-			Err(_) => 0
-		}
-
-	## The lookups of a table for the merged features, stage by stage, each
+	## The lookups of a table for the mapped features, stage by stage, each
 	## stage in lookup index order with the masks of every feature that
-	## lists the lookup. The language system's required feature applies
-	## everywhere, in its tag's stage if a feature has that tag, else in the
-	## first.
-	lookups : LayoutCommon, U64, List(Merged), List(U64), U64 -> List({ index : U64, mask : U64 })
-	lookups = |common, langsys, merged, bits, stages| {
-		required = LayoutCommon.required_feature(common, langsys)
-		required_tag = if (required == LayoutCommon.no_feature) 0 else LayoutCommon.feature_tag(common, required)
-		required_stage = match merged.find_first(|m| m.tag == required_tag and required != LayoutCommon.no_feature) {
-			Ok(m) => m.stage.min(stages - 1)
-			Err(_) => 0
-		}
+	## lists the lookup (a lookup two features list skips joiners only when
+	## both do). The language system's required feature applies everywhere,
+	## in `required_stage`. A feature `varied` substitutes takes the
+	## lookups of its alternate feature table.
+	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], { subs : List({ feature : U64, table : U64 }), fv : LayoutVar.FeatureVariations } -> List(LayoutGsub.Step)
+	lookups = |common, required, required_stage, mapped, stages, table, varied| {
+		feature_lookups = |index|
+			match varied.subs.find_first(|v| v.feature == index) {
+				Ok(v) => LayoutVar.lookups_of(varied.fv, v.table).keep_if(|l| l < common.lookup_count)
+				Err(_) => LayoutCommon.feature_lookups(common, index)
+			}
 		var $out = []
 		for stage in 0..<stages {
 			var $masks = List.repeat(0, common.lookup_count)
+			# Bit 0: some feature asks; bit 1: some feature joins manually; bit
+			# 2: the first feature to list it is `rand`.
+			var $kinds = List.repeat(0.U64, common.lookup_count)
 			if required != LayoutCommon.no_feature and required_stage == stage {
-				for lookup in LayoutCommon.feature_lookups(common, required) {
+				for lookup in feature_lookups(required) {
 					# Feature lookups are below the lookup count.
 					$masks = $masks.set(lookup, ($masks.get(lookup) ?? 0).bitwise_or(Shaper.global_bit)) ?? []
+					$kinds = $kinds.set(lookup, ($kinds.get(lookup) ?? 0).bitwise_or(1)) ?? []
 				}
 			}
-			for k in 0..<merged.len() {
-				m = merged.get(k) ?? { tag: 0, max: 0, default: 0, global: False, stage: 0 }
-				bit = bits.get(k) ?? 0
-				if bit != 0 and m.stage.min(stages - 1) == stage {
-					index = LayoutCommon.find_feature(common, langsys, m.tag)
-					if index != LayoutCommon.no_feature {
-						for lookup in LayoutCommon.feature_lookups(common, index) {
-							$masks = $masks.set(lookup, ($masks.get(lookup) ?? 0).bitwise_or(bit)) ?? []
-						}
+			for m in mapped {
+				index = match table {
+					Gsub => m.gsub
+					Gpos => m.gpos
+				}
+				feature_stage = match table {
+					Gsub => m.stage.min(stages - 1)
+					Gpos => 0
+				}
+				if index != LayoutCommon.no_feature and feature_stage == stage {
+					for lookup in feature_lookups(index) {
+						kind = $kinds.get(lookup) ?? 0
+						first = if (kind.bitwise_and(1) == 0 and m.random) 4 else 0
+						manual = if (m.manual) 2 else 0
+						$masks = $masks.set(lookup, ($masks.get(lookup) ?? 0).bitwise_or(m.mask)) ?? []
+						$kinds = $kinds.set(lookup, kind.bitwise_or(1).bitwise_or(first).bitwise_or(manual)) ?? []
 					}
 				}
 			}
 			for index in 0..<common.lookup_count {
 				mask = $masks.get(index) ?? 0
+				kind = $kinds.get(index) ?? 0
 				if mask != 0 {
-					$out = $out.append({ index, mask })
+					automatic = kind.bitwise_and(2) == 0
+					$out = $out.append({ index, mask, auto_zwnj: automatic, auto_zwj: automatic, random: kind.bitwise_and(4) != 0 })
 				}
 			}
 		}
@@ -259,21 +381,138 @@ Shaper :: {}.{
 		$out
 	}
 
-	## The mask of a glyph from text at `offset`: the default, then each
-	## range that covers the offset, in order.
-	mask_at : Plan, U64 -> U64
-	mask_at = |p, offset| {
-		var $mask = p.default_mask
-		for r in p.ranges {
-			if offset >= r.start and offset < r.end {
-				$mask = if (r.on) $mask.bitwise_or(r.bit) else $mask.bitwise_and(r.bit.bitwise_xor(0xFFFFFFFFFFFFFFFF))
-			}
-		}
-		$mask
-	}
-
 	clamp : I64 -> I32
 	clamp = |v| v.max(-2147483648).min(2147483647).to_i32_wrap()
+
+	## Set the masks HarfBuzz sets before substituting
+	## (`hb_ot_shape_setup_masks`): automatic fractions around U+2044
+	## FRACTION SLASH between decimal digits (numerators, the slash,
+	## denominators; mirrored for backward text), then the caller's ranged
+	## features over the clusters they cover, in order.
+	setup_masks : Plan, List(ShaperNormalize.Char), Bool, Bool -> List(ShaperNormalize.Char)
+	setup_masks = |p, chars, fraction_slash, forward| {
+		count = chars.len()
+		var $chars = chars
+		if fraction_slash and (p.frac_mask != 0 or (p.numr_mask != 0 and p.dnom_mask != 0)) {
+			pre = if (forward) p.numr_mask.bitwise_or(p.frac_mask) else p.frac_mask.bitwise_or(p.dnom_mask)
+			post = if (forward) p.frac_mask.bitwise_or(p.dnom_mask) else p.numr_mask.bitwise_or(p.frac_mask)
+			digit = |c| ShaperUnicode.general_category_of(c.props) == ShaperUnicode.decimal_number
+			var $i = 0
+			while $i < count {
+				c = $chars.get($i) ?? ShaperNormalize.no_char
+				if c.cp == 0x2044 {
+					var $start = $i
+					while $start > 0 and digit($chars.get($start - 1) ?? ShaperNormalize.no_char) {
+						$start = $start - 1
+					}
+					var $end = $i + 1
+					while $end < count and digit($chars.get($end) ?? ShaperNormalize.no_char) {
+						$end = $end + 1
+					}
+					if $start == $i or $end == $i + 1 {
+						$i = $i + 1
+					} else {
+						$chars = Shaper.flag_chars($chars, $start, $end)
+						for j in $start..<$end {
+							d = $chars.get(j) ?? ShaperNormalize.no_char
+							extra = if (j < $i) pre else if (j == $i) p.frac_mask else post
+							# `j < $end <= count`.
+							$chars = $chars.set(j, { ..d, mask: d.mask.bitwise_or(extra) }) ?? []
+						}
+						$i = $end
+					}
+				} else {
+					$i = $i + 1
+				}
+			}
+		}
+		for r in p.ranges {
+			$chars = $chars.map(|c| if (c.cluster >= r.start and c.cluster < r.end) { ..c, mask: c.mask.bitwise_and(r.mask.bitwise_xor(0xFFFFFFFFFFFFFFFF)).bitwise_or(r.value) } else c)
+		}
+		$chars
+	}
+
+	## HarfBuzz's `unsafe_to_break` over characters `start ..< end`.
+	flag_chars : List(ShaperNormalize.Char), U64, U64 -> List(ShaperNormalize.Char)
+	flag_chars = |chars, start, end|
+		if end - start < 2 or end - start > 255 {
+			chars
+		} else {
+			first = (chars.get(start) ?? ShaperNormalize.no_char).cluster
+			last = (chars.get(end - 1) ?? ShaperNormalize.no_char).cluster
+			cluster = first.min(last)
+			var $chars = chars
+			for i in start..<end {
+				c = $chars.get(i) ?? ShaperNormalize.no_char
+				flagged = if (cluster != first and cluster != last) c.cluster != cluster else if (cluster == first) c.cluster != first else c.cluster != last
+				if flagged {
+					# `i < end <= len`.
+					$chars = $chars.set(i, { ..c, mask: c.mask.bitwise_or(LayoutGsub.unsafe) }) ?? []
+				}
+			}
+			$chars
+		}
+
+	## Combining classes HarfBuzz uses for positioning marks itself
+	## (`recategorize_combining_class`): Hebrew, Arabic, Syriac, Thai, Lao
+	## and Tibetan classes become the positional classes they draw at.
+	recategorize : U64, U64 -> U64
+	recategorize = |u, klass_in|
+		if klass_in >= 200 {
+			klass_in
+		} else {
+			klass =
+				if u.bitwise_and(0xFFFFFF00) == 0x0E00 {
+					if klass_in == 0 {
+						if u == 0x0E31 or (u >= 0x0E34 and u <= 0x0E37) or u == 0x0E47 or (u >= 0x0E4C and u <= 0x0E4E) {
+							232
+						} else if u == 0x0EB1 or (u >= 0x0EB4 and u <= 0x0EB7) or u == 0x0EBB or u == 0x0ECC or u == 0x0ECD {
+							230
+						} else if u == 0x0EBC {
+							220
+						} else {
+							klass_in
+						}
+					} else if u == 0x0E3A {
+						222
+					} else {
+						klass_in
+					}
+				} else {
+					klass_in
+				}
+			if (klass >= 10 and klass <= 18) or klass == 20 or klass == 22 {
+				220
+			} else if klass == 23 {
+				216
+			} else if klass == 24 {
+				232
+			} else if klass == 25 or klass == 19 {
+				228
+			} else if klass == 26 {
+				230
+			} else if klass == 27 or klass == 28 or klass == 30 or klass == 31 or klass == 33 or klass == 34 or klass == 35 or klass == 36 {
+				230
+			} else if klass == 29 or klass == 32 {
+				220
+			} else if klass == 103 {
+				222
+			} else if klass == 107 {
+				232
+			} else if klass == 118 {
+				220
+			} else if klass == 122 {
+				230
+			} else if klass == 129 {
+				220
+			} else if klass == 130 {
+				230
+			} else if klass == 132 {
+				220
+			} else {
+				klass
+			}
+		}
 
 	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U32 }) -> Run
 	shape = |face, location, p, scalars| {
@@ -281,32 +520,412 @@ Shaper :: {}.{
 		if n == 0 {
 			return Shaper.empty_run
 		}
-		var $items = List.with_capacity(n)
-		for s in scalars {
-			glyph = Face.glyph(face, s.scalar) ?? 0
-			$items = $items.append({ glyph, cluster: s.offset.to_u64(), mask: Shaper.mask_at(p, s.offset.to_u64()) })
+		gsub = Face.gsub(face)
+		{ chars: prepared, found } = ShaperNormalize.prepare(scalars, p.global_mask)
+		clustered =
+			if !found.continuations {
+				prepared
+			} else if p.characters {
+				# HarfBuzz marks graphemes unsafe to break instead of merging.
+				ShaperNormalize.flag_graphemes(prepared)
+			} else {
+				ShaperNormalize.form_clusters(prepared)
+			}
+		# Shape in the script's own direction (HarfBuzz's
+		# `hb_ensure_native_direction`).
+		reverse = match p.native {
+			Rtl => !p.backward and !ShaperNormalize.numeric(clustered)
+			Ltr => p.backward
+			Either => False
 		}
-		ordered = if (p.reverse_input) Shaper.reversed($items) else $items
+		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
+		backward = if (reverse) !p.backward else p.backward
+		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		ctx = { face, variants: LayoutGsub.variants_of(gsub), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
+		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
+		masked = Shaper.setup_masks(p, normalized, found.fraction_slash, !backward)
+		classes = LayoutGsub.has_glyph_classes(gsub)
+		count0 = masked.len()
+		var $items = List.with_capacity(count0)
+		for c in masked {
+			props =
+				if p.fallback_marks and ShaperUnicode.general_category_of(c.props) == ShaperUnicode.non_spacing_mark {
+					ShaperUnicode.with_high(c.props, Shaper.recategorize(c.cp, ShaperUnicode.class_of(c.props)))
+				} else {
+					c.props
+				}
+			glyph_props =
+				if classes {
+					LayoutGsub.glyph_props(gsub, c.glyph)
+				} else if ShaperUnicode.general_category_of(props) == ShaperUnicode.non_spacing_mark and props.bitwise_and(ShaperUnicode.ignorable) == 0 {
+					LayoutGsub.mark
+				} else {
+					LayoutGsub.base_glyph
+				}
+			$items = $items.append({ glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) })
+		}
 		limit = (p.growth * n).max(16384)
 		budget = (p.operations * n).max(16384)
-		substituted = LayoutGsub.apply(Face.gsub(face), p.gsub, ordered, { limit, budget, depth: Face.max_depth(face) })
+		substituted = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+		Shaper.position(face, location, p, substituted, backward, space_fallback, found.ignorables)
+	}
+
+	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
+	## and `hb_ot_substitute_post`).
+	position : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool -> Run
+	position = |face, location, p, substituted, backward, space_fallback, ignorables| {
+		upem = Face.units_per_em(face).to_i64()
+		advance_of = |glyph| Face.advance(face, location, glyph).to_i64()
+		count = substituted.len()
+		var $base = List.with_capacity(count)
+		for item in substituted {
+			$base = $base.append(advance_of(item.glyph))
+		}
+		if space_fallback {
+			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
+		}
 		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_count(face))
-		items = positioned.items
+		var $items = positioned.items
+		var $ax = List.with_capacity(count)
+		var $dx = positioned.dx
+		var $dy = positioned.dy
+		for i in 0..<count {
+			$ax = $ax.append(($base.get(i) ?? 0) + (positioned.ax.get(i) ?? 0))
+		}
+		# Marks take no advance (HarfBuzz zeroes them after `GPOS`); without
+		# `GPOS`, in forward text a mark keeps hanging over the glyph before.
+		adjust = p.fallback_marks and !backward
+		for i in 0..<count {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			if LayoutGsub.is_mark_item(item) {
+				if adjust {
+					# `i < count`, the lists' length.
+					$dx = $dx.set(i, ($dx.get(i) ?? 0) - ($ax.get(i) ?? 0)) ?? []
+				}
+				$ax = $ax.set(i, 0) ?? []
+			}
+		}
+		if ignorables {
+			for i in 0..<count {
+				if LayoutGsub.is_default_ignorable($items.get(i) ?? LayoutGsub.no_item) {
+					$ax = $ax.set(i, 0) ?? []
+					$dx = $dx.set(i, 0) ?? []
+				}
+			}
+		}
+		if p.fallback_marks {
+			{ items: fallback_items, ax: fallback_ax, dx: fallback_dx, dy: fallback_dy } = Shaper.position_marks(face, location, { items: $items, ax: $ax, dx: $dx, dy: $dy }, backward, p.backward, upem, adjust)
+			$items = fallback_items
+			$ax = fallback_ax
+			$dx = fallback_dx
+			$dy = fallback_dy
+		}
+		ordered = if (backward) { items: Shaper.reversed($items), ax: Shaper.reversed($ax), dx: Shaper.reversed($dx), dy: Shaper.reversed($dy) } else { items: $items, ax: $ax, dx: $dx, dy: $dy }
+		hidden = if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered
+		Shaper.finish(hidden)
+	}
+
+	## The widths HarfBuzz gives spaces the font lacks, drawn with the space
+	## glyph (`_hb_ot_shape_fallback_spaces`): fractions of an em, the width
+	## of a digit or of a full stop, or half the space.
+	space_widths : Face, List(LayoutGsub.Item), List(I64), I64, (U64 -> I64) -> List(I64)
+	space_widths = |face, items, widths, upem, advance_of| {
+		var $widths = widths
+		for i in 0..<items.len() {
+			item = items.get(i) ?? LayoutGsub.no_item
+			if ShaperUnicode.is_space(item.props) and LayoutGsub.gprops(item).bitwise_and(LayoutGsub.ligated) == 0 {
+				kind = item.props.shr_zf_wrap(8).bitwise_and(0xFF)
+				current = $widths.get(i) ?? 0
+				glyph_of = |cp| Face.glyph(face, cp)
+				width =
+					if (kind >= 1 and kind <= 6) or kind == 16 {
+						d = kind.to_i64_wrap()
+						(upem + d // 2) // d
+					} else if kind == 17 {
+						upem * 4 // 18
+					} else if kind == 19 {
+						match ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].find_first(|c| glyph_of(c).is_ok()) {
+							Ok(c) => advance_of(glyph_of(c) ?? 0)
+							Err(_) => current
+						}
+					} else if kind == 20 {
+						match glyph_of('.') {
+							Ok(g) => advance_of(g)
+							Err(_) =>
+								match glyph_of(',') {
+									Ok(g) => advance_of(g)
+									Err(_) => current
+								}
+						}
+					} else if kind == 21 {
+						current // 2
+					} else {
+						current
+					}
+				# `i` is below the run's length.
+				$widths = $widths.set(i, width) ?? []
+			}
+		}
+		$widths
+	}
+
+	Placed : { items : List(LayoutGsub.Item), ax : List(I64), dx : List(I64), dy : List(I64) }
+
+	## HarfBuzz's fallback mark positioning (`_hb_ot_shape_fallback_mark_position`)
+	## for fonts that do not position marks: each cluster's marks are placed
+	## around its base glyph's ink by their combining classes.
+	position_marks : Face, Face.Location, Placed, Bool, Bool, I64, Bool -> Placed
+	position_marks = |face, location, placed, backward, target_backward, upem, adjust| {
+		items = placed.items
+		count = items.len()
+		var $placed = placed
+		var $start = 0
+		for i in 1..<count {
+			item = items.get(i) ?? LayoutGsub.no_item
+			if !ShaperUnicode.is_mark(item.props) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 and !LayoutGsub.is_default_ignorable(item) {
+				$placed = Shaper.position_cluster(face, location, $placed, $start, i, backward, target_backward, upem, adjust)
+				$start = i
+			}
+		}
+		Shaper.position_cluster(face, location, $placed, $start, count, backward, target_backward, upem, adjust)
+	}
+
+	position_cluster : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool -> Placed
+	position_cluster = |face, location, placed, start, end, backward, target_backward, upem, adjust|
+		if end - start < 2 {
+			placed
+		} else {
+			var $placed = placed
+			var $i = start
+			while $i < end {
+				item = $placed.items.get($i) ?? LayoutGsub.no_item
+				if ShaperUnicode.is_mark(item.props) {
+					$i = $i + 1
+				} else {
+					var $j = $i + 1
+					var $going = True
+					while $going and $j < end {
+						next = $placed.items.get($j) ?? LayoutGsub.no_item
+						if next.props.bitwise_and(ShaperUnicode.hidden) != 0 or LayoutGsub.is_default_ignorable(next) {
+							$j = $j + 1
+						} else if !ShaperUnicode.is_mark(next.props) {
+							$going = False
+						} else {
+							$j = $j + 1
+						}
+					}
+					$placed = Shaper.position_around_base(face, location, $placed, $i, $j, backward, target_backward, upem, adjust)
+					$i = $j
+				}
+			}
+			$placed
+		}
+
+	## A glyph's ink box as HarfBuzz's extents (x and y bearings, width and
+	## a negative height); a glyph without outline has a zero box.
+	Extents : { x_bearing : I64, y_bearing : I64, width : I64, height : I64 }
+
+	extents_of : Face, U64 -> Extents
+	extents_of = |face, glyph|
+		match Face.extents(face, glyph) {
+			Extents(b) => { x_bearing: b.x_min.to_i64(), y_bearing: b.y_max.to_i64(), width: b.x_max.to_i64() - b.x_min.to_i64(), height: b.y_min.to_i64() - b.y_max.to_i64() }
+			Empty => { x_bearing: 0, y_bearing: 0, width: 0, height: 0 }
+		}
+
+	## HarfBuzz's `position_around_base`.
+	position_around_base : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool -> Placed
+	position_around_base = |face, location, placed, base, end, backward, target_backward, upem, adjust| {
+		{ items: items0, ax: ax0, dx: dx0, dy: dy0 } = placed
+		items = LayoutGsub.flag_range(items0, base, end, LayoutGsub.end_cluster(items0, base, end, 0xFFFFFFFFFFFFFFFF))
+		base_item = items.get(base) ?? LayoutGsub.no_item
+		raw = Shaper.extents_of(face, base_item.glyph)
+		base_extents = { ..raw, x_bearing: 0, width: Face.advance(face, location, base_item.glyph).to_i64(), y_bearing: raw.y_bearing + (dy0.get(base) ?? 0) }
+		lig_id = LayoutGsub.lig_id(base_item)
+		num_components = LayoutGsub.num_comps(base_item).to_i64_wrap()
+		var $ax = ax0
+		var $dx = dx0
+		var $dy = dy0
+		var $x_offset = if (!backward) -($ax.get(base) ?? 0) else 0
+		var $component = base_extents
+		var $last_component = -1
+		var $last_class = 255
+		var $cluster = base_extents
+		for i in (base + 1)..<end {
+			item = items.get(i) ?? LayoutGsub.no_item
+			this_class = ShaperUnicode.class_of(item.props)
+			if this_class != 0 {
+				if num_components > 1 {
+					this_id = LayoutGsub.lig_id(item)
+					comp = LayoutGsub.lig_comp(item).to_i64_wrap() - 1
+					this_component = if (lig_id == 0 or lig_id != this_id or comp >= num_components) num_components - 1 else comp
+					if $last_component != this_component {
+						$last_component = this_component
+						$last_class = 255
+						x = if (!target_backward) base_extents.x_bearing + this_component * base_extents.width // num_components else base_extents.x_bearing + (num_components - 1 - this_component) * base_extents.width // num_components
+						$component = { ..base_extents, x_bearing: x, width: base_extents.width // num_components }
+					}
+				}
+				if $last_class != this_class {
+					$last_class = this_class
+					$cluster = $component
+				}
+				{ extents, x, y } = Shaper.position_mark(face, $cluster, item.glyph, this_class, backward, upem)
+				$cluster = extents
+				# `i < end <= count`.
+				$ax = $ax.set(i, 0) ?? []
+				$dx = $dx.set(i, x + $x_offset) ?? []
+				$dy = $dy.set(i, y) ?? []
+			} else {
+				$x_offset = if (!backward) $x_offset - ($ax.get(i) ?? 0) else $x_offset + ($ax.get(i) ?? 0)
+			}
+		}
+		_ = adjust
+		{ items, ax: $ax, dx: $dx, dy: $dy }
+	}
+
+	## HarfBuzz's `position_mark`: a mark's offset from the cluster's ink
+	## by its class, and the cluster's ink after stacking the mark.
+	position_mark : Face, Extents, U64, U64, Bool, I64 -> { extents : Extents, x : I64, y : I64 }
+	position_mark = |face, base_in, glyph, klass, backward, upem| {
+		mark = Shaper.extents_of(face, glyph)
+		y_gap = upem // 16
+		x =
+			if (klass == 233 or klass == 234) and !backward {
+				base_in.x_bearing + base_in.width - mark.width // 2 - mark.x_bearing
+			} else if klass == 233 or klass == 234 {
+				base_in.x_bearing - mark.width // 2 - mark.x_bearing
+			} else if klass == 200 or klass == 218 or klass == 228 {
+				# Left aligned.
+				base_in.x_bearing - mark.x_bearing
+			} else if klass == 216 or klass == 222 or klass == 232 {
+				# Right aligned.
+				base_in.x_bearing + base_in.width - mark.width - mark.x_bearing
+			} else {
+				# Centred.
+				base_in.x_bearing + (base_in.width - mark.width) // 2 - mark.x_bearing
+			}
+		below = klass == 233 or klass == 218 or klass == 220 or klass == 222
+		attached_below = klass == 200 or klass == 202
+		above = klass == 234 or klass == 228 or klass == 230 or klass == 232
+		attached_above = klass == 214 or klass == 216
+		if below or attached_below {
+			b0 = if (below) { ..base_in, height: base_in.height - y_gap } else base_in
+			y0 = b0.y_bearing + b0.height - mark.y_bearing
+			{ height, y } = if ((y_gap > 0) == (y0 > 0)) { height: b0.height - y0, y: 0 } else { height: b0.height, y: y0 }
+			{ extents: { ..b0, height: height + mark.height }, x, y }
+		} else if above or attached_above {
+			b0 = if (above) { ..base_in, y_bearing: base_in.y_bearing + y_gap, height: base_in.height - y_gap } else base_in
+			y0 = b0.y_bearing - mark.y_bearing - mark.height
+			{ b1, y } =
+				if (y_gap > 0) != (y0 > 0) {
+					correction = -(y0 // 2)
+					{ b1: { ..b0, y_bearing: b0.y_bearing + correction, height: b0.height - correction }, y: y0 + correction }
+				} else {
+					{ b1: b0, y: y0 }
+				}
+			{ extents: { ..b1, y_bearing: b1.y_bearing - mark.height, height: b1.height + mark.height }, x, y }
+		} else {
+			{ extents: base_in, x, y: 0 }
+		}
+	}
+
+	## Default-ignorable characters drawn with the space glyph, or removed
+	## (their clusters merged) when the font has none (HarfBuzz's
+	## `hb_ot_hide_default_ignorables`).
+	hide_ignorables : Face, Placed -> Placed
+	hide_ignorables = |face, placed|
+		match Face.glyph(face, ' ') {
+			Ok(space) => { ..placed, items: placed.items.map(|item| if (LayoutGsub.is_default_ignorable(item)) { ..item, glyph: space } else item) }
+			Err(_) => {
+				items = placed.items
+				count = items.len()
+				var $items = List.with_capacity(count)
+				var $ax = List.with_capacity(count)
+				var $dx = List.with_capacity(count)
+				var $dy = List.with_capacity(count)
+				var $merged = items
+				for i in 0..<count {
+					item = $merged.get(i) ?? LayoutGsub.no_item
+					if LayoutGsub.is_default_ignorable(item) {
+						cluster = item.cluster
+						shares_next = i + 1 < count and ($merged.get(i + 1) ?? LayoutGsub.no_item).cluster == cluster
+						if !shares_next {
+							match $items.last() {
+								Ok(last) =>
+									if cluster < last.cluster {
+										old = last.cluster
+										var $k = $items.len()
+										while $k > 0 and ($items.get($k - 1) ?? LayoutGsub.no_item).cluster == old {
+											kept = $items.get($k - 1) ?? LayoutGsub.no_item
+											# `$k - 1` is below the kept list's length.
+											$items = $items.set($k - 1, { ..kept, cluster, mask: kept.mask.bitwise_and(0x7FFFFFFFFFFFFFFF).bitwise_or(item.mask.bitwise_and(LayoutGsub.unsafe)) }) ?? []
+											$k = $k - 1
+										}
+									}
+								Err(_) =>
+									if i + 1 < count {
+										$merged = Shaper.merge_items($merged, i, i + 2)
+									}
+							}
+						}
+					} else {
+						$items = $items.append(item)
+						$ax = $ax.append(placed.ax.get(i) ?? 0)
+						$dx = $dx.append(placed.dx.get(i) ?? 0)
+						$dy = $dy.append(placed.dy.get(i) ?? 0)
+					}
+				}
+				{ items: $items, ax: $ax, dx: $dx, dy: $dy }
+			}
+		}
+
+	## HarfBuzz's `merge_clusters` on a finished run (no output list).
+	merge_items : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
+	merge_items = |items, start, end_in|
+		if end_in <= start + 1 {
+			items
+		} else {
+			n = items.len()
+			at = |i| (items.get(i) ?? LayoutGsub.no_item).cluster
+			cluster = LayoutGsub.min_cluster(items, start, end_in.min(n), at(start))
+			var $end = end_in.min(n)
+			if cluster != at($end - 1) {
+				while $end < n and at($end - 1) == at($end) {
+					$end = $end + 1
+				}
+			}
+			var $start = start
+			if cluster != at($start) {
+				while $start > 0 and at($start - 1) == at($start) {
+					$start = $start - 1
+				}
+			}
+			var $items = items
+			for i in $start..<$end {
+				# `i < $end <= n`.
+				$items = $items.set(i, LayoutGsub.set_cluster($items.get(i) ?? LayoutGsub.no_item, cluster)) ?? []
+			}
+			$items
+		}
+
+	## The run in output order, with unsafe-to-break flags the same on every
+	## glyph of a cluster.
+	finish : Placed -> Run
+	finish = |placed| {
+		items = placed.items
 		count = items.len()
 		var $glyphs = List.with_capacity(count)
 		var $advances = List.with_capacity(count)
 		var $offsets = List.with_capacity(count)
 		var $clusters = List.with_capacity(count)
 		for k in 0..<count {
-			i = if (p.reverse_output) count - 1 - k else k
-			item = items.get(i) ?? LayoutGsub.no_item
-			advance = Face.advance(face, location, item.glyph).to_i64() + (positioned.ax.get(i) ?? 0)
+			item = items.get(k) ?? LayoutGsub.no_item
 			$glyphs = $glyphs.append(item.glyph.min(0xFFFFFFFF).to_u32_wrap())
-			$advances = $advances.append({ x: Shaper.clamp(advance), y: 0 })
-			$offsets = $offsets.append({ x: Shaper.clamp(positioned.dx.get(i) ?? 0), y: Shaper.clamp(positioned.dy.get(i) ?? 0) })
+			$advances = $advances.append({ x: Shaper.clamp(placed.ax.get(k) ?? 0), y: 0 })
+			$offsets = $offsets.append({ x: Shaper.clamp(placed.dx.get(k) ?? 0), y: Shaper.clamp(placed.dy.get(k) ?? 0) })
 			$clusters = $clusters.append(item.cluster.min(0xFFFFFFFF).to_u32_wrap())
 		}
-		{ glyphs: $glyphs, advances: $advances, offsets: $offsets, clusters: $clusters, flags: Shaper.flags(items, p.reverse_output) }
+		{ glyphs: $glyphs, advances: $advances, offsets: $offsets, clusters: $clusters, flags: Shaper.flags(items) }
 	}
 
 	reversed : List(a) -> List(a)
@@ -326,27 +945,29 @@ Shaper :: {}.{
 		$out
 	}
 
-	## Unsafe-to-break flags in output order, the same on every glyph of a
+	## Glyph flags: bit 0 unsafe to break, the same on every glyph of a
 	## cluster (consecutive glyphs with one cluster), as HarfBuzz's
-	## `hb_propagate_flags` makes them.
-	flags : List(LayoutGsub.Item), Bool -> List(U8)
-	flags = |items, reverse| {
+	## `hb_propagate_flags` makes it; bit 1 missing, on a glyph 0 drawn for
+	## a character the font does not map.
+	flags : List(LayoutGsub.Item) -> List(U8)
+	flags = |items| {
 		count = items.len()
 		var $out = List.with_capacity(count)
 		var $k = 0
 		while $k < count {
-			at = |j| items.get(if (reverse) count - 1 - j else j) ?? LayoutGsub.no_item
-			cluster = at($k).cluster
+			cluster = (items.get($k) ?? LayoutGsub.no_item).cluster
 			var $end = $k
 			var $unsafe = False
-			while $end < count and at($end).cluster == cluster {
-				if at($end).mask.bitwise_and(LayoutGsub.unsafe) != 0 {
+			while $end < count and (items.get($end) ?? LayoutGsub.no_item).cluster == cluster {
+				if (items.get($end) ?? LayoutGsub.no_item).mask.bitwise_and(LayoutGsub.unsafe) != 0 {
 					$unsafe = True
 				}
 				$end = $end + 1
 			}
-			for _ in $k..<$end {
-				$out = $out.append(if ($unsafe) 1 else 0)
+			for j in $k..<$end {
+				item = items.get(j) ?? LayoutGsub.no_item
+				missing = if (item.glyph == 0 and item.props.bitwise_and(ShaperNormalize.missing) != 0) 2 else 0
+				$out = $out.append((if ($unsafe) 1.U8 else 0).bitwise_or(missing))
 			}
 			$k = $end
 		}

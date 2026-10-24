@@ -23,7 +23,10 @@ and plans live in `TODO.md`, not here.
   licences, and only test modules and fuzz apps import them.
 - Leave Unicode text segmentation (graphemes, line breaks, bidi, script
   runs) to the `unicode` package. Consume its results; do not duplicate
-  its tables.
+  its tables. The character properties shaping itself applies
+  (normalisation, mirroring, mark classes, grapheme extension for
+  clusters) are embedded, generated from pinned Unicode data in
+  `tools/ucd/` at the version the reference shaper uses.
 
 ## Design from the caller's meaning
 

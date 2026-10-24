@@ -33,19 +33,19 @@ repositories are relative to `~/Documents/Github/`.
 
 ### Browser parity (§6)
 
-- [ ] `GDEF` glyph and mark attachment classes, mark filtering sets, GSUB
-  lookup flags.
-- [ ] GSUB types 3 (with the alternate chosen by the feature value) and 8;
-  `frac` and `rand`.
-- [ ] RTL: Unicode mirroring; the Hebrew shaper's GPOS rule.
-- [ ] Language tags whose OpenType tag depends on a region or variant
-  subtag (`zh-HK` and similar).
-- [ ] Mapping steps of §6.2 (compose/decompose by cmap, default ignorables,
-  space fallbacks, variation selectors via cmap 14, documented `.notdef`).
-- [ ] Cluster merging to match HarfBuzz (the largest remaining difference
-  group: emoji grapheme clusters in AdobeBlank2).
-- [ ] Promote curated cases as they pass (now: 10 in M3, 2 in M4) (`tests/cases/curated.jsonc`
-  `gating: true`, re-import, record, `--update-scores`).
+- [ ] GPOS pair lookups honour lookup flags with the skipping iterator
+  (`LayoutGsub.check_glyph_property` and glyph properties are ready).
+- [ ] GPOS lookups reached only through FeatureVariations alternates;
+  FeatureVariations lookup-variation records (HarfBuzz's 1.1 extension).
+- [ ] The driver passes script, language, direction and features (from
+  the case, or the oracle's guessed `detail.script`/`direction`): turns
+  hundreds of unsupported HarfBuzz cases into measured ones.
+- [ ] Restore an in-place fast path for ligature lookups (the adversarial
+  100-lookup case went from 7.7x to 10.8x HarfBuzz).
+- [ ] Decide the policy for cmap glyph ids past `numGlyphs` (HarfBuzz
+  outputs them; roc-font treats them as missing; AOTS cmap4).
+- [ ] Tidy: expose `Face.cmap` and a GDEF accessor so `LayoutGsub` stops
+  keeping copies.
 
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the
 in-house and text-rendering-tests suites, except listed known failures;
@@ -70,10 +70,28 @@ Chrome widths agree on package-mermaid's oracle texts.
   oracle sizes and SVGs byte-identical, 0 differences over 99,771
   measurements, 2.8x faster. After the 0.1.0 release, switch the vendored
   copy to the released package URL and merge.
-- [ ] roc-pdf (`roc-pdf/package/`): kerning and default ligatures in
-  `KernelFacadeShape.roc`; a `Text.Store` producer from `Run`; under its
-  pinned allocation and work counts (`roc-pdf/AGENTS.md`). Settle public
-  names with its feedback.
+- [ ] roc-pdf: proven on branch `feature/roc-font-latin` (worktree
+  `~/Documents/Github/roc-pdf-wt-roc-font`, roc-font `ad2e6bb` vendored,
+  staged, commit pending signing): kerning and ligatures via
+  `KernelOpenTypeShape`, a `Text.Store` producer, 417 cases with 0 baseline
+  differences, 15 strings exact against HarfBuzz. Rebase on roc-pdf's
+  `main` and switch to the release URL after 0.1.0.
+
+### API changes from consumer evidence (before 0.1.0)
+
+- [ ] Report which feature produced each glyph without widening `Run`
+  (roc-pdf's `Text.Substitution`, Ligature vs ManyToOne): e.g.
+  `shape_traced` returning `origins : List([Mapped, Substituted({ feature }),
+  Ligature({ feature, components }), Inserted({ feature })])`.
+- [ ] Never return a partial run silently: when a budget stops shaping,
+  say so (`shape_checked -> Try(Run, [OverBudget(...)])` or a completeness
+  fact), per §6.3 and "never silently clamp".
+- [ ] Cluster offsets: `Shaper.decode` clamps at `0xFFFFFFFF`; use `U64`
+  for `Run.clusters`, scalar offsets and `Feature.start`/`end`, or define
+  and document the bound without clamping.
+- [ ] Document the run's guarantees: clusters never decrease in
+  left-to-right runs, one cluster's glyphs are adjacent, a missing
+  character maps to glyph 0 (with the missing flag).
 
 ### Release
 

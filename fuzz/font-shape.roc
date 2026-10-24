@@ -89,8 +89,10 @@ check_run! = |bytes, run, rtl| {
 		}
 		$k = $k + 1
 	}
-	if !run.flags.all(|f| f <= 1) {
-		crash "a flag other than unsafe-to-break is set"
+	# Bit 0 is unsafe to break; bit 1 marks glyph 0 drawn for a character
+	# the font does not map, so it is never set on another glyph.
+	if !run.flags.all(|f| f <= 3) or run.flags.map2(run.glyphs, |f, g| f.bitwise_and(2) != 0 and g != 0).any(|bad| bad) {
+		crash "a flag other than unsafe-to-break or missing is set, or missing on a real glyph"
 	}
 }
 

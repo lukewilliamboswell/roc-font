@@ -8,6 +8,7 @@ import FontTests
 import SubstituteTests
 import ReadTests
 import ShapeTests
+import ShapeParityTests
 import VariationTests
 import FuzzRegressionTests
 

@@ -300,9 +300,9 @@ expect {
 	shaped(gsub, [5, 1, 2, 6]) == [5, 20, 6]
 }
 
-# A contextual rule reached from another rule reads backtrack only within
-# the outer rule's matched input: here glyph 7 lies before it, so the inner
-# rule does not match; when 7 is part of the outer input, it does.
+# A contextual rule reached from another rule reads its backtrack from
+# everything already written, as HarfBuzz 14.6.0 does: glyph 7 before the
+# outer rule's input still matches the inner rule's backtrack.
 expect {
 	inner = [
 		{ kind: 6, subtables: [FontBuild.chain3([[7]], [[1]], [], [{ at: 0, lookup: 2 }])] },
@@ -310,7 +310,7 @@ expect {
 	]
 	outside = first_active([{ kind: 6, subtables: [FontBuild.chain3([], [[1]], [], [{ at: 0, lookup: 1 }])] }].concat(inner))
 	within = first_active([{ kind: 6, subtables: [FontBuild.chain3([], [[7], [1]], [], [{ at: 1, lookup: 1 }])] }].concat(inner))
-	shaped(outside, [7, 1]) == [7, 1] and shaped(within, [7, 1]) == [7, 11]
+	shaped(outside, [7, 1]) == [7, 11] and shaped(within, [7, 1]) == [7, 11]
 }
 
 # ------------------------------------------------------------ extension
@@ -324,9 +324,10 @@ expect {
 # An extension subtable past the table is a bad table.
 expect refused(all_active([{ kind: 7, subtables: [FontBuild.pack([U16(1), U16(1), U32(100000)])] }]))
 
-# Alternate (3) and reverse chaining (8) lookups are not applied by
-# default; neither is an extension of them.
-expect shaped(all_active([{ kind: 3, subtables: [FontBuild.single1([5], 10)] }, { kind: 8, subtables: [FontBuild.single1([5], 10)] }, { kind: 7, subtables: [FontBuild.extension(3, FontBuild.single1([5], 10))] }]), [5]) == [5]
+# Alternate (3) and reverse chaining (8) lookups are read and applied
+# (tests/api/ShapeParityTests.roc); a subtable of either that does not fit
+# its table is a bad table.
+expect refused(all_active([{ kind: 8, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.coverage1([5])), U16(60000)])] }]))
 
 # ------------------------------------------------------------ features
 

@@ -56,7 +56,10 @@ without losing information.
 segmentation
 |These are Unicode text algorithms, owned by the `unicode` package. roc-font
 consumes their results (runs of one script and direction) and does not
-duplicate their tables.
+duplicate their tables. It does embed the character properties shaping
+itself applies, as HarfBuzz does: general category, combining class,
+canonical (de)composition, mirroring and Extended_Pictographic, generated
+from pinned Unicode data (`tools/ucd/`) at the version HarfBuzz uses.
 
 |Font discovery, fallback across fonts, a font library
 |Policy that differs per consumer (Mermaid guesses emoji widths; roc-pdf
@@ -561,7 +564,7 @@ ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47
                   direction : Direction ?? FromScript, features : List(Feature) ?? [],
                   clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }),
-        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: only bit 0, unsafe to break
+        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break, bit 1 missing character
 ShapePlan                                        # opaque, reusable for one Font and options
 plan : Font, ShapeOptions -> ShapePlan
 shape : Font, Str, ShapeOptions -> Run
@@ -577,8 +580,10 @@ sans_licence, serif_licence, mono_licence : Str
 
 An empty `script` shapes as Latin, as browsers and HarfBuzz do for Latin
 text; an empty script leaves the direction to the text. `Graphemes` and
-`Characters` currently cluster alike: grapheme clusters need Unicode data,
-so callers who have it pass grapheme starts as offsets to `shape_scalars`.
+`Characters` are HarfBuzz's monotone cluster levels 0 and 1. Clusters
+never decrease in a left-to-right run and one cluster's glyphs are
+adjacent; flag bit 1 marks glyph 0 drawn for a character the font does
+not map, where a browser would fall back to another font.
 
 The seed's low-level `substitute` and `kerning` are removed: `shape`
 covers them with clusters and positions, and `shape_scalars` serves callers

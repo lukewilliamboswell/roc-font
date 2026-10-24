@@ -62,3 +62,15 @@ expect ShaperTags.script_direction("Hebr") == Rtl
 expect ShaperTags.script_direction("Latn") == Ltr
 expect ShaperTags.script_direction("Runr") == Either
 expect ShaperTags.script_direction("") == Either
+
+# Tags HarfBuzz maps by a region, script or variant subtag.
+expect ShaperTags.language_tags("zh-HK").languages == [t("ZHH ")]
+expect ShaperTags.language_tags("zh-tw").languages == [t("ZHT ")]
+expect ShaperTags.language_tags("zh-Hant").languages == [t("ZHT ")]
+expect ShaperTags.language_tags("zh-Hant-HK").languages == [t("ZHH ")]
+expect ShaperTags.language_tags("zh-mo").languages == [t("ZHTM"), t("ZHH ")]
+expect ShaperTags.language_tags("zh-cn").languages == [t("ZHS ")]
+expect ShaperTags.language_tags("el-polyton").languages == [t("PGR ")]
+expect ShaperTags.language_tags("en-fonipa").languages == [t("IPPH")]
+expect ShaperTags.language_tags("art-lojban").languages == [t("JBO ")]
+expect ShaperTags.language_tags("ro-MD").languages == [t("MOL "), t("ROM ")]

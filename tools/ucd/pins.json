@@ -1,0 +1,27 @@
+{
+  "about": "The Unicode Character Database files tools/ucd/generate.py reads to write package/ShaperUnicodeData.roc. Unicode 18.0.0 is the version HarfBuzz 14.6.0 (the shaping oracle) was generated from; emoji-data.txt is the same dated file HarfBuzz's emoji table names. Each file is pinned by URL, SHA-256 and size; the generator refuses any other bytes. Downloads are cached in tools/ucd/.cache/ (git-ignored).",
+  "schema": 1,
+  "unicode": "18.0.0",
+  "files": {
+    "UnicodeData.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt",
+      "sha256": "0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950",
+      "size": 2243593
+    },
+    "DerivedNormalizationProps.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/DerivedNormalizationProps.txt",
+      "sha256": "98ac7f67d985fe781e317f6182e885e94cabb0c314769e6dd73e48b226931ccd",
+      "size": 1396877
+    },
+    "BidiMirroring.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/BidiMirroring.txt",
+      "sha256": "cd54810ebf52f0e61a730c8b9cb25975de6c85f6d788a559b416afd548923fd6",
+      "size": 27294
+    },
+    "emoji-data.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/emoji/emoji-data.txt",
+      "sha256": "80d00f8e616a0ef27fd6b8de3b758c06383b5d917e2977709578e68baf733bf1",
+      "size": 108719
+    }
+  }
+}

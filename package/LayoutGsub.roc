@@ -1,14 +1,23 @@
 import Sfnt
 import LayoutCommon
+import TableCmap
+import ShaperUnicode
 
-## Glyph substitution from a font's `GSUB` table: single, multiple and
-## ligature substitutions and contextual rules (lookup types 1, 2, 4, 5, 6
-## and 7), applied lookup by lookup as a shaping plan lists them. Which
-## lookups apply (the features chosen for a script, language and direction)
-## is the plan's business (`Shaper`); this module reads every lookup a
-## feature can reach and applies a list of them.
+## Glyph substitution from a font's `GSUB` table, applied as HarfBuzz
+## 14.6.0 applies it (`hb-ot-layout-gsubgpos.hh`, `hb-ot-layout-gsub-table.hh`,
+## `hb-buffer.cc`): single, multiple, alternate and ligature substitutions,
+## contextual and chained contextual rules, and reverse chaining single
+## substitutions (lookup types 1 to 8), honouring lookup flags (ignore base
+## glyphs, ligatures or marks, a mark attachment type or a mark filtering
+## set) with glyph classes from `GDEF`. Which lookups apply (the features
+## chosen for a script, language and direction) is the plan's business
+## (`Shaper`); this module reads every lookup a feature can reach and
+## applies a list of them.
 ##
-## Lookup flags (skipping marks or ligatures) are not interpreted.
+## The value also carries the font's `GDEF` glyph classes, mark attachment
+## classes and mark glyph sets, and its `cmap` variation sequences, because
+## `Face` hands shaping this value: reading them here keeps the shaper's
+## inputs in one place.
 ##
 ## The prepared data is flat: every subtable, coverage range, glyph value
 ## and contextual rule of the font lives in one of five lists, and nested
@@ -16,14 +25,19 @@ import LayoutCommon
 ## allocates per list, not per ligature or rule, and applying reads only
 ## scalar records, so looking at a subtable costs no reference counting.
 ##
-## A glyph of a run carries its cluster (the text offset it came from) and
-## a mask: one bit per feature group of the plan (a lookup applies at a
-## glyph when their masks share a bit) and `unsafe`, the unsafe-to-break
-## flag. Clusters merge and flags are set as HarfBuzz merges and sets them
-## at its monotone cluster levels (`hb-buffer.hh`, `hb-ot-layout-gsubgpos.hh`).
+## A glyph of a run (`Item`) carries its cluster (the text offset it came
+## from), a mask (one bit field per feature of the plan, as HarfBuzz
+## allocates them, and `unsafe`, the unsafe-to-break flag) and its
+## properties: HarfBuzz's Unicode property word (bits 0-15, see
+## `ShaperUnicode.props`), its glyph properties (bits 16-31: class flags,
+## substitution flags, mark attachment type) and its ligature properties
+## (bits 32-39: ligature id and component). Applying follows HarfBuzz's
+## buffer model, an input and an output list with a cursor, so clusters
+## merge and flags are set exactly where HarfBuzz merges and sets them at
+## its monotone cluster levels.
 LayoutGsub := {
 	common : LayoutCommon,
-	lookups : List({ start : U64, count : U64, mode : U64, d0 : U64, d1 : U64, d2 : U64 }),
+	lookups : List({ start : U64, count : U64, mode : U64, d0 : U64, d1 : U64, d2 : U64, props : U64, reverse : Bool }),
 	subtables : List(
 		{
 			kind : U64,
@@ -44,6 +58,8 @@ LayoutGsub := {
 	ranges : List({ first : U64, last : U64, index : U64 }),
 	values : List(U64),
 	rules : List({ back : U64, back_len : U64, input : U64, input_len : U64, ahead : U64, ahead_len : U64, records : U64, records_len : U64 }),
+	gdef : { classes : U64, classes_len : U64, has_classes : Bool, attach : U64, attach_len : U64, sets : List({ start : U64, len : U64 }) },
+	variants : TableCmap.Variants,
 }.{
 
 	Range : { first : U64, last : U64, index : U64 }
@@ -52,26 +68,31 @@ LayoutGsub := {
 
 	## One lookup: its subtables are `subtables[start ..< start + count]`.
 	## `mode` is 0 when every subtable is a single substitution (applied in
-	## place), 1 when every one is a single or ligature substitution (applied
-	## by compacting in place), 2 otherwise. `d0`, `d1` and `d2` are a digest
-	## of every glyph its subtables cover (see `may_start`). A lookup no
-	## feature reaches is not read and has no subtables.
-	Lookup : { start : U64, count : U64, mode : U64, d0 : U64, d1 : U64, d2 : U64 }
+	## place), 2 otherwise. `d0`, `d1` and `d2` are a digest of every glyph
+	## its subtables cover (see `may_start`). `props` are HarfBuzz's lookup
+	## properties: the lookup flag, plus the mark filtering set times 65536
+	## when the flag uses one. `reverse` for a reverse chaining lookup. A
+	## lookup no feature reaches is not read and has no subtables.
+	Lookup : { start : U64, count : U64, mode : U64, d0 : U64, d1 : U64, d2 : U64, props : U64, reverse : Bool }
 
 	## One subtable. `coverage` and `coverage_len` select its coverage in
 	## `ranges`. By `kind`:
 	##
 	## - 1 (single): `delta` when `data_len` is 0, else the substitutes are
 	##   `values[data ..< data + data_len]`.
-	## - 2 (multiple): `data_len` sequences; `values[data + s]` and
-	##   `values[data + s + 1]` bound sequence `s` in `values`.
+	## - 2 (multiple) and 3 (alternate): `data_len` glyph sequences;
+	##   `values[data + s]` and `values[data + s + 1]` bound sequence `s` in
+	##   `values`.
 	## - 4 (ligature): `data_len` ligature sets bounded likewise in `values`;
 	##   a set holds ligatures as `glyph, n, component 2, ..., component n+1`.
 	## - 5 (context and chained context): `data_len` rule sets bounded
 	##   likewise in `rules`. `match_kind` is 0 for glyphs, 1 for classes
 	##   (`back`, `input` and `ahead` select the class definitions in
 	##   `ranges`), 2 for coverages (each match is a start and length in
-	##   `ranges`, two values).
+	##   `ranges`, two values). `delta` is 1 for a chained subtable.
+	## - 8 (reverse chaining single): backtrack and lookahead coverages at
+	##   `back` and `ahead` in `values` (`back_len` and `ahead_len` of them,
+	##   two values each), the substitutes `values[data ..< data + data_len]`.
 	Sub : {
 		kind : U64,
 		coverage : U64,
@@ -93,25 +114,57 @@ LayoutGsub := {
 	## lookup records as `at, lookup` pairs.
 	Rule : { back : U64, back_len : U64, input : U64, input_len : U64, ahead : U64, ahead_len : U64, records : U64, records_len : U64 }
 
+	## `GDEF`: the glyph class definition and mark attachment class
+	## definition (spans of `ranges`), and the mark glyph sets (each a
+	## coverage in `ranges`). `has_classes` when the glyph class definition
+	## is present (HarfBuzz then takes glyph classes from it, not from
+	## Unicode).
+	Gdef : { classes : U64, classes_len : U64, has_classes : Bool, attach : U64, attach_len : U64, sets : List({ start : U64, len : U64 }) }
+
 	## The lists being filled while reading, and the reading work spent.
 	Built : { subtables : List(Sub), ranges : Ranges, values : List(U64), rules : List(Rule), steps : U64 }
 
-	## One glyph of a run: its cluster and its mask (see the module notes).
-	Item : { glyph : U64, cluster : U64, mask : U64 }
+	## One glyph of a run (see the module notes).
+	Item : { glyph : U64, cluster : U64, mask : U64, props : U64 }
+
+	## One lookup of a plan: its index, its feature mask, whether ZWJ and
+	## ZWNJ are skipped automatically, and whether it is the `rand` feature's.
+	Step : { index : U64, mask : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool }
 
 	## The bounds of one application: a run never grows past `limit`
 	## glyphs, lookups called from contextual rules are applied at most
 	## `budget` times in all, and at most `depth` deep.
 	Limits : { limit : U64, budget : U64, depth : U64 }
 
-	## A contextual rule being applied: its matched input starts at `start`
-	## and is `length` glyphs long now; `next` is its next lookup record;
-	## `before` the run's length before the record being applied.
-	Frame : { rule : Rule, start : U64, length : U64, next : U64, before : U64 }
+	## What a lookup is applied with: its mask and properties, the joiner
+	## rules and `rand`.
+	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool }
+
+	## HarfBuzz's buffer while a lookup applies: the input `info` read from
+	## `idx`, and, when `output`, the output written so far. `serial`
+	## numbers ligatures, `random` is the `rand` feature's state and `ops`
+	## the nested lookups applied so far.
+	Buf : { info : List(Item), out : List(Item), idx : U64, output : Bool, serial : U64, random : U64, ops : U64 }
+
+	## A contextual rule being applied (HarfBuzz's `apply_lookup`): its
+	## nested lookup records, the next one, how many matched positions it
+	## has (in `positions` from `base`), where its match ends, and the
+	## position and length saved around a nested lookup.
+	Frame : { records : U64, records_len : U64, next : U64, count : U64, end : U64, base : U64, saved_at : U64, saved_len : U64 }
+
+	## Reusable lists for applying: matched positions of the subtable being
+	## tried, the frames of contextual rules and their positions.
+	Work : { scratch : List(U64), frames : List(Frame), positions : List(U64) }
+
+	## What applying a subtable did.
+	Outcome : [Applied, NotApplied, Context({ count : U64, records : U64, records_len : U64, end : U64 })]
 
 	## No substitutions.
 	none : LayoutGsub
-	none = { common: LayoutCommon.none, lookups: [], subtables: [], ranges: [], values: [], rules: [] }
+	none = { common: LayoutCommon.none, lookups: [], subtables: [], ranges: [], values: [], rules: [], gdef: LayoutGsub.no_gdef, variants: TableCmap.no_variants }
+
+	no_gdef : Gdef
+	no_gdef = { classes: 0, classes_len: 0, has_classes: False, attach: 0, attach_len: 0, sets: [] }
 
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
@@ -123,10 +176,10 @@ LayoutGsub := {
 	max_context = 64
 
 	no_item : Item
-	no_item = { glyph: 0, cluster: 0, mask: 0 }
+	no_item = { glyph: 0, cluster: 0, mask: 0, props: 0 }
 
 	no_lookup : Lookup
-	no_lookup = { start: 0, count: 0, mode: 0, d0: 0, d1: 0, d2: 0 }
+	no_lookup = { start: 0, count: 0, mode: 0, d0: 0, d1: 0, d2: 0, props: 0, reverse: False }
 
 	no_sub : Sub
 	no_sub = { kind: 0, coverage: 0, coverage_len: 0, delta: 0, data: 0, data_len: 0, match_kind: 0, back: 0, back_len: 0, input: 0, input_len: 0, ahead: 0, ahead_len: 0 }
@@ -135,38 +188,200 @@ LayoutGsub := {
 	no_rule = { back: 0, back_len: 0, input: 0, input_len: 0, ahead: 0, ahead_len: 0, records: 0, records_len: 0 }
 
 	no_frame : Frame
-	no_frame = { rule: LayoutGsub.no_rule, start: 0, length: 0, next: 0, before: 0 }
+	no_frame = { records: 0, records_len: 0, next: 0, count: 0, end: 0, base: 0, saved_at: 0, saved_len: 0 }
 
 	## The script and feature lists, for choosing lookups.
 	common_of : LayoutGsub -> LayoutCommon
 	common_of = |shape| shape.common
 
+	## The font's `cmap` variation sequences.
+	variants_of : LayoutGsub -> TableCmap.Variants
+	variants_of = |shape| shape.variants
+
+	# ------------------------------------------------------------ glyph properties
+
+	## HarfBuzz's glyph property flags (the low byte of `glyph_props`). The
+	## class flags equal the lookup flags that ignore them.
+	base_glyph : U64
+	base_glyph = 0x02
+
+	ligature : U64
+	ligature = 0x04
+
+	mark : U64
+	mark = 0x08
+
+	substituted : U64
+	substituted = 0x10
+
+	ligated : U64
+	ligated = 0x20
+
+	multiplied : U64
+	multiplied = 0x40
+
+	preserve : U64
+	preserve = 0x70
+
+	## Whether the font has `GDEF` glyph classes.
+	has_glyph_classes : LayoutGsub -> Bool
+	has_glyph_classes = |shape| shape.gdef.has_classes
+
+	## A glyph's properties from `GDEF`, as HarfBuzz's `get_glyph_props`:
+	## base, ligature, or mark with its attachment class times 256; 0 for
+	## unclassified and component glyphs.
+	glyph_props : LayoutGsub, U64 -> U64
+	glyph_props = |shape, glyph| {
+		g = shape.gdef
+		klass = LayoutGsub.class_in(shape.ranges, g.classes, g.classes_len, glyph)
+		if klass == 1 {
+			LayoutGsub.base_glyph
+		} else if klass == 2 {
+			LayoutGsub.ligature
+		} else if klass == 3 {
+			LayoutGsub.mark.bitwise_or(LayoutGsub.class_in(shape.ranges, g.attach, g.attach_len, glyph).bitwise_and(0xFF).shl_wrap(8))
+		} else {
+			0
+		}
+	}
+
+	## Whether mark glyph set `set` covers a glyph.
+	mark_set_covers : LayoutGsub, U64, U64 -> Bool
+	mark_set_covers = |shape, set, glyph|
+		match shape.gdef.sets.get(set) {
+			Ok(s) => LayoutGsub.covered_in(shape.ranges, s.start, s.len, glyph).is_ok()
+			Err(_) => False
+		}
+
+	## Lookup properties with a mark filtering set the font does not have
+	## turned off, as HarfBuzz's `sanitize_lookup_props`.
+	sanitize_props : LayoutGsub, U64 -> U64
+	sanitize_props = |shape, props|
+		if props.bitwise_and(0x10) != 0 and props.shr_zf_wrap(16) >= shape.gdef.sets.len() {
+			props.bitwise_and(0xFFFFFFFFFFFFFFEF)
+		} else {
+			props
+		}
+
+	## Whether lookup properties let a lookup see a glyph (HarfBuzz's
+	## `check_glyph_property`).
+	check_glyph_property : LayoutGsub, Item, U64 -> Bool
+	check_glyph_property = |shape, item, match_props| {
+		g = LayoutGsub.gprops(item)
+		if g.bitwise_and(match_props).bitwise_and(0x0E) != 0 {
+			False
+		} else if g.bitwise_and(LayoutGsub.mark) != 0 {
+			if match_props.bitwise_and(0x10) != 0 {
+				LayoutGsub.mark_set_covers(shape, match_props.shr_zf_wrap(16), item.glyph)
+			} else if match_props.bitwise_and(0xFF00) != 0 {
+				match_props.bitwise_and(0xFF00) == g.bitwise_and(0xFF00)
+			} else {
+				True
+			}
+		} else {
+			True
+		}
+	}
+
+	gprops : Item -> U64
+	gprops = |item| item.props.shr_zf_wrap(16).bitwise_and(0xFFFF)
+
+	with_gprops : Item, U64 -> Item
+	with_gprops = |item, g| { ..item, props: item.props.bitwise_and(0xFFFFFFFF0000FFFF).bitwise_or(g.bitwise_and(0xFFFF).shl_wrap(16)) }
+
+	lprops : Item -> U64
+	lprops = |item| item.props.shr_zf_wrap(32).bitwise_and(0xFF)
+
+	with_lprops : Item, U64 -> Item
+	with_lprops = |item, l| { ..item, props: item.props.bitwise_and(0xFFFFFF00FFFFFFFF).bitwise_or(l.bitwise_and(0xFF).shl_wrap(32)) }
+
+	lig_id : Item -> U64
+	lig_id = |item| LayoutGsub.lprops(item).shr_zf_wrap(5)
+
+	lig_comp : Item -> U64
+	lig_comp = |item| {
+		l = LayoutGsub.lprops(item)
+		if (l.bitwise_and(0x10) != 0) 0 else l.bitwise_and(0x0F)
+	}
+
+	num_comps : Item -> U64
+	num_comps = |item| {
+		l = LayoutGsub.lprops(item)
+		if (LayoutGsub.gprops(item).bitwise_and(LayoutGsub.ligature) != 0 and l.bitwise_and(0x10) != 0) l.bitwise_and(0x0F) else 1
+	}
+
+	num_comps_in_ligation : Item -> U64
+	num_comps_in_ligation = |item|
+		if (LayoutGsub.gprops(item).bitwise_and(LayoutGsub.multiplied) != 0 and LayoutGsub.lig_comp(item) != 0) 0 else LayoutGsub.num_comps(item)
+
+	is_mark_item : Item -> Bool
+	is_mark_item = |item| LayoutGsub.gprops(item).bitwise_and(LayoutGsub.mark) != 0
+
+	## Default ignorable and not yet substituted (HarfBuzz's
+	## `_hb_glyph_info_is_default_ignorable`).
+	is_default_ignorable : Item -> Bool
+	is_default_ignorable = |item| item.props.bitwise_and(ShaperUnicode.ignorable) != 0 and LayoutGsub.gprops(item).bitwise_and(LayoutGsub.substituted) == 0
+
+	## An item's glyph properties after substituting `glyph`, as HarfBuzz's
+	## `_set_glyph_class`.
+	set_glyph_class : LayoutGsub, Item, U64, U64, Bool, Bool -> Item
+	set_glyph_class = |shape, item, glyph, class_guess, as_ligature, component| {
+		base = LayoutGsub.gprops(item).bitwise_or(LayoutGsub.substituted)
+		with_ligature = if (as_ligature) base.bitwise_or(LayoutGsub.ligated).bitwise_and(0xFFFF - LayoutGsub.multiplied) else base
+		flags = if (component) with_ligature.bitwise_or(LayoutGsub.multiplied) else with_ligature
+		props =
+			if shape.gdef.has_classes {
+				flags.bitwise_and(LayoutGsub.preserve).bitwise_or(LayoutGsub.glyph_props(shape, glyph))
+			} else if class_guess != 0 {
+				flags.bitwise_and(LayoutGsub.preserve).bitwise_or(class_guess)
+			} else {
+				flags
+			}
+		LayoutGsub.with_gprops(item, props)
+	}
+
 	# ------------------------------------------------------------ applying
 
 	## Apply lookups to a run, in the order given; each applies where a
 	## glyph's mask shares a bit with the lookup's `mask`. Each lookup passes
-	## over the run once, left to right. Past `limits`, a substitution that
-	## would grow the run past its limit is not made, and contextual rules
-	## match but call no more lookups; the run stays total and finite.
-	apply : LayoutGsub, List({ index : U64, mask : U64 }), List(Item), Limits -> List(Item)
+	## over the run once, left to right (a reverse chaining lookup right to
+	## left). Past `limits`, a substitution that would grow the run past its
+	## limit is not made, and contextual rules match but call no more
+	## lookups; the run stays total and finite.
+	apply : LayoutGsub, List(Step), List(Item), Limits -> List(Item)
 	apply = |shape, plan, items, limits| {
 		var $run = items
 		# The previous run of a general lookup, whose allocation the next one
 		# writes into.
 		var $spare = []
+		var $serial = 0
+		var $random = 1
 		var $ops = 0
-		for entry in plan {
-			lookup = shape.lookups.get(entry.index) ?? LayoutGsub.no_lookup
-			if lookup.count > 0 {
-				if lookup.mode == 0 {
-					$run = LayoutGsub.apply_singles(shape, lookup, entry.mask, $run)
-				} else if lookup.mode == 1 {
-					$run = LayoutGsub.apply_compacting(shape, lookup, entry.mask, $run)
-				} else if LayoutGsub.any_start(lookup, $run) {
-					{ run: applied, spare: freed, ops: spent } = LayoutGsub.apply_general(shape, lookup, entry.mask, $run, $spare, limits, $ops)
-					$run = applied
-					$spare = freed
-					$ops = spent
+		var $work = { scratch: [], frames: [], positions: [] }
+		for step in plan {
+			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
+			if lookup.count > 0 and LayoutGsub.any_start(lookup, $run, step.mask) {
+				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random }
+				if lookup.reverse {
+					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops }, limits, $work)
+					{ info, out: _, idx: _, output: _, serial, random, ops } = buf
+					$run = info
+					$serial = serial
+					$random = random
+					$ops = ops
+					$work = work
+				} else if lookup.mode == 0 {
+					$run = LayoutGsub.apply_singles(shape, lookup, ctx, $run)
+				} else {
+					{ buf, work } = LayoutGsub.apply_forward(shape, lookup, ctx, { info: $run, out: $spare.clear().reserve($run.len()), idx: 0, output: True, serial: $serial, random: $random, ops: $ops }, limits, $work)
+					{ info, out, idx, output: _, serial, random, ops } = buf
+					# Sync: the rest of the input follows the output.
+					$run = if (idx < info.len()) out.concat(info.drop_first(idx)) else out
+					$spare = info
+					$serial = serial
+					$random = random
+					$ops = ops
+					$work = work
 				}
 			}
 		}
@@ -176,22 +391,41 @@ LayoutGsub := {
 	applies : U64, U64 -> Bool
 	applies = |item_mask, lookup_mask| item_mask.bitwise_and(lookup_mask) != 0
 
-	# A lookup of single substitutions only: each glyph is replaced in place.
-	apply_singles : LayoutGsub, Lookup, U64, List(Item) -> List(Item)
-	apply_singles = |shape, lookup, mask, items| {
+	## Whether a lookup may start at an item: its glyph may be covered, the
+	## masks share a bit, and the lookup flags let the lookup see it.
+	candidate : LayoutGsub, Lookup, Ctx, Item -> Bool
+	candidate = |shape, lookup, ctx, item| LayoutGsub.may_start(lookup, item.glyph) and LayoutGsub.applies(item.mask, ctx.mask) and LayoutGsub.check_glyph_property(shape, item, ctx.props)
+
+	# A lookup of single substitutions only: each glyph is replaced in place,
+	# which is what HarfBuzz's out-of-place replacement amounts to.
+	apply_singles : LayoutGsub, Lookup, Ctx, List(Item) -> List(Item)
+	apply_singles = |shape, lookup, ctx, items| {
 		var $run = items
 		n = $run.len()
 		var $i = 0
 		while $i < n {
 			item = $run.get($i) ?? LayoutGsub.no_item
-			if LayoutGsub.may_start(lookup, item.glyph) and LayoutGsub.applies(item.mask, mask) {
-				match LayoutGsub.simple_at(shape, lookup, mask, $run, $i) {
-					One(found) =>
-						if found.glyph != item.glyph {
-							# `$i < n`, the run's length.
-							$run = $run.set($i, { ..item, glyph: found.glyph }) ?? []
+			if LayoutGsub.candidate(shape, lookup, ctx, item) {
+				end = lookup.start + lookup.count
+				var $k = lookup.start
+				while $k < end {
+					sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
+					match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
+						Err(_) => {
+							$k = $k + 1
 						}
-					Skip => {}
+						Ok(at) =>
+							match LayoutGsub.single(shape.values, sub, at, item.glyph) {
+								Ok(glyph) => {
+									# `$i < n`, the run's length.
+									$run = $run.set($i, { ..LayoutGsub.set_glyph_class(shape, item, glyph, 0, False, False), glyph }) ?? []
+									$k = end
+								}
+								Err(_) => {
+									$k = $k + 1
+								}
+							}
+					}
 				}
 			}
 			$i = $i + 1
@@ -199,60 +433,989 @@ LayoutGsub := {
 		$run
 	}
 
-	# A lookup of single and ligature substitutions: the run only shrinks, so
-	# results are written over the run behind the read position. A ligature
-	# reads only glyphs after the read position, which are not yet written;
-	# merging clusters may change those glyphs' clusters and the clusters of
-	# glyphs already written.
-	apply_compacting : LayoutGsub, Lookup, U64, List(Item) -> List(Item)
-	apply_compacting = |shape, lookup, mask, items| {
-		var $run = items
-		n = $run.len()
-		var $read = 0
-		var $write = 0
-		while $read < n {
-			item = $run.get($read) ?? LayoutGsub.no_item
-			found = if LayoutGsub.may_start(lookup, item.glyph) and LayoutGsub.applies(item.mask, mask) {
-				match LayoutGsub.simple_at(shape, lookup, mask, $run, $read) {
-					One(one) => one
-					Skip => { glyph: item.glyph, next: $read + 1 }
-				}
-			} else {
-				{ glyph: item.glyph, next: $read + 1 }
-			}
-			if found.next > $read + 1 {
-				# A ligature of the glyphs `$read ..< found.next`.
-				# Destructured, so the run is not also held by a record.
-				{ run: merged, cluster } = LayoutGsub.merge_ligature($run, $write, $read, found.next)
-				# `$write <= $read < n`.
-				$run = merged.set($write, { ..item, glyph: found.glyph, cluster }) ?? []
-			} else if $write != $read or found.glyph != item.glyph {
-				# `$write <= $read < n`, the run's length.
-				$run = $run.set($write, { ..item, glyph: found.glyph }) ?? []
-			}
-			$write = $write + 1
-			$read = found.next
-		}
-		if $write < n {
-			$run.take_first($write)
+	## The substitute of a covered glyph (coverage index `at`) in a single
+	## substitution, or `Err` when format 2 has no substitute at that index.
+	single : List(U64), Sub, U64, U64 -> Try(U64, [NoSubstitute])
+	single = |values, sub, at, glyph|
+		if sub.data_len == 0 {
+			Ok((glyph.to_i64_wrap() + sub.delta).bitwise_and(0xFFFF).to_u64_wrap())
+		} else if at < sub.data_len {
+			Ok(values.get(sub.data + at) ?? glyph)
 		} else {
-			$run
+			Err(NoSubstitute)
+		}
+
+	# HarfBuzz's `apply_forward`: past glyphs no subtable can start at, try
+	# the lookup's subtables in order at each glyph; one that applies moves
+	# the cursor itself, otherwise the glyph is copied.
+	apply_forward : LayoutGsub, Lookup, Ctx, Buf, Limits, Work -> { buf : Buf, work : Work }
+	apply_forward = |shape, lookup, ctx, start, limits, work_in| {
+		var $buf = start
+		var $work = work_in
+		var $going = True
+		while $going {
+			n = $buf.info.len()
+			var $j = $buf.idx
+			while $j < n and !LayoutGsub.candidate(shape, lookup, ctx, $buf.info.get($j) ?? LayoutGsub.no_item) {
+				$j = $j + 1
+			}
+			if $j > $buf.idx {
+				$buf = LayoutGsub.next_glyphs($buf, $j - $buf.idx)
+			}
+			if $buf.idx >= n {
+				$going = False
+			} else {
+				{ buf: after, work: used, outcome } = LayoutGsub.apply_once(shape, lookup, ctx, $buf, limits, $work, False)
+				$work = used
+				match outcome {
+					Applied => {
+						$buf = after
+					}
+					NotApplied => {
+						$buf = LayoutGsub.next_glyph(after)
+					}
+					Context(found) => {
+						{ buf: done, work: frames_done } = LayoutGsub.run_frames(shape, ctx, after, found, limits, $work)
+						$buf = done
+						$work = frames_done
+					}
+				}
+			}
+		}
+		{ buf: $buf, work: $work }
+	}
+
+	# HarfBuzz's `apply_backward`, for reverse chaining lookups: in place,
+	# from the last glyph to the first.
+	apply_backward : LayoutGsub, Lookup, Ctx, Buf, Limits, Work -> { buf : Buf, work : Work }
+	apply_backward = |shape, lookup, ctx, start, limits, work_in| {
+		var $buf = start
+		var $work = work_in
+		var $k = $buf.info.len()
+		while $k > 0 {
+			$buf = { ..$buf, idx: $k - 1 }
+			item = $buf.info.get($k - 1) ?? LayoutGsub.no_item
+			if LayoutGsub.candidate(shape, lookup, ctx, item) {
+				{ buf: after, work: used, outcome: _ } = LayoutGsub.apply_once(shape, lookup, ctx, $buf, limits, $work, False)
+				$buf = after
+				$work = used
+			}
+			$k = $k - 1
+		}
+		{ buf: $buf, work: $work }
+	}
+
+	## The first subtable of a lookup that applies at the cursor.
+	apply_once : LayoutGsub, Lookup, Ctx, Buf, Limits, Work, Bool -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_once = |shape, lookup, ctx, start, limits, work_in, nested| {
+		var $buf = start
+		var $work = work_in
+		var $outcome = NotApplied
+		end = lookup.start + lookup.count
+		var $k = lookup.start
+		while $k < end {
+			sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
+			{ buf: after, work: used, outcome } = LayoutGsub.apply_subtable(shape, sub, ctx, $buf, limits, $work, nested)
+			$buf = after
+			$work = used
+			match outcome {
+				NotApplied => {
+					$k = $k + 1
+				}
+				_ => {
+					$outcome = outcome
+					$k = end
+				}
+			}
+		}
+		{ buf: $buf, work: $work, outcome: $outcome }
+	}
+
+	# One subtable at the cursor (HarfBuzz's subtable `apply`).
+	apply_subtable : LayoutGsub, Sub, Ctx, Buf, Limits, Work, Bool -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_subtable = |shape, sub, ctx, buf, limits, work, nested| {
+		cur = buf.info.get(buf.idx) ?? LayoutGsub.no_item
+		# Built only where it is the answer, so `buf` stays unique.
+		if buf.idx >= buf.info.len() {
+			{ buf, work, outcome: NotApplied }
+		} else if sub.kind == 5 {
+			LayoutGsub.apply_context(shape, sub, ctx, buf, work)
+		} else {
+			match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, cur.glyph) {
+				Err(_) => { buf, work, outcome: NotApplied }
+				Ok(at) =>
+					if sub.kind == 1 {
+						match LayoutGsub.single(shape.values, sub, at, cur.glyph) {
+							Ok(glyph) => { buf: LayoutGsub.replace_glyph(shape, buf, glyph), work, outcome: Applied }
+							Err(_) => { buf, work, outcome: NotApplied }
+						}
+					} else if sub.kind == 2 {
+						LayoutGsub.apply_multiple(shape, sub, at, buf, limits, work)
+					} else if sub.kind == 3 {
+						LayoutGsub.apply_alternate(shape, sub, ctx, at, buf, work)
+					} else if sub.kind == 4 {
+						LayoutGsub.apply_ligatures(shape, sub, ctx, at, buf, work)
+					} else if sub.kind == 8 and !nested {
+						LayoutGsub.apply_reverse(shape, sub, ctx, at, buf, work)
+					} else {
+						{ buf, work, outcome: NotApplied }
+					}
+			}
 		}
 	}
 
-	## Merge the clusters of a ligature's components, `run[start ..< end]`,
-	## as HarfBuzz's `merge_clusters` does: they take their smallest cluster,
-	## and so do the glyphs after them that share the last component's
-	## cluster and the glyphs before `written` that share the first's. Glyphs
-	## from `written` to `start` are not part of the run (already consumed).
-	merge_ligature : List(Item), U64, U64, U64 -> { run : List(Item), cluster : U64 }
-	merge_ligature = |run, written, start, end| {
-		first = (run.get(start) ?? LayoutGsub.no_item).cluster
-		last = (run.get(end - 1) ?? LayoutGsub.no_item).cluster
-		cluster = LayoutGsub.min_cluster(run, start, end, first)
-		forward = if (cluster != last) LayoutGsub.rewrite_forward(run, end, last, cluster) else run
-		backward = if (cluster != first) LayoutGsub.rewrite_backward(forward, written, first, cluster) else forward
-		{ run: backward, cluster }
+	## Replace the glyph at the cursor and move on (HarfBuzz's
+	## `replace_glyph`; in place without an output).
+	replace_glyph : LayoutGsub, Buf, U64 -> Buf
+	replace_glyph = |shape, buf, glyph| {
+		# Destructured, so the lists are not also held by `buf`.
+		{ info, out, idx, output, serial, random, ops } = buf
+		cur = info.get(idx) ?? LayoutGsub.no_item
+		item = { ..LayoutGsub.set_glyph_class(shape, cur, glyph, 0, False, False), glyph }
+		if output {
+			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops }
+		} else {
+			# The cursor is inside the input.
+			{ info: info.set(idx, item) ?? [], out, idx: idx + 1, output, serial, random, ops }
+		}
+	}
+
+	# Multiple substitution (HarfBuzz's `Sequence::apply`). A sequence of
+	# one glyph is a plain replacement and of none a deletion; a longer one
+	# is not made when it would grow the run past its limit.
+	apply_multiple : LayoutGsub, Sub, U64, Buf, Limits, Work -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_multiple = |shape, sub, at, buf, limits, work| {
+		if at >= sub.data_len {
+			{ buf, work, outcome: NotApplied }
+		} else {
+			start = shape.values.get(sub.data + at) ?? 0
+			stop = (shape.values.get(sub.data + at + 1) ?? 0).max(start)
+			count = stop - start
+			if count == 1 {
+				{ buf: LayoutGsub.replace_glyph(shape, buf, shape.values.get(start) ?? 0), work, outcome: Applied }
+			} else if count == 0 {
+				{ buf: LayoutGsub.delete_glyph(buf), work, outcome: Applied }
+			} else if buf.out.len() + count + (buf.info.len() - buf.idx) > limits.limit + 1 {
+				{ buf, work, outcome: NotApplied }
+			} else {
+				{ info, out, idx, output, serial, random, ops } = buf
+				cur = info.get(idx) ?? LayoutGsub.no_item
+				klass = if (LayoutGsub.gprops(cur).bitwise_and(LayoutGsub.ligature) != 0) LayoutGsub.base_glyph else 0
+				attached = LayoutGsub.lig_id(cur) != 0
+				var $cur = cur
+				var $out = out
+				for i in 0..<count {
+					glyph = shape.values.get(start + i) ?? 0
+					component = if (attached) $cur else LayoutGsub.with_lprops($cur, i.bitwise_and(0x0F))
+					$cur = LayoutGsub.set_glyph_class(shape, component, glyph, klass, False, True)
+					$out = $out.append({ ..$cur, glyph })
+				}
+				{ buf: { info, out: $out, idx: idx + 1, output, serial, random, ops }, work, outcome: Applied }
+			}
+		}
+	}
+
+	# Alternate substitution (HarfBuzz's `AlternateSet::apply`): the
+	# alternate is the glyph's value of the lookup's feature; `rand` at its
+	# largest value picks one with HarfBuzz's generator (the minimal
+	# standard generator on a 32-bit state, seeded with 1 for each run), so
+	# the choice is deterministic.
+	apply_alternate : LayoutGsub, Sub, Ctx, U64, Buf, Work -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_alternate = |shape, sub, ctx, at, buf, work| {
+		if at >= sub.data_len {
+			{ buf, work, outcome: NotApplied }
+		} else {
+			start = shape.values.get(sub.data + at) ?? 0
+			stop = (shape.values.get(sub.data + at + 1) ?? 0).max(start)
+			count = stop - start
+			cur = buf.info.get(buf.idx) ?? LayoutGsub.no_item
+			shift = LayoutGsub.trailing_zeros(ctx.mask)
+			chosen = ctx.mask.bitwise_and(cur.mask).shr_zf_wrap(shift.to_u8_wrap())
+			{ index, after } =
+				if chosen == 255 and ctx.random and count > 0 {
+					# HarfBuzz's state is 32 bits: the product wraps before the
+					# remainder.
+					next = (buf.random * 48271).bitwise_and(0xFFFFFFFF) % 2147483647
+					n = buf.info.len()
+					{ info, out, idx, output, serial, random: _, ops } = LayoutGsub.unsafe_to_break(buf, 0, n)
+					{ index: next % count + 1, after: { info, out, idx, output, serial, random: next, ops } }
+				} else {
+					{ index: chosen, after: buf }
+				}
+			if index > count or index == 0 {
+				{ buf: after, work, outcome: NotApplied }
+			} else {
+				{ buf: LayoutGsub.replace_glyph(shape, after, shape.values.get(start + index - 1) ?? 0), work, outcome: Applied }
+			}
+		}
+	}
+
+	trailing_zeros : U64 -> U64
+	trailing_zeros = |mask|
+		if mask == 0 {
+			0
+		} else {
+			var $n = 0
+			var $m = mask
+			while $m.bitwise_and(1) == 0 {
+				$m = $m.shr_zf_wrap(1)
+				$n = $n + 1
+			}
+			$n
+		}
+
+	# Ligature substitution (HarfBuzz's `LigatureSet::apply`): the first
+	# ligature of the set whose components match, skipping what the lookup
+	# flags skip.
+	apply_ligatures : LayoutGsub, Sub, Ctx, U64, Buf, Work -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_ligatures = |shape, sub, ctx, at, buf, work_in| {
+		if at >= sub.data_len {
+			{ buf, work: work_in, outcome: NotApplied }
+		} else {
+			end = shape.values.get(sub.data + at + 1) ?? 0
+			{ scratch: scratch_in, frames, positions } = work_in
+			var $scratch = scratch_in
+			var $found = NoLigature
+			var $p = shape.values.get(sub.data + at) ?? 0
+			while $p < end {
+				glyph = shape.values.get($p) ?? 0
+				components = shape.values.get($p + 1) ?? 0
+				if components == 0 {
+					$found = Single(glyph)
+					$p = end
+				} else {
+					seq = { kind: 0, classes: 0, classes_len: 0, at: $p + 2, stride: 1 }
+					{ ok, end: match_end, scratch, total } = LayoutGsub.match_input(shape, ctx, buf, seq, components + 1, $scratch)
+					$scratch = scratch
+					if ok {
+						$found = Ligature({ glyph, count: components + 1, match_end, total })
+						$p = end
+					} else {
+						$p = $p + 2 + components
+					}
+				}
+			}
+			match $found {
+				Single(glyph) => { buf: LayoutGsub.replace_glyph(shape, buf, glyph), work: { scratch: $scratch, frames, positions }, outcome: Applied }
+				Ligature(l) => { buf: LayoutGsub.ligate_input(shape, buf, $scratch, l.count, l.match_end, l.glyph, l.total), work: { scratch: $scratch, frames, positions }, outcome: Applied }
+				NoLigature => { buf, work: { scratch: $scratch, frames, positions }, outcome: NotApplied }
+			}
+		}
+	}
+
+	# Reverse chaining single substitution (HarfBuzz's
+	# `ReverseChainSingleSubstFormat1::apply`), never called from a rule.
+	apply_reverse : LayoutGsub, Sub, Ctx, U64, Buf, Work -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_reverse = |shape, sub, ctx, at, buf, work| {
+		if at >= sub.data_len {
+			{ buf, work, outcome: NotApplied }
+		} else {
+			back = { kind: 2, classes: 0, classes_len: 0, at: sub.back, stride: 2 }
+			ahead = { kind: 2, classes: 0, classes_len: 0, at: sub.ahead, stride: 2 }
+			before = LayoutGsub.match_backtrack(shape, ctx, buf, back, sub.back_len)
+			after = LayoutGsub.match_lookahead(shape, ctx, buf, ahead, sub.ahead_len, buf.idx + 1)
+			if before.ok and after.ok {
+				{ info, out, idx, output, serial, random, ops } = LayoutGsub.unsafe_to_break_from_outbuffer(buf, before.start, after.end)
+				cur = info.get(idx) ?? LayoutGsub.no_item
+				glyph = shape.values.get(sub.data + at) ?? 0
+				item = { ..LayoutGsub.set_glyph_class(shape, cur, glyph, 0, False, False), glyph }
+				# The cursor is inside the input.
+				{ buf: { info: info.set(idx, item) ?? [], out, idx, output, serial, random, ops }, work, outcome: Applied }
+			} else {
+				{ buf, work, outcome: NotApplied }
+			}
+		}
+	}
+
+	# Contextual and chained contextual substitution: the first rule of the
+	# glyph's rule set that matches. A match is marked unsafe to break and
+	# returned for the caller to run its nested lookups (`run_frames`).
+	apply_context : LayoutGsub, Sub, Ctx, Buf, Work -> { buf : Buf, work : Work, outcome : Outcome }
+	apply_context = |shape, sub, ctx, buf, work_in| {
+		cur = buf.info.get(buf.idx) ?? LayoutGsub.no_item
+		match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, cur.glyph) {
+			Err(_) => { buf, work: work_in, outcome: NotApplied }
+			Ok(at) => {
+				slot = if (sub.match_kind == 1) LayoutGsub.class_in(shape.ranges, sub.input, sub.input_len, cur.glyph) else if (sub.match_kind == 2) 0 else at
+				if slot >= sub.data_len {
+					{ buf, work: work_in, outcome: NotApplied }
+				} else {
+					last = shape.values.get(sub.data + slot + 1) ?? 0
+					stride = if (sub.match_kind == 2) 2 else 1
+					{ scratch: scratch_in, frames, positions } = work_in
+					var $scratch = scratch_in
+					var $found = NoRule
+					var $r = shape.values.get(sub.data + slot) ?? 0
+					while $r < last {
+						rule = shape.rules.get($r) ?? LayoutGsub.no_rule
+						input = { kind: sub.match_kind, classes: sub.input, classes_len: sub.input_len, at: rule.input, stride }
+						count = rule.input_len + 1
+						{ ok, end: match_end, scratch, total: _ } = LayoutGsub.match_input(shape, ctx, buf, input, count, $scratch)
+						$scratch = scratch
+						found = { count, records: rule.records, records_len: rule.records_len, end: match_end }
+						if !ok or count > LayoutGsub.max_context {
+							$r = $r + 1
+						} else if sub.delta == 0 {
+							# A context rule: unsafe to break across its input.
+							$found = Plain({ found, start: buf.idx, end: match_end })
+							$r = last
+						} else {
+							ahead = { kind: sub.match_kind, classes: sub.ahead, classes_len: sub.ahead_len, at: rule.ahead, stride }
+							back = { kind: sub.match_kind, classes: sub.back, classes_len: sub.back_len, at: rule.back, stride }
+							after = LayoutGsub.match_lookahead(shape, ctx, buf, ahead, rule.ahead_len, match_end)
+							before = if (after.ok) LayoutGsub.match_backtrack(shape, ctx, buf, back, rule.back_len) else { ok: False, start: 0 }
+							if after.ok and before.ok {
+								$found = Chained({ found, start: before.start, end: after.end })
+								$r = last
+							} else {
+								$r = $r + 1
+							}
+						}
+					}
+					work = { scratch: $scratch, frames, positions }
+					match $found {
+						Plain(m) => { buf: LayoutGsub.unsafe_to_break(buf, m.start, m.end), work, outcome: Context(m.found) }
+						Chained(m) => { buf: LayoutGsub.unsafe_to_break_from_outbuffer(buf, m.start, m.end), work, outcome: Context(m.found) }
+						NoRule => { buf, work, outcome: NotApplied }
+					}
+				}
+			}
+		}
+	}
+
+	# Run the nested lookups of a matched rule (HarfBuzz's `apply_lookup`)
+	# whose positions are `work.scratch`, and of the rules they match in
+	# turn, through an explicit stack of frames: at most `limits.depth`
+	# rules deep (deeper rules match but call nothing), and at most
+	# `limits.budget` nested lookups in all. Positions are kept relative to
+	# the output, and adjusted after a nested lookup changes the run's
+	# length exactly as HarfBuzz adjusts them.
+	run_frames : LayoutGsub, Ctx, Buf, { count : U64, records : U64, records_len : U64, end : U64 }, Limits, Work -> { buf : Buf, work : Work }
+	run_frames = |shape, ctx, start, found, limits, work_in| {
+		{ scratch: scratch_in, frames: frames_in, positions: positions_in } = work_in
+		var $buf = start
+		var $scratch = scratch_in
+		var $positions = positions_in.clear()
+		var $frames = frames_in.clear()
+		{ frame: first, positions: placed } = LayoutGsub.push_frame($buf, found, $scratch, $positions, 0)
+		$positions = placed
+		$frames = $frames.append(first)
+		while !$frames.is_empty() {
+			depth = $frames.len()
+			top = $frames.last() ?? LayoutGsub.no_frame
+			if top.next >= top.records_len {
+				# The rule is done: continue after its input.
+				$buf = LayoutGsub.move_to($buf, top.end)
+				$frames = $frames.drop_last(1)
+				match $frames.last() {
+					Ok(parent) => {
+						{ frame: adjusted, positions: moved } = LayoutGsub.after_nested($buf, parent, $positions)
+						$positions = moved
+						# The list is not empty: it holds `parent`.
+						$frames = $frames.set($frames.len() - 1, adjusted) ?? []
+					}
+					Err(_) => {}
+				}
+			} else {
+				r = top.next
+				at = shape.values.get(top.records + 2 * r) ?? 0
+				index = shape.values.get(top.records + 2 * r + 1) ?? 0
+				orig_len = $buf.out.len() + ($buf.info.len() - $buf.idx)
+				position = $positions.get(top.base + at) ?? 0
+				# The list is not empty: it holds `top`.
+				$frames = $frames.set(depth - 1, { ..top, next: r + 1 }) ?? []
+				if at < top.count and position < orig_len {
+					$buf = LayoutGsub.move_to($buf, position)
+					if $buf.ops >= limits.budget {
+						# Out of budget: the rule stops here.
+						$frames = $frames.set(depth - 1, { ..top, next: top.records_len }) ?? []
+					} else if depth <= limits.depth {
+						$buf = { ..$buf, ops: $buf.ops + 1 }
+						lookup = shape.lookups.get(index) ?? LayoutGsub.no_lookup
+						nested_ctx = { ..ctx, props: LayoutGsub.sanitize_props(shape, lookup.props) }
+						saved = { ..top, next: r + 1, saved_at: at, saved_len: orig_len }
+						$frames = $frames.set(depth - 1, saved) ?? []
+						# Destructured, so the scratch list is not also held by a record.
+						{ buf: after, work: { scratch: used, frames: _, positions: _ }, outcome } = LayoutGsub.apply_once(shape, lookup, nested_ctx, $buf, limits, { scratch: $scratch, frames: [], positions: [] }, True)
+						$buf = after
+						$scratch = used
+						match outcome {
+							Applied => {
+								{ frame: adjusted, positions: moved } = LayoutGsub.after_nested($buf, saved, $positions)
+								$positions = moved
+								$frames = $frames.set(depth - 1, adjusted) ?? []
+							}
+							NotApplied => {}
+							Context(inner) => {
+								{ frame: pushed, positions: placed_inner } = LayoutGsub.push_frame($buf, inner, $scratch, $positions, depth * LayoutGsub.max_context)
+								$positions = placed_inner
+								$frames = $frames.append(pushed)
+							}
+						}
+					}
+				}
+			}
+		}
+		{ buf: $buf, work: { scratch: $scratch, frames: $frames, positions: $positions } }
+	}
+
+	## A new frame for a matched rule: its positions (`scratch`, input
+	## indices) converted to output indices and stored from `base`.
+	push_frame : Buf, { count : U64, records : U64, records_len : U64, end : U64 }, List(U64), List(U64), U64 -> { frame : Frame, positions : List(U64) }
+	push_frame = |buf, found, scratch, positions_in, base| {
+		bl = buf.out.len()
+		var $positions = positions_in
+		while $positions.len() < base + LayoutGsub.max_context {
+			$positions = $positions.append(0)
+		}
+		for j in 0..<found.count.min(LayoutGsub.max_context) {
+			p = scratch.get(j) ?? buf.idx
+			# Matched positions are at or after the cursor; `base + j` is
+			# within the slots added above.
+			$positions = $positions.set(base + j, p + bl - buf.idx) ?? []
+		}
+		{ frame: { records: found.records, records_len: found.records_len, next: 0, count: found.count, end: bl + found.end - buf.idx, base, saved_at: 0, saved_len: 0 }, positions: $positions }
+	}
+
+	## A frame's positions and end after a nested lookup applied at its
+	## position `saved_at` and changed the run's length from `saved_len`
+	## (HarfBuzz's adjustment in `apply_lookup`, including its limit of
+	## `max_context` positions).
+	after_nested : Buf, Frame, List(U64) -> { frame : Frame, positions : List(U64) }
+	after_nested = |buf, frame, positions_in| {
+		new_len = buf.out.len() + (buf.info.len() - buf.idx)
+		delta0 = new_len.to_i64_wrap() - frame.saved_len.to_i64_wrap()
+		if delta0 == 0 {
+			{ frame, positions: positions_in }
+		} else {
+			base = frame.base
+			at = frame.saved_at
+			count = frame.count.to_i64_wrap()
+			p_at = (positions_in.get(base + at) ?? 0).to_i64_wrap()
+			end0 = frame.end.to_i64_wrap() + delta0
+			{ end, delta } = if (end0 < p_at) { end: p_at, delta: delta0 + (p_at - end0) } else { end: end0, delta: delta0 }
+			next0 = (at + 1).to_i64_wrap()
+			if delta > 0 and delta + count > LayoutGsub.max_context.to_i64_wrap() {
+				# HarfBuzz stops applying the rule's records.
+				{ frame: { ..frame, end: end.to_u64_wrap(), next: frame.records_len }, positions: positions_in }
+			} else {
+				{ d, next } = if (delta > 0) { d: delta, next: next0 } else { d: delta.max(next0 - count), next: next0 - delta.max(next0 - count) }
+				var $positions = positions_in
+				# Shift positions `next ..< count` by `d` places.
+				moved = count - next
+				if d > 0 {
+					var $k = moved - 1
+					while $k >= 0 {
+						v = $positions.get(base + (next + $k).to_u64_wrap()) ?? 0
+						# Within the frame's slots: `count + d <= max_context`.
+						$positions = $positions.set(base + (next + d + $k).to_u64_wrap(), v) ?? []
+						$k = $k - 1
+					}
+				} else if d < 0 {
+					for k in 0..<moved.max(0).to_u64_wrap() {
+						v = $positions.get(base + (next + k.to_i64_wrap()).to_u64_wrap()) ?? 0
+						# Within the frame's slots.
+						$positions = $positions.set(base + (next + d + k.to_i64_wrap()).to_u64_wrap(), v) ?? []
+					}
+				}
+				next2 = next + d
+				count2 = count + d
+				# New entries follow the nested lookup's position.
+				var $j = at + 1
+				while $j.to_i64_wrap() < next2 {
+					v = $positions.get(base + $j - 1) ?? 0
+					# Within the frame's slots.
+					$positions = $positions.set(base + $j, v + 1) ?? []
+					$j = $j + 1
+				}
+				var $m = next2
+				while $m < count2 {
+					v = ($positions.get(base + $m.to_u64_wrap()) ?? 0).to_i64_wrap()
+					# Within the frame's slots.
+					$positions = $positions.set(base + $m.to_u64_wrap(), (v + d).max(0).to_u64_wrap()) ?? []
+					$m = $m + 1
+				}
+				{ frame: { ..frame, end: end.max(0).to_u64_wrap(), count: count2.max(0).to_u64_wrap() }, positions: $positions }
+			}
+		}
+	}
+
+	# ------------------------------------------------------------ matching
+
+	## A sequence of values to match: glyphs (`kind` 0), classes of the
+	## class definition `classes` (1) or coverages (2), from `values[at]`
+	## with `stride` values per entry.
+	Seq : { kind : U64, classes : U64, classes_len : U64, at : U64, stride : U64 }
+
+	## Whether a glyph matches entry `k` of a sequence.
+	seq_matches : LayoutGsub, Seq, U64, U64 -> Bool
+	seq_matches = |shape, seq, k, glyph| LayoutGsub.match_one(shape, seq.kind, seq.classes, seq.classes_len, seq.at + seq.stride * k, glyph)
+
+	## HarfBuzz's skipping iterator deciding about one item: `Skip` it,
+	## it is a `Match`, or `NoMatch` (stop). `context` for backtrack and
+	## lookahead, which ignore masks and skip ZWJ always.
+	step_item : LayoutGsub, Ctx, Item, Bool, Bool -> [Match, NoMatch, Skip]
+	step_item = |shape, ctx, item, context, matched| {
+		skip =
+			if !LayoutGsub.check_glyph_property(shape, item, ctx.props) {
+				SkipYes
+			} else if LayoutGsub.is_default_ignorable(item) and ((context and ctx.auto_zwnj) or !ShaperUnicode.is_zwnj(item.props)) and (context or ctx.auto_zwj or !ShaperUnicode.is_zwj(item.props)) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 {
+				SkipMaybe
+			} else {
+				SkipNo
+			}
+		match skip {
+			SkipYes => Skip
+			_ => {
+				masked = context or LayoutGsub.applies(item.mask, ctx.mask)
+				if masked and matched {
+					Match
+				} else {
+					match skip {
+						SkipNo => NoMatch
+						_ => Skip
+					}
+				}
+			}
+		}
+	}
+
+	## Whether the skipping iterator would skip an item outright (HarfBuzz's
+	## `may_skip` giving `SKIP_YES`), for input matching.
+	skips : LayoutGsub, Ctx, Item -> Bool
+	skips = |shape, ctx, item| !LayoutGsub.check_glyph_property(shape, item, ctx.props)
+
+	# HarfBuzz's `match_input`: the input after the cursor's glyph, `count`
+	# glyphs in all, skipping what the lookup flags and joiner rules skip,
+	# and not across glyphs attached to different components of earlier
+	# ligatures. Gives where the match ends, the matched positions in
+	# `scratch` and the ligature components they carry.
+	match_input : LayoutGsub, Ctx, Buf, Seq, U64, List(U64) -> { ok : Bool, end : U64, scratch : List(U64), total : U64 }
+	match_input = |shape, ctx, buf, seq, count, scratch_in| {
+		# The positions are written only for a match, walking it again, so
+		# the many failed attempts never touch the scratch list.
+		trial = LayoutGsub.match_walk(shape, ctx, buf, seq, count, [], False)
+		if trial.ok {
+			LayoutGsub.match_walk(shape, ctx, buf, seq, count, scratch_in, True)
+		} else {
+			{ ok: False, end: trial.end, scratch: scratch_in, total: 0 }
+		}
+	}
+
+	match_walk : LayoutGsub, Ctx, Buf, Seq, U64, List(U64), Bool -> { ok : Bool, end : U64, scratch : List(U64), total : U64 }
+	match_walk = |shape, ctx, buf, seq, count, scratch_in, record| {
+		info = buf.info
+		idx = buf.idx
+		cur = info.get(idx) ?? LayoutGsub.no_item
+		var $scratch = if (record) scratch_in.clear().append(idx) else scratch_in
+		if count == 1 {
+			{ ok: True, end: idx + 1, scratch: $scratch, total: LayoutGsub.num_comps(cur) }
+		} else if count > LayoutGsub.max_context {
+			{ ok: False, end: idx, scratch: $scratch, total: 0 }
+		} else {
+			first_id = LayoutGsub.lig_id(cur)
+			first_comp = LayoutGsub.lig_comp(cur)
+			n = info.len()
+			var $total = 0
+			var $at = idx
+			var $ok = True
+			var $end = idx
+			# 0 not checked, 1 may not skip, 2 may skip.
+			var $ligbase = 0
+			var $i = 1
+			while $ok and $i < count {
+				# Find the next item that matches entry `$i - 1`.
+				var $searching = True
+				while $searching {
+					if $at + 1 >= n {
+						$ok = False
+						$end = n
+						$searching = False
+					} else {
+						$at = $at + 1
+						item = info.get($at) ?? LayoutGsub.no_item
+						match LayoutGsub.step_item(shape, ctx, item, False, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
+							Match => {
+								$searching = False
+							}
+							NoMatch => {
+								$ok = False
+								$end = $at + 1
+								$searching = False
+							}
+							Skip => {}
+						}
+					}
+				}
+				if $ok {
+					if record {
+						$scratch = $scratch.append($at)
+					}
+					this = info.get($at) ?? LayoutGsub.no_item
+					this_id = LayoutGsub.lig_id(this)
+					this_comp = LayoutGsub.lig_comp(this)
+					if first_id != 0 and first_comp != 0 {
+						if first_id != this_id or first_comp != this_comp {
+							if $ligbase == 0 {
+								# Is the ligature the first glyph belongs to one the
+								# lookup skips?
+								var $j = buf.out.len()
+								var $found = False
+								var $looking = True
+								while $looking and $j > 0 and LayoutGsub.lig_id(buf.out.get($j - 1) ?? LayoutGsub.no_item) == first_id {
+									if LayoutGsub.lig_comp(buf.out.get($j - 1) ?? LayoutGsub.no_item) == 0 {
+										$found = True
+										$looking = False
+									}
+									$j = $j - 1
+								}
+								$ligbase = if ($found and LayoutGsub.skips(shape, ctx, buf.out.get($j) ?? LayoutGsub.no_item)) 2 else 1
+							}
+							if $ligbase == 1 {
+								$ok = False
+							}
+						}
+					} else if this_id != 0 and this_comp != 0 and this_id != first_id {
+						$ok = False
+					}
+					$total = $total + LayoutGsub.num_comps_in_ligation(this)
+				}
+				$i = $i + 1
+			}
+			if $ok {
+				{ ok: True, end: $at + 1, scratch: $scratch, total: $total + LayoutGsub.num_comps(cur) }
+			} else {
+				{ ok: False, end: $end, scratch: $scratch, total: 0 }
+			}
+		}
+	}
+
+	# HarfBuzz's `match_backtrack`: `count` entries backwards from the
+	# output's end (the input's cursor without an output). Gives where the
+	# match starts.
+	match_backtrack : LayoutGsub, Ctx, Buf, Seq, U64 -> { ok : Bool, start : U64 }
+	match_backtrack = |shape, ctx, buf, seq, count| {
+		before = if (buf.output) buf.out else buf.info
+		len = if (buf.output) buf.out.len() else buf.idx
+		if count == 0 {
+			{ ok: True, start: len }
+		} else {
+			var $at = len
+			var $ok = True
+			var $start = len
+			var $i = 0
+			while $ok and $i < count {
+				var $searching = True
+				while $searching {
+					if $at == 0 {
+						$ok = False
+						$start = 0
+						$searching = False
+					} else {
+						$at = $at - 1
+						item = before.get($at) ?? LayoutGsub.no_item
+						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+							Match => {
+								$searching = False
+							}
+							NoMatch => {
+								$ok = False
+								$start = $at.max(1) - 1
+								$searching = False
+							}
+							Skip => {}
+						}
+					}
+				}
+				$i = $i + 1
+			}
+			if ($ok) { ok: True, start: $at } else { ok: False, start: $start }
+		}
+	}
+
+	# HarfBuzz's `match_lookahead`: `count` entries forwards from input
+	# index `start`. Gives where the match ends.
+	match_lookahead : LayoutGsub, Ctx, Buf, Seq, U64, U64 -> { ok : Bool, end : U64 }
+	match_lookahead = |shape, ctx, buf, seq, count, start| {
+		if count == 0 {
+			{ ok: True, end: start }
+		} else {
+			info = buf.info
+			n = info.len()
+			var $at = start - 1
+			var $ok = True
+			var $end = start
+			var $i = 0
+			while $ok and $i < count {
+				var $searching = True
+				while $searching {
+					if $at + 1 >= n {
+						$ok = False
+						$end = n
+						$searching = False
+					} else {
+						$at = $at + 1
+						item = info.get($at) ?? LayoutGsub.no_item
+						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+							Match => {
+								$searching = False
+							}
+							NoMatch => {
+								$ok = False
+								$end = $at + 1
+								$searching = False
+							}
+							Skip => {}
+						}
+					}
+				}
+				$i = $i + 1
+			}
+			if ($ok) { ok: True, end: $at + 1 } else { ok: False, end: $end }
+		}
+	}
+
+	# HarfBuzz's `ligate_input`: merge the clusters of the match, write the
+	# ligature glyph, keep the glyphs skipped between components (with the
+	# ligature's id and their component), drop the components, and move
+	# marks that followed an earlier ligature to the new one's components.
+	ligate_input : LayoutGsub, Buf, List(U64), U64, U64, U64, U64 -> Buf
+	ligate_input = |shape, start, positions, count, match_end, lig_glyph, total| {
+		merged = LayoutGsub.merge_clusters(start, start.idx, match_end)
+		{ info: info_in, out: out_in, idx: idx_in, output, serial: serial_in, random, ops } = merged
+		first = info_in.get(positions.get(0) ?? 0) ?? LayoutGsub.no_item
+		var $is_base = LayoutGsub.gprops(first).bitwise_and(LayoutGsub.base_glyph) != 0
+		var $is_mark = LayoutGsub.is_mark_item(first)
+		for i in 1..<count {
+			if !LayoutGsub.is_mark_item(info_in.get(positions.get(i) ?? 0) ?? LayoutGsub.no_item) {
+				$is_base = False
+				$is_mark = False
+			}
+		}
+		is_ligature = !$is_base and !$is_mark
+		var $info = info_in
+		var $out = out_in
+		var $idx = idx_in
+		klass = if (is_ligature) LayoutGsub.ligature else 0
+		{ id: new_id, serial } = if (is_ligature) LayoutGsub.allocate_lig_id(serial_in) else { id: 0, serial: serial_in }
+		cur = $info.get($idx) ?? LayoutGsub.no_item
+		var $last_id = LayoutGsub.lig_id(cur)
+		var $last_count = LayoutGsub.num_comps(cur)
+		var $so_far = $last_count
+		with_lig =
+			if is_ligature {
+				lig = LayoutGsub.with_lprops(cur, new_id.shl_wrap(5).bitwise_or(0x10).bitwise_or(total.bitwise_and(0x0F)))
+				if (ShaperUnicode.general_category_of(lig.props) == ShaperUnicode.non_spacing_mark) { ..lig, props: ShaperUnicode.with_category(lig.props, ShaperUnicode.other_letter) } else lig
+			} else {
+				cur
+			}
+		$out = $out.append({ ..LayoutGsub.set_glyph_class(shape, with_lig, lig_glyph, klass, True, False), glyph: lig_glyph })
+		$idx = $idx + 1
+		for i in 1..<count {
+			target = positions.get(i) ?? $idx
+			while $idx < target {
+				item = $info.get($idx) ?? LayoutGsub.no_item
+				moved =
+					if is_ligature {
+						this_comp = LayoutGsub.lig_comp(item)
+						comp = if (this_comp == 0) $last_count else this_comp
+						new_comp = $so_far - $last_count + comp.min($last_count)
+						LayoutGsub.with_lprops(item, new_id.shl_wrap(5).bitwise_or(new_comp.bitwise_and(0x0F)))
+					} else {
+						item
+					}
+				$out = $out.append(moved)
+				$idx = $idx + 1
+			}
+			component = $info.get($idx) ?? LayoutGsub.no_item
+			$last_id = LayoutGsub.lig_id(component)
+			$last_count = LayoutGsub.num_comps_in_ligation(component)
+			$so_far = $so_far + $last_count
+			# The component is dropped.
+			$idx = $idx + 1
+		}
+		if !$is_mark and $last_id != 0 {
+			var $k = $idx
+			var $going = True
+			while $going and $k < $info.len() {
+				item = $info.get($k) ?? LayoutGsub.no_item
+				this_comp = LayoutGsub.lig_comp(item)
+				if LayoutGsub.lig_id(item) != $last_id or this_comp == 0 {
+					$going = False
+				} else {
+					new_comp = $so_far - $last_count + this_comp.min($last_count)
+					# `$k` is below the input's length.
+					$info = $info.set($k, LayoutGsub.with_lprops(item, new_id.shl_wrap(5).bitwise_or(new_comp.bitwise_and(0x0F)))) ?? []
+					$k = $k + 1
+				}
+			}
+		}
+		{ info: $info, out: $out, idx: $idx, output, serial, random, ops }
+	}
+
+	## The next ligature id (HarfBuzz's `_hb_allocate_lig_id`: an 8-bit
+	## serial that skips 0, taken modulo 8 and never 0).
+	allocate_lig_id : U64 -> { id : U64, serial : U64 }
+	allocate_lig_id = |serial| {
+		var $s = serial
+		var $id = 0
+		while $id == 0 {
+			$s = ($s + 1) % 256
+			if $s == 0 {
+				$s = 1
+			}
+			$id = $s.bitwise_and(7)
+		}
+		{ id: $id, serial: $s }
+	}
+
+	# ------------------------------------------------------------ buffer
+
+	## Copy the item at the cursor to the output and move on.
+	next_glyph : Buf -> Buf
+	next_glyph = |buf| {
+		{ info, out, idx, output, serial, random, ops } = buf
+		if output {
+			item = info.get(idx) ?? LayoutGsub.no_item
+			{ info, out: out.append(item), idx: idx + 1, output, serial, random, ops }
+		} else {
+			{ info, out, idx: idx + 1, output, serial, random, ops }
+		}
+	}
+
+	next_glyphs : Buf, U64 -> Buf
+	next_glyphs = |buf, n| {
+		{ info, out, idx, output, serial, random, ops } = buf
+		if output {
+			var $out = out
+			for k in idx..<(idx + n) {
+				$out = $out.append(info.get(k) ?? LayoutGsub.no_item)
+			}
+			{ info, out: $out, idx: idx + n, output, serial, random, ops }
+		} else {
+			{ info, out, idx: idx + n, output, serial, random, ops }
+		}
+	}
+
+	## Move the cursor so that the output holds `i` items (HarfBuzz's
+	## `move_to`): forward copies input to the output, backward returns
+	## output to the input.
+	move_to : Buf, U64 -> Buf
+	move_to = |buf, i| {
+		{ info, out, idx, output, serial, random, ops } = buf
+		written = out.len()
+		if !output {
+			{ info, out, idx: i, output, serial, random, ops }
+		} else if written < i {
+			count = (i - written).min(info.len() - idx.min(info.len()))
+			var $out = out
+			for k in idx..<(idx + count) {
+				$out = $out.append(info.get(k) ?? LayoutGsub.no_item)
+			}
+			{ info, out: $out, idx: idx + count, output, serial, random, ops }
+		} else if written > i {
+			count = written - i
+			if idx < count {
+				{ info: out.sublist({ start: i, len: count }).concat(info.drop_first(idx)), out: out.take_first(i), idx: 0, output, serial, random, ops }
+			} else {
+				var $info = info
+				for k in 0..<count {
+					# `idx - count + k < idx <= len`.
+					$info = $info.set(idx - count + k, out.get(i + k) ?? LayoutGsub.no_item) ?? []
+				}
+				{ info: $info, out: out.take_first(i), idx: idx - count, output, serial, random, ops }
+			}
+		} else {
+			{ info, out, idx, output, serial, random, ops }
+		}
+	}
+
+	## An item with another cluster, its unsafe-to-break flag cleared when
+	## the cluster changes (HarfBuzz's `set_cluster`).
+	set_cluster : Item, U64 -> Item
+	set_cluster = |item, cluster|
+		if (item.cluster == cluster) item else { ..item, cluster, mask: item.mask.bitwise_and(0x7FFFFFFFFFFFFFFF) }
+
+	## Merge the clusters of input items `start ..< end` (HarfBuzz's
+	## `merge_clusters` at a monotone level): they and their neighbours with
+	## the same clusters take the smallest, continuing into the output when
+	## the range starts at the cursor.
+	merge_clusters : Buf, U64, U64 -> Buf
+	merge_clusters = |buf, start, end_in|
+		if end_in <= start + 1 {
+			buf
+		} else {
+			{ info, out, idx, output, serial, random, ops } = buf
+			n = info.len()
+			end0 = end_in.min(n)
+			cluster = LayoutGsub.min_cluster(info, start, end0, (info.get(start) ?? LayoutGsub.no_item).cluster)
+			var $end = end0
+			if cluster != (info.get($end - 1) ?? LayoutGsub.no_item).cluster {
+				while $end < n and (info.get($end - 1) ?? LayoutGsub.no_item).cluster == (info.get($end) ?? LayoutGsub.no_item).cluster {
+					$end = $end + 1
+				}
+			}
+			var $start = start
+			if cluster != (info.get($start) ?? LayoutGsub.no_item).cluster {
+				while idx < $start and (info.get($start - 1) ?? LayoutGsub.no_item).cluster == (info.get($start) ?? LayoutGsub.no_item).cluster {
+					$start = $start - 1
+				}
+			}
+			var $out = out
+			first = (info.get($start) ?? LayoutGsub.no_item).cluster
+			if output and idx == $start and first != cluster {
+				var $i = $out.len()
+				while $i > 0 and ($out.get($i - 1) ?? LayoutGsub.no_item).cluster == first {
+					# `$i - 1` is below the output's length.
+					$out = $out.set($i - 1, LayoutGsub.set_cluster($out.get($i - 1) ?? LayoutGsub.no_item, cluster)) ?? []
+					$i = $i - 1
+				}
+			}
+			var $info = info
+			for i in $start..<$end {
+				# `i < $end <= n`.
+				$info = $info.set(i, LayoutGsub.set_cluster($info.get(i) ?? LayoutGsub.no_item, cluster)) ?? []
+			}
+			{ info: $info, out: $out, idx, output, serial, random, ops }
+		}
+
+	## Delete the item at the cursor, merging its cluster as HarfBuzz's
+	## `delete_glyph` does: nothing when a neighbour shares it; else into the
+	## output's last cluster when smaller; else, with nothing written, into
+	## the next item.
+	delete_glyph : Buf -> Buf
+	delete_glyph = |buf| {
+		cur = buf.info.get(buf.idx) ?? LayoutGsub.no_item
+		c = cur.cluster
+		next_shares = buf.idx + 1 < buf.info.len() and (buf.info.get(buf.idx + 1) ?? LayoutGsub.no_item).cluster == c
+		last = buf.out.last()
+		{ shares, smaller, has_last } = match last {
+			Ok(p) => { shares: p.cluster == c, smaller: c < p.cluster, has_last: True }
+			Err(_) => { shares: False, smaller: False, has_last: False }
+		}
+		merged =
+			if next_shares or shares {
+				buf
+			} else if has_last and smaller {
+				old = (last ?? LayoutGsub.no_item).cluster
+				# Destructured, so the output is not also held by `buf`.
+				{ info, out, idx, output, serial, random, ops } = buf
+				var $out = out
+				var $i = $out.len()
+				while $i > 0 and ($out.get($i - 1) ?? LayoutGsub.no_item).cluster == old {
+					item = $out.get($i - 1) ?? LayoutGsub.no_item
+					# `$i - 1` is below the output's length.
+					$out = $out.set($i - 1, { ..item, cluster: c, mask: item.mask.bitwise_and(0x7FFFFFFFFFFFFFFF).bitwise_or(cur.mask.bitwise_and(LayoutGsub.unsafe)) }) ?? []
+					$i = $i - 1
+				}
+				{ info, out: $out, idx, output, serial, random, ops }
+			} else if !has_last and buf.idx + 1 < buf.info.len() {
+				LayoutGsub.merge_clusters(buf, buf.idx, buf.idx + 2)
+			} else {
+				buf
+			}
+		{ info, out, idx, output, serial, random, ops } = merged
+		{ info, out, idx: idx + 1, output, serial, random, ops }
 	}
 
 	## The smallest cluster of `run[start ..< end]` and `init`.
@@ -265,46 +1428,6 @@ LayoutGsub := {
 			$p = $p + 1
 		}
 		$c
-	}
-
-	## Give `cluster` to the items from `from` on whose cluster is `old`, up
-	## to the first that differs.
-	rewrite_forward : List(Item), U64, U64, U64 -> List(Item)
-	rewrite_forward = |run, from, old, cluster| {
-		var $run = run
-		var $p = from
-		var $going = True
-		while $going and $p < $run.len() {
-			item = $run.get($p) ?? LayoutGsub.no_item
-			if item.cluster == old {
-				# `$p` is below the run's length.
-				$run = $run.set($p, { ..item, cluster }) ?? []
-				$p = $p + 1
-			} else {
-				$going = False
-			}
-		}
-		$run
-	}
-
-	## Give `cluster` to the items before `end` whose cluster is `old`, back
-	## to the first that differs.
-	rewrite_backward : List(Item), U64, U64, U64 -> List(Item)
-	rewrite_backward = |run, end, old, cluster| {
-		var $run = run
-		var $p = end.min(run.len())
-		var $going = True
-		while $going and $p > 0 {
-			item = $run.get($p - 1) ?? LayoutGsub.no_item
-			if item.cluster == old {
-				# `$p - 1` is below the run's length.
-				$run = $run.set($p - 1, { ..item, cluster }) ?? []
-				$p = $p - 1
-			} else {
-				$going = False
-			}
-		}
-		$run
 	}
 
 	## Set the unsafe-to-break flag on `run[start ..< end]` as HarfBuzz's
@@ -349,131 +1472,64 @@ LayoutGsub := {
 		}
 	}
 
-	## Mark a matched contextual rule unsafe to break, as HarfBuzz's
-	## `unsafe_to_break_from_outbuffer` does: its backtrack is
-	## `before[back ..< before.len()]`, its input and lookahead
-	## `after[start ..< end]`. Ranges longer than 255 glyphs are not marked
-	## (HarfBuzz's bound).
-	flag_rule : List(Item), U64, List(Item), U64, U64 -> { before : List(Item), after : List(Item) }
-	flag_rule = |before, back, after, start, end|
-		if (before.len() - back) + (end - start) > 255 {
-			{ before, after }
+	## The smallest of the first and last clusters of `run[start ..< end]`
+	## and `init` (HarfBuzz's `_infos_find_min_cluster`, monotone levels).
+	end_cluster : List(Item), U64, U64, U64 -> U64
+	end_cluster = |run, start, end, init|
+		if start >= end {
+			init
 		} else {
-			cluster = LayoutGsub.min_cluster(before, back, before.len(), LayoutGsub.min_cluster(after, start, end, 0xFFFFFFFFFFFFFFFF))
-			{ before: LayoutGsub.flag_range(before, back, before.len(), cluster), after: LayoutGsub.flag_range(after, start, end, cluster) }
+			init.min((run.get(start) ?? LayoutGsub.no_item).cluster).min((run.get(end - 1) ?? LayoutGsub.no_item).cluster)
 		}
 
-	# Any lookup: a new run is written, since multiple substitutions and
-	# contextual rules may grow it. Backtrack context is read from what has
-	# been written. The new run is written into `spare`'s allocation, and the
-	# old run's is returned for the next general lookup.
-	apply_general : LayoutGsub, Lookup, U64, List(Item), List(Item), Limits, U64 -> { run : List(Item), spare : List(Item), ops : U64 }
-	apply_general = |shape, lookup, mask, input_list, spare, limits, ops| {
-		n = input_list.len()
-		var $input = input_list
-		var $out = spare.clear().reserve(n)
-		var $ops = ops
-		var $frames = []
-		var $i = 0
-		while $i < n {
-			item = $input.get($i) ?? LayoutGsub.no_item
-			if LayoutGsub.may_start(lookup, item.glyph) and LayoutGsub.applies(item.mask, mask) {
-				match LayoutGsub.step(shape, lookup, mask, $out, $input, $i, limits.limit) {
-					One(found) => {
-						if found.next > $i + 1 {
-							{ run: merged, cluster } = LayoutGsub.merge_ligature($input, 0, $i, found.next)
-							first = item.cluster
-							$input = merged
-							$out = if (cluster != first) LayoutGsub.rewrite_backward($out, $out.len(), first, cluster) else $out
-							$out = $out.append({ ..item, glyph: found.glyph, cluster })
-						} else {
-							$out = $out.append({ ..item, glyph: found.glyph })
-						}
-						$i = found.next
-					}
-					Sequence(span) => {
-						if span.end == span.start {
-							{ out: kept, input: rest } = LayoutGsub.delete_glyph($out, $input, $i)
-							$out = kept
-							$input = rest
-						}
-						for p in span.start..<span.end {
-							$out = $out.append({ ..item, glyph: shape.values.get(p) ?? 0 })
-						}
-						$i = $i + 1
-					}
-					Nested(rule) => {
-						# The matched input is copied to the end of the new run
-						# and the rule's lookups change it there; backtrack
-						# context may read the whole new run.
-						written = $out.len()
-						window = rule.input_len + 1
-						{ before: flagged_out, after: flagged_in } = LayoutGsub.flag_rule($out, written - rule.back_len, $input, $i, $i + window + rule.ahead_len)
-						$out = flagged_out
-						$input = flagged_in
-						# The window may grow only as far as the whole run may.
-						taken = written + (n - $i - window)
-						room = if (limits.limit >= taken) limits.limit - taken else 0
-						$out = $out.concat($input.sublist({ start: $i, len: window }))
-						{ buffer: grown, ops: spent, next: _, frames: stack } = LayoutGsub.run_rule(shape, rule, window, $out, written, written, mask, written + room, limits, $ops, $frames)
-						$out = grown
-						$ops = spent
-						$frames = stack
-						$i = $i + window
-					}
-					Skip => {
-						$out = $out.append(item)
-						$i = $i + 1
-					}
-				}
-			} else {
-				$out = $out.append(item)
-				$i = $i + 1
-			}
+	## HarfBuzz's `unsafe_to_break` over input items `start ..< end`.
+	unsafe_to_break : Buf, U64, U64 -> Buf
+	unsafe_to_break = |buf, start, end_in| {
+		end = end_in.min(buf.info.len())
+		if end_in < start or end_in - start > 255 or end < start + 2 {
+			buf
+		} else {
+			{ info, out, idx, output, serial, random, ops } = buf
+			cluster = LayoutGsub.end_cluster(info, start, end, 0xFFFFFFFFFFFFFFFF)
+			{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops }
 		}
-		{ run: $out, spare: $input.clear(), ops: $ops }
 	}
 
-	## Delete `input[i]` (a multiple substitution by no glyphs), merging its
-	## cluster as HarfBuzz's `delete_glyph` does: nothing when a neighbour
-	## shares it; else into the glyphs written before it when its cluster is
-	## smaller than theirs; else, with nothing written, into the next glyph.
-	delete_glyph : List(Item), List(Item), U64 -> { out : List(Item), input : List(Item) }
-	delete_glyph = |out, input, i| {
-		c = (input.get(i) ?? LayoutGsub.no_item).cluster
-		next = input.get(i + 1)
-		previous = out.last()
-		shared_next = match next {
-			Ok(item) => item.cluster == c
-			Err(_) => False
-		}
-		shared_previous = match previous {
-			Ok(item) => item.cluster == c
-			Err(_) => False
-		}
-		if shared_next or shared_previous {
-			{ out, input }
+	## HarfBuzz's `unsafe_to_break_from_outbuffer`: output items from `start`
+	## and input items from the cursor to `end`. Like HarfBuzz it compares
+	## the two indices directly for its 255-glyph limit.
+	unsafe_to_break_from_outbuffer : Buf, U64, U64 -> Buf
+	unsafe_to_break_from_outbuffer = |buf, start, end_in| {
+		if end_in < start or end_in - start > 255 {
+			buf
 		} else {
-			match (previous, next) {
-				(Ok(p), _) =>
-					if (c < p.cluster) { out: LayoutGsub.rewrite_backward(out, out.len(), p.cluster, c), input } else { out, input }
-				(Err(_), Ok(after)) => {
-					cluster = c.min(after.cluster)
-					{ out, input: if (cluster != after.cluster) LayoutGsub.rewrite_forward(input, i + 1, after.cluster, cluster) else input }
-				}
-				_ => { out, input }
+			{ info, out, idx, output, serial, random, ops } = buf
+			end = end_in.min(info.len())
+			if !output {
+				cluster = LayoutGsub.end_cluster(info, start, end, 0xFFFFFFFFFFFFFFFF)
+				{ info: LayoutGsub.flag_range(info, start, end, cluster), out, idx, output, serial, random, ops }
+			} else {
+				written = out.len()
+				c1 = LayoutGsub.end_cluster(info, idx, end, 0xFFFFFFFFFFFFFFFF)
+				cluster = LayoutGsub.end_cluster(out, start, written, c1)
+				# `written` is taken first: reading the list's length in the
+				# call that consumes it would keep it shared and force a copy.
+				flagged_info = LayoutGsub.flag_range(info, idx, end, cluster)
+				flagged_out = LayoutGsub.flag_range(out, start, written, cluster)
+				{ info: flagged_info, out: flagged_out, idx, output, serial, random, ops }
 			}
 		}
 	}
 
 	## Whether a lookup could apply anywhere in a run.
-	any_start : Lookup, List(Item) -> Bool
-	any_start = |lookup, run| {
+	any_start : Lookup, List(Item), U64 -> Bool
+	any_start = |lookup, run, mask| {
 		var $found = False
 		var $i = 0
 		n = run.len()
 		while $i < n {
-			if LayoutGsub.may_start(lookup, (run.get($i) ?? LayoutGsub.no_item).glyph) {
+			item = run.get($i) ?? LayoutGsub.no_item
+			if LayoutGsub.may_start(lookup, item.glyph) and LayoutGsub.applies(item.mask, mask) {
 				$found = True
 				$i = n
 			} else {
@@ -514,442 +1570,6 @@ LayoutGsub := {
 				$mask
 			}
 		}
-
-	# The first single or ligature subtable of a lookup that applies at `i`:
-	# the glyph it writes and where reading continues.
-	simple_at : LayoutGsub, Lookup, U64, List(Item), U64 -> [One({ glyph : U64, next : U64 }), Skip]
-	simple_at = |shape, lookup, mask, run, i| {
-		item = run.get(i) ?? LayoutGsub.no_item
-		end = lookup.start + lookup.count
-		var $result = Skip
-		var $k = lookup.start
-		while $k < end {
-			sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
-			outcome = match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
-				Err(_) => Skip
-				Ok(at) =>
-					if sub.kind == 1 {
-						One({ glyph: LayoutGsub.single(shape.values, sub, at, item.glyph), next: i + 1 })
-					} else if sub.kind == 4 {
-						match LayoutGsub.ligature_at(shape.values, sub, at, run, i, mask) {
-							Found(found) => One({ glyph: found.glyph, next: i + 1 + found.count })
-							NotFound => Skip
-						}
-					} else {
-						Skip
-					}
-			}
-			match outcome {
-				One(_) => {
-					$result = outcome
-					$k = end
-				}
-				Skip => {
-					$k = $k + 1
-				}
-			}
-		}
-		$result
-	}
-
-	# The first subtable of a lookup that applies at `i` of `input`, with
-	# `out` written so far: what it writes and where reading continues.
-	step : LayoutGsub, Lookup, U64, List(Item), List(Item), U64, U64 -> [One({ glyph : U64, next : U64 }), Sequence({ start : U64, end : U64 }), Nested(Rule), Skip]
-	step = |shape, lookup, mask, out, input, i, limit| {
-		item = input.get(i) ?? LayoutGsub.no_item
-		end = lookup.start + lookup.count
-		var $result = Skip
-		var $k = lookup.start
-		while $k < end {
-			sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
-			outcome = if sub.kind == 5 {
-				match LayoutGsub.rule_at(shape, sub, out, 0, out.len(), input, i) {
-					Found(rule) => Nested(rule)
-					NotFound => Skip
-				}
-			} else {
-				match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
-					Err(_) => Skip
-					Ok(at) =>
-						if sub.kind == 1 {
-							One({ glyph: LayoutGsub.single(shape.values, sub, at, item.glyph), next: i + 1 })
-						} else if sub.kind == 2 {
-							span = LayoutGsub.sequence(shape.values, sub, at)
-							length = if (span.found) span.end - span.start else 1
-							if out.len() + length + (input.len() - i) > limit + 1 {
-								Skip
-							} else if span.found {
-								Sequence({ start: span.start, end: span.end })
-							} else {
-								One({ glyph: item.glyph, next: i + 1 })
-							}
-						} else if sub.kind == 4 {
-							match LayoutGsub.ligature_at(shape.values, sub, at, input, i, mask) {
-								Found(found) => One({ glyph: found.glyph, next: i + 1 + found.count })
-								NotFound => Skip
-							}
-						} else {
-							Skip
-						}
-				}
-			}
-			match outcome {
-				Skip => {
-					$k = $k + 1
-				}
-				_ => {
-					$result = outcome
-					$k = end
-				}
-			}
-		}
-		$result
-	}
-
-	single : List(U64), Sub, U64, U64 -> U64
-	single = |values, sub, at, glyph|
-		if sub.data_len == 0 {
-			(glyph.to_i64_wrap() + sub.delta).bitwise_and(0xFFFF).to_u64_wrap()
-		} else if at < sub.data_len {
-			values.get(sub.data + at) ?? glyph
-		} else {
-			glyph
-		}
-
-	# Sequence `at` of a multiple substitution as a span of `values`;
-	# `found` is false when the subtable has no such sequence.
-	sequence : List(U64), Sub, U64 -> { found : Bool, start : U64, end : U64 }
-	sequence = |values, sub, at|
-		if at < sub.data_len {
-			start = values.get(sub.data + at) ?? 0
-			end = values.get(sub.data + at + 1) ?? 0
-			{ found: True, start, end: end.max(start) }
-		} else {
-			{ found: False, start: 0, end: 0 }
-		}
-
-	# The first ligature of set `at` whose other components follow `i`, each
-	# with a mask sharing a bit with the lookup's (as HarfBuzz matches
-	# ligature components).
-	ligature_at : List(U64), Sub, U64, List(Item), U64, U64 -> [Found({ glyph : U64, count : U64 }), NotFound]
-	ligature_at = |values, sub, at, buffer, i, mask|
-		if at >= sub.data_len {
-			NotFound
-		} else {
-			end = values.get(sub.data + at + 1) ?? 0
-			var $result = NotFound
-			var $p = values.get(sub.data + at) ?? 0
-			while $p < end {
-				glyph = values.get($p) ?? 0
-				count = values.get($p + 1) ?? 0
-				var $same = i + count < buffer.len()
-				var $j = 0
-				while $same and $j < count {
-					component = buffer.get(i + 1 + $j) ?? LayoutGsub.no_item
-					if component.glyph != (values.get($p + 2 + $j) ?? 0) or !LayoutGsub.applies(component.mask, mask) {
-						$same = False
-					}
-					$j = $j + 1
-				}
-				if $same {
-					$result = Found({ glyph, count })
-					$p = end
-				} else {
-					$p = $p + 2 + count
-				}
-			}
-			$result
-		}
-
-	# The first rule of a context subtable that matches at `i` of `after`,
-	# with backtrack read from the end of `before` (its items from `floor`
-	# to `before_end`).
-	rule_at : LayoutGsub, Sub, List(Item), U64, U64, List(Item), U64 -> [Found(Rule), NotFound]
-	rule_at = |shape, sub, before, floor, before_end, after, i| {
-		glyph = (after.get(i) ?? LayoutGsub.no_item).glyph
-		match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, glyph) {
-			Err(_) => NotFound
-			Ok(at) => {
-				slot = if (sub.match_kind == 1) LayoutGsub.class_in(shape.ranges, sub.input, sub.input_len, glyph) else if (sub.data_len == 1) 0 else at
-				if slot >= sub.data_len {
-					NotFound
-				} else {
-					last = shape.values.get(sub.data + slot + 1) ?? 0
-					var $result = NotFound
-					var $r = shape.values.get(sub.data + slot) ?? 0
-					while $r < last {
-						rule = shape.rules.get($r) ?? LayoutGsub.no_rule
-						if LayoutGsub.matches(shape, rule, sub, before, floor, before_end, after, i) {
-							$result = Found(rule)
-							$r = last
-						} else {
-							$r = $r + 1
-						}
-					}
-					$result
-				}
-			}
-		}
-	}
-
-	# Run a rule's nested lookups over its matched input, which starts at
-	# `i` of `buffer` and is `matched` glyphs long, then say where reading
-	# continues. Backtrack context is read no further back than `floor`.
-	# Rules matched by nested lookups are applied the same way, through an
-	# explicit stack of frames rather than recursion: at most `limits.depth`
-	# rules deep (deeper rules match but call nothing), and at most
-	# `limits.budget` nested lookups in all, counted in `ops`.
-	run_rule : LayoutGsub, Rule, U64, List(Item), U64, U64, U64, U64, Limits, U64, List(Frame) -> { buffer : List(Item), next : U64, ops : U64, frames : List(Frame) }
-	run_rule = |shape, rule, matched, buffer, floor, i, mask, limit, limits, ops, spare| {
-		var $buffer = buffer
-		var $ops = ops
-		# The stack reuses `spare`'s allocation, so a rule costs none.
-		var $frames = spare.clear().append({ rule, start: i, length: matched, next: 0, before: 0 })
-		var $next = i + matched.max(1)
-		while !$frames.is_empty() {
-			depth = $frames.len()
-			top = $frames.last() ?? LayoutGsub.no_frame
-			if top.next >= top.rule.records_len or depth > limits.depth {
-				# The rule is done: the run continues after its input, and its
-				# growth counts towards the rule that called it.
-				$frames = $frames.drop_last(1)
-				$next = top.start + top.length.max(1)
-				match $frames.last() {
-					Ok(parent) => {
-						grown = $buffer.len() + parent.length
-						updated = { ..parent, length: if (grown >= parent.before) grown - parent.before else 0 }
-						# The list is not empty: it holds `parent`.
-						$frames = $frames.set($frames.len() - 1, updated) ?? []
-					}
-					Err(_) => {}
-				}
-			} else {
-				r = top.next
-				at = shape.values.get(top.rule.records + 2 * r) ?? 0
-				lookup = shape.values.get(top.rule.records + 2 * r + 1) ?? 0
-				# The list is not empty: it holds `top`.
-				$frames = $frames.set(depth - 1, { ..top, next: r + 1 }) ?? []
-				if at < top.length and $ops < limits.budget {
-					$ops = $ops + 1
-					before = $buffer.len()
-					match LayoutGsub.apply_lookup(shape, lookup, $buffer, floor, top.start + at, mask, limit) {
-						Applied(changed) => {
-							$buffer = changed
-							grown = $buffer.len() + top.length
-							$frames = $frames.set(depth - 1, { ..top, next: r + 1, length: if (grown >= before) grown - before else 0 }) ?? []
-						}
-						NotApplied(same) => {
-							$buffer = same
-						}
-						Matched({ buffer: flagged, rule: inner }) => {
-							$buffer = flagged
-							$frames = ($frames.set(depth - 1, { ..top, next: r + 1, before }) ?? []).append({ rule: inner, start: top.start + at, length: inner.input_len + 1, next: 0, before: 0 })
-						}
-					}
-				}
-			}
-		}
-		{ buffer: $buffer, next: $next, ops: $ops, frames: $frames }
-	}
-
-	# A nested lookup at `i`: the first of its subtables that applies there.
-	# A contextual rule that matches is marked unsafe to break and returned
-	# for the caller to apply; other substitutions change the buffer in
-	# place.
-	apply_lookup : LayoutGsub, U64, List(Item), U64, U64, U64, U64 -> [Applied(List(Item)), NotApplied(List(Item)), Matched({ buffer : List(Item), rule : Rule })]
-	apply_lookup = |shape, index, buffer, floor, i, mask, limit| {
-		lookup = shape.lookups.get(index) ?? LayoutGsub.no_lookup
-		end = lookup.start + lookup.count
-		var $outcome = NotApplied(buffer)
-		var $k = lookup.start
-		while $k < end {
-			current = match $outcome {
-				NotApplied(b) => b
-				_ => []
-			}
-			$outcome = LayoutGsub.apply_subtable(shape, shape.subtables.get($k) ?? LayoutGsub.no_sub, current, floor, i, mask, limit)
-			$k = match $outcome {
-				NotApplied(_) => $k + 1
-				_ => end
-			}
-		}
-		$outcome
-	}
-
-	# One nested subtable at `i`.
-	apply_subtable : LayoutGsub, Sub, List(Item), U64, U64, U64, U64 -> [Applied(List(Item)), NotApplied(List(Item)), Matched({ buffer : List(Item), rule : Rule })]
-	apply_subtable = |shape, sub, buffer, floor, i, mask, limit| {
-		item = buffer.get(i) ?? LayoutGsub.no_item
-		if i >= buffer.len() {
-			NotApplied(buffer)
-		} else if sub.kind == 5 {
-			match LayoutGsub.rule_at(shape, sub, buffer, floor, i, buffer, i) {
-				Found(rule) => {
-					# The backtrack, input and lookahead all lie in `buffer`.
-					back = i - rule.back_len
-					end = i + rule.input_len + 1 + rule.ahead_len
-					flagged = if (rule.back_len + (end - i) > 255) buffer else LayoutGsub.flag_both(buffer, back, i, end)
-					Matched({ buffer: flagged, rule })
-				}
-				NotFound => NotApplied(buffer)
-			}
-		} else {
-			match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
-				Err(_) => NotApplied(buffer)
-				Ok(at) =>
-					if sub.kind == 1 {
-						glyph = LayoutGsub.single(shape.values, sub, at, item.glyph)
-						# `i` is in bounds (checked above).
-						Applied(buffer.set(i, { ..item, glyph }) ?? [])
-					} else if sub.kind == 2 {
-						span = LayoutGsub.sequence(shape.values, sub, at)
-						length = if (span.found) span.end - span.start else 1
-						if buffer.len() + length > limit + 1 {
-							NotApplied(buffer)
-						} else if span.found {
-							Applied(LayoutGsub.splice_sequence(buffer, i, shape.values, span.start, span.end))
-						} else {
-							# The glyph is replaced by itself.
-							Applied(buffer)
-						}
-					} else if sub.kind == 4 {
-						match LayoutGsub.ligature_at(shape.values, sub, at, buffer, i, mask) {
-							Found(found) => Applied(LayoutGsub.splice_ligature(buffer, i, found.glyph, found.count))
-							NotFound => NotApplied(buffer)
-						}
-					} else {
-						NotApplied(buffer)
-					}
-			}
-		}
-	}
-
-	## `flag_rule` for a rule whose backtrack `[back, i)` and input and
-	## lookahead `[i, end)` lie in one buffer.
-	flag_both : List(Item), U64, U64, U64 -> List(Item)
-	flag_both = |buffer, back, i, end| {
-		cluster = LayoutGsub.min_cluster(buffer, back, end.min(buffer.len()), 0xFFFFFFFFFFFFFFFF)
-		LayoutGsub.flag_range(LayoutGsub.flag_range(buffer, back, i, cluster), i, end, cluster)
-	}
-
-	# Replace the item at `i` (in bounds) by the glyphs `values[start ..<
-	# end]`, moving the items after it. Only the items after `i` move, so the
-	# cost is the length of the rule's matched input, not of the run. No
-	# glyphs delete the item, merging its cluster as `delete_glyph` does.
-	splice_sequence : List(Item), U64, List(U64), U64, U64 -> List(Item)
-	splice_sequence = |buffer, i, values, start, end| {
-		length = end - start
-		n = buffer.len()
-		item = buffer.get(i) ?? LayoutGsub.no_item
-		if length == 0 {
-			var $buffer = buffer
-			# Merge first, while the neighbours are in place.
-			merged = LayoutGsub.delete_in_place($buffer, i)
-			$buffer = merged
-			for p in i..<(n - 1) {
-				# `p + 1 < n`, the buffer's length.
-				$buffer = $buffer.set(p, $buffer.get(p + 1) ?? LayoutGsub.no_item) ?? []
-			}
-			$buffer.take_first(n - 1)
-		} else {
-			var $buffer = buffer
-			grow = length - 1
-			var $k = 0
-			while $k < grow {
-				$buffer = $buffer.append(LayoutGsub.no_item)
-				$k = $k + 1
-			}
-			var $p = n - 1
-			while $p > i {
-				# `$p + grow < n + grow`, the buffer's length.
-				$buffer = $buffer.set($p + grow, $buffer.get($p) ?? LayoutGsub.no_item) ?? []
-				$p = $p - 1
-			}
-			for k in 0..<length {
-				# `i + k < i + length <= n + grow`.
-				$buffer = $buffer.set(i + k, { ..item, glyph: values.get(start + k) ?? 0 }) ?? []
-			}
-			$buffer
-		}
-	}
-
-	## `delete_glyph` within one buffer: the glyphs before `i` are those
-	## written, the glyphs after it those still to read.
-	delete_in_place : List(Item), U64 -> List(Item)
-	delete_in_place = |buffer, i| {
-		c = (buffer.get(i) ?? LayoutGsub.no_item).cluster
-		next = buffer.get(i + 1)
-		previous = if (i > 0) buffer.get(i - 1) else Err(OutOfBounds)
-		shared_next = match next {
-			Ok(item) => item.cluster == c
-			Err(_) => False
-		}
-		shared_previous = match previous {
-			Ok(item) => item.cluster == c
-			Err(_) => False
-		}
-		if shared_next or shared_previous {
-			buffer
-		} else {
-			match (previous, next) {
-				(Ok(p), _) => if (c < p.cluster) LayoutGsub.rewrite_backward(buffer, i, p.cluster, c) else buffer
-				(Err(_), Ok(after)) => {
-					cluster = c.min(after.cluster)
-					if (cluster != after.cluster) LayoutGsub.rewrite_forward(buffer, i + 1, after.cluster, cluster) else buffer
-				}
-				_ => buffer
-			}
-		}
-	}
-
-	# Replace the item at `i` and the `count` after it (all in bounds) by
-	# one ligature glyph, moving the items after them, with their clusters
-	# merged as `merge_ligature` merges them.
-	splice_ligature : List(Item), U64, U64, U64 -> List(Item)
-	splice_ligature = |buffer, i, glyph, count| {
-		n = buffer.len()
-		item = buffer.get(i) ?? LayoutGsub.no_item
-		{ run: merged, cluster } = LayoutGsub.merge_ligature(buffer, i, i, i + 1 + count)
-		# `i < n`, and every index below is under `n`.
-		var $buffer = merged.set(i, { ..item, glyph, cluster }) ?? []
-		for p in (i + 1)..<(n - count) {
-			$buffer = $buffer.set(p, $buffer.get(p + count) ?? LayoutGsub.no_item) ?? []
-		}
-		$buffer.take_first(n - count)
-	}
-
-	# The rule's input after the first glyph, its backtrack (nearest first,
-	# from `before[floor ..< before_end]`) and its lookahead all match around
-	# `i`. Rules with more input than `max_context` never match.
-	matches : LayoutGsub, Rule, Sub, List(Item), U64, U64, List(Item), U64 -> Bool
-	matches = |shape, rule, sub, before, floor, before_end, buffer, i| {
-		input_end = i + 1 + rule.input_len
-		if rule.input_len + 1 > LayoutGsub.max_context or before_end < floor + rule.back_len or input_end + rule.ahead_len > buffer.len() {
-			False
-		} else {
-			stride = if (sub.match_kind == 2) 2 else 1
-			var $ok = True
-			var $k = 0
-			while $ok and $k < rule.back_len {
-				g = (before.get(before_end - 1 - $k) ?? LayoutGsub.no_item).glyph
-				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.back, sub.back_len, rule.back + stride * $k, g)
-				$k = $k + 1
-			}
-			$k = 0
-			while $ok and $k < rule.input_len {
-				g = (buffer.get(i + 1 + $k) ?? LayoutGsub.no_item).glyph
-				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.input, sub.input_len, rule.input + stride * $k, g)
-				$k = $k + 1
-			}
-			$k = 0
-			while $ok and $k < rule.ahead_len {
-				g = (buffer.get(input_end + $k) ?? LayoutGsub.no_item).glyph
-				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.ahead, sub.ahead_len, rule.ahead + stride * $k, g)
-				$k = $k + 1
-			}
-			$ok
-		}
-	}
 
 	# Whether a glyph matches the match stored at `values[at]`: the glyph
 	# itself, a class in the class definition `classes`, or a coverage.
@@ -1045,21 +1665,134 @@ LayoutGsub := {
 		if (total > 8 * data.len() + 16384) Err(Bad(0)) else Ok(total)
 	}
 
-	## The lookups of a font file's `GSUB` that features reach, or none for a
-	## font without `GSUB`. A table listing more than `max_lookups` lookups
-	## is over the limit.
+	## The lookups of a font file's `GSUB` that features reach (none for a
+	## font without `GSUB`), with the font's `GDEF` glyph classes and its
+	## `cmap` variation sequences. A table listing more than `max_lookups`
+	## lookups is over the limit.
+	##
+	## `GDEF` is read as HarfBuzz reads it: a table whose parts do not lie
+	## inside it, or that holds more work than the reading allowance, gives
+	## no glyph classes (HarfBuzz's sanitizer drops it whole). Reporting a
+	## broken `GDEF` is the business of whoever checks the table for the
+	## font (OTS rejects more than this); the variation sequences come from
+	## a `cmap` already checked when the font was read.
 	from_tables : List(U8), List(Sfnt.Table), U64 -> Try(LayoutGsub, [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
-	from_tables = |bytes, tables, max_lookups|
-		match Sfnt.located(bytes, tables, "GSUB", 10) {
-			Missing => Ok(LayoutGsub.none)
-			Bad(at) => Err(Sfnt.bad("GSUB", at))
-			Found({ data: gsub, offset }) =>
-				if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
-					Err(OverLimit("max_lookups"))
-				} else {
-					LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
-				}
+	from_tables = |bytes, tables, max_lookups| {
+		variants = TableCmap.variants_from_tables(bytes, tables)
+		gsub_read =
+			match Sfnt.located(bytes, tables, "GSUB", 10) {
+				Missing => Ok(LayoutGsub.none)
+				Bad(at) => Err(Sfnt.bad("GSUB", at))
+				Found({ data: gsub, offset }) =>
+					if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
+						Err(OverLimit("max_lookups"))
+					} else {
+						LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
+					}
+			}
+		match gsub_read {
+			Err(problem) => Err(problem)
+			Ok(shape) => {
+				{ common, lookups, subtables, ranges, values, rules, gdef: _, variants: _ } = shape
+				with_gdef =
+					match Sfnt.located(bytes, tables, "GDEF", 12) {
+						Found({ data: gdef_data, offset: _ }) => LayoutGsub.read_gdef(gdef_data, ranges) ?? { gdef: LayoutGsub.no_gdef, ranges }
+						_ => { gdef: LayoutGsub.no_gdef, ranges }
+					}
+				Ok({ common, lookups, subtables, ranges: with_gdef.ranges, values, rules, gdef: with_gdef.gdef, variants })
+			}
 		}
+	}
+
+	## The glyph class definition, mark attachment class definition and
+	## mark glyph sets of a `GDEF` table, their ranges added to `ranges`.
+	read_gdef : List(U8), Ranges -> Try({ gdef : Gdef, ranges : Ranges }, [Bad(U64)])
+	read_gdef = |data, ranges_in| {
+		if !LayoutGsub.fits(0, 12, data.len()) or LayoutGsub.u16(data, 0) != 1 {
+			return Err(Bad(0))
+		}
+		minor = LayoutGsub.u16(data, 2)
+		classes_at = LayoutGsub.u16(data, 4)
+		attach_at = LayoutGsub.u16(data, 10)
+		sets_at = if (minor >= 2 and LayoutGsub.fits(0, 14, data.len())) LayoutGsub.u16(data, 12) else 0
+		var $ranges = ranges_in
+		var $steps = 0
+		{ start: classes, len: classes_len } =
+			if classes_at == 0 {
+				{ start: 0, len: 0 }
+			} else {
+				read = LayoutGsub.append_classes(data, classes_at, $steps, $ranges)?
+				$ranges = read.ranges
+				$steps = read.steps
+				{ start: read.start, len: read.len }
+			}
+		{ start: attach, len: attach_len } =
+			if attach_at == 0 {
+				{ start: 0, len: 0 }
+			} else {
+				read = LayoutGsub.append_classes(data, attach_at, $steps, $ranges)?
+				$ranges = read.ranges
+				$steps = read.steps
+				{ start: read.start, len: read.len }
+			}
+		var $sets = []
+		if sets_at != 0 {
+			count = LayoutGsub.u16(data, sets_at + 2)
+			if LayoutGsub.u16(data, sets_at) != 1 or !LayoutGsub.fits(sets_at, 4 + 4 * count, data.len()) {
+				return Err(Bad(sets_at))
+			}
+			$steps = LayoutGsub.spend(data, $steps, count)?
+			for k in 0..<count {
+				coverage = LayoutGsub.append_coverage(data, sets_at + LayoutGsub.u32(data, sets_at + 4 + 4 * k), $steps, $ranges)?
+				$ranges = coverage.ranges
+				$steps = coverage.steps
+				$sets = $sets.append({ start: coverage.start, len: coverage.len })
+			}
+		}
+		Ok({ gdef: { classes, classes_len, has_classes: classes_at != 0, attach, attach_len, sets: $sets }, ranges: $ranges })
+	}
+
+	## Mark the lookups the alternate feature tables of a `GSUB` or `GPOS`
+	## table's `FeatureVariations` list (version 1.1) as used. Parts that do
+	## not lie inside the table are passed over here: checking the list is
+	## `LayoutVar`'s, and a font whose list is broken never selects it.
+	variation_lookups : List(U8), List(Bool) -> List(Bool)
+	variation_lookups = |data, used_in| {
+		size = data.len()
+		list = if (LayoutGsub.u16(data, 2) >= 1 and LayoutGsub.fits(0, 14, size)) LayoutGsub.u32(data, 10) else 0
+		if list == 0 or !LayoutGsub.fits(list, 8, size) {
+			used_in
+		} else {
+			count = LayoutGsub.u32(data, list + 4)
+			if !LayoutGsub.fits(list + 8, 8 * count, size) {
+				used_in
+			} else {
+				var $used = used_in
+				var $steps = 0
+				for r in 0..<count {
+					table = list + LayoutGsub.u32(data, list + 8 + 8 * r + 4)
+					subs = LayoutGsub.u16(data, table + 4)
+					if LayoutGsub.u32(data, list + 8 + 8 * r + 4) != 0 and LayoutGsub.fits(table, 6 + 6 * subs, size) {
+						for k in 0..<subs {
+							feature = table + LayoutGsub.u32(data, table + 6 + 6 * k + 2)
+							n = LayoutGsub.u16(data, feature + 2)
+							$steps = $steps + n + 1
+							if LayoutGsub.fits(feature, 4 + 2 * n, size) and $steps <= 8 * size + 16384 {
+								for j in 0..<n {
+									lookup = LayoutGsub.u16(data, feature + 4 + 2 * j)
+									if lookup < $used.len() {
+										# Checked against the list's length.
+										$used = $used.set(lookup, True) ?? []
+									}
+								}
+							}
+						}
+					}
+				}
+				$used
+			}
+		}
+	}
 
 	## Read a `GSUB` table: its script and feature lists, every lookup a
 	## feature lists, and every lookup their rules call. Problems give their
@@ -1070,7 +1803,7 @@ LayoutGsub := {
 		common = read_common.common
 		lookups = LayoutGsub.u16(gsub, 8)
 		lookup_count = common.lookup_count
-		used = LayoutCommon.all_feature_lookups(common)
+		used = LayoutGsub.variation_lookups(gsub, LayoutCommon.all_feature_lookups(common))
 		start = LayoutGsub.indices(0, lookup_count).keep_if(|index| used.get(index) ?? False)
 		# Read the chosen lookups and those their rules call.
 		var $lookups = List.repeat(LayoutGsub.no_lookup, lookup_count)
@@ -1085,7 +1818,8 @@ LayoutGsub := {
 				$seen = $seen.set(index, True) ?? []
 				lookup = lookups + LayoutGsub.u16(gsub, lookups + 2 + 2 * index)
 				first = $built.subtables.len()
-				$built = LayoutGsub.read_lookup(gsub, lookup, $built)?
+				{ built: read_built, props, reverse } = LayoutGsub.read_lookup(gsub, lookup, $built)?
+				$built = read_built
 				end = $built.subtables.len()
 				var $mode = 0
 				var $d0 = 0
@@ -1093,7 +1827,7 @@ LayoutGsub := {
 				var $d2 = 0
 				for k in first..<end {
 					sub = $built.subtables.get(k) ?? LayoutGsub.no_sub
-					$mode = if (sub.kind == 1) $mode else if (sub.kind == 4) $mode.max(1) else 2
+					$mode = if (sub.kind == 1) $mode else 2
 					for r in sub.coverage..<(sub.coverage + sub.coverage_len) {
 						range = $built.ranges.get(r) ?? { first: 1, last: 0, index: 0 }
 						$d0 = LayoutGsub.digest_range($d0, 0, range.first, range.last)
@@ -1116,22 +1850,30 @@ LayoutGsub := {
 					}
 				}
 				# `index < lookup_count`, the length of `$lookups`.
-				$lookups = $lookups.set(index, { start: first, count: end - first, mode: $mode, d0: $d0, d1: $d1, d2: $d2 }) ?? []
+				$lookups = $lookups.set(index, { start: first, count: end - first, mode: $mode, d0: $d0, d1: $d1, d2: $d2, props, reverse }) ?? []
 			}
 		}
 		{ subtables, ranges, values, rules, steps: _ } = $built
-		Ok({ common, lookups: $lookups, subtables, ranges, values, rules })
+		Ok({ common, lookups: $lookups, subtables, ranges, values, rules, gdef: LayoutGsub.no_gdef, variants: TableCmap.no_variants })
 	}
 
-	read_lookup : List(U8), U64, Built -> Try(Built, [Bad(U64)])
+	## A lookup's subtables, its properties (the lookup flag, plus the mark
+	## filtering set times 65536 when the flag uses one) and whether it is a
+	## reverse chaining lookup (type 8, or an extension whose first subtable
+	## is, as HarfBuzz decides).
+	read_lookup : List(U8), U64, Built -> Try({ built : Built, props : U64, reverse : Bool }, [Bad(U64)])
 	read_lookup = |data, lookup, built| {
 		kind = LayoutGsub.u16(data, lookup)
+		flag = LayoutGsub.u16(data, lookup + 2)
 		count = LayoutGsub.u16(data, lookup + 4)
-		if !LayoutGsub.fits(lookup, 6 + 2 * count, data.len()) {
+		filtering = flag.bitwise_and(0x10) != 0
+		if !LayoutGsub.fits(lookup, 6 + 2 * count + (if (filtering) 2 else 0), data.len()) {
 			Err(Bad(lookup))
 		} else {
+			props = if (filtering) flag + LayoutGsub.u16(data, lookup + 6 + 2 * count) * 65536 else flag
 			steps = LayoutGsub.spend(data, built.steps, count)?
 			var $built = { ..built, steps }
+			var $reverse = kind == 8
 			for s in 0..<count {
 				at = lookup + LayoutGsub.u16(data, lookup + 6 + 2 * s)
 				real = if kind == 7 {
@@ -1142,9 +1884,12 @@ LayoutGsub := {
 				} else {
 					{ kind, at }
 				}
+				if kind == 7 and s == 0 {
+					$reverse = real.kind == 8
+				}
 				$built = LayoutGsub.read_subtable(data, real.kind, real.at, $built)?
 			}
-			Ok($built)
+			Ok({ built: $built, props, reverse: $reverse })
 		}
 	}
 
@@ -1172,7 +1917,7 @@ LayoutGsub := {
 				} else {
 					Err(Bad(at))
 				}
-			} else if kind == 2 and format == 1 {
+			} else if (kind == 2 or kind == 3) and format == 1 {
 				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
 				offsets = LayoutGsub.count_u16s(data, at + 4, cov.steps)?
 				var $steps = offsets.steps
@@ -1190,7 +1935,7 @@ LayoutGsub := {
 					}
 				}
 				$values = $values.set(bounds + offsets.count, $values.len()) ?? []
-				sub = { ..LayoutGsub.no_sub, kind: 2, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
+				sub = { ..LayoutGsub.no_sub, kind, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
 				Ok({ subtables: subtables.append(sub), ranges: cov.ranges, values: $values, rules, steps: $steps })
 			} else if kind == 4 and format == 1 {
 				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
@@ -1223,10 +1968,22 @@ LayoutGsub := {
 				Ok({ subtables: subtables.append(sub), ranges: cov.ranges, values: $values, rules, steps: $steps })
 			} else if kind == 5 or kind == 6 {
 				LayoutGsub.read_context(data, kind == 6, format, at, { subtables, ranges, values, rules, steps })
+			} else if kind == 8 and format == 1 {
+				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
+				back = LayoutGsub.append_coverages(data, at, at + 4, cov.steps, cov.ranges, values)?
+				ahead_at = at + 6 + 2 * back.count
+				ahead = LayoutGsub.append_coverages(data, at, ahead_at, back.steps, back.ranges, back.values)?
+				glyphs_at = ahead_at + 2 + 2 * ahead.count
+				glyphs = LayoutGsub.count_u16s(data, glyphs_at, ahead.steps)?
+				first = ahead.values.len()
+				var $values = ahead.values
+				for k in 0..<glyphs.count {
+					$values = $values.append(LayoutGsub.u16(data, glyphs_at + 2 + 2 * k))
+				}
+				sub = { ..LayoutGsub.no_sub, kind: 8, coverage: cov.start, coverage_len: cov.len, data: first, data_len: glyphs.count, match_kind: 2, back: back.start, back_len: back.count, ahead: ahead.start, ahead_len: ahead.count }
+				Ok({ subtables: subtables.append(sub), ranges: ahead.ranges, values: $values, rules, steps: glyphs.steps })
 			} else {
-				# Alternate (3) and reverse chaining (8) substitutions are not
-				# applied by default.
-				Ok({ subtables, ranges, values, rules, steps })
+				Err(Bad(at))
 			}
 		}
 	}
@@ -1245,7 +2002,7 @@ LayoutGsub := {
 					Err(Bad(at))
 				} else {
 					rule = { back: back.start, back_len: back.count, input: input.start + 2, input_len: input.count - 1, ahead: ahead.start, ahead_len: ahead.count, records: records.start, records_len: records.count }
-					LayoutGsub.context3_of(input.start, rule, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
+					LayoutGsub.context3_of(input.start, rule, 1, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
 				}
 			} else {
 				count = LayoutGsub.u16(data, at + 2)
@@ -1265,7 +2022,7 @@ LayoutGsub := {
 					}
 					records = LayoutGsub.append_record_list(data, at + 6 + 2 * count, record_count, $steps, $values)?
 					rule = { ..LayoutGsub.no_rule, input: first + 2, input_len: count - 1, records: records.start, records_len: records.count }
-					LayoutGsub.context3_of(first, rule, { subtables, ranges: $ranges, values: records.values, rules, steps: records.steps })
+					LayoutGsub.context3_of(first, rule, 0, { subtables, ranges: $ranges, values: records.values, rules, steps: records.steps })
 				}
 			}
 		} else if format == 1 or format == 2 {
@@ -1322,7 +2079,7 @@ LayoutGsub := {
 				kind: 5,
 				coverage: cov.start,
 				coverage_len: cov.len,
-				delta: 0,
+				delta: if (chained) 1 else 0,
 				data: bounds,
 				data_len: offsets.count,
 				match_kind: if (by_class) 1 else 0,
@@ -1341,13 +2098,13 @@ LayoutGsub := {
 
 	# A context subtable of format 3: one rule set holding one rule, whose
 	# coverage is the first input coverage (a start and length at
-	# `values[first]`).
-	context3_of : U64, Rule, Built -> Try(Built, [Bad(U64)])
-	context3_of = |first, rule, { subtables, ranges, values, rules, steps }| {
+	# `values[first]`). `chained` is 1 for a chained subtable.
+	context3_of : U64, Rule, I64, Built -> Try(Built, [Bad(U64)])
+	context3_of = |first, rule, chained, { subtables, ranges, values, rules, steps }| {
 		coverage = values.get(first) ?? 0
 		coverage_len = values.get(first + 1) ?? 0
 		bounds = values.len()
-		sub = { ..LayoutGsub.no_sub, kind: 5, coverage, coverage_len, data: bounds, data_len: 1, match_kind: 2 }
+		sub = { ..LayoutGsub.no_sub, kind: 5, coverage, coverage_len, delta: chained, data: bounds, data_len: 1, match_kind: 2 }
 		Ok({ subtables: subtables.append(sub), ranges, values: values.append(rules.len()).append(rules.len() + 1), rules: rules.append(rule), steps })
 	}
 

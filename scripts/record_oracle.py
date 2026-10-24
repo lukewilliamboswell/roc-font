@@ -391,7 +391,7 @@ def main() -> int:
                 continue
             tools = chrome["tools"] if kind in CHROME_KINDS else tools_for[kind]
             case_extractor = chrome["extractor"] if kind in CHROME_KINDS else extractor[kind]
-            location_key = (font, case.face, canonical_json(case.location))
+            location_key = (font, case.face, canonical_json(case.location), tuple(case.settings.get("variations", [])))
             if location_key not in locations:
                 locations[location_key] = resolve_location(case, font.read_bytes())
             location = locations[location_key]

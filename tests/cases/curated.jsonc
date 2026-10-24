@@ -19,7 +19,7 @@
       "case": "7bc231e79f92d6bd",
       "area": "default-features",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "automatic fractions"
       ],
@@ -69,7 +69,7 @@
       "case": "f2368f2ea7c4ab84",
       "area": "gsub-context",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "required feature"
       ],
@@ -163,7 +163,7 @@
       "case": "ecedcc9b80ee5998",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -177,7 +177,7 @@
       "case": "8c39b53acd026777",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -191,7 +191,7 @@
       "case": "ffd9851b07a38101",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -205,7 +205,7 @@
       "case": "240093649390b5ab",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -219,7 +219,7 @@
       "case": "c28e46d02ce56eeb",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -233,7 +233,7 @@
       "case": "7451e523acd65b30",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -247,7 +247,7 @@
       "case": "882975eaf076fc35",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -261,7 +261,7 @@
       "case": "19a0c50b4d9d7829",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -275,7 +275,7 @@
       "case": "bf3264cae40f4a91",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -289,7 +289,7 @@
       "case": "f3fe59e1d499e2f1",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -303,7 +303,7 @@
       "case": "8a818a77cb622132",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -317,7 +317,7 @@
       "case": "4695406da606d108",
       "area": "cmap-13",
       "milestone": "M1-next",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 13"
       ],
@@ -331,7 +331,7 @@
       "case": "cb3e939445291c26",
       "area": "default-ignorables",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "hide default ignorables"
       ],
@@ -357,7 +357,7 @@
       "case": "02468f1100164432",
       "area": "default-ignorables",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "hide default ignorables",
         "cmap format 14"
@@ -386,7 +386,7 @@
       "case": "70e61869f9cc9941",
       "area": "gpos-mark",
       "milestone": "post-0.1",
-      "gating": false,
+      "gating": true,
       "needs": [
         "fallback mark positioning"
       ],
@@ -468,7 +468,7 @@
       "case": "c673d248e7033d21",
       "area": "cmap-fallback",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "character fallback"
       ],
@@ -614,7 +614,7 @@
       "case": "aa29a705d27165f4",
       "area": "kern-table",
       "milestone": "M3",
-      "gating": false,
+      "gating": true,
       "needs": [
         "Run offsets"
       ],
@@ -640,7 +640,7 @@
       "case": "9eb92773505deab7",
       "area": "default-features",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "default feature set"
       ],
@@ -669,7 +669,7 @@
       "case": "298cd5ac60fee95b",
       "area": "default-features",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "GSUB 3",
         "default feature set"
@@ -684,7 +684,7 @@
       "case": "a9bcfc8bb4610cfb",
       "area": "gsub-8",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "GSUB 8"
       ],
@@ -698,7 +698,7 @@
       "case": "1483bb522bf5a759",
       "area": "gsub-8",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "GSUB 8"
       ],
@@ -832,7 +832,7 @@
       "case": "7ffa2f1e91ef7b66",
       "area": "kern-table",
       "milestone": "M3",
-      "gating": false,
+      "gating": true,
       "needs": [
         "Run offsets"
       ],
@@ -846,7 +846,7 @@
       "case": "788a03667617975a",
       "area": "cmap-14",
       "milestone": "M4",
-      "gating": false,
+      "gating": true,
       "needs": [
         "cmap format 14",
         "hide default ignorables"

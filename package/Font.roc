@@ -271,12 +271,14 @@ Font :: { face : Face }.{
 	## an empty script).
 	Direction : [FromScript, LeftToRight, RightToLeft]
 
-	## How clusters merge, as HarfBuzz's monotone cluster levels: glyphs that
-	## draw several characters together (ligatures) share the first
-	## character's cluster either way. Forming clusters of whole graphemes
-	## (a letter with its accents) needs Unicode data roc-font leaves to the
-	## `unicode` package: pass each scalar's grapheme start as its offset to
-	## `shape_scalars` for that.
+	## How clusters form, as HarfBuzz's monotone cluster levels. `Graphemes`
+	## (the default, HarfBuzz level 0): a character that extends a grapheme
+	## (a combining mark, an emoji modifier, a ZWJ and the pictograph after
+	## it, a variation selector) takes the cluster of the grapheme's first
+	## character. `Characters` (level 1): each character keeps its own
+	## cluster and the run is unsafe to break inside a grapheme. Either way,
+	## glyphs that draw several characters together (ligatures) share the
+	## first character's cluster.
 	ClusterLevel : [Graphemes, Characters]
 
 	## A typographic feature, turned on (value 1, the default), off (0) or to
@@ -287,9 +289,9 @@ Font :: { face : Face }.{
 	## small_caps = Font.Feature.{ tag: "smcp", start: 4, end: 9 }
 	## ```
 	##
-	## The tag is the feature's four-letter OpenType name. Values above 1
-	## turn a feature on; choosing among alternates by value is not
-	## supported yet.
+	## The tag is the feature's four-letter OpenType name. A value above 1
+	## chooses that alternate where the feature offers several (`salt` with
+	## value 2 is the second).
 	Feature := { tag : Str, value : U32 ?? 1, start : U32 ?? 0, end : U32 ?? 4_294_967_295 }
 
 	## Bounds on shaping work, per input character, never below 16384 in
@@ -313,11 +315,13 @@ Font :: { face : Face }.{
 	##   Without features, the browser defaults for the direction apply
 	##   (ligatures, contextual forms and kerning, among others).
 	##
-	## Every script is shaped as HarfBuzz's default shaper shapes it. Scripts
-	## that need more (Arabic joining, Indic reordering, Hebrew's own rules)
-	## and steps that need Unicode data (normalisation, mirroring brackets in
-	## right-to-left text, hiding default-ignorable characters) are not done
-	## yet.
+	## Text is shaped as HarfBuzz's default shaper shapes it (and its Hebrew
+	## shaper for Hebrew): characters compose or decompose to what the font
+	## maps, brackets mirror in right-to-left text, default-ignorable
+	## characters draw with no width, and spaces the font lacks take widths
+	## from its space. Scripts that need their own shaper (Arabic joining,
+	## Indic, Khmer, Myanmar, the Universal Shaping Engine, Thai, Hangul)
+	## shape as the default shaper shapes them.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left
@@ -330,7 +334,12 @@ Font :: { face : Face }.{
 	##   each glyph draws;
 	## - `flags`: bit 0 is set when breaking the text at the start of the
 	##   glyph's cluster would change the glyphs on either side (a ligature
-	##   or kerning spans it), so both sides must be shaped again.
+	##   or kerning spans it), so both sides must be shaped again; bit 1 is
+	##   set on glyph 0 drawn for a character the font does not map (the
+	##   `.notdef` result: a browser would fall back to another font there).
+	##
+	## Clusters never decrease in a left-to-right run (never increase in a
+	## right-to-left one), and the glyphs of one cluster are adjacent.
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U32), flags : List(U8) }
 
 	## The choices `ShapeOptions` make for one font, worked out once. Plan
@@ -344,7 +353,7 @@ Font :: { face : Face }.{
 	plan = |font, options| {
 		limits = options.limits
 		features = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan(font.face, { script: options.script, language: options.language, direction: options.direction, features, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }) }
+		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
 	}
 
 	## Shape text: the glyphs that draw it, where, and which text each draws.
