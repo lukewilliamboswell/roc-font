@@ -1,0 +1,470 @@
+= The default fonts
+:toc: left
+:toclevels: 2
+
+This chapter is for contributors. It records which three fonts roc-font
+ships as its defaults, why, under what licences, exactly where each file
+came from, what is inside them (axes, ligatures, the tables shaping will
+need), what they cost, and how to verify or change them. Why the package
+ships defaults at all is in architecture §5.8; variable fonts in general are
+§5.7.
+
+== The three faces
+
+[cols="1,2,2,2",options="header"]
+|===
+| |Sans |Serif |Mono
+
+|Family
+|Inter
+|Merriweather
+|Fira Code
+
+|File (in `package/fonts/`)
+|`Inter-Variable.ttf`
+|`Merriweather-Variable.ttf`
+|`FiraCode-Variable.ttf`
+
+|Licence file
+|`Inter-OFL.txt`
+|`Merriweather-OFL.txt`
+|`FiraCode-OFL.txt`
+
+|Upstream release
+|rsms/inter `v4.1`
+|EbenSorkin/Merriweather4 `4.009`
+|tonsky/FiraCode `6.2`
+
+|Version (name ID 5)
+|Version 4.001;git-9221beed3
+|Version 2.100
+|Version 6.002
+
+|Size
+|879 708 bytes
+|4 628 080 bytes
+|286 320 bytes
+
+|Outlines
+|`glyf` + `gvar`
+|`glyf` + `gvar`
+|`glyf` + `gvar`
+
+|Units per em
+|2048
+|2000
+|1950
+
+|Glyphs / mapped code points
+|2937 / 2852
+|2384 / 1423
+|2030 / 1586
+
+|Axes (min, default, max)
+|`opsz` 14, *14*, 32; `wght` 100, *400*, 900
+|`wght` 300, *300*, 900; `wdth` 87, *100*, 112; `opsz` 18, *18*, 144
+|`wght` 300, *300*, 700
+
+|Named instances
+|Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black
+(all at `opsz` 14)
+|Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black (all at `wdth`
+100, `opsz` 18)
+|Light, Regular, Medium, SemiBold, Bold
+
+|Default instance
+|Regular
+|*Light*
+|*Light*
+
+|`OS/2.fsType`
+|0 (installable)
+|0 (installable)
+|0 (installable)
+|===
+
+Total: 5 794 108 bytes of fonts, 5 807 315 bytes with licences. The
+package budget is 15 MB uncompressed for everything, fonts included, and
+the full upstream files (every axis, the full character set) fit with room
+to spare. `roc bundle` compresses the three to about 3.9 MB.
+
+=== Why these
+
+* *Inter* is the sans most UI and diagram tools already measure with
+  (package-mermaid's oracle texts use it), with a wide Latin, Greek and
+  Cyrillic repertoire and both a weight and an optical size axis.
+* *Merriweather* is a screen-first text serif with weight, width and optical
+  size axes and Latin, Cyrillic and Vietnamese coverage. Its 4.x remaster
+  is the variable release; the older SorkinType/Merriweather repository is
+  superseded (google/fonts now takes Merriweather from
+  EbenSorkin/Merriweather4).
+* *Fira Code* is the best-known monospaced font with programming
+  ligatures, which exercise contextual substitution while keeping every
+  advance at exactly one cell (1200 units at every weight).
+
+All three are SIL Open Font License 1.1, ship as one upright variable
+TrueType (`glyf`) file each, and have `HVAR`, so advances at any location
+can be computed without `gvar`.
+
+== Licences and reserved font names
+
+[cols="1,3,1",options="header"]
+|===
+|Face |Copyright line (first line of the licence file) |Reserved Font Names
+
+|Inter
+|Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
+|none
+
+|Merriweather
+|Copyright 2020 The Merriweather Project Authors
+(https://github.com/EbenSorkin/Merriweather4) with Reserved Font Name
+"Merriweather".
+|"Merriweather"
+
+|Fira Code
+|Copyright (c) 2014, The Fira Code Project Authors
+(https://github.com/tonsky/FiraCode)
+|none
+|===
+
+The fonts' name tables also carry trademark notices (name ID 7): "Inter UI
+and Inter is a trademark of rsms.", "Merriweather is a trademark of Sorkin
+Type Co." and "Fira Mono is a trademark of The Mozilla Corporation."
+
+What the OFL allows us to do:
+
+* *Ship the files inside the Roc package.* OFL §1–2: the font software "may
+  be bundled, redistributed and/or sold with any software" provided the
+  copyright notice and licence go with it, as a separate text file or in
+  the font's metadata. We ship each file unmodified with its licence text
+  beside it, and expose the text through the API (see "Bundling" below).
+* *Reserved Font Names only bind Modified Versions* (OFL §3). Shipping the
+  files unmodified, or reading them, does not touch them. Never rewrite,
+  subset, instance or rename a shipped file inside the package; a changed
+  file named "Merriweather" would breach §3.
+* *Embedding in documents* (roc-pdf). OFL-FAQ 1.11–1.12: a font embedded in
+  a document, in full or as a subset, is "embedding", and "the restrictions
+  regarding font modification and redistribution do not apply". `fsType` is
+  0 (installable embedding) in all three, so a strict PDF writer that honours
+  `fsType` may embed them. Distributing a subset as a standalone font file
+  (for example a webfont) is a Modified Version, and for Merriweather the
+  Reserved Font Name then applies.
+
+== Provenance
+
+Every file is pinned in `tools/default-fonts/pins.json` by SHA-256 and size,
+with the release archive it came from (pinned by its own SHA-256) and the
+archive member, the release commit, and the licence's URL at that commit.
+The release archive is the authority, not the repository tree:
+
+[cols="1,3",options="header"]
+|===
+|Face |Source
+
+|Inter
+|`InterVariable.ttf` in
+`https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip`
+(sha256 `9883fdd4…b11e`); identical to `docs/font-files/InterVariable.ttf`
+at commit `e3a3d4c5`. Licence: `LICENSE.txt` in the same archive, identical to
+the repository's at that commit. The same file is the conformance corpus
+entry `inter-variable-4.1`.
+
+|Merriweather
+|`Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf` in
+`https://github.com/EbenSorkin/Merriweather4/releases/download/4.009/Merriweather4-4.009.zip`
+(sha256 `526473e3…4345`), release commit `e586023a`. The copy committed in
+the repository at that commit is a different build (it differs in `GDEF`,
+`GPOS`, `GSUB`, `gvar` and `name`) although it also says Version 2.100; the
+google/fonts copy differs only in `head.modified`. The version string does
+not identify a build; the SHA-256 does. Licence: `OFL.txt` in the archive.
+
+|Fira Code
+|`variable_ttf/FiraCode-VF.ttf` in
+`https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip`
+(sha256 `0949915b…3e79`), release commit `eee6db99`. The archive carries no
+licence file and the built fonts are not committed, so the licence is
+`LICENSE` at the release commit.
+|===
+
+Only the upright faces are shipped. Inter, Merriweather and Fira Code
+publish italics as separate files (Fira Code has none), which would add
+about 5.5 MB; they are not part of the defaults.
+
+== Variable structure
+
+What each file contains that variable-font support (architecture §5.7)
+will read:
+
+[cols="2,1,1,1",options="header"]
+|===
+|Table or feature |Inter |Merriweather |Fira Code
+
+|`avar`
+|v1 (`wght` remapped)
+|v1 (`wght` remapped)
+|v1 (`wght` remapped)
+
+|`HVAR`
+|yes, with advance mapping
+|yes, with advance mapping
+|yes, implicit mapping (no `AdvWidthMap`); all deltas zero
+
+|`VVAR`, `cvar`, `CFF2`, `morx`, `kern`
+|no
+|no
+|no
+
+|`MVAR` value tags
+|`stro strs undo unds xhgt`
+|`xhgt`
+|`cpht xhgt`
+
+|`gvar` glyphs with variations
+|2925
+|2356
+|1727
+
+|`GDEF` item variation store
+|yes
+|yes
+|yes
+
+|`GPOS` `VariationIndex` device tables
+|13 518 (kerning, marks)
+|214 913 (mostly kerning)
+|1 983 (mark anchors)
+
+|`GSUB`/`GPOS` `FeatureVariations`
+|no
+|no
+|no
+
+|`STAT`
+|`opsz wght ital`
+|`wght wdth opsz ital`
+|`wght`
+|===
+
+Consequences:
+
+* *Substitution does not depend on the location.* No `FeatureVariations`,
+  so the same glyphs come out at every location (checked on every example
+  below at 3–6 locations each).
+* *Advances need `avar` + `HVAR`*; no font needs `gvar` for advances.
+* *Kerning needs the `GDEF` item variation store.* Inter's and
+  Merriweather's pair kerning values carry `VariationIndex` deltas; without
+  them kerning is right only at the default location.
+* *Ascent and descent do not vary.* `MVAR` touches no `hhea` or `OS/2`
+  ascender/descender value in any of the three.
+* *Ink extents need `gvar`.* Only glyph extents (and later outlines) at a
+  non-default location do.
+
+The default location is not Regular for two faces: Merriweather and Fira
+Code default to Light (`wght` 300). Until variations are supported,
+`from_bytes` measures Light for those two. At Regular, Merriweather's
+advances change for 2114 of 2384 glyphs (up to 113 units, "Wave To" grows
+from 7947 to 8086 units); Fira Code's do not change at all. A browser asked
+for `font-weight: normal` draws `wght` 400, not the default.
+
+== Ligatures and default features
+
+[cols="1,2,2,2",options="header"]
+|===
+| |Inter |Merriweather |Fira Code
+
+|Default-on features with substitutions
+|`ccmp`, `locl`, `calt`
+|`ccmp`, `locl`, `liga`, `calt`
+|`ccmp`, `locl`, `calt`
+
+|Ligature mechanism
+|`calt`: ligature lookups (type 4) plus chaining contextual lookups
+(type 6). Arrows `->` `-->` `<->` `=>` become one glyph; `.case` forms of
+`- : + ( )` are chosen next to capitals and digits. No `liga`: Inter has no
+`fi` or `fl` ligature by design
+|`liga`: one type 4 lookup, `fi` and `fl` (flag IgnoreMarks); `calt`: two
+chaining contextual lookups
+|`calt`: 101 chaining contextual lookups (type 6) that replace each
+character of a sequence with a `.spacer` or `_start.seq` glyph and the last
+with a `.liga` or `_end.seq` glyph, so a ligature keeps one cell per
+character. Only four small type 4 lookups exist, none in `calt`
+
+|Off by default
+|`dlig` (`!?` → interrobang), `ss01`–`ss08`, `cv01`–`cv14`, `case`, `frac`,
+`tnum`, `zero`, …
+|`dlig` (small-cap `fi` `fl`), `smcp`, `c2sc`, `ss01`–`ss04`, `onum`, `frac`, …
+|`ss01`–`ss10`, `cv01`–`cv32`, `zero`, `onum`, `frac`, …
+
+|GSUB lookup types present
+|1, 3 (`aalt` only), 4, 5, 6
+|1, 2, 3 (`aalt` only), 4, 6
+|1, 2, 3 (`aalt` only), 4, 6
+
+|GPOS lookup types present
+|1 (`cpsp`, off), 2, 4, 6 (one extension-wrapped)
+|2, 4, 5, 6 (two extension-wrapped)
+|4, 6
+|===
+
+GSUB lookup type 3 (alternate) only appears under `aalt`, which no default
+path applies. Lookup flags in default features: Merriweather's `liga` and
+`kern` lookups ignore marks; Inter's `kern` and every face's `mkmk` use mark
+filtering sets. They matter only when combining marks sit between the
+glyphs; ASCII text is unaffected.
+
+=== Example shaping (HarfBuzz 14.6.0 via uharfbuzz 0.56.3, default features)
+
+Glyph names, clusters and advances in font units (abbreviated where long);
+only the advances change with the location.
+
+[cols="1,1,3",options="header"]
+|===
+|Face |Text |Default location, and the total advance elsewhere
+
+|Inter |`->` |`[arrowright=0+1954]`; `opsz` 32: 1890
+|Inter |`-->` |`[uni27F6=0+2746]`; `opsz` 32: 2682
+|Inter |`=>` |`[arrowdblright=0+1954]`
+|Inter |`office` |`[o+1228\|f+678\|f+758\|i+496\|c+1170\|e+1194]` = 5524 (no ligature); `wght` 100: 5069, 700: 5798, 900: 6033
+|Inter |`(HELLO)` |`[parenleft.case+747\|H\|E\|L\|L\|O\|parenright.case+747]` = 8071
+|Inter |`12:30` |`colon.case` between digits; 5229
+|Inter |`Wave To` |kerned, 8305; `wght` 900: 8704; `opsz` 32: 7602
+|Merriweather |`fi`, `fl` |`[fi=0+1390]`, `[fl=0+1396]`; `wght` 900: 1560, 1543; `opsz` 144: 1046, 991
+|Merriweather |`ffi` |`[f=0+763\|fi=1+1390]` (no `ffi` ligature)
+|Merriweather |`office` |`[o\|f\|fi=2+1373\|c=4\|e]` = 5276 (kerned); `wdth` 87: 4707
+|Merriweather |`AVATAR` |kerned, 7610; `wght` 400: 7744; `wdth` 112 `wght` 700 `opsz` 144: 7916
+|Fira Code |`->` |`[hyphen_start.seq=0+1200\|greater_hyphen_end.seq=1+1200]`
+|Fira Code |`!=` |`[exclam.spacer=0+1200\|exclam_equal.liga=1+1200]`
+|Fira Code |`===` |`[equal.spacer\|equal.spacer\|equal_equal_equal.liga]`, 3600
+|Fira Code |`www` |`[w.spacer\|w.spacer\|w_w_w.liga]`, 3600
+|Fira Code |`0xFF` |`[zero\|x.multiply\|F\|F]`, 4800
+|===
+
+Every Fira Code advance is 1200 at every weight.
+
+== What roc-font does with them today
+
+All three are accepted by `Font.from_bytes` with no problem reported. At
+the default location, glyph ids, clusters and advances (with pair
+kerning) agree exactly with HarfBuzz on the examples above, on mixed
+sentences, and on 400 random printable-ASCII strings per face (1256 runs in
+all). Not yet supported, and needed for these fonts beyond ASCII or beyond
+the default location: `avar`/`HVAR`/`MVAR`/`gvar`, `GDEF` variation deltas
+in `GPOS`, GPOS mark attachment (types 4, 5, 6) and lookup flags.
+
+== Cost of shipping them
+
+Measured on the 2026-10-23 nightly (x86-64 Linux, LLVM `--opt=speed`, a
+fresh `ROC_CACHE_DIR` per app), with each face read by `Font.from_bytes` in
+a top-level value of a package module and an app that shapes its argument:
+
+[cols="2,1,1,1,1",options="header"]
+|===
+|App uses |Cold build |Warm build |Cold peak RSS |Binary
+
+|nothing (baseline)
+|0.74 s
+|0.55 s
+|204 MB
+|1.07 MB
+
+|prepared Inter
+|2.27 s
+|1.68 s
+|308 MB
+|1.39 MB
+
+|prepared Inter + its bytes
+|2.05 s
+|1.66 s
+|329 MB
+|2.28 MB
+
+|all three prepared
+|2.75 s
+|1.86 s
+|625 MB
+|2.56 MB
+
+|all three bytes only
+|0.93 s
+|0.51 s
+|580 MB
+|6.87 MB
+
+|all three read at run time instead
+|4.54 s
+|3.93 s
+|624 MB
+|7.07 MB
+|===
+
+* Evaluating the three reads at compile time took 7 ms (Inter) and 35 ms
+  (all three); on a warm cache it is skipped. The LLVM pass, not the read,
+  dominates the build.
+* Cold peak memory is driven by importing the file, not by reading it:
+  importing Merriweather's 4.6 MB costs about 330 MB of compiler memory even
+  when it is never read.
+* A prepared face holds no font bytes; its binary cost is its prepared
+  tables (Inter about 0.33 MB, all three 1.5 MB). Bytes cost their file
+  size, and only when the app uses them.
+* First use: process start to a shaped width is 0.04 ms over the baseline
+  for prepared Inter and 0.14 ms for all three, against 1.3 ms and 6.9 ms
+  when the same bytes are read at run time.
+* `--opt=dev` and `--opt=interpreter` builds of the three-face app produce
+  the same widths.
+
+== Bundling
+
+`roc bundle` includes only files a module imports. A licence text is in the
+bundle only if a module imports it (`import "fonts/Inter-OFL.txt" as
+inter_licence : Str`), which is also how the API exposes it; an unimported
+file in `package/fonts/` is silently left out. The bundle check in
+`scripts/all_tests.py` must then accept exactly the files pinned in
+`tools/default-fonts/pins.json` and still reject every other font.
+
+`roc build` refuses a dependency whose decompressed size exceeds
+`--max-package-mb` (default 10 MB). The package with the three fonts is
+about 5.9 MB.
+
+== Measuring with Chrome
+
+The Chrome width oracle can measure a variable font at an explicit location
+with a span styled `font-variation-settings` listing *every* axis,
+`font-optical-sizing: none` and `font-synthesis: none`. Every axis must be
+given: otherwise CSS `font-weight: normal` sets `wght` to 400 and automatic
+optical sizing sets `opsz` from the font size. At variable locations Chrome
+widths are fractional (exact to 1/64 unit), while HarfBuzz at a scale equal
+to units per em rounds each glyph's advance to an integer, so the two agree
+within half a unit per glyph rather than exactly. In a scratch run over 174
+strings and locations, all agreed within that bound, and every Fira Code
+width and most Inter widths agreed exactly.
+
+== Upgrade policy
+
+* *A font change is a breaking change of the package.* Replacing,
+  upgrading or adding a default changes measurements and glyph ids, so it
+  needs a major version bump and a release note naming the old and new
+  versions and SHA-256.
+* Upgrade from an upstream *release* (archive or tag), never a branch.
+  Record the archive's SHA-256, the member path and the release commit in
+  `pins.json`.
+* The file stays byte-for-byte as released: no subsetting, instancing,
+  renaming, re-hinting or table edits. If a release is unsuitable, choose an
+  upstream-provided variant or stay on the old one.
+* Before landing: `verify.py --fetch`, `roc check` and the tests, a native
+  build of an app using each face, the HarfBuzz agreement check at the
+  default location, and these measurements re-run, with this chapter and
+  the pins updated in the same commit.
+
+== How to verify
+
+----
+python3 tools/default-fonts/verify.py          # committed files match pins.json
+python3 tools/default-fonts/verify.py --fetch  # and match the upstream releases
+----
+
+The offline check needs nothing but Python. `--fetch` downloads about
+50 MB (Inter's release archive is 34 MB), keeps it in memory, and checks
+each archive's SHA-256, the archive member and the licence against the
+committed files.

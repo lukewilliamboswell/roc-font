@@ -361,8 +361,10 @@ Variation coordinates select a result, so they belong to the query
 (principle 3), as in skrifa, not to the font, as in ttf-parser. Metric and
 shaping queries will accept an optional `Location`; a cheap derived value
 (`Font.at(font, location)`) may bundle it for repeated use. Reading
-validates `fvar`, `avar`, `HVAR`, `MVAR` and `gvar` once, independent of any
-location.
+validates `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`, the `GDEF` item variation
+store and the variation indices in GPOS value records once, independent of
+any location. Without the GPOS deltas, kerning is wrong away from the
+default location (Merriweather has about 215,000 of them).
 
 === 5.8 Default fonts
 
@@ -379,15 +381,34 @@ preparation is paid once, and first use costs nanoseconds instead of a
 read (measured: about 200 ns against about 1 ms for Inter). A file that
 fails to read is a compile-time crash, so a shipped default is proven
 valid on every build. Faces an app never uses add nothing to its binary.
-The cost is download size, bounded by shipping exactly three faces: the
-whole package, fonts included, stays under 15 MB uncompressed, which is
-small for a Roc package and leaves room for full variable fonts.
+The cost is download size, bounded by shipping exactly three faces. The
+whole package, fonts included, stays under 10 MB uncompressed, because
+`roc build` refuses a dependency larger than its `--max-package-mb`
+default of 10 MB; a larger package would fail for every consumer that
+has not raised it. The three variable fonts total 5.8 MB (3.9 MB as a
+zstd bundle), so italics (about 5.5 MB more) do not fit without that limit
+changing. Importing a large file also costs compiler memory on a cold build
+(about 330 MB for Merriweather's 4.6 MB), whether or not it is read;
+compile-time reading itself takes milliseconds.
+
+The faces are Inter (sans), Merriweather (serif) and Fira Code (mono),
+pinned in `tools/default-fonts/pins.json` and described in
+`docs/default-fonts.adoc`. Two of them default to Light (wght 300), so
+until variations are supported (§5.7) their prepared value measures
+Light, not the Regular a browser draws; avar, HVAR, MVAR and the GPOS
+deltas are therefore required before the defaults are exposed.
+
+A prepared face holds no font bytes; the bytes cost their file size only
+in apps that use them. `roc bundle` includes only files a module imports,
+so each licence is imported as a `Str`, which also exposes it.
 
 Rules:
 
 * fonts are freely licensed (SIL OFL or similar), shipped unmodified, with
   their licence text, which keeps reserved font names safe (subsetting
-  counts as modifying);
+  counts as modifying; embedding in a PDF does not, per the OFL FAQ);
+* each face is its own constant (prepared value, bytes, licence), never
+  selected by a tag, so an app links only the faces it names;
 * each is pinned by version and SHA-256; replacing or upgrading a default
   changes measurements, so it is a breaking change of the package;
 * the defaults are variable fonts once variations are supported (§5.7),

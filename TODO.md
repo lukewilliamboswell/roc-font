@@ -131,6 +131,25 @@ on it.
 
 ## 5. Milestones to 0.1.0
 
+**Default fonts (staged 2026-10-24, `package/fonts/`, not yet exposed).**
+Inter 4.1, Merriweather 4.009 (2.100), Fira Code 6.2, all OFL variable
+`glyf` fonts with HVAR; 5.8 MB; roc-font matches HarfBuzz on 1256 runs at
+the default location. Merriweather and Fira Code default to Light, so
+expose them only after variation phase 1 (avar, HVAR, MVAR) and phase 2
+(GDEF store, GPOS deltas) land: these move into 0.1.0.
+- [ ] Expose `Font.sans`, `Font.serif`, `Font.mono` (prepared at compile
+  time), `*_bytes`, `*_licence` (licences imported as `Str` so the bundle
+  keeps them); named instances after fvar names.
+- [ ] `all_tests.py` bundle step accepts exactly the files in
+  `tools/default-fonts/pins.json`; run `verify.py` in all_tests.
+- [ ] Add Merriweather and Fira Code to `tests/corpus.json`; conformance
+  cases from `docs/default-fonts.adoc` examples at several locations.
+- [ ] Chrome width oracle for variable fonts: set every axis in
+  `font-variation-settings`, `font-optical-sizing: none`,
+  `font-synthesis: none`; compare within half a unit per glyph (Chrome
+  keeps 1/64 units, HarfBuzz at upem scale rounds per glyph).
+
+
 Foundations first, so every refactor after milestone 1 is measured against
 a recorded baseline and checked against recorded oracle results.
 
