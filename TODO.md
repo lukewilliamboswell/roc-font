@@ -181,43 +181,46 @@ a recorded baseline and checked against recorded oracle results.
 ### M1. Harness foundations (before any refactor)
 
 Conformance (§7.1, §7.2):
-- [ ] `tests/corpus.json` and `scripts/fetch_corpus.py`: pinned URL at a
+- [x] `tests/corpus.json` and `scripts/fetch_corpus.py`: pinned URL at a
   release tag, SHA-256 and licence per font; fail on mismatch.
-- [ ] `tools/oracle/requirements.txt` with exact versions and hashes
+- [x] `tools/oracle/requirements.txt` with exact versions and hashes
   (`fonttools==4.61.1`, `uharfbuzz`, `freetype-py`), run from a `.venv`
   with `python3 -I`; each record's provenance holds the tool versions and
   the run fails when they differ from the pin.
-- [ ] `scripts/record_oracle.py`: records keyed by SHA-256 of font bytes,
+- [x] `scripts/record_oracle.py`: records keyed by SHA-256 of font bytes,
   case, options, tool versions and extractor version; forced re-record is
   byte-identical.
-- [ ] `tools/driver/`: native Roc binary, cases in, `hb-shape` notation
+- [x] `tools/driver/`: native Roc binary, cases in, `hb-shape` notation
   out, each font read once.
-- [ ] `scripts/conformance.py` and `tests/known-failures.json` (fails on
+- [x] `scripts/conformance.py` and `tests/known-failures.json` (fails on
   new differences and on stale entries; never edits the list).
-- [ ] Conformance cases as JSONC; Python driver streams a line protocol to
+- [x] Conformance cases as JSONC; Python driver streams a line protocol to
   the basic-cli harness (no generated `.roc` expects, §7.1).
-- [ ] Unhappy-path cases: OTS accept / reject / drop-table expectations.
+- [x] Unhappy-path cases: OTS accept / reject / drop-table expectations
+  (`tests/cases/reading.jsonc`).
 
 Benchmarks (§9):
-- [ ] Protocol: each program prints one JSON line (`iterations`,
+- [x] Protocol: each program prints one JSON line (`iterations`,
   `elapsed_ns`, `successes`, `checksum`); `scripts/bench.py` calibrates,
   warms up, runs batches in fresh processes, reports median, spread,
   throughput, peak RSS.
-- [ ] Roc programs in `bench/roc/` for the first cases (section 6).
-- [ ] `bench/baseline.json` allocation ratchet (allocation calls, requested
-  bytes, peak live bytes per case, compiler version recorded) with an
+- [x] Roc programs in `bench/roc/` for the first cases (section 6).
+- [x] `bench/baseline.json` allocation ratchet (allocation calls per case; requested
+  and peak bytes wait on roc-fuzz PR #82; compiler version recorded) with an
   explicit update command.
-- [ ] `bench/compare/`: HarfBuzz (C, system 8.3.0 or pinned), ttf-parser and
+- [x] `bench/compare/`: HarfBuzz (C, system 8.3.0 or pinned), ttf-parser and
   rustybuzz (Rust, `Cargo.lock`), fontTools (reading only).
 
 Fuzzing and checks (§7.3):
 - [x] Move fuzz targets to `fuzz/` with seeds and dictionaries;
   `scripts/run_fuzz.py`.
-- [ ] Seed both targets from the corpus.
-- [ ] `scripts/all_tests` running format, `roc check`, every test module
+- [x] Seed both targets from the corpus.
+- [x] `scripts/all_tests` running format, `roc check`, every test module
   with the default backend and `--opt=interpreter`, native fuzz smoke runs,
   conformance and the allocation ratchet. (`roc test package/main.roc`
   runs nothing because tests live in test-only modules.)
+
+M1 done 2026-10-24 (byte figures pending roc-fuzz #82).
 
 Exit: `scripts/all_tests` passes on a clean checkout with the corpus
 fetched; conformance runs the HarfBuzz in-house, AOTS and
