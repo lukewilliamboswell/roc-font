@@ -207,32 +207,69 @@ expect {
 
 # ------------------------------------------------------------ lenient and strict reading
 
-# Broken optional tables are dropped and named, with their offsets; the
-# font reads without them. Strict reading rejects the font for them.
+# A broken `OS/2`, `post`, `name`, `GSUB`, `GPOS` or `GDEF` rejects the font
+# in both modes, naming the table, as OTS (and so a browser) rejects it.
 expect {
-	tables = FontBuild.basic.concat([
+	broken = [
 		{ tag: "OS/2", data: List.repeat(0, 20) },
 		{ tag: "post", data: List.repeat(0, 10) },
 		{ tag: "name", data: [0, 0] },
 		{ tag: "GSUB", data: List.repeat(0xFF, 12) },
 		{ tag: "GPOS", data: List.repeat(0xFF, 12) },
-		{ tag: "fvar", data: List.repeat(0, 10) },
-	])
-	bytes = FontBuild.file(tables)
-	expected = ["OS/2", "name", "post", "GSUB", "GPOS", "fvar"]
+		{ tag: "GDEF", data: List.repeat(0xFF, 12) },
+	]
+	broken.all(
+		|t| {
+			bytes = FontBuild.file(FontBuild.basic.append(t))
+			when_lenient = match lenient(bytes) {
+				Ok(_) => False
+				Err(problems) => tables_of(problems) == [t.tag]
+			}
+			when_lenient and strict(bytes).is_err()
+		},
+	)
+}
+
+# A broken `fvar` drops the font's variations, which leaves a static font;
+# strict reading rejects the font for it.
+expect {
+	bytes = FontBuild.file(FontBuild.basic.append({ tag: "fvar", data: List.repeat(0, 10) }))
 	read_ok = match lenient(bytes) {
 		Ok(font) =>
-			tables_of(Font.dropped(font)) == expected
-				and Font.dropped(font).get(0) == Ok(bad("OS/2", table_offset(bytes, "OS/2")))
+			tables_of(Font.dropped(font)) == ["fvar"]
 				and Font.shape(font, "ABC", Font.ShapeOptions.{}).glyphs == [1, 2, 3]
 				and Font.axes(font) == []
 		Err(_) => False
 	}
 	strict_ok = match strict(bytes) {
 		Ok(_) => False
-		Err(problems) => tables_of(problems) == expected
+		Err(problems) => tables_of(problems) == ["fvar"]
 	}
 	read_ok and strict_ok
+}
+
+# A `GDEF` table OTS accepts reads: version 1.2 with a glyph class
+# definition and an empty mark glyph set list.
+expect {
+	classes = FontBuild.pack([U16(2), U16(1), U16(1), U16(3), U16(1)])
+	gdef = FontBuild.pack([U16(1), U16(2), U16(14), U16(0), U16(0), U16(0), U16(14 + 10)]).concat(classes).concat(FontBuild.pack([U16(1), U16(0)]))
+	match lenient(FontBuild.file(FontBuild.basic.append({ tag: "GDEF", data: gdef }))) {
+		Ok(font) => Font.dropped(font) == []
+		Err(_) => False
+	}
+}
+
+# Glyph classes above 4, a class array starting past the font, and
+# version 1.1 are what
+# OTS rejects a `GDEF` for.
+expect {
+	header = |minor| FontBuild.pack([U16(1), U16(minor), U16(12), U16(0), U16(0), U16(0)])
+	tables = [
+		header(0).concat(FontBuild.pack([U16(2), U16(1), U16(1), U16(3), U16(5)])),
+		header(0).concat(FontBuild.pack([U16(1), U16(4), U16(1), U16(1)])),
+		header(1).concat(FontBuild.pack([U16(2), U16(1), U16(1), U16(3), U16(1)])),
+	]
+	tables.all(|gdef| rejected(lenient(FontBuild.file(FontBuild.basic.append({ tag: "GDEF", data: gdef })))))
 }
 
 # A font with nothing wrong reads the same either way.
@@ -264,13 +301,14 @@ expect {
 	tables_of(problems_any(result)) == ["kern"] and rejected(result)
 }
 
-# When `GPOS` is dropped, a `kern` table kerns instead, as when the font
-# has no `GPOS`.
+# When `GPOS` is left out (over the lookup limit), a `kern` table kerns
+# instead, as when the font has no `GPOS`.
 expect {
 	kern = FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }])
-	bytes = FontBuild.file(basic_with("kern", kern).append({ tag: "GPOS", data: List.repeat(0xFF, 12) }))
-	match lenient(bytes) {
-		Ok(font) => Font.width(font, "AB") == 600 + 700 - 50
+	gpos = FontBuild.layout("latn", [], [{ kind: 1, subtables: [] }])
+	bytes = FontBuild.file(basic_with("kern", kern).append({ tag: "GPOS", data: gpos }))
+	match Font.from_bytes(bytes, Font.ReadOptions.{ limits: Font.Limits.{ max_lookups: 0 } }) {
+		Ok(font) => Font.dropped(font) == [OverLimit("max_lookups")] and Font.width(font, "AB") == 600 + 700 - 50
 		Err(_) => False
 	}
 }
@@ -365,7 +403,8 @@ expect {
 	glyphs = [[], FontBuild.outline(10, 490), [], FontBuild.outline(-5, 700)]
 	boxes = FontBuild.outlines(glyphs, False)
 	font = read_or_crash(FontBuild.file(FontBuild.basic.concat([{ tag: "loca", data: boxes.loca }, { tag: "glyf", data: boxes.glyf }])))
-	[0, 1, 3, 4, 0xFFFFFFFF].map(|g| Font.extents(font, g)) == [Empty, Extents({ x_min: 10, y_min: 0, x_max: 490, y_max: 100 }), Extents({ x_min: -5, y_min: 0, x_max: 700, y_max: 100 }), Empty, Empty]
+	# The left edge is the side bearing in `hmtx` (0 here), as in HarfBuzz.
+	[0, 1, 3, 4, 0xFFFFFFFF].map(|g| Font.extents(font, g)) == [Empty, Extents({ x_min: 0, y_min: 0, x_max: 480, y_max: 100 }), Extents({ x_min: 0, y_min: 0, x_max: 705, y_max: 100 }), Empty, Empty]
 }
 
 # ------------------------------------------------------------ variations
@@ -423,8 +462,8 @@ expect {
 # The optical size goes to `opsz`.
 expect advances_of(Font.at(read_or_crash(format1_file), Font.Variation.{ optical_size: Size(48) }), 5) == [500, 10, 521, 530, 0]
 
-# A static font ignores variations; glyph boxes stay at the default
-# instance (a current limit).
+# A static font ignores variations. A variable font without `gvar` keeps
+# its glyph boxes everywhere; `VariationTests` covers boxes that vary.
 expect {
 	inter = read_or_crash(inter_file)
 	bold = Font.at(inter, Font.Variation.{ weight: Bold })

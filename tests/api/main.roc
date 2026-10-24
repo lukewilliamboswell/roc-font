@@ -8,6 +8,7 @@ import FontTests
 import SubstituteTests
 import ReadTests
 import ShapeTests
+import VariationTests
 import FuzzRegressionTests
 
 ## The tests of roc-font's public API. They import the package through

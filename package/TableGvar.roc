@@ -162,6 +162,24 @@ TableGvar := {
 			if index.bitwise_and(0x8000) == 0 and index.bitwise_and(0x0FFF) >= gvar.shared_count {
 				return Err(($header + 2, TupleIndex))
 			}
+			# As OTS: embedded tuples inside [-1, 1], and an intermediate
+			# region's start never after its end.
+			axes = gvar.axis_count
+			tuples = TableGvar.header_size(gvar, $header) // 2 - 2
+			for k in 0..<tuples {
+				c = TableVar.i16(bytes, $header + 4 + 2 * k)
+				if c < -0x4000 or c > 0x4000 {
+					return Err(($header + 4 + 2 * k, TupleRange))
+				}
+			}
+			if index.bitwise_and(0x4000) != 0 {
+				start_at = $header + 4 + (if (index.bitwise_and(0x8000) != 0) 2 * axes else 0)
+				for a in 0..<axes {
+					if TableVar.i16(bytes, start_at + 2 * a) > TableVar.i16(bytes, start_at + 2 * axes + 2 * a) {
+						return Err((start_at + 2 * a, TupleRange))
+					}
+				}
+			}
 			data_size = TableVar.u16(bytes, $header)
 			if !TableVar.fits($data, data_size, end) {
 				return Err(($header, Truncated))

@@ -52,6 +52,7 @@ TableGlyfPoints := {
 		TupleIndex,
 		PointIndex,
 		RunCount,
+		TupleRange,
 	]
 
 	## A glyph's ink box in font units, as HarfBuzz reports it: `x_bearing`
@@ -283,10 +284,14 @@ TableGlyfPoints := {
 		var $state = List.repeat(0.U8, count)
 		var $order = []
 		var $problems = []
+		# The walk's stack, empty between roots and reused, so a font of many
+		# composites allocates it once.
+		var $nodes = []
+		var $records = []
 		for root in 0..<count {
 			if (kinds.get(root) ?? 0) == 2 and ($state.get(root) ?? 0) == 0 {
-				var $nodes = [root]
-				var $records = [(starts.get(root) ?? 0) + 10]
+				$nodes = $nodes.append(root)
+				$records = $records.append((starts.get(root) ?? 0) + 10)
 				$state = $state.set(root, 1) ?? []
 				# Each glyph enters the stack once and each record is read
 				# once, so the walk is bounded by the records of the font.
@@ -355,7 +360,7 @@ TableGlyfPoints := {
 			var $max_depth = 0
 			var $sum_work = $work.get(g) ?? 0
 			for _k in 0..<(t.counts.get(g) ?? 0) {
-				c = TableGlyfPoints.component(t.glyf, $at)
+				c = TableGlyfPoints.component_link(t.glyf, $at)
 				child_points = $points.get(c.glyph) ?? 0
 				if c.anchored and (c.p1 >= $sum_points or c.p2 >= child_points) {
 					$problems = $problems.append({ table: "glyf", offset: $at + 4, reason: AnchorPoint })
@@ -500,6 +505,22 @@ TableGlyfPoints := {
 				}
 				{ xs: $xs, ys: $ys, ends: $ends }
 			}
+		}
+	}
+
+	## The parts of the component record at `at` that reading's work check
+	## needs (its glyph, anchor points and the next record), without the
+	## transform, so the check allocates nothing per component.
+	component_link : List(U8), U64 -> { glyph : U64, anchored : Bool, p1 : U64, p2 : U64, next : U64 }
+	component_link = |glyf, at| {
+		flags = TableVar.u16(glyf, at)
+		words = flags.bitwise_and(0x0001) != 0
+		{
+			glyph: TableVar.u16(glyf, at + 2),
+			anchored: flags.bitwise_and(0x0002) == 0,
+			p1: if (words) TableVar.u16(glyf, at + 4) else TableVar.u8(glyf, at + 4),
+			p2: if (words) TableVar.u16(glyf, at + 6) else TableVar.u8(glyf, at + 5),
+			next: at + TableGlyfPoints.record_size(glyf, at),
 		}
 	}
 

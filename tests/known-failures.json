@@ -7,195 +7,31 @@
     },
     {
       "id": "corpus-fonts/fonttools-bogus-post-read",
-      "reason": "OTS rejects the font because it has no `OS/2` table. roc-font treats `OS/2` as optional (architecture §4.4), so accepting the font is deliberate."
+      "reason": "OTS rejects the font because it has no `OS/2` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `OS/2`, `name` or `post` as OTS does (architecture §4.4) but does not require them to be present, so callers can read metrics-only and synthetic fonts; accepting the font is a deliberate divergence."
     },
     {
       "id": "corpus-fonts/fonttools-noto-vf-subset-read",
-      "reason": "OTS rejects the subset because it has no `name` table. roc-font does not require `name`, so accepting the font is deliberate."
+      "reason": "OTS rejects the subset because it has no `name` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `name` as OTS does (architecture §4.4) but does not require one, so accepting the font is a deliberate divergence."
     },
     {
       "id": "corpus-fonts/jellee-kern-pairs",
-      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset; roc-font reads only the OpenType version 0 `kern` table and returns no offsets yet (architecture §6.2, `kern` values split as HarfBuzz does)."
+      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset. OTS drops every `kern` table but version 0, so a browser never applies this one; roc-font drops it as OTS does (architecture §4.4, `corpus-fonts/jellee-kern-read` agrees), so the pairs are not kerned. Deliberate: browser parity over HarfBuzz parity for legacy tables."
     },
     {
-      "id": "corpus-fonts/jellee-kern-read",
-      "reason": "OTS discards an Apple-style `kern` table (version 1.0: 'Unsupported table version: 1'); roc-font ignores that version without reporting it, so it accepts the font. Lenient reading with `Font.dropped` (architecture §4.4) should report the table as dropped."
+      "id": "hb-curated/in-house/ih-spaces-1",
+      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture §4.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
     },
     {
-      "id": "default-fonts/fira-extents-regular",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
+      "id": "hb-curated/in-house/ih-spaces-3",
+      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture §4.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
     },
     {
-      "id": "default-fonts/fira-extents-wght700",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
+      "id": "hb-curated/text-rendering-tests/trt-kern-1-2",
+      "reason": "TestKERNOne.otf is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture §4.4) where HarfBuzz applies it. Deliberate."
     },
     {
-      "id": "default-fonts/inter-extents-wght300",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
-    },
-    {
-      "id": "default-fonts/inter-extents-wght700",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
-    },
-    {
-      "id": "default-fonts/inter-office-opsz32",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-office-wght300",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-office-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-office-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-wave-to-opsz32",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-wave-to-wght300",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-wave-to-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-wave-to-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/inter-width-wave-to-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-opsz144",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-opsz18",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-wdth87",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-avatar-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-extents-regular",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
-    },
-    {
-      "id": "default-fonts/merriweather-extents-wght700",
-      "reason": "variation phase 2/3 not wired yet: `Font.extents` gives the default instance's glyph boxes (no `gvar`) wherever `Font.at` puts the font; HarfBuzz varies them at this location."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-opsz144",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-opsz18",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-wdth87",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-ffi-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-opsz144",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-opsz18",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-wdth87",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-office-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-opsz144",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-opsz18",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-wdth87",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-wave-to-wght900",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location; only kerned advances differ, unkerned ones (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-width-avatar-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-width-avatar-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-width-office-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-width-wave-to-regular",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
-    },
-    {
-      "id": "default-fonts/merriweather-width-wave-to-wght700",
-      "reason": "variation phase 2/3 not wired yet: kerning (`GPOS` values and device deltas) stays the default instance's at this location, so the width differs from Chrome's by the kerning change; unkerned advances (`HVAR`) agree."
+      "id": "hb-curated/text-rendering-tests/trt-kern-2-2",
+      "reason": "The font is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture §4.4) where HarfBuzz applies it. Deliberate."
     },
     {
       "id": "inter/soft-hyphen-hidden",
@@ -207,7 +43,7 @@
     },
     {
       "id": "reading/inter-metrics-subset",
-      "reason": "OTS rejects the metrics-only subset because it has no `name` table. roc-font does not read `name`, so accepting the font is deliberate."
+      "reason": "OTS rejects the metrics-only subset because it has no `name` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `name` as OTS does (architecture §4.4) but does not require one, so accepting the font is a deliberate divergence."
     }
   ]
 }

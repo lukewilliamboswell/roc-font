@@ -1,5 +1,11 @@
 import Face
 import Shaper
+import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
+import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
+import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
+import "fonts/Inter-OFL.txt" as inter_licence : Str
+import "fonts/Merriweather-OFL.txt" as merriweather_licence : Str
+import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
 
 ## A font read from TrueType or OpenType bytes, ready to measure and shape
 ## text. Read it once with `from_bytes`; every query and every shaping call
@@ -13,10 +19,11 @@ import Shaper
 ## Glyph ids are `U32`. Text is a `Str`, and shaping reports which part of
 ## the text each glyph draws as UTF-8 byte offsets into it (clusters).
 ##
-## No font is built in: callers supply the bytes of the font they use. The
-## bytes are never trusted; `from_bytes` reports everything wrong with a
-## file it cannot use.
-Font :: { face : Face, location : Face.Location }.{
+## Three fonts are built in, ready to use: `sans`, `serif` and `mono`.
+## Any other font is read from its bytes with `from_bytes`. The bytes are
+## never trusted; `from_bytes` reports everything wrong with a file it
+## cannot use.
+Font :: { face : Face }.{
 
 	# ------------------------------------------------------------ reading
 
@@ -25,9 +32,13 @@ Font :: { face : Face, location : Face.Location }.{
 	## - `face`: which font of a collection (a `.ttc` file) to read, from 0.
 	##   A single font file has only face 0.
 	## - `strict`: reject the font for any problem. By default reading is
-	##   lenient, as browsers are: a broken optional table (such as
-	##   substitutions, positioning, kerning, names or variations) is left
-	##   out and reported by `dropped`, and the font reads without it.
+	##   lenient, as browsers are: a font reads exactly when a browser would
+	##   draw it. A broken table a browser rejects the font for (including
+	##   substitutions, positioning, names, `OS/2` and `post`) rejects it
+	##   here too; what a browser leaves out is left out and reported by
+	##   `dropped`: a faulty legacy `kern` table, a faulty `avar`, or faulty
+	##   variation data, which drops all of the font's variations (it then
+	##   reads as its default design).
 	## - `limits`: bounds on the work and memory a file may ask for.
 	ReadOptions := { face : U32 ?? 0, strict : Bool ?? False, limits : Limits ?? Limits.{} }
 
@@ -37,8 +48,8 @@ Font :: { face : Face, location : Face.Location }.{
 	## - `max_bytes`: the largest file accepted.
 	## - `max_faces`: the most faces a collection may hold.
 	## - `max_lookups`: the most substitution or positioning lookups a table
-	##   may list; a table with more is dropped (or, when strict, rejects the
-	##   font).
+	##   may list; a table with more is left out and reported by `dropped`
+	##   (or, when strict, rejects the font).
 	## - `max_depth`: how deeply contextual substitutions may call further
 	##   substitutions while shaping.
 	##
@@ -86,7 +97,7 @@ Font :: { face : Face, location : Face.Location }.{
 		limits = options.limits
 		read = Face.read(bytes, { face: options.face.to_u64(), strict: options.strict, max_bytes: limits.max_bytes, max_faces: limits.max_faces.to_u64(), max_lookups: limits.max_lookups.to_u64(), max_depth: limits.max_depth.to_u64() })
 		match read {
-			Ok(face) => Ok({ face, location: Face.location(face, Face.settings(Regular, Normal, FontDefault, [])) })
+			Ok(face) => Ok({ face: Face.moved_to(face, Regular, Normal, FontDefault, []) })
 			Err(problems) => Err(problems)
 		}
 	}
@@ -100,8 +111,9 @@ Font :: { face : Face, location : Face.Location }.{
 			Err(NotAFont) => Err(NotAFont)
 		}
 
-	## The problems of the optional tables lenient reading left out; empty
-	## when nothing was left out.
+	## What lenient reading left out, and why; empty when nothing was left
+	## out. A problem in a font's variation data names the table where it
+	## was found; all of the font's variations are then left out.
 	dropped : Font -> List(Problem)
 	dropped = |font| Face.dropped(font.face)
 
@@ -139,7 +151,7 @@ Font :: { face : Face, location : Face.Location }.{
 	## The font's vertical measures; see `Metrics`. In a variable font they
 	## follow the font's location.
 	metrics : Font -> Metrics
-	metrics = |font| Face.metrics(font.face, font.location)
+	metrics = |font| Face.metrics(font.face, Face.current(font.face))
 
 	## How many glyphs the font has; glyph ids run below this.
 	glyph_count : Font -> U32
@@ -158,12 +170,13 @@ Font :: { face : Face, location : Face.Location }.{
 	## A glyph's advance width, at the font's location. A glyph id past the
 	## font has an advance of 0, as in HarfBuzz.
 	advance : Font, U32 -> I32
-	advance = |font, id| Face.advance(font.face, font.location, id.to_u64())
+	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
-	## A glyph's bounding box, or `Empty` for a glyph that draws nothing
-	## (such as a space), a glyph id past the font, or a font without
-	## TrueType outlines. Current limit: boxes are those of the font's
-	## default instance, wherever `at` puts a variable font.
+	## A glyph's bounding box at the font's location, or `Empty` for a glyph
+	## that draws nothing (such as a space), a glyph id past the font, or a
+	## font without TrueType outlines. As HarfBuzz gives it: the left edge
+	## is the glyph's left side bearing, and away from a variable font's
+	## default design the box is measured on the outline moved there.
 	extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
 	extents = |font, id| Face.extents(font.face, id.to_u64())
 
@@ -218,20 +231,38 @@ Font :: { face : Face, location : Face.Location }.{
 	Axis : { tag : Str, min : Dec, default : Dec, max : Dec }
 
 	## The font at another point of its variation space. Every query and
-	## shaping call on the result measures there: advances and metrics vary.
-	## Current limits: glyph boxes (`extents`) and kerning stay those of
-	## the font's default instance. Cheap: the font's tables are shared.
+	## shaping call on the result measures there: advances, metrics, glyph
+	## boxes and kerning vary. Cheap: the font's tables are shared.
 	##
 	## ```
 	## bold = Font.at(font, Font.Variation.{ weight: Bold })
 	## ```
 	at : Font, Variation -> Font
-	at = |font, variation| { face: font.face, location: Face.location(font.face, Face.settings(variation.weight, variation.width, variation.optical_size, variation.axes)) }
+	at = |font, variation| { face: Face.moved_to(font.face, variation.weight, variation.width, variation.optical_size, variation.axes) }
 
 	## The axes of a variable font, in the font's order; empty for a static
 	## font.
 	axes : Font -> List(Axis)
 	axes = |font| Face.axes(font.face)
+
+	## The designs a variable font names (such as `Bold` or `Condensed
+	## Light`), in the font's order, each with its value on every axis;
+	## empty for a static font. Move to one with
+	## `Font.at(font, Font.Variation.{ axes: instance.axes })`. The name is
+	## empty when the font does not store it.
+	instances : Font -> List({ name : Str, axes : List({ tag : Str, value : Dec }) })
+	instances = |font| Face.instances(font.face)
+
+	## Where `at` put the font, as each axis's normalised coordinate in
+	## units of 1/16384: -16384 at the axis minimum, 0 at its default and
+	## 16384 at its maximum, after the font's own remapping (`avar`). In the
+	## font's axis order; empty for a static font. These are the numbers
+	## HarfBuzz reports as the normalised coordinates.
+	coordinates : Font -> List({ tag : Str, value : I16 })
+	coordinates = |font| {
+		coords = Face.coords(font.face)
+		Face.axes(font.face).map_with_index(|a, i| { tag: a.tag, value: coords.get(i) ?? 0 })
+	}
 
 	# ------------------------------------------------------------ shaping
 
@@ -326,14 +357,14 @@ Font :: { face : Face, location : Face.Location }.{
 
 	## Shape text with a plan made by `plan`.
 	shape_planned : Font, ShapePlan, Str -> Run
-	shape_planned = |font, shape_plan, text| Shaper.shape(font.face, font.location, shape_plan.plan, Shaper.decode(text))
+	shape_planned = |font, shape_plan, text| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 
 	## Shape characters a paragraph layer has already split up: each scalar
 	## value with the offset to report as its cluster (normally its UTF-8
 	## byte offset in the paragraph). Scalars sharing an offset form one
 	## cluster. Clusters in the run are these offsets.
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U32 }) -> Run
-	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, font.location, shape_plan.plan, scalars)
+	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
 
 	## The width of text shaped with the default options: the sum of its
 	## advances, in font units.
@@ -343,4 +374,66 @@ Font :: { face : Face, location : Face.Location }.{
 		total = run.advances.fold(0.I64, |sum, a| sum + a.x.to_i64())
 		total.max(-2147483648).min(2147483647).to_i32_wrap()
 	}
+
+	# ------------------------------------------------------------ default fonts
+
+	## Inter 4.1, a sans for interfaces and diagrams, at Regular: ready to
+	## use with no font file. Variable in weight (100 to 900) and optical
+	## size; move it with `at`. Read when the program is compiled (a file
+	## that did not read would stop the compilation), so using it costs
+	## nothing at run time; a program that never names it carries none of
+	## it.
+	sans : Font
+	sans =
+		match Font.from_bytes(inter_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## Merriweather 4.009, a serif for running text, at Regular. Variable in
+	## weight (300 to 900), width (87 to 112) and optical size.
+	serif : Font
+	serif =
+		match Font.from_bytes(merriweather_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## Fira Code 6.2, a monospaced font with programming ligatures, at
+	## Regular. Variable in weight (300 to 700); every glyph is 1200 units
+	## wide at every weight.
+	mono : Font
+	mono =
+		match Font.from_bytes(fira_code_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The exact font file `sans` was read from, for drawing or embedding
+	## (in a PDF, say) the font that was measured.
+	sans_bytes : List(U8)
+	sans_bytes = inter_file
+
+	## The exact font file `serif` was read from.
+	serif_bytes : List(U8)
+	serif_bytes = merriweather_file
+
+	## The exact font file `mono` was read from.
+	mono_bytes : List(U8)
+	mono_bytes = fira_code_file
+
+	## The licence of `sans` (the SIL Open Font License 1.1, with Inter's
+	## copyright notice). Keep it with the font when passing the bytes on.
+	sans_licence : Str
+	sans_licence = inter_licence
+
+	## The licence of `serif` (the SIL Open Font License 1.1, with
+	## Merriweather's copyright notice and Reserved Font Name).
+	serif_licence : Str
+	serif_licence = merriweather_licence
+
+	## The licence of `mono` (the SIL Open Font License 1.1, with Fira
+	## Code's copyright notice).
+	mono_licence : Str
+	mono_licence = fira_code_licence
 }

@@ -4,7 +4,9 @@ import TableVar
 ## take from the `GDEF` item variation store, and the alternate feature
 ## tables a `GSUB` or `GPOS` table substitutes at some locations.
 ##
-## Internal. Three parts:
+## Internal. Three parts, and a check of the whole `GDEF` table as OTS
+## makes it (`check_gdef`), since lenient reading rejects exactly the
+## `GDEF` tables OTS rejects:
 ##
 ## - The `GDEF` item variation store (`GDEF` version 1.3 `itemVarStoreOffset`)
 ##   and its location state (`location`): region scalars, computed once per
@@ -53,7 +55,14 @@ LayoutVar := {
 		DeltaIndex,
 		ItemCount,
 		TagOrder,
+		NoAxes,
+		AxisTag,
+		RegionOrder,
+		RegionRange,
 		DeviceFormat,
+		GlyphIndex,
+		RangeOrder,
+		ClassValue,
 		AxisIndex,
 		FeatureIndex,
 		LookupIndex,
@@ -74,8 +83,8 @@ LayoutVar := {
 	## set is the postfix program `kinds[starts[r]]` up to `starts[r + 1]`
 	## (with operands `a`, `b`, `c`); its substitutions are entries
 	## `substitution_starts[r]` up to `substitution_starts[r + 1]` of
-	## `features` (sorted feature indices) and `tables` (the offset in `data`
-	## of each alternate feature table, 0 for one with no lookups).
+	## `features` (feature indices, in the table's order) and `tables` (the
+	## offset in `data` of each alternate feature table).
 	FeatureVariations : {
 		data : List(U8),
 		starts : List(U64),
@@ -113,7 +122,9 @@ LayoutVar := {
 	none = |axis_count| { store: LayoutVar.empty_store(axis_count) }
 
 	empty_store : U64 -> TableVar.Store
-	empty_store = |axis_count| { axis_count, region_count: 0, regions: [], item_counts: [], word_counts: [], long_words: [], index_starts: [0], region_indexes: [], row_starts: [], row_sizes: [], bytes: [] }
+	# No data subtables, so no list is ever indexed (`TableVar.delta` stops
+	# at the item count) and nothing is allocated.
+	empty_store = |axis_count| { axis_count, region_count: 0, regions: [], item_counts: [], word_counts: [], long_words: [], index_starts: [], region_indexes: [], row_starts: [], row_sizes: [], bytes: [] }
 
 	## Read the item variation store of a `GDEF` table for a font with
 	## `axis_count` axes. A `GDEF` before version 1.3, or with a null store
@@ -165,8 +176,393 @@ LayoutVar := {
 			DeltaIndex => DeltaIndex
 			ItemCount => ItemCount
 			TagOrder => TagOrder
+			NoAxes => NoAxes
+			AxisTag => AxisTag
+			RegionOrder => RegionOrder
+			RegionRange => RegionRange
 		}
 		{ table: p.table, offset: p.offset, reason }
+	}
+
+	# ------------------------------------------------------------ GDEF structure
+
+	## Check a whole `GDEF` table as OTS 9.3.0 checks it (`gdef.cc`), so
+	## lenient reading rejects exactly the `GDEF` tables browsers reject:
+	## the header (version 1.0, 1.2 or 1.3 and later; there is no 1.1), the
+	## glyph class definition (classes up to 4), the attachment point list,
+	## the ligature caret list with its caret values and device tables, the
+	## mark attachment class definition, the mark glyph sets and the item
+	## variation store (`TableVar.check_store_ots`, with `axes` the `fvar`
+	## axis count, or `Absent` without `fvar`). Coverage and class
+	## definitions name glyphs below `glyph_count`, as OTS requires. Work is
+	## bounded like every other reader's (`spend`): a table that would take
+	## more than eight steps per byte is refused, where OTS would take the
+	## time.
+	check_gdef : List(U8), U64, [Present(U64), Absent] -> Try({}, Problem)
+	check_gdef = |gdef, glyph_count, axes| {
+		size = gdef.len()
+		bad = |at, reason| Err({ table: "GDEF", offset: at, reason })
+		if size < 12 {
+			return bad(0, Truncated)
+		}
+		minor = TableVar.u16(gdef, 2)
+		if TableVar.u16(gdef, 0) != 1 or minor == 1 {
+			return bad(0, UnsupportedVersion)
+		}
+		header_end = 12 + (if (minor >= 2) 2 else 0) + (if (minor >= 3) 4 else 0)
+		if size < header_end {
+			return bad(0, Truncated)
+		}
+		# An offset to a part: inside the table and after the header.
+		part = |field, value|
+			if value == 0 {
+				Ok(Absent)
+			} else if value >= size or value < header_end {
+				Err({ table: "GDEF", offset: field, reason: Truncated })
+			} else {
+				Ok(Present(value))
+			}
+		var $steps = 0
+		match part(4, TableVar.u16(gdef, 4))? {
+			Present(at) => {
+				$steps = LayoutVar.check_class_def(gdef, at, glyph_count, 4, $steps)?
+			}
+			Absent => {}
+		}
+		match part(6, TableVar.u16(gdef, 6))? {
+			Present(at) => {
+				$steps = LayoutVar.check_attach_list(gdef, at, glyph_count, $steps)?
+			}
+			Absent => {}
+		}
+		match part(8, TableVar.u16(gdef, 8))? {
+			Present(at) => {
+				$steps = LayoutVar.check_caret_list(gdef, at, glyph_count, $steps)?
+			}
+			Absent => {}
+		}
+		match part(10, TableVar.u16(gdef, 10))? {
+			Present(at) => {
+				$steps = LayoutVar.check_class_def(gdef, at, glyph_count, 0xFFFF, $steps)?
+			}
+			Absent => {}
+		}
+		if minor >= 2 {
+			match part(12, TableVar.u16(gdef, 12))? {
+				Present(at) => {
+					$steps = LayoutVar.check_mark_sets(gdef, at, glyph_count, $steps)?
+				}
+				Absent => {}
+			}
+		}
+		if minor >= 3 {
+			match part(14, TableVar.u32(gdef, 14))? {
+				Present(at) => {
+					match TableVar.check_store_ots(gdef, at, axes) {
+						Ok(_) => {}
+						Err(offset) => return bad(offset, BadFormat)
+					}
+				}
+				Absent => {}
+			}
+		}
+		Ok({})
+	}
+
+	# Spend steps for `cost` entries, as a `GDEF` problem at `at`.
+	gdef_spend : List(U8), U64, U64, U64 -> Try(U64, Problem)
+	gdef_spend = |data, steps, cost, at|
+		match LayoutVar.spend(data, steps, cost) {
+			Ok(s) => Ok(s)
+			Err(TooMuchWork) => Err({ table: "GDEF", offset: at, reason: TooMuchWork })
+		}
+
+	## OTS's `ParseCoverageTable` on the coverage at `at` (to the table's
+	## end), for a font of `glyph_count` glyphs.
+	check_coverage_ots : List(U8), U64, U64, U64 -> Try(U64, Problem)
+	check_coverage_ots = |data, at, glyph_count, steps| {
+		size = data.len()
+		bad = |offset, reason| Err({ table: "GDEF", offset, reason })
+		if !TableVar.fits(at, 4, size) {
+			return bad(at, Truncated)
+		}
+		format = TableVar.u16(data, at)
+		count = TableVar.u16(data, at + 2)
+		if format == 1 {
+			if count > glyph_count {
+				return bad(at + 2, GlyphIndex)
+			}
+			if !TableVar.fits(at + 4, 2 * count, size) {
+				return bad(at, Truncated)
+			}
+			for i in 0..<count {
+				if TableVar.u16(data, at + 4 + 2 * i) >= glyph_count {
+					return bad(at + 4 + 2 * i, GlyphIndex)
+				}
+			}
+			LayoutVar.gdef_spend(data, steps, count, at)
+		} else if format == 2 {
+			if count > glyph_count {
+				return bad(at + 2, GlyphIndex)
+			}
+			if !TableVar.fits(at + 4, 6 * count, size) {
+				return bad(at, Truncated)
+			}
+			var $last_end = 0
+			var $index = 0
+			for i in 0..<count {
+				r = at + 4 + 6 * i
+				first = TableVar.u16(data, r)
+				last = TableVar.u16(data, r + 2)
+				if first > last or ($last_end != 0 and first < $last_end) {
+					return bad(r, RangeOrder)
+				}
+				if TableVar.u16(data, r + 4) != $index {
+					return bad(r + 4, RangeOrder)
+				}
+				$last_end = last
+				# OTS keeps the running index in 16 bits.
+				$index = ($index + last - first + 1).bitwise_and(0xFFFF)
+			}
+			LayoutVar.gdef_spend(data, steps, count, at)
+		} else {
+			bad(at, BadFormat)
+		}
+	}
+
+	## OTS's `ParseClassDefTable` at `at` with classes up to `classes`.
+	check_class_def : List(U8), U64, U64, U64, U64 -> Try(U64, Problem)
+	check_class_def = |data, at, glyph_count, classes, steps| {
+		size = data.len()
+		bad = |offset, reason| Err({ table: "GDEF", offset, reason })
+		if !TableVar.fits(at, 4, size) {
+			return bad(at, Truncated)
+		}
+		format = TableVar.u16(data, at)
+		if format == 1 {
+			start = TableVar.u16(data, at + 2)
+			if start >= glyph_count {
+				return bad(at + 2, GlyphIndex)
+			}
+			if !TableVar.fits(at + 4, 2, size) {
+				return bad(at, Truncated)
+			}
+			count = TableVar.u16(data, at + 4)
+			if count > glyph_count {
+				return bad(at + 4, GlyphIndex)
+			}
+			if !TableVar.fits(at + 6, 2 * count, size) {
+				return bad(at, Truncated)
+			}
+			for i in 0..<count {
+				if TableVar.u16(data, at + 6 + 2 * i) > classes {
+					return bad(at + 6 + 2 * i, ClassValue)
+				}
+			}
+			LayoutVar.gdef_spend(data, steps, count, at)
+		} else if format == 2 {
+			count = TableVar.u16(data, at + 2)
+			if count > glyph_count {
+				return bad(at + 2, GlyphIndex)
+			}
+			if !TableVar.fits(at + 4, 6 * count, size) {
+				return bad(at, Truncated)
+			}
+			var $last_end = 0
+			for i in 0..<count {
+				r = at + 4 + 6 * i
+				first = TableVar.u16(data, r)
+				last = TableVar.u16(data, r + 2)
+				if first > last or ($last_end != 0 and first <= $last_end) {
+					return bad(r, RangeOrder)
+				}
+				if TableVar.u16(data, r + 4) > classes {
+					return bad(r + 4, ClassValue)
+				}
+				$last_end = last
+			}
+			LayoutVar.gdef_spend(data, steps, count, at)
+		} else {
+			bad(at, BadFormat)
+		}
+	}
+
+	# OTS's `ParseAttachListTable`.
+	check_attach_list : List(U8), U64, U64, U64 -> Try(U64, Problem)
+	check_attach_list = |gdef, at, glyph_count, steps| {
+		length = gdef.len() - at
+		bad = |offset, reason| Err({ table: "GDEF", offset, reason })
+		if length < 4 {
+			return bad(at, Truncated)
+		}
+		coverage = TableVar.u16(gdef, at)
+		count = TableVar.u16(gdef, at + 2)
+		points_end = 2 * count + 4
+		if points_end > 0xFFFF or coverage == 0 or coverage >= length or coverage < points_end {
+			return bad(at, Truncated)
+		}
+		if count > glyph_count {
+			return bad(at + 2, GlyphIndex)
+		}
+		if length < points_end {
+			return bad(at, Truncated)
+		}
+		for i in 0..<count {
+			p = TableVar.u16(gdef, at + 4 + 2 * i)
+			if p >= length or p < points_end {
+				return bad(at + 4 + 2 * i, Truncated)
+			}
+		}
+		var $steps = LayoutVar.check_coverage_ots(gdef, at + coverage, glyph_count, steps)?
+		for i in 0..<count {
+			p = at + TableVar.u16(gdef, at + 4 + 2 * i)
+			if !TableVar.fits(p, 2, gdef.len()) {
+				return bad(p, Truncated)
+			}
+			points = TableVar.u16(gdef, p)
+			if points == 0 {
+				return bad(p, Truncated)
+			}
+			if !TableVar.fits(p + 2, 2 * points, gdef.len()) {
+				return bad(p, Truncated)
+			}
+			$steps = LayoutVar.gdef_spend(gdef, $steps, points, p)?
+			var $last = 0
+			for j in 0..<points {
+				index = TableVar.u16(gdef, p + 2 + 2 * j)
+				if $last != 0 and $last >= index {
+					return bad(p + 2 + 2 * j, RangeOrder)
+				}
+				$last = index
+			}
+		}
+		Ok($steps)
+	}
+
+	# OTS's `ParseLigCaretListTable`.
+	check_caret_list : List(U8), U64, U64, U64 -> Try(U64, Problem)
+	check_caret_list = |gdef, at, glyph_count, steps| {
+		length = gdef.len() - at
+		bad = |offset, reason| Err({ table: "GDEF", offset, reason })
+		if length < 4 {
+			return bad(at, Truncated)
+		}
+		coverage = TableVar.u16(gdef, at)
+		count = TableVar.u16(gdef, at + 2)
+		glyphs_end = 2 * count + 4
+		if glyphs_end > 0xFFFF or coverage == 0 or coverage >= length or coverage < glyphs_end {
+			return bad(at, Truncated)
+		}
+		if count > glyph_count {
+			return bad(at + 2, GlyphIndex)
+		}
+		if length < glyphs_end {
+			return bad(at, Truncated)
+		}
+		for i in 0..<count {
+			g = TableVar.u16(gdef, at + 4 + 2 * i)
+			if g >= length or g < glyphs_end {
+				return bad(at + 4 + 2 * i, Truncated)
+			}
+		}
+		var $steps = LayoutVar.check_coverage_ots(gdef, at + coverage, glyph_count, steps)?
+		for i in 0..<count {
+			lig = TableVar.u16(gdef, at + 4 + 2 * i)
+			g = at + lig
+			if !TableVar.fits(g, 2, gdef.len()) {
+				return bad(g, Truncated)
+			}
+			carets = TableVar.u16(gdef, g)
+			if carets == 0 {
+				return bad(g, Truncated)
+			}
+			if !TableVar.fits(g + 2, 2 * carets, gdef.len()) {
+				return bad(g, Truncated)
+			}
+			$steps = LayoutVar.gdef_spend(gdef, $steps, carets, g)?
+			offsets_end = 2 * carets + 2
+			for j in 0..<carets {
+				c = TableVar.u16(gdef, g + 2 + 2 * j)
+				if c >= length or c < offsets_end {
+					return bad(g + 2 + 2 * j, Truncated)
+				}
+			}
+			for j in 0..<carets {
+				value_at = g + TableVar.u16(gdef, g + 2 + 2 * j)
+				if !TableVar.fits(value_at, 4, gdef.len()) {
+					return bad(value_at, Truncated)
+				}
+				format = TableVar.u16(gdef, value_at)
+				if format == 0 or format > 3 {
+					return bad(value_at, BadFormat)
+				}
+				if format == 3 {
+					if !TableVar.fits(value_at + 4, 2, gdef.len()) {
+						return bad(value_at, Truncated)
+					}
+					device = TableVar.u16(gdef, value_at + 4)
+					# OTS measures this offset from the ligature glyph's table.
+					absolute = lig + TableVar.u16(gdef, g + 2 + 2 * j) + device
+					if device == 0 or absolute >= length {
+						return bad(value_at + 4, Truncated)
+					}
+					match LayoutVar.check_device_ots(gdef, at + absolute) {
+						Ok(_) => {}
+						Err(reason) => return bad(at + absolute, reason)
+					}
+				}
+			}
+		}
+		Ok($steps)
+	}
+
+	## OTS's `ParseDeviceTable` at `at` (to the table's end).
+	check_device_ots : List(U8), U64 -> Try({}, Reason)
+	check_device_ots = |data, at| {
+		if !TableVar.fits(at, 6, data.len()) {
+			return Err(Truncated)
+		}
+		start = TableVar.u16(data, at)
+		end = TableVar.u16(data, at + 2)
+		format = TableVar.u16(data, at + 4)
+		if format == 0x8000 {
+			Ok({})
+		} else if start > end or format == 0 or format > 3 {
+			Err(DeviceFormat)
+		} else {
+			units = (end - start) // (1.U64).shl_wrap((4 - format).to_u8_wrap()) + 1
+			if (TableVar.fits(at + 6, 2 * units, data.len())) Ok({}) else Err(Truncated)
+		}
+	}
+
+	# OTS's `ParseMarkGlyphSetsDefTable`.
+	check_mark_sets : List(U8), U64, U64, U64 -> Try(U64, Problem)
+	check_mark_sets = |gdef, at, glyph_count, steps| {
+		length = gdef.len() - at
+		bad = |offset, reason| Err({ table: "GDEF", offset, reason })
+		if length < 4 {
+			return bad(at, Truncated)
+		}
+		if TableVar.u16(gdef, at) != 1 {
+			return bad(at, BadFormat)
+		}
+		count = TableVar.u16(gdef, at + 2)
+		sets_end = 2 * count + 4
+		if sets_end > 0xFFFF {
+			return bad(at + 2, Truncated)
+		}
+		var $steps = LayoutVar.gdef_spend(gdef, steps, count, at)?
+		for i in 0..<count {
+			if !TableVar.fits(at + 4 + 4 * i, 4, gdef.len()) {
+				return bad(at + 4 + 4 * i, Truncated)
+			}
+			coverage = TableVar.u32(gdef, at + 4 + 4 * i)
+			if coverage >= length or coverage < sets_end {
+				return bad(at + 4 + 4 * i, Truncated)
+			}
+			$steps = LayoutVar.check_coverage_ots(gdef, at + coverage, glyph_count, $steps)?
+		}
+		Ok($steps)
 	}
 
 	# ------------------------------------------------------------ location
@@ -350,6 +746,8 @@ LayoutVar := {
 		}
 		size1 = LayoutVar.value_size(format1)
 		size2 = LayoutVar.value_size(format2)
+		# Only the store's row counts are needed per device.
+		items = lv.store.item_counts
 		coverage = at + TableVar.u16(data, at + 2)
 		covered = TableVar.u16(data, coverage + 2)
 		coverage_format = TableVar.u16(data, coverage)
@@ -405,13 +803,13 @@ LayoutVar := {
 					}
 					for p in 0..<pairs {
 						r = set + 2 + record * p
-						match LayoutVar.check_devices(lv, data, set, r + 2, format1) {
+						match LayoutVar.check_devices(items, data, set, r + 2, format1) {
 							Ok(n) => {
 								$checked = $checked + n
 							}
 							Err(problem) => return Err(BadAt(problem))
 						}
-						match LayoutVar.check_devices(lv, data, set, r + 2 + size1, format2) {
+						match LayoutVar.check_devices(items, data, set, r + 2 + size1, format2) {
 							Ok(n) => {
 								$checked = $checked + n
 							}
@@ -436,13 +834,13 @@ LayoutVar := {
 			}
 			for cell in 0..<cells {
 				r = at + 16 + (size1 + size2) * cell
-				match LayoutVar.check_devices(lv, data, at, r, format1) {
+				match LayoutVar.check_devices(items, data, at, r, format1) {
 					Ok(n) => {
 						$checked = $checked + n
 					}
 					Err(problem) => return Err(BadAt(problem))
 				}
-				match LayoutVar.check_devices(lv, data, at, r + size1, format2) {
+				match LayoutVar.check_devices(items, data, at, r + size1, format2) {
 					Ok(n) => {
 						$checked = $checked + n
 					}
@@ -457,20 +855,28 @@ LayoutVar := {
 
 	## Check the device offsets of the value record at `at` (inside the
 	## table) with `format`, counted from `base`. Returns how many there are.
-	check_devices : LayoutVar, List(U8), U64, U64, U64 -> Try(U64, Problem)
-	check_devices = |lv, data, base, at, format| {
+	## `items` is the store's row count per data subtable
+	## (`TableVar.Store.item_counts`).
+	check_devices : List(U64), List(U8), U64, U64, U64 -> Try(U64, Problem)
+	check_devices = |items, data, base, at, format| {
+		# The device fields follow the values: their offsets in the record
+		# are found once per record, with no list.
 		var $n = 0
-		for bit in [0x10, 0x20, 0x40, 0x80] {
-			if format.bitwise_and(bit) != 0 {
-				LayoutVar.check_device(lv, data, base, at + 2 * LayoutVar.bits(format, bit - 1))?
+		var $field = at + 2 * LayoutVar.bits(format, 0x0F)
+		var $bit = 0x10
+		while $bit <= 0x80 {
+			if format.bitwise_and($bit) != 0 {
+				LayoutVar.check_device(items, data, base, $field)?
+				$field = $field + 2
 				$n = $n + 1
 			}
+			$bit = $bit * 2
 		}
 		Ok($n)
 	}
 
-	check_device : LayoutVar, List(U8), U64, U64 -> Try({}, Problem)
-	check_device = |lv, data, base, field| {
+	check_device : List(U64), List(U8), U64, U64 -> Try({}, Problem)
+	check_device = |items, data, base, field| {
 		offset = TableVar.u16(data, field)
 		device = base + offset
 		delta_format = TableVar.u16(data, device + 4)
@@ -479,7 +885,10 @@ LayoutVar := {
 		} else if !TableVar.fits(device, 6, data.len()) {
 			Err({ table: "GPOS", offset: field, reason: Truncated })
 		} else if delta_format == 0x8000 {
-			if (TableVar.valid_index(lv.store, TableVar.u16(data, device), TableVar.u16(data, device + 2))) Ok({}) else Err({ table: "GPOS", offset: device, reason: DeltaIndex })
+			outer = TableVar.u16(data, device)
+			inner = TableVar.u16(data, device + 2)
+			# `TableVar.valid_index` on the row counts alone.
+			if ((outer == TableVar.no_variation and inner == TableVar.no_variation) or inner < (items.get(outer) ?? 0)) Ok({}) else Err({ table: "GPOS", offset: device, reason: DeltaIndex })
 		} else if delta_format >= 1 and delta_format <= 3 {
 			Ok({})
 		} else {
@@ -524,9 +933,13 @@ LayoutVar := {
 	## (format 2), and the combinations and, or and not (formats 3 to 5) as
 	## HarfBuzz reads them. A null condition holds (HarfBuzz's format 0); a
 	## condition of an unknown format does not hold, as the specification
-	## asks. Conditions nest at most `nesting_limit` deep. Each substitution
-	## names a feature of the table, in increasing order, and each alternate
-	## feature table's lookups exist. Lookup variation records (version 1.1
+	## asks. Conditions nest at most `nesting_limit` deep. As OTS requires,
+	## each condition of a set and each alternate feature table lies after
+	## its offset and inside the table, a range condition directly in a set
+	## stays inside [-1, 1], and each alternate feature table's lookups
+	## exist. Substitutions may name features in any order, and features the
+	## table lacks (which never apply); `substitutions_at` keeps the first
+	## for a feature, as HarfBuzz does. Lookup variation records (version 1.1
 	## of the `FeatureVariations` table, which HarfBuzz reads) are not read.
 	read_feature_variations : List(U8), Str, LayoutVar, U64 -> Try(FeatureVariations, List(Problem))
 	read_feature_variations = |data, table, lv, axis_count| {
@@ -556,7 +969,6 @@ LayoutVar := {
 		if !TableVar.fits(lookups_at, 2, size) {
 			return bad(8, Truncated)
 		}
-		feature_count = TableVar.u16(data, features_at)
 		lookup_count = TableVar.u16(data, lookups_at)
 		if !TableVar.fits(base, 8, size) {
 			return bad(10, Truncated)
@@ -618,14 +1030,12 @@ LayoutVar := {
 						alternate = TableVar.u32(data, entry + 2)
 						feature_at = at + alternate
 						lookup_total = TableVar.u16(data, feature_at + 2)
+						# As OTS: the alternate feature table after the records and
+						# inside the table. Feature indices are not checked (one
+						# past the feature list never applies), nor their order:
+						# HarfBuzz takes the first record for a feature.
 						problem =
-							if feature >= feature_count {
-								Some({ table, offset: entry, reason: FeatureIndex })
-							} else if $k > 0 and feature <= TableVar.u16(data, entry - 6) {
-								Some({ table, offset: entry, reason: SubstitutionOrder })
-							} else if alternate == 0 {
-								None
-							} else if !TableVar.fits(feature_at, 4, size) or !TableVar.fits(feature_at + 4, 2 * lookup_total, size) {
+							if alternate < 6 + 6 * n or !TableVar.fits(feature_at, 4, size) or !TableVar.fits(feature_at + 4, 2 * lookup_total, size) {
 								Some({ table, offset: entry + 2, reason: Truncated })
 							} else {
 								var $found = None
@@ -708,6 +1118,11 @@ LayoutVar := {
 		for i in 0..<count {
 			k = count - 1 - i
 			offset = TableVar.u32(data, at + 2 + 4 * k)
+			# As OTS: each condition of the set after its offset and inside
+			# the table.
+			if offset < 2 + 4 * (k + 1) or at + offset >= size {
+				return Err(Bad({ table, offset: at + 2 + 4 * k, reason: Truncated }))
+			}
 			$kinds = $kinds.append(0)
 			$places = $places.append(if (offset == 0) 0 else at + offset)
 			$depth = $depth.append(1)
@@ -743,6 +1158,10 @@ LayoutVar := {
 					axis = TableVar.u16(data, place + 2)
 					if axis >= axis_count {
 						return Err(Bad({ table, offset: place + 2, reason: AxisIndex }))
+					}
+					# OTS checks the range of a condition directly in a set.
+					if depth == 1 and (TableVar.i16(data, place + 4) < -0x4000 or TableVar.i16(data, place + 6) > 0x4000) {
+						return Err(Bad({ table, offset: place + 4, reason: MapRange }))
 					}
 					$program = LayoutVar.emit($program, LayoutVar.op_range, axis.to_i64_wrap(), TableVar.i16(data, place + 4), TableVar.i16(data, place + 6))
 				} else if format == 2 {
@@ -806,9 +1225,10 @@ LayoutVar := {
 	}
 
 	## The feature table substitutions that apply at a location: for each
-	## substituted feature (by index in the table's feature list, in
-	## increasing order), the offset in the table of its alternate feature
-	## table, or 0 for one with no lookups. Empty when no record matches.
+	## substituted feature (by index in the table's feature list), the
+	## offset in the table of its alternate feature table, in the record's
+	## order with only the first substitution of each feature kept (as
+	## HarfBuzz's `find_substitute`). Empty when no record matches.
 	substitutions_at : FeatureVariations, LayoutVar, List(I16) -> List({ feature : U64, table : U64 })
 	substitutions_at = |fv, lv, coords|
 		match LayoutVar.matching_record(fv, lv, coords) {
@@ -817,7 +1237,10 @@ LayoutVar := {
 				last = fv.substitution_starts.get(r + 1) ?? 0
 				var $out = List.with_capacity(last - first)
 				for k in first..<last {
-					$out = $out.append({ feature: fv.features.get(k) ?? 0, table: fv.tables.get(k) ?? 0 })
+					feature = fv.features.get(k) ?? 0
+					if !$out.any(|e| e.feature == feature) {
+						$out = $out.append({ feature, table: fv.tables.get(k) ?? 0 })
+					}
 				}
 				$out
 			}

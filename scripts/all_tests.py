@@ -16,7 +16,11 @@ Steps (select with --only, drop with --skip, list with --list):
     bench             scripts/bench.py --check --quick, when present (with
                       --smoke: one Roc-only pass over Inter, no ratchet)
     docs              roc docs shows exactly the public API (scripts/public_api.json)
-    bundle            roc bundle holds no fonts, test modules or fuzz targets
+    bundle            tools/default-fonts/verify.py passes, and roc bundle holds
+                      the package modules plus exactly the default fonts and
+                      licences pinned in tools/default-fonts/pins.json (byte
+                      for byte), no other font, test module or fuzz target, and
+                      stays under roc's 10 MB package limit
     diff-check        git diff --check, plus the same check on untracked files
 
 Each step ends PASS, FAIL, SKIP (with the reason), WARN (passed with a
@@ -305,7 +309,30 @@ def decompress_zstd(path: Path) -> bytes | None:
     return completed.stdout if completed.returncode == 0 else None
 
 
+PINS = ROOT / "tools" / "default-fonts" / "pins.json"
+# `roc build` refuses a dependency larger than this, decompressed (its
+# --max-package-mb default).
+MAX_PACKAGE_BYTES = 10 * 1024 * 1024
+
+
+def pinned_files() -> dict[str, str]:
+    """The pinned default fonts and licences, by their path in the bundle
+    (relative to package/), with their SHA-256."""
+    pins = json.loads(PINS.read_text(encoding="utf-8"))
+    out: dict[str, str] = {}
+    for face in pins["faces"]:
+        for entry in (face, face["licence"]):
+            path = Path(entry["file"])
+            out[str(path.relative_to("package"))] = entry["sha256"]
+    return out
+
+
 def step_bundle(ctx: Context) -> Result:
+    import hashlib
+
+    code, verified = run([sys.executable, "tools/default-fonts/verify.py"])
+    if code != 0:
+        return Result("FAIL", "tools/default-fonts/verify.py failed", verified)
     out = fresh_dir(WORK / "bundle")
     code, output = run([ctx.roc, "bundle", "package/main.roc", "--output-dir", str(out)])
     if code != 0:
@@ -316,23 +343,39 @@ def step_bundle(ctx: Context) -> Result:
     data = decompress_zstd(archives[0])
     if data is None:
         return Result("SKIP", "cannot decompress zstd: needs Python 3.14 or the zstd command", output)
+    pinned = pinned_files()
     problems: list[str] = []
     names: list[str] = []
+    seen: set[str] = set()
+    total = 0
     with tarfile.open(fileobj=io.BytesIO(data)) as archive:
         for member in archive.getmembers():
             names.append(member.name)
-            base = Path(member.name).name
-            content = archive.extractfile(member).read(4) if member.isfile() else b""  # type: ignore[union-attr]
-            if base.lower().endswith(FONT_SUFFIXES) or content in FONT_MAGICS:
-                problems.append(f"{member.name} is a font")
+            if not member.isfile():
+                continue
+            name = member.name.removeprefix("./")
+            base = Path(name).name
+            content = archive.extractfile(member).read()  # type: ignore[union-attr]
+            total += len(content)
+            if name in pinned:
+                seen.add(name)
+                if hashlib.sha256(content).hexdigest() != pinned[name]:
+                    problems.append(f"{member.name} differs from its pin in tools/default-fonts/pins.json")
+                continue
+            if base.lower().endswith(FONT_SUFFIXES) or content[:4] in FONT_MAGICS:
+                problems.append(f"{member.name} is a font that is not pinned")
             if base.endswith("Tests.roc") or base == "FontBuild.roc" or base.startswith("fuzz"):
                 problems.append(f"{member.name} is a test module or fuzz target")
             if not base.endswith(".roc"):
-                problems.append(f"{member.name} is not a Roc module")
-    report = f"{archives[0].name}: " + ", ".join(sorted(names))
+                problems.append(f"{member.name} is neither a Roc module nor a pinned default font or licence")
+    for name in sorted(set(pinned) - seen):
+        problems.append(f"{name} is pinned but missing from the bundle (is it imported?)")
+    if total > MAX_PACKAGE_BYTES:
+        problems.append(f"the bundle holds {total} bytes, over roc's {MAX_PACKAGE_BYTES}-byte package limit")
+    report = f"{archives[0].name}: {total} bytes decompressed, " + ", ".join(sorted(names))
     if problems:
         return Result("FAIL", "; ".join(problems), report)
-    return Result("PASS", f"{len(names)} files: " + ", ".join(sorted(names)), report)
+    return Result("PASS", f"{len(names)} files, {total} bytes ({archives[0].stat().st_size} compressed), {len(seen)} pinned font and licence files", report)
 
 
 def step_diff_check(ctx: Context) -> Result:

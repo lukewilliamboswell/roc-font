@@ -57,6 +57,10 @@ TableVar := {
 		DeltaIndex,
 		ItemCount,
 		TagOrder,
+		NoAxes,
+		AxisTag,
+		RegionOrder,
+		RegionRange,
 	]
 
 	## An `ItemVariationStore` inside a checked table. Region r's axis a has
@@ -154,6 +158,13 @@ TableVar := {
 		if count > TableVar.axis_limit {
 			return bad(8, TooManyAxes)
 		}
+		# As OTS: at least one axis, and the axes after the header.
+		if count == 0 {
+			return bad(8, NoAxes)
+		}
+		if axes_at < 16 {
+			return bad(4, Truncated)
+		}
 		instances_at = axes_at + 20 * count
 		if !TableVar.fits(axes_at, 20 * count, size) {
 			return bad(axes_at, Truncated)
@@ -175,6 +186,10 @@ TableVar := {
 			high = TableVar.i32(bytes, at + 12)
 			if low > middle or middle > high {
 				$problems = $problems.append({ table: "fvar", offset: at, reason: AxisOrder })
+			}
+			# A tag of printable ASCII, as OTS's `CheckTag`.
+			if [0, 1, 2, 3].any(|k| TableVar.u8(bytes, at + k) < 32 or TableVar.u8(bytes, at + k) > 126) {
+				$problems = $problems.append({ table: "fvar", offset: at, reason: AxisTag })
 			}
 			$tags = $tags.append(TableVar.u32(bytes, at).to_u32_wrap())
 			$minimum = $minimum.append(low.to_i32_wrap())
@@ -433,10 +448,11 @@ TableVar := {
 		if !TableVar.fits(list_at, 4, size) {
 			return bad(offset + 2, Truncated)
 		}
-		if TableVar.u16(bytes, list_at) != axis_count {
+		region_count = TableVar.u16(bytes, list_at + 2)
+		# With no regions the axis count is never used (OTS does not check it).
+		if region_count > 0 and TableVar.u16(bytes, list_at) != axis_count {
 			return bad(list_at, AxisCountMismatch)
 		}
-		region_count = TableVar.u16(bytes, list_at + 2)
 		if region_count > TableVar.region_limit {
 			return bad(list_at + 2, TooManyRegions)
 		}
@@ -448,6 +464,32 @@ TableVar := {
 			$regions = $regions.append(TableVar.i16(bytes, list_at + 4 + 2 * i).to_i16_wrap())
 		}
 		var $problems = []
+		# Each region axis as OTS requires it (the first bad one is reported):
+		# start <= peak <= end, inside [-1, 1], and not crossing zero when the
+		# peak is not zero.
+		var $r = 0
+		while $r < axis_count * region_count {
+			start = TableVar.i16(bytes, list_at + 4 + 6 * $r)
+			peak = TableVar.i16(bytes, list_at + 6 + 6 * $r)
+			end = TableVar.i16(bytes, list_at + 8 + 6 * $r)
+			reason =
+				if start > peak or peak > end {
+					Bad(RegionOrder)
+				} else if start < -0x4000 or end > 0x4000 or (peak < 0 and end > 0) or (peak > 0 and start < 0) {
+					Bad(RegionRange)
+				} else {
+					Good
+				}
+			match reason {
+				Bad(why) => {
+					$problems = $problems.append({ table, offset: list_at + 4 + 6 * $r, reason: why })
+					$r = axis_count * region_count
+				}
+				Good => {
+					$r = $r + 1
+				}
+			}
+		}
 		var $item_counts = List.with_capacity(data_count)
 		var $word_counts = List.with_capacity(data_count)
 		var $long_words = List.with_capacity(data_count)
@@ -525,6 +567,113 @@ TableVar := {
 			row_sizes: $row_sizes,
 			bytes,
 		})
+	}
+
+	## Check the item variation store at `offset` exactly as OTS 9.3.0's
+	## `ParseItemVariationStore` does (`variations.cc`), for tables whose
+	## store OTS rejects the font for (`GDEF`) rather than one `TableVar`
+	## reads: a format 1 header, the region list after the data offsets,
+	## regions (when there are any) on the `fvar` axes (`axes`, `Absent`
+	## without `fvar`) with each axis ordered, inside [-1, 1] and not
+	## crossing zero, and every data subtable's word count, region indices
+	## and rows inside the table. Fails with the offset of the first problem.
+	check_store_ots : List(U8), U64, [Present(U64), Absent] -> Try({}, U64)
+	check_store_ots = |bytes, offset, axes| {
+		size = bytes.len()
+		if !TableVar.fits(offset, 8, size) {
+			return Err(offset)
+		}
+		length = size - offset
+		list = TableVar.u32(bytes, offset + 2)
+		data_count = TableVar.u16(bytes, offset + 6)
+		if TableVar.u16(bytes, offset) != 1 {
+			return Err(offset)
+		}
+		if list < 8 + 4 * data_count or list > length {
+			return Err(offset + 2)
+		}
+		list_at = offset + list
+		if !TableVar.fits(list_at, 4, size) {
+			return Err(list_at)
+		}
+		axis_count = TableVar.u16(bytes, list_at)
+		region_count = TableVar.u16(bytes, list_at + 2)
+		if region_count > 0 {
+			match axes {
+				Present(n) if n == axis_count => {}
+				_ => return Err(list_at)
+			}
+			if !TableVar.fits(list_at + 4, 6 * axis_count * region_count, size) {
+				return Err(list_at + 4)
+			}
+			for r in 0..<(axis_count * region_count) {
+				at = list_at + 4 + 6 * r
+				start = TableVar.i16(bytes, at)
+				peak = TableVar.i16(bytes, at + 2)
+				end = TableVar.i16(bytes, at + 4)
+				if start > peak or peak > end or start < -0x4000 or end > 0x4000 or (peak < 0 and end > 0) or (peak > 0 and start < 0) {
+					return Err(at)
+				}
+			}
+		}
+		if !TableVar.fits(offset + 8, 4 * data_count, size) {
+			return Err(offset + 8)
+		}
+		for d in 0..<data_count {
+			relative = TableVar.u32(bytes, offset + 8 + 4 * d)
+			at = offset + relative
+			if relative >= length or !TableVar.fits(at, 6, size) {
+				return Err(offset + 8 + 4 * d)
+			}
+			items = TableVar.u16(bytes, at)
+			word_field = TableVar.u16(bytes, at + 2)
+			columns = TableVar.u16(bytes, at + 4)
+			value_size = if (word_field.bitwise_and(0x8000) != 0) 2 else 1
+			words = word_field.bitwise_and(0x7FFF)
+			if words > columns {
+				return Err(at + 2)
+			}
+			if !TableVar.fits(at + 6, 2 * columns, size) {
+				return Err(at + 4)
+			}
+			for c in 0..<columns {
+				if TableVar.u16(bytes, at + 6 + 2 * c) >= region_count {
+					return Err(at + 6 + 2 * c)
+				}
+			}
+			if !TableVar.fits(at + 6 + 2 * columns, value_size * (words + columns) * items, size) {
+				return Err(at)
+			}
+		}
+		Ok({})
+	}
+
+	## Check a `VVAR` table as OTS 9.3.0 does (`vvar.cc`): roc-font does not
+	## use vertical metrics, but OTS drops every variation table for a bad
+	## one, so lenient reading must too. Fails with the offset of the first
+	## problem.
+	check_vvar_ots : List(U8), U64 -> Try({}, U64)
+	check_vvar_ots = |bytes, axes| {
+		size = bytes.len()
+		if size < 24 {
+			return Err(0)
+		}
+		if TableVar.u16(bytes, 0) != 1 {
+			return Err(0)
+		}
+		for field in [4, 8, 12, 16, 20] {
+			if TableVar.u32(bytes, field) > size {
+				return Err(field)
+			}
+		}
+		TableVar.check_store_ots(bytes, TableVar.u32(bytes, 4), Present(axes))?
+		for field in [8, 12, 16, 20] {
+			at = TableVar.u32(bytes, field)
+			if at != 0 and !TableVar.delta_map_fits(bytes, at) {
+				return Err(field)
+			}
+		}
+		Ok({})
 	}
 
 	## Whether a delta-set index names a row of the store, or is
@@ -673,6 +822,12 @@ TableVar := {
 		}
 	}
 
+	## Whether a `DeltaSetIndexMap` at `offset` fits its table, as OTS checks
+	## the maps it does not use: a format 0 header and its entries.
+	delta_map_fits : List(U8), U64 -> Bool
+	delta_map_fits = |bytes, offset|
+		TableVar.fits(offset, 4, bytes.len()) and TableVar.fits(offset + 4, (TableVar.u8(bytes, offset + 1).shr_zf_wrap(4).bitwise_and(3) + 1) * TableVar.u16(bytes, offset + 2), bytes.len())
+
 	## The delta-set index for `i`: entry `i`, or the last entry past the end.
 	map_entry : DeltaMap, U64 -> { outer : U64, inner : U64 }
 	map_entry = |map, i| {
@@ -704,6 +859,13 @@ TableVar := {
 		map_at = TableVar.u32(bytes, 8)
 		if store_at == 0 {
 			return bad(4, Truncated)
+		}
+		# The side-bearing maps are not used, but OTS checks that they fit.
+		for field in [12, 16] {
+			at = TableVar.u32(bytes, field)
+			if at != 0 and !TableVar.delta_map_fits(bytes, at) {
+				return bad(field, Truncated)
+			}
 		}
 		store = TableVar.read_store(bytes, "HVAR", store_at, axis_count)?
 		if map_at == 0 {

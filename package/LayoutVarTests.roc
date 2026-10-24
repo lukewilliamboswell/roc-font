@@ -835,8 +835,8 @@ substitution = |entries| {
 	var $blobs = []
 	var $at = 6 + 6 * n
 	for (feature, lookups) in entries {
-		blob = if (lookups.is_empty()) [] else u16(0).concat(u16(lookups.len())).concat(lookups.join_map(u16))
-		$records = $records.concat(u16(feature)).concat(u32(if (blob.is_empty()) 0 else $at))
+		blob = u16(0).concat(u16(lookups.len())).concat(lookups.join_map(u16))
+		$records = $records.concat(u16(feature)).concat(u32($at))
 		$blobs = $blobs.concat(blob)
 		$at = $at + blob.len()
 	}
@@ -887,11 +887,13 @@ expect {
 	record_at(gsub, [0]) == 1 and record_at(gsub, [16384]) == 1
 }
 
-# A null condition inside a set, and a null child of an and, hold.
+# A null child of an and holds. A null condition directly in a set is a
+# problem, as OTS rejects it.
 expect {
-	gsub = gsub_with([(condition_set([[], cond_combine(3, [[], cond_range(0, 0, 16384)])]), substitution([(0, [1])]))])
+	gsub = gsub_with([(condition_set([cond_combine(3, [[], cond_range(0, 0, 16384)])]), substitution([(0, [1])]))])
 	record_at(gsub, [100]) == 0 and record_at(gsub, [-100]) == -1
 }
+expect reasons(fv_problems(gsub_with([(condition_set([[], cond_range(0, 0, 16384)]), substitution([(0, [1])]))]))) == [Truncated]
 
 # Not, or and value conditions. Row (0, 0) is -75 at peak 1: -75 * s + 40 > 0
 # holds below s = 40 / 75.
@@ -925,18 +927,22 @@ expect
 		Err(_) => False
 	}
 
-# Problems, one per bad record, all reported: a feature index past the
-# feature list, substitutions out of order, a lookup index past the lookup
-# list, an axis the font lacks, and an unsupported substitution version.
+# Problems, one per bad record, all reported: a lookup index past the
+# lookup list, an axis the font lacks, an unsupported substitution version,
+# an alternate feature table inside the records, and a range condition
+# outside [-1, 1]. A feature index past the feature list and substitutions
+# out of order are accepted, as OTS accepts them.
 expect {
 	gsub = gsub_with([
 		([], substitution([(2, [0])])),
-		([], substitution([(1, [0]), (1, [0])])),
+		([], substitution([(1, [0]), (0, [0]), (1, [1])])),
 		([], substitution([(0, [3])])),
 		(condition_set([cond_range(1, 0, 1)]), []),
 		([], u16(2).concat(u16(0)).concat(u16(0))),
+		([], u16(1).concat(u16(0)).concat(u16(1)).concat(u16(0)).concat(u32(2))),
+		(condition_set([cond_range(0, -16385, 0)]), []),
 	])
-	reasons(fv_problems(gsub)) == [FeatureIndex, SubstitutionOrder, LookupIndex, AxisIndex, UnsupportedVersion]
+	reasons(fv_problems(gsub)) == [LookupIndex, AxisIndex, UnsupportedVersion, Truncated, MapRange]
 }
 
 # A value condition naming a row the store lacks.
@@ -1066,3 +1072,57 @@ expect
 		}
 		Err(_) => False
 	}
+
+# ------------------------------------------------------------ GDEF as OTS checks it
+
+gdef_ok : List(U8), U64, [Present(U64), Absent] -> Bool
+gdef_ok = |gdef, glyphs, axes| LayoutVar.check_gdef(gdef, glyphs, axes).is_ok()
+
+# A version 1.3 table with a store on the font's one axis passes; the same
+# store on a font with two axes, or with no `fvar`, does not (its region
+# list names one axis); a store with a region crossing zero does not.
+expect gdef_ok(gdef_header(3, 18).concat(one_store(-75)), 10, Present(1))
+expect !gdef_ok(gdef_header(3, 18).concat(one_store(-75)), 10, Present(2))
+expect !gdef_ok(gdef_header(3, 18).concat(one_store(-75)), 10, Absent)
+expect {
+	crossing = gdef_header(3, 18).concat(one_store(-75))
+	# The region's start (at 18 + 12 + 4) moved below zero, its peak 1.
+	bad = crossing.take_first(34).concat(i16(-16384)).concat(crossing.drop_first(36))
+	!gdef_ok(bad, 10, Present(1))
+}
+
+# An attachment list: coverage of glyphs 1 and 2, each with increasing
+# point indices. Points out of order, a coverage glyph past the font, and
+# a zero point count are what OTS rejects.
+attach : List(U64), List(List(U64)) -> List(U8)
+attach = |glyphs, points| {
+	n = glyphs.len()
+	coverage = u16(1).concat(u16(n)).concat(glyphs.join_map(u16))
+	var $tables = []
+	var $offsets = []
+	var $at = 4 + 2 * n + coverage.len()
+	for p in points {
+		t = u16(p.len()).concat(p.join_map(u16))
+		$offsets = $offsets.concat(u16($at))
+		$tables = $tables.concat(t)
+		$at = $at + t.len()
+	}
+	list = u16(4 + 2 * n).concat(u16(n)).concat($offsets).concat(coverage).concat($tables)
+	u16(1).concat(u16(0)).concat(u16(0)).concat(u16(12)).concat(u16(0)).concat(u16(0)).concat(list)
+}
+
+expect gdef_ok(attach([1, 2], [[0, 3], [2]]), 10, Absent)
+expect !gdef_ok(attach([1, 2], [[3, 3], [2]]), 10, Absent)
+expect !gdef_ok(attach([1, 12], [[0, 3], [2]]), 10, Absent)
+expect !gdef_ok(attach([1, 2], [[], [2]]), 10, Absent)
+
+# Glyph classes up to 4 only; a class range that overlaps the one before;
+# version 1.1 (which does not exist) and a truncated header.
+classes : List(U8) -> List(U8)
+classes = |class_def| u16(1).concat(u16(0)).concat(u16(12)).concat(List.repeat(0, 6)).concat(class_def)
+
+expect gdef_ok(classes(u16(2).concat(u16(2)).concat(u16(1)).concat(u16(2)).concat(u16(1)).concat(u16(3)).concat(u16(5)).concat(u16(3))), 10, Absent)
+expect !gdef_ok(classes(u16(2).concat(u16(1)).concat(u16(1)).concat(u16(2)).concat(u16(5))), 10, Absent)
+expect !gdef_ok(classes(u16(2).concat(u16(2)).concat(u16(1)).concat(u16(4)).concat(u16(1)).concat(u16(3)).concat(u16(5)).concat(u16(3))), 10, Absent)
+expect !gdef_ok(u16(1).concat(u16(1)).concat(List.repeat(0, 8)), 10, Absent)
+expect !gdef_ok(u16(1).concat(u16(0)).concat(List.repeat(0, 4)), 10, Absent)

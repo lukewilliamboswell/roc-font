@@ -2,6 +2,7 @@ import Sfnt
 import Bytes
 import LayoutCommon
 import LayoutGsub
+import LayoutVar
 
 ## Pair positioning: the pair adjustment lookups of `GPOS` (lookup type
 ## 2, directly or through an extension) that a shaping plan lists, and the
@@ -21,7 +22,11 @@ import LayoutGsub
 ## since lookups search it). `Sets` is GPOS pair format 1 and `Classes`
 ## pair format 2; their fields are offsets into the table and the
 ## subtable's value formats. Of each value record the x and y placement
-## and the x advance are used (horizontal text); device tables are not.
+## and the x advance are used (horizontal text), each with its device
+## table's delta from the `GDEF` item variation store (`lv`) at the
+## location `loc` (`LayoutVar`). Reading checks every device a query can
+## reach (`LayoutVar.check_pair`). At the default location no device
+## applies, and positioning reads the stored values only.
 LayoutKerning := {
 	data : List(U8),
 	common : LayoutCommon,
@@ -33,6 +38,8 @@ LayoutKerning := {
 	kern_digests : List({ a : U64, b : U64, c : U64 }),
 	has_gpos : Bool,
 	has_kern : Bool,
+	lv : LayoutVar,
+	loc : LayoutVar.Location,
 }.{
 
 	Pair : [
@@ -41,8 +48,10 @@ LayoutKerning := {
 		Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }),
 	]
 
-	## The `GPOS` part of reading.
-	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List(U64), digests : List({ a : U64, b : U64, c : U64 }) }
+	## The `GPOS` part of reading. `deltas` are the offsets (in the table) of
+	## device tables whose variation index names no row of the `GDEF` store:
+	## variation data the font cannot use, which OTS does not check.
+	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List(U64), digests : List({ a : U64, b : U64, c : U64 }), deltas : List(U64) }
 
 	## The `kern` part of reading.
 	Legacy : { data : List(U8), subtables : List(Pair), digests : List({ a : U64, b : U64, c : U64 }) }
@@ -61,20 +70,27 @@ LayoutKerning := {
 
 	## No positioning.
 	none : LayoutKerning
-	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False }
+	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False, lv: LayoutVar.none(0), loc: LayoutVar.default_location }
 
-	## Put the two parts together; either may be absent (or dropped).
-	combine : [Present(Gpos), Absent], [Present(Legacy), Absent] -> LayoutKerning
-	combine = |gpos, legacy| {
+	## Put the two parts together; either may be absent (or dropped). `lv`
+	## is the `GDEF` store device deltas come from; the location is the
+	## default until `at` moves it.
+	combine : [Present(Gpos), Absent], [Present(Legacy), Absent], LayoutVar -> LayoutKerning
+	combine = |gpos, legacy, lv| {
+		base = { ..LayoutKerning.none, lv }
 		with_gpos = match gpos {
-			Present(g) => { ..LayoutKerning.none, data: g.data, common: g.common, subtables: g.subtables, ends: g.ends, digests: g.digests, has_gpos: True }
-			Absent => LayoutKerning.none
+			Present(g) => { ..base, data: g.data, common: g.common, subtables: g.subtables, ends: g.ends, digests: g.digests, has_gpos: True }
+			Absent => base
 		}
 		match legacy {
 			Present(k) => { ..with_gpos, kern_data: k.data, kern_subtables: k.subtables, kern_digests: k.digests, has_kern: True }
 			Absent => with_gpos
 		}
 	}
+
+	## Kerning at a location of the variation space (`LayoutVar.location`).
+	at_location : LayoutKerning, LayoutVar.Location -> LayoutKerning
+	at_location = |kerning, loc| { ..kerning, loc }
 
 	## The script and feature lists of `GPOS`, for choosing lookups.
 	common_of : LayoutKerning -> LayoutCommon
@@ -109,13 +125,13 @@ LayoutKerning := {
 			start = if (entry.index == 0) 0 else kerning.ends.get(entry.index - 1) ?? 0
 			end = kerning.ends.get(entry.index) ?? 0
 			if end > start {
-				$out = LayoutKerning.apply_lookup(kerning.data, kerning.subtables, kerning.digests, start, end, entry.mask, $out, glyph_count, False)
+				$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, entry.mask, $out, glyph_count, False)
 			}
 		}
 		match legacy {
 			Kern(mask) => {
 				for k in 0..<kerning.kern_subtables.len() {
-					$out = LayoutKerning.apply_lookup(kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, mask, $out, glyph_count, True)
+					$out = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, mask, $out, glyph_count, True)
 				}
 			}
 			NoKern => {}
@@ -129,8 +145,8 @@ LayoutKerning := {
 	# on the second glyph's advance and offset. The lists are local
 	# variables, not fields of a record passed around, so each stays unique
 	# and is changed in place.
-	apply_lookup : List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, Positions, U64, Bool -> Positions
-	apply_lookup = |data, subtables, digests, start, end, mask, positions, glyph_count, split| {
+	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, Positions, U64, Bool -> Positions
+	apply_lookup = |kerning, data, subtables, digests, start, end, mask, positions, glyph_count, split| {
 		{ items, dx, dy, ax } = positions
 		count = items.len()
 		var $items = items
@@ -144,7 +160,7 @@ LayoutKerning := {
 			if !LayoutGsub.applies(first.mask, mask) or !LayoutGsub.applies(second.mask, mask) {
 				$i = $i + 1
 			} else {
-				match LayoutKerning.pair(data, subtables, digests, start, end, first.glyph, second.glyph, glyph_count) {
+				match LayoutKerning.pair(kerning, data, subtables, digests, start, end, first.glyph, second.glyph, glyph_count) {
 					Applied(found) => {
 						j = $i + 1
 						values =
@@ -192,8 +208,8 @@ LayoutKerning := {
 	}
 
 	# The first subtable of a lookup that has the pair decides it.
-	pair : List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, U64, U64 -> [Applied(Found), NotApplied]
-	pair = |data, subtables, digests, start, end, left, right, glyph_count| {
+	pair : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, U64, U64 -> [Applied(Found), NotApplied]
+	pair = |kerning, data, subtables, digests, start, end, left, right, glyph_count| {
 		var $result = NotApplied
 		var $k = start
 		while $k < end {
@@ -203,8 +219,8 @@ LayoutKerning := {
 				NotApplied
 			} else match subtables.get($k) {
 				Ok(Kern(k)) => LayoutKerning.kern_pair(data, k.at, k.count, left, right)
-				Ok(Sets(s)) if left < glyph_count => LayoutKerning.set_pair(data, s, left, right)
-				Ok(Classes(c)) if left < glyph_count => LayoutKerning.class_pair(data, c, left, right, glyph_count)
+				Ok(Sets(s)) if left < glyph_count => LayoutKerning.set_pair(kerning, data, s, left, right)
+				Ok(Classes(c)) if left < glyph_count => LayoutKerning.class_pair(kerning, data, c, left, right, glyph_count)
 				_ => NotApplied
 			}
 			match outcome {
@@ -249,8 +265,8 @@ LayoutKerning := {
 
 	# Pair format 1: the first glyph's coverage index picks a pair set, in
 	# which the second glyph is looked up.
-	set_pair : List(U8), { at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64 -> [Applied(Found), NotApplied]
-	set_pair = |data, s, left, right|
+	set_pair : LayoutKerning, List(U8), { at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64 -> [Applied(Found), NotApplied]
+	set_pair = |kerning, data, s, left, right|
 		match LayoutKerning.covered(data, s.coverage, left) {
 			Ok(index) if index < s.set_count => {
 				set = s.at + Bytes.u16(data, s.at + 10 + 2 * index)
@@ -267,7 +283,7 @@ LayoutKerning := {
 					} else if right > probe {
 						$low = mid + 1
 					} else {
-						$result = Applied(LayoutKerning.found(data, r + 2, s.format1, r + 2 + s.size1, s.format2))
+						$result = Applied(LayoutKerning.found(kerning, data, set, r + 2, s.format1, r + 2 + s.size1, s.format2))
 						$low = $high
 					}
 				}
@@ -278,8 +294,8 @@ LayoutKerning := {
 
 	# Pair format 2: a grid of first classes by second classes. A class past
 	# the grid matches nothing.
-	class_pair : List(U8), { at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64, U64 -> [Applied(Found), NotApplied]
-	class_pair = |data, c, left, right, glyph_count|
+	class_pair : LayoutKerning, List(U8), { at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64, U64 -> [Applied(Found), NotApplied]
+	class_pair = |kerning, data, c, left, right, glyph_count|
 		if LayoutKerning.covered(data, c.coverage, left).is_err() {
 			NotApplied
 		} else {
@@ -289,14 +305,18 @@ LayoutKerning := {
 				NotApplied
 			} else {
 				r = c.at + 16 + (c.size1 + c.size2) * (row * c.width + column)
-				Applied(LayoutKerning.found(data, r, c.format1, r + c.size1, c.format2))
+				Applied(LayoutKerning.found(kerning, data, c.at, r, c.format1, r + c.size1, c.format2))
 			}
 		}
 
-	found : List(U8), U64, U64, U64, U64 -> Found
-	found = |data, first_at, format1, second_at, format2| {
-		first = LayoutKerning.value(data, first_at, format1)
-		second = LayoutKerning.value(data, second_at, format2)
+	# Device offsets count from `base`: the pair set (format 1) or the
+	# subtable (format 2). Away from the default location, a value record
+	# with devices takes their deltas; otherwise the stored values.
+	found : LayoutKerning, List(U8), U64, U64, U64, U64, U64 -> Found
+	found = |kerning, data, base, first_at, format1, second_at, format2| {
+		varied = kerning.loc.active and format1.bitwise_or(format2).bitwise_and(0xF0) != 0
+		first = if (varied) LayoutKerning.varied_value(kerning, data, base, first_at, format1) else LayoutKerning.value(data, first_at, format1)
+		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.value(data, second_at, format2)
 		nonzero = first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
 		{ first, second, skips: format2 != 0, nonzero }
 	}
@@ -382,6 +402,14 @@ LayoutKerning := {
 		x_at = at + 2 * format.bitwise_and(3).to_u8_wrap().count_one_bits().to_u64()
 		ax = if (format.bitwise_and(4) == 0) 0 else Bytes.i16(data, x_at)
 		{ dx, dy, ax }
+	}
+
+	## A value record's x and y placement and x advance with its devices'
+	## deltas at the kerning's location.
+	varied_value : LayoutKerning, List(U8), U64, U64, U64 -> Value
+	varied_value = |kerning, data, base, at, format| {
+		v = LayoutVar.value(kerning.lv, kerning.loc, data, base, at, format)
+		{ dx: v.x_placement, dy: v.y_placement, ax: v.x_advance }
 	}
 
 	# ------------------------------------------------------------ digests
@@ -497,8 +525,8 @@ LayoutKerning := {
 	## The pair adjustment lookups of a font file's `GPOS` that features
 	## reach. A table listing more than `max_lookups` lookups is over the
 	## limit.
-	from_gpos : List(U8), List(Sfnt.Table), U64, U64 -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
-	from_gpos = |bytes, tables, count_of_glyphs, max_lookups|
+	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv|
 		match Sfnt.located(bytes, tables, "GPOS", 10) {
 			Missing => Ok(Absent)
 			Bad(at) => Err(Sfnt.bad("GPOS", at))
@@ -506,17 +534,16 @@ LayoutKerning := {
 				if Bytes.u16(data, Bytes.u16(data, 8)) > max_lookups {
 					Err(OverLimit("max_lookups"))
 				} else {
-					match LayoutKerning.read_gpos(data, count_of_glyphs) {
-						Ok(gpos) => Ok(Present(gpos))
+					match LayoutKerning.read_gpos(data, count_of_glyphs, lv) {
+						Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
 						Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
 					}
 				}
 		}
 
 	## The horizontal pair subtables of a font file's TrueType `kern` table.
-	## As OTS (and so browsers) treat it, a table whose pairs are out of
-	## order can be dropped (`Drop`), while one whose structure does not fit
-	## rejects the font (`Reject`).
+	## As OTS (and so browsers) treat it, some faults drop the table
+	## (`Drop`) and others reject the font (`Reject`); see `read_kern`.
 	from_kern : List(U8), List(Sfnt.Table) -> Try([Present(Legacy), Absent], [Drop([BadTable({ table : Str, offset : U32 })]), Reject([BadTable({ table : Str, offset : U32 })])])
 	from_kern = |bytes, tables|
 		match Sfnt.located(bytes, tables, "kern", 4) {
@@ -525,15 +552,19 @@ LayoutKerning := {
 			Found({ data, offset }) =>
 				match LayoutKerning.read_kern(data) {
 					Ok(kern) => Ok(Present(kern))
-					Err(Unsorted(at)) => Err(Drop(Sfnt.bad("kern", offset + at)))
+					Err(Dropped(at)) => Err(Drop(Sfnt.bad("kern", offset + at)))
 					Err(Bad(at)) => Err(Reject(Sfnt.bad("kern", offset + at)))
 				}
 		}
 
 	## Every pair adjustment lookup a feature of a `GPOS` table lists, with
-	## its script and feature lists. Problems give their offset in the table.
-	read_gpos : List(U8), U64 -> Try(Gpos, [Bad(U64)])
-	read_gpos = |gpos, glyph_count| {
+	## its script and feature lists, and the device tables of its value
+	## records checked against the `GDEF` store `lv`. Problems give their
+	## offset in the table. A device outside the table or of an unknown
+	## format breaks the table (OTS rejects it); a variation index outside
+	## the store is listed in `deltas`.
+	read_gpos : List(U8), U64, LayoutVar -> Try(Gpos, [Bad(U64)])
+	read_gpos = |gpos, glyph_count, lv| {
 		size = gpos.len()
 		read_common = LayoutCommon.read(gpos)?
 		common = read_common.common
@@ -541,6 +572,7 @@ LayoutKerning := {
 		used = LayoutCommon.all_feature_lookups(common)
 		var $steps = read_common.steps
 		var $subtables = []
+		var $deltas = []
 		var $ends = List.with_capacity(common.lookup_count)
 		for index in 0..<common.lookup_count {
 			if used.get(index) ?? False {
@@ -566,7 +598,15 @@ LayoutKerning := {
 						match target {
 							Some(start) => {
 								done = LayoutKerning.read_pair(gpos, start, glyph_count, $steps)?
-								$steps = done.steps
+								$steps = match LayoutVar.check_pair(lv, gpos, start, glyph_count, done.steps) {
+									Ok(checked) => checked.steps
+									Err(BadAt(problem)) if problem.reason == DeltaIndex => {
+										$deltas = $deltas.append(problem.offset)
+										done.steps
+									}
+									Err(BadAt(problem)) => return Err(Bad(problem.offset))
+									Err(Exhausted(problem)) => return Err(Bad(problem.offset))
+								}
 								$subtables = $subtables.append(done.value)
 							}
 							None => {}
@@ -576,7 +616,7 @@ LayoutKerning := {
 			}
 			$ends = $ends.append($subtables.len())
 		}
-		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables) })
+		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables), deltas: $deltas })
 	}
 
 	read_pair : List(U8), U64, U64, U64 -> Try({ value : [Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })], steps : U64 }, [Bad(U64)])
@@ -688,39 +728,92 @@ LayoutKerning := {
 		Bytes.fits(set, 2 + record * Bytes.u16(data, set), size)
 	}
 
-	## A TrueType `kern` table: each horizontal format 0 subtable, in order.
-	## Apple's version 1.0 layout of the table is read too, as browsers do.
-	## Pairs must be sorted by first and then second glyph, since lookups
-	## search them; browsers (through OTS) drop a table whose pairs are not.
-	read_kern : List(U8) -> Try(Legacy, [Bad(U64), Unsorted(U64)])
+	## A TrueType `kern` table, walked exactly as OTS 9.3.0 walks it
+	## (`kern.cc`), since browsers shape with what OTS keeps. Version 0
+	## only: a subtable of another version is skipped (its header only, as
+	## OTS skips it), as is one that is vertical or not of format 0; the
+	## rest are horizontal format 0 subtables with their pairs, and the next
+	## subtable starts after the pairs. `Dropped` is what OTS drops the
+	## table for (another table version, no subtables, reserved coverage
+	## bits, an empty or oversized pair list, pairs out of order, nothing
+	## kept); `Bad` what it rejects the font for (a header, subtable or pair
+	## that does not fit, a wrong `entrySelector`). Of the kept subtables,
+	## those with coverage exactly 1 (horizontal, format 0, no flags) kern.
+	read_kern : List(U8) -> Try(Legacy, [Bad(U64), Dropped(U64)])
 	read_kern = |kern| {
-		version = Bytes.u16(kern, 0)
-		if version == 1 {
-			LayoutKerning.read_apple_kern(kern)
-		} else if version != 0 {
-			Err(Bad(0))
-		} else {
-			count = Bytes.u16(kern, 2)
-			var $at = 4
-			var $subtables = []
-			for _ in 0..<count {
-				if !Bytes.fits($at, 14, kern.len()) {
+		size = kern.len()
+		if size < 4 {
+			return Err(Bad(0))
+		}
+		if Bytes.u16(kern, 0) != 0 {
+			return Err(Dropped(0))
+		}
+		count = Bytes.u16(kern, 2)
+		if count == 0 {
+			return Err(Dropped(2))
+		}
+		var $at = 4
+		var $kept = 0
+		var $subtables = []
+		for _ in 0..<count {
+			if !Bytes.fits($at, 4, size) {
+				return Err(Bad($at))
+			}
+			header = $at
+			version = Bytes.u16(kern, $at)
+			length = Bytes.u16(kern, $at + 2)
+			$at = $at + 4
+			if version == 0 {
+				if header + length > size {
+					return Err(Bad(header))
+				}
+				if !Bytes.fits($at, 2, size) {
 					return Err(Bad($at))
 				}
-				length = Bytes.u16(kern, $at + 2)
-				coverage = Bytes.u16(kern, $at + 4)
-				pairs = Bytes.u16(kern, $at + 6)
-				if coverage == 0x0001 {
-					if !Bytes.fits($at + 14, 6 * pairs, kern.len()) {
+				coverage = Bytes.u16(kern, $at)
+				$at = $at + 2
+				if coverage.bitwise_and(1) == 0 {
+					{}
+				} else if coverage.bitwise_and(0xF0) != 0 {
+					return Err(Dropped(header + 4))
+				} else if coverage.shr_zf_wrap(8) != 0 {
+					{}
+				} else {
+					if !Bytes.fits($at, 8, size) {
 						return Err(Bad($at))
 					}
-					LayoutKerning.check_sorted(kern, $at + 14, pairs)?
-					$subtables = $subtables.append(Kern({ at: $at + 14, count: pairs }))
+					pairs = Bytes.u16(kern, $at)
+					selector = Bytes.u16(kern, $at + 4)
+					if pairs == 0 or pairs > 65536 // 6 {
+						return Err(Dropped($at))
+					}
+					var $pow = 0
+					while (1.U64).shl_wrap(($pow + 1).to_u8_wrap()) <= pairs {
+						$pow = $pow + 1
+					}
+					if selector != $pow {
+						return Err(Bad($at + 4))
+					}
+					first = $at + 8
+					if !Bytes.fits(first, 6 * pairs, size) {
+						return Err(Bad(first))
+					}
+					match LayoutKerning.check_sorted(kern, first, pairs) {
+						Ok(_) => {}
+						Err(Unsorted(bad)) => return Err(Dropped(bad))
+					}
+					if coverage == 1 {
+						$subtables = $subtables.append(Kern({ at: first, count: pairs }))
+					}
+					$kept = $kept + 1
+					$at = first + 6 * pairs
 				}
-				$at = $at + length.max(6)
 			}
-			Ok({ data: kern, subtables: $subtables, digests: LayoutKerning.digests(kern, $subtables) })
 		}
+		if $kept == 0 {
+			return Err(Dropped(4))
+		}
+		Ok({ data: kern, subtables: $subtables, digests: LayoutKerning.digests(kern, $subtables) })
 	}
 
 	# Pairs at `at` in strictly increasing order of their first and second
@@ -735,39 +828,5 @@ LayoutKerning := {
 			$k = $k + 1
 		}
 		Ok({})
-	}
-
-	# Apple's layout: a 32-bit version and count, and subtables with a 32-bit
-	# length and an 8-bit coverage (vertical, cross-stream and variation
-	# flags) followed by the format.
-	read_apple_kern : List(U8) -> Try(Legacy, [Bad(U64), Unsorted(U64)])
-	read_apple_kern = |kern| {
-		count = Bytes.u32(kern, 4)
-		if Bytes.u16(kern, 2) != 0 or !Bytes.fits(8, 0, kern.len()) {
-			Err(Bad(0))
-		} else {
-			var $at = 8
-			var $subtables = []
-			var $k = 0
-			while $k < count {
-				length = Bytes.u32(kern, $at)
-				if length < 16 or !Bytes.fits($at, length, kern.len()) {
-					return Err(Bad($at))
-				}
-				coverage = Bytes.u8(kern, $at + 4)
-				format = Bytes.u8(kern, $at + 5)
-				if coverage.bitwise_and(0xE0) == 0 and format == 0 {
-					pairs = Bytes.u16(kern, $at + 8)
-					if !Bytes.fits($at + 16, 6 * pairs, kern.len()) {
-						return Err(Bad($at))
-					}
-					LayoutKerning.check_sorted(kern, $at + 16, pairs)?
-					$subtables = $subtables.append(Kern({ at: $at + 16, count: pairs }))
-				}
-				$at = $at + length
-				$k = $k + 1
-			}
-			Ok({ data: kern, subtables: $subtables, digests: LayoutKerning.digests(kern, $subtables) })
-		}
 	}
 }

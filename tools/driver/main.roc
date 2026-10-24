@@ -22,8 +22,7 @@ import Case
 ## A result is hb-shape notation with glyph ids, `width:<n>`, `read:accept`,
 ## `read:reject`, `read:drop=<tags>`, a font-fact result (`coords:`,
 ## `advances:`, `metrics:`, `extents:`), `unsupported:<what>` (a font size
-## other than the units per em, or what the public API cannot answer yet:
-## named instances, and normalised coordinates of a variable font),
+## other than the units per em, or a named instance past the font's),
 ## `error:font-file` (the font could not be read from disk) or
 ## `error:malformed-request:<why>`. See docs/conformance.adoc.
 ##
@@ -111,8 +110,13 @@ run = |state, req|
 		Rejected(_) => "read:reject"
 		Ready({ font: read, dropped }) =>
 			match req.location {
-				# The public API has no named-instance query yet.
-				Instance(_) => "unsupported:instance"
+				# A named instance is its axis values; an index past the
+				# font's instances is an oracle error, never recorded.
+				Instance(n) =>
+					match Font.instances(read).get(n.to_u64()) {
+						Ok(instance) => answer(Font.at(read, Font.Variation.{ axes: instance.axes }), dropped, req)
+						Err(_) => "unsupported:instance"
+					}
 				Regular => answer(read, dropped, req)
 				At(v) => answer(Font.at(read, Font.Variation.{ weight: v.weight, width: v.width, optical_size: v.optical_size, axes: v.axes }), dropped, req)
 			}
@@ -129,9 +133,7 @@ answer = |font, dropped, req|
 			} else {
 				Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
 			}
-		# A static font has no coordinates; a variable font's normalised
-		# coordinates are not observable through the public API yet.
-		Coords => if (Font.axes(font).is_empty()) "coords:" else "unsupported:kind=coords"
+		Coords => "coords:${Str.join_with(Font.coordinates(font).map(|c| "${c.tag}=${c.value.to_str()}"), ",")}"
 		Advances(which) => Case.advances(ids(font, which).map(|g| Font.advance(font, g).to_i64()))
 		Metrics => {
 			m = Font.metrics(font)

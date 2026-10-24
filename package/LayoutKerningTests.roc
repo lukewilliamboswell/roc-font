@@ -1,4 +1,5 @@
 import LayoutKerning
+import LayoutVar
 
 ## In-package tests of `LayoutKerning` for what the public API cannot
 ## observe: how much reading keeps. The kerning callers see is tested
@@ -30,9 +31,9 @@ expect {
 		$set = $set.concat(be16(g)).concat(be16(65535))
 	}
 	gpos = header.concat(scripts).concat(language).concat(features).concat(lookups).concat(fields).concat(offsets).concat(coverage).concat($set)
-	match LayoutKerning.read_gpos(gpos, n) {
+	match LayoutKerning.read_gpos(gpos, n, LayoutVar.none(0)) {
 		Ok(read) => {
-			kerning = LayoutKerning.combine(Present(read), Absent)
+			kerning = LayoutKerning.combine(Present(read), Absent, LayoutVar.none(0))
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1 })
 			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, n)
 			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]

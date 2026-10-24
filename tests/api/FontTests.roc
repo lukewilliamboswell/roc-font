@@ -514,12 +514,23 @@ inks_of = |tables|
 	}
 
 # Glyph extents from short and from long offsets; glyphs without an
-# outline, and glyph indices past the last glyph, have no ink.
-expect inks_of(with_outlines(False, FontBuild.outlines(outline_glyphs, False))) == [Empty, Extents({ x_min: 10, y_min: 0, x_max: 490, y_max: 100 }), Empty, Extents({ x_min: -5, y_min: 0, x_max: 700, y_max: 100 }), Empty]
-expect inks_of(with_outlines(True, FontBuild.outlines(outline_glyphs, True))) == [Empty, Extents({ x_min: 10, y_min: 0, x_max: 490, y_max: 100 }), Empty, Extents({ x_min: -5, y_min: 0, x_max: 700, y_max: 100 }), Empty]
+# outline, and glyph indices past the last glyph, have no ink. As in
+# HarfBuzz, the box is the glyph header's, with its left edge at the left
+# side bearing in `hmtx` (0 in these fonts) rather than at `xMin`.
+expect inks_of(with_outlines(False, FontBuild.outlines(outline_glyphs, False))) == [Empty, Extents({ x_min: 0, y_min: 0, x_max: 480, y_max: 100 }), Empty, Extents({ x_min: 0, y_min: 0, x_max: 705, y_max: 100 }), Empty]
+expect inks_of(with_outlines(True, FontBuild.outlines(outline_glyphs, True))) == [Empty, Extents({ x_min: 0, y_min: 0, x_max: 480, y_max: 100 }), Empty, Extents({ x_min: 0, y_min: 0, x_max: 705, y_max: 100 }), Empty]
 
-# A glyph shorter than its header, and one whose extent is inverted.
-expect inks_of(with_outlines(False, FontBuild.outlines([[], [1, 2, 3, 4], FontBuild.outline(5, 4), []], False))) == [Empty, Empty, Empty, Empty, Empty]
+# The side bearing places the box: glyph 1 has a bearing of 25, glyph 3
+# one of -40.
+expect {
+	tables = with_outlines(False, FontBuild.outlines(outline_glyphs, False)).map(|t| if (t.tag == "hmtx") { tag: t.tag, data: FontBuild.pack([U16(500), I16(0), U16(600), I16(25), U16(700), I16(0), U16(800), I16(-40)]) } else t)
+	inks_of(tables) == [Empty, Extents({ x_min: 25, y_min: 0, x_max: 505, y_max: 100 }), Empty, Extents({ x_min: -40, y_min: 0, x_max: 665, y_max: 100 }), Empty]
+}
+
+# A glyph shorter than its header has no ink; one whose header box is
+# inverted is measured from its smaller to its larger edge, as HarfBuzz
+# measures it.
+expect inks_of(with_outlines(False, FontBuild.outlines([[], [1, 2, 3, 4], FontBuild.outline(5, 4), []], False))) == [Empty, Empty, Extents({ x_min: 0, y_min: 0, x_max: 1, y_max: 100 }), Empty, Empty]
 
 # The `loca` format must match `head`: short offsets read as long ones
 # run past the end of `loca`.
@@ -645,8 +656,14 @@ expect {
 expect {
 	tables = FontBuild.basic
 		.map(|t| if (t.tag == "hmtx") { tag: t.tag, data: [0, 1] } else t)
-		.concat([{ tag: "GSUB", data: List.repeat(0xFF, 12) }, { tag: "GPOS", data: List.repeat(0xFF, 12) }, { tag: "loca", data: [0] }, { tag: "glyf", data: [] }])
+		.concat([{ tag: "GSUB", data: List.repeat(0xFF, 12) }, { tag: "GPOS", data: List.repeat(0xFF, 12) }, { tag: "loca", data: [0] }, { tag: "glyf", data: [0, 0, 0, 0] }])
 	kinds_of(tables) == ["BadTable(hmtx)", "BadTable(loca)", "BadTable(GSUB)", "BadTable(GPOS)"]
+}
+
+# An empty table rejects the font, as OTS rejects it, whichever table it is.
+expect {
+	tables = FontBuild.basic.append({ tag: "zzzz", data: [] })
+	kinds_of(tables) == ["BadTable(zzzz)"]
 }
 
 # Every prefix of a font, and every byte of it set to 0 or 0xFF, is read or
@@ -722,7 +739,7 @@ expect {
 				and Font.metrics(font).descent == 400
 				and [0x41, 0x5A, 0x61, 0x1F600].map(|cp| Font.glyph(font, cp) ?? 9999) == [1, 26, 9999, 30]
 				and [0, 3, 39].map(|g| Font.advance(font, g)) == [1000, 1300, 1300]
-				and [0, 1, 2].map(|g| Font.extents(font, g)) == [Empty, Extents({ x_min: -4, y_min: 0, x_max: 10, y_max: 100 }), Extents({ x_min: -3, y_min: 0, x_max: 20, y_max: 100 })]
+				and [0, 1, 2].map(|g| Font.extents(font, g)) == [Empty, Extents({ x_min: 0, y_min: 0, x_max: 14, y_max: 100 }), Extents({ x_min: 0, y_min: 0, x_max: 23, y_max: 100 })]
 				and kerning(font, [1, 2], "AB") == [-61, 2]
 				and Font.shape(font, "GABC", Font.ShapeOptions.{}).glyphs == [7, 11, 2, 3]
 		Err(_) => False
@@ -918,11 +935,10 @@ expect kerning_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ le
 expect offsets_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: -31 }] }])), [1, 2, 3, 1]) == [{ x: 0, y: 0 }, { x: -25, y: 0 }, { x: -15, y: 0 }, { x: 0, y: 0 }]
 
 # Each horizontal subtable is applied in turn and the adjustments add up;
-# vertical and cross-stream subtables are ignored.
+# a cross-stream subtable (coverage 5) is kept but does not kern.
 expect {
 	kern = FontBuild.kern([
 		{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] },
-		{ coverage: 0, pairs: [{ left: 1, right: 2, value: -1000 }] },
 		{ coverage: 5, pairs: [{ left: 1, right: 2, value: -2000 }] },
 		{ coverage: 1, pairs: [{ left: 1, right: 2, value: 7 }] },
 	])
@@ -932,9 +948,25 @@ expect {
 expect kinds_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == ["BadTable(kern)"]
 expect kinds_of(basic_with("kern", FontBuild.patch(FontBuild.kern([]), 2, FontBuild.u16(3)))) == ["BadTable(kern)"]
 
-# A `kern` table in Apple's layout (version 1), as browsers read it:
-# horizontal format 0 subtables kern; vertical, cross-stream and variation
-# subtables and other formats do not.
+# What OTS (and so a browser) drops, with the font read without kerning:
+# a table with only a vertical subtable (nothing is kept), a subtable with
+# reserved coverage bits, and an empty pair list. A wrong binary search
+# field (`entrySelector`) rejects the font.
+expect {
+	tables = [
+		FontBuild.kern([{ coverage: 0, pairs: [{ left: 1, right: 2, value: -50 }] }]),
+		FontBuild.kern([{ coverage: 0x11, pairs: [{ left: 1, right: 2, value: -50 }] }]),
+		FontBuild.kern([{ coverage: 1, pairs: [] }]),
+	]
+	tables.all(|kern| kinds_of(basic_with("kern", kern)) == ["BadTable(kern)"] and kerning_of(basic_with("kern", kern), [1, 2]) == [0, 0])
+}
+expect {
+	kern = FontBuild.patch(FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: -5 }] }]), 4 + 10, FontBuild.u16(0))
+	read_tables(basic_with("kern", kern)).is_err()
+}
+
+# A `kern` table in Apple's layout (version 1.0) is dropped, as OTS drops
+# every version but 0: the font reads, without that kerning.
 apple_kern : List({ coverage : U64, format : U64, pairs : List({ left : U64, right : U64, value : I64 }) }) -> List(U8)
 apple_kern = |subtables| {
 	body = subtables.join_map(
@@ -949,20 +981,9 @@ apple_kern = |subtables| {
 }
 
 expect {
-	kern = apple_kern([
-		{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: 4 }] },
-		{ coverage: 0x80, format: 0, pairs: [{ left: 1, right: 2, value: -1000 }] },
-		{ coverage: 0x40, format: 0, pairs: [{ left: 1, right: 2, value: -1000 }] },
-		{ coverage: 0x20, format: 0, pairs: [{ left: 1, right: 2, value: -1000 }] },
-		{ coverage: 0, format: 2, pairs: [{ left: 1, right: 2, value: -1000 }] },
-		{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -1 }] },
-	])
-	kerning_of(basic_with("kern", kern), [1, 2, 3]) == [-26, -23, 2]
+	kern = apple_kern([{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -50 }] }])
+	kinds_of(basic_with("kern", kern)) == ["BadTable(kern)"] and kerning_of(basic_with("kern", kern), [1, 2]) == [0, 0]
 }
-expect kinds_of(basic_with("kern", apple_kern([{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == ["BadTable(kern)"]
-expect kinds_of(basic_with("kern", FontBuild.patch(apple_kern([]), 4, FontBuild.u32(0xFFFFFFFF)))) == ["BadTable(kern)"]
-expect kinds_of(basic_with("kern", FontBuild.patch(apple_kern([{ coverage: 0, format: 0, pairs: [] }]), 8, FontBuild.u32(8)))) == ["BadTable(kern)"]
-expect kerning_of(basic_with("kern", apple_kern([])), [1, 2]) == [0, 0]
 
 # ------------------------------------------------------------ Inter
 
@@ -981,9 +1002,12 @@ expect {
 	font = inter
 	[2, 456, 411, 790, 1459, 1517, 1777, 1547, 1342, 618, 1316, 1805, 2936].map(|g| Font.advance(font, g)) == [1413, 1413, 1322, 1228, 942, 1355, 576, 1026, 833, 1194, 1365, 1954, 434]
 }
+# The metrics subset keeps each glyph's header box but no contours (a
+# contour count of 0), so every glyph is empty, as HarfBuzz reports it
+# (zero extents).
 expect {
 	font = inter
-	[0, 2, 1547, 1548, 1777, 1805, 2936].map(|g| Font.extents(font, g)) == [Extents({ x_min: 328, y_min: -416, x_max: 1016, y_max: 1856 }), Extents({ x_min: 52, y_min: 0, x_max: 1361, y_max: 1490 }), Extents({ x_min: 114, y_min: 652, x_max: 912, y_max: 1490 }), Extents({ x_min: 195, y_min: 255, x_max: 1126, y_max: 1235 }), Empty, Extents({ x_min: 256, y_min: 0, x_max: 1752, y_max: 1304 }), Extents({ x_min: 80, y_min: 1255, x_max: 354, y_max: 1568 })]
+	[0, 2, 1547, 1548, 1777, 1805, 2936].all(|g| Font.extents(font, g) == Empty)
 }
 
 # Kerning pairs A V, T o, V A, A A, W a, y period, T y, L T, and A with the

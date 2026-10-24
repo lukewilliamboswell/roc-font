@@ -84,15 +84,15 @@ gsub_problem = |p|
 		_ => is_gsub(p)
 	}
 
-# The table is broken: lenient reading leaves it out and says so, strict
-# reading refuses the font for it.
+# The table is broken: reading refuses the font for it, lenient or strict,
+# as OTS (and so a browser) refuses it, naming only the table.
 refused : List(U8) -> Bool
 refused = |gsub| {
 	bytes = FontBuild.file(FontBuild.replace(many_glyphs, "GSUB", gsub))
 	only_gsub = |problems| !problems.is_empty() and problems.all(is_gsub)
 	lenient = match Font.from_bytes(bytes, Font.ReadOptions.{}) {
-		Ok(font) => only_gsub(Font.dropped(font)) and run_of(font, [5, 6]).glyphs == [5, 6]
-		Err(_) => False
+		Ok(_) => False
+		Err(problems) => only_gsub(problems)
 	}
 	strict = match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True }) {
 		Ok(_) => False
@@ -483,8 +483,9 @@ expect {
 				gsub_only = Font.dropped(font).all(gsub_problem)
 				$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
 			}
-			Err(_) => {
-				$outcomes = $outcomes + 1000000
+			# A broken `GSUB` rejects the font, naming only `GSUB`.
+			Err(found) => {
+				$outcomes = $outcomes + (if (!found.is_empty() and found.all(is_gsub)) 1 else 1000000)
 			}
 		}
 	}
@@ -501,8 +502,8 @@ expect {
 					gsub_only = Font.dropped(font).all(gsub_problem)
 					$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
 				}
-				Err(_) => {
-					$outcomes = $outcomes + 1000000
+				Err(found) => {
+					$outcomes = $outcomes + (if (!found.is_empty() and found.all(is_gsub)) 1 else 1000000)
 				}
 			}
 		}
