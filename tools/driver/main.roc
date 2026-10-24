@@ -63,30 +63,55 @@ main! = |args| {
 	Ok({})
 }
 
-FontState : [Ready(Font), Rejected(Str), NoFile]
+## A font read for the driver: measured at its default location (protocol
+## 1 compares with HarfBuzz's default instance; without `at` a variable font
+## measures at Regular), with the tags of the tables lenient reading dropped.
+FontState : [Ready({ font : Font, dropped : List(Str) }), Rejected(Str), NoFile]
 
 load! : Str => FontState
 load! = |path|
 	match Path.read_bytes!(Path.utf8(path)) {
 		Err(_) => NoFile
 		Ok(bytes) =>
-			match Font.from_bytes(bytes) {
-				Ok(font) => Ready(font)
+			match Font.from_bytes(bytes, Font.ReadOptions.{}) {
+				Ok(read) => {
+					axes = Font.axes(read).map(|a| { tag: a.tag, value: a.default })
+					font = Font.at(read, Font.Variation.{ axes })
+					Ready({ font, dropped: dropped_tags(Font.dropped(read)) })
+				}
 				Err(problems) => Rejected(Str.inspect(problems))
 			}
 	}
+
+# The tags of the tables a reading result can name (the oracle's
+# `READ_TABLES`), each once, sorted as the oracle sorts them.
+dropped_tags : List(Font.Problem) -> List(Str)
+dropped_tags = |problems| {
+	known = ["GPOS", "GSUB", "OS/2", "cmap", "glyf", "head", "hhea", "hmtx", "kern", "loca", "maxp"]
+	var $tags = []
+	for p in problems {
+		match p {
+			BadTable(b) if known.contains(b.table) and !$tags.contains(b.table) => {
+				$tags = $tags.append(b.table)
+			}
+			_ => {}
+		}
+	}
+	# `known` is in the oracle's order.
+	known.keep_if(|t| $tags.contains(t))
+}
 
 run : FontState, Case.Request -> Str
 run = |state, req|
 	match state {
 		NoFile => "error:font-file"
 		Rejected(_) => "read:reject"
-		Ready(font) =>
+		Ready({ font, dropped }) =>
 			match req.kind {
-				Read => "read:accept"
+				Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
 				Width => Case.width(glyphs(font, req.settings, req.scalars))
 				Shape =>
-					if req.settings.font_size != 0 and req.settings.font_size.to_f64() != Font.units_per_em(font) {
+					if req.settings.font_size != 0 and req.settings.font_size != Font.units_per_em(font).to_u64() {
 						"unsupported:--font-size=${req.settings.font_size.to_str()}"
 					} else {
 						Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
@@ -94,30 +119,20 @@ run = |state, req|
 			}
 	}
 
-# The current public API shapes in four steps: map code points to glyphs,
-# apply the default substitutions, take advances and add pair kerning.
-# Offsets are always zero and clusters are code point indices (converted to
-# UTF-8 byte offsets for `utf8-clusters`). A code point the font does not
-# map is drawn with glyph 0, as hb-shape does; that is this driver's choice,
-# not the package's.
+# Shape the scalars with the default options. Each scalar's offset is its
+# UTF-8 byte offset (`utf8-clusters`) or its index, so the run's clusters
+# are already what hb-shape prints. A code point the font does not map is
+# drawn with glyph 0, as in hb-shape.
 glyphs : Font, Case.Settings, List(U32) -> List(Case.Glyph)
 glyphs = |font, settings, scalars| {
-	var $items = List.with_capacity(scalars.len())
-	var $index = 0
-	for code_point in scalars {
-		$items = $items.append({ glyph: Font.glyph(font, code_point) ?? 0, cluster: $index })
-		$index = $index + 1
-	}
-	substituted = Font.substitute(font, $items)
-	kerning = Font.kerning(font, substituted.map(|g| g.glyph))
 	offsets = Case.utf8_offsets(scalars)
-	var $run = List.with_capacity(substituted.len())
-	var $i = 0
-	for g in substituted {
-		advance = Font.advance(font, g.glyph) + (kerning.get($i) ?? 0.0)
-		cluster = if (settings.utf8) (offsets.get(g.cluster) ?? 0) else g.cluster
-		$run = $run.append({ glyph: g.glyph, cluster, dx: 0, dy: 0, ax: advance.to_i64_wrap(), ay: 0 })
-		$i = $i + 1
+	items = scalars.map_with_index(|scalar, i| { scalar, offset: (if (settings.utf8) offsets.get(i) ?? 0 else i).to_u32_wrap() })
+	shaped = Font.shape_scalars(font, Font.plan(font, Font.ShapeOptions.{}), items)
+	var $out = List.with_capacity(shaped.glyphs.len())
+	for i in 0..<shaped.glyphs.len() {
+		advance = shaped.advances.get(i) ?? { x: 0, y: 0 }
+		offset = shaped.offsets.get(i) ?? { x: 0, y: 0 }
+		$out = $out.append({ glyph: (shaped.glyphs.get(i) ?? 0).to_u64(), cluster: (shaped.clusters.get(i) ?? 0).to_u64(), dx: offset.x.to_i64(), dy: offset.y.to_i64(), ax: advance.x.to_i64(), ay: advance.y.to_i64() })
 	}
-	$run
+	$out
 }

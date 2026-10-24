@@ -86,6 +86,31 @@ FontBuild :: {}.{
 		FontBuild.u32(0x00010000).concat(FontBuild.u16(count)).concat(FontBuild.u16(0)).concat(FontBuild.u16(0)).concat(FontBuild.u16(0)).concat($records).concat($body)
 	}
 
+	## A font collection (`ttcf`) of fonts, each given as its tables. Each
+	## face keeps its own copy of its tables; table offsets count from the
+	## start of the collection, as the format requires.
+	collection : List(List({ tag : Str, data : List(U8) })) -> List(U8)
+	collection = |faces| {
+		files = faces.map(FontBuild.file)
+		header = 12 + 4 * files.len()
+		var $offsets = []
+		var $body = []
+		for f in files {
+			base = header + $body.len()
+			$offsets = $offsets.append(base)
+			# Move each table record's offset (at 12 + 16 i + 8) by the base.
+			count = (f.get(4) ?? 0).to_u64() * 256 + (f.get(5) ?? 0).to_u64()
+			var $moved = f
+			for i in 0..<count {
+				at = 12 + 16 * i + 8
+				old = $moved.sublist({ start: at, len: 4 }).fold(0, |acc, b| acc * 256 + b.to_u64())
+				$moved = FontBuild.patch($moved, at, FontBuild.u32(old + base))
+			}
+			$body = $body.concat($moved)
+		}
+		"ttcf".to_utf8().concat(FontBuild.u32(0x00010000)).concat(FontBuild.u32(files.len())).concat($offsets.join_map(FontBuild.u32)).concat($body)
+	}
+
 	## A `head` table: 54 bytes with units per em at 18 and the `loca` format
 	## at 50.
 	head : U64, Bool -> List(U8)

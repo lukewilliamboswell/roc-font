@@ -10,11 +10,14 @@ import build.FontBuild
 import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
 ## The font reading contract on untrusted bytes: reading never crashes, is
-## deterministic, and either succeeds or reports at least one problem. On
-## success every metric is finite and every query is total: character
-## lookups give glyphs the font has, advances and outline extents are
-## finite, kerning keeps one adjustment per glyph, and substitution keeps
-## its clusters in range and never grows a run past `4 n + 32` glyphs.
+## deterministic, and either succeeds or reports at least one problem;
+## strict reading succeeds exactly when lenient reading succeeds with
+## nothing dropped. On success every query is total: character lookups give
+## glyphs the font has, the code point listing is ascending and agrees with
+## lookups, advances are non-negative, boxes are ordered, and shaping keeps
+## its lists index-aligned, its clusters inside the text and in order, and
+## its growth within HarfBuzz's bound (64 glyphs per character, at least
+## 16384).
 ##
 ## Inputs are fonts or recipes for nearly valid fonts (see
 ## `FontBuild.fuzz_font`): real font files, or Inter or the synthetic
@@ -27,20 +30,25 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	font_bytes = FontBuild.fuzz_font(bytes, inter_file)
-	first = Font.from_bytes(font_bytes)
-	if summary(first) != summary(Font.from_bytes(font_bytes)) {
+	first = Font.from_bytes(font_bytes, Font.ReadOptions.{})
+	if summary(first) != summary(Font.from_bytes(font_bytes, Font.ReadOptions.{})) {
 		crash "reading the same bytes twice gave different results"
 	}
-	match first {
-		Err([]) => crash "bytes were rejected without a problem"
-		Err(_) => {}
-		Ok(font) => check(font)
+	strict = Font.from_bytes(font_bytes, Font.ReadOptions.{ strict: True })
+	match (first, strict) {
+		(Err([]), _) => crash "bytes were rejected without a problem"
+		(_, Err([])) => crash "strict reading rejected bytes without a problem"
+		(Err(_), Ok(_)) => crash "strict reading accepted bytes lenient reading rejected"
+		(Ok(font), Ok(_)) if !Font.dropped(font).is_empty() => crash "strict reading accepted a font with dropped tables"
+		(Ok(font), Err(_)) if Font.dropped(font).is_empty() => crash "strict reading rejected a font lenient reading read whole"
+		(Ok(font), _) => check!(font)
+		(Err(_), Err(_)) => {}
 	}
 	small = FontBuild.scaled(bytes, 2)
 	large = FontBuild.scaled(bytes, 16)
-	small_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(small))
-	large_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(large))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large))
+	small_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(small, Font.ReadOptions.{}))
+	large_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
 	if large_cost.allocations > 10 * small_cost.allocations + 256 {
 		crash "reading a font 8 times larger took ${large_cost.allocations.to_str()} allocations, against ${small_cost.allocations.to_str()}"
 	}
@@ -55,12 +63,17 @@ test! = |bytes| {
 code_points : List(U32)
 code_points = [0, 1, 0x20, 0x41, 0x5A, 0x61, 0x7E, 0x7F, 0xA0, 0xFF, 0x100, 0x400, 0x401, 0x2192, 0xD800, 0xFFFD, 0xFFFE, 0xFFFF, 0x10000, 0x1F600, 0x1F852, 0x10FFFF, 0x110000, 0xFFFFFFFF]
 
-## Glyph indices worth asking about, beyond the font's own.
-probe_glyphs : Font -> List(U64)
+## Glyph ids worth asking about, beyond the font's own.
+probe_glyphs : Font -> List(U32)
 probe_glyphs = |font| {
-	total = Font.glyph_total(font)
-	[0, 1, 2, 3, 7, 9, 11, 30, 1805, 2936, total - 1, total, total + 1, 65535, 65536, 0xFFFFFFFFFFFFFFFF]
+	total = Font.glyph_count(font)
+	[0, 1, 2, 3, 7, 9, 11, 30, 1805, 2936, total - 1, total, total + 1, 65535, 65536, 0xFFFFFFFF]
 }
+
+## Texts worth shaping: empty, the sample fonts' letters, ligature and
+## arrow candidates, and a mix of scripts.
+texts : List(Str)
+texts = ["", "A", "GABC", "office ->> <-> fi", "AVATAR Tomorrow", "αβγ Привет €100", Str.join_with(List.repeat("AB", 40), "")]
 
 ## Everything observable about a read, for comparing two reads.
 summary : Try(Font, List(Font.Problem)) -> Str
@@ -69,30 +82,27 @@ summary = |result|
 		Err(problems) => Str.inspect(problems)
 		Ok(font) => {
 			glyphs = probe_glyphs(font)
-			run = glyphs.map_with_index(|glyph, cluster| { glyph, cluster })
 			Str.inspect((
 				Font.units_per_em(font),
-				Font.ascent(font),
-				Font.descent(font),
-				Font.glyph_total(font),
+				Font.metrics(font),
+				Font.glyph_count(font),
+				Font.dropped(font),
 				code_points.map(|cp| Font.glyph(font, cp) ?? 0xFFFFFFFF),
 				glyphs.map(|g| Font.advance(font, g)),
-				glyphs.map(|g| Font.ink(font, g)),
-				Font.kerning(font, glyphs),
-				Font.substitute(font, run),
+				glyphs.map(|g| Font.extents(font, g)),
+				Font.code_points(font).take_first(64),
+				Font.axes(font),
+				texts.map(|t| Font.shape(font, t, Font.ShapeOptions.{})),
 			))
 		}
 	}
 
-finite : F64 -> Bool
-finite = |value| F64.is_finite(value)
-
-check : Font => {}
-check = |font| {
-	total = Font.glyph_total(font)
+check! : Font => {}
+check! = |font| {
+	total = Font.glyph_count(font)
 	units = Font.units_per_em(font)
-	if total == 0 or !(units >= 16.0 and units <= 16384.0) or !finite(Font.ascent(font)) or !finite(Font.descent(font)) {
-		crash "a font's metrics are out of range"
+	if total == 0 or units < 16 or units > 16384 {
+		crash "a font's units per em or glyph count is out of range"
 	}
 	for cp in code_points {
 		match Font.glyph(font, cp) {
@@ -100,29 +110,65 @@ check = |font| {
 			_ => {}
 		}
 	}
-	glyphs = probe_glyphs(font)
-	for g in glyphs {
-		if !finite(Font.advance(font, g)) or Font.advance(font, g) < 0.0 {
-			crash "an advance is not finite and non-negative"
+	# The listing is ascending and every listed code point maps.
+	var $previous = Err(None)
+	for cp in Font.code_points(font).take_first(4096) {
+		match $previous {
+			Ok(p) if cp <= p => crash "the code point listing is not ascending"
+			_ => {}
 		}
-		match Font.ink(font, g) {
-			Ink(box) if !finite(box.left) or !finite(box.right) or box.left > box.right => crash "an outline extent is not finite"
+		if Font.glyph(font, cp).is_err() {
+			crash "a listed code point does not map to a glyph"
+		}
+		$previous = Ok(cp)
+	}
+	for g in probe_glyphs(font) {
+		if Font.advance(font, g) < 0 {
+			crash "an advance is negative"
+		}
+		match Font.extents(font, g) {
+			Extents(box) if box.x_min > box.x_max or box.y_min > box.y_max => crash "a glyph box is not ordered"
 			_ => {}
 		}
 	}
-	runs = [glyphs, [], [1], [7, 1, 2, 3, 1, 2], List.repeat(1, 40), FontBuild.counting(64)]
-	for run in runs {
-		kerned = Font.kerning(font, run)
-		if kerned.len() != run.len() or !kerned.all(finite) {
-			crash "kerning is not one finite adjustment per glyph"
+	for text in texts {
+		check_run!(text, Font.shape(font, text, Font.ShapeOptions.{}), False)
+		check_run!(text, Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft }), True)
+	}
+	bold = Font.at(font, Font.Variation.{ weight: Bold, axes: [{ tag: "opsz", value: 36 }] })
+	for g in probe_glyphs(font) {
+		if Font.advance(bold, g) < 0 {
+			crash "an advance at another location is negative"
 		}
-		shaped = Font.substitute(font, run.map_with_index(|glyph, cluster| { glyph, cluster }))
-		if shaped.len() > 4 * run.len() + 32 {
-			crash "substitution grew a run of ${run.len().to_str()} glyphs to ${shaped.len().to_str()}"
+	}
+}
+
+## A run's lists are index-aligned, its clusters lie inside the text and
+## run in order (backwards for right-to-left), and it grew within bounds.
+check_run! : Str, Font.Run, Bool => {}
+check_run! = |text, run, rtl| {
+	n = run.glyphs.len()
+	if run.advances.len() != n or run.offsets.len() != n or run.clusters.len() != n or run.flags.len() != n {
+		crash "a run's lists are not index-aligned"
+	}
+	bytes = text.to_utf8().len()
+	if n > (64 * bytes).max(16384) {
+		crash "shaping grew ${bytes.to_str()} bytes of text to ${n.to_str()} glyphs"
+	}
+	if !run.clusters.all(|c| c.to_u64() < bytes) {
+		crash "a cluster lies outside the text"
+	}
+	var $k = 1
+	while $k < n {
+		a = run.clusters.get($k - 1) ?? 0
+		b = run.clusters.get($k) ?? 0
+		if if (rtl) a < b else a > b {
+			crash "clusters are out of order"
 		}
-		if !shaped.all(|item| item.cluster < run.len()) {
-			crash "substitution gave a cluster outside the run"
-		}
+		$k = $k + 1
+	}
+	if !run.flags.all(|f| f <= 1) {
+		crash "a flag other than unsafe-to-break is set"
 	}
 }
 

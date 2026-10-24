@@ -7,24 +7,14 @@ repositories are relative to `~/Documents/Github/`.
 
 ## To 0.1.0
 
-### Internal structure and API (§5.1, §5.9)
+### Reading (§4.4)
 
-- [ ] The §5.9 surface: `ReadOptions`/`Limits`, `ShapeOptions`/`ShapeLimits`,
-  integer font units, `U32` glyph ids, `Run`, `ShapePlan`, `plan`, `shape`,
-  `shape_planned`, `shape_scalars`, `width`, `metrics` (line gap, cap and x
-  height, underline, strikeout), `extents`, `family_name`, `glyph_name`
-  (`name`, `post`), `code_points` as an `Iter` (benchmark against a `List`
-  first, §5.6). Drop `substitute` and `kerning`.
-- [ ] `ttcf` collections and `face_count` (§4.1); lenient and strict
-  reading with `dropped`, problems naming table and offset (§4.4).
-- [ ] HarfBuzz budgets in `ShapeLimits` (§6.3); update the growth bound in
-  `fuzz/font-shape.roc`. Nested contextual lookups use an explicit work
-  list once depth rises to 64.
+- [ ] Lenient reading accepts exactly what OTS accepts: reject (not drop)
+  broken GSUB, GPOS, GDEF, OS/2, `post`, `name`; drop only the variation
+  tables and an unsorted `kern`. Check every reading case against OTS.
 
 ### Variable fonts (§5.7, `docs/variable-fonts.adoc`)
 
-- [ ] Phase 1: wire `TableVar` into `Font` (`Variation`, `at`, `axes`,
-  Regular by default; HVAR advances, MVAR metrics).
 - [ ] Wire phase 2 (`LayoutVar`: kerning deltas via `check_pair` inside
   `LayoutKerning.read_gpos`, `x_advance` with the PairSet base for format
   1; FeatureVariations in the shaping plan) and phase 3 (`TableGlyfPoints`,
@@ -48,17 +38,17 @@ repositories are relative to `~/Documents/Github/`.
 ### Browser parity (§6)
 
 - [ ] `GDEF` glyph and mark attachment classes, mark filtering sets, GSUB
-  lookup flags; the required feature of a language system.
-- [ ] GSUB types 3 (with the alternate index) and 8.
-- [ ] Script, language and feature selection with browser defaults per
-  script and direction.
+  lookup flags.
+- [ ] GSUB types 3 (with the alternate chosen by the feature value) and 8;
+  `frac` and `rand`.
+- [ ] RTL: Unicode mirroring; the Hebrew shaper's GPOS rule.
+- [ ] Language tags whose OpenType tag depends on a region or variant
+  subtag (`zh-HK` and similar).
 - [ ] Mapping steps of §6.2 (compose/decompose by cmap, default ignorables,
   space fallbacks, variation selectors via cmap 14, documented `.notdef`).
-- [ ] GPOS x/y placement for pair adjustment; legacy `kern` values split as
-  HarfBuzz does.
 - [ ] Cluster merging to match HarfBuzz (the largest remaining difference
   group: emoji grapheme clusters in AdobeBlank2).
-- [ ] Promote curated cases as they pass (`tests/cases/curated.jsonc`
+- [ ] Promote curated cases as they pass (now: 10 in M3, 2 in M4) (`tests/cases/curated.jsonc`
   `gating: true`, re-import, record, `--update-scores`).
 
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the

@@ -6,6 +6,8 @@ app [main!] {
 
 import FontTests
 import SubstituteTests
+import ReadTests
+import ShapeTests
 
 ## The tests of roc-font's public API. They import the package through
 ## `package/main.roc`, exactly what ships, and build their fonts with the

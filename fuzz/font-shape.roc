@@ -16,44 +16,46 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## `FontBuild.fuzz_font`). Without a font, or with one that cannot be read,
 ## the text is shaped with Inter.
 ##
-## Substitution is deterministic, keeps every glyph's cluster inside the
-## run, and never gives more than `4 n + 32` glyphs for `n` characters
-## (at most 36 per character); kerning gives one finite adjustment per
-## glyph. The run's width in font units (advances plus kerning) is
-## deterministic and finite. Shaping 8 times the text (16 against 2
-## copies) must not take more than about 8 times the allocations, and must
-## free what it allocates.
+## Shaping is deterministic; a run's lists are index-aligned; its clusters
+## lie inside the text, in order for left-to-right text and in reverse for
+## right-to-left; it never has more than 64 glyphs per byte of text (or
+## 16384 in all), HarfBuzz's bound; only the unsafe-to-break flag is set;
+## the same with features turned off over part of the text; shaping with a
+## plan agrees with shaping directly, and so does shaping scalars with
+## their offsets; the width is the sum of the advances. Shaping 8 times the
+## text (16 against 2 copies) must not take more than about 8 times the
+## allocations, and must free what it allocates.
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	split = split_at_marker(bytes)
-	read = if (split.font.is_empty()) Err([]) else Font.from_bytes(FontBuild.fuzz_font(split.font, inter_file))
+	read = if (split.font.is_empty()) Err([]) else Font.from_bytes(FontBuild.fuzz_font(split.font, inter_file), Font.ReadOptions.{})
 	font = read ?? inter
 	text = Str.from_utf8_lossy(split.text)
-	code_points = decode(text.to_utf8())
-	n = code_points.len()
-	missing = Font.glyph_total(font)
-	items = code_points.map_with_index(|cp, i| { glyph: Font.glyph(font, cp) ?? missing, cluster: i })
-	shaped = Font.substitute(font, items)
-	if shaped != Font.substitute(font, items) {
-		crash "substituting the same run twice gave different glyphs"
+	n = text.to_utf8().len()
+	ltr = Font.shape(font, text, Font.ShapeOptions.{})
+	if Str.inspect(ltr) != Str.inspect(Font.shape(font, text, Font.ShapeOptions.{})) {
+		crash "shaping the same text twice gave different runs"
 	}
-	if shaped.len() > 4 * n + 32 or (n > 0 and shaped.len() > 36 * n) {
-		crash "substitution turned ${n.to_str()} characters into ${shaped.len().to_str()} glyphs"
+	check_run!(n, ltr, False)
+	plan = Font.plan(font, Font.ShapeOptions.{})
+	if Str.inspect(Font.shape_planned(font, plan, text)) != Str.inspect(ltr) {
+		crash "shaping with a plan differs from shaping directly"
 	}
-	if !shaped.all(|item| item.cluster < n) {
-		crash "substitution gave a cluster outside the run"
+	scalars = decode(text.to_utf8())
+	if Str.inspect(Font.shape_scalars(font, plan, scalars)) != Str.inspect(ltr) {
+		crash "shaping scalars with their offsets differs from shaping the text"
 	}
-	glyphs = shaped.map(|item| item.glyph)
-	kerned = Font.kerning(font, glyphs)
-	if kerned.len() != glyphs.len() or !kerned.all(|k| F64.is_finite(k)) {
-		crash "kerning is not one finite adjustment per glyph"
-	}
-	measured = width(font, text)
-	if measured != width(font, text) {
-		crash "measuring the same text twice gave different widths"
-	}
-	if !F64.is_finite(measured) {
-		crash "a measured width is not finite"
+	rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft, script: "Hebr" })
+	check_run!(n, rtl, True)
+	latin_rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft })
+	check_run!(n, latin_rtl, True)
+	half = (n // 2).to_u32_wrap()
+	ranged = Font.shape(font, text, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "liga", value: 0, end: half }, Font.Feature.{ tag: "kern", value: 0, start: half }, Font.Feature.{ tag: "smcp" }] })
+	check_run!(n, ranged, False)
+	measured = Font.width(font, text)
+	total = ltr.advances.fold(0.I64, |sum, a| sum + a.x.to_i64())
+	if measured.to_i64() != total.max(-2147483648).min(2147483647) {
+		crash "the width is not the sum of the advances"
 	}
 	scaling!(font, repeated(text, 2), repeated(text, 16))
 	Fuzz.keep
@@ -62,24 +64,34 @@ test! = |bytes| {
 ## Inter Regular as a metrics-only file (a test fixture, SIL Open Font
 ## License 1.1).
 inter : Font
-inter = Font.from_bytes(inter_file) ?? Font.empty
+inter = Font.from_bytes(inter_file, Font.ReadOptions.{}) ?? crash "the Inter test font could not be read"
 
-## A run's width in font units: each glyph's advance plus its kerning, after
-## the font's default substitutions.
-width : Font, Str -> F64
-width = |font, text| {
-	missing = Font.glyph_total(font)
-	items = decode(text.to_utf8()).map_with_index(|cp, i| { glyph: Font.glyph(font, cp) ?? missing, cluster: i })
-	glyphs = Font.substitute(font, items).map(|item| item.glyph)
-	kerned = Font.kerning(font, glyphs)
-	var $sum = 0.0
-	for k in kerned {
-		$sum = $sum + k
+## A run's lists are index-aligned, its clusters lie inside the text and
+## run in order (backwards for right-to-left), and it grew within bounds.
+check_run! : U64, Font.Run, Bool => {}
+check_run! = |bytes, run, rtl| {
+	n = run.glyphs.len()
+	if run.advances.len() != n or run.offsets.len() != n or run.clusters.len() != n or run.flags.len() != n {
+		crash "a run's lists are not index-aligned"
 	}
-	for g in glyphs {
-		$sum = $sum + Font.advance(font, g)
+	if n > (64 * bytes).max(16384) {
+		crash "shaping grew ${bytes.to_str()} bytes of text to ${n.to_str()} glyphs"
 	}
-	$sum
+	if !run.clusters.all(|c| c.to_u64() < bytes) {
+		crash "a cluster lies outside the text"
+	}
+	var $k = 1
+	while $k < n {
+		a = run.clusters.get($k - 1) ?? 0
+		b = run.clusters.get($k) ?? 0
+		if if (rtl) a < b else a > b {
+			crash "clusters are out of order"
+		}
+		$k = $k + 1
+	}
+	if !run.flags.all(|f| f <= 1) {
+		crash "a flag other than unsafe-to-break is set"
+	}
 }
 
 split_at_marker : List(U8) -> { text : List(U8), font : List(U8) }
@@ -91,8 +103,8 @@ split_at_marker = |bytes| {
 	{ text: bytes.take_first($i), font: bytes.drop_first($i + 1) }
 }
 
-## Code points of valid UTF-8.
-decode : List(U8) -> List(U32)
+## Scalars of valid UTF-8 with the byte offset each starts at.
+decode : List(U8) -> List({ scalar : U32, offset : U32 })
 decode = |bytes| {
 	var $out = []
 	var $i = 0
@@ -103,7 +115,7 @@ decode = |bytes| {
 		for k in 1..<len {
 			$cp = $cp.shl_wrap(6).bitwise_or((bytes.get($i + k) ?? 0).to_u32().bitwise_and(0x3F))
 		}
-		$out = $out.append($cp)
+		$out = $out.append({ scalar: $cp, offset: $i.to_u32_wrap() })
 		$i = $i + len
 	}
 	$out
@@ -120,9 +132,9 @@ repeated = |text, copies| {
 ## them all.
 scaling! : Font, Str, Str => {}
 scaling! = |font, small, large| {
-	small_cost = Fuzz.measure_allocs!(|{}| width(font, small))
-	large_cost = Fuzz.measure_allocs!(|{}| width(font, large))
-	Fuzz.expect_no_leaks!(|{}| width(font, large))
+	small_cost = Fuzz.measure_allocs!(|{}| Font.width(font, small))
+	large_cost = Fuzz.measure_allocs!(|{}| Font.width(font, large))
+	Fuzz.expect_no_leaks!(|{}| Font.width(font, large))
 	if large_cost.allocations > 10 * small_cost.allocations + 256 {
 		crash "shaping 8 times the text took ${large_cost.allocations.to_str()} allocations, against ${small_cost.allocations.to_str()}"
 	}

@@ -23,17 +23,20 @@ every problem found, and every query on a font that was read succeeds.
 ```roc
 import font.Font
 
-# The width of "AV" in font units: advances plus kerning, after the
-# font's default substitutions.
-width : List(U8) -> Try(F64, List(Font.Problem))
+# The width of "AV" in font units, shaped with the browser default
+# features (ligatures, contextual forms and kerning).
+width : List(U8) -> Try(I32, List(Font.Problem))
 width = |bytes| {
-	font = Font.from_bytes(bytes)?
-	missing = Font.glyph_total(font)
-	items = [0x41, 0x56].map_with_index(|cp, i| { glyph: Font.glyph(font, cp) ?? missing, cluster: i })
-	glyphs = Font.substitute(font, items).map(|item| item.glyph)
-	advances = glyphs.map(|g| Font.advance(font, g))
-	kerning = Font.kerning(font, glyphs)
-	Ok(advances.concat(kerning).fold(0.0, |sum, x| sum + x))
+	font = Font.from_bytes(bytes, Font.ReadOptions.{})?
+	Ok(Font.width(font, "AV"))
+}
+
+# Glyphs, their advances and offsets, and the UTF-8 byte offset of the text
+# each draws, for Bold text in English.
+shaped : List(U8) -> Try(Font.Run, List(Font.Problem))
+shaped = |bytes| {
+	font = Font.at(Font.from_bytes(bytes, Font.ReadOptions.{})?, Font.Variation.{ weight: Bold })
+	Ok(Font.shape(font, "office -> home", Font.ShapeOptions.{ script: "Latn", language: "en" }))
 }
 ```
 

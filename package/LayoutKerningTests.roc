@@ -31,7 +31,12 @@ expect {
 	}
 	gpos = header.concat(scripts).concat(language).concat(features).concat(lookups).concat(fields).concat(offsets).concat(coverage).concat($set)
 	match LayoutKerning.read_gpos(gpos, n) {
-		Ok(kerning) => LayoutKerning.stored_size(kerning) == 2 and LayoutKerning.adjust(kerning, [5, 7, 299, 0], n) == [-1.0, -1.0, -1.0, 0.0]
+		Ok(read) => {
+			kerning = LayoutKerning.combine(Present(read), Absent)
+			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1 })
+			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, n)
+			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]
+		}
 		Err(_) => False
 	}
 }

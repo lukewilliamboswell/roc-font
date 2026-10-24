@@ -2,26 +2,6 @@
   "about": "Cases where roc-font deliberately or knowingly differs from its recorded oracle result. scripts/conformance.py fails on any unlisted difference and on any listed case that now agrees; it never edits this file. Keep entries sorted by id; every entry needs a reason a reader can act on.",
   "entries": [
     {
-      "id": "collections/inter-ttc-read-face0",
-      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
-    },
-    {
-      "id": "collections/inter-ttc-shape-face0",
-      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
-    },
-    {
-      "id": "collections/inter-ttc-width-face0",
-      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
-    },
-    {
-      "id": "collections/test-ttc-read-face0",
-      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
-    },
-    {
-      "id": "collections/test-ttc-shape-face0",
-      "reason": "Collections are not read yet (architecture §4.1, ReadOptions.face): roc-font rejects a `ttcf` file, while HarfBuzz and OTS read its first face."
-    },
-    {
       "id": "corpus-fonts/fonttools-bogus-post-read",
       "reason": "OTS rejects the font because it has no `OS/2` table. roc-font treats `OS/2` as optional (architecture §4.4), so accepting the font is deliberate."
     },
@@ -48,14 +28,6 @@
     {
       "id": "reading/inter-metrics-subset",
       "reason": "OTS rejects the metrics-only subset because it has no `name` table. roc-font does not read `name`, so accepting the font is deliberate."
-    },
-    {
-      "id": "reading/kern-unsorted",
-      "reason": "Lenient reading (architecture §4.4) is not implemented: OTS drops a `kern` table whose pairs are out of order, while roc-font accepts it."
-    },
-    {
-      "id": "tiny/kern-table-pair",
-      "reason": "HarfBuzz splits a legacy `kern` table value across the pair (half on the first glyph's advance, half as the second glyph's offset and advance). The current public API returns only advance changes, and the `kern` value lands on the first glyph."
     }
   ]
 }

@@ -209,10 +209,15 @@ A table is *required* (`head`, `hhea`, `maxp`, `hmtx`, `cmap`, plus `loca`
 and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
 `OS/2`, `name`, `post`, ...).
 
-* *Lenient* (the default) follows browsers and OTS: a broken required table
-  rejects the font; a broken optional table is dropped, and the font reads
-  successfully with that table absent. The font reports what was dropped
-  and why (`Font.dropped`), so nothing is hidden.
+* *Lenient* (the default) accepts exactly what browsers accept, which is
+  what OTS accepts: OTS is the oracle for every reading case. A broken
+  required table rejects the font, and so does a broken GSUB, GPOS, GDEF,
+  OS/2, `post`, `name` or structurally broken `kern`, because OTS rejects
+  those fonts and a browser would never draw them. OTS drops the variation
+  tables as one unit and an unsorted `kern`; roc-font drops the same, and
+  the font reports what was dropped and why (`Font.dropped`). (Measured
+  with OTS 9.3.0; an earlier draft dropped every broken optional table,
+  which would measure fonts no browser can show.)
 * *Strict* (`ReadOptions.{ strict: True }`, wanted by roc-pdf) rejects
   the font for any problem, including checksum mismatches and overlapping or
   unordered tables.
@@ -366,13 +371,16 @@ reverse chaining runs backwards, and marks attach to earlier glyphs, so a
 run is produced whole.
 
 `Iter` is used for *listings* where the caller may stop early or where a
-full list would be large and usually discarded: the code points a cmap maps,
-name records, the scripts and features a font offers, and outline drawing
-commands. Each listing reads lazily from the prepared font through
+full list would be large and usually discarded: name records, the scripts
+and features a font offers, and outline drawing commands. Each listing reads lazily from the prepared font through
 `Iter.custom`. Where a caller usually wants everything at once (all
 advances), a `List` query is offered instead. Before an `Iter` listing
 lands, a native benchmark compares it with the equivalent `List` query; the
-per-step closure call must not make a common use slower.
+per-step closure call must not make a common use slower. That rule made
+`code_points` a `List`: filling an atlas lists every code point, which
+cost 22.5 µs through `Iter.custom` against 2.5–3.9 µs for a list allocated
+at its final length (Inter, Noto Sans); `Iter` won only for the first
+handful.
 
 === 5.7 Variable fonts
 
@@ -529,7 +537,7 @@ glyph_count : Font -> U32
 glyph : Font, U32 -> Try(U32, [Missing])        # code point -> glyph id
 advance : Font, U32 -> I32                      # glyph id; past the font: the format's rule
 extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
-code_points : Font -> Iter(U32)                 # every mapped code point, ascending
+code_points : Font -> List(U32)                 # every mapped code point, ascending (§5.6)
 family_name : Font -> Try(Str, [Missing])
 glyph_name : Font, U32 -> Try(Str, [Missing])
 
@@ -553,7 +561,7 @@ ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47
                   direction : Direction ?? FromScript, features : List(Feature) ?? [],
                   clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }),
-        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break
+        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: only bit 0, unsafe to break
 ShapePlan                                        # opaque, reusable for one Font and options
 plan : Font, ShapeOptions -> ShapePlan
 shape : Font, Str, ShapeOptions -> Run
@@ -566,6 +574,11 @@ sans, serif, mono : Font                         # Inter, Merriweather, Fira Cod
 sans_bytes, serif_bytes, mono_bytes : List(U8)
 sans_licence, serif_licence, mono_licence : Str
 ----
+
+An empty `script` shapes as Latin, as browsers and HarfBuzz do for Latin
+text; an empty script leaves the direction to the text. `Graphemes` and
+`Characters` currently cluster alike: grapheme clusters need Unicode data,
+so callers who have it pass grapheme starts as offsets to `shape_scalars`.
 
 The seed's low-level `substitute` and `kerning` are removed: `shape`
 covers them with clusters and positions, and `shape_scalars` serves callers
@@ -613,7 +626,7 @@ Shaping work is bounded by budgets in `ShapeLimits`, with defaults generous
 enough never to change a result on a legitimate font: output length at most
 `max(64 n, 16384)` glyphs and lookup applications at most
 `max(1024 n, 16384)`, following HarfBuzz, with nested lookup depth bounded
-at 64. Roc is efficient enough that a tight budget buys nothing but
+by `Limits.max_depth` (default 64, walked with an explicit frame stack). Roc is efficient enough that a tight budget buys nothing but
 disagreement with the reference. Exceeding a budget stops the stage and
 returns the run computed so far, which is total and finite; the budget, not
 the text, is then documented as the cause of any oracle difference.

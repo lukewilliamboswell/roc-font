@@ -1,50 +1,105 @@
 import font.Font
 import build.FontBuild
 
-## The tests of the default substitutions (ligatures and contextual forms),
-## through the public `Font` API exactly as the package ships it: each test
-## builds a font with a `GSUB` table, reads it with `Font.from_bytes` and
-## shapes a run with `Font.substitute`. Run with `roc test tests/api/main.roc`.
+## The tests of substitutions (ligatures, contextual forms and the rest of
+## `GSUB`), through the public `Font` API exactly as the package ships it:
+## each test builds a font with a `GSUB` table, reads it with
+## `Font.from_bytes` and shapes text with `Font.shape`. Run with
+## `roc test tests/api/main.roc`.
 SubstituteTests :: {}.{}
 
 # ------------------------------------------------------------ test helpers
 #
-# Each test puts a `GSUB` table built with `FontBuild` into the four-glyph
-# `FontBuild.basic` font. Substitution does not check glyph indices against
-# the font, so the runs use whatever indices the table needs.
+# Each test puts a `GSUB` table built with `FontBuild` into a font of 65535
+# glyphs whose character map draws U+10000 + g with glyph g (for g from 1),
+# so text can name any glyph; U+10000 itself draws glyph 0. Each character
+# takes four bytes of UTF-8, so glyph i of the input has cluster 4 i.
 
-items_of : List(U64) -> List({ glyph : U64, cluster : U64 })
-items_of = |glyphs| glyphs.map_with_index(|glyph, i| { glyph, cluster: i })
+# The text whose characters draw these glyphs.
+text_of : List(U64) -> Str
+text_of = |glyphs| {
+	var $bytes = []
+	for g in glyphs {
+		c = 0x10000 + g
+		$bytes = $bytes.concat([0xF0 + c.shr_zf_wrap(18), 0x80 + c.shr_zf_wrap(12).bitwise_and(0x3F), 0x80 + c.shr_zf_wrap(6).bitwise_and(0x3F), 0x80 + c.bitwise_and(0x3F)].map(|b| b.to_u8_wrap()))
+	}
+	Str.from_utf8($bytes) ?? ""
+}
 
-# The basic font with the given `GSUB` table.
+many_glyphs : List({ tag : Str, data : List(U8) })
+many_glyphs = [
+	{ tag: "head", data: FontBuild.head(1000, False) },
+	{ tag: "hhea", data: FontBuild.hhea(800, -200, 1) },
+	{ tag: "maxp", data: FontBuild.maxp(65535) },
+	{ tag: "hmtx", data: FontBuild.hmtx([500]) },
+	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFF, glyph: 1 }]) }]) },
+]
+
+# The font with the given `GSUB` table.
 read : List(U8) -> Try(Font, List(Font.Problem))
-read = |gsub| Font.from_bytes(FontBuild.file(FontBuild.replace(FontBuild.basic, "GSUB", gsub)))
+read = |gsub| Font.from_bytes(FontBuild.file(FontBuild.replace(many_glyphs, "GSUB", gsub)), Font.ReadOptions.{})
+
+run_of : Font, List(U64) -> Font.Run
+run_of = |font, glyphs| Font.shape(font, text_of(glyphs), Font.ShapeOptions.{})
 
 # The glyphs of a shaped run, or [99999] when the font cannot be read.
-shaped : List(U8), List(U64) -> List(U64)
+shaped : List(U8), List(U64) -> List(U32)
 shaped = |gsub, glyphs|
 	match read(gsub) {
-		Ok(font) => Font.substitute(font, items_of(glyphs)).map(|item| item.glyph)
+		Ok(font) => run_of(font, glyphs).glyphs
 		Err(_) => [99999]
 	}
 
-shaped_items : List(U8), List(U64) -> List({ glyph : U64, cluster : U64 })
+# Glyphs with their clusters as indices into the input glyphs.
+shaped_items : List(U8), List(U64) -> List({ glyph : U32, cluster : U32 })
 shaped_items = |gsub, glyphs|
 	match read(gsub) {
-		Ok(font) => Font.substitute(font, items_of(glyphs))
+		Ok(font) => {
+			run = run_of(font, glyphs)
+			run.glyphs.map2(run.clusters, |glyph, cluster| { glyph, cluster: cluster // 4 })
+		}
 		Err(_) => []
 	}
 
 readable : List(U8) -> Bool
-readable = |gsub| read(gsub).is_ok()
-
-# The font is refused, for its `GSUB` table alone.
-refused : List(U8) -> Bool
-refused = |gsub|
+readable = |gsub|
 	match read(gsub) {
-		Ok(_) => False
-		Err(problems) => problems == [BadTable("GSUB")]
+		Ok(font) => Font.dropped(font).is_empty()
+		Err(_) => False
 	}
+
+is_gsub : Font.Problem -> Bool
+is_gsub = |p|
+	match p {
+		BadTable(b) => b.table == "GSUB"
+		_ => False
+	}
+
+# A problem only `GSUB` can cause: broken, or listing more lookups than
+# the limit allows.
+gsub_problem : Font.Problem -> Bool
+gsub_problem = |p|
+	match p {
+		OverLimit(which) => which == "max_lookups"
+		_ => is_gsub(p)
+	}
+
+# The table is broken: lenient reading leaves it out and says so, strict
+# reading refuses the font for it.
+refused : List(U8) -> Bool
+refused = |gsub| {
+	bytes = FontBuild.file(FontBuild.replace(many_glyphs, "GSUB", gsub))
+	only_gsub = |problems| !problems.is_empty() and problems.all(is_gsub)
+	lenient = match Font.from_bytes(bytes, Font.ReadOptions.{}) {
+		Ok(font) => only_gsub(Font.dropped(font)) and run_of(font, [5, 6]).glyphs == [5, 6]
+		Err(_) => False
+	}
+	strict = match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True }) {
+		Ok(_) => False
+		Err(problems) => only_gsub(problems)
+	}
+	lenient and strict
+}
 
 # A table whose `calt` feature uses the first lookup; the others are only
 # reached from it.
@@ -66,7 +121,7 @@ expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single1([5, 6], 10)] 
 
 # Deltas wrap modulo 65536.
 expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single1([5], -6)] }]), [5]) == [65535]
-expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single1([65535], 2)] }]), [65535]) == [1]
+expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single1([65534], 3)] }]), [65534]) == [1]
 
 expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single2([5, 7], [50, 70])] }]), [5, 6, 7]) == [50, 6, 70]
 
@@ -88,10 +143,25 @@ expect shaped_items(all_active([{ kind: 2, subtables: [FontBuild.multiple([5], [
 # An empty sequence deletes the glyph.
 expect shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([5], [[]])] }]), [4, 5, 6]) == [4, 6]
 
-# A run never grows past 4 n + 32 glyphs.
+# A run grows as far as the substitutions take it, up to 64 glyphs per
+# input glyph or 16384 in all, whichever is more (HarfBuzz's bound); past
+# that, substitutions that would grow it are not made.
+expect shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }]), List.repeat(1, 10)).len() == 1000
 expect {
-	result = shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }]), List.repeat(1, 10))
-	result.len() <= 4 * 10 + 32 and result.len() >= 10
+	result = shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }]), List.repeat(1, 300))
+	result.len() <= 64 * 300 and result.len() >= 300
+}
+
+# A smaller growth limit binds sooner, but never below 16384 glyphs.
+expect {
+	match read(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }])) {
+		Ok(font) => {
+			options = Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } }
+			run = Font.shape(font, text_of(List.repeat(1, 300)), options)
+			run.glyphs.len() <= 16384 and run.glyphs.len() > 300
+		}
+		Err(_) => False
+	}
 }
 
 # ------------------------------------------------------------ ligature
@@ -261,13 +331,14 @@ expect shaped(all_active([{ kind: 3, subtables: [FontBuild.single1([5], 10)] }, 
 # ------------------------------------------------------------ features
 
 # Only the features a browser applies by default to left-to-right text
-# apply: not small capitals, discretionary ligatures, right-to-left forms,
-# or features of other tables.
+# apply: not small capitals, discretionary ligatures or right-to-left
+# forms. As in HarfBuzz, default features apply in whichever table lists
+# them, so `kern` and `mark` lookups in `GSUB` apply too.
 expect {
 	tags = ["rvrn", "ltra", "ltrm", "ccmp", "locl", "rlig", "liga", "clig", "calt", "rclt", "smcp", "dlig", "rtla", "rtlm", "kern", "mark"]
 	lookups = tags.map(|_| { kind: 1, subtables: [FontBuild.single1(FontBuild.counting(200), 1)] })
 	features = tags.map_with_index(|tag, i| { tag, lookups: [i] })
-	shaped(FontBuild.layout("latn", features, lookups), [5]) == [15]
+	shaped(FontBuild.layout("latn", features, lookups), [5]) == [17]
 }
 
 # Lookups apply in lookup order, not feature order; a lookup listed by
@@ -303,24 +374,25 @@ expect refused(first_active([{ kind: 5, subtables: [FontBuild.context3([[1]], [{
 # ------------------------------------------------------------ edge cases
 
 expect shaped(all_active([{ kind: 1, subtables: [FontBuild.single1([5], 1)] }]), []) == []
-# A font without substitutions, and the empty font, keep every run as it is.
+# A font without substitutions keeps every glyph as the character map
+# gives it; characters it does not map draw glyph 0.
 expect {
-	run = items_of([1, 2, 3, 70000])
-	match Font.from_bytes(FontBuild.file(FontBuild.basic)) {
-		Ok(font) => Font.substitute(font, run) == run and Font.substitute(Font.empty, run) == run
+	match Font.from_bytes(FontBuild.file(FontBuild.basic), Font.ReadOptions.{}) {
+		Ok(font) => Font.shape(font, "ABC@", Font.ShapeOptions.{}).glyphs == [1, 2, 3, 0]
 		Err(_) => False
 	}
 }
 
-# Glyph indices no font has pass through every kind of lookup.
+# Glyph 0 and glyphs substitutions give past the font pass through every
+# kind of lookup.
 expect {
 	gsub = all_active([
-		{ kind: 1, subtables: [FontBuild.single1([5], 1)] },
-		{ kind: 2, subtables: [FontBuild.multiple([5], [[1, 2]])] },
+		{ kind: 1, subtables: [FontBuild.single1([5], -6)] },
+		{ kind: 2, subtables: [FontBuild.multiple([7], [[1, 2]])] },
 		{ kind: 4, subtables: [FontBuild.ligature([1], [[{ glyph: 9, rest: [2] }]])] },
 		{ kind: 6, subtables: [FontBuild.chain3([[1]], [[2]], [[3]], [])] },
 	])
-	shaped(gsub, [70000, 1000000000, 0xFFFFFFFFFFFFFFFF]) == [70000, 1000000000, 0xFFFFFFFFFFFFFFFF]
+	shaped(gsub, [0, 5, 0]) == [0, 65535, 0]
 }
 
 # Lookups that call themselves stop at a fixed depth.
@@ -341,12 +413,11 @@ expect {
 }
 
 ## fuzz regression: a contextual rule that calls a multiple substitution
-## once per input glyph must not grow the run past 4 n + 32 glyphs; each
-## rule could otherwise grow its own window to that size.
+## once per input glyph must not grow the run past its bound (here 16384
+## glyphs); each rule could otherwise grow its own window to that size.
 expect {
 	gsub = first_active([{ kind: 6, subtables: [FontBuild.chain3([], [[1]], [], [{ at: 0, lookup: 1 }])] }, { kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 60)])] }])
-	result = shaped(gsub, List.repeat(1, 20))
-	result.len() <= 4 * 20 + 32
+	shaped(gsub, List.repeat(1, 20)).len() == 1200 and shaped(gsub, List.repeat(1, 400)).len() <= 64 * 400
 }
 
 # Applying is deterministic.
@@ -408,11 +479,12 @@ expect {
 	for n in 0..<every_kind.len() {
 		match read(every_kind.take_first(n)) {
 			Ok(font) => {
-				run = items_of([7, 1, 2, 3, 1, 2])
-				$outcomes = $outcomes + (if (Font.substitute(font, run).len() <= 4 * 6 + 32) 1 else 1000000)
+				glyphs = run_of(font, [7, 1, 2, 3, 1, 2]).glyphs
+				gsub_only = Font.dropped(font).all(gsub_problem)
+				$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
 			}
-			Err(problems) => {
-				$outcomes = $outcomes + (if (problems == [BadTable("GSUB")]) 1 else 1000000)
+			Err(_) => {
+				$outcomes = $outcomes + 1000000
 			}
 		}
 	}
@@ -425,11 +497,12 @@ expect {
 		for value in [0, 1, 0xFF] {
 			match read(every_kind.set(at, value) ?? []) {
 				Ok(font) => {
-					run = items_of([7, 1, 2, 3, 1, 2, 0, 9])
-					$outcomes = $outcomes + (if (Font.substitute(font, run).len() <= 4 * 8 + 32) 1 else 1000000)
+					glyphs = run_of(font, [7, 1, 2, 3, 1, 2, 0, 9]).glyphs
+					gsub_only = Font.dropped(font).all(gsub_problem)
+					$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
 				}
-				Err(problems) => {
-					$outcomes = $outcomes + (if (problems == [BadTable("GSUB")]) 1 else 1000000)
+				Err(_) => {
+					$outcomes = $outcomes + 1000000
 				}
 			}
 		}

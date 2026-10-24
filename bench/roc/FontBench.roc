@@ -22,12 +22,24 @@ import font.Font
 ## - `read`: `Font.from_bytes` on the font bytes.
 ## - `cmap`: `Font.glyph` for every code point of the text.
 ## - `advance`: `Font.advance` for the glyph of every code point.
-## - `kerning`: `Font.kerning` over the glyphs of the whole text.
-## - `shape`: the whole pipeline from text: decode UTF-8, map characters to
-##   glyphs, `Font.substitute`, then advances and `Font.kerning`.
+## - `kerning`: pair positioning alone over the glyphs of the whole text:
+##   `Font.shape_planned` with every default substitution turned off, so
+##   the run keeps the mapped glyphs; the checksum folds each glyph's
+##   advance change.
+## - `shape`: `Font.shape_planned` on the text with the default features,
+##   the plan made in `prepare`; the checksum folds glyphs, clusters and
+##   advances.
+##
+## Queries measure at the font's default instance (every axis at its
+## default), as the operations did before variations, so checksums stay
+## comparable across versions and with comparators.
 FontBench :: {}.{
 
-	Prepared : { op : Str, bytes : List(U8), font : Font, text : List(U8), code_points : List(U32), glyphs : List(U64) }
+	Prepared : { op : Str, bytes : List(U8), font : [Ready(Font), NotRead], text : Str, code_points : List(U32), glyphs : List(U32), plan : [Planned(Font.ShapePlan), NotPlanned] }
+
+	## The default substitutions, turned off for the `kerning` operation.
+	no_substitutions : List(Font.Feature)
+	no_substitutions = ["rvrn", "ltra", "ltrm", "ccmp", "locl", "rlig", "liga", "clig", "calt", "rclt", "abvm", "blwm"].map(|tag| Font.Feature.{ tag, value: 0 })
 
 	prepare : List(U8) -> Try(Prepared, Str)
 	prepare = |input| {
@@ -39,16 +51,26 @@ FontBench :: {}.{
 			Err("the case file is shorter than its font length")
 		} else {
 			{ before: bytes, others: text } = data.split_at(length)
+			# Invalid UTF-8 decodes to U+FFFD, in the text the shaping operations
+			# see as in the code points.
+			decoded = FontBench.decode_utf8(text)
+			code_points = decoded.map(|c| c.code_point)
+			text_str = Str.from_utf8_lossy(text)
 			if op == "read" {
-				Ok({ op, bytes, font: Font.empty, text, code_points: [], glyphs: [] })
+				Ok({ op, bytes, font: NotRead, text: text_str, code_points: [], glyphs: [], plan: NotPlanned })
 			} else {
-				match Font.from_bytes(bytes) {
+				match Font.from_bytes(bytes, Font.ReadOptions.{}) {
 					Err(problems) => Err("the font could not be read: ${Str.inspect(problems)}")
-					Ok(font) => {
-						code_points = FontBench.decode_utf8(text).map(|c| c.code_point)
+					Ok(read) => {
+						font = Font.at(read, Font.Variation.{ axes: Font.axes(read).map(|a| { tag: a.tag, value: a.default }) })
 						glyphs = code_points.map(|cp| Font.glyph(font, cp) ?? 0)
-						if op == "cmap" or op == "advance" or op == "kerning" or op == "shape" {
-							Ok({ op, bytes, font, text, code_points, glyphs })
+						if op == "cmap" or op == "advance" {
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: NotPlanned })
+						} else if op == "kerning" {
+							plan = Font.plan(font, Font.ShapeOptions.{ features: FontBench.no_substitutions })
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(plan) })
+						} else if op == "shape" {
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(Font.plan(font, Font.ShapeOptions.{})) })
 						} else {
 							Err("unknown operation ${op}")
 						}
@@ -61,58 +83,61 @@ FontBench :: {}.{
 	## One operation; `Ok` with its checksum when it succeeded.
 	run : Prepared -> Try(U64, U64)
 	run = |p|
-		match p.op {
-			"read" =>
-				match Font.from_bytes(p.bytes) {
-					Ok(font) => Ok(Font.glyph_total(font) + F64.to_u64_wrap(Font.units_per_em(font)))
+		match (p.op, p.font, p.plan) {
+			("read", _, _) =>
+				match Font.from_bytes(p.bytes, Font.ReadOptions.{}) {
+					Ok(font) => Ok(Font.glyph_count(font).to_u64() + Font.units_per_em(font).to_u64())
 					Err(problems) => Err(problems.len())
 				}
-			"cmap" => {
+			("cmap", Ready(font), _) => {
 				var $sum = 0.U64
 				for cp in p.code_points {
-					match Font.glyph(p.font, cp) {
+					match Font.glyph(font, cp) {
 						Ok(g) => {
-							$sum = $sum + g + 1
+							$sum = $sum + g.to_u64() + 1
 						}
 						Err(Missing) => {}
 					}
 				}
 				Ok($sum)
 			}
-			"advance" => {
+			("advance", Ready(font), _) => {
 				var $sum = 0.U64
 				for g in p.glyphs {
-					$sum = $sum + F64.to_u64_wrap(Font.advance(p.font, g))
+					$sum = $sum + Font.advance(font, g).to_i64().to_u64_wrap()
 				}
 				Ok($sum)
 			}
-			"kerning" => Ok(FontBench.sum_f64(Font.kerning(p.font, p.glyphs)))
-			"shape" => Ok(FontBench.shape(p.font, p.text))
+			("kerning", Ready(font), Planned(plan)) => Ok(FontBench.kerning(font, plan, p.code_points))
+			("shape", Ready(font), Planned(plan)) => Ok(FontBench.shape(font, plan, p.text))
 			_ => Err(0)
 		}
 
-	shape : Font, List(U8) -> U64
-	shape = |font, text| {
-		items = FontBench.decode_utf8(text).map(|c| { glyph: Font.glyph(font, c.code_point) ?? 0, cluster: c.offset })
-		shaped = Font.substitute(font, items)
-		glyphs = shaped.map(|item| item.glyph)
-		kerned = Font.kerning(font, glyphs)
-		var $sum = 0.U64
-		for item in shaped {
-			$sum = $sum.plus_wrap(item.glyph + item.cluster + F64.to_u64_wrap(Font.advance(font, item.glyph)))
+	# The kerning of the code points' glyphs: each glyph's advance change,
+	# folded with wrapping (kerning is often negative).
+	kerning : Font, Font.ShapePlan, List(U32) -> U64
+	kerning = |font, plan, code_points| {
+		shaped = Font.shape_scalars(font, plan, code_points.map_with_index(|scalar, i| { scalar, offset: i.to_u32_wrap() }))
+		var $sum = 0.I64
+		for i in 0..<shaped.glyphs.len() {
+			g = shaped.glyphs.get(i) ?? 0
+			adv = (shaped.advances.get(i) ?? { x: 0, y: 0 }).x
+			$sum = $sum.plus_wrap((adv - Font.advance(font, g)).to_i64())
 		}
-		$sum.plus_wrap(FontBench.sum_f64(kerned))
+		$sum.to_u64_wrap()
 	}
 
-	# Kerning adjustments are whole font units, often negative; fold them
-	# with wrapping so the checksum is total.
-	sum_f64 : List(F64) -> U64
-	sum_f64 = |values| {
-		var $sum = 0.I64
-		for v in values {
-			$sum = $sum.plus_wrap(F64.to_i64_wrap(v))
+	shape : Font, Font.ShapePlan, Str -> U64
+	shape = |font, plan, text| {
+		shaped = Font.shape_planned(font, plan, text)
+		var $sum = 0.U64
+		for i in 0..<shaped.glyphs.len() {
+			g = (shaped.glyphs.get(i) ?? 0).to_u64()
+			c = (shaped.clusters.get(i) ?? 0).to_u64()
+			adv = (shaped.advances.get(i) ?? { x: 0, y: 0 }).x.to_i64().to_u64_wrap()
+			$sum = $sum.plus_wrap(g + c).plus_wrap(adv)
 		}
-		I64.to_u64_wrap($sum)
+		$sum
 	}
 
 	## Code points of UTF-8 text with the byte offset each starts at. A byte
