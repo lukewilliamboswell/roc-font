@@ -111,7 +111,9 @@ Each principle below appears again in the sections that apply it.
   combination.
 . *Font units at the boundary, integers throughout.* Values are what the font
   stores, as integers. No floating point enters reading or shaping, so no NaN
-  or infinity can escape and results are bit-identical everywhere.
+  or infinity can escape and results are bit-identical everywhere. Where
+  the reference computes in floating point (variation deltas), roc-font
+  emulates those exact operations with integers (§5.7).
 . *Good defaults, options by record.* The default path needs no OpenType
   knowledge and matches what a browser does. Every option is a defaulted
   field of a nominal options record (§5.3), so adding an option never breaks
@@ -373,7 +375,7 @@ Font.Variation := {
 	weight : Font.Weight ?? Regular,                # Thin … Black, or Weight(U16), CSS 1–1000
 	width : Font.Width ?? Normal,                   # CSS widths (wdth 100)
 	optical_size : Font.OpticalSize ?? FontDefault, # or Size(px) to match a browser
-	axes : List({ tag : Str, value : I32 }) ?? [],  # any other axis, for experts
+	axes : List({ tag : Str, value : Dec }) ?? [],  # any other axis, for experts
 }
 
 bold = Font.at(Font.serif, Font.Variation.{ weight: Bold })
@@ -396,9 +398,35 @@ bold = Font.at(Font.serif, Font.Variation.{ weight: Bold })
 Scope for the first release: phase 1 (avar, item variation store, HVAR,
 MVAR) and phase 2 (GDEF store, GPOS deltas, FeatureVariations) for
 advances, metrics and kerning; phase 3 (gvar applied to glyf points) for
-glyph extents away from the default instance. Arithmetic is fixed point
-with the rounding documented and checked against HarfBuzz and fontTools'
-instancer. Details are in `docs/variable-fonts.adoc`.
+glyph extents away from the default instance. Details, per-font
+requirements and evidence are in `docs/variable-fonts.adoc`.
+
+*Arithmetic.* Results are bit-identical with HarfBuzz, because browsers
+draw with HarfBuzz and consumers compare against them. HarfBuzz computes
+variation scalars in single precision (16.16 normalisation, `avar` in
+`float`, a second rounding to 2.14, cached scalars rounded to 2^-30) and
+rounds halves up (`floor(x + 0.5)`). Exact arithmetic with correct
+rounding still disagreed on about 1 advance in 600,000 and on about 1 in
+4,000 fractional coordinates, which shifts every delta at that location.
+So roc-font performs HarfBuzz's operations, in HarfBuzz's order, on
+single-precision bit patterns held in `U32`: integer code, deterministic,
+with no NaN or infinity reachable. Measured: 14.9 million advances across
+the three defaults at grid and random fractional locations, 0
+differences. Phase 3 needs the same for HarfBuzz's double-precision `gvar`
+scalars. fontTools' instancer takes advances from `gvar` phantom points
+and differs from HarfBuzz on a few glyphs, so it is an oracle only for
+extents.
+
+*Details of the API.* `Font.at` returns a `Font`, so every query keeps its
+signature; it computes only the location state (0.6–3.7 µs), and the
+prepared tables are shared. Named fields apply only when the font has
+that axis; `axes` entries apply last and override them, like CSS
+`font-variation-settings`, with a later entry for the same tag winning.
+Axis values are `Dec` because valid locations are fractional (`wdth` 87.5
+is CSS semi-condensed). Malformed variation data the reference silently
+accepts (an empty delta-set map, out-of-range indices, an axis default
+outside its range) is a reading problem here; under lenient reading a bad
+`fvar` or `avar` drops the whole variation space.
 
 Reading
 validates `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`, the `GDEF` item variation

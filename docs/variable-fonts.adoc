@@ -1,0 +1,594 @@
+= Variable fonts in roc-font
+:toc: left
+:toclevels: 2
+
+This chapter is for contributors. It scopes variable-font support for 0.1.0:
+which tables and structures each phase needs, what the three default fonts
+use, the numeric model and how it stays bit-identical with HarfBuzz, the
+prepared representation, the public API, validation rules and budgets, and
+how each phase is tested. The enduring decision (variation coordinates are a
+query input) is architecture §5.7; this chapter is the plan and the
+evidence behind it. Measurements below were taken on 2026-10-24 with
+HarfBuzz 14.6.0 (uharfbuzz 0.56.3) and fontTools 4.61.1 from
+`tools/oracle/`.
+
+== 1. Scope and phases
+
+All three phases are required for 0.1.0: the defaults are variable fonts,
+queries measure at Regular, and two of the three defaults (Merriweather and
+Fira Code) have a default instance of Light, so even the default path needs
+variations.
+
+[cols="1,3,1",options="header"]
+|===
+|Phase |Tables and structures (OpenType 1.9.1 sections) |Size estimate
+
+|1. Metrics at any location
+|`fvar` (axes, named instances); `avar` version 1 segment maps; the
+`ItemVariationStore` with `VariationRegionList` and `ItemVariationData`
+(8-, 16- and 32-bit deltas, `LONG_WORDS`) and `DeltaSetIndexMap` formats 0
+and 1 (OTVar common formats, "Item variation store" and "Delta-set index
+map"); `HVAR` advance mapping (explicit and implicit); `MVAR` value records.
+Public `Font.Variation`, `Font.at`, Regular as the default location.
+|Reading and numerics: done as `package/TableVar.roc` (about 1000 lines
+with the single-precision arithmetic). Integration into `Font`: 300-400
+lines plus 300 lines of tests and the conformance kind.
+
+|2. Shaping at any location
+|`GDEF` 1.3 `itemVarStore`; `GPOS` `ValueRecord` device offsets with
+`DeltaFormat` 0x8000 (`VariationIndex` tables) for pair adjustment, and for
+`Anchor` format 3 when mark positioning lands; `GSUB`/`GPOS` 1.1
+`FeatureVariations` (condition sets, feature table substitution).
+|500-700 lines: device offsets in the pair reader, one variation index
+column beside each adjustment, a delta per applied adjustment.
+`FeatureVariations` another 200-300 lines, deferrable (no default uses it).
+
+|3. Extents and outlines
+|`gvar` (shared tuples, tuple variation headers, intermediate regions,
+packed point numbers and deltas); `glyf` simple and composite points with
+the four phantom points; inferred deltas for untouched points (IUP);
+component offsets that vary; the bounding box. Also the advance fallback
+from phantom points when a font has no `HVAR` (no default needs it).
+|1200-1800 lines, the largest phase, plus binary64 emulation for the tuple
+scalar (§3.5).
+|===
+
+Out of scope for 0.1.0, each with its reason: `avar` version 2 (no default
+uses it; `TableVar` already has the store and map it needs, so it is about
+50 more lines when a font asks), `VVAR` and vertical layout, `CFF2`
+outlines (no default uses CFF), `cvar` and hinting (out of scope by
+architecture §1.2), `STAT` (naming policy for consumers).
+
+== 2. What the default fonts need
+
+Measured on the pinned files in `package/fonts/` (and Inter also on
+`tests/corpus/inter-variable-4.1/InterVariable.ttf`, the same bytes).
+
+[cols="2,2,2,2",options="header"]
+|===
+| |Inter 4.1 |Merriweather 4.009 |Fira Code 6.2
+
+|Bytes |879 708 |4 628 080 |286 320
+|Glyphs, units per em |2937, 2048 |2384, 2000 |2030, 1950
+|Axes (min, default, max) |`opsz` 14-14-32, `wght` 100-400-900
+|`wght` 300-300-900, `wdth` 87-100-112, `opsz` 18-18-144 |`wght` 300-300-700
+|Default instance |Regular |Light |Light
+|Named instances |9 (all at `opsz` 14) |7 |5
+|`avar` |version 1, non-linear `wght` (7 entries) |version 1, non-linear
+`wght` (8 entries), identity `wdth`, `opsz` |version 1, non-linear `wght`
+(6 entries)
+|`HVAR` |explicit map (format 0), 5 regions, 10 data subtables, at most 5
+columns |explicit map (format 0), 11 regions, 26 data subtables, at most 11
+columns |no map (implicit), one data subtable with no regions: advances
+never vary (monospace)
+|`MVAR` tags |`stro strs undo unds xhgt` |`xhgt` |`cpht xhgt`
+|Ascent, descent, line gap vary? |no (no `hasc hdsc hlgp`) |no |no
+|`GDEF` variation store |5 regions, 24 data subtables |11 regions, 152 data
+subtables |1 region, 2 data subtables
+|`GPOS` `VariationIndex` devices |7635 in pair adjustment, 5883 on mark
+anchors |206 899 in pair adjustment, 8014 on mark anchors |none in pair
+adjustment (no kerning), 1983 on mark anchors
+|`FeatureVariations` |none |none |none
+|`LONG_WORDS` data |none |none |none
+|`gvar` |2925 glyphs, 14 605 tuples, 2730 with untouched points (IUP), 1881
+composites |2356 glyphs, 25 507 tuples, 4141 with IUP, 1336 composites
+|1727 glyphs, 1727 tuples, 237 with IUP, 884 composites
+|===
+
+Consequences:
+
+* Kerning varies with weight in Inter and Merriweather, so phase 2 pair
+  deltas are needed for browser-parity widths at any weight other than
+  each font's default. Fira Code has no kerning.
+* Mark anchor deltas matter only once mark positioning lands; they share
+  the phase 2 machinery.
+* Because Merriweather and Fira Code default to Light, Regular (where
+  queries measure by default) is a non-default location for them: ink
+  extents at Regular need phase 3 `gvar`, and advances need `HVAR` (Fira
+  Code's advances are constant).
+* Merriweather is 4.6 MB, above architecture §5.8's "under about 1 MB".
+  That is download size only; the measured cost of reading it is part of
+  the compile-time default (§5.8).
+
+== 3. Numeric model
+
+=== 3.1 The pipeline
+
+For a location given in design units (user space: `wght` 450, `opsz` 14):
+
+. *Clamp* each value to its axis's `[min, max]` from `fvar` (the format
+  defines this; it is not a repair).
+. *Normalise* to `[-1, 1]`: `(v - default) / (default - min)` below the
+  default, `(v - default) / (max - default)` above it.
+. *Bend* by `avar`: piecewise-linear interpolation in the axis's segment
+  map.
+. *Quantise* to F2Dot14 (`I16`, 1 = 16384).
+. *Region scalar*: per region, the product over axes of each axis's
+  triangle (`start`, `peak`, `end`) evaluated at the coordinate.
+. *Delta*: per item, the sum over the item's columns of region scalar times
+  stored delta.
+. *Apply*: round the delta and add it to the default value.
+
+Steps 1-5 depend only on the location, so they are done once per location
+(`Font.at`). Step 6 is per query.
+
+=== 3.2 HarfBuzz's exact arithmetic
+
+HarfBuzz computes in IEEE 754 single precision (`float`) in a fixed order:
+
+* Design values arrive as `float`. `fvar` Fixed values are converted as
+  `int` to `float` times 2^-16, F2Dot14 as `int` times 2^-14.
+* Normalisation (`hb-ot-var-fvar-table.hh`) is in `float`, scaled by 65536
+  and rounded to an `int` in 16.16.
+* `avar` (`map_coords_16_16`) converts back to `float`, interpolates
+  `before.to + ((after.to - before.to) * (v - before.from)) / (after.from -
+  before.from)` in `float`, scales by 65536, rounds to 16.16, and finally
+  converts to F2Dot14 as `(v + 2) >> 2`. This is double rounding: 16.16
+  first, then 2.14 with halves up.
+* Every `roundf` in HarfBuzz is `#define`d (`hb-algs.hh`) as `floorf(x +
+  .5f)`: halves round *up*, towards positive infinity, and the addition
+  itself rounds in `float`.
+* Region axis scalars are `float` divisions of `int` differences
+  (`VarRegionAxis::evaluate`), multiplied in `float` across axes.
+* The region scalar cache (`hb_scalar_cache_t`) stores each computed scalar
+  as `roundf(v * 2^30)` in an `int` and returns `int * 2^-30`; scalars of
+  2^-7 and above are unchanged, smaller ones lose their bits below 2^-30.
+  The cache lives on the font, so every query but the first sees the
+  quantised value.
+* Deltas are summed in `float` in column order (`delta += scalar * d`, with
+  `d` converted to `float`).
+* `HVAR`: advance = `max(0, advance + roundf(delta))`.
+  `MVAR`: metric = `roundf(value + delta)`, the addition in `float`. For an
+  integer default these agree except where the `float` addition rounds, so
+  `TableVar` keeps each exactly as written (`advance`, `metric`).
+* `GPOS` `VariationIndex` deltas are rounded individually
+  (`em_scalef_x`, which at a scale of units per em is `roundf`) and added to
+  the value record.
+
+=== 3.3 Exact arithmetic is not enough
+
+An exact rational model (Python `Fraction`) with HarfBuzz's rounding rules
+but exact intermediate values was compared with HarfBuzz:
+
+* With round half away from zero (C's `roundf`, the obvious reading of the
+  source) it disagreed on 1349 of 452 298 Inter advances at 154 locations,
+  every one an exact tie such as `-103 / 2 = -51.5` (HarfBuzz gives -51).
+  This is how `hb-algs.hh`'s redefinition of `roundf` was found.
+* With round half up it disagreed on 1 of 607 959 advances at 207
+  locations (`wght` 200, `opsz` 31.99, glyph 257: exact delta
+  -536.50000075, `float` sum -536.5, HarfBuzz 1121, exact 1120).
+* Normalised coordinates disagreed for 11 of 51 201 Inter `wght` values at
+  1/64 steps, 14 of 38 401 for Merriweather and 8 of 25 601 for Fira Code
+  (for example `wght` 525.046875 on Inter: HarfBuzz 3688, exact 3687), all
+  from `float` rounding in the `avar` interpolation followed by the double
+  rounding to F2Dot14. At integer and quarter design values only one
+  disagreement was found (Merriweather `wght` 621.75). A coordinate
+  difference shifts every delta at that location, so it is the more
+  serious one.
+
+So roc-font evaluates HarfBuzz's operations, in HarfBuzz's order, on
+single-precision bit patterns held in `U32`, with integer arithmetic only
+(`TableVar.f32_*`: round to nearest even, subnormals, no infinities or NaN
+reachable). This keeps architecture principle 4's intent (deterministic,
+integer-only, no NaN or infinity can escape: inputs are bounded by the
+formats, so no operation can overflow single precision) while matching the
+oracle bit for bit. The arithmetic was checked against 22 974 vectors from
+Python's correctly rounded `float` (add, subtract, multiply, divide,
+conversions, floor and `roundf`, including subnormals and ties).
+
+The result, on the native build of a scratch app using `TableVar`:
+
+[cols="2,1,1,1",options="header"]
+|===
+|Font, locations |Coordinates differ |Advances compared |Advances differ
+
+|Inter, 121-point grid incl. out-of-range |0 |355 377 |0
+|Inter, 2000 random fractional locations |0 |5 874 000 |0
+|Merriweather (pinned), 1452-point grid |0 |3 461 568 |0
+|Merriweather (pinned), 500 random locations |0 |1 192 000 |0
+|Fira Code (pinned), 11-point grid |0 |22 330 |0
+|Fira Code (pinned), 500 random locations |0 |1 015 000 |0
+|===
+
+`MVAR` x height agreed at every one of those locations, and the three
+cases where exact arithmetic disagrees (above) agree too. The only known
+residual is HarfBuzz's cache: the *first* evaluation of a region after
+`set_variations` is not quantised. `TableVar` models the steady state; a
+difference needs a scalar below 2^-7 and a delta within 2^-16 of a
+rounding tie, and none was seen.
+
+=== 3.4 Where HarfBuzz, fontTools and the specification disagree
+
+[cols="1,2,2",options="header"]
+|===
+|Point |Behaviours |roc-font
+
+|Normalisation and `avar`
+|HarfBuzz: `float`, 16.16, double rounding to 2.14. fontTools
+(`varLib.instancer.normalize`): `double`, one rounding straight to 2.14
+with `otRound`. They can differ by one F2Dot14 unit.
+|HarfBuzz.
+
+|Delta sums
+|HarfBuzz `float`; fontTools `double`; FreeType 16.16 fixed point.
+|HarfBuzz.
+
+|Advances of a static instance
+|fontTools' instancer recomputes `hmtx` from `gvar` phantom points, not
+from `HVAR`. On Inter at `wght` 700, `opsz` 32 it differs from HarfBuzz
+(which uses `HVAR`) on 6 glyphs by one unit, because the font's two sources
+disagree after rounding.
+|`HVAR`, as HarfBuzz and browsers. fontTools static instances are not an
+advance oracle.
+
+|Region axis with `start < 0 < end` and `peak != 0`, at coordinate 0
+|The specification and fontTools ignore the axis (scalar 1); HarfBuzz
+tests `coord == 0` first and gives 0.
+|The specification (the format defines it). Only malformed fonts reach it;
+a conformance case would be a listed known failure.
+
+|`DeltaSetIndexMap` with no entries
+|HarfBuzz passes the index through unchanged.
+|Rejected as a problem (`ItemCount`): an empty map has no last entry to
+use.
+
+|Delta-set index outside the store
+|HarfBuzz returns no delta.
+|Rejected when reading (`DeltaIndex`), except `0xFFFF`/`0xFFFF`
+(`NO_VARIATION_INDEX`).
+
+|`fvar` axis with `min > default` or `default > max`
+|HarfBuzz reorders silently (`hb_min`, `hb_max`); fontTools raises.
+|Rejected (`AxisOrder`).
+
+|`HVAR` advance map format 1
+|fontTools 4.61.1 cannot read it (it reads `HVAR` maps in the format 0
+layout only). HarfBuzz and the specification accept it.
+|Accepted; HarfBuzz is the oracle.
+|===
+
+=== 3.5 Phase 2 and 3 numerics
+
+Phase 2 reuses the store: a pair adjustment's device delta is
+`f32_round_half_up(TableVar.delta(gdef_store, gdef_scalars, outer,
+inner))`, added per value. Phase 3 needs more: HarfBuzz computes a `gvar`
+tuple's scalar in `double` (`TupleVariationHeader::calculate_scalar`),
+converts it to `float`, quantises it in the shared-tuple cache, multiplies
+packed deltas by it in `float`, infers untouched points in `float`
+(`infer_delta`), and rounds the bounding box with `roundf` per edge
+(`glyf.hh`: `x_bearing = roundf(min_x)`, `width = roundf(max_x) -
+x_bearing`). `f32_pack` generalises to binary64 by its significand width
+and minimum exponent; that and the `gvar` decoder are phase 3's work.
+
+== 4. Prepared representation
+
+Reading (`Font.from_bytes`) validates every variation table once,
+independent of any location, and keeps flat, index-addressed data plus the
+checked table bytes (architecture §4.2):
+
+* `fvar`: parallel lists per axis (tag, min, default, max as Fixed 16.16,
+  flags, name id) and per named instance (name ids, a flat
+  instance-by-axis coordinate list).
+* `avar`: one flat list of from/to F2Dot14 pairs with per-axis start
+  offsets (axis count + 1 entries).
+* Each `ItemVariationStore` (`HVAR`, `MVAR`, `GDEF`): the regions as one
+  flat `I16` list (start, peak, end per region and axis), per data subtable
+  its item count, word count, `LONG_WORDS` flag, row start and row size,
+  the region indexes as one flat list with start offsets, and the table's
+  bytes: delta rows are read in place.
+* `DeltaSetIndexMap`: its start, count, entry size and inner bit count over
+  the table bytes, read in place.
+
+A *location state* is what `Font.at` computes: the F2Dot14 coordinates and,
+per store, the region scalars (one `U32` per region). It is small
+and is derived purely from the font and the variation (Inter: 2
+coordinates and 5 scalars each for `HVAR` and `GDEF`; Merriweather: 3
+coordinates and 11 per store). Measured natively
+(scratch app, `--opt=speed`):
+
+[cols="2,1,1,1",options="header"]
+|===
+| |Inter |Merriweather |Fira Code
+
+|coordinates + `HVAR` scalars (`Font.at` minus `MVAR`/`GDEF`) |0.6-2.0 µs |3.7 µs |0.8 µs
+|advance at the default location (every scalar 0) |9-11 ns |- |3 ns
+|advance at another location |60-63 ns |129 ns |3 ns
+|===
+
+Per-query cost is proportional to an item's column count (at most 11 for
+the defaults), dominated by two single-precision operations per nonzero
+scalar. Two optimisations are possible and should be measured before
+either lands (architecture §4.3): computing every glyph's advance in
+`Font.at` (Inter: 2937 × 60 ns ≈ 180 µs, worth it only for callers that
+measure thousands of glyphs per location), and an exact fixed-point fast
+path that falls back to the single-precision path only within a proven
+error bound of a rounding tie.
+
+The defaults' Regular location state, and any `Font.at` a caller writes as
+a top-level value, is evaluated at compile time like the defaults
+themselves (§5.8), so it costs nothing at run time.
+
+== 5. Public API
+
+=== 5.1 Shape
+
+The integrator's decision, with this chapter's comments:
+
+[source,roc]
+----
+Font.Variation := {
+	weight : Font.Weight ?? Regular,            # wght, CSS 1-1000
+	width : Font.Width ?? Normal,               # wdth, percent
+	optical_size : Font.OpticalSize ?? FontDefault,  # opsz
+	axes : List({ tag : Str, value : Dec }) ?? [],
+}
+
+Font.Weight : [Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)]
+Font.Width : [UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded, Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)]
+Font.OpticalSize : [FontDefault, Size(Dec)]   # Size is the font size in CSS px
+
+Font.at : Font, Font.Variation -> Font
+
+bold = Font.at(font, Font.Variation.{ weight: Bold })
+caption = Font.at(font, Font.Variation.{ optical_size: Size(12) })
+custom = Font.at(font, Font.Variation.{ axes: [{ tag: "GRAD", value: 50 }] })
+----
+
+`Font.at` returns a `Font`, not a separate instance type: every query and
+shaping entry point keeps its signature, the location state is small, and
+the prepared tables are shared (Roc lists are reference counted), so the
+copy is the record plus a few short lists. A separate type would double
+the API for no measured gain. `Font` derives no equality (AGENTS.md), so
+tests compare query results.
+
+Semantics:
+
+* Without `Font.at`, a font measures at `Font.Variation.{}`: Regular
+  (`wght` 400), Normal width, the font's default optical size, as a browser
+  does. For Inter that is the default instance; for Merriweather and Fira
+  Code it is not, so reading computes the Regular location state once.
+* Named fields apply only to axes the font has. Weights map to the CSS
+  values (Thin 100 ... Black 900); widths to CSS `font-stretch`
+  percentages (UltraCondensed 50, ExtraCondensed 62.5, Condensed 75,
+  SemiCondensed 87.5, Normal 100, SemiExpanded 112.5, Expanded 125,
+  ExtraExpanded 150, UltraExpanded 200).
+* `axes` entries are applied after the named fields and win for the same
+  tag, as CSS `font-variation-settings` overrides `font-weight`,
+  `font-stretch` and `font-optical-sizing`. A later entry for the same tag
+  wins. A tag that is not exactly four bytes, or that the font lacks, is
+  ignored (queries are total; there is no error path after reading).
+* Values outside an axis's range clamp, as the format's normalisation
+  defines (`Weight(1000)` is 900 on Inter).
+* A static font ignores variations: `Font.at` returns it unchanged.
+* Named instances: `Font.instances(font)` listing each instance's name and
+  its `Variation` (all axes in `axes`) is a later addition; it needs the
+  `name` reader.
+
+Comments on the decision:
+
+* *Fractional values.* The spec'd `axes : List({ tag : Str, value : I32 })`
+  cannot express `wdth` 87.5 (CSS SemiCondensed, inside Merriweather's
+  87-112 range), `opsz` 13.33 or `wght` 450.5, and an `I32` read as Fixed
+  16.16 is not plain language. `Dec` costs nothing here: `TableVar` rounds
+  a `Dec` to the nearest single-precision value exactly as HarfBuzz receives
+  a `float`, and agreement was measured on fractional locations (§3.3). The
+  same applies to `Percent` and `Size`, proposed as `Dec` above. `Weight(U16)`
+  is fine: CSS weights are integers in practice and the axis is in the same
+  units.
+* *Optical size.* roc-font does not know the font size, so the default is
+  the font's own default (`FontDefault`), not automatic sizing. Browsers
+  default to `font-optical-sizing: auto`, which sets `opsz` to the font
+  size in CSS px. Callers wanting browser parity at a known size pass
+  `Size(px)`. This matters for the Chrome oracle: measuring "at a font size
+  equal to units per em" (architecture §7.1) would set Inter's `opsz` to
+  2048, clamped to 32, so Chrome cases on variable fonts must pin `opsz`
+  with `font-variation-settings` or use `font-optical-sizing: none`.
+
+=== 5.2 Internal surface (from `TableVar`)
+
+`TableVar.read(fvar, Present(avar) | Absent)`, `read_hvar(bytes,
+axis_count, glyph_count)`, `read_mvar(bytes, axis_count)`,
+`read_store(bytes, table, offset, axis_count)` (for `GDEF`),
+`read_delta_map(...)`; per location `coords_for(space, [{ tag, value :
+Dec }])`, `coords_of_instance(space, index)`, `region_scalars(store,
+coords)`; per query `advance(hvar, scalars, glyph, default)`,
+`metric(mvar, scalars, tag, value)`, `delta(store, scalars, outer,
+inner)`. `Font` maps `Font.Variation` to `(tag, Dec)` settings and calls
+`coords_for`.
+
+== 6. Validation rules and budgets
+
+Every rule below is enforced by `TableVar`; each problem names the table
+and the byte offset in it. Independent problems are reported together
+(one per bad axis, per bad segment map, per bad data subtable, per bad
+`MVAR` record; a delta-set index map reports its first bad entry).
+
+* `fvar`: at least 16 bytes; major version 1; axis record size 20; instance
+  record size `4 × axes + 4` or `+ 6` (with a PostScript name id); axes and
+  instances inside the table; `min <= default <= max` per axis; at most 64
+  axes (provisional, until `Font.Limits` carries it; real fonts use under
+  20, the format allows 65 535).
+* `avar`: major version 1 (version 2 is `UnsupportedVersion`); axis count
+  equal to `fvar`'s; each map inside the table; a map is empty (identity) or
+  contains -1 → -1, 0 → 0 and 1 → 1, with source coordinates strictly
+  increasing, targets never decreasing and all values in [-1, 1]. Under
+  these rules HarfBuzz's tolerance for malformed maps is never reached and
+  its interpolation is the plain one.
+* `ItemVariationStore`: format 1; region list axis count equal to `fvar`'s;
+  region count at most 32 767 (the specification's bound); regions, data
+  offsets, region indexes and all rows inside the table, checked before
+  allocating; `wordCount <= regionIndexCount`; every region index below the
+  region count. A null data offset is an empty subtable. Region axis values
+  are not checked: the format defines how malformed ones evaluate.
+* `DeltaSetIndexMap`: format 0 or 1; at least one entry; entries inside the
+  table; every entry names an existing row or is `NO_VARIATION_INDEX`. An
+  index past the end uses the last entry (the format's rule).
+* `HVAR`: major version 1; a store; with no advance map, the first data
+  subtable has a row per glyph. Side-bearing maps are not read (no query
+  uses them).
+* `MVAR`: major version 1; record size at least 8; records inside the
+  table and sorted by tag; every record names a row or is
+  `NO_VARIATION_INDEX`; a null store only with no records.
+
+Lenient reading (architecture §4.4) drops tables as units, never repairing
+one: a bad `fvar` or `avar` drops the whole variation space (`fvar`,
+`avar`, and with it every delta: the font reads as its default instance);
+a bad `HVAR` drops it (advances then come from `gvar` phantom points in
+phase 3, or are the defaults before it); a bad `MVAR` drops it (metrics are
+the defaults); a bad `GDEF` store drops `GDEF`, as HarfBuzz treats a table
+that fails to sanitise. `Font.dropped` names each. Strict reading rejects
+the font.
+
+Work bounds: every loop runs over a count checked against the data. The
+location state costs regions × axes per store (bounded by the table size);
+an advance costs its row's column count; no work grows with text beyond
+one delta per glyph and per applied adjustment.
+
+== 7. Testing plan
+
+=== 7.1 Unit expects (done for phase 1)
+
+`package/TableVarTests.roc`, 65 expects, passing with the default backend
+and `--opt=interpreter`:
+
+* three generated fixtures in `tests/fonts/variable/` (1-1.5 KB each,
+  reproducible from `generate.py`, values from `oracle.py`): coordinates,
+  every glyph's advance agree with HarfBuzz at 24 locations and `MVAR`
+  metrics at 8, including clamped, fractional and two-axis ones, an intermediate
+  region, `LONG_WORDS` and 8-bit deltas, a short advance map, a format 1
+  map with 1-byte entries, the implicit mapping and a default at the axis
+  minimum;
+* named instances, a later setting overriding an earlier one, unknown axes;
+* hand-built tables for every validation rule and aggregated problems;
+* every byte of the fixture's `HVAR`, `fvar` and `avar` corrupted in turn:
+  never a crash, a problem whenever reading fails, and finite, repeatable,
+  non-negative advances and coordinates in [-1, 1] whenever it succeeds;
+* single-precision ties, subnormals and conversions.
+
+The corruption expect already caught one bug before it landed: a `U64`
+underflow computing the row size when `wordCount > regionIndexCount`.
+
+=== 7.2 Conformance
+
+The oracle is HarfBuzz with `set_variations`, over a location grid per
+font: for Inter `wght` {100, 200, 300, 400, 450, 500, 600, 700, 800, 900}
+× `opsz` {14, 20, 32}; for Merriweather `wght` × `wdth` {87, 100, 112} ×
+`opsz` {18, 36, 144}; for Fira Code `wght` {300, 400, 450, 500, 600, 700};
+plus each named instance, one out-of-range value per axis and one
+fractional location. fontTools' instancer is a cross-check for outlines
+and extents in phase 3 only (§3.4: its advances come from phantom points).
+FreeType (`freetype-py` with `FT_Set_Var_Design_Coordinates`) is a second
+extents oracle for phase 3.
+
+Case fields for the conformance agent (JSONC):
+
+* `variations`: an object of axis tag to design value, `{"wght": 450,
+  "opsz": 14}`, passed to HarfBuzz `set_variations` and to roc-font as
+  `Font.Variation.{ axes: [...] }`. Absent means `Font.Variation.{}`
+  (Regular), and the oracle must then be given `{"wght": 400}` explicitly
+  for fonts with a `wght` axis (HarfBuzz's absent means the default
+  instance).
+* Optionally `variation`: the named-field form, `{"weight": "Bold",
+  "width": 87.5, "optical_size": 12}`, which the driver maps to the
+  `Font.Variation` fields and `scripts/conformance.py` maps to axes for the
+  oracle. It tests the mapping itself.
+* `instance`: a named instance index, as `hb_font_set_var_named_instance`.
+* New kinds: `advances` (a list of glyph ids, or all; result `adv:` plus
+  the list), `metrics` (`x_height`, `cap_height`, `underline_offset`,
+  `strikeout_offset`, ... as `hb_ot_metrics_get_position_with_fallback`),
+  `coords` (the normalised F2Dot14 coordinates, `get_var_coords_normalized`
+  × 16384), and in phase 3 `extents`. Existing `shape` and `width` cases
+  gain `variations`.
+* The record key must include `variations`, `variation` and `instance`.
+* Chrome cases on variable fonts carry `font-variation-settings` and
+  `font-optical-sizing: none` (§5.1).
+
+=== 7.3 Fuzzing
+
+`fuzz/var-read.roc`, seeded with the three defaults' variation tables, the
+fixtures and corpus variable fonts, splitting the input into `fvar`,
+`avar`, `HVAR` and `MVAR` slices:
+
+* totality: reading never crashes; a failed read reports at least one
+  problem;
+* determinism: reading and every query twice give identical results;
+* bounds: coordinates in [-16384, 16384]; region scalars decode to values
+  in [0, 1]; advances non-negative and at most `default + columns × 2^31`;
+* monotonicity: for a successfully read `avar`, coordinates are
+  non-decreasing in the design value along each axis (each single-precision
+  operation in the pipeline is monotone in the varying input);
+* allocation linear in input size (`Fuzz.measure_allocs!`), no leaks.
+
+Phase 2 adds a differential target (kerned widths at fuzzed locations
+against recorded HarfBuzz output); phase 3 a `gvar` target (totality,
+finite extents, composite depth bounded).
+
+=== 7.4 Benchmarks
+
+* `var-at`: `Font.at` per default font (coordinates and the three stores'
+  scalars).
+* `var-advance`: advances at a non-default location for 100, 1000 and
+  10 000 glyphs per font, against the default location.
+* `var-shape`: shaping the existing texts at Bold against Regular (phase
+  2: pair deltas).
+* `var-instance-top-level`: a top-level `Font.at(Font.sans, ...)` used at
+  run time, which must cost what a plain query costs (compile-time
+  evaluation).
+* Comparators: HarfBuzz's `hb_font_set_variations` plus advances, and
+  rustybuzz/ttf-parser's `set_variation`.
+
+== 8. Milestones (proposal for `TODO.md`)
+
+* *V1, with M3 (API)*: `TableVar` lands (this change); `Font.Variation`,
+  `Font.Weight`, `Font.Width`, `Font.OpticalSize`, `Font.at`; reading keeps
+  the variation space and the Regular location state; advances through
+  `HVAR`; `MVAR` metrics as M3's metrics land; lenient dropping and
+  `Font.dropped`; `coords`, `advances` and `metrics` conformance kinds with
+  variation grids; `fuzz/var-read.roc`; `var-at` and `var-advance` benches.
+  Exit: zero disagreement with HarfBuzz on the grids for all three defaults.
+* *V2, with M4 (GPOS)*: `GDEF` store; pair adjustment device deltas; then
+  anchor deltas with mark positioning; `FeatureVariations` reading (and
+  applying, or a reported gap) before 0.1.0. Exit: shaped widths at Bold
+  agree with HarfBuzz and Chrome for Inter and Merriweather.
+* *V3, before M5 (package-mermaid switchover)*: `gvar` and `glyf` points,
+  IUP, composites, phantom points, extents at any location; binary64
+  emulation for the tuple scalar. Exit: ink extents at Regular agree with
+  HarfBuzz for Merriweather and Fira Code, and with FreeType within its
+  documented rounding.
+
+== 9. Proposed architecture §5.7 text
+
+____
+Variation coordinates select a result, so they belong to the query
+(principle 3), as in skrifa. `Font.at(font, Font.Variation.{ ... })`
+returns the font at a location; it computes only the location state
+(normalised coordinates and region scalars, a few microseconds) and shares
+every prepared table. Without it a font measures at Regular (`wght` 400),
+as a browser does, which is not the default instance of every font.
+Reading validates `fvar`, `avar`, `HVAR`, `MVAR`, the `GDEF` variation
+store and `gvar` once, independent of any location. Coordinates, region
+scalars and deltas are computed exactly as HarfBuzz computes them, in
+single precision, emulated on integers: exact arithmetic disagrees with
+HarfBuzz near rounding ties, and bit-identical results are the contract
+(`docs/variable-fonts.adoc`).
+____

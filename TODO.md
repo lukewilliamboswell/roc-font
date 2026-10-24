@@ -48,7 +48,7 @@ and §9 exists yet. It is being scaffolded under `tools/`, `tests/`,
 | Listings | none | `Iter` for code points, names, scripts and features, outline commands | §5.6 |
 | Outlines | horizontal extents (`ink`) only | glyf, then CFF/CFF2, as listings | §1.1 |
 | Subsetting | none (roc-pdf has one) | later | §1.1 |
-| Variations | none | location as a query input, later | §5.7 |
+| Variations | `TableVar` reads fvar, avar v1, item variation store, HVAR, MVAR; not wired into `Font` | `Font.Variation` + `Font.at`, Regular default, phases 1–3 in 0.1.0 | §5.7 |
 | Docs surface | `roc docs` lists about 50 internal readers as items of `Font` (`read_head`, `u16`, `fits`, `pair_in_sets`, `kern_pairs`, ...) and internal types `Table`, `Runs`, `Subtable` | only public namesakes; readers in unexposed `Sfnt`, `Table*`, `Layout*`, `Shaper*` modules | §5.1 |
 | Fuzz targets | `fuzz/font-read.roc`, `fuzz/font-shape.roc` via `package/testing.roc` (shape asserts the old `4n+32` bound) | one target per stage, differential target | §7.3, §10 |
 
@@ -134,13 +134,20 @@ on it.
 **Variable fonts are in 0.1.0** (§5.7): `Font.Variation` with
 `weight ?? Regular`, applied by `Font.at`; queries default to Regular.
 - [ ] Phase 1: fvar, avar, item variation store, HVAR, MVAR (advances and
-  metrics at any location).
+  metrics at any location). Reading and arithmetic done in `TableVar`
+  (0 differences from HarfBuzz over 14.9M advances); remaining: wire into
+  `Font` (`Font.Variation`, `Font.at`, Regular default), case kinds
+  `variations`/`coords`/`advances`/`metrics`, `fuzz/var-read.roc`,
+  `var-at` and `var-advance` benchmarks.
 - [ ] Phase 2: GDEF store, GPOS VariationIndex deltas, FeatureVariations
   (kerning and substitution at any location).
 - [ ] Phase 3: gvar on glyf points, composites, IUP (extents at any
-  location).
+  location); needs double-precision emulation for gvar scalars.
 - [ ] Conformance grid per default font against HarfBuzz with variations
-  and fontTools' instancer; narrow fuzz targets per phase.
+  (cases without `variations` must still pass `wght=400` to the oracle,
+  since HarfBuzz's default is the font's default instance); fontTools'
+  instancer and FreeType for phase 3 extents only; narrow fuzz targets per
+  phase.
 
 **Default fonts (staged 2026-10-24, `package/fonts/`, not yet exposed).**
 Inter 4.1, Merriweather 4.009 (2.100), Fira Code 6.2, all OFL variable
