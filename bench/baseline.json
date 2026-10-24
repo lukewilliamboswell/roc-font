@@ -37,7 +37,7 @@
       "optional": false
     },
     "adv-many-kern-pairs/read": {
-      "allocations": 485,
+      "allocations": 477,
       "case_sha256": "7e4a65b3b163ad083af4b31d50b603955a3f2acb4e422976e5afdeb03f4ca26a",
       "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
       "leaked": 0,
@@ -51,28 +51,28 @@
       "optional": false
     },
     "adv-many-ligature-lookups/read": {
-      "allocations": 68641,
+      "allocations": 274,
       "case_sha256": "1bae2e97cc6dc5af5959d72f20481acea26693f18b1eef5b1dd431a5c7c2849c",
       "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
       "leaked": 0,
       "optional": false
     },
     "adv-many-ligature-lookups/shape/letters-large": {
-      "allocations": 8446,
+      "allocations": 3,
       "case_sha256": "aff550df6722101d352272d176c2086bc55e5ff6d32009d4fe373d6233e30dc7",
       "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
       "leaked": 0,
       "optional": false
     },
     "adv-many-ligature-lookups/shape/letters-medium": {
-      "allocations": 1146,
+      "allocations": 3,
       "case_sha256": "d6409c3236a966626c4aec39d6b7e0f7ce479bdc7f95af7572bce0abd381dadc",
       "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
       "leaked": 0,
       "optional": false
     },
     "adv-many-ligature-lookups/shape/letters-small": {
-      "allocations": 234,
+      "allocations": 3,
       "case_sha256": "ae15cb91be3c38de0cc3d13260e05d3c45a483fb7f28c35f4ed5bba2d92c5514",
       "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
       "leaked": 0,
@@ -106,6 +106,27 @@
       "leaked": 0,
       "optional": true
     },
+    "corpus-inter-4.1/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "b79d8c9475e2bc06da79a56e9c39f2817aa05b2bcc18242c8cf7bd3b92531a6c",
+      "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-inter-4.1/read": {
+      "allocations": 1965,
+      "case_sha256": "9e04eca22643f46e85146aec47992bbef9c79dbfe9351c04598650a4762ca0e7",
+      "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-inter-4.1/shape/words-medium": {
+      "allocations": 4,
+      "case_sha256": "f0fd274e9d869faf4fbf8c59c0718e96ec9ab9b6967490b52aa14b8fe0033aa9",
+      "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82",
+      "leaked": 0,
+      "optional": true
+    },
     "corpus-inter-variable-4.1/cmap/bmp-sweep": {
       "allocations": 0,
       "case_sha256": "1f1211405b2395698ce5a45bf1c697c249bfc5b33aabe9d7c5c8892ae5f5a23b",
@@ -114,14 +135,14 @@
       "optional": true
     },
     "corpus-inter-variable-4.1/read": {
-      "allocations": 5476,
+      "allocations": 2051,
       "case_sha256": "a54ca40f5ec88c3bd02f4822c0b85f9ab9748edc091209b493c43a30e1e7c4ae",
       "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
       "leaked": 0,
       "optional": true
     },
     "corpus-inter-variable-4.1/shape/words-medium": {
-      "allocations": 121,
+      "allocations": 4,
       "case_sha256": "21f6fdc3c5e1ae8a21ca6966b6c75bede31dee89bd822b8662aa65ca4139a4b5",
       "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
       "leaked": 0,
@@ -135,14 +156,14 @@
       "optional": true
     },
     "corpus-noto-sans-arabic-2.013/read": {
-      "allocations": 1313,
+      "allocations": 711,
       "case_sha256": "9a0e7cb9cd443e2afb77cfddf01f9e5fddfc346c58c44c39bed7d7df4b37d76a",
       "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
       "leaked": 0,
       "optional": true
     },
     "corpus-noto-sans-arabic-2.013/shape/words-medium": {
-      "allocations": 16,
+      "allocations": 3,
       "case_sha256": "1f8b69e39090b2185777f1a242a9e66770965f6032d0ffb1da1826fdfd68b22b",
       "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
       "leaked": 0,
@@ -163,14 +184,14 @@
       "optional": true
     },
     "corpus-source-sans-3.052/read": {
-      "allocations": 3047,
+      "allocations": 1541,
       "case_sha256": "5792bf1633fa53fa6b8b693d96db1dd57c77d8a819636c3858d899744bb6bd90",
       "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
       "leaked": 0,
       "optional": true
     },
     "corpus-source-sans-3.052/shape/words-medium": {
-      "allocations": 116,
+      "allocations": 4,
       "case_sha256": "5e1adad662b35e01afc57c238f02c296fde0aa5997472750b9673f28b7099390",
       "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
       "leaked": 0,
@@ -212,28 +233,28 @@
       "optional": false
     },
     "inter/read": {
-      "allocations": 5396,
+      "allocations": 1965,
       "case_sha256": "7727586a7e453a990607ba0b2bbd6dfd3b8f58e691c16f7a26e50698b61ace86",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false
     },
     "inter/shape/words-large": {
-      "allocations": 740,
+      "allocations": 4,
       "case_sha256": "c0cc1271cc9139862c960a5d20ea8a6325fc770194bcc9fd914978850c2c2bd8",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false
     },
     "inter/shape/words-medium": {
-      "allocations": 121,
+      "allocations": 4,
       "case_sha256": "9867e5b43308628c209e546283c590d3706188afcee5f9f70dbc14a5e60d6969",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false
     },
     "inter/shape/words-small": {
-      "allocations": 24,
+      "allocations": 4,
       "case_sha256": "96e2df2aac5f6cfc701a4ad32b94f080e3905a4ebcf5338fee65678f39e55147",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,

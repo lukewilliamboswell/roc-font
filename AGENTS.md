@@ -110,6 +110,11 @@ observed cost of an algorithm. In hot paths:
 - Prefer flat parallel lists, offset tables and index-addressed arrays over
   nested growing lists. Replacing one inner list in `List(List(a))` can copy
   the outer list.
+- Reading an element of a list whose items hold lists (tag payloads or
+  records with list fields) increments and decrements every inner list on
+  each access. In hot prepared data, use scalar records holding spans into
+  flat pools. This was the dominant cost of the seed's shaper (about 60 % of
+  its time), ahead of allocation.
 - Preallocate index-aligned output when its final length is known.
 - Treat the fallback of `List.set` as part of ownership design. When
   validation proves an index is in bounds, use an unreachable fallback that

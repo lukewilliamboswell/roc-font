@@ -336,6 +336,17 @@ Conformance findings to act on:
 - Add a FreeType case kind (extents); OTS is pinned for
   Linux x86-64 only.
 
+**Shaper rewrite (2026-10-24).** GSUB data is scalar records over flat
+pools with a per-lookup glyph digest and three in-place apply modes.
+Shaping makes 3–4 allocations per call at every size (was 24/121/740 on
+Inter); GSUB reading on the 52k-ligature font 274 allocations (was
+68641). Geometric mean over shape cases: 1.72x HarfBuzz (was 6.7x),
+0.46x rustybuzz (was 1.9x). Behaviour identical (bench checksums, 6245
+HarfBuzz cases, a differential harness). Kerning (Font.roc) is now about
+75 % of Inter shaping time and has the same nested-list refcount pattern.
+Nested contextual lookups still recurse (depth 8); convert to a work list
+when M3 raises the depth.
+
 Performance findings to act on:
 - Reading allocates about once per cmap group or ligature (30k allocations
   for 30k format-12 groups; 69k for 52k ligatures; 5.4k for Inter). Flat,

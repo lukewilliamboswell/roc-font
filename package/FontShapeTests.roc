@@ -189,6 +189,45 @@ expect {
 	shaped(gsub, [1, 2, 4]) == [5, 5, 5, 20, 4]
 }
 
+# Nested substitutions in the middle of a run keep the glyphs before and
+# after the matched input, with their clusters; a nested multiple
+# substitution may also delete its glyph.
+expect {
+	gsub = first_active([
+		{ kind: 6, subtables: [FontTest.chain3([], [[1], [2]], [], [{ at: 0, lookup: 1 }])] },
+		{ kind: 4, subtables: [FontTest.ligature([1], [[{ glyph: 9, rest: [2] }]])] },
+	])
+	shaped_items(gsub, [5, 1, 2, 6, 1, 2]) == [{ glyph: 5, cluster: 0 }, { glyph: 9, cluster: 1 }, { glyph: 6, cluster: 3 }, { glyph: 9, cluster: 4 }]
+}
+expect {
+	gsub = first_active([
+		{ kind: 6, subtables: [FontTest.chain3([], [[1], [2]], [], [{ at: 0, lookup: 1 }])] },
+		{ kind: 2, subtables: [FontTest.multiple([1], [[3, 4, 5]])] },
+	])
+	shaped_items(gsub, [5, 1, 2, 6]) == [{ glyph: 5, cluster: 0 }, { glyph: 3, cluster: 1 }, { glyph: 4, cluster: 1 }, { glyph: 5, cluster: 1 }, { glyph: 2, cluster: 2 }, { glyph: 6, cluster: 3 }]
+}
+expect {
+	gsub = first_active([
+		{ kind: 6, subtables: [FontTest.chain3([], [[1], [2]], [], [{ at: 0, lookup: 1 }, { at: 0, lookup: 2 }])] },
+		{ kind: 2, subtables: [FontTest.multiple([1], [[]])] },
+		{ kind: 1, subtables: [FontTest.single2([2], [20])] },
+	])
+	shaped(gsub, [5, 1, 2, 6]) == [5, 20, 6]
+}
+
+# A contextual rule reached from another rule reads backtrack only within
+# the outer rule's matched input: here glyph 7 lies before it, so the inner
+# rule does not match; when 7 is part of the outer input, it does.
+expect {
+	inner = [
+		{ kind: 6, subtables: [FontTest.chain3([[7]], [[1]], [], [{ at: 0, lookup: 2 }])] },
+		{ kind: 1, subtables: [FontTest.single1([1], 10)] },
+	]
+	outside = first_active([{ kind: 6, subtables: [FontTest.chain3([], [[1]], [], [{ at: 0, lookup: 1 }])] }].concat(inner))
+	within = first_active([{ kind: 6, subtables: [FontTest.chain3([], [[7], [1]], [], [{ at: 1, lookup: 1 }])] }].concat(inner))
+	shaped(outside, [7, 1]) == [7, 1] and shaped(within, [7, 1]) == [7, 11]
+}
+
 # ------------------------------------------------------------ extension
 
 expect shaped(all_active([{ kind: 7, subtables: [FontTest.extension(1, FontTest.single1([5], 10))] }]), [5, 6]) == [15, 6]
