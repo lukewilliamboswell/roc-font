@@ -65,14 +65,14 @@ results, so every check runs without the references installed.
 
 * **Shaping matches HarfBuzz 14.6.0** on the cases every change must pass:
   of 441 recorded cases (HarfBuzz shaping, Chrome widths, OTS reading and
-  font facts), 429 agree, 9 are documented differences, 3 use
+  font facts), 423 agree, 16 are documented differences, 2 use
   options the test driver cannot express yet, and none fail.
 * **On HarfBuzz's own test suites**, roc-font's glyphs and positions equal
-  HarfBuzz's in 4,157 of the 4,905 in-house cases it runs (85 %); 584 of
-  the 748 differences are in scripts HarfBuzz gives their own shaper. In
-  the text-rendering-tests suite 228 of 348 agree; 109 of the 120
-  differences need Apple's `morx` and `mort` tables, which roc-font does
-  not apply.
+  HarfBuzz's in 4,087 of the 4,961 in-house cases it runs (82 %); most of
+  the 874 differences are in scripts HarfBuzz gives their own shaper
+  (Tibetan, Indic, Arabic, Thai). In the text-rendering-tests suite 212 of
+  352 agree; most of the 140 differences need Apple's `morx` and `mort`
+  tables, which roc-font does not apply, or are fonts OTS refuses.
 * **Variable fonts are bit-identical with HarfBuzz.** roc-font repeats
   HarfBuzz's single-precision arithmetic on integers; normalised
   coordinates and advances differed in none of 11,920,275 advances
@@ -80,7 +80,9 @@ results, so every check runs without the references installed.
 * **Reading follows OTS**, the font sanitiser Chrome and Firefox load fonts
   through: a font is accepted when OTS 9.3.0 would accept it, and only the
   parts OTS drops (the variation tables as one unit, an unsorted `kern`
-  table) are left out. It was compared with OTS on 1,267 fonts.
+  table) are left out. Over 1,278 fonts it refuses exactly the fonts OTS
+  refuses, except that it does not require the `OS/2`, `name` and `post`
+  tables or outlines to be present.
 
 == Known limits
 

@@ -56,7 +56,7 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Release
 
-- [ ] Refresh the figures in `docs/releases/0.1.0.adoc` just before tagging.
+- [ ] Re-check the figures in `docs/releases/0.1.0.adoc` if anything lands before tagging.
 - [ ] Just before tagging: the default-branch ruleset from roc-automation's
   settings chapter (pull request, required checks `check` and the release
   dry-run build, signed commits, no bot bypass), verified with a pull
