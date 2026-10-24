@@ -5,7 +5,8 @@ the expects in package/TableVarTests.roc embed them.
 
 Pinned: uharfbuzz 0.56.3 (HarfBuzz 14.6.0). For each location: the
 normalised coordinates (F2Dot14), every glyph's advance, and for fonts with
-MVAR the x height and underline position.
+MVAR the x height and underline position. For var-outlines.ttf: every
+glyph's extents (x bearing, y bearing, width, height) instead.
 """
 import os
 
@@ -23,6 +24,12 @@ LOCATIONS = {
     "var-format1.ttf": [{}, {"wght": 800}, {"opsz": 48}, {"wght": 800, "opsz": 48}, {"wght": 600, "opsz": 30}, {"wght": 300, "opsz": 10}],
 }
 
+OUTLINE_LOCATIONS = [
+    {}, {"wght": 900}, {"wght": 100}, {"wdth": 75}, {"wght": 650}, {"wght": 900, "wdth": 75},
+    {"wght": 400.5}, {"wght": 812, "wdth": 81}, {"wght": 456.7, "wdth": 110.25}, {"wght": 250, "wdth": 120},
+    {"wght": 417.974853515625, "wdth": 115.83099365234375}, {"wght": 479.65087890625, "wdth": 106.18438720703125},
+]
+
 for name, locations in LOCATIONS.items():
     face = hb.Face(hb.Blob.from_file_path(os.path.join(HERE, name)))
     font = hb.Font(face)
@@ -38,3 +45,16 @@ for name, locations in LOCATIONS.items():
             ul = font.get_metric_position(hb.OTMetricsTag.UNDERLINE_OFFSET)
             extra = f" x_height={xh} underline={ul}"
         print(f"{loc} coords={coords} advances={advances}{extra}")
+
+face = hb.Face(hb.Blob.from_file_path(os.path.join(HERE, "var-outlines.ttf")))
+font = hb.Font(face)
+font.scale = (face.upem, face.upem)
+print("# var-outlines.ttf")
+for loc in OUTLINE_LOCATIONS:
+    font.set_variations(loc)
+    coords = [round(c * 16384) for c in font.get_var_coords_normalized()]
+    extents = []
+    for g in range(face.glyph_count):
+        e = font.get_glyph_extents(g)
+        extents.append((e.x_bearing, e.y_bearing, e.width, e.height))
+    print(f"{loc} coords={coords} extents={extents}")

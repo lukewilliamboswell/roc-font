@@ -1,7 +1,8 @@
 # Variable-font fixtures
 
-Tiny generated fonts for `package/TableVarTests.roc`. They are not real
-typefaces: every glyph is empty, and only the variation tables matter.
+Tiny generated fonts for `package/TableVarTests.roc` and
+`package/TableGvarTests.roc`. They are not real typefaces: only the
+variation tables, and for `var-outlines.ttf` a few outlines, matter.
 
 - `var-mapped.ttf`: two axes (`wght` 100–400–900, `wdth` 75–100–125), a
   non-linear `avar` map on `wght`, three named instances, an `HVAR` with five
@@ -13,6 +14,14 @@ typefaces: every glyph is empty, and only the variation tables matter.
   glyph-id advance mapping.
 - `var-format1.ttf`: a format 1 advance map with 1-byte entries and 3 inner
   bits, and a data subtable with no regions.
+- `var-outlines.ttf`: outlines with glyph variations (`gvar`): simple
+  glyphs (one whose side bearing is not its xMin), composite glyphs (an
+  offset, a scale, an x and y scale, a 2x2 transform with scaled offsets,
+  `USE_MY_METRICS`, anchor points, a nested composite), an empty glyph,
+  shared tuples, embedded peaks, intermediate regions, shared and private
+  point numbers with untouched points to infer, zero, 8-, 16- and 32-bit
+  deltas, deltas on phantom points, and two glyphs whose extents tell
+  HarfBuzz's double-precision tuple scalar from a single-precision one.
 
 They are generated, byte for byte reproducibly, by `generate.py` (fontTools
 4.61.1 from `tools/oracle/`):
@@ -20,7 +29,9 @@ They are generated, byte for byte reproducibly, by `generate.py` (fontTools
     tools/oracle/.venv/bin/python -I tests/fonts/variable/generate.py
 
 `oracle.py` prints HarfBuzz 14.6.0's coordinates, advances and metrics for
-them; the expects in `package/TableVarTests.roc` embed those values.
+them, and glyph extents for `var-outlines.ttf`; the expects in
+`package/TableVarTests.roc` and `package/TableGvarTests.roc` embed those
+values.
 
 fontTools 4.61.1 cannot read `var-format1.ttf`'s `HVAR`: it reads `HVAR`
 advance maps with its format 0 layout only. HarfBuzz reads it, and the
