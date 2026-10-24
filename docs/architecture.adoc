@@ -32,8 +32,10 @@ bits on every platform, in apps, packages, `expect`s and WebAssembly.
   out.
 * Three default fonts, sans, serif and mono, ready to use without
   supplying bytes (§5.8).
-* Later: subsetting (glyph closure and table rewrite) for PDF embedding, and
-  variable-font instancing of metrics and outlines.
+* Variable fonts: metrics, glyph extents and shaping at any point of a
+  font's axes (§5.7), in the first release, because two of the three
+  defaults need it to measure Regular.
+* Later: subsetting (glyph closure and table rewrite) for PDF embedding.
 
 === 1.2 What is out, and why
 
@@ -355,12 +357,48 @@ advances), a `List` query is offered instead. Before an `Iter` listing
 lands, a native benchmark compares it with the equivalent `List` query; the
 per-step closure call must not make a common use slower.
 
-=== 5.7 Variable fonts (later)
+=== 5.7 Variable fonts
 
 Variation coordinates select a result, so they belong to the query
-(principle 3), as in skrifa, not to the font, as in ttf-parser. Metric and
-shaping queries will accept an optional `Location`; a cheap derived value
-(`Font.at(font, location)`) may bundle it for repeated use. Reading
+(principle 3), as in skrifa, not to the prepared font, as in ttf-parser.
+Many queries need them (advances, metrics, extents, shaping), so instead of
+a field on every options record there is one shared options record,
+applied by a cheap derived value:
+
+[source,roc]
+----
+Font.Variation := {
+	weight : Font.Weight ?? Regular,                # Thin … Black, or Weight(U16), CSS 1–1000
+	width : Font.Width ?? Normal,                   # CSS widths (wdth 100)
+	optical_size : Font.OpticalSize ?? FontDefault, # or Size(px) to match a browser
+	axes : List({ tag : Str, value : I32 }) ?? [],  # any other axis, for experts
+}
+
+bold = Font.at(Font.serif, Font.Variation.{ weight: Bold })
+----
+
+* Without `at`, queries measure at `Font.Variation.{}`: Regular (wght
+  400), not the font's default instance. That is what a browser draws for
+  `font-weight: normal`, and two of the defaults (Merriweather, Fira Code)
+  default to Light. HarfBuzz uses the default instance, so oracle cases
+  always pass explicit variations.
+* Values outside an axis's range are clamped, because the format's
+  normalisation defines exactly that; it is documented, not repair.
+* Optical size defaults to the font's own default: browsers derive it
+  from the font size, which roc-font never sees. Callers who know their
+  size pass `Size(px)`.
+* Static fonts ignore variations.
+* `at` costs little and can run at compile time, so named instances of the
+  defaults (`Font.serif` at Bold, say) cost nothing at run time.
+
+Scope for the first release: phase 1 (avar, item variation store, HVAR,
+MVAR) and phase 2 (GDEF store, GPOS deltas, FeatureVariations) for
+advances, metrics and kerning; phase 3 (gvar applied to glyf points) for
+glyph extents away from the default instance. Arithmetic is fixed point
+with the rounding documented and checked against HarfBuzz and fontTools'
+instancer. Details are in `docs/variable-fonts.adoc`.
+
+Reading
 validates `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`, the `GDEF` item variation
 store and the variation indices in GPOS value records once, independent of
 any location. Without the GPOS deltas, kerning is wrong away from the

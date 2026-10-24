@@ -131,6 +131,17 @@ on it.
 
 ## 5. Milestones to 0.1.0
 
+**Variable fonts are in 0.1.0** (§5.7): `Font.Variation` with
+`weight ?? Regular`, applied by `Font.at`; queries default to Regular.
+- [ ] Phase 1: fvar, avar, item variation store, HVAR, MVAR (advances and
+  metrics at any location).
+- [ ] Phase 2: GDEF store, GPOS VariationIndex deltas, FeatureVariations
+  (kerning and substitution at any location).
+- [ ] Phase 3: gvar on glyf points, composites, IUP (extents at any
+  location).
+- [ ] Conformance grid per default font against HarfBuzz with variations
+  and fontTools' instancer; narrow fuzz targets per phase.
+
 **Default fonts (staged 2026-10-24, `package/fonts/`, not yet exposed).**
 Inter 4.1, Merriweather 4.009 (2.100), Fira Code 6.2, all OFL variable
 `glyf` fonts with HVAR; 5.8 MB; roc-font matches HarfBuzz on 1256 runs at
@@ -297,9 +308,7 @@ Exit: tagged release; checks pass; `git diff --check` clean.
 4. glyf outlines as a listing, then CFF and CFF2.
 5. Complex-script shapers (Arabic, Indic, USE, Hangul) with a published
    per-script support matrix.
-6. Variable fonts: `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`; `Location` on
-   queries.
-7. WOFF/WOFF2 unwrapping outside the core (roc-deflate, later Brotli).
+6. WOFF/WOFF2 unwrapping outside the core (roc-deflate, later Brotli).
 
 ## 6. Performance (standing requirement, §9)
 
