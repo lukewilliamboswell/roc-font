@@ -483,6 +483,81 @@ Rules:
   so one file covers every weight; until then the default instance is
   used.
 
+=== 5.9 The 0.1.0 surface
+
+This is the contract the implementation works to. Names may still change
+on consumer evidence (package-mermaid, roc-pdf) before the release; types
+and meaning should not. Everything is an associated item of `Font`.
+
+[source,roc]
+----
+# Reading (§4)
+ReadOptions := { face : U32 ?? 0, strict : Bool ?? False, limits : Limits ?? Limits.{} }
+Limits := { max_bytes : U64 ?? 268_435_456, max_faces : U32 ?? 1024, max_lookups : U32 ?? 16_384, max_depth : U32 ?? 64 }
+Problem : [
+    NotAFont,                                   # too short, unknown signature
+    NoSuchFace({ face : U32, count : U32 }),    # collection index out of range
+    OverLimit(Str),                             # which limit
+    MissingTable(Str),                          # table tag
+    BadTable({ table : Str, offset : U32 }),    # tag and byte offset in the file
+    BadUnitsPerEm,
+    NoUnicodeMapping,
+]
+from_bytes : List(U8), ReadOptions -> Try(Font, List(Problem))
+face_count : List(U8) -> Try(U32, [NotAFont])
+dropped : Font -> List(Problem)                 # optional tables lenient reading dropped
+
+# Facts, in font units
+Metrics : { ascent : I32, descent : I32, line_gap : I32, cap_height : I32, x_height : I32,
+            underline : { position : I32, thickness : I32 }, strikeout : { position : I32, thickness : I32 } }
+units_per_em : Font -> U16
+metrics : Font -> Metrics
+glyph_count : Font -> U32
+glyph : Font, U32 -> Try(U32, [Missing])        # code point -> glyph id
+advance : Font, U32 -> I32                      # glyph id; past the font: the format's rule
+extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
+code_points : Font -> Iter(U32)                 # every mapped code point, ascending
+family_name : Font -> Try(Str, [Missing])
+glyph_name : Font, U32 -> Try(Str, [Missing])
+
+# Variations (§5.7)
+Variation := { weight : Weight ?? Regular, width : Width ?? Normal,
+               optical_size : OpticalSize ?? FontDefault, axes : List({ tag : Str, value : Dec }) ?? [] }
+Weight : [Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)]
+Width : [UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded,
+         Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)]
+OpticalSize : [FontDefault, Size(Dec)]
+Axis : { tag : Str, min : Dec, default : Dec, max : Dec }
+at : Font, Variation -> Font
+axes : Font -> List(Axis)
+
+# Shaping (§5.2-5.5, §6)
+Direction : [FromScript, LeftToRight, RightToLeft]
+ClusterLevel : [Graphemes, Characters]
+Feature := { tag : Str, value : U32 ?? 1, start : U32 ?? 0, end : U32 ?? 4_294_967_295 }  # UTF-8 byte range
+ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }   # per input scalar; floor 16384
+ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47; "" unknown
+                  direction : Direction ?? FromScript, features : List(Feature) ?? [],
+                  clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }),
+        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break
+ShapePlan                                        # opaque, reusable for one Font and options
+plan : Font, ShapeOptions -> ShapePlan
+shape : Font, Str, ShapeOptions -> Run
+shape_planned : Font, ShapePlan, Str -> Run
+shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U32 }) -> Run   # for a paragraph layer
+width : Font, Str -> I32                         # sum of advances with default options
+
+# Default fonts (§5.8), each prepared at compile time
+sans, serif, mono : Font                         # Inter, Merriweather, Fira Code at Regular
+sans_bytes, serif_bytes, mono_bytes : List(U8)
+sans_licence, serif_licence, mono_licence : Str
+----
+
+The seed's low-level `substitute` and `kerning` are removed: `shape`
+covers them with clusters and positions, and `shape_scalars` serves callers
+that do their own itemisation.
+
 [#shaping]
 == 6. Shaping
 
