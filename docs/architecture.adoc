@@ -1,0 +1,721 @@
+= roc-font architecture
+:toc: left
+:toclevels: 2
+:sectanchors:
+
+This document describes the architecture roc-font is moving towards and,
+above all, *why*. It is the enduring design: what a finished roc-font looks
+like and the reasons behind each choice. Day-to-day rules for contributors
+are in `AGENTS.md`; status, milestones and open questions are in `TODO.md`.
+When evidence changes a decision here, change this document in the same
+commit and say what the evidence was.
+
+Section numbers are stable references: `TODO.md` and commit messages cite
+them as "architecture §4.2".
+
+[#purpose]
+== 1. Purpose and boundary
+
+roc-font is a pure-Roc, host-free library that turns *font bytes and text*
+into *font facts and positioned glyphs*. No effects, no file I/O, no system
+font lookup. The same package version, bytes and arguments give the same
+bits on every platform, in apps, packages, `expect`s and WebAssembly.
+
+=== 1.1 What is in
+
+* Reading and validating TrueType and OpenType files (`sfnt`, `ttcf`
+  collections), reporting every independent problem.
+* Font facts in font units: metrics, character maps, glyph advances and
+  extents, names, and later outlines.
+* Shaping: Unicode text plus script, language, direction and feature
+  choices in; a run of glyph ids, advances, offsets, clusters and flags
+  out.
+* Later: subsetting (glyph closure and table rewrite) for PDF embedding, and
+  variable-font instancing of metrics and outlines.
+
+=== 1.2 What is out, and why
+
+[cols="1,2",options="header"]
+|===
+|Out of scope |Why
+
+|Rasterising, hinting, drawing
+|Hosts own pixels. Every renderer rasterises differently; a pure-Roc
+rasteriser would never match the host that draws.
+
+|Rounding to pixels or points
+|Chrome rounds to 1/64 px, PDF to 1/1000 em, raylib to whole pixels. Font
+units are the only representation every consumer can round its own way
+without losing information.
+
+|Line breaking, wrapping, justification, bidi, script itemisation, grapheme
+segmentation
+|These are Unicode text algorithms, owned by the `unicode` package. roc-font
+consumes their results (runs of one script and direction) and does not
+duplicate their tables.
+
+|Font discovery, fallback across fonts, bundled fonts
+|Policy that differs per consumer (Mermaid guesses emoji widths; roc-pdf
+embeds a specific font). An optional asset package may ship font bytes;
+the library never does.
+
+|Decompressing WOFF and WOFF2
+|A container concern, not a font concern. Accept decompressed `sfnt` bytes;
+a separate module or package (built on `roc-deflate`, and later Brotli) can
+unwrap WOFF.
+|===
+
+[#consumers]
+== 2. Who it is for
+
+The design is driven by real consumers, in order of commitment:
+
+package-mermaid:: text measurement that agrees with Chrome: cmap, advances,
+glyph extents, ascent and descent, default ligatures and pair kerning. Its
+Mermaid oracle suite must pass unchanged on roc-font.
+roc-pdf:: shaped runs for embedding: Latin kerning and ligatures first,
+then its stricter validation, subsetting, a reverse map from glyphs to text
+(ToUnicode), exact allocation and work counts per case, `U32` glyph ids and
+UTF-8 byte clusters.
+roc-ray and terrocotta:: measurement with kerning from the same bytes the
+host loads, the list of code points a font maps (for a glyph atlas), and
+later glyph-id drawing.
+Future:: SVG and HTML generators, charts, static-site tools, Roc GUI
+toolkits that own their text.
+
+A feature is in scope when a consumer needs it or when leaving it out would
+make results disagree with browsers on ordinary text (see §6.2). Everything
+else waits for evidence.
+
+[#principles]
+== 3. Principles behind the shape
+
+Each principle below appears again in the sections that apply it.
+
+. *Bytes are hostile; reading is the only failure.* All validation happens
+  once, in reading. A successfully read font is proof that every later query
+  and every shaping call is total. Callers never handle errors after reading.
+  (This is HarfBuzz's "sanitize once, then trust" model, and the reason
+  queries can use unreachable fallbacks safely.)
+. *Prepare once, use many times.* Reading is the expensive, failure-capable
+  step; queries and shaping are cheap and total. Work moves into reading only
+  when it is valid for every later use of that exact font file and a
+  benchmark shows it pays.
+. *Inputs that only select a result belong to the query.* Text, features,
+  script, language and, later, variation coordinates are arguments to
+  queries, never fields of the prepared font. One read font serves every
+  combination.
+. *Font units at the boundary, integers throughout.* Values are what the font
+  stores, as integers. No floating point enters reading or shaping, so no NaN
+  or infinity can escape and results are bit-identical everywhere.
+. *Good defaults, options by record.* The default path needs no OpenType
+  knowledge and matches what a browser does. Every option is a defaulted
+  field of a nominal options record (§5.3), so adding an option never breaks
+  a caller.
+. *Flat, index-aligned, deterministic data.* Hot structures are flat
+  parallel lists and offset tables addressed by index. Output lists are
+  index-aligned with input. No hash iteration order influences a result.
+. *Every claim is measured.* Correctness is checked against reference
+  implementations; performance is checked against baselines that only move
+  in the right direction (§9).
+
+[#layers]
+== 4. Layers
+
+roc-font is a pipeline of pure phases with explicit inputs and outputs. Each
+phase can be tested, fuzzed and benchmarked on its own.
+
+----
+            bytes + ReadOptions
+                    │
+   ┌────────────────▼────────────────┐
+   │ 1. Container   sfnt / ttcf      │  choose a face, table directory
+   │ 2. Validate    per table        │  bounds, counts, offsets, cross-table
+   │ 3. Index       measured hot     │  flat lookups worth precomputing
+   └────────────────┬────────────────┘
+                    │ Font  (opaque, total from here on)
+      ┌─────────────┼───────────────────────┐
+      ▼             ▼                       ▼
+   Queries      Shaping plan            Listings (Iter)
+   metrics,     script + language       code points, names,
+   glyph,       + features → which      scripts and features,
+   advance,     lookups apply           outline commands
+   extents      (ShapePlan, reusable)
+                    │
+                    ▼  text + ShapePlan
+   ┌─────────────────────────────────┐
+   │ 4. Map       scalars → glyphs   │  cmap, normalisation, ignorables
+   │ 5. Substitute  GSUB             │  feature plan, lookup flags
+   │ 6. Position    advances, GPOS   │  kern fallback
+   │ 7. Finish      clusters, flags  │
+   └────────────────┬────────────────┘
+                    ▼
+                   Run  (flat, index-aligned)
+----
+
+=== 4.1 Container
+
+Accept `sfnt` (TrueType `0x00010000`, `true`, OpenType `OTTO`) and `ttcf`
+collections, choosing a face by `ReadOptions.face` (default 0).
+Collections are cheap to support and common on real systems, so they are
+not deferred. A collection read reports the face count so callers can
+enumerate faces.
+
+=== 4.2 Validation: check eagerly, keep the bytes
+
+Reading checks every offset, count and length a later query or shaping step
+will follow, and checks before allocating anything sized by the data.
+After validation, the prepared font keeps *the checked table bytes* (as
+`List.sublist` views, which Roc does not copy) rather than parsing every
+table into new structures.
+
+Why: this combines the two mature models. ttf-parser and fontations read
+lazily and in place, which keeps reading cheap and memory small but makes
+every query fallible. HarfBuzz and OTS sanitise first and then trust the
+bytes, which makes queries total. In a pure language with no interior
+mutation we cannot sanitise lazily and cache the result, so we validate
+eagerly and then read in place. Queries use unreachable fallbacks
+(`?? 0`, `?? []`) justified by validation, and each states the invariant
+that makes it unreachable.
+
+=== 4.3 Index: precompute only what is measured
+
+Some lookups are faster from a prepared index than from the raw table: for
+example a cmap flattened into sorted ranges, or GPOS pair classes. An index
+is built in reading only when (a) it is valid for every query on that font,
+and (b) a native benchmark shows the saving across the expected number of
+queries outweighs its cost in reading time and peak memory. Each index
+records the benchmark that justified it in a comment.
+
+=== 4.4 Strict and lenient reading
+
+A table is *required* (`head`, `hhea`, `maxp`, `hmtx`, `cmap`, plus `loca`
+and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
+`OS/2`, `name`, `post`, ...).
+
+* *Lenient* (the default) follows browsers and OTS: a broken required table
+  rejects the font; a broken optional table is dropped, and the font reads
+  successfully with that table absent. The font reports what was dropped
+  and why (`Font.dropped`), so nothing is hidden.
+* *Strict* (`ReadOptions.{ strict: True }`, wanted by roc-pdf) rejects
+  the font for any problem, including checksum mismatches and overlapping or
+  unordered tables.
+
+Both modes report every independent problem in one result. A problem
+names the table by its tag and, where it helps, the byte offset in the file
+and what was wrong there, so a caller can act on it; the exact payload is
+settled with roc-pdf (`TODO.md`). Dropping a table
+is not repair: data is never clamped, references are never redirected, and
+glyph 0 is never substituted for missing data. Either a table is used as the
+font defines it or it is not used at all.
+
+=== 4.5 Limits
+
+Reading takes limits as defaulted fields of `ReadOptions` (maximum file
+size, faces, glyphs, lookups, composite depth). Defaults admit every font in
+the corpus with room to spare. Exceeding a limit is a reported problem, never
+a crash or a silent truncation.
+
+[#api]
+== 5. Public API shape
+
+=== 5.1 Modules
+
+Only a module's namesake type is visible to importers, and every public
+item appears in `roc docs`. So the public surface is a small number of
+namesake types; everything else lives in modules `package/main.roc` does not
+expose.
+
+[cols="1,3",options="header"]
+|===
+|Module |Role
+
+|`Font` (public)
+|Reading, options, problems, metrics and glyph queries, listings, shaping
+entry points. Most callers import only this.
+
+|`Run` (public, when it earns it)
+|The shaped result and its accessors, if it grows beyond a record type
+alias in `Font`.
+
+|Internal: `Sfnt`, `Table*`, `Layout*`, `Shaper*`, `Subset*`
+|Table readers, the GSUB/GPOS engine, per-script shapers. Named after the
+OpenType specification. Never exposed; never in generated docs.
+
+|Test only: `*Test.roc`, `*Tests.roc`, fuzz targets, fixtures
+|Builders of synthetic fonts and expectations. Never reachable from
+`package/main.roc`, so `roc bundle` leaves them out.
+|===
+
+=== 5.2 Values and types
+
+* Glyph ids are `U32` (roc-pdf's choice, and wide enough for any `maxp`).
+* Lengths, advances and offsets are `I32` font units; table-native values
+  (`U16`, `I16`) appear only where the caller asks for raw table data.
+* Text is a `Str`. Clusters are UTF-8 byte offsets into it, so callers can
+  slice their own text with them. Callers that already hold scalars with
+  byte offsets (a paragraph layer) use a lower-level entry point that takes
+  them directly.
+* Script and language are given in plain-language standards: ISO 15924
+  script codes and BCP 47 language tags. roc-font maps them to OpenType tags
+  internally (as HarfBuzz does). Raw OpenType tags remain available as an
+  option for experts.
+* Features are named by their four-letter tag with a value, optionally over
+  a byte range of the text: `{ tag: "liga", value: 0 }`, `{ tag: "salt",
+  value: 2, start: 4, end: 9 }`. The default set matches a browser for the
+  script and direction.
+
+=== 5.3 Options records
+
+Every operation that can be configured takes a nominal record whose fields
+all have defaults, so the default call is short and new options never break
+callers:
+
+[source,roc]
+----
+Font.ReadOptions := {
+	face : U32 ?? 0,
+	strict : Bool ?? False,
+	limits : Font.Limits ?? Font.Limits.{},
+}
+
+Font.ShapeOptions := {
+	script : Font.Script ?? Font.Script.unknown,
+	language : Font.Language ?? Font.Language.unknown,
+	direction : Font.Direction ?? Font.Direction.from_script,
+	features : List(Font.Feature) ?? [],
+	clusters : Font.ClusterLevel ?? Font.ClusterLevel.graphemes,
+	limits : Font.ShapeLimits ?? Font.ShapeLimits.{},
+}
+
+font = Font.from_bytes(bytes, Font.ReadOptions.{})?
+run = Font.shape(font, "office -> home", Font.ShapeOptions.{})
+pdf_font = Font.from_bytes(bytes, Font.ReadOptions.{ strict: True })?
+----
+
+The names above illustrate the pattern; the exact names are settled in
+`TODO.md` and proved by consumers before 0.1.0. Nested defaulted records
+(`limits`) compile on the current nightly (checked 2026-10-24).
+
+roc-font does not detect scripts itself: that needs Unicode script data,
+which belongs to the `unicode` package (§1.2). An unknown script shapes
+with the font's default script and language system, which is what a
+browser does for Latin text. Callers that itemise text with `unicode`
+pass each run's script. `clusters` chooses how glyph clusters merge
+(HarfBuzz's cluster levels); its default suits measurement and
+line breaking.
+
+=== 5.4 The shaped run
+
+A `Run` is a structure of flat, index-aligned lists, one entry per output
+glyph:
+
+[source,roc]
+----
+Run : {
+	glyphs : List(U32),
+	advances : List({ x : I32, y : I32 }),
+	offsets : List({ x : I32, y : I32 }),
+	clusters : List(U32),   # UTF-8 byte offset into the input text
+	flags : List(U8),       # unsafe-to-break, unsafe-to-concat
+}
+----
+
+Why flat lists: consumers sum advances, slice by cluster and copy glyph ids
+into PDF strings; each wants one column. Parallel lists cost one allocation
+per column instead of one per glyph and stay unique under Roc's ownership
+rules. Flags are returned because they are already computed and line
+breaking needs them to avoid reshaping.
+
+=== 5.5 Shaping plans
+
+Choosing which lookups apply for a script, language, direction and feature
+set is independent of the text. `Font.plan(font, options)` returns a
+reusable `ShapePlan`; `Font.shape` builds one internally when not given
+one. Callers that shape many strings with the same settings (every
+consumer) plan once. This is HarfBuzz's `hb_shape_plan`, and it is the
+second level of "prepare once, use many times".
+
+=== 5.6 Listings and `Iter`
+
+Font bytes are not streamed: offsets point anywhere in the file, so the
+whole file must be in memory, and every mature parser takes the full byte
+slice. Shaping does not stream either: GSUB and GPOS look behind and ahead,
+reverse chaining runs backwards, and marks attach to earlier glyphs, so a
+run is produced whole.
+
+`Iter` is used for *listings* where the caller may stop early or where a
+full list would be large and usually discarded: the code points a cmap maps,
+name records, the scripts and features a font offers, and outline drawing
+commands. Each listing reads lazily from the prepared font through
+`Iter.custom`. Where a caller usually wants everything at once (all
+advances), a `List` query is offered instead. Before an `Iter` listing
+lands, a native benchmark compares it with the equivalent `List` query; the
+per-step closure call must not make a common use slower.
+
+=== 5.7 Variable fonts (later)
+
+Variation coordinates select a result, so they belong to the query
+(principle 3), as in skrifa, not to the font, as in ttf-parser. Metric and
+shaping queries will accept an optional `Location`; a cheap derived value
+(`Font.at(font, location)`) may bundle it for repeated use. Reading
+validates `fvar`, `avar`, `HVAR`, `MVAR` and `gvar` once, independent of any
+location.
+
+[#shaping]
+== 6. Shaping
+
+=== 6.1 Stages
+
+Each stage is a pure function over flat lists with a documented growth
+bound:
+
+. *Map*: decode the text to scalars with byte offsets; map each to a glyph
+  through the cmap (formats 4, 12, 14 and the rest), with the fallbacks in
+  §6.2.
+. *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
+  and mark filtering sets from `GDEF`.
+. *Position*: take advances from `hmtx` (and later `HVAR`); apply GPOS
+  lookups, or the `kern` table when the font has no GPOS kerning.
+. *Finish*: merge clusters at the configured level, compute unsafe-to-break
+  flags, reverse for right-to-left output order.
+
+Complex scripts (Arabic joining, Indic reordering, the Universal Shaping
+Engine, Hangul) are separate shaper modules plugged into the stages and are
+added with a published per-script support matrix.
+
+=== 6.2 Behaviour browsers have that GSUB does not express
+
+These steps change which glyphs draw ordinary text and so its width; without
+them results disagree with Chrome. They are in scope for the default path:
+
+* compose or decompose a character depending on what the cmap maps
+  (`é` absent → `e` plus combining acute, and the reverse);
+* hide default-ignorable characters (ZWJ, ZWNJ, soft hyphen, variation
+  selectors) as zero-width;
+* give U+2000–U+200A and other spaces widths derived from the space glyph
+  when the font lacks them;
+* apply variation sequences through cmap format 14;
+* a defined, documented result for characters the font cannot draw.
+
+=== 6.3 Budgets
+
+Shaping work is bounded by budgets in `ShapeLimits`, with defaults generous
+enough never to change a result on a legitimate font: output length at most
+`max(64 n, 16384)` glyphs and lookup applications at most
+`max(1024 n, 16384)`, following HarfBuzz, with nested lookup depth bounded
+at 64. Roc is efficient enough that a tight budget buys nothing but
+disagreement with the reference. Exceeding a budget stops the stage and
+returns the run computed so far, which is total and finite; the budget, not
+the text, is then documented as the cause of any oracle difference.
+
+[#testing]
+== 7. Verification
+
+Four layers, each with a different job. None replaces another.
+
+[cols="1,2,2",options="header"]
+|===
+|Layer |Job |Where
+
+|Unit expects
+|Fast, precise checks of one reader or stage on crafted fonts, including
+aggregated problems and degenerate input. Run by `roc test`.
+|`package/*Tests.roc`
+
+|Conformance
+|Agreement with reference implementations on thousands of real cases.
+|`tests/cases/`, `tests/oracle/`, `tools/driver/`, `scripts/conformance.py`
+
+|Fuzzing
+|Contracts on hostile and generated input: totality, determinism, bounded
+growth, index alignment, linear allocation, no leaks.
+|`fuzz/` (roc-fuzz targets, seeds, dictionaries), `scripts/run_fuzz.py`
+
+|Performance
+|Baselines that ratchet, and comparison with mature libraries.
+|`bench/`, `scripts/bench.py`
+|===
+
+=== 7.1 Conformance: record once, replay cheaply
+
+Why this shape: an oracle (HarfBuzz, fontTools, FreeType, OTS, Chrome) is
+slow to install and slow to run; roc-font is fast. So oracle results are
+recorded once and cached, and the expensive part never runs in the normal
+loop.
+
+* *Cases* are lines in `tests/cases/*.cases`, in HarfBuzz's own test format
+  exactly as its `run-tests.py` reads it (`font;options;code points;expected`,
+  with `#` comments and disabled cases, `@` directives and `*` for "any").
+  One format means HarfBuzz's test suite, the text-rendering-tests and our
+  own cases all run through the same driver without conversion. Three
+  extensions: `# id: <name>` names the next case, `?` as the expected value
+  means "fill from the oracle", and the `--read-outcome` option makes a
+  reading case whose result is `read:accept`, `read:reject` or
+  `read:drop=<tags>`, which is how unhappy paths share the same files.
+* *Results* are serialised in `hb-shape` notation with glyph ids and UTF-8
+  clusters (`--no-glyph-names --utf8-clusters`:
+  `[gid=cluster@dx,dy+adv|...]`), so comparison is string equality and a
+  difference reads like HarfBuzz output. HarfBuzz's own expectations use
+  glyph names and code point clusters by default, so the recorded oracle
+  output, not the expected column of an imported file, is the reference.
+* *Records* live in `tests/oracle/records/` as JSON lines. Each record's key
+  is a SHA-256 over every input that can change it: font bytes, case,
+  options, oracle tool versions and the extractor's version. A record is
+  recomputed only when its key changes, and forcing a re-record must
+  reproduce it byte for byte. Records are committed so `roc test` and the
+  driver need no oracle installed.
+* *The driver* (`tools/driver/`) is one native Roc binary. It reads cases on
+  stdin or from files named on the command line, reads each font once per
+  run, shapes every case and prints one result line per case. Build once,
+  then run thousands of happy and unhappy cases in seconds (6245 cases took
+  about 0.9 s on the seed).
+* *The review* (`scripts/conformance.py`) runs the driver, compares with the
+  records and fails on any difference not listed in
+  `tests/known-failures.json` with a reason, and on any listed case that now
+  agrees (the list is stale). Entries name single cases; patterns are not
+  allowed, so every divergence is a deliberate, reviewed decision. The
+  script never edits the list itself.
+* *Gating and scored suites.* Our own case files gate: every case agrees or
+  is listed. Large imported suites (HarfBuzz's 6000+ cases) cannot gate
+  until the implementation covers them, and listing thousands of failures
+  would hide the signal. They run as *scored* suites: the review reports
+  agree, differ and unsupported counts per suite, and the agree count
+  ratchets like the allocation baseline (it may only rise). A scored suite
+  is promoted to gating once its remaining differences fit in a reviewed
+  known-failures list.
+* *Curated imports.* Our own case files are the authority; external
+  suites are sources we curate from, not trees we vendor. A curation list
+  (`tests/cases/curated.json`) names each imported case by suite, file and
+  line, with the reason it is in scope, and `scripts/fetch_corpus.py
+  import-hb-tests --curated` copies exactly those cases, with their fonts'
+  pinned hashes, into gating case files. As each milestone lands, the next
+  slice is promoted. Whole suites are never committed: the source tarball
+  is pinned by hash in `tests/corpus.json`, so a full import is
+  reproducible on demand. Generated cases (corpus fonts with written or
+  fuzzed text) supply volume; curated imports supply the hard cases we
+  would not think to write.
+* A small, representative slice of records is generated into Roc expect
+  modules so plain `roc test` enforces agreement with no tooling at all.
+
+Oracles, each pinned by exact version and recorded in every record's
+provenance:
+
+[cols="1,2",options="header"]
+|===
+|Oracle |Decides
+
+|HarfBuzz (`uharfbuzz`)
+|glyphs, advances, offsets, clusters and flags for given settings
+
+|fontTools
+|table parsing, metrics, cmap, names, kern pairs, subsetting round trips
+
+|FreeType (`freetype-py`)
+|glyph extents and, later, outlines
+
+|OTS (`ots-sanitize`, pinned release binary)
+|accept, reject or drop-table for hostile and malformed fonts, the
+reference for §4.4. fontTools is only a weak fallback here: it accepts
+fonts browsers reject (units per em of 0, for example)
+
+|Pinned Chrome (Puppeteer)
+|browser default features and end-to-end widths, as package-mermaid uses
+|===
+
+=== 7.2 Corpus
+
+Fonts come from many sources, each pinned by URL at a release tag (never a
+moving branch) and SHA-256 in `tests/corpus.json`, with its licence fetched
+beside it. `scripts/fetch_corpus.py` downloads into the ignored
+`tests/corpus/` and fails on any hash mismatch. Only small fixtures are
+committed (`tests/fonts/`).
+
+Sources: HarfBuzz's `test/shape/data` (in-house, AOTS and
+text-rendering-tests fonts with expectations), HarfBuzz's
+`test/fuzzing/fonts` and OTS's test fonts (malformed input), fontTools'
+test data, Google Fonts and Noto across scripts and outline formats, a
+variable font, a `kern`-only font, and crafted fixtures for edge cases.
+The same corpus seeds the fuzz targets.
+
+=== 7.3 Fuzzing
+
+Every reading or shaping stage has a roc-fuzz target asserting its
+contract: totality, determinism, finite output, bounded growth, index
+alignment and clusters in range. Allocation is checked with
+`Fuzz.measure_allocs!` at two sizes against a linear bound, and leaks with
+`Fuzz.expect_no_leaks!`. A differential target shapes fuzzed text on corpus
+fonts and compares with recorded HarfBuzz output. Every crash is distilled
+into a permanent `## fuzz regression:` expect. The smoke run (fixed seed,
+seeds-only corpus) is deterministic and part of `all_tests.py`; the
+roc-fuzz release is pinned by URL and asset SHA-256 in `run_fuzz.py`.
+Details are in `docs/fuzzing.adoc`.
+
+[#performance]
+== 8. Performance by construction
+
+Performance is a design input, not a later pass. The rules in `AGENTS.md`
+("Protect performance by construction") exist because Roc's ownership model
+makes some innocent-looking code quadratic: replacing one inner list of a
+`List(List(a))` can copy the outer list, a list threaded through a
+record-valued `fold` may not stay unique, and `List.sort_with` is quadratic
+on sorted input. The architecture avoids these by construction:
+
+* flat parallel lists and offset tables instead of nested lists, in both the
+  prepared font and the run;
+* output preallocated when its length is known;
+* explicit work lists with bounded depth instead of recursion;
+* order checked linearly instead of sorting, since fonts store arrays
+  sorted;
+* every loop bounded by a count validated against the data.
+
+[#benchmarks]
+== 9. Measuring performance
+
+=== 9.1 Protocol
+
+Following roc-parser: every benchmark program, in Roc or another language,
+reads its input, runs the operation N times inside a timed region and prints
+one JSON line (`iterations`, `elapsed_ns`, `successes`, `checksum`). The
+checksum folds over the whole result so no implementation can skip work.
+`scripts/bench.py` calibrates N to a target batch time, discards a warmup
+batch, runs several batches in fresh processes, and reports the median,
+spread, throughput and peak RSS. Peak RSS is taken from GNU `time` around
+each batch process: Linux carries a parent's peak across fork and exec, so
+reading it from the harness's own `wait4` reports the harness, not the
+program (every case read 203 MiB instead of about 1.3 MiB). Inputs (corpus fonts, generated texts at
+three or more increasing sizes, and adversarial fonts) are pinned by hash in
+a manifest so results are comparable across machines and runs.
+
+=== 9.2 Ratchets
+
+Allocation counts and leaked allocations of a Roc operation are
+deterministic for a given compiler and input (verified across runs). They
+are recorded per case in `bench/baseline.json` and ratchet. Requested bytes
+and peak live bytes are the next figures to ratchet; they need counters
+added to the roc-fuzz host (its allocator already keeps a size header),
+since the binaries are statically linked and malloc cannot be intercepted.
+The ratchet:
+
+* an increase fails the check;
+* a decrease fails until the baseline is updated, so improvements are
+  locked in rather than lost;
+* updating the baseline is an explicit command whose diff appears in review,
+  with the compiler version recorded.
+
+A new case, a changed input hash, or a change in whether a font is accepted
+also fails the check, so the baseline always describes exactly the inputs
+measured.
+
+Elapsed time is not deterministic, so it does not ratchet in absolute terms.
+It is compared as a ratio against the reference implementations measured in
+the same run on the same machine, with a tolerance; a ratio that worsens
+beyond the tolerance fails the full benchmark run. On a shared machine batch
+spreads reach 20–100 %, so ratios are recorded only on an idle or dedicated
+machine and judged per operation (geometric mean over its cases), not per
+case.
+
+=== 9.3 Comparison implementations
+
+`bench/compare/` holds small programs, following the same protocol, using
+HarfBuzz (C), ttf-parser and rustybuzz (Rust) and, for reading only,
+fontTools (Python). Each pins its library version in its own lock file.
+They answer "how far are we from a mature implementation", per operation:
+reading, cmap lookup, advance query, shaping at each text size. A missing
+toolchain is skipped and named in the report. Each comparator's checksum is
+also compared with roc-font's, which catches disagreements cheaply between
+conformance runs.
+
+The `read` comparison is not like for like: HarfBuzz, ttf-parser and
+rustybuzz parse lazily, often with constant-time bounds checks, while
+roc-font validates everything and builds its indexes up front (§4.2). The
+gap shows what validation costs, and the target is to make it proportional
+to what later queries actually use. Kerning alone has no comparator; it is
+measured for roc-font only.
+
+=== 9.4 Scaling
+
+Every hot operation is measured at three or more increasing sizes, and
+allocation growth across sizes is checked as well as time: reading linear in
+file size, cmap lookup logarithmic in mappings, shaping linear in text
+length times applicable lookups. Adversarial fonts (huge coverage tables,
+deep contextual nesting, long ligature sets, many lookups) are part of the
+benchmark corpus, not only the fuzz corpus.
+
+[#layout]
+== 10. Repository layout
+
+----
+package/                 the package: public Font, internal modules, unit tests
+  main.roc               exposes only public modules
+  testing.roc            test-support root (Font + test builders) for fuzz/
+fuzz/                    roc-fuzz targets, seeds/, dictionaries/
+tests/
+  fonts/                 small committed fixtures with licences
+  corpus.json            pinned external fonts (URL, SHA-256, licence)
+  corpus/                fetched fonts (ignored)
+  cases/*.cases          conformance cases, HarfBuzz test format
+  oracle/records/        cached oracle results (JSON lines, committed)
+  known-failures.json    deliberate divergences, each with a reason
+tools/
+  driver/                native Roc conformance driver (cases in, results out)
+  oracle/                pinned oracle extractors and requirements
+bench/
+  roc/                   Roc benchmark programs
+  compare/               HarfBuzz, Rust and Python comparison programs
+  baseline.json          allocation ratchet
+scripts/                 all_tests.py, fetch_corpus.py, record_oracle.py,
+                         conformance.py, run_fuzz.py, bench.py
+docs/                    this document and contributor chapters
+.roc-version             the nightly every check runs with
+----
+
+Nothing under `tests/`, `tools/`, `bench/`, `fuzz/` or `scripts/` is
+reachable from `package/main.roc`. Apps outside `package/` that need test
+builders import them through `package/testing.roc`, a second package root
+that `main.roc` never reaches; `roc bundle package/main.roc` gives the same
+archive with or without it.
+
+`python3 scripts/all_tests.py` runs every check in §7 and §9 with the
+compiler named in `.roc-version`; `scripts/public_api.json` lists the items
+`roc docs` may show, and its list of known internal leaks may only shrink.
+
+[#references]
+== 11. Lessons taken from mature libraries
+
+[cols="1,3",options="header"]
+|===
+|Library |What roc-font takes
+
+|HarfBuzz
+|Sanitise once then trust; face and font split; shape plans; budgets;
+cluster levels and unsafe-to-break flags; script and language tag mapping;
+its test-suite format and corpus.
+
+|ttf-parser
+|Never panic, never allocate per query, read in place from checked bytes;
+optional tables are absent rather than fatal; iterators for listings.
+
+|rustybuzz, go-text/typesetting
+|A single-language HarfBuzz port is feasible when its tests are generated
+from HarfBuzz's own test files.
+
+|fontations (read-fonts, skrifa)
+|Specification-named internal readers; variation location as a query
+input; differential testing against FreeType.
+
+|swash
+|Reusable shaping state separate from the font.
+
+|allsorts, fontkit
+|Shaping, subsetting and container handling together serve PDF producers;
+the subsetting design to learn from for roc-pdf.
+
+|OTS
+|Which malformed fonts browsers reject or repair by dropping tables; the
+model for lenient reading and the oracle for unhappy paths.
+
+|roc-parser
+|Benchmark protocol, generated corpora pinned by hash, known-failure lists
+that fail when stale, pinned oracles, the fuzz runner.
+|===
