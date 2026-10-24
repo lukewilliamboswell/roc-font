@@ -1,0 +1,25 @@
+# Native fuzz builds and their working state
+/fuzz_*
+.roc-fuzz/
+/tests/corpus/
+artifacts/
+
+# Generated docs and bundles
+generated-docs/
+.docs-out/
+dist/
+*.tar.zst
+
+# Oracle tooling
+node_modules/
+.venv/
+tools/**/.cache/
+
+# Scratch and caches
+/.roc-font-tmp/
+bench/compare/rust/target/
+/tests/cases/harfbuzz/
+/tests/oracle/records/harfbuzz/
+__pycache__/
+
+.DS_Store
