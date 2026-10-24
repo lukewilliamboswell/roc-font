@@ -25,15 +25,18 @@ repositories are relative to `~/Documents/Github/`.
 
 - [ ] Phase 1: wire `TableVar` into `Font` (`Variation`, `at`, `axes`,
   Regular by default; HVAR advances, MVAR metrics).
-- [ ] Phase 2: GDEF store and GPOS device deltas in kerning;
-  FeatureVariations (groundwork in progress).
-- [ ] Phase 3: gvar extents (groundwork in progress).
-- [ ] Case fields `variations`, `variation`, `instance` and kinds `coords`,
-  `advances`, `metrics`, `extents`; cases without `variations` pass
-  `wght=400` to the oracle. A grid per default font against HarfBuzz.
-- [ ] Chrome widths for variable fonts: every axis in
-  `font-variation-settings`, `font-optical-sizing: none`,
-  `font-synthesis: none`; tolerance half a unit per glyph.
+- [ ] Wire phase 2 (`LayoutVar`: kerning deltas via `check_pair` inside
+  `LayoutKerning.read_gpos`, `x_advance` with the PairSet base for format
+  1; FeatureVariations in the shaping plan) and phase 3 (`TableGlyfPoints`,
+  `TableGvar` extents) into `Font.at`; `TableGvar`'s extents replace
+  `TableGlyf`'s header boxes.
+- [ ] Driver protocol 2 (`docs/conformance.adoc`, "The driver"): kinds
+  `coords`, `advances`, `metrics`, `extents`, flags `face`, `instance`,
+  `weight`, `width`, `optical-size`, `axis`; then `DRIVER_PROTOCOL = 2`.
+  Unlocks 250 recorded cases (default fonts at many locations, collections).
+- [ ] Fuzz targets for the variation readers (`TableVar`, `LayoutVar`,
+  `TableGvar`): totality, determinism, bounded steps, differential values
+  at fuzzed locations.
 
 ### Default fonts (§5.8, `docs/default-fonts.adoc`)
 
@@ -41,8 +44,6 @@ repositories are relative to `~/Documents/Github/`.
   phases 1 and 2 (two faces default to Light).
 - [ ] `all_tests.py`: bundle step accepts exactly the files in
   `tools/default-fonts/pins.json`; run `tools/default-fonts/verify.py`.
-- [ ] Merriweather and Fira Code in `tests/corpus.json`; conformance cases
-  from `docs/default-fonts.adoc` at several locations.
 
 ### Browser parity (§6)
 
@@ -69,11 +70,8 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] Narrow fuzz targets with allocation scaling (§7.3): cmap formats;
   coverage and class definitions; GSUB per lookup type; GPOS pair and
   `kern`; item variation store and HVAR; gvar.
-- [ ] Corpus: fontTools test data, Noto Sans and Serif (Latin, Greek,
-  Cyrillic), Noto Devanagari, a CJK or emoji font with format 12, a `.ttc`,
-  a `kern`-only font.
-- [ ] Oracle: accept `--single-par` (no-op) and `--face-index` in
-  `tools/oracle/extract.py` (unblocks 271 AOTS cases and collections).
+- [ ] Optional speed-up: U64 fast paths for TableVar's single-precision
+  multiply and add (85 % of gvar extents time).
 - [ ] Record time ratios on an idle machine (`bench.py --check
   --update-baseline`, full run).
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
@@ -95,11 +93,13 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Release
 
-- [ ] Align the repository with roc-automation's pure-package guide
-  (`roc-automation/docs/pure-package.adoc`): layout, `CONTRIBUTING.md`,
-  `SECURITY.md`, Blueprint, workflows, docs site, release workflow.
 - [ ] `roc docs` reviewed as the API; README example compiles against it.
 - [ ] Bundle: package modules plus the default fonts and licences only.
+- [ ] Examples (`examples/` with `spec.json` and the archive step) so the
+  release and nightly workflows have something to check.
+- [ ] Repository settings (maintainer): required checks, immutable
+  releases, a `release` environment, tag ruleset, Pages via Actions (then
+  set `PAGES_ENABLED`), private vulnerability reporting.
 - [ ] Every check in `AGENTS.md` on interpreter and native; tag 0.1.0.
 
 ## After 0.1.0
