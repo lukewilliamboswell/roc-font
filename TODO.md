@@ -348,8 +348,14 @@ Performance findings to act on:
   scope or a listed known divergence.
 - Record time ratios on an idle machine (`bench.py --update-baseline`
   full run); they are left out of the committed baseline for now.
-- Add requested-bytes and peak-live counters to the roc-fuzz host, then
-  ratchet them.
+- Requested-bytes and peak-live counters: `Fuzz.measure_memory!` is on
+  roc-fuzz branch `alloc-bytes` (commit `713901e`, local, not pushed;
+  roc-fuzz's default branch is `trunk`). Once a release ships it, switch
+  `bench/roc/alloc.roc` to `measure_memory!`, add `requested_bytes` and
+  `peak_live_bytes` to `RATCHETED` in `scripts/bench.py`, and update the
+  baseline. First figures (deterministic): inter/read 687272 requested,
+  399722 peak; inter/shape at 0.5/4/32 KiB 94176/743128/5964992 requested,
+  15936/127040/1019456 peak. Byte counts include Roc's refcount prefixes.
 - The nightly reports type errors inside basic-cli 0.23.0 yet builds;
   `conformance.py` tolerates only problems inside the cached platform.
 - The local debug compiler panics building `bench/roc/alloc.roc` with
