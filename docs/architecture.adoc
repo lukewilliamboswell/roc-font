@@ -79,11 +79,19 @@ glyph extents, ascent and descent, default ligatures and pair kerning. Its
 Mermaid oracle suite must pass unchanged on roc-font.
 roc-pdf:: shaped runs for embedding: Latin kerning and ligatures first,
 then its stricter validation, subsetting, a reverse map from glyphs to text
-(ToUnicode), exact allocation and work counts per case, `U32` glyph ids and
-UTF-8 byte clusters.
+(ToUnicode), exact allocation and work counts per case, `U32` glyph ids,
+UTF-8 byte clusters and, optionally, the feature that produced each
+substitution.
 roc-ray and terrocotta:: measurement with kerning from the same bytes the
 host loads, the list of code points a font maps (for a glyph atlas), and
-later glyph-id drawing.
+later glyph-id drawing. Host raster metrics differ slightly from unhinted
+font units, so their parity checks need a tolerance.
+unicode:: not a consumer but the other half of a text engine: it supplies
+segmentation, bidi and script itemisation, and roc-font takes scalars with
+byte offsets so the core does not depend on it.
+Should not use it:: toolkits whose host shapes text itself (roc-gui's GPUI
+host uses `font-kit`, so Roc-side measurement would disagree with what is
+drawn), terminal width (a Unicode question), and fixed bitmap fonts.
 Future:: SVG and HTML generators, charts, static-site tools, Roc GUI
 toolkits that own their text.
 
