@@ -150,6 +150,9 @@ answer = |font, dropped, req|
 						match Font.extents(font, g) {
 							Extents(b) => { glyph: g.to_u64(), box: Box({ x_min: b.x_min.to_i64(), y_min: b.y_min.to_i64(), x_max: b.x_max.to_i64(), y_max: b.y_max.to_i64() }) }
 							Empty => { glyph: g.to_u64(), box: Empty }
+							# Outlines roc-font does not read (CFF): no box, as
+							# before the public API told the two apart.
+							Unknown => { glyph: g.to_u64(), box: Empty }
 						},
 				),
 			)

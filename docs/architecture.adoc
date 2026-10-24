@@ -530,6 +530,7 @@ Problem : [
 from_bytes : List(U8), ReadOptions -> Try(Font, List(Problem))
 face_count : List(U8) -> Try(U32, [NotAFont])
 dropped : Font -> List(Problem)                 # optional tables lenient reading dropped
+describe_problem : Problem -> Str               # plain English: what is wrong, the table and the offset
 
 # Facts, in font units
 Metrics : { ascent : I32, descent : I32, line_gap : I32, cap_height : I32, x_height : I32,
@@ -539,10 +540,11 @@ metrics : Font -> Metrics
 glyph_count : Font -> U32
 glyph : Font, U32 -> Try(U32, [Missing])        # code point -> glyph id
 advance : Font, U32 -> I32                      # glyph id; past the font: the format's rule
-extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
+extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown]
 code_points : Font -> List(U32)                 # every mapped code point, ascending (§5.6)
 family_name : Font -> Try(Str, [Missing])
 glyph_name : Font, U32 -> Try(Str, [Missing])
+features : Font -> List(Str)                    # GSUB and GPOS feature tags (and kern for a kern table), ascending, unique (§5.6)
 
 # Variations (§5.7)
 Variation := { weight : Weight ?? Regular, width : Width ?? Normal,
@@ -554,6 +556,8 @@ OpticalSize : [FontDefault, Size(Dec)]
 Axis : { tag : Str, min : Dec, default : Dec, max : Dec }
 at : Font, Variation -> Font
 axes : Font -> List(Axis)
+instances : Font -> List({ name : Str, axes : List({ tag : Str, value : Dec }) })
+coordinates : Font -> List({ tag : Str, value : I16 })   # normalised, units of 1/16384, after avar
 
 # Shaping (§5.2-5.5, §6)
 Direction : [FromScript, LeftToRight, RightToLeft]
@@ -576,6 +580,10 @@ Budget : [Growth, Operations, Depth]
 shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> { run : Run, origins : List(GlyphOrigin) }
 shape_checked : Font, ShapePlan, Str -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
 width : Font, Str -> I32                         # sum of advances with default options
+width_planned : Font, ShapePlan, Str -> I32      # sum of advances with a plan
+unsafe_to_break : U8 -> Bool                     # a Run.flags entry: bit 0
+missing : U8 -> Bool                             # a Run.flags entry: bit 1
+cluster_ranges : Run, U64 -> List({ start : U64, end : U64 })   # each glyph's UTF-8 byte range; U64 is the text length
 
 # Default fonts (§5.8), each prepared at compile time
 sans, serif, mono : Font                         # Inter, Merriweather, Fira Code at Regular
@@ -593,6 +601,19 @@ not map, where a browser would fall back to another font.
 feature of the plan step that made it (a contextual rule's substitutions
 are credited to the rule's feature); the origin travels in spare bits of
 the glyph record, so untraced shaping allocates nothing more.
+
+`extents` tells three cases apart: a box, `Empty` (the glyph draws
+nothing, or its id is past the font) and `Unknown` (the font has no
+`glyf` outlines: CFF, CFF2 or bitmaps, which roc-font does not read), so
+a caller knows when to fall back on metrics and advances. `features`
+lists what a `Feature` can change, font-wide; it is a `List` because it
+is small and wanted whole. Run flags stay one `U8` column, as computed,
+read through `unsafe_to_break` and `missing` rather than bit masks.
+`cluster_ranges` gives each glyph's text as the range from its cluster
+to the next larger cluster of the run (or the text's end), index-aligned
+with the glyphs in either direction and total for any cluster order.
+`describe_problem` words a `Problem` for messages and logs; programs that
+act on a problem match on it.
 
 The seed's low-level `substitute` and `kerning` are removed: `shape`
 covers them with clusters and positions, and `shape_scalars` serves callers

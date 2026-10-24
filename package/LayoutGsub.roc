@@ -1,6 +1,7 @@
 import Sfnt
 import LayoutCommon
-import TableCmap
+import LayoutGdef
+import LayoutVar
 import ShaperUnicode
 
 ## Glyph substitution from a font's `GSUB` table, applied as HarfBuzz
@@ -15,9 +16,9 @@ import ShaperUnicode
 ## applies a list of them.
 ##
 ## The value also carries the font's `GDEF` glyph classes, mark attachment
-## classes and mark glyph sets, and its `cmap` variation sequences, because
-## `Face` hands shaping this value: reading them here keeps the shaper's
-## inputs in one place.
+## classes and mark glyph sets (`LayoutGdef`, read once by `Face` and shared
+## with `GPOS`), which lookup flags consult; `Face` attaches them with
+## `with_gdef`.
 ##
 ## The prepared data is flat: every subtable, coverage range, glyph value
 ## and contextual rule of the font lives in one of five lists, and nested
@@ -58,8 +59,7 @@ LayoutGsub := {
 	ranges : List({ first : U64, last : U64, index : U64 }),
 	values : List(U64),
 	rules : List({ back : U64, back_len : U64, input : U64, input_len : U64, ahead : U64, ahead_len : U64, records : U64, records_len : U64 }),
-	gdef : { classes : U64, classes_len : U64, has_classes : Bool, attach : U64, attach_len : U64, sets : List({ start : U64, len : U64 }) },
-	variants : TableCmap.Variants,
+	gdef : LayoutGdef,
 }.{
 
 	Range : { first : U64, last : U64, index : U64 }
@@ -114,13 +114,6 @@ LayoutGsub := {
 	## lookup records as `at, lookup` pairs.
 	Rule : { back : U64, back_len : U64, input : U64, input_len : U64, ahead : U64, ahead_len : U64, records : U64, records_len : U64 }
 
-	## `GDEF`: the glyph class definition and mark attachment class
-	## definition (spans of `ranges`), and the mark glyph sets (each a
-	## coverage in `ranges`). `has_classes` when the glyph class definition
-	## is present (HarfBuzz then takes glyph classes from it, not from
-	## Unicode).
-	Gdef : { classes : U64, classes_len : U64, has_classes : Bool, attach : U64, attach_len : U64, sets : List({ start : U64, len : U64 }) }
-
 	## The lists being filled while reading, and the reading work spent.
 	Built : { subtables : List(Sub), ranges : Ranges, values : List(U64), rules : List(Rule), steps : U64 }
 
@@ -169,10 +162,7 @@ LayoutGsub := {
 
 	## No substitutions.
 	none : LayoutGsub
-	none = { common: LayoutCommon.none, lookups: [], subtables: [], ranges: [], values: [], rules: [], gdef: LayoutGsub.no_gdef, variants: TableCmap.no_variants }
-
-	no_gdef : Gdef
-	no_gdef = { classes: 0, classes_len: 0, has_classes: False, attach: 0, attach_len: 0, sets: [] }
+	none = { common: LayoutCommon.none, lookups: [], subtables: [], ranges: [], values: [], rules: [], gdef: LayoutGdef.none }
 
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
@@ -215,9 +205,10 @@ LayoutGsub := {
 	common_of : LayoutGsub -> LayoutCommon
 	common_of = |shape| shape.common
 
-	## The font's `cmap` variation sequences.
-	variants_of : LayoutGsub -> TableCmap.Variants
-	variants_of = |shape| shape.variants
+	## The substitutions with the font's `GDEF` glyph classes, which lookup
+	## flags and the glyph properties of substituted glyphs use.
+	with_gdef : LayoutGsub, LayoutGdef -> LayoutGsub
+	with_gdef = |shape, gdef| { ..shape, gdef }
 
 	# ------------------------------------------------------------ glyph properties
 
@@ -246,63 +237,21 @@ LayoutGsub := {
 
 	## Whether the font has `GDEF` glyph classes.
 	has_glyph_classes : LayoutGsub -> Bool
-	has_glyph_classes = |shape| shape.gdef.has_classes
+	has_glyph_classes = |shape| LayoutGdef.has_glyph_classes(shape.gdef)
 
-	## A glyph's properties from `GDEF`, as HarfBuzz's `get_glyph_props`:
-	## base, ligature, or mark with its attachment class times 256; 0 for
-	## unclassified and component glyphs.
+	## A glyph's properties from `GDEF` (see `LayoutGdef.glyph_props`).
 	glyph_props : LayoutGsub, U64 -> U64
-	glyph_props = |shape, glyph| {
-		g = shape.gdef
-		klass = LayoutGsub.class_in(shape.ranges, g.classes, g.classes_len, glyph)
-		if klass == 1 {
-			LayoutGsub.base_glyph
-		} else if klass == 2 {
-			LayoutGsub.ligature
-		} else if klass == 3 {
-			LayoutGsub.mark.bitwise_or(LayoutGsub.class_in(shape.ranges, g.attach, g.attach_len, glyph).bitwise_and(0xFF).shl_wrap(8))
-		} else {
-			0
-		}
-	}
-
-	## Whether mark glyph set `set` covers a glyph.
-	mark_set_covers : LayoutGsub, U64, U64 -> Bool
-	mark_set_covers = |shape, set, glyph|
-		match shape.gdef.sets.get(set) {
-			Ok(s) => LayoutGsub.covered_in(shape.ranges, s.start, s.len, glyph).is_ok()
-			Err(_) => False
-		}
+	glyph_props = |shape, glyph| LayoutGdef.glyph_props(shape.gdef, glyph)
 
 	## Lookup properties with a mark filtering set the font does not have
 	## turned off, as HarfBuzz's `sanitize_lookup_props`.
 	sanitize_props : LayoutGsub, U64 -> U64
-	sanitize_props = |shape, props|
-		if props.bitwise_and(0x10) != 0 and props.shr_zf_wrap(16) >= shape.gdef.sets.len() {
-			props.bitwise_and(0xFFFFFFFFFFFFFFEF)
-		} else {
-			props
-		}
+	sanitize_props = |shape, props| LayoutGdef.sanitize_props(shape.gdef, props)
 
 	## Whether lookup properties let a lookup see a glyph (HarfBuzz's
 	## `check_glyph_property`).
 	check_glyph_property : LayoutGsub, Item, U64 -> Bool
-	check_glyph_property = |shape, item, match_props| {
-		g = LayoutGsub.gprops(item)
-		if g.bitwise_and(match_props).bitwise_and(0x0E) != 0 {
-			False
-		} else if g.bitwise_and(LayoutGsub.mark) != 0 {
-			if match_props.bitwise_and(0x10) != 0 {
-				LayoutGsub.mark_set_covers(shape, match_props.shr_zf_wrap(16), item.glyph)
-			} else if match_props.bitwise_and(0xFF00) != 0 {
-				match_props.bitwise_and(0xFF00) == g.bitwise_and(0xFF00)
-			} else {
-				True
-			}
-		} else {
-			True
-		}
-	}
+	check_glyph_property = |shape, item, match_props| LayoutGdef.check_glyph_property(shape.gdef, item.glyph, LayoutGsub.gprops(item), match_props)
 
 	gprops : Item -> U64
 	gprops = |item| item.props.shr_zf_wrap(16).bitwise_and(0xFFFF)
@@ -351,7 +300,7 @@ LayoutGsub := {
 		with_ligature = if (as_ligature) base.bitwise_or(LayoutGsub.ligated).bitwise_and(0xFFFF - LayoutGsub.multiplied) else base
 		flags = if (component) with_ligature.bitwise_or(LayoutGsub.multiplied) else with_ligature
 		props =
-			if shape.gdef.has_classes {
+			if LayoutGdef.has_glyph_classes(shape.gdef) {
 				flags.bitwise_and(LayoutGsub.preserve).bitwise_or(LayoutGsub.glyph_props(shape, glyph))
 			} else if class_guess != 0 {
 				flags.bitwise_and(LayoutGsub.preserve).bitwise_or(class_guess)
@@ -1763,133 +1712,21 @@ LayoutGsub := {
 	}
 
 	## The lookups of a font file's `GSUB` that features reach (none for a
-	## font without `GSUB`), with the font's `GDEF` glyph classes and its
-	## `cmap` variation sequences. A table listing more than `max_lookups`
-	## lookups is over the limit.
-	##
-	## `GDEF` is read as HarfBuzz reads it: a table whose parts do not lie
-	## inside it, or that holds more work than the reading allowance, gives
-	## no glyph classes (HarfBuzz's sanitizer drops it whole). Reporting a
-	## broken `GDEF` is the business of whoever checks the table for the
-	## font (OTS rejects more than this); the variation sequences come from
-	## a `cmap` already checked when the font was read.
+	## font without `GSUB`). A table listing more than `max_lookups` lookups
+	## is over the limit. The result has no `GDEF` glyph classes until
+	## `with_gdef` gives it the font's.
 	from_tables : List(U8), List(Sfnt.Table), U64 -> Try(LayoutGsub, [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
-	from_tables = |bytes, tables, max_lookups| {
-		variants = TableCmap.variants_from_tables(bytes, tables)
-		gsub_read =
-			match Sfnt.located(bytes, tables, "GSUB", 10) {
-				Missing => Ok(LayoutGsub.none)
-				Bad(at) => Err(Sfnt.bad("GSUB", at))
-				Found({ data: gsub, offset }) =>
-					if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
-						Err(OverLimit("max_lookups"))
-					} else {
-						LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
-					}
-			}
-		match gsub_read {
-			Err(problem) => Err(problem)
-			Ok(shape) => {
-				{ common, lookups, subtables, ranges, values, rules, gdef: _, variants: _ } = shape
-				with_gdef =
-					match Sfnt.located(bytes, tables, "GDEF", 12) {
-						Found({ data: gdef_data, offset: _ }) => LayoutGsub.read_gdef(gdef_data, ranges) ?? { gdef: LayoutGsub.no_gdef, ranges }
-						_ => { gdef: LayoutGsub.no_gdef, ranges }
-					}
-				Ok({ common, lookups, subtables, ranges: with_gdef.ranges, values, rules, gdef: with_gdef.gdef, variants })
-			}
-		}
-	}
-
-	## The glyph class definition, mark attachment class definition and
-	## mark glyph sets of a `GDEF` table, their ranges added to `ranges`.
-	read_gdef : List(U8), Ranges -> Try({ gdef : Gdef, ranges : Ranges }, [Bad(U64)])
-	read_gdef = |data, ranges_in| {
-		if !LayoutGsub.fits(0, 12, data.len()) or LayoutGsub.u16(data, 0) != 1 {
-			return Err(Bad(0))
-		}
-		minor = LayoutGsub.u16(data, 2)
-		classes_at = LayoutGsub.u16(data, 4)
-		attach_at = LayoutGsub.u16(data, 10)
-		sets_at = if (minor >= 2 and LayoutGsub.fits(0, 14, data.len())) LayoutGsub.u16(data, 12) else 0
-		var $ranges = ranges_in
-		var $steps = 0
-		{ start: classes, len: classes_len } =
-			if classes_at == 0 {
-				{ start: 0, len: 0 }
-			} else {
-				read = LayoutGsub.append_classes(data, classes_at, $steps, $ranges)?
-				$ranges = read.ranges
-				$steps = read.steps
-				{ start: read.start, len: read.len }
-			}
-		{ start: attach, len: attach_len } =
-			if attach_at == 0 {
-				{ start: 0, len: 0 }
-			} else {
-				read = LayoutGsub.append_classes(data, attach_at, $steps, $ranges)?
-				$ranges = read.ranges
-				$steps = read.steps
-				{ start: read.start, len: read.len }
-			}
-		var $sets = []
-		if sets_at != 0 {
-			count = LayoutGsub.u16(data, sets_at + 2)
-			if LayoutGsub.u16(data, sets_at) != 1 or !LayoutGsub.fits(sets_at, 4 + 4 * count, data.len()) {
-				return Err(Bad(sets_at))
-			}
-			$steps = LayoutGsub.spend(data, $steps, count)?
-			for k in 0..<count {
-				coverage = LayoutGsub.append_coverage(data, sets_at + LayoutGsub.u32(data, sets_at + 4 + 4 * k), $steps, $ranges)?
-				$ranges = coverage.ranges
-				$steps = coverage.steps
-				$sets = $sets.append({ start: coverage.start, len: coverage.len })
-			}
-		}
-		Ok({ gdef: { classes, classes_len, has_classes: classes_at != 0, attach, attach_len, sets: $sets }, ranges: $ranges })
-	}
-
-	## Mark the lookups the alternate feature tables of a `GSUB` or `GPOS`
-	## table's `FeatureVariations` list (version 1.1) as used. Parts that do
-	## not lie inside the table are passed over here: checking the list is
-	## `LayoutVar`'s, and a font whose list is broken never selects it.
-	variation_lookups : List(U8), List(Bool) -> List(Bool)
-	variation_lookups = |data, used_in| {
-		size = data.len()
-		list = if (LayoutGsub.u16(data, 2) >= 1 and LayoutGsub.fits(0, 14, size)) LayoutGsub.u32(data, 10) else 0
-		if list == 0 or !LayoutGsub.fits(list, 8, size) {
-			used_in
-		} else {
-			count = LayoutGsub.u32(data, list + 4)
-			if !LayoutGsub.fits(list + 8, 8 * count, size) {
-				used_in
-			} else {
-				var $used = used_in
-				var $steps = 0
-				for r in 0..<count {
-					table = list + LayoutGsub.u32(data, list + 8 + 8 * r + 4)
-					subs = LayoutGsub.u16(data, table + 4)
-					if LayoutGsub.u32(data, list + 8 + 8 * r + 4) != 0 and LayoutGsub.fits(table, 6 + 6 * subs, size) {
-						for k in 0..<subs {
-							feature = table + LayoutGsub.u32(data, table + 6 + 6 * k + 2)
-							n = LayoutGsub.u16(data, feature + 2)
-							$steps = $steps + n + 1
-							if LayoutGsub.fits(feature, 4 + 2 * n, size) and $steps <= 8 * size + 16384 {
-								for j in 0..<n {
-									lookup = LayoutGsub.u16(data, feature + 4 + 2 * j)
-									if lookup < $used.len() {
-										# Checked against the list's length.
-										$used = $used.set(lookup, True) ?? []
-									}
-								}
-							}
-						}
-					}
+	from_tables = |bytes, tables, max_lookups|
+		match Sfnt.located(bytes, tables, "GSUB", 10) {
+			Missing => Ok(LayoutGsub.none)
+			Bad(at) => Err(Sfnt.bad("GSUB", at))
+			Found({ data: gsub, offset }) =>
+				if LayoutGsub.u16(gsub, LayoutGsub.u16(gsub, 8)) > max_lookups {
+					Err(OverLimit("max_lookups"))
+				} else {
+					LayoutGsub.read(gsub).map_err(|Bad(at)| Sfnt.bad("GSUB", offset + at))
 				}
-				$used
-			}
 		}
-	}
 
 	## Read a `GSUB` table: its script and feature lists, every lookup a
 	## feature lists, and every lookup their rules call. Problems give their
@@ -1900,7 +1737,9 @@ LayoutGsub := {
 		common = read_common.common
 		lookups = LayoutGsub.u16(gsub, 8)
 		lookup_count = common.lookup_count
-		used = LayoutGsub.variation_lookups(gsub, LayoutCommon.all_feature_lookups(common))
+		# Lookups feature variations can swap in at some location are read
+		# too (alternate feature tables and lookup variation records).
+		used = LayoutVar.variation_lookups(gsub, LayoutCommon.all_feature_lookups(common))
 		start = LayoutGsub.indices(0, lookup_count).keep_if(|index| used.get(index) ?? False)
 		# Read the chosen lookups and those their rules call.
 		var $lookups = List.repeat(LayoutGsub.no_lookup, lookup_count)
@@ -1951,7 +1790,7 @@ LayoutGsub := {
 			}
 		}
 		{ subtables, ranges, values, rules, steps: _ } = $built
-		Ok({ common, lookups: $lookups, subtables, ranges, values, rules, gdef: LayoutGsub.no_gdef, variants: TableCmap.no_variants })
+		Ok({ common, lookups: $lookups, subtables, ranges, values, rules, gdef: LayoutGdef.none })
 	}
 
 	## A lookup's subtables, its properties (the lookup flag, plus the mark

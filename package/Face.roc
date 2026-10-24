@@ -16,6 +16,8 @@ import LayoutGsub
 import LayoutGdef
 import LayoutKerning
 import LayoutVar
+import LayoutCommon
+import Sorted
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -48,6 +50,9 @@ Face := {
 	glyph_count : U64,
 	advances : List(U16),
 	boxes : List(TableGlyf.Bounds),
+	# Whether the font has TrueType outlines (`glyf` and `loca`), so that
+	# `boxes` measure every glyph.
+	has_glyf : Bool,
 	cmap : TableCmap,
 	hhea : TableHhea.Hhea,
 	os2 : [Present(TableOs2.Metrics), Absent],
@@ -295,12 +300,13 @@ Face := {
 								glyph_count,
 								advances: a,
 								boxes: b,
+								has_glyf: tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x6C6F6361),
 								cmap: c,
 								hhea: hh,
 								os2: os2 ?? Absent,
 								post: Face.present(post ?? Absent, TablePost.none),
 								name: Face.present(name ?? Absent, TableName.none),
-								gsub: gsub ?? LayoutGsub.none,
+								gsub: LayoutGsub.with_gdef(gsub ?? LayoutGsub.none, gdef),
 								gdef,
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
@@ -731,7 +737,10 @@ Face := {
 	## HarfBuzz reports it. At the default location (and in a font without
 	## `gvar`) it is the glyph header's box (`TableGlyf`); elsewhere the
 	## outline's points are moved by `gvar` and measured (`TableGvar`).
-	extents : Face, U64 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
+	## `Unknown` for a glyph of a font without `glyf` outlines (CFF, CFF2
+	## or bitmaps, which roc-font does not read); a glyph id past the font
+	## is `Empty` in every font.
+	extents : Face, U64 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown]
 	extents = |face, id|
 		match face.outlines {
 			Present(o) if face.location.varied => {
@@ -746,6 +755,7 @@ Face := {
 			_ =>
 				match face.boxes.get(id) {
 					Ok(b) if b.x_min <= b.x_max and b.y_min <= b.y_max => Extents({ x_min: b.x_min, y_min: b.y_min, x_max: b.x_max, y_max: b.y_max })
+					Ok(_) if !face.has_glyf => Unknown
 					_ => Empty
 				}
 		}
@@ -781,7 +791,9 @@ Face := {
 				Ok(g) =>
 					match Face.extents(face, g) {
 						Extents(b) => Box(b)
-						Empty => Box({ x_min: 0, y_min: 0, x_max: 0, y_max: 0 })
+						# HarfBuzz reads CFF boxes; roc-font, which does not,
+						# takes a zero box, as for a glyph that draws nothing.
+						Empty | Unknown => Box({ x_min: 0, y_min: 0, x_max: 0, y_max: 0 })
 					}
 			}
 		stored = match face.os2 {
@@ -822,6 +834,27 @@ Face := {
 
 	glyph_name : Face, U64 -> Try(Str, [Missing])
 	glyph_name = |face, id| if (id > 0xFFFFFFFF) Err(Missing) else TablePost.glyph_name(face.post, id.to_u32_wrap())
+
+	## The feature tags the font's `GSUB` and `GPOS` feature lists name, in
+	## increasing order without repeats, with `kern` when the font has a
+	## legacy `kern` table shaping applies. A layout table left out when
+	## reading (over `max_lookups`) names none.
+	feature_tags : Face -> List(U64)
+	feature_tags = |face| {
+		gsub = LayoutGsub.common_of(face.gsub)
+		gpos = LayoutKerning.common_of(face.kerning)
+		var $tags = List.with_capacity(gsub.feature_count + gpos.feature_count + 1)
+		for i in 0..<gsub.feature_count {
+			$tags = $tags.append(LayoutCommon.feature_tag(gsub, i))
+		}
+		for i in 0..<gpos.feature_count {
+			$tags = $tags.append(LayoutCommon.feature_tag(gpos, i))
+		}
+		if LayoutKerning.has_kern(face.kerning) {
+			$tags = $tags.append(Face.tag("kern").to_u64())
+		}
+		Sorted.unique($tags)
+	}
 
 	gsub : Face -> LayoutGsub
 	gsub = |face| face.gsub

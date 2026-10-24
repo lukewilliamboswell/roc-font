@@ -23,6 +23,20 @@ import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
 ## Any other font is read from its bytes with `from_bytes`. The bytes are
 ## never trusted; `from_bytes` reports everything wrong with a file it
 ## cannot use.
+##
+## Where to start:
+##
+## - How wide is a string? `width` (or `width_planned`, with options).
+## - Which glyphs draw it, where? `shape`, which gives a `Run`.
+## - Shaping many strings the same way? Make a `plan` once and use
+##   `shape_planned`.
+## - A font of your own? `from_bytes`, and `describe_problem` for anything
+##   wrong with it.
+##
+## ```
+## units = Font.width(Font.sans, "Hello, world!") # 12111
+## pixels = (units * 16).to_dec() / Font.units_per_em(Font.sans).to_dec() # 94.6171875 at 16 px
+## ```
 Font :: { face : Face }.{
 
 	# ------------------------------------------------------------ reading
@@ -31,8 +45,9 @@ Font :: { face : Face }.{
 	##
 	## - `face`: which font of a collection (a `.ttc` file) to read, from 0.
 	##   A single font file has only face 0.
-	## - `strict`: reject the font for any problem. By default reading is
-	##   lenient, as browsers are: a font reads exactly when a browser would
+	## - `strict`: reject the font for any problem, for a file you will pass
+	##   on (embed in a PDF, say) and want to work everywhere. By default
+	##   reading is lenient, as browsers are: a font reads exactly when a browser would
 	##   draw it. A broken table a browser rejects the font for (including
 	##   substitutions, positioning, names, `OS/2` and `post`) rejects it
 	##   here too; what a browser leaves out is left out and reported by
@@ -53,7 +68,8 @@ Font :: { face : Face }.{
 	## - `max_depth`: how deeply contextual substitutions may call further
 	##   substitutions while shaping.
 	##
-	## The defaults admit every real font with room to spare.
+	## The defaults (256 MiB, 1024 faces, 16384 lookups, depth 64) admit
+	## every real font with room to spare.
 	Limits := { max_bytes : U64 ?? 268_435_456, max_faces : U32 ?? 1024, max_lookups : U32 ?? 16_384, max_depth : U32 ?? 64 }
 
 	## Why bytes could not be read as a font, or what lenient reading left
@@ -73,6 +89,8 @@ Font :: { face : Face }.{
 	## - `NoUnicodeMapping`: no character map this reader can use (one for
 	##   Unicode, a Windows symbol map or a Macintosh map, in format 0, 4, 6,
 	##   10, 12 or 13).
+	##
+	## `describe_problem` puts any of them into words.
 	Problem : [
 		NotAFont,
 		NoSuchFace({ face : U32, count : U32 }),
@@ -116,6 +134,32 @@ Font :: { face : Face }.{
 	## was found; all of the font's variations are then left out.
 	dropped : Font -> List(Problem)
 	dropped = |font| Face.dropped(font.face)
+
+	## A problem in plain English, for a message or a log: what is wrong and
+	## where (the table and, for a damaged one, the byte offset in the
+	## file).
+	##
+	## ```
+	## match Font.from_bytes(bytes, Font.ReadOptions.{}) {
+	##     Ok(font) => ...
+	##     Err(problems) => Str.join_with(problems.map(Font.describe_problem), "; ")
+	## }
+	## ```
+	##
+	## gives, for example, "the GSUB table is damaged at byte 1234 of the
+	## file". Match on `Problem` instead when a program acts on the kind of
+	## problem.
+	describe_problem : Problem -> Str
+	describe_problem = |problem|
+		match problem {
+			NotAFont => "not a TrueType or OpenType font file"
+			NoSuchFace({ face, count }) => "there is no font ${face.to_str()} in a collection of ${count.to_str()} (fonts are numbered from 0)"
+			OverLimit(limit) => "the file asks for more than the ${limit} reading limit allows"
+			MissingTable(table) => "the ${table} table, which every font needs, is missing"
+			BadTable({ table, offset }) => "the ${table} table is damaged at byte ${offset.to_str()} of the file"
+			BadUnitsPerEm => "the font's units per em (in the head table) are outside 16 to 16384"
+			NoUnicodeMapping => "the font has no character map for Unicode text (cmap table)"
+		}
 
 	# ------------------------------------------------------------ facts
 
@@ -172,12 +216,19 @@ Font :: { face : Face }.{
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
-	## A glyph's bounding box at the font's location, or `Empty` for a glyph
-	## that draws nothing (such as a space), a glyph id past the font, or a
-	## font without TrueType outlines. As HarfBuzz gives it: the left edge
-	## is the glyph's left side bearing, and away from a variable font's
-	## default design the box is measured on the outline moved there.
-	extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
+	## A glyph's bounding box (its ink) at the font's location, in font
+	## units, y up from the baseline:
+	##
+	## - `Extents`: the box. As HarfBuzz gives it, the left edge is the
+	##   glyph's left side bearing, and away from a variable font's default
+	##   design the box is measured on the outline moved there.
+	## - `Empty`: the glyph draws nothing (such as a space), or the glyph id
+	##   is past the font.
+	## - `Unknown`: the font's outlines are in a form roc-font does not
+	##   read (CFF or CFF2 outlines, or bitmaps only), so the glyph may draw
+	##   something whose box cannot be measured. Fall back on the font's
+	##   `metrics` and the glyph's `advance`.
+	extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown]
 	extents = |font, id| Face.extents(font.face, id.to_u64())
 
 	## Every code point the font maps to a glyph, in increasing order: what a
@@ -194,6 +245,24 @@ Font :: { face : Face }.{
 	glyph_name : Font, U32 -> Try(Str, [Missing])
 	glyph_name = |font, id| Face.glyph_name(font.face, id.to_u64())
 
+	## The typographic features the font offers, by their four-letter tags
+	## (such as `kern`, `liga`, `smcp` or `ss01`), in increasing order
+	## without repeats: what a `Feature` can turn on or off in this font.
+	## Use it to offer the choices to users, or to check for a feature
+	## before relying on it.
+	##
+	## ```
+	## Font.features(Font.mono).contains("calt") # True
+	## ```
+	##
+	## Every feature the font's substitution and positioning tables
+	## (`GSUB` and `GPOS`) name is listed, for any script or language, as
+	## is `kern` when the font has an old-style `kern` table. Shaping
+	## applies some of them by default (see `ShapeOptions`); a font may
+	## offer a feature for one script only.
+	features : Font -> List(Str)
+	features = |font| Face.feature_tags(font.face).map(Shaper.tag_text)
+
 	# ------------------------------------------------------------ variations
 
 	## Where to measure a variable font: its weight, width and optical size,
@@ -207,9 +276,12 @@ Font :: { face : Face }.{
 	##   `font-variation-settings`; a later entry for one tag wins. A tag
 	##   that is not four bytes, or that the font lacks, is ignored.
 	##
-	## Values outside an axis's range are clamped to it, as the format
-	## defines. Named fields apply only to axes the font has, and a font
-	## without variations ignores them all.
+	## The default, `Variation.{}`, is Regular weight and Normal width at
+	## the font's own optical size: what a browser draws for text with no
+	## weight or width set, and where every font starts. Values outside an
+	## axis's range are clamped to it, as the format defines. Named fields
+	## apply only to axes the font has, and a font without variations
+	## ignores them all.
 	Variation := { weight : Weight ?? Regular, width : Width ?? Normal, optical_size : OpticalSize ?? FontDefault, axes : List({ tag : Str, value : Dec }) ?? [] }
 
 	## CSS weights: `Thin` is 100, `Regular` 400, `Bold` 700, `Black` 900,
@@ -266,19 +338,27 @@ Font :: { face : Face }.{
 
 	# ------------------------------------------------------------ shaping
 
-	## Which way text runs. `FromScript` takes the script's own direction
-	## (right to left for Arabic and Hebrew, for example; left to right for
-	## an empty script).
+	## Which way text runs. `FromScript` (the default) takes the script's
+	## own direction (right to left for Arabic and Hebrew, for example; left
+	## to right for an empty script).
 	Direction : [FromScript, LeftToRight, RightToLeft]
 
-	## How clusters form, as HarfBuzz's monotone cluster levels. `Graphemes`
-	## (the default, HarfBuzz level 0): a character that extends a grapheme
-	## (a combining mark, an emoji modifier, a ZWJ and the pictograph after
-	## it, a variation selector) takes the cluster of the grapheme's first
-	## character. `Characters` (level 1): each character keeps its own
-	## cluster and the run is unsafe to break inside a grapheme. Either way,
-	## glyphs that draw several characters together (ligatures) share the
-	## first character's cluster.
+	## How characters group into clusters, the parts of the text a run's
+	## glyphs say they draw.
+	##
+	## - `Graphemes` (the default): what a reader sees as one character
+	##   stays together. A character that extends a grapheme (a combining
+	##   mark, an emoji modifier, a zero-width joiner and the pictograph
+	##   after it, a variation selector) takes the cluster of the grapheme's
+	##   first character. Suits measuring, cursor movement and line
+	##   breaking.
+	## - `Characters`: each character keeps its own cluster, and the run is
+	##   unsafe to break inside a grapheme. Suits mapping glyphs back to
+	##   single characters.
+	##
+	## Either way, glyphs that draw several characters together (ligatures)
+	## share the first character's cluster. These are HarfBuzz's monotone
+	## cluster levels 0 and 1.
 	ClusterLevel : [Graphemes, Characters]
 
 	## A typographic feature, turned on (value 1, the default), off (0) or to
@@ -292,15 +372,17 @@ Font :: { face : Face }.{
 	## small_caps = Font.Feature.{ tag: "smcp", start: 4, end: 9 }
 	## ```
 	##
-	## The tag is the feature's four-letter OpenType name. A value above 1
-	## chooses that alternate where the feature offers several (`salt` with
-	## value 2 is the second).
+	## The tag is the feature's four-letter OpenType name; `features` lists
+	## those a font offers, and a tag it does not offer changes nothing. A
+	## value above 1 chooses that alternate where the feature offers
+	## several (`salt` with value 2 is the second).
 	Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
 
 	## Bounds on shaping work, per input character, never below 16384 in
-	## all: `growth` bounds how many glyphs the run may grow to and
-	## `operations` how many substitutions contextual rules may call
-	## (HarfBuzz's factors). The defaults never bind on a real font; only a
+	## all: `growth` bounds how many glyphs the run may grow to (64 per
+	## character by default) and `operations` how many substitutions
+	## contextual rules may call (1024 per character by default); these are
+	## HarfBuzz's factors. The defaults never bind on a real font; only a
 	## font built to make shaping work without end reaches them. Past a
 	## bound, substitution stops where it is: `shape` and the other shaping
 	## calls return the run made so far (which still draws the whole text),
@@ -318,8 +400,9 @@ Font :: { face : Face }.{
 	##   `-x-hbot` and `-x-hbsc` private-use subtags give raw OpenType
 	##   language and script tags, as in HarfBuzz.
 	## - `direction`, `features`, `clusters` and `limits`: see their types.
-	##   Without features, the browser defaults for the direction apply
-	##   (ligatures, contextual forms and kerning, among others).
+	##   The browser defaults for the direction always apply (ligatures,
+	##   contextual forms and kerning, among others) unless a `Feature`
+	##   turns one off; `features` lists only the changes.
 	##
 	## Text is shaped as HarfBuzz's default shaper shapes it (and its Hebrew
 	## shaper for Hebrew): characters compose or decompose to what the font
@@ -339,11 +422,13 @@ Font :: { face : Face }.{
 	## - `clusters`: the UTF-8 byte offset in the text of the first character
 	##   each glyph draws (for `shape_scalars`, the offset given with it),
 	##   never clamped;
-	## - `flags`: bit 0 is set when breaking the text at the start of the
-	##   glyph's cluster would change the glyphs on either side (a ligature
-	##   or kerning spans it), so both sides must be shaped again; bit 1 is
-	##   set on glyph 0 drawn for a character the font does not map (the
-	##   `.notdef` result: a browser would fall back to another font there).
+	## - `flags`: facts about each glyph, read with `unsafe_to_break` (bit
+	##   0: breaking the text at the start of the glyph's cluster would
+	##   change the glyphs on either side, so both sides must be shaped
+	##   again) and `missing` (bit 1: glyph 0 drawn for a character the font
+	##   does not map, where a browser would fall back to another font).
+	##
+	## `cluster_ranges` gives the part of the text each glyph draws.
 	##
 	## What every run guarantees (for `shape_scalars`, when the offsets
 	## given increase):
@@ -358,13 +443,13 @@ Font :: { face : Face }.{
 	##   with no glyph of its own (joined into a ligature, or removed by a
 	##   substitution) is drawn by the cluster it was merged into.
 	## - A character the font does not map is drawn with glyph 0, never left
-	##   out, with flag bit 1 set; only a substitution in the font may
-	##   replace that glyph. The exceptions are default-ignorable characters
-	##   (such as a zero-width joiner, a soft hyphen or a variation
-	##   selector), which draw nothing visible: the font's space glyph with
-	##   no advance, or no glyph when the font has no space. A glyph 0 the
-	##   font itself gives (by its character map or a substitution) does not
-	##   have bit 1.
+	##   out, and the glyph is `missing`; only a substitution in the font
+	##   may replace that glyph. The exceptions are default-ignorable
+	##   characters (such as a zero-width joiner, a soft hyphen or a
+	##   variation selector), which draw nothing visible: the font's space
+	##   glyph with no advance, or no glyph when the font has no space. A
+	##   glyph 0 the font itself gives (by its character map or a
+	##   substitution) is not `missing`.
 	## - Empty text gives a run of empty lists; glyph ids past the font have
 	##   an advance of 0.
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
@@ -411,15 +496,25 @@ Font :: { face : Face }.{
 	## meaningless.
 	ShapePlan :: { plan : Shaper.Plan }
 
-	## Work out a plan for shaping with these options.
+	## Work out a plan for shaping with these options, to shape or measure
+	## many strings the same way (`shape_planned`, `width_planned` and the
+	## others that take a plan) without working out the options each time.
+	##
+	## ```
+	## plan = Font.plan(font, Font.ShapeOptions.{ script: "Grek", language: "el" })
+	## runs = lines.map(|line| Font.shape_planned(font, plan, line))
+	## ```
 	plan : Font, ShapeOptions -> ShapePlan
 	plan = |font, options| {
 		limits = options.limits
-		features = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
+		chosen = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
+		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
 	}
 
-	## Shape text: the glyphs that draw it, where, and which text each draws.
+	## Shape text: the glyphs that draw it, where, and which part of the
+	## text each draws. Use it to draw text, or to map between glyphs and
+	## text (a cursor, a selection, a line break); for a width alone,
+	## `width` is shorter.
 	##
 	## ```
 	## run = Font.shape(font, "office -> home", Font.ShapeOptions.{})
@@ -427,7 +522,8 @@ Font :: { face : Face }.{
 	shape : Font, Str, ShapeOptions -> Run
 	shape = |font, text, options| Font.shape_planned(font, Font.plan(font, options), text)
 
-	## Shape text with a plan made by `plan`.
+	## Shape text with a plan made by `plan`: the run `shape` gives for the
+	## plan's options.
 	shape_planned : Font, ShapePlan, Str -> Run
 	shape_planned = |font, shape_plan, text| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 
@@ -456,10 +552,12 @@ Font :: { face : Face }.{
 		}
 	}
 
-	## Shape characters a paragraph layer has already split up: each scalar
-	## value with the offset to report as its cluster (normally its UTF-8
-	## byte offset in the paragraph). Scalars sharing an offset form one
-	## cluster. Clusters in the run are these offsets, unchanged.
+	## Shape characters a paragraph layer has already split up (by script,
+	## direction or font): each Unicode scalar value with the offset to
+	## report as its cluster (normally its UTF-8 byte offset in the
+	## paragraph), so runs of one paragraph report offsets into it.
+	## Scalars sharing an offset form one cluster. Clusters in the run are
+	## these offsets, unchanged.
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
 
@@ -479,14 +577,72 @@ Font :: { face : Face }.{
 		{ run: shaped.run, origins: Shaper.origins(font.face, shape_plan.plan, shaped.items) }
 	}
 
-	## The width of text shaped with the default options: the sum of its
-	## advances, in font units.
+	## How wide text is, in font units: the sum of the advances of the run
+	## `shape` gives with the default options (ligatures, kerning and the
+	## other browser defaults). For other options, use `width_planned`.
+	##
+	## ```
+	## units = Font.width(Font.sans, "Hello, world!") # 12111, at 2048 units to the em
+	## ```
+	##
+	## A total beyond the range of `I32` (only possible for text of tens of
+	## thousands of glyphs at the largest advances) is held at its limit.
 	width : Font, Str -> I32
-	width = |font, text| {
-		run = Font.shape(font, text, ShapeOptions.{})
+	width = |font, text| Font.width_planned(font, Font.plan(font, ShapeOptions.{}), text)
+
+	## How wide text is with a plan made by `plan`, in font units: the sum
+	## of the advances of the run `shape_planned` gives, held at the range
+	## of `I32` as `width` is.
+	##
+	## ```
+	## tabular = Font.plan(font, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "tnum" }] })
+	## Font.width_planned(font, tabular, "1111") == Font.width_planned(font, tabular, "0000")
+	## ```
+	width_planned : Font, ShapePlan, Str -> I32
+	width_planned = |font, shape_plan, text| {
+		run = Font.shape_planned(font, shape_plan, text)
 		total = run.advances.fold(0.I64, |sum, a| sum + a.x.to_i64())
 		total.max(-2147483648).min(2147483647).to_i32_wrap()
 	}
+
+	## Whether a glyph's entry in `Run.flags` says the text must not be
+	## broken at the start of the glyph's cluster without shaping both sides
+	## again: a ligature, kerning or contextual form spans the break, so the
+	## glyphs on either side would change. Breaking elsewhere lets a line
+	## breaker reuse the run's glyphs as they are.
+	##
+	## ```
+	## safe_breaks = run.flags.map(|flags| !Font.unsafe_to_break(flags))
+	## ```
+	unsafe_to_break : U8 -> Bool
+	unsafe_to_break = |flags| flags.bitwise_and(1) != 0
+
+	## Whether a glyph's entry in `Run.flags` says the glyph is glyph 0
+	## drawn for a character the font does not map: where a browser would
+	## draw the character with another font.
+	##
+	## ```
+	## needs_fallback = run.flags.any(Font.missing)
+	## ```
+	missing : U8 -> Bool
+	missing = |flags| flags.bitwise_and(2) != 0
+
+	## The part of the text each glyph of a run draws, as UTF-8 byte ranges
+	## `start ..< end`, one per glyph in the run's order (so in
+	## right-to-left text, too, entry `i` is glyph `i`'s). `length` is the
+	## text's length in bytes (`text.count_utf8_bytes()`).
+	##
+	## ```
+	## bytes = text.to_utf8()
+	## drawn = Font.cluster_ranges(run, bytes.len()).map(|r| Str.from_utf8(bytes.sublist({ start: r.start, len: r.end - r.start })) ?? "")
+	## ```
+	##
+	## A range runs from the glyph's cluster to the next larger cluster in
+	## the run, or to `length` when there is none, so glyphs of one cluster
+	## share a range and a ligature's covers every character it draws. A
+	## cluster at or past `length` gets an empty range there.
+	cluster_ranges : Run, U64 -> List({ start : U64, end : U64 })
+	cluster_ranges = |run, length| Shaper.cluster_ranges(run.clusters, length)
 
 	# ------------------------------------------------------------ default fonts
 

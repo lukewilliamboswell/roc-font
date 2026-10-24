@@ -19,8 +19,9 @@ import font.Font
 # its platform allows (here with basic-cli's `Path.read_bytes!`) and hands
 # them to `Font.from_bytes`. Font files are treated as untrusted. Reading is
 # the only step that can fail, and when it does it reports every problem it
-# found, not just the first. Without a path, this checks the file that
-# `Font.sans` was read from, so it runs as it is.
+# found, not just the first; `Font.describe_problem` puts each into words
+# (match on `Font.Problem` to act on the kind). Without a path, this checks
+# the file that `Font.sans` was read from, so it runs as it is.
 main! = |args| {
 	(name, bytes) = match args.first() {
 		Ok(arg) => {
@@ -52,7 +53,7 @@ main! = |args| {
 		Err(problems) => {
 			Stdout.line!("This font cannot be used:")?
 			for problem in problems {
-				Stdout.line!("  - ${describe(problem)}")?
+				Stdout.line!("  - ${Font.describe_problem(problem)}")?
 			}
 			Err(Exit(1))
 		}
@@ -72,7 +73,7 @@ main! = |args| {
 			} else {
 				Stdout.line!("Left out, as a browser would:")?
 				for problem in left_out {
-					Stdout.line!("  - ${describe(problem)}")?
+					Stdout.line!("  - ${Font.describe_problem(problem)}")?
 				}
 			}
 
@@ -84,7 +85,7 @@ main! = |args| {
 				Err(problems) => {
 					Stdout.line!("Strict reading rejects it:")?
 					for problem in problems {
-						Stdout.line!("  - ${describe(problem)}")?
+						Stdout.line!("  - ${Font.describe_problem(problem)}")?
 					}
 				}
 			}
@@ -92,16 +93,3 @@ main! = |args| {
 		}
 	}
 }
-
-# Say what a problem means, in words a user of your program can act on.
-describe : Font.Problem -> Str
-describe = |problem|
-	match problem {
-		NotAFont => "not a TrueType or OpenType font file"
-		NoSuchFace({ face, count }) => "there is no font ${face.to_str()} in a collection of ${count.to_str()}"
-		OverLimit(limit) => "the file asks for more than the ${limit} limit allows"
-		MissingTable(table) => "the required `${table}` table is missing"
-		BadTable({ table, offset }) => "the `${table}` table is damaged (at byte ${offset.to_str()})"
-		BadUnitsPerEm => "the font's units per em are out of range"
-		NoUnicodeMapping => "the font has no character map for Unicode text"
-	}

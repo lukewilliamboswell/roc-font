@@ -1,11 +1,14 @@
 import Face
 import LayoutCommon
+import LayoutGdef
 import LayoutGsub
 import LayoutKerning
 import LayoutVar
 import ShaperNormalize
 import ShaperTags
 import ShaperUnicode
+import Sorted
+import TableCmap
 
 ## Shaping as HarfBuzz 14.6.0's default and Hebrew shapers shape: choosing
 ## lookups for a script, language, direction and features (a plan, as
@@ -62,6 +65,7 @@ Shaper :: {}.{
 		gsub_required : U64,
 		gsub_required_stage : U64,
 		gsub_subs : List({ feature : U64, table : U64 }),
+		gsub_lookup_vars : List({ feature : U64, defaults : Bool, lookups : List(U64) }),
 	}
 
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
@@ -206,8 +210,8 @@ Shaper :: {}.{
 		# Feature variations at the face's location replace the lookups of
 		# the features they name (HarfBuzz's `variations_index`).
 		variations = Face.feature_variations(face)
-		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub }
-		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos }
+		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub, lookup_vars: LayoutVar.lookup_variations_at(variations.gsub, variations.lv, variations.coords) }
+		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos, lookup_vars: LayoutVar.lookup_variations_at(variations.gpos, variations.lv, variations.coords) }
 		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, 2, Gsub, gsub_varied)
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
@@ -265,6 +269,7 @@ Shaper :: {}.{
 			gsub_required,
 			gsub_required_stage: $gsub_required_stage,
 			gsub_subs: gsub_varied.subs,
+			gsub_lookup_vars: gsub_varied.lookup_vars,
 		}
 	}
 
@@ -323,19 +328,39 @@ Shaper :: {}.{
 		$out
 	}
 
+	## What feature variations do at the face's location to one layout
+	## table's features: the feature table substitutions in force (`subs`,
+	## alternate tables in `fv`) and the lookup variation records in force
+	## (`lookup_vars`).
+	Varied : { subs : List({ feature : U64, table : U64 }), fv : LayoutVar.FeatureVariations, lookup_vars : List({ feature : U64, defaults : Bool, lookups : List(U64) }) }
+
+	## The lookups of feature `index` at the face's location: its own, or
+	## its alternate feature table's when a substitution is in force, then
+	## as the first lookup variation record in force for it has them
+	## (replaced, or extended when the record keeps them). Only indices
+	## below the table's lookup count are kept.
+	varied_feature_lookups : LayoutCommon, Varied, U64 -> List(U64)
+	varied_feature_lookups = |common, varied, index| {
+		own = match varied.subs.find_first(|v| v.feature == index) {
+			Ok(v) => LayoutVar.lookups_of(varied.fv, v.table)
+			Err(_) => LayoutCommon.feature_lookups(common, index)
+		}
+		if varied.lookup_vars.is_empty() {
+			own.keep_if(|l| l < common.lookup_count)
+		} else {
+			LayoutVar.varied_lookups(varied.lookup_vars, index, own).keep_if(|l| l < common.lookup_count)
+		}
+	}
+
 	## The lookups of a table for the mapped features, stage by stage, each
 	## stage in lookup index order with the masks of every feature that
 	## lists the lookup (a lookup two features list skips joiners only when
 	## both do). The language system's required feature applies everywhere,
-	## in `required_stage`. A feature `varied` substitutes takes the
-	## lookups of its alternate feature table.
-	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], { subs : List({ feature : U64, table : U64 }), fv : LayoutVar.FeatureVariations } -> List(LayoutGsub.Step)
+	## in `required_stage`. A feature's lookups are as feature variations
+	## have them at the face's location (`varied_feature_lookups`).
+	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied -> List(LayoutGsub.Step)
 	lookups = |common, required, required_stage, mapped, stages, table, varied| {
-		feature_lookups = |index|
-			match varied.subs.find_first(|v| v.feature == index) {
-				Ok(v) => LayoutVar.lookups_of(varied.fv, v.table).keep_if(|l| l < common.lookup_count)
-				Err(_) => LayoutCommon.feature_lookups(common, index)
-			}
+		feature_lookups = |index| Shaper.varied_feature_lookups(common, varied, index)
 		var $out = []
 		for stage in 0..<stages {
 			var $masks = List.repeat(0, common.lookup_count)
@@ -567,10 +592,11 @@ Shaper :: {}.{
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
-		ctx = { face, variants: LayoutGsub.variants_of(gsub), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
+		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
 		masked = Shaper.setup_masks(p, normalized, found.fraction_slash, !backward)
-		classes = LayoutGsub.has_glyph_classes(gsub)
+		gdef = Face.gdef(face)
+		classes = LayoutGdef.has_glyph_classes(gdef)
 		count0 = masked.len()
 		var $items = List.with_capacity(count0)
 		for c in masked {
@@ -582,7 +608,7 @@ Shaper :: {}.{
 				}
 			glyph_props =
 				if classes {
-					LayoutGsub.glyph_props(gsub, c.glyph)
+					LayoutGdef.glyph_props(gdef, c.glyph)
 				} else if ShaperUnicode.general_category_of(props) == ShaperUnicode.non_spacing_mark and props.bitwise_and(ShaperUnicode.ignorable) == 0 {
 					LayoutGsub.mark
 				} else {
@@ -755,7 +781,7 @@ Shaper :: {}.{
 	extents_of = |face, glyph|
 		match Face.extents(face, glyph) {
 			Extents(b) => { x_bearing: b.x_min.to_i64(), y_bearing: b.y_max.to_i64(), width: b.x_max.to_i64() - b.x_min.to_i64(), height: b.y_min.to_i64() - b.y_max.to_i64() }
-			Empty => { x_bearing: 0, y_bearing: 0, width: 0, height: 0 }
+			Empty | Unknown => { x_bearing: 0, y_bearing: 0, width: 0, height: 0 }
 		}
 
 	## HarfBuzz's `position_around_base`.
@@ -1000,6 +1026,40 @@ Shaper :: {}.{
 		$out
 	}
 
+	## The text range each glyph draws (`Font.cluster_ranges`): from its
+	## cluster to the next larger cluster of the run, or `length` when none
+	## is larger; empty at the cluster when the cluster is at or past
+	## `length`. The larger clusters come from the run's distinct clusters
+	## in increasing order (one pass and one list for the monotone runs
+	## shaping gives), searched by bisection, so any order of clusters has
+	## a defined result.
+	cluster_ranges : List(U64), U64 -> List({ start : U64, end : U64 })
+	cluster_ranges = |clusters, length| {
+		distinct = Sorted.unique(clusters)
+		n = distinct.len()
+		var $out = List.with_capacity(clusters.len())
+		for c in clusters {
+			if c >= length {
+				$out = $out.append({ start: c, end: c })
+			} else {
+				# The first distinct cluster above `c`.
+				var $low = 0
+				var $high = n
+				while $low < $high {
+					mid = ($low + $high) // 2
+					if (distinct.get(mid) ?? 0) <= c {
+						$low = mid + 1
+					} else {
+						$high = mid
+					}
+				}
+				next = if ($low < n) distinct.get($low) ?? length else length
+				$out = $out.append({ start: c, end: next.min(length) })
+			}
+		}
+		$out
+	}
+
 	# ------------------------------------------------------------ origins
 
 	## Which substitution produced each glyph of a traced run, by the
@@ -1016,12 +1076,8 @@ Shaper :: {}.{
 	step_features : Face, Plan -> List(List({ tag : U64, mask : U64, text : Str }))
 	step_features = |face, p| {
 		common = LayoutGsub.common_of(Face.gsub(face))
-		fv = Face.feature_variations(face).gsub
-		feature_lookups = |index|
-			match p.gsub_subs.find_first(|v| v.feature == index) {
-				Ok(v) => LayoutVar.lookups_of(fv, v.table).keep_if(|l| l < common.lookup_count)
-				Err(_) => LayoutCommon.feature_lookups(common, index)
-			}
+		varied = { subs: p.gsub_subs, fv: Face.feature_variations(face).gsub, lookup_vars: p.gsub_lookup_vars }
+		feature_lookups = |index| Shaper.varied_feature_lookups(common, varied, index)
 		stages = 2
 		var $out = []
 		for stage in 0..<stages {

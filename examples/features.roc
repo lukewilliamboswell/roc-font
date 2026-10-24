@@ -35,13 +35,15 @@ main! = |_args| {
 
 	# Tabular figures. Inter's digits normally have their own widths, so a
 	# column of numbers would not line up; `tnum` makes every digit as wide
-	# as every other.
+	# as every other. A plan holds the options, worked out once, for
+	# measuring (`Font.width_planned`) or shaping many strings.
 	Stdout.line!("")?
 	Stdout.line!("Figures in Font.sans, in font units")?
 	for features in [[], [Font.Feature.{ tag: "tnum" }]] {
 		label = if (features.is_empty()) "default:" else "tnum:    "
-		ones = width(Font.sans, "1111", features)
-		zeros = width(Font.sans, "0000", features)
+		plan = Font.plan(Font.sans, Font.ShapeOptions.{ features })
+		ones = Font.width_planned(Font.sans, plan, "1111")
+		zeros = Font.width_planned(Font.sans, plan, "0000")
 		Stdout.line!("  ${label} \"1111\" is ${ones.to_str()} wide, \"0000\" is ${zeros.to_str()} wide")?
 	}
 
@@ -60,6 +62,10 @@ main! = |_args| {
 	Stdout.line!("Stylistic alternates in Font.sans")?
 	Stdout.line!("  default: ${glyph_names(Font.sans, "a1", [])}")?
 	Stdout.line!("  salt:    ${glyph_names(Font.sans, "a1", [Font.Feature.{ tag: "salt" }])}")?
+
+	# Which features a font offers: every tag it names, for any script.
+	Stdout.line!("")?
+	Stdout.line!("Font.serif offers: ${Str.join_with(Font.features(Font.serif), " ")}")?
 	Ok({})
 }
 
@@ -68,11 +74,4 @@ glyph_names : Font, Str, List(Font.Feature) -> Str
 glyph_names = |font, text, features| {
 	run = Font.shape(font, text, Font.ShapeOptions.{ features })
 	Str.join_with(run.glyphs.map(|glyph| Font.glyph_name(font, glyph) ?? "?"), " ")
-}
-
-# The width of text shaped with the given features, in font units.
-width : Font, Str, List(Font.Feature) -> I32
-width = |font, text, features| {
-	run = Font.shape(font, text, Font.ShapeOptions.{ features })
-	run.advances.fold(0, |sum, advance| sum + advance.x)
 }

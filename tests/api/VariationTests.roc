@@ -84,7 +84,7 @@ expect positions(Font.at(at(kern_var, wght(900)), Font.Variation.{}), "abcdefg")
 outlines : Font
 outlines = read_or_crash(outlines_file)
 
-Ink : [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty]
+Ink : [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown]
 
 boxes : Font -> List(Ink)
 boxes = |font| [0, 1, 2, 3, 4, 5, 6, 7, 8].map(|g| Font.extents(font, g))

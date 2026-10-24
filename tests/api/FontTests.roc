@@ -165,7 +165,8 @@ simple_pairs = FontBuild.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 2, values: [
 # ------------------------------------------------------------ reading a font
 
 # The minimal font: metrics, glyph count and advances. Without `OS/2` the
-# vertical metrics come from `hhea`; without `loca`/`glyf` nothing has ink.
+# vertical metrics come from `hhea`; without `loca`/`glyf` no glyph's box
+# can be measured, so each is `Unknown`.
 expect {
 	match read_tables(FontBuild.basic) {
 		Ok(font) =>
@@ -174,7 +175,8 @@ expect {
 				and Font.metrics(font).ascent == 800
 				and Font.metrics(font).descent == 200
 				and [0, 1, 2, 3, 4, 1000000].map(|g| Font.advance(font, g)) == [500, 600, 700, 800, 0, 0]
-				and [0, 1, 3].all(|g| Font.extents(font, g) == Empty)
+				and [0, 1, 3].all(|g| Font.extents(font, g) == Unknown)
+				and Font.extents(font, 4) == Empty
 				and kerning(font, [1, 2, 3], "ABC") == [0, 0, 0]
 				and Font.shape(font, "A", Font.ShapeOptions.{}).glyphs == [1]
 				and Font.dropped(font) == []
@@ -506,7 +508,7 @@ with_outlines = |long, tables|
 		.append({ tag: "loca", data: tables.loca })
 		.append({ tag: "glyf", data: tables.glyf })
 
-inks_of : List({ tag : Str, data : List(U8) }) -> List([Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty])
+inks_of : List({ tag : Str, data : List(U8) }) -> List([Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown])
 inks_of = |tables|
 	match read_tables(tables) {
 		Ok(font) => [0, 1, 2, 3, 4].map(|g| Font.extents(font, g))
@@ -541,8 +543,9 @@ expect kinds_of(with_outlines(False, { loca: FontBuild.outlines(outline_glyphs, 
 expect kinds_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 10, 0, 11], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
 expect kinds_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 2, 0, 10], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == ["BadTable(loca)"]
 
-# `loca` without `glyf` (or the reverse) gives no extents.
-expect inks_of(basic_with("loca", FontBuild.outlines(outline_glyphs, False).loca)) == [Empty, Empty, Empty, Empty, Empty]
+# `loca` without `glyf` (or the reverse) is no outlines: every glyph of the
+# font is `Unknown`, and an id past the font `Empty`.
+expect inks_of(basic_with("loca", FontBuild.outlines(outline_glyphs, False).loca)) == [Unknown, Unknown, Unknown, Unknown, Empty]
 
 # ------------------------------------------------------------ vertical metrics
 

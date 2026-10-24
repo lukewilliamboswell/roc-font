@@ -539,3 +539,35 @@ expect {
 	scripts = FontBuild.pack([U16(1), Tag("latn"), Ref(FontBuild.pack([Ref(language), U16(0)]))])
 	shaped(FontBuild.pack([U32(0x00010000), Ref(scripts), Ref(features), Ref(body)]), [5]) == [8]
 }
+
+# ------------------------------------------------------------ lookup variations
+
+# A variable font (`wght` 100 to 900, default 400) whose `liga` feature
+# uses lookup 0 (glyph 1 becomes 2) and has a lookup variation record (a
+# `FeatureVariations` extension HarfBuzz reads) that, from half way to the
+# heaviest weight, adds lookup 1 (2 becomes 4) to the feature's own when
+# `keep`, or else replaces them with lookup 2 (1 becomes 5). A record
+# that does not keep the feature's lookups replaces them even where no
+# condition holds, leaving the feature none. Lookups 1 and 2 are listed
+# by no feature, so reading must read them for the variation. Expected
+# glyphs are HarfBuzz 14.6.0's (uharfbuzz 0.56.3) for these files.
+lookup_varied : Bool -> List(U8)
+lookup_varied = |keep| {
+	lookups = [
+		{ kind: 1, flag: 0, set: 0, subtables: [FontBuild.single1([1], 1)] },
+		{ kind: 1, flag: 0, set: 0, subtables: [FontBuild.single1([2], 2)] },
+		{ kind: 1, flag: 0, set: 0, subtables: [FontBuild.single1([1], 4)] },
+	]
+	variations = FontBuild.lookup_variations([{ feature: 0, keep, conditions: [{ axis: 0, min: 8192, max: 16384, lookups: [if (keep) 1 else 2] }] }])
+	FontBuild.file(many_glyphs.concat([{ tag: "fvar", data: FontBuild.fvar([{ tag: "wght", min: 100, default: 400, max: 900 }]) }, { tag: "GSUB", data: FontBuild.flagged_layout_varied("liga", [0], lookups, variations) }]))
+}
+
+lookup_varied_glyphs : Bool, U16 -> List(U32)
+lookup_varied_glyphs = |keep, weight|
+	match Font.from_bytes(lookup_varied(keep), Font.ReadOptions.{}) {
+		Ok(font) => Font.shape(Font.at(font, Font.Variation.{ weight: Weight(weight) }), text_of([1, 3]), Font.ShapeOptions.{}).glyphs
+		Err(_) => []
+	}
+
+expect lookup_varied_glyphs(True, 400) == [2, 3] and lookup_varied_glyphs(True, 600) == [2, 3] and lookup_varied_glyphs(True, 700) == [4, 3] and lookup_varied_glyphs(True, 900) == [4, 3]
+expect lookup_varied_glyphs(False, 400) == [1, 3] and lookup_varied_glyphs(False, 600) == [1, 3] and lookup_varied_glyphs(False, 700) == [5, 3] and lookup_varied_glyphs(False, 900) == [5, 3]

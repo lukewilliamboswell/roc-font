@@ -769,6 +769,19 @@ FontBuild :: {}.{
 		substitution = |subs| FontBuild.pack([U16(1), U16(0), U16(subs.len())].concat(subs.join_map(|f| [U16(f.feature), Ref32(FontBuild.pack([U16(0), U16(f.lookups.len())].concat(f.lookups.map(|l| U16(l)))))])))
 		FontBuild.pack([U16(1), U16(0), U32(variations.len())].concat(variations.join_map(|r| [Ref32(condition_set(r.conditions)), Ref32(substitution(r.substitutions))])))
 	}
+
+	## A `FeatureVariations` table (version 1.1) without feature variation
+	## records, with lookup variation records: each names a feature (by
+	## index), whether it keeps the feature's own lookups (`keep`), and
+	## conditions (an axis range, F2Dot14) each with the lookups it adds
+	## when it holds.
+	lookup_variations : List({ feature : U64, keep : Bool, conditions : List({ axis : U64, min : I64, max : I64, lookups : List(U64) }) }) -> List(U8)
+	lookup_variations = |entries| {
+		indices = |lookups| FontBuild.pack([U16(lookups.len())].concat(lookups.map(|l| U16(l))))
+		condition = |c| FontBuild.pack([U16(1), U16(c.axis), I16(c.min), I16(c.max)])
+		table = |r| FontBuild.pack([U16(1), U16(0), U16(if (r.keep) 1 else 0), U32(r.conditions.len())].concat(r.conditions.join_map(|c| [Ref32(condition(c)), Ref32(indices(c.lookups))])))
+		FontBuild.pack([U16(1), U16(1), U32(0), U32(entries.len())].concat(entries.join_map(|r| [U16(r.feature), Ref32(table(r))])))
+	}
 }
 
 expect FontBuild.u16(0x1234) == [0x12, 0x34]

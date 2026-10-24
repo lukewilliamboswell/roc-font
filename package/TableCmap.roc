@@ -142,16 +142,6 @@ TableCmap := {
 		}
 	}
 
-	## The variation sequences of a font file's `cmap`, for a font whose
-	## `cmap` has been read (and so checked): none when the table is absent
-	## or, which reading has already refused, broken.
-	variants_from_tables : List(U8), List(Sfnt.Table) -> Variants
-	variants_from_tables = |bytes, tables|
-		match Sfnt.located(bytes, tables, "cmap", 4) {
-			Found(found) => TableCmap.read_variants(found.data) ?? TableCmap.no_variants
-			_ => TableCmap.no_variants
-		}
-
 	## Find and check the format 14 subtable of a `cmap` table (the first
 	## record for platform 0, encoding 5, whose subtable has format 14).
 	read_variants : List(U8) -> Try(Variants, [Bad(U64)])

@@ -9,7 +9,7 @@
       "optional": false
     },
     "adv-huge-cmap/read": {
-      "allocations": 19,
+      "allocations": 17,
       "case_sha256": "a173f8c31931423b724ba76d34c4b3dcfd80f9a4b48ed0356ee90ab5cbae628b",
       "font_sha256": "ee1c53c37249d06c71f7d492b7bd101373de323db264bf9bf3cfadb2f22fc644",
       "leaked": 0,
@@ -37,7 +37,7 @@
       "optional": false
     },
     "adv-many-kern-pairs/read": {
-      "allocations": 26,
+      "allocations": 24,
       "case_sha256": "7e4a65b3b163ad083af4b31d50b603955a3f2acb4e422976e5afdeb03f4ca26a",
       "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
       "leaked": 0,
@@ -51,7 +51,7 @@
       "optional": false
     },
     "adv-many-ligature-lookups/read": {
-      "allocations": 263,
+      "allocations": 261,
       "case_sha256": "1bae2e97cc6dc5af5959d72f20481acea26693f18b1eef5b1dd431a5c7c2849c",
       "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
       "leaked": 0,
@@ -86,7 +86,7 @@
       "optional": true
     },
     "corpus-fira-code-6.2/read": {
-      "allocations": 468,
+      "allocations": 464,
       "case_sha256": "58abf4297f36df23914a90ad31a8d60ada3de4dddd01648e22d3c7b19eeabfed",
       "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26",
       "leaked": 0,
@@ -100,7 +100,7 @@
       "optional": true
     },
     "corpus-hb-fuzzing-037322204d9b/read": {
-      "allocations": 76,
+      "allocations": 73,
       "case_sha256": "318d613618c9325129fd42351b7de728fd1a2c513d7c056f4e112ce45204a1dd",
       "font_sha256": "865c672ed7e45d3ec694ba7a5defd28f6fdaa345b0a26151c2c1c3d7ed6c36c3",
       "leaked": 0,
@@ -114,7 +114,7 @@
       "optional": true
     },
     "corpus-hb-in-house-jellee-kern/read": {
-      "allocations": 26,
+      "allocations": 24,
       "case_sha256": "73377e688b3a71e64f5f13d86e61d330b2b1eace79797fafb70aaa1d31e340dd",
       "font_sha256": "299d0f1c7a297724cc5eec72a89fd6857532a983ac649130fd0ac128b6500b8b",
       "leaked": 0,
@@ -135,7 +135,7 @@
       "optional": true
     },
     "corpus-hb-in-house-trak/read": {
-      "allocations": 20,
+      "allocations": 18,
       "case_sha256": "f6e4143d16c4f9e14ba93610e1d14127ec825115afb0a5f46c29209681f34dcb",
       "font_sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
       "leaked": 0,
@@ -156,7 +156,7 @@
       "optional": true
     },
     "corpus-inter-4.1/read": {
-      "allocations": 171,
+      "allocations": 167,
       "case_sha256": "9e04eca22643f46e85146aec47992bbef9c79dbfe9351c04598650a4762ca0e7",
       "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82",
       "leaked": 0,
@@ -177,7 +177,7 @@
       "optional": true
     },
     "corpus-inter-variable-4.1/read": {
-      "allocations": 254,
+      "allocations": 250,
       "case_sha256": "a54ca40f5ec88c3bd02f4822c0b85f9ab9748edc091209b493c43a30e1e7c4ae",
       "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
       "leaked": 0,
@@ -198,7 +198,7 @@
       "optional": true
     },
     "corpus-merriweather-4.009/read": {
-      "allocations": 253,
+      "allocations": 249,
       "case_sha256": "df716b4666d21cfe4eaa11e1db63ab833b4b2337d58374da19145552b1ee916a",
       "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422",
       "leaked": 0,
@@ -219,7 +219,7 @@
       "optional": true
     },
     "corpus-noto-emoji-3.002/read": {
-      "allocations": 112,
+      "allocations": 110,
       "case_sha256": "931f28edc9bac9720cbc1b12ec2341f3514a611ae585676ceba411a01297d268",
       "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
       "leaked": 0,
@@ -240,7 +240,7 @@
       "optional": true
     },
     "corpus-noto-sans-2.015/read": {
-      "allocations": 125,
+      "allocations": 120,
       "case_sha256": "a8a3d074f645b51733f806e40c4ff210a089f1406df9ea07bb4c82f6fb3a22eb",
       "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8",
       "leaked": 0,
@@ -261,7 +261,7 @@
       "optional": true
     },
     "corpus-noto-sans-arabic-2.013/read": {
-      "allocations": 111,
+      "allocations": 105,
       "case_sha256": "9a0e7cb9cd443e2afb77cfddf01f9e5fddfc346c58c44c39bed7d7df4b37d76a",
       "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
       "leaked": 0,
@@ -282,7 +282,7 @@
       "optional": true
     },
     "corpus-noto-sans-devanagari-2.007/read": {
-      "allocations": 227,
+      "allocations": 222,
       "case_sha256": "8516999d2412549ce7ac1bf5577a334b8200e6dc96d9f4640def535a0a63bb0c",
       "font_sha256": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd",
       "leaked": 0,
@@ -303,7 +303,7 @@
       "optional": true
     },
     "corpus-noto-serif-2.015/read": {
-      "allocations": 119,
+      "allocations": 115,
       "case_sha256": "81c81132fc424553c2bcb56ba4873cab01cc4c777cc68427fc0aad1415fae5ed",
       "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1",
       "leaked": 0,
@@ -317,7 +317,7 @@
       "optional": true
     },
     "corpus-ots-bad-0014256514b2/read": {
-      "allocations": 30,
+      "allocations": 28,
       "case_sha256": "028f090ff5e8287dacfcac217eb69d4f3e7b31ffeba27a7fb6fdf8643162fb92",
       "font_sha256": "fec4f7423488fd439fbb9ad336bfac04b8f374edbe0ed37239a90ad5ff150e40",
       "leaked": 0,
@@ -331,7 +331,7 @@
       "optional": true
     },
     "corpus-source-sans-3.052/read": {
-      "allocations": 170,
+      "allocations": 167,
       "case_sha256": "5792bf1633fa53fa6b8b693d96db1dd57c77d8a819636c3858d899744bb6bd90",
       "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
       "leaked": 0,
@@ -380,7 +380,7 @@
       "optional": false
     },
     "inter/read": {
-      "allocations": 168,
+      "allocations": 166,
       "case_sha256": "7727586a7e453a990607ba0b2bbd6dfd3b8f58e691c16f7a26e50698b61ace86",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,

@@ -31,17 +31,16 @@ main! = |_args| {
 	# The lists in a run are index-aligned: entry `i` of each describes the
 	# same glyph. Glyphs are in visual order, left to right.
 	bytes = text.to_utf8()
-	# Clusters index the text's bytes; as `U64` they index a list directly.
-	clusters = run.clusters.map(|c| c.to_u64())
+	# A cluster is a UTF-8 byte offset into the text. The text a glyph
+	# draws runs from its cluster to the next larger cluster (or the end of
+	# the text); `Font.cluster_ranges` gives that range for every glyph.
+	ranges = Font.cluster_ranges(run, bytes.len())
 	for i in 0..<run.glyphs.len() {
 		glyph = run.glyphs.get(i) ?? 0
-		cluster = clusters.get(i) ?? 0
+		cluster = run.clusters.get(i) ?? 0
 		advance = (run.advances.get(i) ?? { x: 0, y: 0 }).x
-
-		# A cluster is a UTF-8 byte offset into the text. The text a glyph
-		# draws runs from its cluster to the next cluster after it.
-		next = clusters.drop_first(i + 1).find_first(|c| c > cluster) ?? bytes.len()
-		drawn = Str.from_utf8(bytes.sublist({ start: cluster, len: next - cluster })) ?? "?"
+		range = ranges.get(i) ?? { start: 0, end: 0 }
+		drawn = Str.from_utf8(bytes.sublist({ start: range.start, len: range.end - range.start })) ?? "?"
 
 		# Glyph names are optional in fonts; ids are what you draw with.
 		name = Font.glyph_name(font, glyph) ?? ""

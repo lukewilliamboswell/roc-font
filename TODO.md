@@ -7,42 +7,12 @@ repositories are relative to `~/Documents/Github/`.
 
 ## To 0.1.0
 
-### Reading (§4.4)
-
-- [ ] Lenient reading accepts exactly what OTS accepts: reject (not drop)
-  broken GSUB, GPOS, GDEF, OS/2, `post`, `name`; drop only the variation
-  tables and an unsorted `kern`. Check every reading case against OTS.
-
-### Variable fonts (§5.7, `docs/variable-fonts.adoc`)
-
-- [ ] Wire phase 2 (`LayoutVar`: kerning deltas via `check_pair` inside
-  `LayoutKerning.read_gpos`, `x_advance` with the PairSet base for format
-  1; FeatureVariations in the shaping plan) and phase 3 (`TableGlyfPoints`,
-  `TableGvar` extents) into `Font.at`; `TableGvar`'s extents replace
-  `TableGlyf`'s header boxes.
-- [ ] `Font.instances` and `Font.coordinates` (named instances and the
-  normalised coordinates `at` resolves to); then the driver answers
-  `instance=` and `coords` (20 + 35 recorded cases wait on them).
-
-### Default fonts (§5.8, `docs/default-fonts.adoc`)
-
-- [ ] Expose `sans`, `serif`, `mono`, `*_bytes`, `*_licence` after variable
-  phases 1 and 2 (two faces default to Light).
-- [ ] `all_tests.py`: bundle step accepts exactly the files in
-  `tools/default-fonts/pins.json`; run `tools/default-fonts/verify.py`.
-
 ### Browser parity (§6)
 
-- [ ] GPOS pair lookups honour lookup flags with the skipping iterator
-  (`LayoutGsub.check_glyph_property` and glyph properties are ready).
-- [ ] GPOS lookups reached only through FeatureVariations alternates;
-  FeatureVariations lookup-variation records (HarfBuzz's 1.1 extension).
 - [ ] Restore an in-place fast path for ligature lookups (the adversarial
   100-lookup case went from 7.7x to 10.8x HarfBuzz).
 - [ ] Decide the policy for cmap glyph ids past `numGlyphs` (HarfBuzz
   outputs them; roc-font treats them as missing; AOTS cmap4).
-- [ ] Tidy: expose `Face.cmap` and a GDEF accessor so `LayoutGsub` stops
-  keeping copies.
 
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the
 in-house and text-rendering-tests suites, except listed known failures;
@@ -51,7 +21,10 @@ Chrome widths agree on package-mermaid's oracle texts.
 ### Tests and measurement
 
 - [ ] Narrow fuzz targets still to add: gvar extents, LayoutVar kerning
-  deltas and FeatureVariations (once wired).
+  deltas and FeatureVariations.
+- [ ] `adv-huge-cmap/read` got slower (188 to 222 µs) when strictly less
+  work was done: a code-generation effect of the nightly; re-check on the
+  next nightly.
 - [ ] Optional speed-up: U64 fast paths for TableVar's single-precision
   multiply and add (85 % of gvar extents time).
 - [ ] Record time ratios on an idle machine (`bench.py --check
@@ -76,14 +49,7 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Release
 
-- [ ] Final API review with consumer and example evidence: `width` with
-  options (or a run-width helper), listing a font's features, named tests
-  for run flags, a cluster-range helper, a plain-language rendering of
-  `Problem`, telling "draws nothing" from "CFF outlines not read" in
-  `extents`; then `roc docs` reviewed as the API.
 - [ ] Refresh the figures in `docs/releases/0.1.0.adoc` just before tagging.
-
-- [ ] Bundle: package modules plus the default fonts and licences only.
 - [ ] Just before tagging: the default-branch ruleset from roc-automation's
   settings chapter (pull request, required checks `check` and the release
   dry-run build, signed commits, no bot bypass), verified with a pull

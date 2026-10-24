@@ -17,7 +17,10 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## lookups, advances are non-negative, boxes are ordered, and shaping keeps
 ## its lists index-aligned, its clusters inside the text and in order, and
 ## its growth within HarfBuzz's bound (64 glyphs per character, at least
-## 16384).
+## 16384). The feature listing is four-byte tags in increasing order
+## without repeats, a planned width is the sum of the planned run's
+## advances, and each glyph's text range starts at its cluster and ends
+## after it, inside the text.
 ##
 ## Inputs are fonts or recipes for nearly valid fonts (see
 ## `FontBuild.fuzz_font`): real font files, or Inter or the synthetic
@@ -92,6 +95,7 @@ summary = |result|
 				glyphs.map(|g| Font.extents(font, g)),
 				Font.code_points(font).take_first(64),
 				Font.axes(font),
+				Font.features(font),
 				texts.map(|t| Font.shape(font, t, Font.ShapeOptions.{})),
 			))
 		}
@@ -135,12 +139,49 @@ check! = |font| {
 		check_run!(text, Font.shape(font, text, Font.ShapeOptions.{}), False)
 		check_run!(text, Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft }), True)
 	}
+	var $tag = []
+	for tag in Font.features(font) {
+		bytes = tag.to_utf8()
+		if bytes.len() > 4 {
+			crash "a feature tag is longer than four bytes"
+		}
+		if !$tag.is_empty() and !before($tag, bytes) {
+			crash "the feature listing is not in increasing order without repeats"
+		}
+		$tag = bytes
+	}
+	plan = Font.plan(font, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "liga", value: 0 }] })
+	for text in texts {
+		run = Font.shape_planned(font, plan, text)
+		sum = run.advances.fold(0.I64, |acc, a| acc + a.x.to_i64()).max(-2147483648).min(2147483647)
+		if Font.width_planned(font, plan, text).to_i64() != sum {
+			crash "a planned width is not the sum of the planned run's advances"
+		}
+	}
 	bold = Font.at(font, Font.Variation.{ weight: Bold, axes: [{ tag: "opsz", value: 36 }] })
 	for g in probe_glyphs(font) {
 		if Font.advance(bold, g) < 0 {
 			crash "an advance at another location is negative"
 		}
 	}
+}
+
+## Whether bytes `a` come before bytes `b` in byte order.
+before : List(U8), List(U8) -> Bool
+before = |a, b| {
+	var $k = 0
+	var $result = a.len() < b.len()
+	var $going = True
+	while $going and $k < a.len() and $k < b.len() {
+		x = a.get($k) ?? 0
+		y = b.get($k) ?? 0
+		if x != y {
+			$result = x < y
+			$going = False
+		}
+		$k = $k + 1
+	}
+	$result
 }
 
 ## A run's lists are index-aligned, its clusters lie inside the text and
@@ -169,8 +210,12 @@ check_run! = |text, run, rtl| {
 	}
 	# Bit 0 is unsafe to break; bit 1 marks glyph 0 drawn for a character
 	# the font does not map.
-	if !run.flags.all(|f| f <= 3) or run.flags.map2(run.glyphs, |f, g| f.bitwise_and(2) != 0 and g != 0).any(|bad| bad) {
+	if !run.flags.all(|f| f <= 3) or run.flags.map2(run.glyphs, |f, g| Font.missing(f) and g != 0).any(|bad| bad) {
 		crash "a flag other than unsafe-to-break or missing is set, or missing on a real glyph"
+	}
+	ranges = Font.cluster_ranges(run, bytes)
+	if ranges.len() != n or !ranges.map2(run.clusters, |r, c| r.start == c and r.end > r.start and r.end <= bytes).all(|ok| ok) {
+		crash "a glyph's text range is not aligned with its cluster or leaves the text"
 	}
 }
 

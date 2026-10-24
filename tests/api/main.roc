@@ -13,6 +13,7 @@ import VariationTests
 import FuzzRegressionTests
 import GposFlagTests
 import TraceTests
+import QueryTests
 
 ## The tests of roc-font's public API. They import the package through
 ## `package/main.roc`, exactly what ships, and build their fonts with the
