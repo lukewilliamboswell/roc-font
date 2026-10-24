@@ -1,0 +1,252 @@
+{
+  "about": "Allocation ratchet for scripts/bench.py --check; see docs/benchmarks.adoc. Counts are roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz Fuzz.measure_allocs! in a `roc build --fuzz` binary.",
+  "cases": {
+    "adv-huge-cmap/cmap/plane1-sweep": {
+      "allocations": 0,
+      "case_sha256": "00df43db60a6510bdc40a6ad26283413cb600cd63681eb9f1815d4c2dd824dd9",
+      "font_sha256": "ee1c53c37249d06c71f7d492b7bd101373de323db264bf9bf3cfadb2f22fc644",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-huge-cmap/read": {
+      "allocations": 30035,
+      "case_sha256": "a173f8c31931423b724ba76d34c4b3dcfd80f9a4b48ed0356ee90ab5cbae628b",
+      "font_sha256": "ee1c53c37249d06c71f7d492b7bd101373de323db264bf9bf3cfadb2f22fc644",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-kern-pairs/kerning/cjk-large": {
+      "allocations": 1,
+      "case_sha256": "9e8a1a08f4a972f74a6212f3765d051b8669869076e131c34ff2db88f04440d0",
+      "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-kern-pairs/kerning/cjk-medium": {
+      "allocations": 1,
+      "case_sha256": "4f355198a33a9f4c86a26aa596e5c8d086d65987dd92b8810224edc293aec73b",
+      "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-kern-pairs/kerning/cjk-small": {
+      "allocations": 1,
+      "case_sha256": "ed2ad72b18a67073ba368634e6f7a3e226e8964159ca30fde554b9e1f8d59f22",
+      "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-kern-pairs/read": {
+      "allocations": 485,
+      "case_sha256": "7e4a65b3b163ad083af4b31d50b603955a3f2acb4e422976e5afdeb03f4ca26a",
+      "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-kern-pairs/shape/cjk-medium": {
+      "allocations": 3,
+      "case_sha256": "0ab5f151fd13f2a23dec5c4afaa258d7ca66255383d1f183e54b222b7d566a79",
+      "font_sha256": "6d712330c27e0a3a091723a241933500078c5e1cfa7cdaf75e0b267407fd5266",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-ligature-lookups/read": {
+      "allocations": 68641,
+      "case_sha256": "1bae2e97cc6dc5af5959d72f20481acea26693f18b1eef5b1dd431a5c7c2849c",
+      "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-ligature-lookups/shape/letters-large": {
+      "allocations": 8446,
+      "case_sha256": "aff550df6722101d352272d176c2086bc55e5ff6d32009d4fe373d6233e30dc7",
+      "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-ligature-lookups/shape/letters-medium": {
+      "allocations": 1146,
+      "case_sha256": "d6409c3236a966626c4aec39d6b7e0f7ce479bdc7f95af7572bce0abd381dadc",
+      "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
+      "leaked": 0,
+      "optional": false
+    },
+    "adv-many-ligature-lookups/shape/letters-small": {
+      "allocations": 234,
+      "case_sha256": "ae15cb91be3c38de0cc3d13260e05d3c45a483fb7f28c35f4ed5bba2d92c5514",
+      "font_sha256": "b3459a1ac747533793339c723208a9075cafb5df99ea26aed646370eb85af1f4",
+      "leaked": 0,
+      "optional": false
+    },
+    "corpus-hb-fuzzing-037322204d9b/read": {
+      "allocations": 20,
+      "case_sha256": "318d613618c9325129fd42351b7de728fd1a2c513d7c056f4e112ce45204a1dd",
+      "font_sha256": "865c672ed7e45d3ec694ba7a5defd28f6fdaa345b0a26151c2c1c3d7ed6c36c3",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-hb-in-house-trak/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "32ff5c452950a6ea7c3cf4efb4b85fdc453f6c6882839b5cd685b4e163c5ed77",
+      "font_sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-hb-in-house-trak/read": {
+      "allocations": 18,
+      "case_sha256": "f6e4143d16c4f9e14ba93610e1d14127ec825115afb0a5f46c29209681f34dcb",
+      "font_sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-hb-in-house-trak/shape/words-medium": {
+      "allocations": 3,
+      "case_sha256": "5532482b709afb1afdf724ab7f0f2a6184e93326a09c074122d4ec2cf5ae6250",
+      "font_sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-inter-variable-4.1/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "1f1211405b2395698ce5a45bf1c697c249bfc5b33aabe9d7c5c8892ae5f5a23b",
+      "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-inter-variable-4.1/read": {
+      "allocations": 5476,
+      "case_sha256": "a54ca40f5ec88c3bd02f4822c0b85f9ab9748edc091209b493c43a30e1e7c4ae",
+      "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-inter-variable-4.1/shape/words-medium": {
+      "allocations": 121,
+      "case_sha256": "21f6fdc3c5e1ae8a21ca6966b6c75bede31dee89bd822b8662aa65ca4139a4b5",
+      "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-noto-sans-arabic-2.013/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "18733353072eeb72b440435b21c6a7d14450470fc2789185b3052f9c51829f54",
+      "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-noto-sans-arabic-2.013/read": {
+      "allocations": 1313,
+      "case_sha256": "9a0e7cb9cd443e2afb77cfddf01f9e5fddfc346c58c44c39bed7d7df4b37d76a",
+      "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-noto-sans-arabic-2.013/shape/words-medium": {
+      "allocations": 16,
+      "case_sha256": "1f8b69e39090b2185777f1a242a9e66770965f6032d0ffb1da1826fdfd68b22b",
+      "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-ots-bad-0014256514b2/read": {
+      "allocations": 25,
+      "case_sha256": "028f090ff5e8287dacfcac217eb69d4f3e7b31ffeba27a7fb6fdf8643162fb92",
+      "font_sha256": "fec4f7423488fd439fbb9ad336bfac04b8f374edbe0ed37239a90ad5ff150e40",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-source-sans-3.052/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "9bcb926eab86e353740f3bb594eb4d3345979e461acb51292a7857bb6a94e770",
+      "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-source-sans-3.052/read": {
+      "allocations": 3047,
+      "case_sha256": "5792bf1633fa53fa6b8b693d96db1dd57c77d8a819636c3858d899744bb6bd90",
+      "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
+      "leaked": 0,
+      "optional": true
+    },
+    "corpus-source-sans-3.052/shape/words-medium": {
+      "allocations": 116,
+      "case_sha256": "5e1adad662b35e01afc57c238f02c296fde0aa5997472750b9673f28b7099390",
+      "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
+      "leaked": 0,
+      "optional": true
+    },
+    "inter/advance/words-medium": {
+      "allocations": 0,
+      "case_sha256": "1e257d3c66c5564c8394af937e15dfd353ccb7b7710c562a4a3a5a820f08cb4e",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "7b17bf4e4c5b577633a96cb642a31fe1dd00be39be4e4f7c23953049ed8f4ca0",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/kerning/words-large": {
+      "allocations": 1,
+      "case_sha256": "fda20a8ac00349255bf958263394570e59b9cacbfffba179d0b121c7220b42f5",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/kerning/words-medium": {
+      "allocations": 1,
+      "case_sha256": "2addeffba5c823c8616330a642624da4589c9bb7d9e1059aa7629c995abe0cc9",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/kerning/words-small": {
+      "allocations": 1,
+      "case_sha256": "8197f5d85307e5926494e8ebd1acd8edf552690d901b3834fece2adf07371446",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/read": {
+      "allocations": 5396,
+      "case_sha256": "7727586a7e453a990607ba0b2bbd6dfd3b8f58e691c16f7a26e50698b61ace86",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/shape/words-large": {
+      "allocations": 740,
+      "case_sha256": "c0cc1271cc9139862c960a5d20ea8a6325fc770194bcc9fd914978850c2c2bd8",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/shape/words-medium": {
+      "allocations": 121,
+      "case_sha256": "9867e5b43308628c209e546283c590d3706188afcee5f9f70dbc14a5e60d6969",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    },
+    "inter/shape/words-small": {
+      "allocations": 24,
+      "case_sha256": "96e2df2aac5f6cfc701a4ad32b94f080e3905a4ebcf5338fee65678f39e55147",
+      "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
+      "leaked": 0,
+      "optional": false
+    }
+  },
+  "compiler": {
+    "build": "roc build --fuzz bench/roc/alloc.roc",
+    "roc_fuzz": "0.4.3",
+    "version": "Roc compiler version nightly-2026-10-23-18478ff"
+  },
+  "generator": {
+    "fonttools": "4.61.1"
+  },
+  "schema": 1
+}

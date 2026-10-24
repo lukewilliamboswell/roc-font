@@ -1,0 +1,18 @@
+[package]
+name = "roc-font-bench-compare"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# Comparison program for scripts/bench.py; see docs/benchmarks.adoc.
+[[bin]]
+name = "compare"
+path = "src/main.rs"
+
+[dependencies]
+ttf-parser = "=0.25.1"
+rustybuzz = "=0.20.1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

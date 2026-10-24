@@ -1,0 +1,303 @@
+[#benchmarks]
+= Benchmarks
+
+This chapter is for contributors who want to measure a change, add a
+benchmark or understand why `scripts/bench.py --check` failed. It covers the
+harness, the inputs, the allocation ratchet, the comparison programs and how
+to read a report. The policy behind it is in
+link:architecture.adoc#benchmarks[architecture §9].
+
+== Run the benchmarks
+
+You need a Roc nightly. Point `ROC` at it; the harness falls back to `roc` on
+`PATH`, and warns when that is a debug build of the compiler. A C compiler
+with `pkg-config` and HarfBuzz headers, Rust (cargo) and Python with
+fontTools are optional: a missing toolchain is skipped and named in the
+report. fontTools is also what generates the adversarial fonts.
+
+[source,console]
+----
+$ export ROC=~/roc_nightly-linux_x86_64-2026-10-23-18478ff/roc
+$ python3 scripts/bench.py --check            # allocation ratchet, about 15 seconds
+$ python3 scripts/bench.py --quick            # timing smoke run, under a minute
+$ python3 scripts/bench.py                    # full timing comparison, a few minutes
+----
+
+`--check` builds only the allocation diagnostic, replays every case once and
+compares the counts with `bench/baseline.json`. Run it before sending a
+change to `package/`. `--quick` times every case except the large texts,
+with three short batches; use it to see that everything builds and runs, not
+to quote numbers. The full run uses seven batches of about 200 ms.
+
+Narrow a run with these options:
+
+`--ops read,shape`:: Only these operations (`read`, `cmap`, `advance`,
+`kerning`, `shape`).
+`--langs roc,c`:: Only these implementations (`roc`, `c`, `rust`, `python`).
+`--only inter,large`:: Only cases matching one of these: a case id
+(`inter/shape/words-large`), font id (`adv-huge-cmap`), size (`small`,
+`medium`, `large`, `sweep`, `font`), operation, text name or font kind
+(`committed`, `generated`, `corpus`).
+`--label before`:: Write the report to `.roc-font-tmp/bench/before/`, so two
+runs can be compared side by side.
+`--repetitions`, `--target-ms`, `--timeout`:: Batch count, approximate batch
+duration and the time limit for one batch.
+`--no-allocations`:: Time without counting allocations.
+`--corpus-only`:: Write the case files and their manifest, then stop.
+`--python`:: The interpreter that runs the fontTools comparator.
+
+Reports go to `.roc-font-tmp/bench/<label>/`, or under `$ROC_FONT_TMPDIR`.
+
+== How a measurement works
+
+Every implementation, in Roc or another language, is a small program that
+follows one protocol. It reads a _case file_ from standard input:
+
+----
+<operation>\n
+<font length in bytes>\n
+<font bytes><text bytes>
+----
+
+It prepares everything that is not the operation (reading the font for a
+query, decoding the text, mapping characters to glyphs for an advance or
+kerning query), starts a monotonic clock, runs the operation the given
+number of times (its last argument), stops the clock and prints one JSON
+line:
+
+[source,json]
+----
+{"iterations":120,"elapsed_ns":20414000,"successes":120,"checksum":43811}
+----
+
+Each operation folds its whole result into the checksum, so no work can be
+optimised away. The operations are:
+
+`read`:: `Font.from_bytes` on the font.
+`cmap`:: `Font.glyph` for every code point of the text.
+`advance`:: `Font.advance` for the glyph of every code point.
+`kerning`:: `Font.kerning` over the glyphs of the whole text.
+`shape`:: the whole pipeline from UTF-8 text: decode, map characters to
+glyphs, `Font.substitute`, then advances and `Font.kerning`.
+
+For each case and implementation, `scripts/bench.py`:
+
+. runs one operation to estimate its cost, and picks the number of
+  operations per batch so a batch takes about `--target-ms`;
+. runs one warmup batch and discards it;
+. runs `--repetitions` batches, each in a fresh process;
+. records the median time per operation, minimum, maximum, standard
+  deviation and spread (`(max - min) / median`), throughput in MB/s (text
+  bytes for queries and shaping, font bytes for reading) and the peak
+  resident set size of the batch processes.
+
+Peak RSS is measured with GNU `time` when it is installed, because Linux
+carries a process's peak across `fork` and `exec` and the harness itself is
+large after generating fonts. It includes the language runtime and a few
+MiB for `time`; compare it within a language or across sizes.
+
+== Inputs
+
+The harness builds every case in `build_cases` in `scripts/bench.py` on
+every run, and writes them with a `manifest.json` giving every font's and
+text's size and SHA-256. The baseline records each case file's SHA-256, so a
+changed input is reported rather than silently compared.
+
+Fonts::
+* `inter`: `tests/fonts/Inter-Regular-metrics.ttf`, committed with its
+  licence.
+* `adv-huge-cmap`: 30 000 one-character `cmap` format 12 groups that cannot
+  merge, plus ASCII.
+* `adv-many-kern-pairs`: a `GPOS` pair adjustment for every ordered pair of
+  300 glyphs (90 000 pairs, split over subtables).
+* `adv-many-ligature-lookups`: 100 ligature lookups in `liga`, each with 20
+  three-letter ligatures for every first letter (52 000 ligatures).
+* `corpus-*`: every `.ttf` or `.otf` under `tests/corpus/`, when fetched.
+  Where `tests/corpus.json` lists a SHA-256 for a file, a file that does not
+  match is skipped. These cases are marked optional in the baseline.
+
+The adversarial fonts are generated with fontTools from fixed recipes with
+fixed timestamps, so their bytes are identical on every run with the pinned
+fontTools (`bench/compare/python/requirements.txt`). Another fontTools
+version may produce different bytes; the harness warns, and the ratchet
+reports `input-changed` for every affected case.
+
+Texts:: Generated from a random number generator seeded by the text's name,
+so the bytes are identical everywhere. `words-small`, `words-medium` and
+`words-large` (512 B, 4 KiB, 32 KiB) mix f-ligatures, arrows, kerning pairs,
+digits, accented letters and curly quotes, which exercise Inter's default
+features. `bmp-sweep` is every scalar from U+0020 to U+2FFF except the C1
+controls, shuffled; `plane1-sweep` is 16 384 shuffled code points over and
+past the huge `cmap`; `cjk-*` and `letters-*` draw from the adversarial
+fonts' own characters at the three sizes.
+
+Every hot operation runs at three increasing sizes (kerning and shaping on
+Inter, kerning on the pairs font, shaping on the ligature font), and reading
+runs on fonts from 175 KiB to 1.6 MiB, so the report shows growth in both
+time and allocations (architecture §9.4).
+
+== Allocation ratchet
+
+`bench/roc/alloc.roc` is a roc-fuzz app built with `roc build --fuzz`. It
+replays one case file, runs the operation once inside
+`Fuzz.measure_allocs!`, and crashes on purpose to print its counts, so exit
+code 77 is the expected result:
+
+----
+ALLOCATION_DIAGNOSTIC allocations=5396 leaked=0 result=ok checksum=4985
+----
+
+`allocations`:: Every `roc_alloc` and `roc_realloc` the operation made. A
+reallocation counts as one.
+`leaked`:: How many allocations were still live after the operation
+returned its checksum, which holds none. It should always be 0.
+
+Both are deterministic for one compiler and one input; two runs give
+identical numbers. `bench/baseline.json` records them per case with the case
+file's SHA-256 and the compiler version, and `--check` compares exactly:
+
+* an *increase* fails as a `regression`;
+* a *decrease* fails as an `improvement` until it is locked in;
+* a case in the matrix but not in the baseline fails as `new`;
+* a case whose input bytes changed fails as `input-changed`;
+* a baseline case missing from the matrix fails as `unmeasured`, unless it
+  is an optional corpus case whose font is not fetched in this checkout;
+* a diagnostic that crashes for any other reason fails as `error`.
+
+When the compiler differs from the one the baseline names, a failing check
+says so, since a compiler change alone can change counts.
+
+To accept a change, run
+
+[source,console]
+----
+$ python3 scripts/bench.py --check --update-baseline
+----
+
+and commit `bench/baseline.json` with the change that caused it. The file is
+written with sorted keys and a fixed layout, and holds no dates, so the diff
+shows exactly which counts moved; explain them in the review. Updating with
+`--only` or `--ops` changes only the cases measured. Updating in a checkout
+without the corpus keeps the corpus cases already recorded.
+
+roc-fuzz 0.4.3 exposes only the number of allocations served and the number
+still live (`Fuzz.alloc_count!`, `Fuzz.live_alloc_count!`). Requested bytes
+and peak live bytes, which architecture §9.2 also calls for, need counters
+in the roc-fuzz host; the native binaries are statically linked, so they
+cannot be measured by interposing `malloc` either.
+
+== Time ratios
+
+Elapsed time is never ratcheted in absolute terms. After a full run (not
+`--quick`, no filters), `--update-baseline` also records, per case and
+comparison library, the ratio of roc-font's median time to the library's,
+to two significant digits, with the machine and a tolerance (25 % by
+default, `--time-tolerance`). A later full run fails when a ratio worsens
+beyond the tolerance; while the baseline holds no ratios, none are checked. Ratios move with the machine and its load, so record
+them on an idle machine, and treat a failure on different hardware as a
+prompt to look, not a verdict.
+
+== Comparison programs
+
+[cols="1,2,3",options="header"]
+|===
+|Implementation |Where |What it measures, and its pin
+
+|`c/harfbuzz`
+|`bench/compare/c/harfbuzz.c`
+|System libharfbuzz found by `pkg-config` (the version is recorded in the
+report). `read`: blob, face and font creation, then loading `cmap`, `hmtx`,
+`GSUB` and `GPOS`. `cmap`: `hb_font_get_nominal_glyph`. `advance`:
+`hb_font_get_glyph_h_advance`. `shape`: `hb_shape` with the default
+features, Latin script, English, left to right.
+
+|`rust/ttf-parser`
+|`bench/compare/rust/`
+|ttf-parser 0.25.1, pinned in `Cargo.toml` and `Cargo.lock`, built with
+`cargo build --release --locked`, thin LTO and one codegen unit. `read`:
+`Face::parse` and the `GSUB` and `GPOS` lookup lists. `cmap`:
+`glyph_index`. `advance`: `glyph_hor_advance`.
+
+|`rust/rustybuzz`
+|`bench/compare/rust/`
+|rustybuzz 0.20.1, same build. `read`: `Face::from_slice`. `shape`:
+`rustybuzz::shape` with the same settings as HarfBuzz.
+
+|`python/fonttools`
+|`bench/compare/python/`
+|fontTools 4.61.1 (`requirements.txt`). `read` only: `TTFont` then
+`ensureDecompiled`, which decompiles every table including outlines.
+|===
+
+Kerning on its own has no direct equivalent in these libraries, so it is
+measured for Roc only, and it is included in `shape`.
+
+Checksums are defined the same way everywhere (`read`: glyph count plus
+units per em; `cmap`: the sum of glyph index plus one over characters the
+font maps; `advance`: the sum of advances; `shape`: the sum over output
+glyphs of glyph index, cluster and advance including kerning), so the
+report can say whether each library produced the same result as roc-font.
+For `shape` this is a cheap agreement check on top of the conformance tests,
+not a replacement for them.
+
+Read the `read` ratios with care. HarfBuzz, ttf-parser and rustybuzz parse
+lazily: they check table bounds, often in constant time, and decode records
+when a query needs them. roc-font checks every offset and builds its
+indexes up front so that every later query is total (architecture §4.2),
+and fontTools decompiles everything. The ratio says what that choice costs,
+not that one reader does the same work faster.
+
+To add a comparator, add the operation to the program, register it in
+`COMPARATORS` in `scripts/bench.py` with the operations it supports and a
+one-line description, pin the library, and run
+`python3 scripts/bench.py --quick --langs <lang>`.
+
+== Add a benchmark
+
+* *An input:* add a text generator or a font recipe in `scripts/bench.py`
+  and a `Case` in `build_cases`. Draw randomness only from
+  `random.Random(seed_for(name))`. Fonts generated by a recipe must set
+  fixed timestamps. Then run `--check --update-baseline` and commit the new
+  baseline entries.
+* *An operation:* add it to `OPS` in `scripts/bench.py` and to `prepare` and
+  `run` in `bench/roc/FontBench.roc` (both the timing driver
+  `bench/roc/font.roc` and `bench/roc/alloc.roc` share it), give it cases
+  at three sizes, and add it to every comparator that has an equivalent.
+* *A public API change:* only `bench/roc/FontBench.roc` calls the package.
+
+The Roc programs import the package through `../../package/main.roc`, so
+they see only its public API, and nothing under `bench/` is reachable from
+`package/main.roc`.
+
+== Read a report
+
+Each run writes to `.roc-font-tmp/bench/<label>/`:
+
+`results.json`:: Metadata (date, machine, OS, compiler, library and crate
+versions, commit and whether the tree was dirty, the case manifest with
+hashes, what each implementation measures), one record per case and
+implementation, the allocation records and the ratchet findings.
+`report.md`:: The same as Markdown tables.
+`cases/`:: The case files, so any program can be run by hand:
++
+[source,console]
+----
+$ .roc-font-tmp/bench/full/bin/roc-font 100 < .roc-font-tmp/bench/full/cases/inter__shape__words-medium.case
+$ .roc-font-tmp/bench/full/bin/roc-alloc replay .roc-font-tmp/bench/full/cases/inter__read.case
+----
+`logs/`:: Build output.
+
+The *comparison* table gives, per operation and library, the geometric mean
+over the cases both accepted of roc-font's median time over the library's,
+and how many of those cases had matching checksums. "3x slower" means
+roc-font took three times as long.
+
+Before trusting a number, check:
+
+* *Spread:* above about 10 %, the machine was busy or the batch too short;
+  rerun on an idle machine or raise `--target-ms`.
+* *Compiler:* timings from a debug build of the compiler, or from
+  `roc dev`, are not representative. The harness always builds with
+  `roc build --opt=speed`.
+* *Hashes and versions:* two reports can be compared only when their case
+  hashes match and only the variable under test changed.
