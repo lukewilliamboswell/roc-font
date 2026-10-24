@@ -12,9 +12,12 @@
 ## for the other kinds. Flags are comma-separated, from `no-clusters`,
 ## `no-positions`, `no-advances`, `utf8-clusters` and `font-size=<n>`, and
 ## (protocol 2) `face=<n>`, `instance=<n>`, `weight=<w>`, `width=<w>`,
-## `optical-size=<s>` and repeatable `axis=<tag>:<decimal>`. Shaping results
-## are printed in hb-shape's text notation with glyph ids:
-## `[gid=cluster@dx,dy+ax,ay|...]`. See docs/conformance.adoc.
+## `optical-size=<s>` and repeatable `axis=<tag>:<decimal>`, and (protocol
+## 3) the shaping options `direction=ltr|rtl`, `script=<ISO 15924>`,
+## `language=<BCP 47>`, `cluster-level=0|1` and repeatable
+## `feature=<tag>:<value>:<start>:<end>` (`end` is `*` for the end of the
+## text). Shaping results are printed in hb-shape's text notation with
+## glyph ids: `[gid=cluster@dx,dy+ax,ay|...]`. See docs/conformance.adoc.
 Case :: {}.{
 
 	## Which glyphs a font-fact request lists: every glyph of the font, in
@@ -41,11 +44,25 @@ Case :: {}.{
 	## a variation built from the location flags.
 	Location : [Regular, Instance(U32), At(Variation)]
 
+	## The shaping options, mirroring `Font.ShapeOptions` (whose field types
+	## these are, structurally); with no shaping flag, the defaults.
+	Shaping : {
+		script : Str,
+		language : Str,
+		direction : [FromScript, LeftToRight, RightToLeft],
+		features : List({ tag : Str, value : U32, start : U64, end : U64 }),
+		clusters : [Graphemes, Characters],
+	}
+
 	## Everything the flags field selects.
-	Flags : { settings : Settings, face : U32, location : Location }
+	Flags : { settings : Settings, face : U32, location : Location, shaping : Shaping }
 
 	## One parsed request line.
-	Request : { tag : Str, font : Str, kind : Kind, scalars : List(U32), settings : Settings, face : U32, location : Location }
+	Request : { tag : Str, font : Str, kind : Kind, scalars : List(U32), settings : Settings, face : U32, location : Location, shaping : Shaping }
+
+	## The shaping options with no shaping flag: `Font.ShapeOptions.{}`.
+	default_shaping : Shaping
+	default_shaping = { script: "", language: "", direction: FromScript, features: [], clusters: Graphemes }
 
 	## One positioned output glyph, in font units.
 	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64 }
@@ -68,7 +85,7 @@ Case :: {}.{
 				}
 				match (parsed, Case.flags(flag_text)) {
 					(Ok((kind, scalars)), Ok(f)) =>
-						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind, scalars, settings: f.settings, face: f.face, location: f.location })
+						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind, scalars, settings: f.settings, face: f.face, location: f.location, shaping: f.shaping })
 					(Err(BadKind), _) => Err(Malformed({ tag, why: "kind" }))
 					(Err(BadUnicodes), _) => Err(Malformed({ tag, why: "code-points" }))
 					(Err(_), _) => Err(Malformed({ tag, why: "items" }))
@@ -90,10 +107,20 @@ Case :: {}.{
 		var $has_instance = False
 		var $v = { weight: Regular, width: Normal, optical_size: FontDefault, axes: [] }
 		var $varied = False
+		var $shaping = Case.default_shaping
 		var $bad = ""
 		for flag in field.split_on(",") {
 			if $bad.is_empty() and !flag.is_empty() {
-				if flag == "no-clusters" {
+				if flag.starts_with("direction=") or flag.starts_with("script=") or flag.starts_with("language=") or flag.starts_with("cluster-level=") or flag.starts_with("feature=") {
+					match Case.shaping_flag($shaping, flag) {
+						Ok(next) => {
+							$shaping = next
+						}
+						Err(_) => {
+							$bad = flag
+						}
+					}
+				} else if flag == "no-clusters" {
 					$s = { ..$s, clusters: False }
 				} else if flag == "no-positions" {
 					$s = { ..$s, positions: False }
@@ -167,8 +194,45 @@ Case :: {}.{
 		} else {
 			Regular
 		}
-		if ($bad.is_empty()) Ok({ settings: $s, face: $face, location }) else Err($bad)
+		if ($bad.is_empty()) Ok({ settings: $s, face: $face, location, shaping: $shaping }) else Err($bad)
 	}
+
+	## The shaping options after one shaping flag (protocol 3), or `Err`
+	## when its value is not understood. Features accumulate in order.
+	shaping_flag : Shaping, Str -> Try(Shaping, {})
+	shaping_flag = |shaping, flag|
+		if flag.starts_with("direction=") {
+			match flag.drop_prefix("direction=") {
+				"ltr" => Ok({ ..shaping, direction: LeftToRight })
+				"rtl" => Ok({ ..shaping, direction: RightToLeft })
+				_ => Err({})
+			}
+		} else if flag.starts_with("script=") {
+			text = flag.drop_prefix("script=")
+			if (text.is_empty()) Err({}) else Ok({ ..shaping, script: text })
+		} else if flag.starts_with("language=") {
+			text = flag.drop_prefix("language=")
+			if (text.is_empty()) Err({}) else Ok({ ..shaping, language: text })
+		} else if flag.starts_with("cluster-level=") {
+			match flag.drop_prefix("cluster-level=") {
+				"0" => Ok({ ..shaping, clusters: Graphemes })
+				"1" => Ok({ ..shaping, clusters: Characters })
+				_ => Err({})
+			}
+		} else {
+			match flag.drop_prefix("feature=").split_on(":") {
+				[tag, value_text, start_text, end_text] if !tag.is_empty() =>
+					match (Case.decimal_digits(value_text), Case.decimal_digits(start_text), Case.feature_end(end_text)) {
+						(Ok(value), Ok(start), Ok(end)) if value <= 0xFFFFFFFF => Ok({ ..shaping, features: shaping.features.append({ tag, value: value.to_u32_wrap(), start, end }) })
+						_ => Err({})
+					}
+				_ => Err({})
+			}
+		}
+
+	## A feature range's end: `*` for the end of the text, or a decimal.
+	feature_end : Str -> Try(U64, {})
+	feature_end = |text| if (text == "*") Ok(18_446_744_073_709_551_615) else Case.decimal_digits(text)
 
 	## `Font.Variation.weight` from a flag value: a CSS weight name or a
 	## decimal integer 0-65535.
@@ -441,10 +505,10 @@ Case :: {}.{
 plain : Case.Settings
 plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
 
-expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular })
-expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular })
-expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain, face: 0, location: Regular })
-expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 }, face: 0, location: Regular })
+expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping: Case.default_shaping })
+expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
+expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
+expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 }, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("t\tf.ttf\tshape\t41") == Err(Malformed({ tag: "t", why: "fields" }))
 expect Case.request("t\tf.ttf\tdraw\t41\t") == Err(Malformed({ tag: "t", why: "kind" }))
 expect Case.request("t\tf.ttf\tshape\td800\t") == Err(Malformed({ tag: "t", why: "code-points" }))
@@ -458,14 +522,14 @@ expect Case.scalars("U+0041") == Err(BadUnicodes)
 expect Case.flags("font-size=0") == Err("font-size=0")
 expect Case.request("t\tf.ttf\tcoords\t41\t") == Err(Malformed({ tag: "t", why: "items" }))
 expect Case.request("t\tf.ttf\tadvances\t0,zz\t") == Err(Malformed({ tag: "t", why: "items" }))
-expect Case.request("t\tf.ttf\tmetrics\t\tface=2") == Ok({ tag: "t", font: "f.ttf", kind: Metrics, scalars: [], settings: plain, face: 2, location: Regular })
-expect Case.request("t\tf.ttf\tadvances\t0,1c8,ffffffff\t") == Ok({ tag: "t", font: "f.ttf", kind: Advances(Listed([0, 456, 0xFFFFFFFF])), scalars: [], settings: plain, face: 0, location: Regular })
-expect Case.request("t\tf.ttf\textents\tall\tinstance=8") == Ok({ tag: "t", font: "f.ttf", kind: Extents(All), scalars: [], settings: plain, face: 0, location: Instance(8) })
+expect Case.request("t\tf.ttf\tmetrics\t\tface=2") == Ok({ tag: "t", font: "f.ttf", kind: Metrics, scalars: [], settings: plain, face: 2, location: Regular, shaping: Case.default_shaping })
+expect Case.request("t\tf.ttf\tadvances\t0,1c8,ffffffff\t") == Ok({ tag: "t", font: "f.ttf", kind: Advances(Listed([0, 456, 0xFFFFFFFF])), scalars: [], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
+expect Case.request("t\tf.ttf\textents\tall\tinstance=8") == Ok({ tag: "t", font: "f.ttf", kind: Extents(All), scalars: [], settings: plain, face: 0, location: Instance(8), shaping: Case.default_shaping })
 expect Case.glyph_ids("") == Ok(Listed([]))
 expect Case.glyph_ids("100000000") == Err(BadGlyphs)
 
 expect {
-	at = |v| Ok({ settings: plain, face: 0, location: At(v) })
+	at = |v| Ok({ settings: plain, face: 0, location: At(v), shaping: Case.default_shaping })
 	base = { weight: Regular, width: Normal, optical_size: FontDefault, axes: [] }
 	Case.flags("weight=Bold") == at({ ..base, weight: Bold })
 		and Case.flags("weight=650,width=SemiCondensed,optical-size=12.5") == at({ ..base, weight: Weight(650), width: SemiCondensed, optical_size: Size(12.5) })
@@ -505,3 +569,17 @@ expect {
 
 expect Case.width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
 expect Case.width([]) == "width:0"
+
+expect {
+	parsed = Case.flags("utf8-clusters,direction=rtl,script=Arab,language=ar,cluster-level=1,feature=liga:0:0:*,feature=kern:2:3:5")
+	shaping = { script: "Arab", language: "ar", direction: RightToLeft, features: [{ tag: "liga", value: 0, start: 0, end: 18_446_744_073_709_551_615 }, { tag: "kern", value: 2, start: 3, end: 5 }], clusters: Characters }
+	parsed == Ok({ settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping })
+}
+
+expect Case.flags("direction=ttb") == Err("direction=ttb")
+expect Case.flags("cluster-level=2") == Err("cluster-level=2")
+expect Case.flags("script=") == Err("script=")
+expect Case.flags("feature=liga:1:0") == Err("feature=liga:1:0")
+expect Case.flags("feature=:1:0:*") == Err("feature=:1:0:*")
+expect Case.flags("feature=liga:4294967296:0:*") == Err("feature=liga:4294967296:0:*")
+expect Case.flags("feature=liga:on:0:*") == Err("feature=liga:on:0:*")

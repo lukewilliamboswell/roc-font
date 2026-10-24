@@ -695,6 +695,80 @@ FontBuild :: {}.{
 	mvar : List(U8), List({ tag : Str, outer : U64, inner : U64 }) -> List(U8)
 	mvar = |store, values|
 		FontBuild.pack([U16(1), U16(0), U16(0), U16(8), U16(values.len()), Ref(store)].concat(values.join_map(|r| [Tag(r.tag), U16(r.outer), U16(r.inner)])))
+
+	# ------------------------------------------------------------ lookup flags
+
+	## The tables of a font with 64 glyphs, each 500 units wide (1000 units
+	## per em): glyph g (from 1) draws U+10000 + g, the space draws glyph 3.
+	sixty_four : List({ tag : Str, data : List(U8) })
+	sixty_four = [
+		{ tag: "head", data: FontBuild.head(1000, False) },
+		{ tag: "hhea", data: FontBuild.hhea(800, -200, 64) },
+		{ tag: "maxp", data: FontBuild.maxp(64) },
+		{ tag: "hmtx", data: FontBuild.hmtx(List.repeat(500, 64)) },
+		{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x20, last: 0x20, glyph: 3 }, { first: 0x10001, last: 0x1003F, glyph: 1 }]) }]) },
+	]
+
+	## A `GDEF` (version 1.2) for `sixty_four`: glyphs 1 to 4 are base
+	## glyphs, 5 and 6 marks of attachment classes 1 and 2, 7 a ligature;
+	## mark glyph set 0 holds glyph 5 alone.
+	marks_gdef : List(U8)
+	marks_gdef = FontBuild.pack([
+		U32(0x00010002),
+		Ref(FontBuild.classes2([{ first: 1, last: 4, class: 1 }, { first: 5, last: 6, class: 3 }, { first: 7, last: 7, class: 2 }])),
+		U16(0),
+		U16(0),
+		Ref(FontBuild.classes2([{ first: 5, last: 5, class: 1 }, { first: 6, last: 6, class: 2 }])),
+		Ref(FontBuild.pack([U16(1), U16(1), Ref32(FontBuild.coverage1([5]))])),
+	])
+
+	## A `GSUB` or `GPOS` table with one script (`latn`), whose default
+	## language lists one feature (`tag`) using every lookup in order; each
+	## lookup has a type, a lookup flag, a mark filtering set (written only
+	## when the flag uses one, 0x10) and its subtables.
+	flagged_layout : Str, List({ kind : U64, flag : U64, set : U64, subtables : List(List(U8)) }) -> List(U8)
+	flagged_layout = |tag, lookups| FontBuild.flagged_listing(tag, FontBuild.counting(lookups.len()), lookups)
+
+	## `flagged_layout` whose feature uses only the lookups `listed`.
+	flagged_listing : Str, List(U64), List({ kind : U64, flag : U64, set : U64, subtables : List(List(U8)) }) -> List(U8)
+	flagged_listing = |tag, listed, lookups| {
+		language = FontBuild.pack([U16(0), U16(0xFFFF), U16(1), U16(0)])
+		scripts = FontBuild.pack([U16(1), Tag("latn"), Ref(FontBuild.pack([Ref(language), U16(0)]))])
+		features = FontBuild.pack([U16(1), Tag(tag), Ref(FontBuild.pack([U16(0), U16(listed.len())].concat(listed.map(|i| U16(i)))))])
+		lookup_list = FontBuild.pack(
+			[U16(lookups.len())].concat(
+				lookups.map(
+					|l| {
+						filter = if (l.flag.bitwise_and(0x10) != 0) [U16(l.set)] else []
+						Ref(FontBuild.pack([U16(l.kind), U16(l.flag), U16(l.subtables.len())].concat(l.subtables.map(|s| Ref(s))).concat(filter)))
+					},
+				),
+			),
+		)
+		FontBuild.pack([U32(0x00010000), Ref(scripts), Ref(features), Ref(lookup_list)])
+	}
+
+	## `flagged_listing` as version 1.1, with a `FeatureVariations` table
+	## (`FontBuild.feature_variations`).
+	flagged_layout_varied : Str, List(U64), List({ kind : U64, flag : U64, set : U64, subtables : List(List(U8)) }), List(U8) -> List(U8)
+	flagged_layout_varied = |tag, listed, lookups, variations| {
+		plain = FontBuild.flagged_listing(tag, listed, lookups)
+		# The three offsets of the version 1.0 header move by the 4 bytes of
+		# the `FeatureVariations` offset, which points after the rest.
+		moved = |at| FontBuild.u16(((plain.get(at) ?? 0).to_u64() * 256 + (plain.get(at + 1) ?? 0).to_u64()) + 4)
+		FontBuild.u32(0x00010001).concat(moved(4)).concat(moved(6)).concat(moved(8)).concat(FontBuild.u32(plain.len() + 4)).concat(plain.drop_first(10)).concat(variations)
+	}
+
+	## A `FeatureVariations` table (version 1.0): records of axis range
+	## conditions (axis, minimum and maximum, F2Dot14), all of which must
+	## hold, and feature substitutions (feature index and the lookups of its
+	## alternate feature table).
+	feature_variations : List({ conditions : List({ axis : U64, min : I64, max : I64 }), substitutions : List({ feature : U64, lookups : List(U64) }) }) -> List(U8)
+	feature_variations = |variations| {
+		condition_set = |conditions| FontBuild.pack([U16(conditions.len())].concat(conditions.map(|c| Ref32(FontBuild.pack([U16(1), U16(c.axis), I16(c.min), I16(c.max)])))))
+		substitution = |subs| FontBuild.pack([U16(1), U16(0), U16(subs.len())].concat(subs.join_map(|f| [U16(f.feature), Ref32(FontBuild.pack([U16(0), U16(f.lookups.len())].concat(f.lookups.map(|l| U16(l)))))])))
+		FontBuild.pack([U16(1), U16(0), U32(variations.len())].concat(variations.join_map(|r| [Ref32(condition_set(r.conditions)), Ref32(substitution(r.substitutions))])))
+	}
 }
 
 expect FontBuild.u16(0x1234) == [0x12, 0x34]

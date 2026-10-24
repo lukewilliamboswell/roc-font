@@ -282,7 +282,10 @@ Font :: { face : Face }.{
 	ClusterLevel : [Graphemes, Characters]
 
 	## A typographic feature, turned on (value 1, the default), off (0) or to
-	## a value, over the whole text or the UTF-8 byte range `start ..< end`.
+	## a value, over the whole text or over the characters whose cluster
+	## offsets lie in `start ..< end` (UTF-8 byte offsets for `shape`; the
+	## given offsets for `shape_scalars`). The default range is the whole
+	## text: `end` defaults to the largest `U64`, past every offset.
 	##
 	## ```
 	## no_ligatures = Font.Feature.{ tag: "liga", value: 0 }
@@ -292,13 +295,16 @@ Font :: { face : Face }.{
 	## The tag is the feature's four-letter OpenType name. A value above 1
 	## chooses that alternate where the feature offers several (`salt` with
 	## value 2 is the second).
-	Feature := { tag : Str, value : U32 ?? 1, start : U32 ?? 0, end : U32 ?? 4_294_967_295 }
+	Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
 
 	## Bounds on shaping work, per input character, never below 16384 in
 	## all: `growth` bounds how many glyphs the run may grow to and
-	## `operations` how many nested substitutions may be made (HarfBuzz's
-	## factors). Past them shaping stops changing the run and returns what it
-	## has; the defaults never bind on a real font.
+	## `operations` how many substitutions contextual rules may call
+	## (HarfBuzz's factors). The defaults never bind on a real font; only a
+	## font built to make shaping work without end reaches them. Past a
+	## bound, substitution stops where it is: `shape` and the other shaping
+	## calls return the run made so far (which still draws the whole text),
+	## and `shape_checked` says so (see `Budget`).
 	ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }
 
 	## How to shape.
@@ -331,16 +337,73 @@ Font :: { face : Face }.{
 	## - `advances`: how far each glyph moves the pen, in font units;
 	## - `offsets`: where to draw each glyph relative to the pen;
 	## - `clusters`: the UTF-8 byte offset in the text of the first character
-	##   each glyph draws;
+	##   each glyph draws (for `shape_scalars`, the offset given with it),
+	##   never clamped;
 	## - `flags`: bit 0 is set when breaking the text at the start of the
 	##   glyph's cluster would change the glyphs on either side (a ligature
 	##   or kerning spans it), so both sides must be shaped again; bit 1 is
 	##   set on glyph 0 drawn for a character the font does not map (the
 	##   `.notdef` result: a browser would fall back to another font there).
 	##
-	## Clusters never decrease in a left-to-right run (never increase in a
-	## right-to-left one), and the glyphs of one cluster are adjacent.
-	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U32), flags : List(U8) }
+	## What every run guarantees (for `shape_scalars`, when the offsets
+	## given increase):
+	##
+	## - Clusters never decrease from glyph to glyph in a left-to-right run
+	##   and never increase in a right-to-left one, and the glyphs of one
+	##   cluster are adjacent. A cluster's glyphs draw the characters from
+	##   its offset up to the next larger cluster offset (or the end of the
+	##   text), so slicing the text at cluster offsets never splits what a
+	##   glyph draws.
+	## - Every cluster is the offset of a character of the text. A character
+	##   with no glyph of its own (joined into a ligature, or removed by a
+	##   substitution) is drawn by the cluster it was merged into.
+	## - A character the font does not map is drawn with glyph 0, never left
+	##   out, with flag bit 1 set; only a substitution in the font may
+	##   replace that glyph. The exceptions are default-ignorable characters
+	##   (such as a zero-width joiner, a soft hyphen or a variation
+	##   selector), which draw nothing visible: the font's space glyph with
+	##   no advance, or no glyph when the font has no space. A glyph 0 the
+	##   font itself gives (by its character map or a substitution) does not
+	##   have bit 1.
+	## - Empty text gives a run of empty lists; glyph ids past the font have
+	##   an advance of 0.
+	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
+
+	## Which substitution produced a glyph of a run shaped by
+	## `shape_traced`, for callers that must map glyphs back to the text
+	## exactly, such as a PDF writer recording what a ligature stands for.
+	##
+	## - `Mapped`: the font's character map gave the glyph (after composing
+	##   or decomposing characters to what the font maps) and no
+	##   substitution changed it.
+	## - `Substituted`: one glyph replaced by another (an alternate, a small
+	##   capital, a contextual form).
+	## - `Ligature`: one glyph that joined `components` glyphs, each a
+	##   character's glyph or an earlier ligature counting as one; the text
+	##   it draws is its cluster's.
+	## - `Multiple`: the first of several glyphs that replaced one glyph; it
+	##   stands for the replaced glyph's characters.
+	## - `Inserted`: a further glyph of such a replacement; it stands for no
+	##   character of its own and shares the first glyph's cluster.
+	##
+	## `feature` is the four-letter tag (such as `liga`, `smcp` or `ccmp`)
+	## of the feature whose substitution step made the glyph's last
+	## substitution. A substitution made by a contextual rule is credited to
+	## the feature whose rule it is (`calt` for a contextual alternate),
+	## even when the rule calls on substitutions that features do not list
+	## themselves. A substitution several features share (such as `liga`
+	## and `clig` listing the same one) is credited to the first of them, in
+	## tag order, that is on for the glyph. A one-for-one substitution of a
+	## ligature or of a glyph of a multiple substitution keeps its kind (the
+	## glyph still draws the same characters) and takes the later feature.
+	GlyphOrigin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }), Multiple({ feature : Str }), Inserted({ feature : Str })]
+
+	## A bound that stopped substitution before it finished: `Growth` and
+	## `Operations` are the `ShapeLimits` fields, and `Depth` is
+	## `Limits.max_depth`, how deeply contextual substitutions may call
+	## further substitutions (a reading option, because it guards the
+	## work a font file may ask for).
+	Budget : [Growth, Operations, Depth]
 
 	## The choices `ShapeOptions` make for one font, worked out once. Plan
 	## once and shape many times with `shape_planned`. A plan belongs to the
@@ -368,12 +431,53 @@ Font :: { face : Face }.{
 	shape_planned : Font, ShapePlan, Str -> Run
 	shape_planned = |font, shape_plan, text| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 
+	## Shape text with a plan, and say whether shaping finished. `Ok` holds
+	## the run `shape_planned` gives. When a bound stopped substitution
+	## early, the result is `OverBudget` with the run made so far (total
+	## and finite, still drawing the whole text) and every bound that
+	## stopped it; raise those bounds (`ShapeLimits` in the plan's options,
+	## `Limits.max_depth` when reading) to shape further. On a real font
+	## the defaults never bind, so this matters where fonts come from
+	## untrusted sources.
+	##
+	## ```
+	## match Font.shape_checked(font, plan, text) {
+	##     Ok(run) => run
+	##     Err(OverBudget({ run, budgets })) => ...
+	## }
+	## ```
+	shape_checked : Font, ShapePlan, Str -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
+	shape_checked = |font, shape_plan, text| {
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
+		if shaped.stopped == 0 {
+			Ok(shaped.run)
+		} else {
+			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
+
 	## Shape characters a paragraph layer has already split up: each scalar
 	## value with the offset to report as its cluster (normally its UTF-8
 	## byte offset in the paragraph). Scalars sharing an offset form one
-	## cluster. Clusters in the run are these offsets.
-	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U32 }) -> Run
+	## cluster. Clusters in the run are these offsets, unchanged.
+	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
+
+	## Shape characters as `shape_scalars` does, and also say which
+	## substitution produced each glyph (see `GlyphOrigin`). `origins` has
+	## one entry per glyph, in the run's (visual) order. The run is the one
+	## `shape_scalars` gives; only this call pays for the origins (one more
+	## list, and naming the features of the plan's substitution steps).
+	##
+	## ```
+	## traced = Font.shape_traced(font, plan, [{ scalar: 'f', offset: 0 }, { scalar: 'i', offset: 1 }])
+	## # traced.origins == [Ligature({ feature: "liga", components: 2 })] in a font with an fi ligature
+	## ```
+	shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> { run : Run, origins : List(GlyphOrigin) }
+	shape_traced = |font, shape_plan, scalars| {
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+		{ run: shaped.run, origins: Shaper.origins(font.face, shape_plan.plan, shaped.items) }
+	}
 
 	## The width of text shaped with the default options: the sum of its
 	## advances, in font units.

@@ -28,7 +28,7 @@ Shaper :: {}.{
 		script : Str,
 		language : Str,
 		direction : [FromScript, LeftToRight, RightToLeft],
-		features : List({ tag : Str, value : U32, start : U32, end : U32 }),
+		features : List({ tag : Str, value : U32, start : U64, end : U64 }),
 		growth : U64,
 		operations : U64,
 	}
@@ -36,7 +36,10 @@ Shaper :: {}.{
 	## A plan: the lookups to apply in order with their masks, the mask
 	## every glyph starts with and the ranges of text where features that
 	## vary are set, the masks the shaper sets itself, the direction, and
-	## which of HarfBuzz's fallbacks apply.
+	## which of HarfBuzz's fallbacks apply. `mapped`, `gsub_required`,
+	## `gsub_required_stage` and `gsub_subs` are what chose the `GSUB`
+	## lookups, kept (they are already built) so that `step_features` can
+	## name the features of each step for traced shaping.
 	Plan : {
 		backward : Bool,
 		native : [Ltr, Rtl, Either],
@@ -55,9 +58,23 @@ Shaper :: {}.{
 		fallback_marks : Bool,
 		growth : U64,
 		operations : U64,
+		mapped : List(Mapped),
+		gsub_required : U64,
+		gsub_required_stage : U64,
+		gsub_subs : List({ feature : U64, table : U64 }),
 	}
 
-	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U32), flags : List(U8) }
+	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
+
+	## A shaped run with the finished items it was made from (in output
+	## order, for origins) and the bounds that stopped substitution
+	## (`LayoutGsub.Applied`; 0 when none did).
+	Shaped : { run : Run, items : List(LayoutGsub.Item), stopped : U64 }
+
+	## The end of a feature range that runs to the end of the text (every
+	## offset is below it): with start 0, a feature over the whole text.
+	text_end : U64
+	text_end = 0xFFFFFFFFFFFFFFFF
 
 	## A requested feature (HarfBuzz's `feature_info_t`): its largest and
 	## default values, whether it is global, falls back to `kern`, joins
@@ -125,7 +142,7 @@ Shaper :: {}.{
 		horizontal = ["calt", "clig", "curs", "dist"].map(|t| Shaper.request(t, 1, True)).append({ ..Shaper.request("kern", 1, True), fallback: True }).concat(["liga", "rclt"].map(|t| Shaper.request(t, 1, True)))
 		user = options.features.map(
 			|f| {
-				global = f.start == 0 and f.end == 0xFFFFFFFF
+				global = f.start == 0 and f.end == Shaper.text_end
 				v = f.value.to_u64()
 				{ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: 1 }
 			},
@@ -213,11 +230,11 @@ Shaper :: {}.{
 		# Ranges, in the caller's order: a later one wins where they overlap.
 		var $ranges = []
 		for f in options.features {
-			if !(f.start == 0 and f.end == 0xFFFFFFFF) {
+			if !(f.start == 0 and f.end == Shaper.text_end) {
 				t = Shaper.feature_tag(f.tag)
 				match mapped.find_first(|m| m.tag == t) {
 					Ok(m) => {
-						$ranges = $ranges.append({ mask: m.mask, value: f.value.to_u64().shl_wrap(m.shift.to_u8_wrap()).bitwise_and(m.mask), start: f.start.to_u64(), end: f.end.to_u64() })
+						$ranges = $ranges.append({ mask: m.mask, value: f.value.to_u64().shl_wrap(m.shift.to_u8_wrap()).bitwise_and(m.mask), start: f.start, end: f.end })
 					}
 					Err(_) => {}
 				}
@@ -244,6 +261,10 @@ Shaper :: {}.{
 			fallback_marks: !apply_gpos,
 			growth: options.growth,
 			operations: options.operations,
+			mapped,
+			gsub_required,
+			gsub_required_stage: $gsub_required_stage,
+			gsub_subs: gsub_varied.subs,
 		}
 	}
 
@@ -362,7 +383,7 @@ Shaper :: {}.{
 	# ------------------------------------------------------------ shaping
 
 	## Text as scalars with the UTF-8 byte offset each starts at.
-	decode : Str -> List({ scalar : U32, offset : U32 })
+	decode : Str -> List({ scalar : U32, offset : U64 })
 	decode = |text| {
 		bytes = text.to_utf8()
 		count = bytes.len()
@@ -375,7 +396,7 @@ Shaper :: {}.{
 			for k in 1..<width {
 				$cp = $cp.shl_wrap(6).bitwise_or((bytes.get($i + k) ?? 0).to_u32().bitwise_and(0x3F))
 			}
-			$out = $out.append({ scalar: $cp, offset: $i.min(0xFFFFFFFF).to_u32_wrap() })
+			$out = $out.append({ scalar: $cp, offset: $i })
 			$i = $i + width
 		}
 		$out
@@ -514,11 +535,16 @@ Shaper :: {}.{
 			}
 		}
 
-	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U32 }) -> Run
-	shape = |face, location, p, scalars| {
+	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Run
+	shape = |face, location, p, scalars| Shaper.shape_items(face, location, p, scalars).run
+
+	## Shape, keeping the finished items and the bounds that stopped
+	## substitution (see `Shaped`).
+	shape_items : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Shaped
+	shape_items = |face, location, p, scalars| {
 		n = scalars.len()
 		if n == 0 {
-			return Shaper.empty_run
+			return { run: Shaper.empty_run, items: [], stopped: 0 }
 		}
 		gsub = Face.gsub(face)
 		{ chars: prepared, found } = ShaperNormalize.prepare(scalars, p.global_mask)
@@ -566,13 +592,14 @@ Shaper :: {}.{
 		}
 		limit = (p.growth * n).max(16384)
 		budget = (p.operations * n).max(16384)
-		substituted = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
-		Shaper.position(face, location, p, substituted, backward, space_fallback, found.ignorables)
+		applied = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+		placed = Shaper.position(face, location, p, applied.items, backward, space_fallback, found.ignorables)
+		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
 	## and `hb_ot_substitute_post`).
-	position : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool -> Run
+	position : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool -> Placed
 	position = |face, location, p, substituted, backward, space_fallback, ignorables| {
 		upem = Face.units_per_em(face).to_i64()
 		advance_of = |glyph| Face.advance(face, location, glyph).to_i64()
@@ -621,8 +648,7 @@ Shaper :: {}.{
 			$dy = fallback_dy
 		}
 		ordered = if (backward) { items: Shaper.reversed($items), ax: Shaper.reversed($ax), dx: Shaper.reversed($dx), dy: Shaper.reversed($dy) } else { items: $items, ax: $ax, dx: $dx, dy: $dy }
-		hidden = if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered
-		Shaper.finish(hidden)
+		if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered
 	}
 
 	## The widths HarfBuzz gives spaces the font lacks, drawn with the space
@@ -923,7 +949,7 @@ Shaper :: {}.{
 			$glyphs = $glyphs.append(item.glyph.min(0xFFFFFFFF).to_u32_wrap())
 			$advances = $advances.append({ x: Shaper.clamp(placed.ax.get(k) ?? 0), y: 0 })
 			$offsets = $offsets.append({ x: Shaper.clamp(placed.dx.get(k) ?? 0), y: Shaper.clamp(placed.dy.get(k) ?? 0) })
-			$clusters = $clusters.append(item.cluster.min(0xFFFFFFFF).to_u32_wrap())
+			$clusters = $clusters.append(item.cluster)
 		}
 		{ glyphs: $glyphs, advances: $advances, offsets: $offsets, clusters: $clusters, flags: Shaper.flags(items) }
 	}
@@ -970,6 +996,126 @@ Shaper :: {}.{
 				$out = $out.append((if ($unsafe) 1.U8 else 0).bitwise_or(missing))
 			}
 			$k = $end
+		}
+		$out
+	}
+
+	# ------------------------------------------------------------ origins
+
+	## Which substitution produced each glyph of a traced run, by the
+	## public `GlyphOrigin` kinds.
+	Origin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }), Multiple({ feature : Str }), Inserted({ feature : Str })]
+
+	## The features that list each `GSUB` step's lookup, in the plan's step
+	## order, each step's features in increasing tag order, with each tag's
+	## text made once here (not once per glyph). Built as
+	## `lookups` builds the steps (stage by stage, each stage in lookup
+	## order, from the required feature and the mapped features of the
+	## stage, their lookups replaced by feature variations), so the lists
+	## align with `p.gsub`. Only traced shaping calls it.
+	step_features : Face, Plan -> List(List({ tag : U64, mask : U64, text : Str }))
+	step_features = |face, p| {
+		common = LayoutGsub.common_of(Face.gsub(face))
+		fv = Face.feature_variations(face).gsub
+		feature_lookups = |index|
+			match p.gsub_subs.find_first(|v| v.feature == index) {
+				Ok(v) => LayoutVar.lookups_of(fv, v.table).keep_if(|l| l < common.lookup_count)
+				Err(_) => LayoutCommon.feature_lookups(common, index)
+			}
+		stages = 2
+		var $out = []
+		for stage in 0..<stages {
+			var $found = List.repeat([], common.lookup_count)
+			add = |found, lookup, wanted, mask| {
+				entry = { tag: wanted, mask, text: Shaper.tag_text(wanted) }
+				list = found.get(lookup) ?? []
+				var $at = list.len()
+				while $at > 0 and (list.get($at - 1) ?? entry).tag > wanted {
+					$at = $at - 1
+				}
+				# Feature lookups are below the lookup count, the list's length.
+				found.set(lookup, list.take_first($at).append(entry).concat(list.drop_first($at))) ?? []
+			}
+			if p.gsub_required != LayoutCommon.no_feature and p.gsub_required_stage == stage {
+				required_tag = LayoutCommon.feature_tag(common, p.gsub_required)
+				for lookup in feature_lookups(p.gsub_required) {
+					$found = add($found, lookup, required_tag, Shaper.global_bit)
+				}
+			}
+			for m in p.mapped {
+				if m.gsub != LayoutCommon.no_feature and m.stage.min(stages - 1) == stage {
+					for lookup in feature_lookups(m.gsub) {
+						$found = add($found, lookup, m.tag, m.mask)
+					}
+				}
+			}
+			for features in $found {
+				if !features.is_empty() {
+					$out = $out.append(features)
+				}
+			}
+		}
+		$out
+	}
+
+	## A four-byte tag as text, as the font stores it (bytes that are not
+	## UTF-8 become U+FFFD).
+	tag_text : U64 -> Str
+	tag_text = |t| Str.from_utf8_lossy([24, 16, 8, 0].map(|s| t.shr_zf_wrap(s).bitwise_and(0xFF).to_u8_wrap()))
+
+	## The origin of every glyph of a finished run (`Shaped.items`): what
+	## made it, and the feature of the plan step that made it. A step's
+	## lookup that several features list is credited to the first of them,
+	## in tag order, that is on for the glyph (to the first of them when
+	## none is: a lookup a contextual rule called may change a glyph the
+	## rule's feature is not on for).
+	origins : Face, Plan, List(LayoutGsub.Item) -> List(Origin)
+	origins = |face, p, items| {
+		features = Shaper.step_features(face, p)
+		items.map(
+			|item| {
+				kind = LayoutGsub.origin_kind(item)
+				if kind == LayoutGsub.origin_mapped {
+					Mapped
+				} else {
+					candidates = features.get(LayoutGsub.origin_step(item)) ?? []
+					# Every step has a feature that lists its lookup, so a
+					# candidate exists; "" is never seen.
+					feature = match candidates.find_first(|c| c.mask.bitwise_and(item.mask) != 0) {
+						Ok(c) => c.text
+						Err(_) =>
+							match candidates.first() {
+								Ok(c) => c.text
+								Err(_) => ""
+							}
+					}
+					if kind == LayoutGsub.origin_ligature {
+						Ligature({ feature, components: LayoutGsub.origin_components(item).to_u32_wrap() })
+					} else if kind == LayoutGsub.origin_multiple {
+						Multiple({ feature: feature })
+					} else if kind == LayoutGsub.origin_inserted {
+						Inserted({ feature: feature })
+					} else {
+						Substituted({ feature: feature })
+					}
+				}
+			},
+		)
+	}
+
+	## The bounds a `Shaped.stopped` names, in the order growth,
+	## operations, depth.
+	budgets : U64 -> List([Growth, Operations, Depth])
+	budgets = |stopped| {
+		var $out = []
+		if stopped.bitwise_and(LayoutGsub.stopped_growth) != 0 {
+			$out = $out.append(Growth)
+		}
+		if stopped.bitwise_and(LayoutGsub.stopped_operations) != 0 {
+			$out = $out.append(Operations)
+		}
+		if stopped.bitwise_and(LayoutGsub.stopped_depth) != 0 {
+			$out = $out.append(Depth)
 		}
 		$out
 	}

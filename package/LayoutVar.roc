@@ -85,6 +85,16 @@ LayoutVar := {
 	## `substitution_starts[r]` up to `substitution_starts[r + 1]` of
 	## `features` (feature indices, in the table's order) and `tables` (the
 	## offset in `data` of each alternate feature table).
+	##
+	## Lookup variation records (version 1.1 of the `FeatureVariations`
+	## table, an extension HarfBuzz reads): record v replaces the lookups of
+	## feature `lookup_features[v]` with those of its conditions that hold,
+	## plus the feature's own (after substitution) when `lookup_defaults[v]`.
+	## Its conditions are entries `lookup_record_starts[v]` up to
+	## `lookup_record_starts[v + 1]` of `condition_starts` (where each
+	## condition's program starts, one more entry closing the last) and
+	## `condition_lookups` (the offset in `data` of each condition's lookup
+	## index list, 0 for none).
 	FeatureVariations : {
 		data : List(U8),
 		starts : List(U64),
@@ -96,6 +106,11 @@ LayoutVar := {
 		substitution_starts : List(U64),
 		features : List(U64),
 		tables : List(U64),
+		lookup_features : List(U64),
+		lookup_defaults : List(Bool),
+		lookup_record_starts : List(U64),
+		condition_starts : List(U64),
+		condition_lookups : List(U64),
 	}
 
 	# ------------------------------------------------------------ limits
@@ -900,7 +915,7 @@ LayoutVar := {
 
 	## No feature variations.
 	no_feature_variations : FeatureVariations
-	no_feature_variations = { data: [], starts: [0], kinds: [], a: [], b: [], c: [], uses_values: False, substitution_starts: [0], features: [], tables: [] }
+	no_feature_variations = { data: [], starts: [0], kinds: [], a: [], b: [], c: [], uses_values: False, substitution_starts: [0], features: [], tables: [], lookup_features: [], lookup_defaults: [], lookup_record_starts: [0], condition_starts: [0], condition_lookups: [] }
 
 	# Condition program operations.
 	op_true : U8
@@ -940,7 +955,8 @@ LayoutVar := {
 	## exist. Substitutions may name features in any order, and features the
 	## table lacks (which never apply); `substitutions_at` keeps the first
 	## for a feature, as HarfBuzz does. Lookup variation records (version 1.1
-	## of the `FeatureVariations` table, which HarfBuzz reads) are not read.
+	## of the `FeatureVariations` table, which HarfBuzz reads) follow the
+	## records; see the note in the body for how they are checked.
 	read_feature_variations : List(U8), Str, LayoutVar, U64 -> Try(FeatureVariations, List(Problem))
 	read_feature_variations = |data, table, lv, axis_count| {
 		size = data.len()
@@ -952,14 +968,14 @@ LayoutVar := {
 			return bad(0, UnsupportedVersion)
 		}
 		if TableVar.u16(data, 2) < 1 {
-			return Ok({ data, starts: [0], kinds: [], a: [], b: [], c: [], uses_values: False, substitution_starts: [0], features: [], tables: [] })
+			return Ok({ ..LayoutVar.no_feature_variations, data })
 		}
 		if size < 14 {
 			return bad(0, Truncated)
 		}
 		base = TableVar.u32(data, 10)
 		if base == 0 {
-			return Ok({ data, starts: [0], kinds: [], a: [], b: [], c: [], uses_values: False, substitution_starts: [0], features: [], tables: [] })
+			return Ok({ ..LayoutVar.no_feature_variations, data })
 		}
 		features_at = TableVar.u16(data, 6)
 		lookups_at = TableVar.u16(data, 8)
@@ -1074,6 +1090,70 @@ LayoutVar := {
 		if !$problems.is_empty() {
 			return Err($problems)
 		}
+		# Lookup variation records (version 1.1). OTS does not read them, so
+		# they never reject the font. A record list that does not lie inside
+		# the table, or more reading work than the allowance, drops the whole
+		# `FeatureVariations`, as HarfBuzz's sanitizer drops it; a feature
+		# lookups table or lookup index list that does not lie inside counts
+		# as absent (the sanitizer nulls its offset), and conditions are read
+		# leniently (`read_condition`).
+		dropped = Ok({ ..LayoutVar.no_feature_variations, data })
+		var $lookup_features = []
+		var $lookup_defaults = []
+		var $lookup_record_starts = [0]
+		var $condition_starts = [$program.kinds.len()]
+		var $condition_lookups = []
+		if TableVar.u16(data, base + 2) >= 1 {
+			list = base + 8 + 8 * count
+			records = TableVar.u32(data, list)
+			if !TableVar.fits(list, 4, size) or !TableVar.fits(list + 4, 6 * records, size) {
+				return dropped
+			}
+			$steps = match LayoutVar.spend(data, $steps, records) {
+				Ok(spent) => spent
+				Err(TooMuchWork) => return dropped
+			}
+			for v in 0..<records {
+				record = list + 4 + 6 * v
+				offset = TableVar.u32(data, record + 2)
+				table_at = base + offset
+				conditions = TableVar.u32(data, table_at + 6)
+				present = offset != 0 and TableVar.fits(table_at, 10, size) and TableVar.u16(data, table_at) == 1 and TableVar.fits(table_at + 10, 8 * conditions, size)
+				$lookup_features = $lookup_features.append(TableVar.u16(data, record))
+				$lookup_defaults = $lookup_defaults.append(present and TableVar.u16(data, table_at + 4).bitwise_and(1) != 0)
+				if present {
+					$steps = match LayoutVar.spend(data, $steps, conditions) {
+						Ok(spent) => spent
+						Err(TooMuchWork) => return dropped
+					}
+					for q in 0..<conditions {
+						entry = table_at + 10 + 8 * q
+						condition = TableVar.u32(data, entry)
+						match LayoutVar.read_condition(data, table, lv, axis_count, if (condition == 0) 0 else table_at + condition, $program, $steps) {
+							Ok(done) => {
+								$program = done.program
+								$steps = done.steps
+							}
+							# Lenient reading reports no problem; only work runs out.
+							Err(_) => return dropped
+						}
+						indices = TableVar.u32(data, entry + 4)
+						list_at = table_at + indices
+						n = TableVar.u16(data, list_at)
+						fits = indices != 0 and TableVar.fits(list_at, 2, size) and TableVar.fits(list_at + 2, 2 * n, size)
+						if fits {
+							$steps = match LayoutVar.spend(data, $steps, n) {
+								Ok(spent) => spent
+								Err(TooMuchWork) => return dropped
+							}
+						}
+						$condition_lookups = $condition_lookups.append(if (fits) list_at else 0)
+						$condition_starts = $condition_starts.append($program.kinds.len())
+					}
+				}
+				$lookup_record_starts = $lookup_record_starts.append($condition_lookups.len())
+			}
+		}
 		Ok({
 			data,
 			starts: $starts,
@@ -1085,6 +1165,11 @@ LayoutVar := {
 			substitution_starts: $substitution_starts,
 			features: $features,
 			tables: $tables,
+			lookup_features: $lookup_features,
+			lookup_defaults: $lookup_defaults,
+			lookup_record_starts: $lookup_record_starts,
+			condition_starts: $condition_starts,
+			condition_lookups: $condition_lookups,
 		})
 	}
 
@@ -1127,6 +1212,33 @@ LayoutVar := {
 			$places = $places.append(if (offset == 0) 0 else at + offset)
 			$depth = $depth.append(1)
 		}
+		LayoutVar.run_conditions(data, table, lv, axis_count, at, { kinds: $kinds, places: $places, depth: $depth }, $program, $steps, False)
+	}
+
+	# Append the postfix program of the single condition at `at` (0 for a
+	# null offset, which holds) of a lookup variation record. OTS does not
+	# read these, so nothing here rejects the font; problems are resolved as
+	# HarfBuzz's sanitizer and evaluation resolve them (see
+	# `run_conditions`). Only running out of reading work fails.
+	read_condition : List(U8), Str, LayoutVar, U64, U64, Program, U64 -> Try({ program : Program, steps : U64 }, [Bad(Problem), Exhausted(Problem)])
+	read_condition = |data, table, lv, axis_count, at, program, steps|
+		LayoutVar.run_conditions(data, table, lv, axis_count, at, { kinds: [0], places: [at], depth: [1] }, program, steps, True)
+
+	# Run a condition work list (see `read_condition_set`) into the
+	# program. `lenient` for a lookup variation record's condition, which
+	# OTS never checks: a condition that does not lie inside the table, or
+	# nests too deep, holds (HarfBuzz's sanitizer replaces it with a null
+	# offset); an axis past the font reads coordinate 0 and a variation
+	# index outside the store gives delta 0, as HarfBuzz evaluates them; the
+	# range of a condition is not limited.
+	run_conditions : List(U8), Str, LayoutVar, U64, U64, { kinds : List(U8), places : List(U64), depth : List(U64) }, Program, U64, Bool -> Try({ program : Program, steps : U64 }, [Bad(Problem), Exhausted(Problem)])
+	run_conditions = |data, table, lv, axis_count, at, work, program_in, steps_in, lenient| {
+		size = data.len()
+		var $steps = steps_in
+		var $program = program_in
+		var $kinds = work.kinds
+		var $places = work.places
+		var $depth = work.depth
 		while !$kinds.is_empty() {
 			last = $kinds.len() - 1
 			kind = $kinds.get(last) ?? 0
@@ -1143,6 +1255,8 @@ LayoutVar := {
 				$program = LayoutVar.emit($program, kind, place.to_i64_wrap(), 0, 0)
 			} else if place == 0 {
 				$program = LayoutVar.emit($program, LayoutVar.op_true, 0, 0, 0)
+			} else if lenient and (depth > LayoutVar.nesting_limit or !TableVar.fits(place, 2, size) or LayoutVar.condition_truncated(data, place)) {
+				$program = LayoutVar.emit($program, LayoutVar.op_true, 0, 0, 0)
 			} else if depth > LayoutVar.nesting_limit {
 				return Err(Bad({ table, offset: place, reason: NestingDepth }))
 			} else if !TableVar.fits(place, 2, size) {
@@ -1156,11 +1270,11 @@ LayoutVar := {
 						return Err(Bad({ table, offset: place, reason: Truncated }))
 					}
 					axis = TableVar.u16(data, place + 2)
-					if axis >= axis_count {
+					if axis >= axis_count and !lenient {
 						return Err(Bad({ table, offset: place + 2, reason: AxisIndex }))
 					}
 					# OTS checks the range of a condition directly in a set.
-					if depth == 1 and (TableVar.i16(data, place + 4) < -0x4000 or TableVar.i16(data, place + 6) > 0x4000) {
+					if depth == 1 and !lenient and (TableVar.i16(data, place + 4) < -0x4000 or TableVar.i16(data, place + 6) > 0x4000) {
 						return Err(Bad({ table, offset: place + 4, reason: MapRange }))
 					}
 					$program = LayoutVar.emit($program, LayoutVar.op_range, axis.to_i64_wrap(), TableVar.i16(data, place + 4), TableVar.i16(data, place + 6))
@@ -1170,7 +1284,7 @@ LayoutVar := {
 					}
 					outer = TableVar.u16(data, place + 4)
 					inner = TableVar.u16(data, place + 6)
-					if !TableVar.valid_index(lv.store, outer, inner) {
+					if !lenient and !TableVar.valid_index(lv.store, outer, inner) {
 						return Err(Bad({ table, offset: place + 4, reason: DeltaIndex }))
 					}
 					$program = LayoutVar.emit($program, LayoutVar.op_value, TableVar.i16(data, place + 2), outer.to_i64_wrap(), inner.to_i64_wrap())
@@ -1206,6 +1320,22 @@ LayoutVar := {
 		Ok({ program: $program, steps: $steps })
 	}
 
+	# Whether a condition's fields run past the table, by its format.
+	condition_truncated : List(U8), U64 -> Bool
+	condition_truncated = |data, place| {
+		format = TableVar.u16(data, place)
+		size = data.len()
+		if format == 1 or format == 2 {
+			!TableVar.fits(place, 8, size)
+		} else if format == 3 or format == 4 {
+			!TableVar.fits(place, 3, size) or !TableVar.fits(place, 3 + 3 * TableVar.u8(data, place + 2), size)
+		} else if format == 5 {
+			!TableVar.fits(place, 5, size)
+		} else {
+			False
+		}
+	}
+
 	## The index of the first record whose conditions hold at normalised
 	## coordinates `coords` (F2Dot14, one per axis), as HarfBuzz chooses it.
 	matching_record : FeatureVariations, LayoutVar, List(I16) -> Try(U64, [NoMatch])
@@ -1216,7 +1346,7 @@ LayoutVar := {
 		scalars = if (fv.uses_values and !coords.is_empty()) LayoutVar.exact_scalars(lv.store, coords) else []
 		var $r = 0
 		while $r < records {
-			if LayoutVar.holds(fv, lv, coords, scalars, $r) {
+			if LayoutVar.holds(fv, lv, coords, scalars, fv.starts.get($r) ?? 0, fv.starts.get($r + 1) ?? 0) {
 				return Ok($r)
 			}
 			$r = $r + 1
@@ -1261,13 +1391,131 @@ LayoutVar := {
 			$out
 		}
 
-	# Evaluate record r's postfix program on a stack of booleans. A checked
-	# program leaves exactly one value; each operation's operands are on
-	# the stack, so every index below is in bounds.
-	holds : FeatureVariations, LayoutVar, List(I16), List(U32), U64 -> Bool
-	holds = |fv, lv, coords, scalars, r| {
-		first = fv.starts.get(r) ?? 0
-		last = fv.starts.get(r + 1) ?? 0
+	## The lookup variations in force at normalised coordinates `coords`:
+	## for each lookup variation record, in the table's order, its feature,
+	## whether the feature keeps its own lookups (`defaults`), and the
+	## lookups of every condition of the record that holds there, in record
+	## order (duplicates possible; indices are not checked against the
+	## lookup list). Empty for a table without lookup variations.
+	lookup_variations_at : FeatureVariations, LayoutVar, List(I16) -> List({ feature : U64, defaults : Bool, lookups : List(U64) })
+	lookup_variations_at = |fv, lv, coords| {
+		count = fv.lookup_features.len()
+		if count == 0 {
+			return []
+		}
+		scalars = if (fv.uses_values and !coords.is_empty()) LayoutVar.exact_scalars(lv.store, coords) else []
+		var $out = List.with_capacity(count)
+		for v in 0..<count {
+			var $lookups = []
+			for q in (fv.lookup_record_starts.get(v) ?? 0)..<(fv.lookup_record_starts.get(v + 1) ?? 0) {
+				if LayoutVar.holds(fv, lv, coords, scalars, fv.condition_starts.get(q) ?? 0, fv.condition_starts.get(q + 1) ?? 0) {
+					at = fv.condition_lookups.get(q) ?? 0
+					if at != 0 {
+						for j in 0..<TableVar.u16(fv.data, at) {
+							$lookups = $lookups.append(TableVar.u16(fv.data, at + 2 + 2 * j))
+						}
+					}
+				}
+			}
+			$out = $out.append({ feature: fv.lookup_features.get(v) ?? 0, defaults: fv.lookup_defaults.get(v) ?? False, lookups: $lookups })
+		}
+		$out
+	}
+
+	## The lookups of feature `feature`, whose own lookups (after any
+	## feature table substitution) are `current`, under the lookup
+	## variations in force (`lookup_variations_at`): the first variation for
+	## the feature, as HarfBuzz takes it, replaces them with its lookups,
+	## plus `current` when it keeps them. Order and repeats do not matter to
+	## a plan, which applies each lookup once in lookup index order.
+	varied_lookups : List({ feature : U64, defaults : Bool, lookups : List(U64) }), U64, List(U64) -> List(U64)
+	varied_lookups = |variations, feature, current|
+		match variations.find_first(|v| v.feature == feature) {
+			Ok(v) => if (v.defaults) current.concat(v.lookups) else v.lookups
+			Err(_) => current
+		}
+
+	## Mark as used, in `used_in` (one entry per lookup of the table), the
+	## lookups the `FeatureVariations` of a `GSUB` or `GPOS` table can swap
+	## in at some location: those of every alternate feature table and of
+	## every lookup variation record (version 1.1). Parts that do not lie
+	## inside the table are passed over here: checking the list is
+	## `read_feature_variations`'s, and a font whose list is broken never
+	## selects them. The walk is bounded by the reading allowance.
+	variation_lookups : List(U8), List(Bool) -> List(Bool)
+	variation_lookups = |data, used_in| {
+		size = data.len()
+		limit = 8 * size + 16384
+		list = if (TableVar.u16(data, 2) >= 1 and TableVar.fits(0, 14, size)) TableVar.u32(data, 10) else 0
+		if list == 0 or !TableVar.fits(list, 8, size) {
+			return used_in
+		}
+		count = TableVar.u32(data, list + 4)
+		if !TableVar.fits(list + 8, 8 * count, size) {
+			return used_in
+		}
+		var $used = used_in
+		var $steps = 0
+		for r in 0..<count {
+			offset = TableVar.u32(data, list + 8 + 8 * r + 4)
+			table = list + offset
+			subs = TableVar.u16(data, table + 4)
+			if offset != 0 and TableVar.fits(table, 6 + 6 * subs, size) {
+				for k in 0..<subs {
+					feature = table + TableVar.u32(data, table + 6 + 6 * k + 2)
+					n = TableVar.u16(data, feature + 2)
+					$steps = $steps + n + 1
+					if TableVar.fits(feature, 4 + 2 * n, size) and $steps <= limit {
+						$used = LayoutVar.mark_used($used, data, feature + 4, n)
+					}
+				}
+			}
+		}
+		records_at = list + 8 + 8 * count
+		records = TableVar.u32(data, records_at)
+		if TableVar.u16(data, list + 2) >= 1 and TableVar.fits(records_at, 4, size) and TableVar.fits(records_at + 4, 6 * records, size) {
+			for v in 0..<records {
+				offset = TableVar.u32(data, records_at + 4 + 6 * v + 2)
+				table = list + offset
+				conditions = TableVar.u32(data, table + 6)
+				if offset != 0 and TableVar.fits(table, 10, size) and TableVar.fits(table + 10, 8 * conditions, size) {
+					for q in 0..<conditions {
+						indices = TableVar.u32(data, table + 10 + 8 * q + 4)
+						at = table + indices
+						n = TableVar.u16(data, at)
+						$steps = $steps + n + 1
+						if indices != 0 and TableVar.fits(at, 2 + 2 * n, size) and $steps <= limit {
+							$used = LayoutVar.mark_used($used, data, at + 2, n)
+						}
+					}
+				}
+			}
+		}
+		$used
+	}
+
+	# Mark the `n` lookup indices at `at` used; indices past the list are
+	# passed over.
+	mark_used : List(Bool), List(U8), U64, U64 -> List(Bool)
+	mark_used = |used_in, data, at, n| {
+		var $used = used_in
+		for j in 0..<n {
+			lookup = TableVar.u16(data, at + 2 * j)
+			if lookup < $used.len() {
+				# Checked against the list's length.
+				$used = $used.set(lookup, True) ?? []
+			}
+		}
+		$used
+	}
+
+	# Evaluate the postfix program `kinds[first ..< last]` (a record's
+	# condition set, or a lookup variation's condition) on a stack of
+	# booleans. A checked program leaves exactly one value; each
+	# operation's operands are on the stack, so every index below is in
+	# bounds.
+	holds : FeatureVariations, LayoutVar, List(I16), List(U32), U64, U64 -> Bool
+	holds = |fv, lv, coords, scalars, first, last| {
 		var $stack = List.repeat(False, last - first)
 		var $top = 0
 		for i in first..<last {

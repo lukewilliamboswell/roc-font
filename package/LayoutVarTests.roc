@@ -1126,3 +1126,85 @@ expect !gdef_ok(classes(u16(2).concat(u16(1)).concat(u16(1)).concat(u16(2)).conc
 expect !gdef_ok(classes(u16(2).concat(u16(2)).concat(u16(1)).concat(u16(4)).concat(u16(1)).concat(u16(3)).concat(u16(5)).concat(u16(3))), 10, Absent)
 expect !gdef_ok(u16(1).concat(u16(1)).concat(List.repeat(0, 8)), 10, Absent)
 expect !gdef_ok(u16(1).concat(u16(0)).concat(List.repeat(0, 4)), 10, Absent)
+
+# ------------------------------------------------------------ lookup variations
+
+# A GSUB 1.1 like `gsub_with`, without feature variation records, whose
+# FeatureVariations (version 1.1) has lookup variation records: a feature,
+# its flags (1 keeps the feature's own lookups) and conditions with the
+# lookups each adds (an empty condition for a null offset).
+gsub_lookup_variations : List((U64, U64, List((List(U8), List(U64))))) -> List(U8)
+gsub_lookup_variations = |records| {
+	m = records.len()
+	head = u16(1).concat(u16(1)).concat(u16(0)).concat(u16(14)).concat(u16(16)).concat(u32(18))
+	var $entries = []
+	var $blobs = []
+	var $at = 8 + 4 + 6 * m
+	for (feature, flags, conditions) in records {
+		k = conditions.len()
+		var $fields = []
+		var $parts = []
+		var $inner = 10 + 8 * k
+		for (condition, lookups) in conditions {
+			list = u16(lookups.len()).concat(lookups.join_map(u16))
+			$fields = $fields.concat(u32(if (condition.is_empty()) 0 else $inner)).concat(u32($inner + condition.len()))
+			$parts = $parts.concat(condition).concat(list)
+			$inner = $inner + condition.len() + list.len()
+		}
+		lookups_table = u16(1).concat(u16(0)).concat(u16(flags)).concat(u32(k)).concat($fields).concat($parts)
+		$entries = $entries.concat(u16(feature)).concat(u32($at))
+		$blobs = $blobs.concat(lookups_table)
+		$at = $at + lookups_table.len()
+	}
+	head.concat(u16(2)).concat(u16(3)).concat(u16(1)).concat(u16(1)).concat(u32(0)).concat(u32(m)).concat($entries).concat($blobs)
+}
+
+lookup_variations : List(U8), List(I16) -> List({ feature : U64, defaults : Bool, lookups : List(U64) })
+lookup_variations = |gsub, coords|
+	match LayoutVar.read_feature_variations(gsub, "GSUB", device_store, 1) {
+		Ok(fv) => LayoutVar.lookup_variations_at(fv, device_store, coords)
+		Err(_) => [{ feature: 99, defaults: False, lookups: [] }]
+	}
+
+two_features : List(U8)
+two_features = gsub_lookup_variations([(0, 1, [(cond_range(0, 0, 16384), [2]), ([], [1])]), (1, 0, [(cond_range(0, -16384, -1), [0])])])
+
+# Each record gives its feature, whether it keeps the feature's lookups,
+# and the lookups of the conditions that hold; a null condition holds.
+expect lookup_variations(two_features, [5]) == [{ feature: 0, defaults: True, lookups: [2, 1] }, { feature: 1, defaults: False, lookups: [] }]
+expect lookup_variations(two_features, [-5]) == [{ feature: 0, defaults: True, lookups: [1] }, { feature: 1, defaults: False, lookups: [0] }]
+
+# A variation replaces a feature's lookups, keeping them only when its flag
+# asks; a feature without one keeps its own.
+expect {
+	at = lookup_variations(two_features, [5])
+	LayoutVar.varied_lookups(at, 0, [9]) == [9, 2, 1] and LayoutVar.varied_lookups(at, 1, [9]) == [] and LayoutVar.varied_lookups(at, 5, [9]) == [9]
+}
+
+# Every lookup a lookup variation names is read, whatever the location.
+expect LayoutVar.variation_lookups(two_features, [False, False, False, False]) == [True, True, True, False]
+
+# OTS does not read lookup variations, so nothing in them is a problem: an
+# axis past the font reads coordinate 0, a condition past the table holds,
+# and a feature lookups table of another version counts as absent.
+expect lookup_variations(gsub_lookup_variations([(0, 0, [(cond_range(7, -1, 1), [2])])]), [5]) == [{ feature: 0, defaults: False, lookups: [2] }]
+expect {
+	gsub = gsub_lookup_variations([(0, 0, [(cond_range(0, -16384, -1), [2])])])
+	# The condition offset of the one record (FeatureLookupsTable at 18 + 18,
+	# its first field at 10) pointed past the end of the table.
+	broken = gsub.sublist({ start: 0, len: 46 }).concat(u32(4000)).concat(gsub.drop_first(50))
+	lookup_variations(broken, [5]) == [{ feature: 0, defaults: False, lookups: [2] }]
+}
+expect {
+	gsub = gsub_lookup_variations([(0, 1, [([], [2])])])
+	broken = gsub.sublist({ start: 0, len: 36 }).concat(u16(2)).concat(gsub.drop_first(38))
+	lookup_variations(broken, [5]) == [{ feature: 0, defaults: False, lookups: [] }]
+}
+
+# A lookup variation list past the end of the table drops the whole
+# FeatureVariations, as HarfBuzz's sanitizer drops it.
+expect {
+	gsub = gsub_lookup_variations([(0, 1, [([], [2])])])
+	broken = gsub.sublist({ start: 0, len: 26 }).concat(u32(1000)).concat(gsub.drop_first(30))
+	lookup_variations(broken, [5]) == []
+}

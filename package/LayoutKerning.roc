@@ -3,6 +3,7 @@ import Bytes
 import LayoutCommon
 import LayoutGsub
 import LayoutVar
+import LayoutGdef
 
 ## Pair positioning: the pair adjustment lookups of `GPOS` (lookup type
 ## 2, directly or through an extension) that a shaping plan lists, and the
@@ -15,7 +16,8 @@ import LayoutVar
 ## allocates a few lists per table, not per pair, pair set or glyph. The
 ## checked subtables are one flat list in lookup list order; `ends` holds,
 ## for each lookup of the lookup list, the end of its subtables in that
-## list (a lookup no feature reaches, or of another type, has none).
+## list (a lookup no feature reaches, or of another type, has none) and
+## its properties (`props`, see below).
 ##
 ## `Kern` is a `kern` format 0 subtable: `count` pairs of six bytes from
 ## `at`, sorted by their first and second glyph (reading checks the order,
@@ -27,11 +29,19 @@ import LayoutVar
 ## location `loc` (`LayoutVar`). Reading checks every device a query can
 ## reach (`LayoutVar.check_pair`). At the default location no device
 ## applies, and positioning reads the stored values only.
+##
+## Pairs are found as HarfBuzz finds them, with its skipping iterator: a
+## lookup's flags (`props`: the lookup flag plus its mark filtering set
+## times 65536, 0 for a lookup not read) decide, with the glyph classes of `GDEF`
+## (`gdef`), which glyphs it sees. A first glyph it ignores starts no
+## pair; between the first and second glyph it passes over glyphs it
+## ignores and default ignorable characters, so a pair is found across
+## skipped marks. A `kern` table ignores marks, as HarfBuzz applies it.
 LayoutKerning := {
 	data : List(U8),
 	common : LayoutCommon,
 	subtables : List(Pair),
-	ends : List(U64),
+	ends : List({ end : U64, props : U64 }),
 	digests : List({ a : U64, b : U64, c : U64 }),
 	kern_data : List(U8),
 	kern_subtables : List(Pair),
@@ -40,6 +50,7 @@ LayoutKerning := {
 	has_kern : Bool,
 	lv : LayoutVar,
 	loc : LayoutVar.Location,
+	gdef : LayoutGdef,
 }.{
 
 	Pair : [
@@ -51,7 +62,7 @@ LayoutKerning := {
 	## The `GPOS` part of reading. `deltas` are the offsets (in the table) of
 	## device tables whose variation index names no row of the `GDEF` store:
 	## variation data the font cannot use, which OTS does not check.
-	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List(U64), digests : List({ a : U64, b : U64, c : U64 }), deltas : List(U64) }
+	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List({ end : U64, props : U64 }), digests : List({ a : U64, b : U64, c : U64 }), deltas : List(U64) }
 
 	## The `kern` part of reading.
 	Legacy : { data : List(U8), subtables : List(Pair), digests : List({ a : U64, b : U64, c : U64 }) }
@@ -70,14 +81,14 @@ LayoutKerning := {
 
 	## No positioning.
 	none : LayoutKerning
-	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False, lv: LayoutVar.none(0), loc: LayoutVar.default_location }
+	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False, lv: LayoutVar.none(0), loc: LayoutVar.default_location, gdef: LayoutGdef.none }
 
 	## Put the two parts together; either may be absent (or dropped). `lv`
-	## is the `GDEF` store device deltas come from; the location is the
-	## default until `at` moves it.
-	combine : [Present(Gpos), Absent], [Present(Legacy), Absent], LayoutVar -> LayoutKerning
-	combine = |gpos, legacy, lv| {
-		base = { ..LayoutKerning.none, lv }
+	## is the `GDEF` store device deltas come from, `gdef` the glyph classes
+	## lookup flags use; the location is the default until `at` moves it.
+	combine : [Present(Gpos), Absent], [Present(Legacy), Absent], LayoutVar, LayoutGdef -> LayoutKerning
+	combine = |gpos, legacy, lv, gdef| {
+		base = { ..LayoutKerning.none, lv, gdef }
 		with_gpos = match gpos {
 			Present(g) => { ..base, data: g.data, common: g.common, subtables: g.subtables, ends: g.ends, digests: g.digests, has_gpos: True }
 			Absent => base
@@ -122,16 +133,20 @@ LayoutKerning := {
 		count = items.len()
 		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: List.repeat(0, count) }
 		for entry in plan {
-			start = if (entry.index == 0) 0 else kerning.ends.get(entry.index - 1) ?? 0
-			end = kerning.ends.get(entry.index) ?? 0
+			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end
+			lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
+			end = lookup.end
 			if end > start {
-				$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, entry.mask, $out, glyph_count, False)
+				# A mark filtering set the font lacks is turned off (HarfBuzz's
+				# `sanitize_lookup_props`).
+				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props)
+				$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
 			}
 		}
 		match legacy {
 			Kern(mask) => {
 				for k in 0..<kerning.kern_subtables.len() {
-					$out = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, mask, $out, glyph_count, True)
+					$out = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, { mask, props: LayoutKerning.ignore_marks }, $out, glyph_count, True)
 				}
 			}
 			NoKern => {}
@@ -139,16 +154,28 @@ LayoutKerning := {
 		$out
 	}
 
-	# One lookup (subtables `start ..< end`) over the whole run. With
-	# `split`, a `kern` table's value is split between the pair as HarfBuzz
-	# splits it: half (rounded down) on the first glyph's advance, the rest
-	# on the second glyph's advance and offset. The lists are local
-	# variables, not fields of a record passed around, so each stays unique
-	# and is changed in place.
-	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, Positions, U64, Bool -> Positions
-	apply_lookup = |kerning, data, subtables, digests, start, end, mask, positions, glyph_count, split| {
+	## The lookup flag HarfBuzz applies a `kern` table with.
+	ignore_marks : U64
+	ignore_marks = 0x08
+
+	# One lookup (subtables `start ..< end`) over the whole run, with its
+	# mask and properties. A `GPOS` lookup (HarfBuzz's `apply_forward` and
+	# `PairPos`) starts a pair at a glyph its mask and flags let it see and
+	# whose subtables may cover it, finds the second glyph with the skipping
+	# iterator (`next`), and moves past the pair it applies, or on by one.
+	# A `kern` table (`legacy`, HarfBuzz's `hb_kern_machine_t`) starts a
+	# pair at any glyph its mask selects and always moves to the second
+	# glyph (or past where the iterator stopped). The legacy value is split
+	# between the pair as HarfBuzz splits it: half (rounded down) on the
+	# first glyph's advance, the rest on the second glyph's advance and
+	# offset. The lists are local variables, not fields of a record passed
+	# around, so each stays unique and is changed in place.
+	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, { mask : U64, props : U64 }, Positions, U64, Bool -> Positions
+	apply_lookup = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy| {
 		{ items, dx, dy, ax } = positions
 		count = items.len()
+		mask = ctx.mask
+		props = ctx.props
 		var $items = items
 		var $dx = dx
 		var $dy = dy
@@ -156,44 +183,102 @@ LayoutKerning := {
 		var $i = 0
 		while $i + 1 < count {
 			first = $items.get($i) ?? LayoutGsub.no_item
-			second = $items.get($i + 1) ?? LayoutGsub.no_item
-			if !LayoutGsub.applies(first.mask, mask) or !LayoutGsub.applies(second.mask, mask) {
+			# The first subtable that may cover the first glyph (`end` for
+			# none); a `kern` table looks for the second glyph regardless.
+			from = if (LayoutGsub.applies(first.mask, mask) and (legacy or LayoutKerning.sees(kerning.gdef, first, props))) LayoutKerning.first_candidate(digests, start, end, first.glyph) else end
+			if from == end and !(legacy and LayoutGsub.applies(first.mask, mask)) {
 				$i = $i + 1
 			} else {
-				match LayoutKerning.pair(kerning, data, subtables, digests, start, end, first.glyph, second.glyph, glyph_count) {
-					Applied(found) => {
-						j = $i + 1
-						values =
-							if split {
-								kern = found.first.ax
-								kern1 = kern.shr_wrap(1)
-								kern2 = kern - kern1
-								{ first: { dx: 0, dy: 0, ax: kern1 }, second: { dx: kern2, dy: 0, ax: kern2 } }
-							} else {
-								{ first: found.first, second: found.second }
-							}
-						# `$i < j < count`, the length of every list.
-						$dx = $dx.set($i, ($dx.get($i) ?? 0) + values.first.dx) ?? []
-						$dy = $dy.set($i, ($dy.get($i) ?? 0) + values.first.dy) ?? []
-						$ax = $ax.set($i, ($ax.get($i) ?? 0) + values.first.ax) ?? []
-						$dx = $dx.set(j, ($dx.get(j) ?? 0) + values.second.dx) ?? []
-						$dy = $dy.set(j, ($dy.get(j) ?? 0) + values.second.dy) ?? []
-						$ax = $ax.set(j, ($ax.get(j) ?? 0) + values.second.ax) ?? []
-						if found.nonzero {
-							$items = LayoutKerning.unsafe_to_break($items, $i, j + 1)
-						}
-						if found.skips {
-							$items = LayoutKerning.unsafe_to_break($items, $i, j + 2)
-						}
-						$i = if (found.skips) j + 1 else j
+				match LayoutKerning.next($items, $i, mask, props, kerning.gdef) {
+					Stopped(after) => {
+						$i = if (legacy) after else $i + 1
 					}
-					NotApplied => {
-						$i = $i + 1
+					Found(j) => {
+						second = $items.get(j) ?? LayoutGsub.no_item
+						match LayoutKerning.pair(kerning, data, subtables, digests, from, end, first.glyph, second.glyph, glyph_count) {
+							Applied(found) => {
+								values =
+									if legacy {
+										kern = found.first.ax
+										kern1 = kern.shr_wrap(1)
+										kern2 = kern - kern1
+										{ first: { dx: 0, dy: 0, ax: kern1 }, second: { dx: kern2, dy: 0, ax: kern2 } }
+									} else {
+										{ first: found.first, second: found.second }
+									}
+								# `$i < j < count`, the length of every list.
+								$dx = $dx.set($i, ($dx.get($i) ?? 0) + values.first.dx) ?? []
+								$dy = $dy.set($i, ($dy.get($i) ?? 0) + values.first.dy) ?? []
+								$ax = $ax.set($i, ($ax.get($i) ?? 0) + values.first.ax) ?? []
+								$dx = $dx.set(j, ($dx.get(j) ?? 0) + values.second.dx) ?? []
+								$dy = $dy.set(j, ($dy.get(j) ?? 0) + values.second.dy) ?? []
+								$ax = $ax.set(j, ($ax.get(j) ?? 0) + values.second.ax) ?? []
+								if found.nonzero {
+									$items = LayoutKerning.unsafe_to_break($items, $i, j + 1)
+								}
+								if found.skips {
+									$items = LayoutKerning.unsafe_to_break($items, $i, j + 2)
+								}
+								$i = if (found.skips) j + 1 else j
+							}
+							NotApplied => {
+								$i = if (legacy) j else $i + 1
+							}
+						}
 					}
 				}
 			}
 		}
 		{ items: $items, dx: $dx, dy: $dy, ax: $ax }
+	}
+
+	# Whether lookup properties let a lookup see a glyph. Most lookups have
+	# no flags and see every glyph.
+	sees : LayoutGdef, LayoutGsub.Item, U64 -> Bool
+	sees = |gdef, item, props| props == 0 or LayoutGdef.check_glyph_property(gdef, item.glyph, LayoutGsub.gprops(item), props)
+
+	# The first of subtables `start ..< end` that may cover a first glyph
+	# (its digest does not rule the glyph out), or `end`.
+	first_candidate : List({ a : U64, b : U64, c : U64 }), U64, U64, U64 -> U64
+	first_candidate = |digests, start, end, glyph| {
+		var $k = start
+		while $k < end and !LayoutKerning.may_have(digests.get($k) ?? LayoutKerning.full, glyph) {
+			$k = $k + 1
+		}
+		$k
+	}
+
+	## HarfBuzz's skipping iterator moving on from glyph `i` for a `GPOS`
+	## lookup (`skipping_iterator_t::next`, without a match function): a
+	## glyph the lookup's flags ignore is skipped, and so is a default
+	## ignorable one (ZWNJ, ZWJ and hidden ones included, as for `GPOS`,
+	## whose lookups skip joiners automatically); the first other glyph is
+	## `Found` when its mask shares a bit with `mask`, and otherwise stops
+	## the search. `Stopped(after)` gives where
+	## HarfBuzz's `unsafe_to` points: after the glyph that stopped it, or
+	## the end of the run.
+	next : List(LayoutGsub.Item), U64, U64, U64, LayoutGdef -> [Found(U64), Stopped(U64)]
+	next = |items, i, mask, props, gdef| {
+		count = items.len()
+		var $k = i + 1
+		var $result = Stopped(count)
+		while $k < count {
+			item = items.get($k) ?? LayoutGsub.no_item
+			if !LayoutKerning.sees(gdef, item, props) {
+				$k = $k + 1
+			} else if LayoutGsub.is_default_ignorable(item) {
+				# `SKIP_MAYBE`: with no match function a maybe-skippable glyph
+				# is never a match, whatever its mask.
+				$k = $k + 1
+			} else if LayoutGsub.applies(item.mask, mask) {
+				$result = Found($k)
+				$k = count
+			} else {
+				$result = Stopped($k + 1)
+				$k = count
+			}
+		}
+		$result
 	}
 
 	## HarfBuzz's `unsafe_to_break(start, end)` within a run.
@@ -557,10 +642,14 @@ LayoutKerning := {
 				}
 		}
 
-	## Every pair adjustment lookup a feature of a `GPOS` table lists, with
-	## its script and feature lists, and the device tables of its value
-	## records checked against the `GDEF` store `lv`. Problems give their
-	## offset in the table. A device outside the table or of an unknown
+	## Every pair adjustment lookup a feature of a `GPOS` table lists
+	## (including the alternate feature tables and lookup variations of its
+	## `FeatureVariations`, which may swap lookups in at some locations),
+	## with its script and feature lists, its lookup properties, and the
+	## device tables of its value records checked against the `GDEF` store
+	## `lv`. A lookup whose flag uses a mark filtering set holds the set's
+	## index after its subtable offsets. Problems give their offset in the
+	## table. A device outside the table or of an unknown
 	## format breaks the table (OTS rejects it); a variation index outside
 	## the store is listed in `deltas`.
 	read_gpos : List(U8), U64, LayoutVar -> Try(Gpos, [Bad(U64)])
@@ -569,19 +658,23 @@ LayoutKerning := {
 		read_common = LayoutCommon.read(gpos)?
 		common = read_common.common
 		lookups = Bytes.u16(gpos, 8)
-		used = LayoutCommon.all_feature_lookups(common)
+		used = LayoutVar.variation_lookups(gpos, LayoutCommon.all_feature_lookups(common))
 		var $steps = read_common.steps
 		var $subtables = []
 		var $deltas = []
 		var $ends = List.with_capacity(common.lookup_count)
 		for index in 0..<common.lookup_count {
+			var $props = 0
 			if used.get(index) ?? False {
 				lookup = lookups + Bytes.u16(gpos, lookups + 2 + 2 * index)
 				kind = Bytes.u16(gpos, lookup)
+				flag = Bytes.u16(gpos, lookup + 2)
 				count = Bytes.u16(gpos, lookup + 4)
-				if !Bytes.fits(lookup, 6 + 2 * count, size) {
+				filtering = flag.bitwise_and(0x10) != 0
+				if !Bytes.fits(lookup, 6 + 2 * count + (if (filtering) 2 else 0), size) {
 					return Err(Bad(lookup))
 				}
+				$props = if (filtering) flag + Bytes.u16(gpos, lookup + 6 + 2 * count) * 65536 else flag
 				if kind == 2 or kind == 9 {
 					$steps = LayoutKerning.spend(gpos, $steps, count)?
 					for s in 0..<count {
@@ -614,7 +707,7 @@ LayoutKerning := {
 					}
 				}
 			}
-			$ends = $ends.append($subtables.len())
+			$ends = $ends.append({ end: $subtables.len(), props: $props })
 		}
 		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables), deltas: $deltas })
 	}

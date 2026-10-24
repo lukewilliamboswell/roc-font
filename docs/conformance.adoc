@@ -336,17 +336,18 @@ other than 0.
 
 |`direction`: `ltr`, `rtl`, `ttb`, `btt`
 |`--direction=`
-|`ltr` only
+|`ltr` and `rtl` from protocol 3 (`ltr` only before)
 |yes
 
 |`script`, `language` (strings)
 |`--script=`, `--language=`
-|no
+|from protocol 3
 |yes
 
 |`features`, `variations` (lists of hb-shape items, e.g. `"-kern"`, `"salt=2"`, `"wght=700"`)
 |`--features=`, `--variations=` (comma-joined)
-|`variations` from protocol 2 (as `axis=` flags)
+|`variations` from protocol 2 (as `axis=` flags), `features` from
+protocol 3 (as `feature=` flags)
 |yes
 
 |`font_size` (integer)
@@ -356,7 +357,7 @@ other than 0.
 
 |`cluster_level` (0–3)
 |`--cluster-level=`
-|no
+|0 and 1 from protocol 3
 |yes
 
 |`output`: list of `ned`, `no-clusters`, `no-positions`, `no-advances`
@@ -510,15 +511,64 @@ Regular, Merriweather and Fira Code at `wght` 300). `DRIVER_PROTOCOL` in
 `--variations=` values are sent in canonical decimal form (`.3` as `0.3`,
 `1.0` as `1`), which denotes the same number.
 
-Two protocol 2 requests need public queries the package does not offer
-yet, so the driver answers them as unsupported rather than reading tables
-itself (the driver uses only the public API):
+The driver uses only the public API: `instance=<n>` takes the axis
+values `Font.instances` lists (an index past them answers
+`unsupported:instance`, which the oracle never records), and `coords`
+prints `Font.coordinates`.
 
-* `instance=<n>` answers `unsupported:instance`: there is no way to list a
-  font's named instances and their coordinates.
-* `coords` on a variable font answers `unsupported:kind=coords`: the
-  normalised coordinates `Font.at` resolves are not observable. On a font
-  `Font.axes` reports static (no axes) the answer is `coords:`.
+*Protocol 3* (since 2026-10-24) adds the shaping options of `shape`
+requests, so cases with a script, a direction, features or a cluster level
+are measured instead of reported unsupported:
+
+[cols="1,3",options="header"]
+|===
+|Flag |Meaning for the driver
+
+|`direction=<d>`
+|`Font.ShapeOptions.direction`: `ltr` is `LeftToRight`, `rtl`
+`RightToLeft`. Vertical directions are answered `unsupported:--direction=ttb`
+(or `btt`) without sending the case.
+
+|`script=<code>`
+|`Font.ShapeOptions.script`, passed through as written (roc-font
+canonicalises ISO 15924 codes as HarfBuzz does).
+
+|`language=<tag>`
+|`Font.ShapeOptions.language`, passed through as written.
+
+|`cluster-level=<n>`
+|`Font.ShapeOptions.clusters`: `0` is `Graphemes`, `1` `Characters`. Levels
+2 and 3 are answered `unsupported:--cluster-level=<n>`.
+
+|`feature=<tag>:<value>:<start>:<end>`
+|one `Font.Feature`, repeatable. `value`, `start` and `end` are decimal;
+`end` is `*` for the end of the text (`Feature.end`'s default), so
+`<tag>:<value>:0:*` is a feature over the whole text. `start` and `end`
+count in the units of the request's clusters (code point indices, or
+UTF-8 byte offsets with `utf8-clusters`), as hb-shape's feature ranges do.
+|===
+
+`_common.driver_features` turns a case's hb-shape feature strings
+(`-liga`, `aalt=2`, `kern[3:5]=0`, `kern[3:]`) into flags exactly as
+`tools/oracle/extract.py` hands them to HarfBuzz: one entry per tag in
+first-seen order, a later global value replacing an earlier one, each
+tag's ranges in order, an open range ending at `*` (HarfBuzz's global
+end). A feature string the oracle refuses is answered
+`unsupported:--features=...`. Tags with `,`, `:` or `*` cannot be carried
+and are refused the same way.
+
+*Guessed script and direction.* The oracle shapes with the script and
+direction HarfBuzz guesses for the text when a case gives none
+(`hb_buffer_guess_segment_properties`), and records them in the record's
+`detail` (`{"direction": "rtl", "script": "Arab"}`; `"None"` for no
+script). For an imported HarfBuzz case (one whose `source` names a
+HarfBuzz version: everything under `harfbuzz/`, `hb-curated/` and
+`hb-pending/`), `conformance.py` passes that `detail` to
+`_common.driver_request`, which sends the guessed `script=` and
+`direction=` where the case has no `script` or `direction`: roc-font does
+not detect scripts (that belongs to the `unicode` package), so following
+HarfBuzz's guess is what makes the comparison fair. Our own cases are sent
+with their own options only, so they test the default path a caller gets.
 
 `_common.driver_request` writes requests; `Case.request` parses them (with
 expects for every field and error). By hand:
@@ -537,17 +587,19 @@ roc test tools/driver/Case.roc
 newer, and sends every runnable case in one process. Measured on
 2026-10-24 with protocol 2: building takes about 7 s; the 6117 requests of
 the full local run (our cases, the curated slice and the 6203-case
-HarfBuzz import) take 0.12–0.13 s natively and about 65 s with
+HarfBuzz import) take 0.12–0.13 s natively (protocol 3: 6623 requests,
+0.25 s) and about 65 s with
 `--opt=interpreter`, which gives the same result for every case.
 
 What the driver does with today's public API, and the limits that follow:
 
-* `shape` and `width` call `Font.shape_scalars` with the default
-  `ShapeOptions`, passing each code point's index (or UTF-8 byte offset with
-  `utf8-clusters`) as its offset, so the run's clusters are what hb-shape
-  prints. Only left-to-right text with the default features; other
-  options stay `unsupported` until the support rules in
-  `_common.driver_request` and `glyphs` in `main.roc` pass them on.
+* `shape` and `width` call `Font.shape_scalars` with the request's
+  `ShapeOptions` (the defaults without shaping flags), passing each code
+  point's index (or UTF-8 byte offset with `utf8-clusters`) as its offset,
+  so the run's clusters are what hb-shape prints. Vertical text, cluster
+  levels 2 and 3, `--remove-default-ignorables` on text with
+  default-ignorable characters and font sizes other than the units per em
+  stay `unsupported`.
 * `advances`, `metrics` and `extents` call `Font.advance`, `Font.metrics`
   and `Font.extents` on the font at the request's location. roc-font's
   descent is a depth (positive below the baseline); the driver negates it
@@ -889,7 +941,20 @@ supported since extractor `shape` 2; 264 records are on variable fonts and
 carry a resolved location. The
 driver (protocol 2) agreed on 424, 805 were unsupported (an option the driver or the oracle cannot honour yet), and 4829
 differed, 3825 of them because AdobeBlank2 maps everything through cmap
-format 13, which the reader rejects.
+format 13, which the reader rejects. With protocol 3 (2026-10-24), which
+passes the case's shaping options and HarfBuzz's guessed script and
+direction, AOTS went from 276 unsupported to 203 agreeing (the 71 that
+differ are GPOS lookups other than pair adjustment and cmap glyph ids past
+the glyph count), in-house measured 56 more cases (4091 agree, 870
+differ, 68 unsupported) and text-rendering-tests agree on 232. In-house
+lost 109 agreements that had held only because the script was not passed:
+the Tibetan cases, whose fonts list their substitutions under `DFLT`
+`rlig` as well as under `tibt` `abvs` and `blws`; with the guessed script
+`Tibt`, roc-font's default shaper chooses `tibt` and does not turn on
+`abvs` and `blws`, which HarfBuzz's complex-script shaping does. The
+differing in-house cases are complex scripts (667), GPOS beyond pair
+adjustment (37), variations (9), AAT (4) and other (153, mostly Thai
+`sara-am` and mark attachment through ligature components).
 
 === Curated imports
 

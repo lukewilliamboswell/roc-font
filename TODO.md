@@ -37,9 +37,6 @@ repositories are relative to `~/Documents/Github/`.
   (`LayoutGsub.check_glyph_property` and glyph properties are ready).
 - [ ] GPOS lookups reached only through FeatureVariations alternates;
   FeatureVariations lookup-variation records (HarfBuzz's 1.1 extension).
-- [ ] The driver passes script, language, direction and features (from
-  the case, or the oracle's guessed `detail.script`/`direction`): turns
-  hundreds of unsupported HarfBuzz cases into measured ones.
 - [ ] Restore an in-place fast path for ligature lookups (the adversarial
   100-lookup case went from 7.7x to 10.8x HarfBuzz).
 - [ ] Decide the policy for cmap glyph ids past `numGlyphs` (HarfBuzz
@@ -77,22 +74,6 @@ Chrome widths agree on package-mermaid's oracle texts.
   differences, 15 strings exact against HarfBuzz. Rebase on roc-pdf's
   `main` and switch to the release URL after 0.1.0.
 
-### API changes from consumer evidence (before 0.1.0)
-
-- [ ] Report which feature produced each glyph without widening `Run`
-  (roc-pdf's `Text.Substitution`, Ligature vs ManyToOne): e.g.
-  `shape_traced` returning `origins : List([Mapped, Substituted({ feature }),
-  Ligature({ feature, components }), Inserted({ feature })])`.
-- [ ] Never return a partial run silently: when a budget stops shaping,
-  say so (`shape_checked -> Try(Run, [OverBudget(...)])` or a completeness
-  fact), per §6.3 and "never silently clamp".
-- [ ] Cluster offsets: `Shaper.decode` clamps at `0xFFFFFFFF`; use `U64`
-  for `Run.clusters`, scalar offsets and `Feature.start`/`end`, or define
-  and document the bound without clamping.
-- [ ] Document the run's guarantees: clusters never decrease in
-  left-to-right runs, one cluster's glyphs are adjacent, a missing
-  character maps to glyph 0 (with the missing flag).
-
 ### Release
 
 - [ ] Final API review with consumer and example evidence: `width` with
@@ -118,8 +99,9 @@ Chrome widths agree on package-mermaid's oracle texts.
    `KernelFontPlan.roc`).
 3. GPOS single, cursive, mark attachment, contextual positioning.
 4. Outlines as a listing; CFF and CFF2.
-5. Complex-script shapers (Arabic, Indic, USE, Hangul) with a per-script
-   support matrix.
+5. Complex-script shapers (Arabic, Indic, USE, Hangul, Tibetan, Thai)
+   with a per-script support matrix; 109 in-house Tibetan cases need
+   `abvs`/`blws`, and Thai `sara-am` 52.
 6. WOFF/WOFF2 unwrapping outside the core.
 
 ## Open questions

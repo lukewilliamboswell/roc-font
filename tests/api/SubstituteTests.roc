@@ -51,7 +51,7 @@ shaped = |gsub, glyphs|
 	}
 
 # Glyphs with their clusters as indices into the input glyphs.
-shaped_items : List(U8), List(U64) -> List({ glyph : U32, cluster : U32 })
+shaped_items : List(U8), List(U64) -> List({ glyph : U32, cluster : U64 })
 shaped_items = |gsub, glyphs|
 	match read(gsub) {
 		Ok(font) => {

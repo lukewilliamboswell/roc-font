@@ -23,7 +23,7 @@ read = |tables|
 		Err(_) => crash "a test font could not be read"
 	}
 
-Expected : { glyphs : List(U32), clusters : List(U32), advances : List(I32), flags : List(U8) }
+Expected : { glyphs : List(U32), clusters : List(U64), advances : List(I32), flags : List(U8) }
 
 agrees : Font.Run, Expected -> Bool
 agrees = |run, expected|
@@ -97,6 +97,21 @@ expect {
 	run.glyphs == [2, 456, 2] and run.clusters == [10, 10, 12] and run.flags == [0, 0, 1] and run.advances.map(|a| a.x) == [1273, 1273, 1413]
 }
 expect Font.shape_scalars(inter, Font.plan(inter, latin), []) == Font.shape(inter, "", latin)
+
+# Offsets past 2^32 are clusters unchanged, never clamped, and feature
+# ranges reach them.
+expect {
+	big = 5_000_000_000
+	run = Font.shape_scalars(inter, Font.plan(inter, latin), [{ scalar: 'A', offset: big }, { scalar: 'V', offset: big + 1 }])
+	run.clusters == [big, big + 1]
+}
+expect {
+	big = 5_000_000_000
+	gsub = layout_with([{ script: "latn", langs: [{ tag: "dflt", features: [0] }] }], ["smcp"])
+	font = read(FontBuild.replace(FontBuild.basic, "GSUB", gsub))
+	plan = Font.plan(font, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "smcp", start: big + 1 }] })
+	Font.shape_scalars(font, plan, [{ scalar: 'A', offset: big }, { scalar: 'A', offset: big + 1 }]).glyphs == [1, 2]
+}
 
 expect Font.width(inter, "AV") == 1273 + 1413
 expect Font.width(inter, "") == 0

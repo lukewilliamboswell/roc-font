@@ -16,7 +16,7 @@ inter = match Face.read(inter_file, { face: 0, strict: False, max_bytes: 268_435
 	Err(_) => crash "the Inter test font could not be read"
 }
 
-shaped : Str, [Graphemes, Characters], [FromScript, LeftToRight, RightToLeft] -> { glyphs : List(U32), clusters : List(U32), flags : List(U8) }
+shaped : Str, [Graphemes, Characters], [FromScript, LeftToRight, RightToLeft] -> { glyphs : List(U32), clusters : List(U64), flags : List(U8) }
 shaped = |text, level, direction| {
 	options = { script: "Latn", language: "", direction, features: [], growth: 64, operations: 1024 }
 	run = Shaper.shape(inter, Face.current(inter), Shaper.plan_with_clusters(inter, options, level), Shaper.decode(text))

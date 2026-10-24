@@ -13,6 +13,7 @@ import TableName
 import TablePost
 import TableVar
 import LayoutGsub
+import LayoutGdef
 import LayoutKerning
 import LayoutVar
 
@@ -53,6 +54,7 @@ Face := {
 	post : TablePost,
 	name : TableName,
 	gsub : LayoutGsub,
+	gdef : LayoutGdef,
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
 	hvar : [Present(TableVar.Hvar), Absent],
@@ -284,6 +286,10 @@ Face := {
 					match (advances, boxes, cmap) {
 						(Ok(a), Ok(b), Ok(c)) => {
 							no_lv = LayoutVar.none(0)
+							gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
+								Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
+								_ => LayoutGdef.none
+							}
 							Ok({
 								units_per_em: h.units_per_em,
 								glyph_count,
@@ -295,7 +301,8 @@ Face := {
 								post: Face.present(post ?? Absent, TablePost.none),
 								name: Face.present(name ?? Absent, TableName.none),
 								gsub: gsub ?? LayoutGsub.none,
-								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv),
+								gdef,
+								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
 								hvar: if (keep_variations) variations.hvar else Absent,
 								mvar: if (keep_variations) variations.mvar else Absent,
@@ -818,6 +825,16 @@ Face := {
 
 	gsub : Face -> LayoutGsub
 	gsub = |face| face.gsub
+
+	## The face's character map, checked when the face was read.
+	cmap : Face -> TableCmap
+	cmap = |face| face.cmap
+
+	## The face's `GDEF` glyph classes, mark attachment classes and mark
+	## glyph sets, as lookup flags use them (`LayoutGdef.none` without a
+	## `GDEF`, or for one HarfBuzz would drop).
+	gdef : Face -> LayoutGdef
+	gdef = |face| face.gdef
 
 	kerning : Face -> LayoutKerning
 	kerning = |face| face.kerning

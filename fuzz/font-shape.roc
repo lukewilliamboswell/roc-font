@@ -22,7 +22,10 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## 16384 in all), HarfBuzz's bound; only the unsafe-to-break flag is set;
 ## the same with features turned off over part of the text; shaping with a
 ## plan agrees with shaping directly, and so does shaping scalars with
-## their offsets; the width is the sum of the advances. Shaping 8 times the
+## their offsets, tracing them (with one origin per glyph, the same twice)
+## and checking the budgets (complete, or over budget with that same run
+## and at least one bound named); the width is the sum of the advances.
+## Shaping 8 times the
 ## text (16 against 2 copies) must not take more than about 8 times the
 ## allocations, and must free what it allocates.
 test! : List(U8) => Fuzz.Outcome
@@ -45,11 +48,28 @@ test! = |bytes| {
 	if Str.inspect(Font.shape_scalars(font, plan, scalars)) != Str.inspect(ltr) {
 		crash "shaping scalars with their offsets differs from shaping the text"
 	}
+	traced = Font.shape_traced(font, plan, scalars)
+	if Str.inspect(traced.run) != Str.inspect(ltr) or traced.origins.len() != ltr.glyphs.len() {
+		crash "a traced run differs from the run, or its origins are not index-aligned"
+	}
+	if Str.inspect(Font.shape_traced(font, plan, scalars).origins) != Str.inspect(traced.origins) {
+		crash "tracing the same text twice gave different origins"
+	}
+	match Font.shape_checked(font, plan, text) {
+		Ok(run) =>
+			if Str.inspect(run) != Str.inspect(ltr) {
+				crash "a checked run differs from the run"
+			}
+		Err(OverBudget({ run, budgets })) =>
+			if Str.inspect(run) != Str.inspect(ltr) or budgets.is_empty() {
+				crash "an over-budget run differs from the run, or names no bound"
+			}
+	}
 	rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft, script: "Hebr" })
 	check_run!(n, rtl, True)
 	latin_rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft })
 	check_run!(n, latin_rtl, True)
-	half = (n // 2).to_u32_wrap()
+	half = n // 2
 	ranged = Font.shape(font, text, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "liga", value: 0, end: half }, Font.Feature.{ tag: "kern", value: 0, start: half }, Font.Feature.{ tag: "smcp" }] })
 	check_run!(n, ranged, False)
 	measured = Font.width(font, text)
@@ -106,7 +126,7 @@ split_at_marker = |bytes| {
 }
 
 ## Scalars of valid UTF-8 with the byte offset each starts at.
-decode : List(U8) -> List({ scalar : U32, offset : U32 })
+decode : List(U8) -> List({ scalar : U32, offset : U64 })
 decode = |bytes| {
 	var $out = []
 	var $i = 0
@@ -117,7 +137,7 @@ decode = |bytes| {
 		for k in 1..<len {
 			$cp = $cp.shl_wrap(6).bitwise_or((bytes.get($i + k) ?? 0).to_u32().bitwise_and(0x3F))
 		}
-		$out = $out.append({ scalar: $cp, offset: $i.to_u32_wrap() })
+		$out = $out.append({ scalar: $cp, offset: $i })
 		$i = $i + len
 	}
 	$out

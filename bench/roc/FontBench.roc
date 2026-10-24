@@ -117,7 +117,7 @@ FontBench :: {}.{
 	# folded with wrapping (kerning is often negative).
 	kerning : Font, Font.ShapePlan, List(U32) -> U64
 	kerning = |font, plan, code_points| {
-		shaped = Font.shape_scalars(font, plan, code_points.map_with_index(|scalar, i| { scalar, offset: i.to_u32_wrap() }))
+		shaped = Font.shape_scalars(font, plan, code_points.map_with_index(|scalar, i| { scalar, offset: i }))
 		var $sum = 0.I64
 		for i in 0..<shaped.glyphs.len() {
 			g = shaped.glyphs.get(i) ?? 0
@@ -133,7 +133,7 @@ FontBench :: {}.{
 		var $sum = 0.U64
 		for i in 0..<shaped.glyphs.len() {
 			g = (shaped.glyphs.get(i) ?? 0).to_u64()
-			c = (shaped.clusters.get(i) ?? 0).to_u64()
+			c = shaped.clusters.get(i) ?? 0
 			adv = (shaped.advances.get(i) ?? { x: 0, y: 0 }).x.to_i64().to_u64_wrap()
 			$sum = $sum.plus_wrap(g + c).plus_wrap(adv)
 		}

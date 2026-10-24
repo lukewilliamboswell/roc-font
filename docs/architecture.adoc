@@ -345,7 +345,7 @@ Run : {
 	glyphs : List(U32),
 	advances : List({ x : I32, y : I32 }),
 	offsets : List({ x : I32, y : I32 }),
-	clusters : List(U32),   # UTF-8 byte offset into the input text
+	clusters : List(U64),   # UTF-8 byte offset into the input text, never clamped
 	flags : List(U8),       # unsafe-to-break, unsafe-to-concat
 }
 ----
@@ -558,18 +558,23 @@ axes : Font -> List(Axis)
 # Shaping (§5.2-5.5, §6)
 Direction : [FromScript, LeftToRight, RightToLeft]
 ClusterLevel : [Graphemes, Characters]
-Feature := { tag : Str, value : U32 ?? 1, start : U32 ?? 0, end : U32 ?? 4_294_967_295 }  # UTF-8 byte range
+Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }  # UTF-8 byte range
 ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }   # per input scalar; floor 16384
 ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47; "" unknown
                   direction : Direction ?? FromScript, features : List(Feature) ?? [],
                   clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }),
-        clusters : List(U32), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break, bit 1 missing character
+        clusters : List(U64), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break, bit 1 missing character
 ShapePlan                                        # opaque, reusable for one Font and options
 plan : Font, ShapeOptions -> ShapePlan
 shape : Font, Str, ShapeOptions -> Run
 shape_planned : Font, ShapePlan, Str -> Run
-shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U32 }) -> Run   # for a paragraph layer
+shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run   # for a paragraph layer
+GlyphOrigin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }),
+               Multiple({ feature : Str }), Inserted({ feature : Str })]
+Budget : [Growth, Operations, Depth]
+shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> { run : Run, origins : List(GlyphOrigin) }
+shape_checked : Font, ShapePlan, Str -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
 width : Font, Str -> I32                         # sum of advances with default options
 
 # Default fonts (§5.8), each prepared at compile time
@@ -584,6 +589,10 @@ text; an empty script leaves the direction to the text. `Graphemes` and
 never decrease in a left-to-right run and one cluster's glyphs are
 adjacent; flag bit 1 marks glyph 0 drawn for a character the font does
 not map, where a browser would fall back to another font.
+`shape_traced` reports which substitution produced each glyph and the
+feature of the plan step that made it (a contextual rule's substitutions
+are credited to the rule's feature); the origin travels in spare bits of
+the glyph record, so untraced shaping allocates nothing more.
 
 The seed's low-level `substitute` and `kerning` are removed: `shape`
 covers them with clusters and positions, and `shape_scalars` serves callers
@@ -632,9 +641,19 @@ enough never to change a result on a legitimate font: output length at most
 `max(64 n, 16384)` glyphs and lookup applications at most
 `max(1024 n, 16384)`, following HarfBuzz, with nested lookup depth bounded
 by `Limits.max_depth` (default 64, walked with an explicit frame stack). Roc is efficient enough that a tight budget buys nothing but
-disagreement with the reference. Exceeding a budget stops the stage and
-returns the run computed so far, which is total and finite; the budget, not
-the text, is then documented as the cause of any oracle difference.
+disagreement with the reference. Exceeding a budget stops substitution where it is: a multiple
+substitution that would outgrow the run is not made, and a contextual rule
+calls no further lookups. The run made so far is then finished as usual:
+total, finite, index-aligned, and still drawing the whole text. A partial
+run is never returned silently: `shape_checked` returns
+`Err(OverBudget({ run, budgets }))`, naming every bound that stopped work
+(`Growth` and `Operations` from `ShapeLimits`, `Depth` from
+`Limits.max_depth`), and `Ok(run)` otherwise; the other shaping calls
+return the same run and say so. The fact is not a field of `Run` (§5.4):
+on every legitimate font the run is complete, so most callers would carry
+the field and ignore it. Recording it costs nothing on the default path,
+because the stop is noted in a word the substitution buffer already
+carries.
 
 [#testing]
 == 7 Verification

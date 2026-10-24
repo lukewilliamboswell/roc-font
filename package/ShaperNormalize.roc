@@ -33,7 +33,7 @@ ShaperNormalize :: {}.{
 	## modifiers, the second of a pair of regional indicators, ZWJ and an
 	## Extended_Pictographic character after it, halfwidth katakana voiced
 	## marks and tag characters continue the grapheme before them.
-	prepare : List({ scalar : U32, offset : U32 }), U64 -> { chars : List(Char), found : Found }
+	prepare : List({ scalar : U32, offset : U64 }), U64 -> { chars : List(Char), found : Found }
 	prepare = |scalars, mask| {
 		n = scalars.len()
 		var $chars = List.with_capacity(n)
@@ -76,7 +76,7 @@ ShaperNormalize :: {}.{
 			if props.bitwise_and(cont) != 0 {
 				$continuations = True
 			}
-			$chars = $chars.append({ cp: u, glyph: 0, cluster: s.offset.to_u64(), mask, props })
+			$chars = $chars.append({ cp: u, glyph: 0, cluster: s.offset, mask, props })
 			if extra {
 				# The pictographic character after a ZWJ continues the grapheme.
 				nx = scalars.get($i + 1) ?? { scalar: 0, offset: 0 }
@@ -85,7 +85,7 @@ ShaperNormalize :: {}.{
 				if q.bitwise_and(ShaperUnicode.ignorable) != 0 {
 					$ignorables = True
 				}
-				$chars = $chars.append({ cp: v, glyph: 0, cluster: nx.offset.to_u64(), mask, props: q.bitwise_or(cont) })
+				$chars = $chars.append({ cp: v, glyph: 0, cluster: nx.offset, mask, props: q.bitwise_or(cont) })
 				$i = $i + 2
 			} else {
 				$i = $i + 1

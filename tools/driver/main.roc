@@ -18,6 +18,8 @@ import Case
 ##
 ## Protocol 2: each distinct (font path, face) is read once; every request
 ## then measures at its own location with `Font.at`, which is cheap.
+## Protocol 3: shaping requests carry their script, language, direction,
+## features and cluster level.
 ##
 ## A result is hb-shape notation with glyph ids, `width:<n>`, `read:accept`,
 ## `read:reject`, `read:drop=<tags>`, a font-fact result (`coords:`,
@@ -126,12 +128,12 @@ answer : Font, List(Str), Case.Request -> Str
 answer = |font, dropped, req|
 	match req.kind {
 		Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
-		Width => Case.width(glyphs(font, req.settings, req.scalars))
+		Width => Case.width(glyphs(font, req.settings, req.shaping, req.scalars))
 		Shape =>
 			if req.settings.font_size != 0 and req.settings.font_size != Font.units_per_em(font).to_u64() {
 				"unsupported:--font-size=${req.settings.font_size.to_str()}"
 			} else {
-				Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
+				Case.serialize(req.settings, glyphs(font, req.settings, req.shaping, req.scalars))
 			}
 		Coords => "coords:${Str.join_with(Font.coordinates(font).map(|c| "${c.tag}=${c.value.to_str()}"), ",")}"
 		Advances(which) => Case.advances(ids(font, which).map(|g| Font.advance(font, g).to_i64()))
@@ -168,15 +170,19 @@ ids = |font, which|
 		Listed(list) => list
 	}
 
-# Shape the scalars with the default options. Each scalar's offset is its
-# UTF-8 byte offset (`utf8-clusters`) or its index, so the run's clusters
-# are already what hb-shape prints. A code point the font does not map is
-# drawn with glyph 0, as in hb-shape.
-glyphs : Font, Case.Settings, List(U32) -> List(Case.Glyph)
-glyphs = |font, settings, scalars| {
+# Shape the scalars with the request's shaping options (the defaults
+# without shaping flags). Each scalar's offset is its UTF-8 byte offset
+# (`utf8-clusters`) or its index, so the run's clusters are already what
+# hb-shape prints, and feature ranges count in the same units, as
+# hb-shape's do. A code point the font does not map is drawn with glyph
+# 0, as in hb-shape.
+glyphs : Font, Case.Settings, Case.Shaping, List(U32) -> List(Case.Glyph)
+glyphs = |font, settings, shaping, scalars| {
 	offsets = Case.utf8_offsets(scalars)
-	items = scalars.map_with_index(|scalar, i| { scalar, offset: (if (settings.utf8) offsets.get(i) ?? 0 else i).to_u32_wrap() })
-	shaped = Font.shape_scalars(font, Font.plan(font, Font.ShapeOptions.{}), items)
+	items = scalars.map_with_index(|scalar, i| { scalar, offset: if (settings.utf8) offsets.get(i) ?? 0 else i })
+	features = shaping.features.map(|f| Font.Feature.{ tag: f.tag, value: f.value, start: f.start, end: f.end })
+	options = Font.ShapeOptions.{ script: shaping.script, language: shaping.language, direction: shaping.direction, features, clusters: shaping.clusters }
+	shaped = Font.shape_scalars(font, Font.plan(font, options), items)
 	var $out = List.with_capacity(shaped.glyphs.len())
 	for i in 0..<shaped.glyphs.len() {
 		advance = shaped.advances.get(i) ?? { x: 0, y: 0 }

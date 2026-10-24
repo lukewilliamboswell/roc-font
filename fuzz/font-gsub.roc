@@ -23,7 +23,11 @@ import build.FontBuild
 ## Contract: both fonts read; with ligatures off the glyphs are the text's;
 ## shaping the text gives the same run with both fonts (the extra lookups
 ## never match it) and the same run twice; runs are index-aligned with
-## clusters in range and in order, within HarfBuzz's growth bound. Reading
+## clusters in range and in order, within HarfBuzz's growth bound; tracing
+## gives the same run with one origin per glyph, `Mapped` for every band
+## glyph (lookups write only glyphs 1 to 15) and `liga` for every
+## substituted one, a ligature joining at least two glyphs; checking the
+## budgets finds the run complete. Reading
 ## and planning take at most `10 × small + 256` allocations for 8 times the
 ## lookups (linear in lookups), shaping the same text with a plan costs no
 ## more allocations with 8 times the lookups (constant per call), and
@@ -213,7 +217,49 @@ check! = |file, text, source| {
 		crash "shaping the same text twice gave different runs"
 	}
 	check_run!(n, Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft }), True)
+	plan = Font.plan(font, Font.ShapeOptions.{})
+	traced = Font.shape_traced(font, plan, scalars_of(text))
+	if Str.inspect(traced.run) != Str.inspect(run) or traced.origins.len() != run.glyphs.len() {
+		crash "a traced run differs from the run, or its origins are not index-aligned"
+	}
+	traced.origins.map2(run.glyphs, |o, g| (o, g)).for_each!(
+		|(origin, glyph)| {
+			fits = match origin {
+				# Output glyphs in the text are mapped too; band glyphs only.
+				Mapped => True
+				Substituted({ feature }) => glyph < 16 and feature == "liga"
+				Multiple({ feature }) => glyph < 16 and feature == "liga"
+				Inserted({ feature }) => glyph < 16 and feature == "liga"
+				Ligature({ feature, components }) => glyph < 16 and feature == "liga" and components >= 2
+			}
+			if !fits {
+				crash "glyph ${glyph.to_str()} has origin ${Str.inspect(origin)}"
+			}
+		},
+	)
+	if Font.shape_checked(font, plan, text).is_err() {
+		crash "a small text went over budget"
+	}
 	font
+}
+
+## Scalars of valid UTF-8 text with the byte offset each starts at.
+scalars_of : Str -> List({ scalar : U32, offset : U64 })
+scalars_of = |text| {
+	bytes = text.to_utf8()
+	var $out = []
+	var $i = 0
+	while $i < bytes.len() {
+		b = (bytes.get($i) ?? 0).to_u32()
+		len = if (b < 0x80) 1 else if (b < 0xE0) 2 else if (b < 0xF0) 3 else 4
+		var $cp = if (len == 1) b else if (len == 2) b.bitwise_and(0x1F) else if (len == 3) b.bitwise_and(0x0F) else b.bitwise_and(0x07)
+		for k in 1..<len {
+			$cp = $cp.shl_wrap(6).bitwise_or((bytes.get($i + k) ?? 0).to_u32().bitwise_and(0x3F))
+		}
+		$out = $out.append({ scalar: $cp, offset: $i })
+		$i = $i + len
+	}
+	$out
 }
 
 ## A run's lists are index-aligned, its clusters lie inside the text and

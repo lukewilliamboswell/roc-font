@@ -910,17 +910,21 @@ def has_glyph_names(expected: str) -> bool:
 # utf8-clusters and font-size=<n>, and from protocol 2 face=<n>,
 # instance=<n>, weight=<name or n>, width=<name or percent>,
 # optical-size=<FontDefault or px> and axis=<tag>:<value> (repeatable, in
-# order; later wins). The driver answers `<tag> TAB <result>` per request,
+# order; later wins), and from protocol 3 direction=<ltr|rtl>,
+# script=<code>, language=<tag>, cluster-level=<0|1> and
+# feature=<tag>:<value>:<start>:<end or *> (repeatable, in the order the
+# oracle passes features to HarfBuzz). The driver answers `<tag> TAB <result>` per request,
 # in order, plus a third column with the reader's problems under --explain.
 # docs/conformance.adoc ("The driver") is the full description.
 DRIVER_NOOP_HB_OPTIONS = ("--font-funcs=ot", "--font-funcs=ft", "--single-par")
 
 # The protocol tools/driver speaks. 1: shape, read and width at the font's
 # default location, face 0. 2: also the font-fact kinds, faces and
-# locations (the flags above); tools/driver/Case.roc parses it. The driver
-# itself answers `unsupported:instance` and `unsupported:kind=coords` (on a
-# variable font) while the public API cannot answer them.
-DRIVER_PROTOCOL = 2
+# locations (the flags above). 3: also the shaping options (direction,
+# script, language, features, cluster level 0 or 1), and for imported
+# HarfBuzz cases the script and direction the oracle guessed when the case
+# gives none. tools/driver/Case.roc parses it.
+DRIVER_PROTOCOL = 3
 PROTOCOL_1_KINDS = ("shape", "read", "width")
 
 
@@ -950,20 +954,132 @@ def driver_location_flags(case: Case) -> list[str]:
     return flags
 
 
-def driver_request(case: Case, font: str, location: dict | None = None, protocol: int | None = None) -> tuple[str | None, str]:
+def is_imported(case: Case) -> bool:
+    """Whether a case comes from HarfBuzz's own test files (its `source`
+    names the HarfBuzz version), so its oracle record was made from the
+    same hb-shape options HarfBuzz's test runner uses."""
+    return isinstance(case.source, dict) and "harfbuzz" in case.source
+
+
+# A script code or language tag the driver can carry in a flag.
+FLAG_TEXT = re.compile(r"[A-Za-z0-9_-]+")
+# A feature tag the driver can carry: one to four bytes, none of the
+# protocol's separators.
+FEATURE_TAG = re.compile(r"[\x21-\x7e]{1,4}")
+
+
+def driver_features(text_items: Sequence[str]) -> list[str] | None:
+    """Protocol 3 `feature=` flags for hb-shape feature strings, in the
+    order tools/oracle/extract.py passes them to HarfBuzz (its
+    `parse_features`: one entry per tag in first-seen order, a later global
+    value replacing an earlier one, a tag's ranges in order), or None when
+    the syntax is one the oracle does not take either."""
+    features: dict = {}
+    try:
+        for item in text_items:
+            item = item.strip()
+            if not item:
+                continue
+            value = 1
+            if item[0] in "+-":
+                value = 0 if item[0] == "-" else 1
+                item = item[1:]
+            if "=" in item:
+                item, raw = item.split("=", 1)
+                value = int(raw)
+            start, end = 0, None
+            if "[" in item:
+                item, span = item.split("[", 1)
+                span = span.rstrip("]")
+                lo, _, hi = span.partition(":")
+                start = int(lo) if lo else 0
+                end = int(hi) if hi else (start + 1 if ":" not in span else None)
+            tag = item.strip("'\"")
+            if not FEATURE_TAG.fullmatch(tag) or any(c in tag for c in ",:*"):
+                return None
+            if not 0 <= value <= 0xFFFFFFFF or start < 0 or (end is not None and end < 0):
+                return None
+            if start == 0 and end is None:
+                features[tag] = value
+            else:
+                features.setdefault(tag, [])
+                if not isinstance(features[tag], list):
+                    return None
+                features[tag].append((start, end if end is not None else 0xFFFFFFFF, value))
+    except ValueError:
+        return None
+    flags = []
+    for tag, value in features.items():
+        if isinstance(value, int):
+            flags.append(f"feature={tag}:{value}:0:*")
+        else:
+            for start, end, v in value:
+                flags.append(f"feature={tag}:{v}:{start}:{'*' if end == 0xFFFFFFFF else end}")
+    return flags
+
+
+def driver_shaping_flags(case: Case, guess: dict | None) -> tuple[list[str] | None, str]:
+    """Protocol 3 flags for a shaping case's script, language, direction,
+    features and cluster level, or None and the hb-shape option the driver
+    cannot honour. For an imported HarfBuzz case, `guess` is the oracle
+    record's `detail`: the script and direction HarfBuzz guessed for the
+    text (`hb_buffer_guess_segment_properties`), used where the case gives
+    none, so roc-font shapes with what HarfBuzz shaped with."""
+    s = case.settings
+    flags: list[str] = []
+    direction = s.get("direction")
+    script = s.get("script")
+    if guess and is_imported(case):
+        if direction is None and guess.get("direction") in ("ltr", "rtl"):
+            direction = guess["direction"]
+        if script is None and guess.get("script") not in (None, "", "None"):
+            script = guess["script"]
+    if direction is not None:
+        if direction not in ("ltr", "rtl"):
+            return None, f"--direction={direction}"
+        flags.append(f"direction={direction}")
+    if script is not None:
+        if not FLAG_TEXT.fullmatch(script):
+            return None, f"--script={script}"
+        flags.append(f"script={script}")
+    if "language" in s:
+        if not FLAG_TEXT.fullmatch(s["language"]):
+            return None, f"--language={s['language']}"
+        flags.append(f"language={s['language']}")
+    if "features" in s:
+        features = driver_features(s["features"])
+        if features is None:
+            return None, f"--features={','.join(s['features'])}"
+        flags += features
+    if "cluster_level" in s:
+        if s["cluster_level"] not in (0, 1):
+            return None, f"--cluster-level={s['cluster_level']}"
+        flags.append(f"cluster-level={s['cluster_level']}")
+    return flags, ""
+
+
+def driver_request(case: Case, font: str, location: dict | None = None, protocol: int | None = None, guess: dict | None = None) -> tuple[str | None, str]:
     """The protocol line for a case, or None and what the driver cannot
     honour (reported as `unsupported:<what>`: an hb-shape option, `kind=<k>`,
     `face`, or `location`). `location` is resolve_location's result for the
-    case's font."""
+    case's font; `guess` is the oracle record's `detail` (see
+    driver_shaping_flags)."""
     protocol = DRIVER_PROTOCOL if protocol is None else protocol
     if case.kind not in (KNOWN_KINDS if protocol >= 2 else PROTOCOL_1_KINDS):
         return None, f"kind={case.kind}"
     flags: list[str] = []
     s = case.settings
     if case.kind == "shape":
+        if protocol >= 3:
+            shaping, unsupported = driver_shaping_flags(case, guess)
+            if shaping is None:
+                return None, unsupported
+            flags += shaping
         for name in ("direction", "script", "language", "features", "variations", "cluster_level"):
             if name not in s:
                 continue
+            if name in ("direction", "script", "language", "features", "cluster_level") and protocol >= 3:
+                continue  # sent as shaping flags
             if name == "direction" and s[name] == "ltr":
                 continue
             if name == "variations" and protocol >= 2:

@@ -185,9 +185,11 @@ def results_agree(case, record: dict, actual: str) -> bool:
     return False
 
 
-def run_driver(command_prefix: list[str], cases: list, explain: bool, locations: Locations) -> tuple[dict[str, str], dict[str, str], dict]:
+def run_driver(command_prefix: list[str], cases: list, explain: bool, locations: Locations, guesses: dict[str, dict]) -> tuple[dict[str, str], dict[str, str], dict]:
     """Send every runnable case to the driver in one process (the line
     protocol of tools/driver/Case.roc, written by _common.driver_request).
+    `guesses` holds each case's oracle record `detail` (the script and
+    direction HarfBuzz guessed), which imported HarfBuzz cases shape with.
     Returns results and explanations by case id, and timing figures. A case
     the driver cannot honour gets `unsupported:<option>` without being sent."""
     results: dict[str, str] = {}
@@ -196,7 +198,7 @@ def run_driver(command_prefix: list[str], cases: list, explain: bool, locations:
     for case in cases:
         if not case.font_path.is_file():
             continue
-        line, unsupported = driver_request(case, str(case.font_path), locations.of(case))
+        line, unsupported = driver_request(case, str(case.font_path), locations.of(case), guess=guesses.get(case.id))
         if line is None:
             results[case.id] = f"unsupported:{unsupported}"
         else:
@@ -335,7 +337,13 @@ def main() -> int:
         cases += parsed
         problems += file_problems
     locations = Locations()
-    results, explanations, timing = run_driver(prefix, cases, args.explain, locations)
+    records_by_file = {path.resolve(): load_records(path) for path in files}
+    guesses = {}
+    for case in cases:
+        record = records_by_file[case.file].get(case.id)
+        if record is not None and record.get("status") == "ok" and isinstance(record.get("detail"), dict):
+            guesses[case.id] = record["detail"]
+    results, explanations, timing = run_driver(prefix, cases, args.explain, locations, guesses)
 
     outcomes: list[tuple[str, object, str]] = []  # gating: (outcome, case, note)
     scored: dict[str, Counter] = {}
@@ -343,7 +351,6 @@ def main() -> int:
     scored_failures: list[tuple[str, object, str]] = []
     dump = []
     font_hashes: dict[Path, str] = {}
-    records_by_file = {path.resolve(): load_records(path) for path in files}
     for case in cases:
         record = records_by_file[case.file].get(case.id)
         actual = results.get(case.id, "error:no-driver-output")

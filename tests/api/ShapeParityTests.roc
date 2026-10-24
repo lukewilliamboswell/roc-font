@@ -23,7 +23,7 @@ inter = match Font.from_bytes(inter_file, Font.ReadOptions.{}) {
 latin : Font.ShapeOptions
 latin = Font.ShapeOptions.{ script: "Latn" }
 
-Shaped : { glyphs : List(U32), clusters : List(U32), advances : List(I32), flags : List(U8) }
+Shaped : { glyphs : List(U32), clusters : List(U64), advances : List(I32), flags : List(U8) }
 
 shaped : Font, Str, Font.ShapeOptions -> Shaped
 shaped = |font, text, options| {
