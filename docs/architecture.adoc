@@ -14,7 +14,7 @@ Section numbers are stable references: `TODO.md` and commit messages cite
 them as "architecture §4.2".
 
 [#purpose]
-== 1. Purpose and boundary
+== 1 Purpose and boundary
 
 roc-font is a pure-Roc, host-free library that turns *font bytes and text*
 into *font facts and positioned glyphs*. No effects, no file I/O, no system
@@ -70,7 +70,7 @@ unwrap WOFF.
 |===
 
 [#consumers]
-== 2. Who it is for
+== 2 Who it is for
 
 The design is driven by real consumers, in order of commitment:
 
@@ -100,7 +100,7 @@ make results disagree with browsers on ordinary text (see §6.2). Everything
 else waits for evidence.
 
 [#principles]
-== 3. Principles behind the shape
+== 3 Principles behind the shape
 
 Each principle below appears again in the sections that apply it.
 
@@ -134,36 +134,36 @@ Each principle below appears again in the sections that apply it.
   in the right direction (§9).
 
 [#layers]
-== 4. Layers
+== 4 Layers
 
 roc-font is a pipeline of pure phases with explicit inputs and outputs. Each
 phase can be tested, fuzzed and benchmarked on its own.
 
 ----
             bytes + ReadOptions
-                    │
-   ┌────────────────▼────────────────┐
-   │ 1. Container   sfnt / ttcf      │  choose a face, table directory
-   │ 2. Validate    per table        │  bounds, counts, offsets, cross-table
-   │ 3. Index       measured hot     │  flat lookups worth precomputing
-   └────────────────┬────────────────┘
-                    │ Font  (opaque, total from here on)
-      ┌─────────────┼───────────────────────┐
-      ▼             ▼                       ▼
+                    |
+   +----------------v----------------+
+   | 1. Container   sfnt / ttcf      |  choose a face, table directory
+   | 2. Validate    per table        |  bounds, counts, offsets, cross-table
+   | 3. Index       measured hot     |  flat lookups worth precomputing
+   +----------------+----------------+
+                    | Font  (opaque, total from here on)
+      +-------------+-----------------------+
+      v             v                       v
    Queries      Shaping plan            Listings (Iter)
    metrics,     script + language       code points, names,
-   glyph,       + features → which      scripts and features,
+   glyph,       + features -> which     scripts and features,
    advance,     lookups apply           outline commands
    extents      (ShapePlan, reusable)
-                    │
-                    ▼  text + ShapePlan
-   ┌─────────────────────────────────┐
-   │ 4. Map       scalars → glyphs   │  cmap, normalisation, ignorables
-   │ 5. Substitute  GSUB             │  feature plan, lookup flags
-   │ 6. Position    advances, GPOS   │  kern fallback
-   │ 7. Finish      clusters, flags  │
-   └────────────────┬────────────────┘
-                    ▼
+                    |
+                    v  text + ShapePlan
+   +---------------------------------+
+   | 4. Map       scalars -> glyphs  |  cmap, normalisation, ignorables
+   | 5. Substitute  GSUB             |  feature plan, lookup flags
+   | 6. Position    advances, GPOS   |  kern fallback
+   | 7. Finish      clusters, flags  |
+   +----------------+----------------+
+                    v
                    Run  (flat, index-aligned)
 ----
 
@@ -233,7 +233,7 @@ the corpus with room to spare. Exceeding a limit is a reported problem, never
 a crash or a silent truncation.
 
 [#api]
-== 5. Public API shape
+== 5 Public API shape
 
 === 5.1 Modules
 
@@ -572,7 +572,7 @@ covers them with clusters and positions, and `shape_scalars` serves callers
 that do their own itemisation.
 
 [#shaping]
-== 6. Shaping
+== 6 Shaping
 
 === 6.1 Stages
 
@@ -599,7 +599,7 @@ These steps change which glyphs draw ordinary text and so its width; without
 them results disagree with Chrome. They are in scope for the default path:
 
 * compose or decompose a character depending on what the cmap maps
-  (`é` absent → `e` plus combining acute, and the reverse);
+  (`é` absent: `e` plus combining acute, and the reverse);
 * hide default-ignorable characters (ZWJ, ZWNJ, soft hyphen, variation
   selectors) as zero-width;
 * give U+2000–U+200A and other spaces widths derived from the space glyph
@@ -619,7 +619,7 @@ returns the run computed so far, which is total and finite; the budget, not
 the text, is then documented as the cause of any oracle difference.
 
 [#testing]
-== 7. Verification
+== 7 Verification
 
 Four layers, each with a different job. None replaces another.
 
@@ -785,7 +785,7 @@ roc-fuzz release is pinned by URL and asset SHA-256 in `run_fuzz.py`.
 Details are in `docs/fuzzing.adoc`.
 
 [#performance]
-== 8. Performance by construction
+== 8 Performance by construction
 
 Performance is a design input, not a later pass. The rules in `AGENTS.md`
 ("Protect performance by construction") exist because Roc's ownership model
@@ -803,7 +803,7 @@ on sorted input. The architecture avoids these by construction:
 * every loop bounded by a count validated against the data.
 
 [#benchmarks]
-== 9. Measuring performance
+== 9 Measuring performance
 
 === 9.1 Protocol
 
@@ -876,7 +876,7 @@ deep contextual nesting, long ligature sets, many lookups) are part of the
 benchmark corpus, not only the fuzz corpus.
 
 [#layout]
-== 10. Repository layout
+== 10 Repository layout
 
 ----
 package/                 the package: public Font, internal modules, in-package tests
@@ -918,7 +918,7 @@ compiler named in `.roc-version`; `scripts/public_api.json` lists the items
 `roc docs` may show; the generated docs must show exactly its `public` list.
 
 [#references]
-== 11. Lessons taken from mature libraries
+== 11 Lessons taken from mature libraries
 
 [cols="1,3",options="header"]
 |===

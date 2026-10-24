@@ -11,19 +11,17 @@ ships defaults at all is in architecture §5.8; variable fonts in general are
 
 == The three faces
 
+Each face is one file in `package/fonts/`: `Inter-Variable.ttf` (sans),
+`Merriweather-Variable.ttf` (serif) and `FiraCode-Variable.ttf` (mono).
+
 [cols="1,2,2,2",options="header"]
 |===
-| |Sans |Serif |Mono
+|Property |Sans |Serif |Mono
 
 |Family
 |Inter
 |Merriweather
 |Fira Code
-
-|File (in `package/fonts/`)
-|`Inter-Variable.ttf`
-|`Merriweather-Variable.ttf`
-|`FiraCode-Variable.ttf`
 
 |Licence file
 |`Inter-OFL.txt`
@@ -158,34 +156,30 @@ with the release archive it came from (pinned by its own SHA-256) and the
 archive member, the release commit, and the licence's URL at that commit.
 The release archive is the authority, not the repository tree:
 
-[cols="1,3",options="header"]
-|===
-|Face |Source
-
-|Inter
-|`InterVariable.ttf` in
-`https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip`
+Inter::
+`InterVariable.ttf` in the release archive
+https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip[`Inter-4.1.zip`]
 (sha256 `9883fdd4…b11e`); identical to `docs/font-files/InterVariable.ttf`
 at commit `e3a3d4c5`. Licence: `LICENSE.txt` in the same archive, identical to
 the repository's at that commit. The same file is the conformance corpus
 entry `inter-variable-4.1`.
 
-|Merriweather
-|`Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf` in
-`https://github.com/EbenSorkin/Merriweather4/releases/download/4.009/Merriweather4-4.009.zip`
+Merriweather::
+`Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf` in
+the release archive
+https://github.com/EbenSorkin/Merriweather4/releases/download/4.009/Merriweather4-4.009.zip[`Merriweather4-4.009.zip`]
 (sha256 `526473e3…4345`), release commit `e586023a`. The copy committed in
 the repository at that commit is a different build (it differs in `GDEF`,
 `GPOS`, `GSUB`, `gvar` and `name`) although it also says Version 2.100; the
 google/fonts copy differs only in `head.modified`. The version string does
 not identify a build; the SHA-256 does. Licence: `OFL.txt` in the archive.
 
-|Fira Code
-|`variable_ttf/FiraCode-VF.ttf` in
-`https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip`
+Fira Code::
+`variable_ttf/FiraCode-VF.ttf` in the release archive
+https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip[`Fira_Code_v6.2.zip`]
 (sha256 `0949915b…3e79`), release commit `eee6db99`. The archive carries no
 licence file and the built fonts are not committed, so the licence is
 `LICENSE` at the release commit.
-|===
 
 Only the upright faces are shipped. Inter, Merriweather and Fira Code
 publish italics as separate files (Fira Code has none), which would add
@@ -271,7 +265,7 @@ for `font-weight: normal` draws `wght` 400, not the default.
 
 [cols="1,2,2,2",options="header"]
 |===
-| |Inter |Merriweather |Fira Code
+|Property |Inter |Merriweather |Fira Code
 
 |Default-on features with substitutions
 |`ccmp`, `locl`, `calt`
@@ -291,7 +285,7 @@ with a `.liga` or `_end.seq` glyph, so a ligature keeps one cell per
 character. Only four small type 4 lookups exist, none in `calt`
 
 |Off by default
-|`dlig` (`!?` → interrobang), `ss01`–`ss08`, `cv01`–`cv14`, `case`, `frac`,
+|`dlig` (`!?` becomes an interrobang), `ss01`–`ss08`, `cv01`–`cv14`, `case`, `frac`,
 `tnum`, `zero`, …
 |`dlig` (small-cap `fi` `fl`), `smcp`, `c2sc`, `ss01`–`ss04`, `onum`, `frac`, …
 |`ss01`–`ss10`, `cv01`–`cv32`, `zero`, `onum`, `frac`, …
@@ -315,30 +309,39 @@ glyphs; ASCII text is unaffected.
 
 === Example shaping (HarfBuzz 14.6.0 via uharfbuzz 0.56.3, default features)
 
-Glyph names, clusters and advances in font units (abbreviated where long);
-only the advances change with the location.
+Glyph names, clusters and advances in font units, in HarfBuzz notation
+(`name=cluster+advance`, glyphs separated by `|`, abbreviated where long).
+Each line gives the text, its glyphs at the default location, and the
+total advance at other locations; only the advances change with the
+location.
 
-[cols="1,1,3",options="header"]
-|===
-|Face |Text |Default location, and the total advance elsewhere
+Inter:
 
-|Inter |`->` |`[arrowright=0+1954]`; `opsz` 32: 1890
-|Inter |`-->` |`[uni27F6=0+2746]`; `opsz` 32: 2682
-|Inter |`=>` |`[arrowdblright=0+1954]`
-|Inter |`office` |`[o+1228\|f+678\|f+758\|i+496\|c+1170\|e+1194]` = 5524 (no ligature); `wght` 100: 5069, 700: 5798, 900: 6033
-|Inter |`(HELLO)` |`[parenleft.case+747\|H\|E\|L\|L\|O\|parenright.case+747]` = 8071
-|Inter |`12:30` |`colon.case` between digits; 5229
-|Inter |`Wave To` |kerned, 8305; `wght` 900: 8704; `opsz` 32: 7602
-|Merriweather |`fi`, `fl` |`[fi=0+1390]`, `[fl=0+1396]`; `wght` 900: 1560, 1543; `opsz` 144: 1046, 991
-|Merriweather |`ffi` |`[f=0+763\|fi=1+1390]` (no `ffi` ligature)
-|Merriweather |`office` |`[o\|f\|fi=2+1373\|c=4\|e]` = 5276 (kerned); `wdth` 87: 4707
-|Merriweather |`AVATAR` |kerned, 7610; `wght` 400: 7744; `wdth` 112 `wght` 700 `opsz` 144: 7916
-|Fira Code |`->` |`[hyphen_start.seq=0+1200\|greater_hyphen_end.seq=1+1200]`
-|Fira Code |`!=` |`[exclam.spacer=0+1200\|exclam_equal.liga=1+1200]`
-|Fira Code |`===` |`[equal.spacer\|equal.spacer\|equal_equal_equal.liga]`, 3600
-|Fira Code |`www` |`[w.spacer\|w.spacer\|w_w_w.liga]`, 3600
-|Fira Code |`0xFF` |`[zero\|x.multiply\|F\|F]`, 4800
-|===
+* `->`: `[arrowright=0+1954]`; `opsz` 32: 1890
+* `-->`: `[uni27F6=0+2746]`; `opsz` 32: 2682
+* `=>`: `[arrowdblright=0+1954]`
+* `office`: `[o+1228|f+678|f+758|i+496|c+1170|e+1194]` = 5524 (no ligature);
+  `wght` 100: 5069, 700: 5798, 900: 6033
+* `(HELLO)`: `[parenleft.case+747|H|E|L|L|O|parenright.case+747]` = 8071
+* `12:30`: `colon.case` between digits; 5229
+* `Wave To`: kerned, 8305; `wght` 900: 8704; `opsz` 32: 7602
+
+Merriweather:
+
+* `fi`, `fl`: `[fi=0+1390]`, `[fl=0+1396]`; `wght` 900: 1560, 1543;
+  `opsz` 144: 1046, 991
+* `ffi`: `[f=0+763|fi=1+1390]` (no `ffi` ligature)
+* `office`: `[o|f|fi=2+1373|c=4|e]` = 5276 (kerned); `wdth` 87: 4707
+* `AVATAR`: kerned, 7610; `wght` 400: 7744; `wdth` 112 `wght` 700 `opsz`
+  144: 7916
+
+Fira Code:
+
+* `->`: `[hyphen_start.seq=0+1200|greater_hyphen_end.seq=1+1200]`
+* `!=`: `[exclam.spacer=0+1200|exclam_equal.liga=1+1200]`
+* `===`: `[equal.spacer|equal.spacer|equal_equal_equal.liga]`, 3600
+* `www`: `[w.spacer|w.spacer|w_w_w.liga]`, 3600
+* `0xFF`: `[zero|x.multiply|F|F]`, 4800
 
 Every Fira Code advance is 1200 at every weight.
 

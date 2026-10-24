@@ -17,11 +17,11 @@ replayed by string comparison. The normal loop needs only Python's standard
 library and a Roc compiler.
 
 ----
-tests/cases/*.jsonc ──► scripts/conformance.py ──(line protocol)──► tools/driver (native Roc)
-        │                   │      ▲                                        │
-        │                   │      └──────────── one result per request ────┘
-        │                   └──► compare with records, known failures, scores
-        └──► scripts/record_oracle.py ──► tests/oracle/records/*.jsonl
+tests/cases/*.jsonc --> scripts/conformance.py --(line protocol)--> tools/driver (native Roc)
+        |                   |      ^                                        |
+        |                   |      +------------ one result per request ----+
+        |                   +--> compare with records, known failures, scores
+        +--> scripts/record_oracle.py --> tests/oracle/records/*.jsonl
                   (tools/oracle: uharfbuzz, OTS, fontTools; Chrome via Puppeteer)
 ----
 
@@ -299,7 +299,10 @@ order, after `avar`. A static font gives `coords:`.
 
 |`metrics`
 |a location
-|`metrics:ascent=..,descent=..,line_gap=..,cap_height=..,x_height=..,underline_position=..,underline_thickness=..,strikeout_position=..,strikeout_thickness=..`:
+|`metrics:` then `name=value` pairs separated by commas, in the order
+`ascent`, `descent`, `line_gap`, `cap_height`, `x_height`,
+`underline_position`, `underline_thickness`, `strikeout_position`,
+`strikeout_thickness`:
 `hb_ot_metrics_get_position_with_fallback` for the horizontal ascender,
 descender (negative below the baseline) and line gap, cap and x height,
 underline and strikeout offset and size (`MVAR` at a location). The record's
@@ -307,8 +310,9 @@ underline and strikeout offset and size (`MVAR` at a location). The record's
 
 |`extents`
 |`glyphs`, a location
-|`extents:<gid>=<x_min>,<y_min>,<x_max>,<y_max>\|<gid>=empty\|...`: the ink box
-from `hb_font_get_glyph_extents` (y up), or `empty` for a glyph without
+|`extents:` then one entry per listed glyph, separated by a vertical bar:
+`<gid>=<x_min>,<y_min>,<x_max>,<y_max>`, the ink box
+from `hb_font_get_glyph_extents` (y up), or `<gid>=empty` for a glyph without
 outline (HarfBuzz reports a zero box or fails). At a non-default location
 this needs `gvar` (phase 3).
 |===
@@ -372,10 +376,13 @@ other than 0.
 
 |`hb_options` (list)
 |verbatim (anything else hb-shape takes, e.g. `--single-par`, `--show-flags`)
-|`--font-funcs=ot/ft` and `--single-par` (no effect on roc-font);
+|`--font-funcs` (`ot` or `ft`) and `--single-par` (no effect on roc-font);
 `--face-index=N` from protocol 2
-|some (`--single-par` is a no-op: one buffer is always one paragraph)
+|some
 |===
+
+In `hb_options`, `--single-par` is a no-op for the oracle: one buffer is
+always one paragraph.
 
 The `variations` option exists for imported HarfBuzz cases; our own cases
 use the `variations` case field, which every kind but `read` takes. Both

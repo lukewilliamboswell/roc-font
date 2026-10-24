@@ -1,11 +1,11 @@
-[#benchmarks]
+[#benchmarking]
 = Benchmarks
 
 This chapter is for contributors who want to measure a change, add a
 benchmark or understand why `scripts/bench.py --check` failed. It covers the
 harness, the inputs, the allocation ratchet, the comparison programs and how
 to read a report. The policy behind it is in
-link:architecture.adoc#benchmarks[architecture §9].
+xref:architecture.adoc#benchmarks[architecture §9].
 
 == Run the benchmarks
 

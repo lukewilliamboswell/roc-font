@@ -12,7 +12,7 @@ evidence behind it. Measurements below were taken on 2026-10-24 with
 HarfBuzz 14.6.0 (uharfbuzz 0.56.3) and fontTools 4.61.1 from
 `tools/oracle/`.
 
-== 1. Scope and phases
+== 1 Scope and phases
 
 All three phases are required for 0.1.0: the defaults are variable fonts,
 queries measure at Regular, and two of the three defaults (Merriweather and
@@ -23,7 +23,7 @@ variations.
 |===
 |Phase |Tables and structures (OpenType 1.9.1 sections) |Size estimate
 
-|1. Metrics at any location
+|Phase 1: metrics at any location
 |`fvar` (axes, named instances); `avar` version 1 segment maps; the
 `ItemVariationStore` with `VariationRegionList` and `ItemVariationData`
 (8-, 16- and 32-bit deltas, `LONG_WORDS`) and `DeltaSetIndexMap` formats 0
@@ -34,7 +34,7 @@ Public `Font.Variation`, `Font.at`, Regular as the default location.
 with the single-precision arithmetic). Integration into `Font`: 300-400
 lines plus 300 lines of tests and the conformance kind.
 
-|2. Shaping at any location
+|Phase 2: shaping at any location
 |`GDEF` 1.3 `itemVarStore`; `GPOS` `ValueRecord` device offsets with
 `DeltaFormat` 0x8000 (`VariationIndex` tables) for pair adjustment, and for
 `Anchor` format 3 when mark positioning lands; `GSUB`/`GPOS` 1.1
@@ -43,7 +43,7 @@ lines plus 300 lines of tests and the conformance kind.
 column beside each adjustment, a delta per applied adjustment.
 `FeatureVariations` another 200-300 lines, deferrable (no default uses it).
 
-|3. Extents and outlines
+|Phase 3: extents and outlines
 |`gvar` (shared tuples, tuple variation headers, intermediate regions,
 packed point numbers and deltas); `glyf` simple and composite points with
 the four phantom points; inferred deltas for untouched points (IUP);
@@ -59,14 +59,14 @@ uses it; `TableVar` already has the store and map it needs, so it is about
 outlines (no default uses CFF), `cvar` and hinting (out of scope by
 architecture §1.2), `STAT` (naming policy for consumers).
 
-== 2. What the default fonts need
+== 2 What the default fonts need
 
 Measured on the pinned files in `package/fonts/` (and Inter also on
 `tests/corpus/inter-variable-4.1/InterVariable.ttf`, the same bytes).
 
 [cols="2,2,2,2",options="header"]
 |===
-| |Inter 4.1 |Merriweather 4.009 |Fira Code 6.2
+|Property |Inter 4.1 |Merriweather 4.009 |Fira Code 6.2
 
 |Bytes |879 708 |4 628 080 |286 320
 |Glyphs, units per em |2937, 2048 |2384, 2000 |2030, 1950
@@ -108,9 +108,9 @@ Consequences:
   Code's advances are constant).
 * Merriweather is 4.6 MB, above architecture §5.8's "under about 1 MB".
   That is download size only; the measured cost of reading it is part of
-  the compile-time default (§5.8).
+  the compile-time default (architecture §5.8).
 
-== 3. Numeric model
+== 3 Numeric model
 
 === 3.1 The pipeline
 
@@ -280,7 +280,7 @@ packed deltas by it in `float`, infers untouched points in `float`
 x_bearing`). `f32_pack` generalises to binary64 by its significand width
 and minimum exponent; that and the `gvar` decoder are phase 3's work.
 
-== 4. Prepared representation
+== 4 Prepared representation
 
 Reading (`Font.from_bytes`) validates every variation table once,
 independent of any location, and keeps flat, index-addressed data plus the
@@ -308,7 +308,7 @@ coordinates and 11 per store). Measured natively
 
 [cols="2,1,1,1",options="header"]
 |===
-| |Inter |Merriweather |Fira Code
+|Measurement |Inter |Merriweather |Fira Code
 
 |coordinates + `HVAR` scalars (`Font.at` minus `MVAR`/`GDEF`) |0.6-2.0 µs |3.7 µs |0.8 µs
 |advance at the default location (every scalar 0) |9-11 ns |- |3 ns
@@ -319,16 +319,16 @@ Per-query cost is proportional to an item's column count (at most 11 for
 the defaults), dominated by two single-precision operations per nonzero
 scalar. Two optimisations are possible and should be measured before
 either lands (architecture §4.3): computing every glyph's advance in
-`Font.at` (Inter: 2937 × 60 ns ≈ 180 µs, worth it only for callers that
+`Font.at` (Inter: 2937 × 60 ns, about 180 µs, worth it only for callers that
 measure thousands of glyphs per location), and an exact fixed-point fast
 path that falls back to the single-precision path only within a proven
 error bound of a rounding tie.
 
 The defaults' Regular location state, and any `Font.at` a caller writes as
 a top-level value, is evaluated at compile time like the defaults
-themselves (§5.8), so it costs nothing at run time.
+themselves (architecture §5.8), so it costs nothing at run time.
 
-== 5. Public API
+== 5 Public API
 
 === 5.1 Shape
 
@@ -416,7 +416,7 @@ coords)`; per query `advance(hvar, scalars, glyph, default)`,
 inner)`. `Font` maps `Font.Variation` to `(tag, Dec)` settings and calls
 `coords_for`.
 
-== 6. Validation rules and budgets
+== 6 Validation rules and budgets
 
 Every rule below is enforced by `TableVar`; each problem names the table
 and the byte offset in it. Independent problems are reported together
@@ -430,7 +430,7 @@ and the byte offset in it. Independent problems are reported together
   20, the format allows 65 535).
 * `avar`: major version 1 (version 2 is `UnsupportedVersion`); axis count
   equal to `fvar`'s; each map inside the table; a map is empty (identity) or
-  contains -1 → -1, 0 → 0 and 1 → 1, with source coordinates strictly
+  maps -1 to -1, 0 to 0 and 1 to 1, with source coordinates strictly
   increasing, targets never decreasing and all values in [-1, 1]. Under
   these rules HarfBuzz's tolerance for malformed maps is never reached and
   its interpolation is the plain one.
@@ -464,7 +464,7 @@ location state costs regions × axes per store (bounded by the table size);
 an advance costs its row's column count; no work grows with text beyond
 one delta per glyph and per applied adjustment.
 
-== 7. Testing plan
+== 7 Testing plan
 
 === 7.1 Unit expects (done for phase 1)
 
@@ -557,7 +557,7 @@ finite extents, composite depth bounded).
 * Comparators: HarfBuzz's `hb_font_set_variations` plus advances, and
   rustybuzz/ttf-parser's `set_variation`.
 
-== 8. Milestones (proposal for `TODO.md`)
+== 8 Milestones (proposal for `TODO.md`)
 
 * *V1, with M3 (API)*: `TableVar` lands (this change); `Font.Variation`,
   `Font.Weight`, `Font.Width`, `Font.OpticalSize`, `Font.at`; reading keeps
@@ -576,7 +576,8 @@ finite extents, composite depth bounded).
   HarfBuzz for Merriweather and Fira Code, and with FreeType within its
   documented rounding.
 
-== 9. Proposed architecture §5.7 text
+[#proposed-architecture-text]
+== 9 Proposed architecture §5.7 text
 
 ____
 Variation coordinates select a result, so they belong to the query

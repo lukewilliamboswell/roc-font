@@ -24,9 +24,8 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 env:
-  # The manual's PDF joins the release once `blueprint run docs` succeeds on
-  # every chapter under docs/; see docs.yml.
-  BUILD_MANUAL: 'false'
+  # The manual's PDF is attached to every release.
+  BUILD_MANUAL: 'true'
 
 jobs:
   build:

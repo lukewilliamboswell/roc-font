@@ -81,7 +81,7 @@ explain the design and each kind of test:
   and other references through recorded results.
 * <<fuzzing-roc-font>> describes each fuzz target's contract and how a crash
   becomes a permanent regression test.
-* <<benchmarks>> covers the timing comparison and the allocation ratchet.
+* <<benchmarking>> covers the timing comparison and the allocation ratchet.
 * <<the-default-fonts>> records which fonts roc-font ships, their licences
   and provenance.
 * <<variable-fonts-in-roc-font>> scopes variable-font support.
