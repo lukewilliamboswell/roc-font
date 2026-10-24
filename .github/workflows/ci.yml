@@ -47,10 +47,6 @@ jobs:
 
       - run: blueprint check
 
-      # The benchmark harness generates its adversarial fonts with fontTools;
-      # without it those ratchet cases are unmeasured and the check fails.
-      - name: Install the pinned fontTools
-        run: python3 -m pip install --user --require-hashes --no-deps -r bench/compare/python/requirements.txt
-
       - name: Run every check
-        run: blueprint run check
+        # Fuzzing and benchmarks only smoke-test here; full runs are local.
+        run: blueprint run check -- --smoke

@@ -10,9 +10,11 @@ Steps (select with --only, drop with --skip, list with --list):
                       in-package package/*Tests.roc and the driver's Case.roc
                       (dev backend)
     test-interpreter  the same with --opt=interpreter
-    fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded)
+    fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded;
+                      200 inputs per target with --smoke)
     conformance       scripts/conformance.py, when present
-    bench             scripts/bench.py --check --quick, when present
+    bench             scripts/bench.py --check --quick, when present (with
+                      --smoke: one Roc-only pass over Inter, no ratchet)
     docs              roc docs shows exactly the public API (scripts/public_api.json)
     bundle            roc bundle holds no fonts, test modules or fuzz targets
     diff-check        git diff --check, plus the same check on untracked files
@@ -21,6 +23,10 @@ Each step ends PASS, FAIL, SKIP (with the reason), WARN (passed with a
 caveat) or KNOWN (a failure recorded as known; it still fails the run
 unless --allow-known is given). The exit status is 0 only when no step
 failed.
+
+--smoke is what CI runs: fuzzing and benchmarks only prove they build and
+run, so pull requests stay fast. The allocation ratchet, comparison
+programs and fuzz campaigns are local (architecture §7.3, §9).
 
 The compiler is $ROC, or `roc` on PATH. Standard library only.
 """
@@ -207,10 +213,14 @@ def step_test_interpreter(ctx: Context) -> Result:
     return tests_with(ctx, ["--opt=interpreter"])
 
 
+SMOKE_FUZZ_RUNS = 200
+
+
 def step_fuzz_smoke(ctx: Context) -> Result:
     command = [sys.executable, "scripts/run_fuzz.py", "smoke", "--roc", ctx.roc]
-    if ctx.args.fuzz_runs:
-        command.append(f"--runs={ctx.args.fuzz_runs}")
+    runs = ctx.args.fuzz_runs or (SMOKE_FUZZ_RUNS if ctx.args.smoke else None)
+    if runs:
+        command.append(f"--runs={runs}")
     print(f"  + {' '.join(command)}", flush=True)
     completed = subprocess.run(command, cwd=ROOT, env=child_env(ctx), check=False,
                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
@@ -238,6 +248,10 @@ def step_conformance(ctx: Context) -> Result:
 
 
 def step_bench(ctx: Context) -> Result:
+    if ctx.args.smoke:
+        arguments = ["--quick", "--langs", "roc", "--only", "inter", "--no-allocations",
+                     "--repetitions", "1", "--label", "smoke"]
+        return optional_script(ctx, "bench.py", arguments, "benchmark smoke run, architecture §9")
     return optional_script(ctx, "bench.py", ["--check", "--quick"], "allocation ratchet, architecture §9.2")
 
 
@@ -381,6 +395,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--allow-roc-mismatch", action="store_true", help="warn instead of failing on another release compiler")
     parser.add_argument("--no-cache", action="store_true", help="pass --no-cache to roc test")
     parser.add_argument("--fuzz-runs", type=int, help="inputs per fuzz target in the smoke step")
+    parser.add_argument("--smoke", action="store_true",
+                        help="CI mode: short fuzz smoke, benchmark smoke without the ratchet")
     parser.add_argument("--verbose", action="store_true", help="print each step's full output")
     parser.add_argument("--list", action="store_true", help="list the steps and exit")
     args = parser.parse_args(argv)

@@ -57,8 +57,14 @@ The other tasks in `Blueprint.roc`:
 | `bench-quick` | `scripts/bench.py --quick`: a timing smoke run against the comparison programs present |
 | `docs` | render the manual in `docs/` into `.docs-out/` |
 
-Pull-request CI runs `blueprint run check` with the nightly in
-`.roc-version` (`.github/workflows/ci.yml`).
+Pull-request CI runs `blueprint run check -- --smoke` with the nightly in
+`.roc-version` (`.github/workflows/ci.yml`). `--smoke` keeps CI fast:
+fuzz targets run 200 inputs each and the benchmarks run one Roc-only pass,
+proving both build and run. The allocation ratchet, the comparison
+programs and fuzz campaigns are local: run the full `blueprint run check`
+(and `scripts/run_fuzz.py campaign`) before pushing a change to a hot path
+or a reading or shaping stage. Dedicated CI jobs for them can be added
+when there is a need.
 
 ## Where things live
 

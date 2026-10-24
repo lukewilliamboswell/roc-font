@@ -183,7 +183,9 @@ never changes a result on a legitimate font.
 ## Verify the contract, not only the numbers
 
 `python3 scripts/all_tests.py` runs these checks with the compiler named in
-`.roc-version`. For a public API change or a new table, lookup type or
+`.roc-version`. CI runs it with `--smoke` (fuzzing and benchmarks only
+build and run briefly); the allocation ratchet and fuzz campaigns are
+local, so run the full script before pushing hot-path or stage changes. For a public API change or a new table, lookup type or
 shaping stage:
 
 - format every changed Roc file (`roc fmt --check package/`);
