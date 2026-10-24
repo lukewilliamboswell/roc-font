@@ -1,3 +1,5 @@
+import Sfnt
+import TableOs2
 import Bytes
 
 ## The character map (`cmap`): which glyph draws each character.
@@ -85,6 +87,19 @@ TableCmap := {
 	}
 
 	# ------------------------------------------------------------ reading
+
+	## The character map of a font file. A symbol map's encoding depends on
+	## the Windows 3.1 font page of a version 0 `OS/2` table.
+	from_tables : List(U8), List(Sfnt.Table) -> Try(TableCmap, [MissingTable(Str), BadTable(Str), NoUnicodeMapping])
+	from_tables = |bytes, tables| {
+		cmap = Sfnt.required(bytes, tables, "cmap", 4)?
+		page = TableOs2.font_page(bytes, tables)
+		match TableCmap.read(cmap, page) {
+			Ok(map) => Ok(map)
+			Err(NoUnicodeMapping) => Err(NoUnicodeMapping)
+			Err(Bad) => Err(BadTable("cmap"))
+		}
+	}
 
 	## Choose and check a subtable of a `cmap` table. `font_page` is the
 	## `OS/2` table's Windows 3.1 font page (0 for none).

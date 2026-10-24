@@ -1,3 +1,5 @@
+import Sfnt
+
 ## Glyph substitution from a font's `GSUB` table: the ligatures, local
 ## forms and contextual alternates a browser applies by default to
 ## left-to-right text (features `rvrn`, `ltra`, `ltrm`, `ccmp`, `locl`,
@@ -13,7 +15,7 @@
 ## structure is expressed by offsets and lengths into them. Reading
 ## allocates per list, not per ligature or rule, and applying reads only
 ## scalar records, so looking at a subtable costs no reference counting.
-FontShape := {
+LayoutGsub := {
 	lookups : List({ start : U64, count : U64, mode : U64, d0 : U64, d1 : U64, d2 : U64 }),
 	subtables : List(
 		{
@@ -91,7 +93,7 @@ FontShape := {
 	Item : { glyph : U64, cluster : U64 }
 
 	## No substitutions.
-	none : FontShape
+	none : LayoutGsub
 	none = { lookups: [], subtables: [], ranges: [], values: [], rules: [], active: [] }
 
 	feature_tags : List(Str)
@@ -119,7 +121,7 @@ FontShape := {
 	## from contextual rules (which may call further lookups, up to 8 deep)
 	## are applied at most `64 n + 16384` times in all; past that, contextual
 	## rules match but change nothing.
-	apply : FontShape, List(Item) -> List(Item)
+	apply : LayoutGsub, List(Item) -> List(Item)
 	apply = |shape, items| {
 		limit = 4 * items.len() + 32
 		budget = 64 * items.len() + 16384
@@ -129,14 +131,14 @@ FontShape := {
 		var $spare = []
 		var $ops = 0
 		for index in shape.active {
-			lookup = shape.lookups.get(index) ?? FontShape.no_lookup
+			lookup = shape.lookups.get(index) ?? LayoutGsub.no_lookup
 			if lookup.count > 0 {
 				if lookup.mode == 0 {
-					$run = FontShape.apply_singles(shape, lookup, $run)
+					$run = LayoutGsub.apply_singles(shape, lookup, $run)
 				} else if lookup.mode == 1 {
-					$run = FontShape.apply_compacting(shape, lookup, $run)
-				} else if FontShape.any_start(lookup, $run) {
-					done = FontShape.apply_general(shape, lookup, $run, $spare, limit, $ops, budget)
+					$run = LayoutGsub.apply_compacting(shape, lookup, $run)
+				} else if LayoutGsub.any_start(lookup, $run) {
+					done = LayoutGsub.apply_general(shape, lookup, $run, $spare, limit, $ops, budget)
 					$run = done.run
 					$spare = done.spare
 					$ops = done.ops
@@ -147,15 +149,15 @@ FontShape := {
 	}
 
 	# A lookup of single substitutions only: each glyph is replaced in place.
-	apply_singles : FontShape, Lookup, List(Item) -> List(Item)
+	apply_singles : LayoutGsub, Lookup, List(Item) -> List(Item)
 	apply_singles = |shape, lookup, items| {
 		var $run = items
 		n = $run.len()
 		var $i = 0
 		while $i < n {
-			item = $run.get($i) ?? FontShape.no_item
-			if FontShape.may_start(lookup, item.glyph) {
-				match FontShape.simple_at(shape, lookup, $run, $i) {
+			item = $run.get($i) ?? LayoutGsub.no_item
+			if LayoutGsub.may_start(lookup, item.glyph) {
+				match LayoutGsub.simple_at(shape, lookup, $run, $i) {
 					One(found) =>
 						if found.glyph != item.glyph {
 							# `$i < n`, the run's length.
@@ -172,16 +174,16 @@ FontShape := {
 	# A lookup of single and ligature substitutions: the run only shrinks, so
 	# results are written over the run behind the read position. A ligature
 	# reads only glyphs after the read position, which are not yet written.
-	apply_compacting : FontShape, Lookup, List(Item) -> List(Item)
+	apply_compacting : LayoutGsub, Lookup, List(Item) -> List(Item)
 	apply_compacting = |shape, lookup, items| {
 		var $run = items
 		n = $run.len()
 		var $read = 0
 		var $write = 0
 		while $read < n {
-			item = $run.get($read) ?? FontShape.no_item
-			found = if FontShape.may_start(lookup, item.glyph) {
-				match FontShape.simple_at(shape, lookup, $run, $read) {
+			item = $run.get($read) ?? LayoutGsub.no_item
+			found = if LayoutGsub.may_start(lookup, item.glyph) {
+				match LayoutGsub.simple_at(shape, lookup, $run, $read) {
 					One(one) => one
 					Skip => { glyph: item.glyph, next: $read + 1 }
 				}
@@ -206,16 +208,16 @@ FontShape := {
 	# contextual rules may grow it. Backtrack context is read from what has
 	# been written. The new run is written into `spare`'s allocation, and the
 	# old run's is returned for the next general lookup.
-	apply_general : FontShape, Lookup, List(Item), List(Item), U64, U64, U64 -> { run : List(Item), spare : List(Item), ops : U64 }
+	apply_general : LayoutGsub, Lookup, List(Item), List(Item), U64, U64, U64 -> { run : List(Item), spare : List(Item), ops : U64 }
 	apply_general = |shape, lookup, input, spare, limit, ops, budget| {
 		n = input.len()
 		var $out = spare.clear().reserve(n)
 		var $ops = ops
 		var $i = 0
 		while $i < n {
-			item = input.get($i) ?? FontShape.no_item
-			if FontShape.may_start(lookup, item.glyph) {
-				match FontShape.step(shape, lookup, $out, input, $i, limit) {
+			item = input.get($i) ?? LayoutGsub.no_item
+			if LayoutGsub.may_start(lookup, item.glyph) {
+				match LayoutGsub.step(shape, lookup, $out, input, $i, limit) {
 					One(found) => {
 						$out = $out.append({ glyph: found.glyph, cluster: item.cluster })
 						$i = found.next
@@ -236,7 +238,7 @@ FontShape := {
 						taken = written + (n - $i - window)
 						room = if (limit >= taken) limit - taken else 0
 						$out = $out.concat(input.sublist({ start: $i, len: window }))
-						done = FontShape.substitute(shape, rule, window, $out, written, written, 1, written + room, { ops: $ops, budget })
+						done = LayoutGsub.substitute(shape, rule, window, $out, written, written, 1, written + room, { ops: $ops, budget })
 						$out = done.buffer
 						$ops = done.ops
 						$i = $i + window
@@ -261,7 +263,7 @@ FontShape := {
 		var $i = 0
 		n = run.len()
 		while $i < n {
-			if FontShape.may_start(lookup, (run.get($i) ?? FontShape.no_item).glyph) {
+			if LayoutGsub.may_start(lookup, (run.get($i) ?? LayoutGsub.no_item).glyph) {
 				$found = True
 				$i = n
 			} else {
@@ -305,21 +307,21 @@ FontShape := {
 
 	# The first single or ligature subtable of a lookup that applies at `i`:
 	# the glyph it writes and where reading continues.
-	simple_at : FontShape, Lookup, List(Item), U64 -> [One({ glyph : U64, next : U64 }), Skip]
+	simple_at : LayoutGsub, Lookup, List(Item), U64 -> [One({ glyph : U64, next : U64 }), Skip]
 	simple_at = |shape, lookup, run, i| {
-		item = run.get(i) ?? FontShape.no_item
+		item = run.get(i) ?? LayoutGsub.no_item
 		end = lookup.start + lookup.count
 		var $result = Skip
 		var $k = lookup.start
 		while $k < end {
-			sub = shape.subtables.get($k) ?? FontShape.no_sub
-			outcome = match FontShape.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
+			sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
+			outcome = match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
 				Err(_) => Skip
 				Ok(at) =>
 					if sub.kind == 1 {
-						One({ glyph: FontShape.single(shape.values, sub, at, item.glyph), next: i + 1 })
+						One({ glyph: LayoutGsub.single(shape.values, sub, at, item.glyph), next: i + 1 })
 					} else if sub.kind == 4 {
-						match FontShape.ligature_at(shape.values, sub, at, run, i) {
+						match LayoutGsub.ligature_at(shape.values, sub, at, run, i) {
 							Found(found) => One({ glyph: found.glyph, next: i + 1 + found.count })
 							NotFound => Skip
 						}
@@ -342,27 +344,27 @@ FontShape := {
 
 	# The first subtable of a lookup that applies at `i` of `input`, with
 	# `out` written so far: what it writes and where reading continues.
-	step : FontShape, Lookup, List(Item), List(Item), U64, U64 -> [One({ glyph : U64, next : U64 }), Sequence({ start : U64, end : U64 }), Nested(Rule), Skip]
+	step : LayoutGsub, Lookup, List(Item), List(Item), U64, U64 -> [One({ glyph : U64, next : U64 }), Sequence({ start : U64, end : U64 }), Nested(Rule), Skip]
 	step = |shape, lookup, out, input, i, limit| {
-		item = input.get(i) ?? FontShape.no_item
+		item = input.get(i) ?? LayoutGsub.no_item
 		end = lookup.start + lookup.count
 		var $result = Skip
 		var $k = lookup.start
 		while $k < end {
-			sub = shape.subtables.get($k) ?? FontShape.no_sub
+			sub = shape.subtables.get($k) ?? LayoutGsub.no_sub
 			outcome = if sub.kind == 5 {
-				match FontShape.rule_at(shape, sub, out, 0, out.len(), input, i) {
+				match LayoutGsub.rule_at(shape, sub, out, 0, out.len(), input, i) {
 					Found(rule) => Nested(rule)
 					NotFound => Skip
 				}
 			} else {
-				match FontShape.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
+				match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
 					Err(_) => Skip
 					Ok(at) =>
 						if sub.kind == 1 {
-							One({ glyph: FontShape.single(shape.values, sub, at, item.glyph), next: i + 1 })
+							One({ glyph: LayoutGsub.single(shape.values, sub, at, item.glyph), next: i + 1 })
 						} else if sub.kind == 2 {
-							span = FontShape.sequence(shape.values, sub, at)
+							span = LayoutGsub.sequence(shape.values, sub, at)
 							length = if (span.found) span.end - span.start else 1
 							if out.len() + length + (input.len() - i) > limit + 1 {
 								Skip
@@ -372,7 +374,7 @@ FontShape := {
 								One({ glyph: item.glyph, next: i + 1 })
 							}
 						} else if sub.kind == 4 {
-							match FontShape.ligature_at(shape.values, sub, at, input, i) {
+							match LayoutGsub.ligature_at(shape.values, sub, at, input, i) {
 								Found(found) => One({ glyph: found.glyph, next: i + 1 + found.count })
 								NotFound => Skip
 							}
@@ -431,7 +433,7 @@ FontShape := {
 				var $same = i + count < buffer.len()
 				var $j = 0
 				while $same and $j < count {
-					if ((buffer.get(i + 1 + $j) ?? FontShape.no_item).glyph) != (values.get($p + 2 + $j) ?? 0) {
+					if ((buffer.get(i + 1 + $j) ?? LayoutGsub.no_item).glyph) != (values.get($p + 2 + $j) ?? 0) {
 						$same = False
 					}
 					$j = $j + 1
@@ -449,13 +451,13 @@ FontShape := {
 	# The first rule of a context subtable that matches at `i` of `after`,
 	# with backtrack read from the end of `before` (its items from `floor`
 	# to `before_end`).
-	rule_at : FontShape, Sub, List(Item), U64, U64, List(Item), U64 -> [Found(Rule), NotFound]
+	rule_at : LayoutGsub, Sub, List(Item), U64, U64, List(Item), U64 -> [Found(Rule), NotFound]
 	rule_at = |shape, sub, before, floor, before_end, after, i| {
-		glyph = (after.get(i) ?? FontShape.no_item).glyph
-		match FontShape.covered_in(shape.ranges, sub.coverage, sub.coverage_len, glyph) {
+		glyph = (after.get(i) ?? LayoutGsub.no_item).glyph
+		match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, glyph) {
 			Err(_) => NotFound
 			Ok(at) => {
-				slot = if (sub.match_kind == 1) FontShape.class_in(shape.ranges, sub.input, sub.input_len, glyph) else if (sub.data_len == 1) 0 else at
+				slot = if (sub.match_kind == 1) LayoutGsub.class_in(shape.ranges, sub.input, sub.input_len, glyph) else if (sub.data_len == 1) 0 else at
 				if slot >= sub.data_len {
 					NotFound
 				} else {
@@ -463,8 +465,8 @@ FontShape := {
 					var $result = NotFound
 					var $r = shape.values.get(sub.data + slot) ?? 0
 					while $r < last {
-						rule = shape.rules.get($r) ?? FontShape.no_rule
-						if FontShape.matches(shape, rule, sub, before, floor, before_end, after, i) {
+						rule = shape.rules.get($r) ?? LayoutGsub.no_rule
+						if LayoutGsub.matches(shape, rule, sub, before, floor, before_end, after, i) {
 							$result = Found(rule)
 							$r = last
 						} else {
@@ -480,9 +482,9 @@ FontShape := {
 	# Nested lookups, applied in place on a rule's matched input. The matched
 	# input and what nested lookups make of it are the end of `buffer`;
 	# backtrack context is read no further back than `floor`.
-	apply_lookup : FontShape, U64, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { applied : Bool, buffer : List(Item), next : U64, ops : U64 }
+	apply_lookup : LayoutGsub, U64, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { applied : Bool, buffer : List(Item), next : U64, ops : U64 }
 	apply_lookup = |shape, index, buffer, floor, i, depth, limit, count| {
-		lookup = shape.lookups.get(index) ?? FontShape.no_lookup
+		lookup = shape.lookups.get(index) ?? LayoutGsub.no_lookup
 		end = lookup.start + lookup.count
 		var $buffer = buffer
 		var $applied = False
@@ -490,7 +492,7 @@ FontShape := {
 		var $ops = count.ops
 		var $k = lookup.start
 		while $k < end {
-			outcome = FontShape.apply_subtable(shape, shape.subtables.get($k) ?? FontShape.no_sub, $buffer, floor, i, depth, limit, count)
+			outcome = LayoutGsub.apply_subtable(shape, shape.subtables.get($k) ?? LayoutGsub.no_sub, $buffer, floor, i, depth, limit, count)
 			$buffer = outcome.buffer
 			if outcome.applied {
 				$applied = True
@@ -506,41 +508,41 @@ FontShape := {
 
 	# One nested subtable at `i`. The buffer is returned whether or not the
 	# subtable applied, and changed in place when it did.
-	apply_subtable : FontShape, Sub, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { applied : Bool, buffer : List(Item), next : U64, ops : U64 }
+	apply_subtable : LayoutGsub, Sub, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { applied : Bool, buffer : List(Item), next : U64, ops : U64 }
 	apply_subtable = |shape, sub, buffer, floor, i, depth, limit, count| {
-		item = buffer.get(i) ?? FontShape.no_item
+		item = buffer.get(i) ?? LayoutGsub.no_item
 		if i >= buffer.len() {
 			{ applied: False, buffer, next: i, ops: count.ops }
 		} else if sub.kind == 5 {
-			match FontShape.rule_at(shape, sub, buffer, floor, i, buffer, i) {
+			match LayoutGsub.rule_at(shape, sub, buffer, floor, i, buffer, i) {
 				Found(rule) => {
-					done = FontShape.substitute(shape, rule, rule.input_len + 1, buffer, floor, i, depth, limit, count)
+					done = LayoutGsub.substitute(shape, rule, rule.input_len + 1, buffer, floor, i, depth, limit, count)
 					{ applied: True, buffer: done.buffer, next: done.next, ops: done.ops }
 				}
 				NotFound => { applied: False, buffer, next: i, ops: count.ops }
 			}
 		} else {
-			match FontShape.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
+			match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, item.glyph) {
 				Err(_) => { applied: False, buffer, next: i, ops: count.ops }
 				Ok(at) =>
 					if sub.kind == 1 {
-						glyph = FontShape.single(shape.values, sub, at, item.glyph)
+						glyph = LayoutGsub.single(shape.values, sub, at, item.glyph)
 						# `i` is in bounds (checked above).
 						{ applied: True, buffer: buffer.set(i, { glyph, cluster: item.cluster }) ?? [], next: i + 1, ops: count.ops }
 					} else if sub.kind == 2 {
-						span = FontShape.sequence(shape.values, sub, at)
+						span = LayoutGsub.sequence(shape.values, sub, at)
 						length = if (span.found) span.end - span.start else 1
 						if buffer.len() + length > limit + 1 {
 							{ applied: False, buffer, next: i, ops: count.ops }
 						} else if span.found {
-							{ applied: True, buffer: FontShape.splice_sequence(buffer, i, shape.values, span.start, span.end, item.cluster), next: i + length, ops: count.ops }
+							{ applied: True, buffer: LayoutGsub.splice_sequence(buffer, i, shape.values, span.start, span.end, item.cluster), next: i + length, ops: count.ops }
 						} else {
 							# The glyph is replaced by itself.
 							{ applied: True, buffer, next: i + 1, ops: count.ops }
 						}
 					} else if sub.kind == 4 {
-						match FontShape.ligature_at(shape.values, sub, at, buffer, i) {
-							Found(found) => { applied: True, buffer: FontShape.splice_ligature(buffer, i, found.glyph, item.cluster, found.count), next: i + 1, ops: count.ops }
+						match LayoutGsub.ligature_at(shape.values, sub, at, buffer, i) {
+							Found(found) => { applied: True, buffer: LayoutGsub.splice_ligature(buffer, i, found.glyph, item.cluster, found.count), next: i + 1, ops: count.ops }
 							NotFound => { applied: False, buffer, next: i, ops: count.ops }
 						}
 					} else {
@@ -561,20 +563,20 @@ FontShape := {
 		if length == 0 {
 			for p in i..<(n - 1) {
 				# `p + 1 < n`, the buffer's length.
-				$buffer = $buffer.set(p, $buffer.get(p + 1) ?? FontShape.no_item) ?? []
+				$buffer = $buffer.set(p, $buffer.get(p + 1) ?? LayoutGsub.no_item) ?? []
 			}
 			$buffer.take_first(n - 1)
 		} else {
 			grow = length - 1
 			var $k = 0
 			while $k < grow {
-				$buffer = $buffer.append(FontShape.no_item)
+				$buffer = $buffer.append(LayoutGsub.no_item)
 				$k = $k + 1
 			}
 			var $p = n - 1
 			while $p > i {
 				# `$p + grow < n + grow`, the buffer's length.
-				$buffer = $buffer.set($p + grow, $buffer.get($p) ?? FontShape.no_item) ?? []
+				$buffer = $buffer.set($p + grow, $buffer.get($p) ?? LayoutGsub.no_item) ?? []
 				$p = $p - 1
 			}
 			for k in 0..<length {
@@ -593,7 +595,7 @@ FontShape := {
 		# `i < n`, and every index below is under `n`.
 		var $buffer = buffer.set(i, { glyph, cluster }) ?? []
 		for p in (i + 1)..<(n - count) {
-			$buffer = $buffer.set(p, $buffer.get(p + count) ?? FontShape.no_item) ?? []
+			$buffer = $buffer.set(p, $buffer.get(p + count) ?? LayoutGsub.no_item) ?? []
 		}
 		$buffer.take_first(n - count)
 	}
@@ -601,7 +603,7 @@ FontShape := {
 	# The rule's input after the first glyph, its backtrack (nearest first,
 	# from `before[floor ..< before_end]`) and its lookahead all match around
 	# `i`.
-	matches : FontShape, Rule, Sub, List(Item), U64, U64, List(Item), U64 -> Bool
+	matches : LayoutGsub, Rule, Sub, List(Item), U64, U64, List(Item), U64 -> Bool
 	matches = |shape, rule, sub, before, floor, before_end, buffer, i| {
 		input_end = i + 1 + rule.input_len
 		if before_end < floor + rule.back_len or input_end + rule.ahead_len > buffer.len() {
@@ -611,20 +613,20 @@ FontShape := {
 			var $ok = True
 			var $k = 0
 			while $ok and $k < rule.back_len {
-				g = (before.get(before_end - 1 - $k) ?? FontShape.no_item).glyph
-				$ok = FontShape.match_one(shape, sub.match_kind, sub.back, sub.back_len, rule.back + stride * $k, g)
+				g = (before.get(before_end - 1 - $k) ?? LayoutGsub.no_item).glyph
+				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.back, sub.back_len, rule.back + stride * $k, g)
 				$k = $k + 1
 			}
 			$k = 0
 			while $ok and $k < rule.input_len {
-				g = (buffer.get(i + 1 + $k) ?? FontShape.no_item).glyph
-				$ok = FontShape.match_one(shape, sub.match_kind, sub.input, sub.input_len, rule.input + stride * $k, g)
+				g = (buffer.get(i + 1 + $k) ?? LayoutGsub.no_item).glyph
+				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.input, sub.input_len, rule.input + stride * $k, g)
 				$k = $k + 1
 			}
 			$k = 0
 			while $ok and $k < rule.ahead_len {
-				g = (buffer.get(input_end + $k) ?? FontShape.no_item).glyph
-				$ok = FontShape.match_one(shape, sub.match_kind, sub.ahead, sub.ahead_len, rule.ahead + stride * $k, g)
+				g = (buffer.get(input_end + $k) ?? LayoutGsub.no_item).glyph
+				$ok = LayoutGsub.match_one(shape, sub.match_kind, sub.ahead, sub.ahead_len, rule.ahead + stride * $k, g)
 				$k = $k + 1
 			}
 			$ok
@@ -633,21 +635,21 @@ FontShape := {
 
 	# Whether a glyph matches the match stored at `values[at]`: the glyph
 	# itself, a class in the class definition `classes`, or a coverage.
-	match_one : FontShape, U64, U64, U64, U64, U64 -> Bool
+	match_one : LayoutGsub, U64, U64, U64, U64, U64 -> Bool
 	match_one = |shape, kind, classes, classes_len, at, glyph| {
 		value = shape.values.get(at) ?? 0
 		if kind == 0 {
 			value == glyph
 		} else if kind == 1 {
-			FontShape.class_in(shape.ranges, classes, classes_len, glyph) == value
+			LayoutGsub.class_in(shape.ranges, classes, classes_len, glyph) == value
 		} else {
-			FontShape.covered_in(shape.ranges, value, shape.values.get(at + 1) ?? 0, glyph).is_ok()
+			LayoutGsub.covered_in(shape.ranges, value, shape.values.get(at + 1) ?? 0, glyph).is_ok()
 		}
 	}
 
 	# Run a rule's nested lookups over the matched input, then continue after
 	# it. Each nested lookup applied counts against the run's budget.
-	substitute : FontShape, Rule, U64, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { buffer : List(Item), next : U64, ops : U64 }
+	substitute : LayoutGsub, Rule, U64, List(Item), U64, U64, U64, U64, { ops : U64, budget : U64 } -> { buffer : List(Item), next : U64, ops : U64 }
 	substitute = |shape, rule, matched, buffer, floor, i, depth, limit, count| {
 		var $buffer = buffer
 		var $length = matched
@@ -659,7 +661,7 @@ FontShape := {
 				if at < $length and $ops < count.budget {
 					$ops = $ops + 1
 					before = $buffer.len()
-					done = FontShape.apply_lookup(shape, lookup, $buffer, floor, i + at, depth + 1, limit, { ops: $ops, budget: count.budget })
+					done = LayoutGsub.apply_lookup(shape, lookup, $buffer, floor, i + at, depth + 1, limit, { ops: $ops, budget: count.budget })
 					$ops = done.ops
 					$buffer = done.buffer
 					if done.applied {
@@ -674,7 +676,7 @@ FontShape := {
 
 	## The coverage index of a glyph.
 	covered : Ranges, U64 -> Try(U64, [NotCovered])
-	covered = |ranges, glyph| FontShape.covered_in(ranges, 0, ranges.len(), glyph)
+	covered = |ranges, glyph| LayoutGsub.covered_in(ranges, 0, ranges.len(), glyph)
 
 	## The coverage index of a glyph in the coverage `ranges[start ..< start
 	## + len]`.
@@ -701,7 +703,7 @@ FontShape := {
 	## A glyph's class; classes are stored as ranges whose `index` is the
 	## class.
 	class_of : Ranges, U64 -> U64
-	class_of = |ranges, glyph| FontShape.class_in(ranges, 0, ranges.len(), glyph)
+	class_of = |ranges, glyph| LayoutGsub.class_in(ranges, 0, ranges.len(), glyph)
 
 	## A glyph's class in the class definition `ranges[start ..< start +
 	## len]`.
@@ -731,7 +733,7 @@ FontShape := {
 	u16 = |bytes, at| (bytes.get(at) ?? 0).to_u64() * 256 + (bytes.get(at + 1) ?? 0).to_u64()
 
 	u32 : List(U8), U64 -> U64
-	u32 = |bytes, at| FontShape.u16(bytes, at) * 65536 + FontShape.u16(bytes, at + 2)
+	u32 = |bytes, at| LayoutGsub.u16(bytes, at) * 65536 + LayoutGsub.u16(bytes, at + 2)
 
 	fits : U64, U64, U64 -> Bool
 	fits = |start, len, size| start <= size and len <= size - start
@@ -752,37 +754,47 @@ FontShape := {
 		if (total > 8 * data.len() + 16384) Err(Bad) else Ok(total)
 	}
 
+	## The default substitutions of a font file, or none for a font without
+	## `GSUB`.
+	from_tables : List(U8), List(Sfnt.Table) -> Try(LayoutGsub, [BadTable(Str)])
+	from_tables = |bytes, tables|
+		match Sfnt.table(bytes, tables, "GSUB", 10) {
+			Missing => Ok(LayoutGsub.none)
+			Bad => Err(BadTable("GSUB"))
+			Found(gsub) => LayoutGsub.read(gsub).map_err(|_| BadTable("GSUB"))
+		}
+
 	## Read a `GSUB` table: the lookups of the default features, and every
 	## lookup they call.
-	read : List(U8) -> Try(FontShape, [Bad])
+	read : List(U8) -> Try(LayoutGsub, [Bad])
 	read = |gsub| {
-		if !FontShape.fits(0, 10, gsub.len()) {
+		if !LayoutGsub.fits(0, 10, gsub.len()) {
 			Err(Bad)
 		} else {
-			scripts = FontShape.u16(gsub, 4)
-			features = FontShape.u16(gsub, 6)
-			lookups = FontShape.u16(gsub, 8)
-			lookup_count = FontShape.u16(gsub, lookups)
-			feature_count = FontShape.u16(gsub, features)
-			if !FontShape.fits(lookups, 2 + 2 * lookup_count, gsub.len()) or !FontShape.fits(features, 2 + 6 * feature_count, gsub.len()) {
+			scripts = LayoutGsub.u16(gsub, 4)
+			features = LayoutGsub.u16(gsub, 6)
+			lookups = LayoutGsub.u16(gsub, 8)
+			lookup_count = LayoutGsub.u16(gsub, lookups)
+			feature_count = LayoutGsub.u16(gsub, features)
+			if !LayoutGsub.fits(lookups, 2 + 2 * lookup_count, gsub.len()) or !LayoutGsub.fits(features, 2 + 6 * feature_count, gsub.len()) {
 				Err(Bad)
 			} else {
-				chosen = FontShape.default_features(gsub, scripts)?
-				wanted = FontShape.feature_tags.map(FontShape.tag)
-				var $steps = FontShape.spend(gsub, 0, chosen.len())?
+				chosen = LayoutGsub.default_features(gsub, scripts)?
+				wanted = LayoutGsub.feature_tags.map(LayoutGsub.tag)
+				var $steps = LayoutGsub.spend(gsub, 0, chosen.len())?
 				var $active = List.repeat(False, lookup_count)
 				for f in chosen {
 					if f < feature_count {
 						record = features + 2 + 6 * f
-						if wanted.contains(FontShape.u32(gsub, record)) {
-							feature = features + FontShape.u16(gsub, record + 4)
-							count = FontShape.u16(gsub, feature + 2)
-							if !FontShape.fits(feature, 4 + 2 * count, gsub.len()) {
+						if wanted.contains(LayoutGsub.u32(gsub, record)) {
+							feature = features + LayoutGsub.u16(gsub, record + 4)
+							count = LayoutGsub.u16(gsub, feature + 2)
+							if !LayoutGsub.fits(feature, 4 + 2 * count, gsub.len()) {
 								return Err(Bad)
 							}
-							$steps = FontShape.spend(gsub, $steps, count)?
+							$steps = LayoutGsub.spend(gsub, $steps, count)?
 							for j in 0..<count {
-								index = FontShape.u16(gsub, feature + 4 + 2 * j)
+								index = LayoutGsub.u16(gsub, feature + 4 + 2 * j)
 								if index < lookup_count {
 									# `index < lookup_count`, the length of `$active`.
 									$active = $active.set(index, True) ?? []
@@ -793,9 +805,9 @@ FontShape := {
 						return Err(Bad)
 					}
 				}
-				start = FontShape.indices(0, lookup_count).keep_if(|index| $active.get(index) ?? False)
+				start = LayoutGsub.indices(0, lookup_count).keep_if(|index| $active.get(index) ?? False)
 				# Read the chosen lookups and those their rules call.
-				var $lookups = List.repeat(FontShape.no_lookup, lookup_count)
+				var $lookups = List.repeat(LayoutGsub.no_lookup, lookup_count)
 				var $built = { subtables: [], ranges: [], values: [], rules: [], steps: $steps }
 				var $seen = List.repeat(False, lookup_count)
 				var $pending = start
@@ -805,28 +817,28 @@ FontShape := {
 					if !($seen.get(index) ?? True) {
 						# Every pending index is below `lookup_count`.
 						$seen = $seen.set(index, True) ?? []
-						lookup = lookups + FontShape.u16(gsub, lookups + 2 + 2 * index)
+						lookup = lookups + LayoutGsub.u16(gsub, lookups + 2 + 2 * index)
 						first = $built.subtables.len()
-						$built = FontShape.read_lookup(gsub, lookup, $built)?
+						$built = LayoutGsub.read_lookup(gsub, lookup, $built)?
 						end = $built.subtables.len()
 						var $mode = 0
 						var $d0 = 0
 						var $d1 = 0
 						var $d2 = 0
 						for k in first..<end {
-							sub = $built.subtables.get(k) ?? FontShape.no_sub
+							sub = $built.subtables.get(k) ?? LayoutGsub.no_sub
 							$mode = if (sub.kind == 1) $mode else if (sub.kind == 4) $mode.max(1) else 2
 							for r in sub.coverage..<(sub.coverage + sub.coverage_len) {
 								range = $built.ranges.get(r) ?? { first: 1, last: 0, index: 0 }
-								$d0 = FontShape.digest_range($d0, 0, range.first, range.last)
-								$d1 = FontShape.digest_range($d1, 4, range.first, range.last)
-								$d2 = FontShape.digest_range($d2, 9, range.first, range.last)
+								$d0 = LayoutGsub.digest_range($d0, 0, range.first, range.last)
+								$d1 = LayoutGsub.digest_range($d1, 4, range.first, range.last)
+								$d2 = LayoutGsub.digest_range($d2, 9, range.first, range.last)
 							}
 							if sub.kind == 5 {
 								# The lookups this subtable's rules call, in rule order.
 								rules_end = $built.values.get(sub.data + sub.data_len) ?? 0
 								for r in ($built.values.get(sub.data) ?? 0)..<rules_end {
-									rule = $built.rules.get(r) ?? FontShape.no_rule
+									rule = $built.rules.get(r) ?? LayoutGsub.no_rule
 									for j in 0..<rule.records_len {
 										called = $built.values.get(rule.records + 2 * j + 1) ?? 0
 										if called >= lookup_count {
@@ -851,19 +863,19 @@ FontShape := {
 	# default script's.
 	default_features : List(U8), U64 -> Try(List(U64), [Bad])
 	default_features = |gsub, scripts| {
-		count = FontShape.u16(gsub, scripts)
-		if !FontShape.fits(scripts, 2 + 6 * count, gsub.len()) {
+		count = LayoutGsub.u16(gsub, scripts)
+		if !LayoutGsub.fits(scripts, 2 + 6 * count, gsub.len()) {
 			Err(Bad)
 		} else {
 			var $latin = None
 			var $fallback = None
 			for s in 0..<count {
 				record = scripts + 2 + 6 * s
-				name = FontShape.u32(gsub, record)
-				script = scripts + FontShape.u16(gsub, record + 4)
-				if name == FontShape.tag("latn") {
+				name = LayoutGsub.u32(gsub, record)
+				script = scripts + LayoutGsub.u16(gsub, record + 4)
+				if name == LayoutGsub.tag("latn") {
 					$latin = Some(script)
-				} else if name == FontShape.tag("DFLT") {
+				} else if name == LayoutGsub.tag("DFLT") {
 					$fallback = Some(script)
 				}
 			}
@@ -875,17 +887,17 @@ FontShape := {
 			match chosen {
 				None => Ok([])
 				Some(script) => {
-					language = FontShape.u16(gsub, script)
+					language = LayoutGsub.u16(gsub, script)
 					if language == 0 {
 						Ok([])
 					} else {
 						at = script + language
-						n = FontShape.u16(gsub, at + 4)
-						if !FontShape.fits(at, 6 + 2 * n, gsub.len()) {
+						n = LayoutGsub.u16(gsub, at + 4)
+						if !LayoutGsub.fits(at, 6 + 2 * n, gsub.len()) {
 							Err(Bad)
 						} else {
-							required = FontShape.u16(gsub, at + 2)
-							listed = FontShape.indices(0, n).map(|j| FontShape.u16(gsub, at + 6 + 2 * j))
+							required = LayoutGsub.u16(gsub, at + 2)
+							listed = LayoutGsub.indices(0, n).map(|j| LayoutGsub.u16(gsub, at + 6 + 2 * j))
 							Ok(if (required == 0xFFFF) listed else listed.append(required))
 						}
 					}
@@ -896,24 +908,24 @@ FontShape := {
 
 	read_lookup : List(U8), U64, Built -> Try(Built, [Bad])
 	read_lookup = |data, lookup, built| {
-		kind = FontShape.u16(data, lookup)
-		count = FontShape.u16(data, lookup + 4)
-		if !FontShape.fits(lookup, 6 + 2 * count, data.len()) {
+		kind = LayoutGsub.u16(data, lookup)
+		count = LayoutGsub.u16(data, lookup + 4)
+		if !LayoutGsub.fits(lookup, 6 + 2 * count, data.len()) {
 			Err(Bad)
 		} else {
-			steps = FontShape.spend(data, built.steps, count)?
+			steps = LayoutGsub.spend(data, built.steps, count)?
 			var $built = { ..built, steps }
 			for s in 0..<count {
-				at = lookup + FontShape.u16(data, lookup + 6 + 2 * s)
+				at = lookup + LayoutGsub.u16(data, lookup + 6 + 2 * s)
 				real = if kind == 7 {
-					if !FontShape.fits(at, 8, data.len()) {
+					if !LayoutGsub.fits(at, 8, data.len()) {
 						return Err(Bad)
 					}
-					{ kind: FontShape.u16(data, at + 2), at: at + FontShape.u32(data, at + 4) }
+					{ kind: LayoutGsub.u16(data, at + 2), at: at + LayoutGsub.u32(data, at + 4) }
 				} else {
 					{ kind, at }
 				}
-				$built = FontShape.read_subtable(data, real.kind, real.at, $built)?
+				$built = LayoutGsub.read_subtable(data, real.kind, real.at, $built)?
 			}
 			Ok($built)
 		}
@@ -921,79 +933,79 @@ FontShape := {
 
 	read_subtable : List(U8), U64, U64, Built -> Try(Built, [Bad])
 	read_subtable = |data, kind, at, { subtables, ranges, values, rules, steps }| {
-		if !FontShape.fits(at, 6, data.len()) {
+		if !LayoutGsub.fits(at, 6, data.len()) {
 			Err(Bad)
 		} else {
-			format = FontShape.u16(data, at)
+			format = LayoutGsub.u16(data, at)
 			if kind == 1 {
-				cov = FontShape.append_coverage(data, at + FontShape.u16(data, at + 2), steps, ranges)?
-				base = { ..FontShape.no_sub, kind: 1, coverage: cov.start, coverage_len: cov.len }
+				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
+				base = { ..LayoutGsub.no_sub, kind: 1, coverage: cov.start, coverage_len: cov.len }
 				if format == 1 {
-					raw = FontShape.u16(data, at + 4).to_i64_wrap()
+					raw = LayoutGsub.u16(data, at + 4).to_i64_wrap()
 					delta = if (raw >= 32768) raw - 65536 else raw
 					Ok({ subtables: subtables.append({ ..base, delta }), ranges: cov.ranges, values, rules, steps: cov.steps })
 				} else if format == 2 {
-					glyphs = FontShape.count_u16s(data, at + 4, cov.steps)?
+					glyphs = LayoutGsub.count_u16s(data, at + 4, cov.steps)?
 					first = values.len()
 					var $values = values
 					for k in 0..<glyphs.count {
-						$values = $values.append(FontShape.u16(data, at + 6 + 2 * k))
+						$values = $values.append(LayoutGsub.u16(data, at + 6 + 2 * k))
 					}
 					Ok({ subtables: subtables.append({ ..base, data: first, data_len: glyphs.count }), ranges: cov.ranges, values: $values, rules, steps: glyphs.steps })
 				} else {
 					Err(Bad)
 				}
 			} else if kind == 2 and format == 1 {
-				cov = FontShape.append_coverage(data, at + FontShape.u16(data, at + 2), steps, ranges)?
-				offsets = FontShape.count_u16s(data, at + 4, cov.steps)?
+				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
+				offsets = LayoutGsub.count_u16s(data, at + 4, cov.steps)?
 				var $steps = offsets.steps
 				# Bounds of each sequence, filled in as the sequences are read.
 				bounds = values.len()
 				var $values = values.concat(List.repeat(0, offsets.count + 1))
 				for s in 0..<offsets.count {
-					sequence_at = at + FontShape.u16(data, at + 6 + 2 * s)
-					seq = FontShape.count_u16s(data, sequence_at, $steps)?
+					sequence_at = at + LayoutGsub.u16(data, at + 6 + 2 * s)
+					seq = LayoutGsub.count_u16s(data, sequence_at, $steps)?
 					$steps = seq.steps
 					# `bounds + s` is within the slots added above.
 					$values = $values.set(bounds + s, $values.len()) ?? []
 					for k in 0..<seq.count {
-						$values = $values.append(FontShape.u16(data, sequence_at + 2 + 2 * k))
+						$values = $values.append(LayoutGsub.u16(data, sequence_at + 2 + 2 * k))
 					}
 				}
 				$values = $values.set(bounds + offsets.count, $values.len()) ?? []
-				sub = { ..FontShape.no_sub, kind: 2, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
+				sub = { ..LayoutGsub.no_sub, kind: 2, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
 				Ok({ subtables: subtables.append(sub), ranges: cov.ranges, values: $values, rules, steps: $steps })
 			} else if kind == 4 and format == 1 {
-				cov = FontShape.append_coverage(data, at + FontShape.u16(data, at + 2), steps, ranges)?
-				offsets = FontShape.count_u16s(data, at + 4, cov.steps)?
+				cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
+				offsets = LayoutGsub.count_u16s(data, at + 4, cov.steps)?
 				var $steps = offsets.steps
 				# Bounds of each ligature set, filled in as the sets are read.
 				bounds = values.len()
 				var $values = values.concat(List.repeat(0, offsets.count + 1))
 				for s in 0..<offsets.count {
-					set = at + FontShape.u16(data, at + 6 + 2 * s)
-					ligatures = FontShape.count_u16s(data, set, $steps)?
+					set = at + LayoutGsub.u16(data, at + 6 + 2 * s)
+					ligatures = LayoutGsub.count_u16s(data, set, $steps)?
 					$steps = ligatures.steps
 					# `bounds + s` is within the slots added above.
 					$values = $values.set(bounds + s, $values.len()) ?? []
 					for l in 0..<ligatures.count {
-						lig = set + FontShape.u16(data, set + 2 + 2 * l)
-						count = FontShape.u16(data, lig + 2)
-						if count == 0 or !FontShape.fits(lig, 2 + 2 * count, data.len()) {
+						lig = set + LayoutGsub.u16(data, set + 2 + 2 * l)
+						count = LayoutGsub.u16(data, lig + 2)
+						if count == 0 or !LayoutGsub.fits(lig, 2 + 2 * count, data.len()) {
 							return Err(Bad)
 						}
-						$steps = FontShape.spend(data, $steps, count)?
-						$values = $values.append(FontShape.u16(data, lig)).append(count - 1)
+						$steps = LayoutGsub.spend(data, $steps, count)?
+						$values = $values.append(LayoutGsub.u16(data, lig)).append(count - 1)
 						for k in 1..<count {
-							$values = $values.append(FontShape.u16(data, lig + 2 + 2 * k))
+							$values = $values.append(LayoutGsub.u16(data, lig + 2 + 2 * k))
 						}
 					}
 				}
 				$values = $values.set(bounds + offsets.count, $values.len()) ?? []
-				sub = { ..FontShape.no_sub, kind: 4, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
+				sub = { ..LayoutGsub.no_sub, kind: 4, coverage: cov.start, coverage_len: cov.len, data: bounds, data_len: offsets.count }
 				Ok({ subtables: subtables.append(sub), ranges: cov.ranges, values: $values, rules, steps: $steps })
 			} else if kind == 5 or kind == 6 {
-				FontShape.read_context(data, kind == 6, format, at, { subtables, ranges, values, rules, steps })
+				LayoutGsub.read_context(data, kind == 6, format, at, { subtables, ranges, values, rules, steps })
 			} else {
 				# Alternate (3) and reverse chaining (8) substitutions are not
 				# applied by default.
@@ -1006,22 +1018,22 @@ FontShape := {
 	read_context = |data, chained, format, at, { subtables, ranges, values, rules, steps }| {
 		if format == 3 {
 			if chained {
-				back = FontShape.append_coverages(data, at, at + 2, steps, ranges, values)?
+				back = LayoutGsub.append_coverages(data, at, at + 2, steps, ranges, values)?
 				input_at = at + 4 + 2 * back.count
-				input = FontShape.append_coverages(data, at, input_at, back.steps, back.ranges, back.values)?
+				input = LayoutGsub.append_coverages(data, at, input_at, back.steps, back.ranges, back.values)?
 				ahead_at = input_at + 2 + 2 * input.count
-				ahead = FontShape.append_coverages(data, at, ahead_at, input.steps, input.ranges, input.values)?
-				records = FontShape.append_records(data, ahead_at + 2 + 2 * ahead.count, ahead.steps, ahead.values)?
+				ahead = LayoutGsub.append_coverages(data, at, ahead_at, input.steps, input.ranges, input.values)?
+				records = LayoutGsub.append_records(data, ahead_at + 2 + 2 * ahead.count, ahead.steps, ahead.values)?
 				if input.count == 0 {
 					Err(Bad)
 				} else {
 					rule = { back: back.start, back_len: back.count, input: input.start + 2, input_len: input.count - 1, ahead: ahead.start, ahead_len: ahead.count, records: records.start, records_len: records.count }
-					FontShape.context3_of(input.start, rule, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
+					LayoutGsub.context3_of(input.start, rule, { subtables, ranges: ahead.ranges, values: records.values, rules, steps: records.steps })
 				}
 			} else {
-				count = FontShape.u16(data, at + 2)
-				record_count = FontShape.u16(data, at + 4)
-				if count == 0 or !FontShape.fits(at, 6 + 2 * count, data.len()) {
+				count = LayoutGsub.u16(data, at + 2)
+				record_count = LayoutGsub.u16(data, at + 4)
+				if count == 0 or !LayoutGsub.fits(at, 6 + 2 * count, data.len()) {
 					Err(Bad)
 				} else {
 					var $steps = steps
@@ -1029,18 +1041,18 @@ FontShape := {
 					var $values = values
 					first = $values.len()
 					for k in 0..<count {
-						coverage = FontShape.append_coverage(data, at + FontShape.u16(data, at + 6 + 2 * k), $steps, $ranges)?
+						coverage = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 6 + 2 * k), $steps, $ranges)?
 						$steps = coverage.steps
 						$ranges = coverage.ranges
 						$values = $values.append(coverage.start).append(coverage.len)
 					}
-					records = FontShape.append_record_list(data, at + 6 + 2 * count, record_count, $steps, $values)?
-					rule = { ..FontShape.no_rule, input: first + 2, input_len: count - 1, records: records.start, records_len: records.count }
-					FontShape.context3_of(first, rule, { subtables, ranges: $ranges, values: records.values, rules, steps: records.steps })
+					records = LayoutGsub.append_record_list(data, at + 6 + 2 * count, record_count, $steps, $values)?
+					rule = { ..LayoutGsub.no_rule, input: first + 2, input_len: count - 1, records: records.start, records_len: records.count }
+					LayoutGsub.context3_of(first, rule, { subtables, ranges: $ranges, values: records.values, rules, steps: records.steps })
 				}
 			}
 		} else if format == 1 or format == 2 {
-			cov = FontShape.append_coverage(data, at + FontShape.u16(data, at + 2), steps, ranges)?
+			cov = LayoutGsub.append_coverage(data, at + LayoutGsub.u16(data, at + 2), steps, ranges)?
 			var $steps = cov.steps
 			var $ranges = cov.ranges
 			by_class = format == 2
@@ -1050,18 +1062,18 @@ FontShape := {
 			class_offsets = if (!by_class) [] else if (chained) [4, 6, 8] else [4]
 			var $classes = []
 			for o in class_offsets {
-				offset = FontShape.u16(data, at + o)
+				offset = LayoutGsub.u16(data, at + o)
 				if offset == 0 {
 					$classes = $classes.append({ start: $ranges.len(), len: 0 })
 				} else {
-					classes = FontShape.append_classes(data, at + offset, $steps, $ranges)?
+					classes = LayoutGsub.append_classes(data, at + offset, $steps, $ranges)?
 					$steps = classes.steps
 					$ranges = classes.ranges
 					$classes = $classes.append({ start: classes.start, len: classes.len })
 				}
 			}
 			sets_at = at + 4 + 2 * class_offsets.len()
-			offsets = FontShape.count_u16s(data, sets_at, $steps)?
+			offsets = LayoutGsub.count_u16s(data, sets_at, $steps)?
 			$steps = offsets.steps
 			# Bounds of each rule set in `rules`, filled in as the sets are
 			# read.
@@ -1069,15 +1081,15 @@ FontShape := {
 			var $values = values.concat(List.repeat(0, offsets.count + 1))
 			var $rules = rules
 			for s in 0..<offsets.count {
-				o = FontShape.u16(data, sets_at + 2 + 2 * s)
+				o = LayoutGsub.u16(data, sets_at + 2 + 2 * s)
 				# `bounds + s` is within the slots added above.
 				$values = $values.set(bounds + s, $rules.len()) ?? []
 				if o != 0 {
 					set = at + o
-					count = FontShape.count_u16s(data, set, $steps)?
+					count = LayoutGsub.count_u16s(data, set, $steps)?
 					$steps = count.steps
 					for r in 0..<count.count {
-						done = FontShape.read_rule(data, chained, set + FontShape.u16(data, set + 2 + 2 * r), $steps, $values, $rules)?
+						done = LayoutGsub.read_rule(data, chained, set + LayoutGsub.u16(data, set + 2 + 2 * r), $steps, $values, $rules)?
 						$steps = done.steps
 						$values = done.values
 						$rules = done.rules
@@ -1118,53 +1130,53 @@ FontShape := {
 		coverage = values.get(first) ?? 0
 		coverage_len = values.get(first + 1) ?? 0
 		bounds = values.len()
-		sub = { ..FontShape.no_sub, kind: 5, coverage, coverage_len, data: bounds, data_len: 1, match_kind: 2 }
+		sub = { ..LayoutGsub.no_sub, kind: 5, coverage, coverage_len, data: bounds, data_len: 1, match_kind: 2 }
 		Ok({ subtables: subtables.append(sub), ranges, values: values.append(rules.len()).append(rules.len() + 1), rules: rules.append(rule), steps })
 	}
 
 	read_rule : List(U8), Bool, U64, U64, List(U64), List(Rule) -> Try({ values : List(U64), rules : List(Rule), steps : U64 }, [Bad])
 	read_rule = |data, chained, at, steps, values, rules| {
 		if chained {
-			back = FontShape.count_u16s(data, at, steps)?
+			back = LayoutGsub.count_u16s(data, at, steps)?
 			back_start = values.len()
 			var $values = values
 			for k in 0..<back.count {
-				$values = $values.append(FontShape.u16(data, at + 2 + 2 * k))
+				$values = $values.append(LayoutGsub.u16(data, at + 2 + 2 * k))
 			}
 			input_at = at + 2 + 2 * back.count
-			input_count = FontShape.u16(data, input_at)
-			if input_count == 0 or !FontShape.fits(input_at, 2 + 2 * (input_count - 1), data.len()) {
+			input_count = LayoutGsub.u16(data, input_at)
+			if input_count == 0 or !LayoutGsub.fits(input_at, 2 + 2 * (input_count - 1), data.len()) {
 				Err(Bad)
 			} else {
-				counted = FontShape.spend(data, back.steps, input_count)?
+				counted = LayoutGsub.spend(data, back.steps, input_count)?
 				input_start = $values.len()
 				for k in 1..<input_count {
-					$values = $values.append(FontShape.u16(data, input_at + 2 * k))
+					$values = $values.append(LayoutGsub.u16(data, input_at + 2 * k))
 				}
 				ahead_at = input_at + 2 * input_count
-				ahead = FontShape.count_u16s(data, ahead_at, counted)?
+				ahead = LayoutGsub.count_u16s(data, ahead_at, counted)?
 				ahead_start = $values.len()
 				for k in 0..<ahead.count {
-					$values = $values.append(FontShape.u16(data, ahead_at + 2 + 2 * k))
+					$values = $values.append(LayoutGsub.u16(data, ahead_at + 2 + 2 * k))
 				}
-				records = FontShape.append_records(data, ahead_at + 2 + 2 * ahead.count, ahead.steps, $values)?
+				records = LayoutGsub.append_records(data, ahead_at + 2 + 2 * ahead.count, ahead.steps, $values)?
 				rule = { back: back_start, back_len: back.count, input: input_start, input_len: input_count - 1, ahead: ahead_start, ahead_len: ahead.count, records: records.start, records_len: records.count }
 				Ok({ values: records.values, rules: rules.append(rule), steps: records.steps })
 			}
 		} else {
-			input_count = FontShape.u16(data, at)
-			record_count = FontShape.u16(data, at + 2)
-			if input_count == 0 or !FontShape.fits(at, 4 + 2 * (input_count - 1), data.len()) {
+			input_count = LayoutGsub.u16(data, at)
+			record_count = LayoutGsub.u16(data, at + 2)
+			if input_count == 0 or !LayoutGsub.fits(at, 4 + 2 * (input_count - 1), data.len()) {
 				Err(Bad)
 			} else {
-				counted = FontShape.spend(data, steps, input_count)?
+				counted = LayoutGsub.spend(data, steps, input_count)?
 				input_start = values.len()
 				var $values = values
 				for k in 1..<input_count {
-					$values = $values.append(FontShape.u16(data, at + 2 + 2 * k))
+					$values = $values.append(LayoutGsub.u16(data, at + 2 + 2 * k))
 				}
-				records = FontShape.append_record_list(data, at + 2 + 2 * input_count, record_count, counted, $values)?
-				rule = { ..FontShape.no_rule, input: input_start, input_len: input_count - 1, records: records.start, records_len: records.count }
+				records = LayoutGsub.append_record_list(data, at + 2 + 2 * input_count, record_count, counted, $values)?
+				rule = { ..LayoutGsub.no_rule, input: input_start, input_len: input_count - 1, records: records.start, records_len: records.count }
 				Ok({ values: records.values, rules: rules.append(rule), steps: records.steps })
 			}
 		}
@@ -1185,11 +1197,11 @@ FontShape := {
 	# spends the work of reading them, returning the count.
 	count_u16s : List(U8), U64, U64 -> Try({ count : U64, steps : U64 }, [Bad])
 	count_u16s = |data, at, steps| {
-		count = FontShape.u16(data, at)
-		if !FontShape.fits(at, 2 + 2 * count, data.len()) {
+		count = LayoutGsub.u16(data, at)
+		if !LayoutGsub.fits(at, 2 + 2 * count, data.len()) {
 			Err(Bad)
 		} else {
-			after = FontShape.spend(data, steps, count)?
+			after = LayoutGsub.spend(data, steps, count)?
 			Ok({ count, steps: after })
 		}
 	}
@@ -1199,13 +1211,13 @@ FontShape := {
 	# `values` from `start`.
 	append_coverages : List(U8), U64, U64, U64, Ranges, List(U64) -> Try({ start : U64, count : U64, ranges : Ranges, values : List(U64), steps : U64 }, [Bad])
 	append_coverages = |data, base, at, steps, ranges, values| {
-		offsets = FontShape.count_u16s(data, at, steps)?
+		offsets = LayoutGsub.count_u16s(data, at, steps)?
 		var $steps = offsets.steps
 		var $ranges = ranges
 		var $values = values
 		start = $values.len()
 		for k in 0..<offsets.count {
-			coverage = FontShape.append_coverage(data, base + FontShape.u16(data, at + 2 + 2 * k), $steps, $ranges)?
+			coverage = LayoutGsub.append_coverage(data, base + LayoutGsub.u16(data, at + 2 + 2 * k), $steps, $ranges)?
 			$steps = coverage.steps
 			$ranges = coverage.ranges
 			$values = $values.append(coverage.start).append(coverage.len)
@@ -1214,19 +1226,19 @@ FontShape := {
 	}
 
 	append_records : List(U8), U64, U64, List(U64) -> Try({ start : U64, count : U64, values : List(U64), steps : U64 }, [Bad])
-	append_records = |data, at, steps, values| FontShape.append_record_list(data, at + 2, FontShape.u16(data, at), steps, values)
+	append_records = |data, at, steps, values| LayoutGsub.append_record_list(data, at + 2, LayoutGsub.u16(data, at), steps, values)
 
 	# Nested lookup records, added to `values` as `at, lookup` pairs.
 	append_record_list : List(U8), U64, U64, U64, List(U64) -> Try({ start : U64, count : U64, values : List(U64), steps : U64 }, [Bad])
 	append_record_list = |data, at, count, steps, values|
-		if !FontShape.fits(at, 4 * count, data.len()) {
+		if !LayoutGsub.fits(at, 4 * count, data.len()) {
 			Err(Bad)
 		} else {
-			after = FontShape.spend(data, steps, count)?
+			after = LayoutGsub.spend(data, steps, count)?
 			start = values.len()
 			var $values = values
 			for k in 0..<count {
-				$values = $values.append(FontShape.u16(data, at + 4 * k)).append(FontShape.u16(data, at + 4 * k + 2))
+				$values = $values.append(LayoutGsub.u16(data, at + 4 * k)).append(LayoutGsub.u16(data, at + 4 * k + 2))
 			}
 			Ok({ start, count, values: $values, steps: after })
 		}
@@ -1234,7 +1246,7 @@ FontShape := {
 	## A coverage table as ranges of glyphs with their first coverage index.
 	read_coverage : List(U8), U64, U64 -> Try({ value : Ranges, steps : U64 }, [Bad])
 	read_coverage = |data, at, steps| {
-		done = FontShape.append_coverage(data, at, steps, [])?
+		done = LayoutGsub.append_coverage(data, at, steps, [])?
 		Ok({ value: done.ranges, steps: done.steps })
 	}
 
@@ -1242,14 +1254,14 @@ FontShape := {
 	# Consecutive glyphs of a format 1 table are merged into one range.
 	append_coverage : List(U8), U64, U64, Ranges -> Try({ start : U64, len : U64, ranges : Ranges, steps : U64 }, [Bad])
 	append_coverage = |data, at, steps, ranges| {
-		format = FontShape.u16(data, at)
-		count = FontShape.u16(data, at + 2)
+		format = LayoutGsub.u16(data, at)
+		count = LayoutGsub.u16(data, at + 2)
 		start = ranges.len()
-		if format == 1 and FontShape.fits(at, 4 + 2 * count, data.len()) {
-			after = FontShape.spend(data, steps, count)?
+		if format == 1 and LayoutGsub.fits(at, 4 + 2 * count, data.len()) {
+			after = LayoutGsub.spend(data, steps, count)?
 			var $out = ranges
 			for i in 0..<count {
-				g = FontShape.u16(data, at + 4 + 2 * i)
+				g = LayoutGsub.u16(data, at + 4 + 2 * i)
 				merged = if $out.len() > start {
 					match $out.last() {
 						Ok(last) if last.last + 1 == g and last.index + (last.last - last.first) + 1 == i => Ok({ first: last.first, last: g, index: last.index })
@@ -1265,9 +1277,9 @@ FontShape := {
 				}
 			}
 			Ok({ start, len: $out.len() - start, ranges: $out, steps: after })
-		} else if format == 2 and FontShape.fits(at, 4 + 6 * count, data.len()) {
-			after = FontShape.spend(data, steps, count)?
-			Ok({ start, len: count, ranges: FontShape.append_range_records(data, at + 4, count, ranges), steps: after })
+		} else if format == 2 and LayoutGsub.fits(at, 4 + 6 * count, data.len()) {
+			after = LayoutGsub.spend(data, steps, count)?
+			Ok({ start, len: count, ranges: LayoutGsub.append_range_records(data, at + 4, count, ranges), steps: after })
 		} else {
 			Err(Bad)
 		}
@@ -1276,33 +1288,33 @@ FontShape := {
 	## A class definition as ranges whose `index` is the class.
 	read_classes : List(U8), U64, U64 -> Try({ value : Ranges, steps : U64 }, [Bad])
 	read_classes = |data, at, steps| {
-		done = FontShape.append_classes(data, at, steps, [])?
+		done = LayoutGsub.append_classes(data, at, steps, [])?
 		Ok({ value: done.ranges, steps: done.steps })
 	}
 
 	# A class definition, added to `ranges` from `start` (`len` ranges).
 	append_classes : List(U8), U64, U64, Ranges -> Try({ start : U64, len : U64, ranges : Ranges, steps : U64 }, [Bad])
 	append_classes = |data, at, steps, ranges| {
-		format = FontShape.u16(data, at)
+		format = LayoutGsub.u16(data, at)
 		start = ranges.len()
-		if format == 1 and FontShape.fits(at, 6, data.len()) {
-			first = FontShape.u16(data, at + 2)
-			count = FontShape.u16(data, at + 4)
-			if FontShape.fits(at + 6, 2 * count, data.len()) {
-				after = FontShape.spend(data, steps, count)?
+		if format == 1 and LayoutGsub.fits(at, 6, data.len()) {
+			first = LayoutGsub.u16(data, at + 2)
+			count = LayoutGsub.u16(data, at + 4)
+			if LayoutGsub.fits(at + 6, 2 * count, data.len()) {
+				after = LayoutGsub.spend(data, steps, count)?
 				var $out = ranges
 				for k in 0..<count {
-					$out = $out.append({ first: first + k, last: first + k, index: FontShape.u16(data, at + 6 + 2 * k) })
+					$out = $out.append({ first: first + k, last: first + k, index: LayoutGsub.u16(data, at + 6 + 2 * k) })
 				}
 				Ok({ start, len: count, ranges: $out, steps: after })
 			} else {
 				Err(Bad)
 			}
-		} else if format == 2 and FontShape.fits(at, 4, data.len()) {
-			count = FontShape.u16(data, at + 2)
-			if FontShape.fits(at + 4, 6 * count, data.len()) {
-				after = FontShape.spend(data, steps, count)?
-				Ok({ start, len: count, ranges: FontShape.append_range_records(data, at + 4, count, ranges), steps: after })
+		} else if format == 2 and LayoutGsub.fits(at, 4, data.len()) {
+			count = LayoutGsub.u16(data, at + 2)
+			if LayoutGsub.fits(at + 4, 6 * count, data.len()) {
+				after = LayoutGsub.spend(data, steps, count)?
+				Ok({ start, len: count, ranges: LayoutGsub.append_range_records(data, at + 4, count, ranges), steps: after })
 			} else {
 				Err(Bad)
 			}
@@ -1321,7 +1333,7 @@ FontShape := {
 		var $out = ranges
 		for i in 0..<count {
 			r = at + 6 * i
-			$out = $out.append({ first: FontShape.u16(data, r), last: FontShape.u16(data, r + 2), index: FontShape.u16(data, r + 4) })
+			$out = $out.append({ first: LayoutGsub.u16(data, r), last: LayoutGsub.u16(data, r + 2), index: LayoutGsub.u16(data, r + 4) })
 		}
 		$out
 	}

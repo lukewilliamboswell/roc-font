@@ -256,7 +256,12 @@ alias in `Font`.
 
 |Internal: `Sfnt`, `Table*`, `Layout*`, `Shaper*`, `Subset*`
 |Table readers, the GSUB/GPOS engine, per-script shapers. Named after the
-OpenType specification. Never exposed; never in generated docs.
+OpenType specification. Never exposed; never in generated docs. Today:
+`Sfnt` (directory and checked table access), `TableHead`, `TableHhea`,
+`TableMaxp`, `TableHmtx`, `TableOs2`, `TableCmap`, `TableGlyf`, `TableVar`,
+`LayoutGsub`, `LayoutKerning`, `Bytes` (big-endian fields). Each table
+module offers `from_tables`, which returns only the problems it can
+produce (an open tag union), and `Font` composes them.
 
 |Test only: `tests/support/` (FontBuild), `tests/api/`, in-package `*Tests.roc`, fuzz targets, fixtures
 |Builders of synthetic fonts and expectations. Never reachable from
@@ -910,7 +915,7 @@ builders would mean testing a package no consumer imports.
 
 `python3 scripts/all_tests.py` runs every check in §7 and §9 with the
 compiler named in `.roc-version`; `scripts/public_api.json` lists the items
-`roc docs` may show, and its list of known internal leaks may only shrink.
+`roc docs` may show; the generated docs must show exactly its `public` list.
 
 [#references]
 == 11. Lessons taken from mature libraries

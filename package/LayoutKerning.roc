@@ -1,3 +1,4 @@
+import Sfnt
 import Bytes
 
 ## Pair kerning: the `kern` feature's pair adjustment lookups in `GPOS`
@@ -365,6 +366,21 @@ LayoutKerning := {
 
 	tag_of : Str -> U64
 	tag_of = |name| name.to_utf8().fold(0, |acc, b| acc * 256 + b.to_u64())
+
+	## The pair kerning of a font file: from the `kern` feature of `GPOS`, or,
+	## for a font without `GPOS`, from a TrueType `kern` table.
+	from_tables : List(U8), List(Sfnt.Table), U64 -> Try(LayoutKerning, [BadTable(Str)])
+	from_tables = |bytes, tables, count_of_glyphs|
+		match Sfnt.table(bytes, tables, "GPOS", 10) {
+			Bad => Err(BadTable("GPOS"))
+			Found(gpos) => LayoutKerning.read_gpos(gpos, count_of_glyphs).map_err(|_| BadTable("GPOS"))
+			Missing =>
+				match Sfnt.table(bytes, tables, "kern", 4) {
+					Bad => Err(BadTable("kern"))
+					Found(kern) => LayoutKerning.read_kern(kern).map_err(|_| BadTable("kern"))
+					Missing => Ok(LayoutKerning.none)
+				}
+		}
 
 	## The pair adjustment lookups of every `kern` feature of a `GPOS` table,
 	## each lookup once, in lookup list order.

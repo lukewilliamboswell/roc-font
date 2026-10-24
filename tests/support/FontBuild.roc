@@ -398,7 +398,7 @@ FontBuild :: {}.{
 
 	# ------------------------------------------------------------ whole fonts
 
-	## A `GSUB` table with a lookup of every kind `FontShape` reads: lookup
+	## A `GSUB` table with a lookup of every kind `LayoutGsub` reads: lookup
 	## 0 (feature `calt`) is chained context of formats 3 and 2, calling
 	## single substitutions (1), an extension holding a ligature (2), context
 	## of formats 1 and 2 (3), which call a multiple substitution (4).
