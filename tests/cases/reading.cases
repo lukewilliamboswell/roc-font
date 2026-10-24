@@ -1,0 +1,32 @@
+# Reading cases: the --read-outcome option (a roc-font extension of the
+# hb-shape options) asks whether a font reads. Results are read:accept,
+# read:reject or read:drop=<tags> (tables a lenient reader would drop,
+# limited to the tables roc-font reads). The oracle is OTS when installed,
+# otherwise fontTools. Fixtures are made by tests/cases/fixtures/generate.py.
+
+# id: tiny
+fixtures/tiny.ttf;--read-outcome;;read:accept
+# id: no-kern
+fixtures/no-kern.ttf;--read-outcome;;read:accept
+# id: empty-file
+fixtures/empty.ttf;--read-outcome;;read:reject
+# id: header-only
+fixtures/header-only.ttf;--read-outcome;;read:reject
+# id: bad-magic
+fixtures/bad-magic.ttf;--read-outcome;;read:reject
+# id: truncated-half
+fixtures/truncated-half.ttf;--read-outcome;;read:reject
+# id: hmtx-past-end
+fixtures/hmtx-past-end.ttf;--read-outcome;;read:reject
+# id: kern-past-end
+fixtures/kern-past-end.ttf;--read-outcome;;read:reject
+# id: kern-bad-pairs
+fixtures/kern-bad-pairs.ttf;--read-outcome;;read:reject
+# id: kern-unsorted
+fixtures/kern-unsorted.ttf;--read-outcome;;read:drop=kern
+# id: no-cmap
+fixtures/no-cmap.ttf;--read-outcome;;read:reject
+# id: upem-zero
+fixtures/upem-zero.ttf;--read-outcome;;read:reject
+# id: inter-metrics-subset
+../fonts/Inter-Regular-metrics.ttf;--read-outcome;;read:reject

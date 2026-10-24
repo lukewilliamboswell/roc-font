@@ -1,0 +1,494 @@
+= Conformance testing roc-font
+:toc: left
+:toclevels: 2
+
+This chapter is for contributors. It explains how roc-font is compared with
+reference implementations: the case format, the driver, the oracle records,
+the review, the font corpus, and how to add cases, case sources and
+oracles. Why conformance is shaped this way ("record once, replay cheaply")
+is in architecture §7.1 and §7.2.
+
+== Overview
+
+An oracle (HarfBuzz, OTS, fontTools) is slow to install and slow to run;
+roc-font is fast. So each oracle answer is recorded once, committed, and
+replayed by string comparison. The normal loop needs only Python's standard
+library and a Roc compiler.
+
+----
+tests/cases/*.cases ──► tools/driver (native Roc) ──► one result per case ─┐
+        │                                                                   ├─► scripts/conformance.py
+        └──► scripts/record_oracle.py ──► tests/oracle/records/*.jsonl ────┘     (agree / known / FAIL / STALE ...)
+                  (tools/oracle venv: uharfbuzz, OTS, fontTools)
+----
+
+[cols="1,3",options="header"]
+|===
+|Path |Role
+
+|`tests/cases/*.cases`
+|Cases, in HarfBuzz's `.tests` format plus three small extensions.
+
+|`tests/cases/fixtures/`
+|Tiny crafted fonts for unhappy paths, made by `generate.py`.
+
+|`tests/oracle/records/<case file>.jsonl`
+|One oracle record per case, committed.
+
+|`tests/known-failures.json`
+|Differences we accept for now, each with a reason.
+
+|`tests/corpus.json`, `tests/corpus/`
+|Pinned external fonts; the fetched copies are not committed.
+
+|`tools/driver/`
+|The native Roc conformance driver (`main.roc`, and `Case.roc` for parsing
+and printing, which has its own expects).
+
+|`tools/oracle/`
+|The oracle extractor (`extract.py`), its pinned libraries
+(`requirements.txt`, with hashes) and the pinned OTS build (`ots.json`).
+
+|`scripts/conformance.py`, `scripts/record_oracle.py`, `scripts/fetch_corpus.py`
+|The review, the recorder and the corpus fetcher; `scripts/_common.py` holds
+the case parser, case ids and record keys they share.
+|===
+
+Nothing here is reachable from `package/main.roc`; the driver imports the
+package, never the reverse.
+
+== Quick start
+
+[source,sh]
+----
+export ROC=/path/to/roc                      # the nightly named in .roc-version
+
+python3 scripts/conformance.py               # build the driver, run every case, compare
+python3 scripts/conformance.py inter --diff  # one case file, with expected/actual
+python3 scripts/conformance.py --interpreter # the same through `roc --opt=interpreter`
+
+# Only when cases, fonts or oracle versions change:
+python3 scripts/record_oracle.py --setup     # once: tools/oracle/.venv and ots-sanitize
+python3 scripts/record_oracle.py             # record what changed
+----
+
+The review prints a summary such as:
+
+----
+42 cases in 3 files: 36 agree, 5 known, 0 fail, 0 stale, 0 missing-record, 0 missing-font, 0 bad-expectation, 1 unsupported, 0 skipped; 0 unknown known-failure ids
+----
+
+== Case format
+
+=== HarfBuzz's `.tests` format
+
+Case files use exactly the format of HarfBuzz's `test/shape/data/*/tests/
+*.tests` files, as read by HarfBuzz's `test/shape/run-tests.py` (checked
+against HarfBuzz 14.6.0). Each line is one of:
+
+blank:: ignored.
+`# ` followed by text:: a comment (`#` then a space).
+`#` followed directly by a case:: a disabled case; it is parsed but not run.
+`@shaper=…`, `@face-loader=…`, `@font-funcs=…`:: a backend directive for
+HarfBuzz's runner (a trailing `-` before `=` excludes). roc-font has one
+backend, so directives are skipped.
+a case:: exactly four fields separated by `;`:
++
+----
+font-path;hb-shape options;code points;expected
+../fonts/Inter-Regular-metrics.ttf;--no-glyph-names;U+0041,U+0056;[2=0+1273|456=1+1413]
+----
+
+`font-path`:: relative to the directory of the file containing the line. An
+absolute path (HarfBuzz uses these for system fonts) may end in `@<sha1>`,
+which is dropped; a missing absolute path is skipped, as HarfBuzz does.
+`hb-shape options`:: whitespace-separated `hb-shape` command-line options,
+for example `--direction=rtl --features=-kern --no-glyph-names`.
+`code points`:: `hb-shape --unicodes` syntax: hexadecimal numbers, each
+optionally prefixed `U+`, `u+` or `0x`, separated by commas or spaces. Empty
+means empty text. Surrogates and values past U+10FFFF are rejected.
+`expected`:: `hb-shape` output, or `*` (HarfBuzz: "must not crash").
+HarfBuzz's own files mostly write glyph *names*; see below.
+
+HarfBuzz's runner also adds `--verify --unsafe-to-concat
+--safe-to-insert-tatweel` when the expectation is not `*`; these affect only
+flags and checks, not the printed text.
+
+=== Result notation
+
+Results are `hb-shape`'s text notation (`hb_buffer_serialize`, text format)
+with glyph *ids*, because the driver works in ids and roc-font has no glyph
+names. The oracle always adds `--no-glyph-names`.
+
+----
+[gid=cluster@dx,dy+ax,ay|gid=cluster+ax|...]
+----
+
+* `=cluster` is absent with `--no-clusters` or `--ned`.
+* `@dx,dy` (offsets) appears only when one of them is non-zero.
+* `+ax` is the advance; `,ay` follows only when the vertical advance is
+  non-zero. Advances are absent with `--no-advances` or `--ned`, and then
+  `@x,y` becomes the pen position (the running sum of advances plus the
+  offset), as `hb_buffer_serialize` does.
+* `--no-positions` drops offsets and advances.
+* Clusters are *code point indices* into the case's code points (hb-shape
+  resets UTF-8 clusters to character indices unless `--utf8-clusters` is
+  given). With `--utf8-clusters` they are UTF-8 byte offsets, the unit
+  roc-font's API uses (architecture §5.2).
+* Values are font units: hb-shape's default font size is the units per em.
+* An empty run is `[]`. (hb-shape prints an empty line; the extractor
+  writes `[]` so every result is visible.)
+
+=== roc-font extensions
+
+The extensions keep every file a valid HarfBuzz file for HarfBuzz's own
+parser, except that HarfBuzz's runner would reject the `--read-outcome`
+option.
+
+Case names:: a `# id: <name>` comment names the next case. The case's id is
+`<case file path under tests/cases without .cases>/<name>`, for example
+`inter/kern-avatar`. A case without a name gets `line-<12 hex digits of the
+SHA-256 of its line>`, so ids survive reordering but change when the line
+changes. Names may not contain spaces, `/`, `;` or `~`, or start with
+`line-`. To HarfBuzz the name line is an ordinary comment.
+
+Expectation `?`:: "fill this in": `record_oracle.py --fill-expected` writes
+the oracle's result in its place. Expectations in glyph-id notation must
+equal the record (checked by both scripts); `*`, `?` and expectations with
+glyph names are not compared.
+
+Reading cases:: the option `--read-outcome` turns a line into a question
+about reading the font; the code point field is ignored (leave it empty).
+Results are:
++
+--
+`read:accept`:: the font reads and every table roc-font reads is usable.
+`read:reject`:: the font cannot be used.
+`read:drop=<tag>,<tag>`:: the font reads but a lenient reader drops these
+tables (architecture §4.4). Only tables roc-font reads are listed (`READ_TABLES`
+in `tools/oracle/extract.py`), sorted.
+--
++
+A shaping case whose font is rejected also prints `read:reject`.
+
+Driver-only results:: `unsupported:<option>` (an option the driver cannot
+honour yet), `error:font-file` (the font could not be read from disk) and
+`error:malformed-case`.
+
+=== Options
+
+[cols="2,1,1",options="header"]
+|===
+|Option |Driver |Oracle
+
+|`--no-glyph-names`, `--font-funcs=ot`, `--font-funcs=ft`
+|yes (ids always)
+|yes (HarfBuzz's own `ot` functions for both)
+
+|`--no-clusters`, `--no-positions`, `--no-advances`, `--ned`, `--utf8-clusters`
+|yes
+|yes
+
+|`--direction=ltr`
+|yes
+|yes
+
+|`--direction=` other, `--script=`, `--language=`, `--features=`, `--variations=`, `--cluster-level=`, `--font-size=`, `--remove-default-ignorables`, `--show-flags`, `--show-extents`
+|no (`unsupported:`)
+|yes
+
+|`--read-outcome`
+|yes
+|yes
+
+|anything else
+|no
+|no (record status `unsupported`)
+|===
+
+== The driver
+
+`tools/driver/main.roc` is a basic-cli app importing `../../package/main.roc`.
+It reads the case files named on its command line (or one from stdin when
+none, or `-`, is named), reads each distinct font once per run (a cache keyed
+by resolved path), runs every case and prints one line per case:
+
+----
+<case file as given>:<line number><TAB><result>
+----
+
+`scripts/conformance.py` builds it with `roc build` into
+`.roc-font-tmp/conformance/driver` (or `$ROC_FONT_TMPDIR/conformance/`)
+whenever a driver or package source is newer than the binary, and runs every
+selected case file in a single invocation. By hand:
+
+[source,sh]
+----
+roc build tools/driver/main.roc --output=.roc-font-tmp/conformance/driver
+.roc-font-tmp/conformance/driver tests/cases/*.cases
+.roc-font-tmp/conformance/driver --explain tests/cases/reading.cases   # add the reader's problems
+roc tools/driver/main.roc --opt=interpreter -- tests/cases/inter.cases
+roc test tools/driver/Case.roc
+----
+
+With `--explain` first, a line whose font was rejected gets a third column
+listing the reader's problems; it is for triage and never compared.
+
+What the driver does with today's public API, and the limits that follow:
+
+* Code points map through `Font.glyph`; a code point the font does not map
+  becomes glyph 0 with glyph 0's advance, which is what HarfBuzz prints.
+  This is the driver's choice as a consumer, not the package's (the package
+  reports `Missing`).
+* `Font.substitute` applies the default substitutions; each output glyph
+  keeps the index of its first code point, which becomes its cluster.
+* Advances are `Font.advance` plus `Font.kerning`'s change for each glyph.
+  Offsets are always 0: the API has no glyph offsets yet.
+* Only left-to-right text with the default features is supported. Options
+  the API cannot express produce `unsupported:` rather than a guess.
+* When the API gains `Font.shape` and the `Run` (architecture §5.4), only
+  `shape` in `main.roc` changes.
+
+Some nightlies report problems inside the cached basic-cli platform and
+exit non-zero although the binary is built (or the interpreter ran).
+`conformance.py` accepts that, but fails on any problem reported in this
+repository's files.
+
+== Oracle records
+
+=== Setting up the oracle
+
+[source,sh]
+----
+python3 scripts/record_oracle.py --setup
+----
+
+This creates `tools/oracle/.venv` (with `--without-pip` and an outside pip
+where the system Python lacks `ensurepip`), installs
+`tools/oracle/requirements.txt` with `--require-hashes --only-binary=:all:
+--no-deps`, and downloads the pinned `ots-sanitize` build named in
+`tools/oracle/ots.json` into `tools/oracle/.cache/`, checking its SHA-256.
+The extractor always runs as `tools/oracle/.venv/bin/python -I`, so user
+site packages cannot leak in.
+
+[cols="1,1,2",options="header"]
+|===
+|Tool |Pinned |Answers
+
+|uharfbuzz (bundles HarfBuzz)
+|0.56.3 (HarfBuzz 14.6.0)
+|shaping cases
+
+|OTS `ots-sanitize`
+|9.3.0 (Linux x86-64 release build)
+|reading cases, when installed
+
+|fontTools
+|4.61.1
+|reading cases when OTS is absent (every table decompiled; a failing
+required table rejects, any other failing table is dropped)
+
+|freetype-py
+|2.5.1
+|installed for future glyph-extent and outline cases; no case kind uses it yet
+|===
+
+`record_oracle.py` refuses to run when the installed versions differ from the
+pins. Each record names the tools that answered it, so the oracle for reading
+cases is part of their keys. Without `ots-sanitize` the recorder stops rather
+than silently re-recording reading cases with fontTools; pass
+`--allow-fonttools-read` to do that deliberately (on a platform without a
+pinned OTS build, for example).
+
+=== Records and keys
+
+`tests/oracle/records/<case file>.jsonl` holds one JSON object per line,
+sorted by case id, with sorted keys and no insignificant whitespace:
+
+[source,json]
+----
+{"detail":{...},"font":"tests/cases/fixtures/bad-magic.ttf","font_sha256":"8c37…","id":"reading/bad-magic",
+ "key":"87a2…","kind":"read","options":["--read-outcome"],
+ "provenance":{"backend":"ots-sanitize","extractor":1,"tools":{"ots-sanitize":"9.3.0"}},
+ "result":"read:reject","status":"ok","unicodes":""}
+----
+
+`status` is `ok`, `unsupported` (the oracle cannot honour an option) or
+`error` (the oracle failed on this case). `detail` is diagnostic only (OTS
+messages, the script HarfBuzz guessed) and never compared. Records carry no
+timestamps or machine paths, so they are reproducible.
+
+The `key` is a SHA-256 over the canonical JSON of: the font's SHA-256, the
+case kind, the options, the code points as numbers (so `U+41` and `U+0041`
+agree, and moving a font does not matter), the tools that answer this kind
+with their versions, and the extractor version (`EXTRACTOR_VERSION` in
+`extract.py`; bump it whenever a change there can change a result). The
+review recomputes the key from the case, the font and the record's own
+provenance, so a stale record is caught without the oracle installed.
+
+=== Recording
+
+[source,sh]
+----
+python3 scripts/record_oracle.py                   # record cases whose key changed
+python3 scripts/record_oracle.py reading           # case files matching "reading"
+python3 scripts/record_oracle.py --fill-expected   # also write results into `?` expectations
+python3 scripts/record_oracle.py --check           # fail if a record is missing or stale
+python3 scripts/record_oracle.py --force           # re-record everything
+----
+
+All requests go to one extractor process. Records whose key is unchanged
+are kept as they are; records for cases that no longer exist are pruned; a
+case whose font is missing keeps its old record. `--force` must reproduce
+every file byte for byte: after `--force`, `git diff tests/oracle` must be
+empty, and any difference is a reproducibility bug to fix before
+committing.
+
+== The review
+
+`scripts/conformance.py` compares the driver's result for each case with
+its record:
+
+[cols="1,3",options="header"]
+|===
+|Outcome |Meaning
+
+|agree |the result equals the record
+|known |differs, and `tests/known-failures.json` lists the case
+|FAIL |differs and is not listed
+|STALE |listed but now agrees, or listed but no such case exists
+|MISSING-RECORD |no record, or its key no longer matches the case or font
+|MISSING-FONT |a font inside the repository is missing
+|BAD-EXPECTATION |the case's own glyph-id expectation differs from its record
+|unsupported |the driver or the oracle cannot honour an option yet
+|skipped |a corpus font that has not been fetched, or a missing system font
+|===
+
+Upper-case outcomes fail the run; `--strict` makes `unsupported` fail too.
+Options: case-file selectors (substrings of paths under `tests/cases`),
+`--diff`, `--verbose`, `--explain`, `--interpreter`, `--rebuild`,
+`--no-build`.
+
+=== Known failures
+
+`tests/known-failures.json` lists `{ "id", "reason" }` entries, sorted by
+id. The policy, as in roc-parser:
+
+* Every difference is either fixed or listed with a reason a reader can act
+  on: which behaviour differs and why (not implemented yet, with the
+  architecture section; or deliberate, with the justification).
+* A listed case that starts to agree fails the run, so the list cannot rot.
+* Scripts never edit the list. Removing or adding an entry is a reviewed
+  change.
+* An entry names one case. There are no patterns: a pattern could hide a
+  regression in a case it was never meant to cover.
+
+== Fonts
+
+=== Committed fixtures
+
+`tests/fonts/` holds small real fonts with their licences (today Inter's
+metrics-only subset: hmtx, cmap, GSUB, GPOS and glyph bounding boxes, but no
+outlines, `name` or `post`). `tests/cases/fixtures/` holds tiny crafted
+fonts for unhappy paths, all derived from one generated font with one
+defect each (truncated, wrong signature, a table past the end, a `kern`
+table with too many or unsorted pairs, a missing `cmap`, a zero units per
+em). They are under 1 KB each and reproducible:
+
+[source,sh]
+----
+python3 tests/cases/fixtures/generate.py           # rewrite
+python3 tests/cases/fixtures/generate.py --check   # fail if a committed fixture differs
+----
+
+=== The corpus
+
+`tests/corpus.json` pins external fonts:
+
+[source,json]
+----
+{ "id": "source-sans-3.052", "kind": "archive",
+  "url": "https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip",
+  "sha256": "…", "size": 2387997,
+  "members": { "OTF/SourceSans3-Regular.otf": "…" },
+  "licence": { "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/3.052R/LICENSE.md", "sha256": "…" },
+  "tags": ["latin", "cff", "gsub", "gpos"], "verified": true }
+----
+
+`kind` is `file` or `archive` (zip or tar). An archive extracts only its
+`members` when listed (each checked by SHA-256), otherwise everything under
+the `include` prefixes after removing `strip_components` leading
+directories. URLs name a release tag or commit, never a moving branch.
+`verified` is `true` only after the hashes were confirmed by a download;
+the fetcher refuses unverified entries.
+
+[source,sh]
+----
+python3 scripts/fetch_corpus.py list
+python3 scripts/fetch_corpus.py fetch [ids…] [--tag malformed]
+python3 scripts/fetch_corpus.py verify
+----
+
+Downloads go to `tests/corpus/<id>/` (ignored by git) beside
+`LICENCE-<name>`. Any hash mismatch fails the run.
+
+=== Importing HarfBuzz's shaping tests
+
+[source,sh]
+----
+python3 scripts/fetch_corpus.py fetch harfbuzz-14.6.0
+python3 scripts/fetch_corpus.py import-hb-tests --suite in-house --suite aots --suite text-rendering-tests
+python3 scripts/record_oracle.py harfbuzz
+python3 scripts/conformance.py harfbuzz --explain
+----
+
+`import-hb-tests` copies each `.tests` file to
+`tests/cases/harfbuzz/<suite>/<name>.cases`, adds a two-line header naming
+its source, and rewrites each relative font path (including in disabled
+cases) so it points at the same fetched font; nothing else changes.
+HarfBuzz's expectations mostly use glyph names, so they are kept for
+reading and not compared; the records (with ids) are the reference.
+Cases whose fonts are not fetched are reported as `skipped`.
+
+Measured on 2026-10-24: the three suites give 6203 cases in 308 files; the
+oracle recorded 6058 of them in about 1.3 seconds (312 use options the
+extractor does not support, 4 make HarfBuzz fail, and 145 name macOS system
+fonts), and every expectation written with glyph ids agreed with the
+oracle. The driver and review then ran all 6245 cases in under a second:
+83 agreed, 1267 used options the driver does not support yet, and 4708
+differed, 3861 of them because seven test fonts use cmap formats 0, 6, 10
+or 13 or a symbol cmap, which the reader rejects (`NoUnicodeMapping`). The
+imported suites are not committed until they can gate the build without a
+known-failures entry per case.
+
+== Extending the harness
+
+Adding a case:: add a line, preceded by `# id: <name>`, to a `.cases` file
+with `?` as its expectation; run `record_oracle.py --fill-expected <file>`,
+read the result, and commit the case and its record together. If roc-font
+disagrees on purpose, add a known-failures entry with a reason.
+
+Adding a case source:: a converter that writes `.cases` files under
+`tests/cases/<source>/` in this format, with fonts either committed under
+`tests/fonts/` (small, with a licence) or pinned in `tests/corpus.json`.
+Prefer one importer per upstream suite, re-runnable, with the upstream
+version in each file's header.
+
+Adding an oracle or case kind:: extend `tools/oracle/extract.py`: pin the
+tool (in `requirements.txt` with hashes, or in a JSON pin like `ots.json`),
+report its version in `versions()` under the kinds it answers, add the kind
+or option, and bump `EXTRACTOR_VERSION`. A new kind needs a selecting
+option (like `--read-outcome`), a result notation that cannot be confused
+with hb-shape output, driver support in `tools/driver/`, and a section in
+this chapter. Re-record with `--force` twice and confirm the second run
+changes nothing.
+
+== Known environment issues
+
+* `roc build` and `roc … --opt=interpreter` with nightly-2026-10-23-18478ff
+  report type problems inside basic-cli 0.23.0 and exit 1 although they
+  build and run correctly; `conformance.py` tolerates exactly that (see
+  above).
+* An older local debug compiler (debug-7894793d) panics in its ARC
+  certification pass when building any app that calls `Font.from_bytes`
+  (including the driver). Use the pinned nightly.

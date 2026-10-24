@@ -1,0 +1,108 @@
+{
+  "about": "External fonts for conformance, fuzzing and benchmarks. Each entry is pinned by a URL at a release tag or commit (never a moving branch) and a SHA-256; its licence is fetched beside it. scripts/fetch_corpus.py downloads into tests/corpus/ (not committed) and fails on any mismatch or on an entry whose hashes were not verified. Hashes below were verified by download on 2026-10-24.",
+  "schema": 1,
+  "entries": [
+    {
+      "id": "harfbuzz-14.6.0",
+      "kind": "archive",
+      "url": "https://github.com/harfbuzz/harfbuzz/releases/download/14.6.0/harfbuzz-14.6.0.tar.xz",
+      "sha256": "d07a007327277708a2a73ae437887cdbaf282937f6d03ca5467723e9099af586",
+      "size": 20295260,
+      "strip_components": 1,
+      "include": ["COPYING", "test/shape/data/", "test/fuzzing/fonts/"],
+      "licence": {
+        "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
+        "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+      },
+      "tags": ["shaping-tests", "in-house", "aots", "text-rendering-tests", "malformed", "many-scripts"],
+      "notes": "HarfBuzz release matching the uharfbuzz 0.56.3 oracle. test/shape/data holds the in-house, AOTS and text-rendering-tests suites (.tests files and fonts; import them with `fetch_corpus.py import-hb-tests`); test/fuzzing/fonts holds malformed fonts. Only those paths and COPYING are extracted. Test fonts carry their own licences, listed by the HarfBuzz repository.",
+      "verified": true
+    },
+    {
+      "id": "hb-in-house-trak",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/test/shape/data/in-house/fonts/TRAK.ttf",
+      "sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
+      "size": 2492,
+      "licence": {
+        "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
+        "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+      },
+      "tags": ["glyf", "aat", "trak", "small"],
+      "verified": true
+    },
+    {
+      "id": "hb-fuzzing-037322204d9b",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/test/fuzzing/fonts/037322204d9bc87b6b0b0f2342c97caa9c5fd479",
+      "sha256": "865c672ed7e45d3ec694ba7a5defd28f6fdaa345b0a26151c2c1c3d7ed6c36c3",
+      "size": 12370,
+      "filename": "037322204d9bc87b6b0b0f2342c97caa9c5fd479.ttf",
+      "licence": {
+        "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
+        "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+      },
+      "tags": ["malformed", "fuzzing"],
+      "verified": true
+    },
+    {
+      "id": "ots-bad-0014256514b2",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/khaledhosny/ots/v9.3.0/tests/fonts/bad/0014256514b220c525e98840b0d6ba736a85acbd.ttf",
+      "sha256": "fec4f7423488fd439fbb9ad336bfac04b8f374edbe0ed37239a90ad5ff150e40",
+      "size": 57296,
+      "licence": {
+        "url": "https://raw.githubusercontent.com/khaledhosny/ots/v9.3.0/LICENSE",
+        "sha256": "0d74de3c3cd3196a9ed1bc612cfd5f81d7509d66c4be34a50f99d61bd1ad00d4"
+      },
+      "tags": ["malformed", "ots-bad"],
+      "notes": "From OTS's tests/fonts/bad: OTS must reject it.",
+      "verified": true
+    },
+    {
+      "id": "inter-variable-4.1",
+      "kind": "file",
+      "url": "https://raw.githubusercontent.com/rsms/inter/v4.1/docs/font-files/InterVariable.ttf",
+      "sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
+      "size": 879708,
+      "licence": {
+        "url": "https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt",
+        "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+      },
+      "tags": ["latin", "greek", "cyrillic", "glyf", "variable", "gsub", "gpos"],
+      "verified": true
+    },
+    {
+      "id": "noto-sans-arabic-2.013",
+      "kind": "archive",
+      "url": "https://github.com/notofonts/arabic/releases/download/NotoSansArabic-v2.013/NotoSansArabic-v2.013.zip",
+      "sha256": "1301aceaea84c501cf2e6dcfb3182e2328c8eae5725817fcb239672bda7154f1",
+      "size": 18777381,
+      "members": {
+        "NotoSansArabic/unhinted/ttf/NotoSansArabic-Regular.ttf": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/notofonts/arabic/NotoSansArabic-v2.013/OFL.txt",
+        "sha256": "a7a5a25eb188bf1cd96982030d53e23c33485c69b1044a562254226857ee13af"
+      },
+      "tags": ["arabic", "glyf", "marks", "cursive", "rtl"],
+      "verified": true
+    },
+    {
+      "id": "source-sans-3.052",
+      "kind": "archive",
+      "url": "https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip",
+      "sha256": "a4ebbdea20b08ccbd7bf3665a9462454eefdd01d9a6307129d3b3d4672981074",
+      "size": 2387997,
+      "members": {
+        "OTF/SourceSans3-Regular.otf": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/3.052R/LICENSE.md",
+        "sha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c"
+      },
+      "tags": ["latin", "cff", "gsub", "gpos"],
+      "verified": true
+    }
+  ]
+}

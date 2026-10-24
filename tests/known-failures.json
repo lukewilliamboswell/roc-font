@@ -1,0 +1,25 @@
+{
+  "about": "Cases where roc-font deliberately or knowingly differs from its recorded oracle result. scripts/conformance.py fails on any unlisted difference and on any listed case that now agrees; it never edits this file. Keep entries sorted by id; every entry needs a reason a reader can act on.",
+  "entries": [
+    {
+      "id": "inter/soft-hyphen-hidden",
+      "reason": "Default-ignorable characters are not hidden yet (architecture §6.2). HarfBuzz draws U+00AD with the space glyph at zero advance; the driver maps it through the cmap and gets glyph 0."
+    },
+    {
+      "id": "inter/zwj-hidden",
+      "reason": "Default-ignorable characters are not hidden yet (architecture §6.2). HarfBuzz draws U+200D with the space glyph at zero advance and merges it into the previous cluster."
+    },
+    {
+      "id": "reading/inter-metrics-subset",
+      "reason": "OTS rejects the metrics-only subset because it has no `name` table. roc-font does not read `name`, so accepting the font is deliberate."
+    },
+    {
+      "id": "reading/kern-unsorted",
+      "reason": "Lenient reading (architecture §4.4) is not implemented: OTS drops a `kern` table whose pairs are out of order, while roc-font accepts it."
+    },
+    {
+      "id": "tiny/kern-table-pair",
+      "reason": "HarfBuzz splits a legacy `kern` table value across the pair (half on the first glyph's advance, half as the second glyph's offset and advance). The current public API returns only advance changes, and the `kern` value lands on the first glyph."
+    }
+  ]
+}
