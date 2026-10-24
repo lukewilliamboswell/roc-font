@@ -97,9 +97,11 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] Bundle: package modules plus the default fonts and licences only.
 - [ ] Examples (`examples/` with `spec.json` and the archive step) so the
   release and nightly workflows have something to check.
-- [ ] Repository settings (maintainer): required checks, immutable
-  releases, a `release` environment, tag ruleset, Pages via Actions (then
-  set `PAGES_ENABLED`), private vulnerability reporting.
+- [ ] Just before tagging: the default-branch ruleset from roc-automation's
+  settings chapter (pull request, required checks `check` and the release
+  dry-run build, signed commits, no bot bypass), verified with a pull
+  request whose check fails; then integrate by pull request. Everything
+  else in `blueprint run check-settings` already passes.
 - [ ] Every check in `AGENTS.md` on interpreter and native; tag 0.1.0.
 
 ## After 0.1.0
