@@ -416,5 +416,249 @@
   "generator": {
     "fonttools": "4.61.1"
   },
-  "schema": 1
+  "schema": 1,
+  "time_ratios": {
+    "about": "roc-font median time / comparator median time, same run and machine",
+    "machine": "AMD Ryzen 7 9700X 8-Core Processor (16 CPUs, x86_64)",
+    "ratios": {
+      "adv-huge-cmap/cmap/plane1-sweep": {
+        "c/harfbuzz": 0.86,
+        "rust/ttf-parser": 0.53
+      },
+      "adv-huge-cmap/read": {
+        "c/harfbuzz": 3300.0,
+        "python/fonttools": 0.025,
+        "rust/rustybuzz": 9800.0,
+        "rust/ttf-parser": 13000.0
+      },
+      "adv-many-kern-pairs/read": {
+        "c/harfbuzz": 25.0,
+        "python/fonttools": 0.00011,
+        "rust/rustybuzz": 71.0,
+        "rust/ttf-parser": 190.0
+      },
+      "adv-many-kern-pairs/shape/cjk-medium": {
+        "c/harfbuzz": 2.0,
+        "rust/rustybuzz": 0.46
+      },
+      "adv-many-ligature-lookups/read": {
+        "c/harfbuzz": 130.0,
+        "python/fonttools": 0.041,
+        "rust/rustybuzz": 2600.0,
+        "rust/ttf-parser": 77000.0
+      },
+      "adv-many-ligature-lookups/shape/letters-large": {
+        "c/harfbuzz": 1.8,
+        "rust/rustybuzz": 0.29
+      },
+      "adv-many-ligature-lookups/shape/letters-medium": {
+        "c/harfbuzz": 1.9,
+        "rust/rustybuzz": 0.3
+      },
+      "adv-many-ligature-lookups/shape/letters-small": {
+        "c/harfbuzz": 1.9,
+        "rust/rustybuzz": 0.29
+      },
+      "corpus-fira-code-6.2/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.62,
+        "rust/ttf-parser": 0.14
+      },
+      "corpus-fira-code-6.2/read": {
+        "c/harfbuzz": 160.0,
+        "python/fonttools": 0.017,
+        "rust/rustybuzz": 67.0,
+        "rust/ttf-parser": 6700.0
+      },
+      "corpus-fira-code-6.2/shape/words-medium": {
+        "c/harfbuzz": 2.3,
+        "rust/rustybuzz": 1.3
+      },
+      "corpus-hb-fuzzing-037322204d9b/read": {
+        "c/harfbuzz": 37.0,
+        "rust/rustybuzz": 81.0,
+        "rust/ttf-parser": 120.0
+      },
+      "corpus-hb-in-house-jellee-kern/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.49,
+        "rust/ttf-parser": 0.095
+      },
+      "corpus-hb-in-house-jellee-kern/read": {
+        "c/harfbuzz": 71.0,
+        "python/fonttools": 0.0078,
+        "rust/rustybuzz": 160.0,
+        "rust/ttf-parser": 270.0
+      },
+      "corpus-hb-in-house-jellee-kern/shape/words-medium": {
+        "c/harfbuzz": 1.6,
+        "rust/rustybuzz": 0.56
+      },
+      "corpus-hb-in-house-trak/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.21,
+        "rust/ttf-parser": 0.03
+      },
+      "corpus-hb-in-house-trak/read": {
+        "c/harfbuzz": 17.0,
+        "python/fonttools": 0.0058,
+        "rust/rustybuzz": 38.0,
+        "rust/ttf-parser": 59.0
+      },
+      "corpus-hb-in-house-trak/shape/words-medium": {
+        "c/harfbuzz": 2.1,
+        "rust/rustybuzz": 0.84
+      },
+      "corpus-inter-4.1/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.67,
+        "rust/ttf-parser": 0.17
+      },
+      "corpus-inter-4.1/read": {
+        "c/harfbuzz": 140.0,
+        "python/fonttools": 0.0069,
+        "rust/rustybuzz": 100.0,
+        "rust/ttf-parser": 6600.0
+      },
+      "corpus-inter-4.1/shape/words-medium": {
+        "c/harfbuzz": 2.1,
+        "rust/rustybuzz": 0.88
+      },
+      "corpus-inter-variable-4.1/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.62,
+        "rust/ttf-parser": 0.16
+      },
+      "corpus-inter-variable-4.1/read": {
+        "c/harfbuzz": 360.0,
+        "python/fonttools": 0.0087,
+        "rust/rustybuzz": 280.0,
+        "rust/ttf-parser": 14000.0
+      },
+      "corpus-inter-variable-4.1/shape/words-medium": {
+        "c/harfbuzz": 2.1,
+        "rust/rustybuzz": 0.82
+      },
+      "corpus-merriweather-4.009/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.71,
+        "rust/ttf-parser": 0.25
+      },
+      "corpus-merriweather-4.009/read": {
+        "c/harfbuzz": 1400.0,
+        "python/fonttools": 0.0047,
+        "rust/rustybuzz": 1300.0,
+        "rust/ttf-parser": 38000.0
+      },
+      "corpus-merriweather-4.009/shape/words-medium": {
+        "c/harfbuzz": 1.8,
+        "rust/rustybuzz": 0.44
+      },
+      "corpus-noto-emoji-3.002/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.4,
+        "rust/ttf-parser": 0.059
+      },
+      "corpus-noto-emoji-3.002/read": {
+        "c/harfbuzz": 530.0,
+        "python/fonttools": 0.012,
+        "rust/rustybuzz": 4300.0,
+        "rust/ttf-parser": 15000.0
+      },
+      "corpus-noto-emoji-3.002/shape/words-medium": {
+        "c/harfbuzz": 2.5,
+        "rust/rustybuzz": 0.85
+      },
+      "corpus-noto-sans-2.015/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.5,
+        "rust/ttf-parser": 0.11
+      },
+      "corpus-noto-sans-2.015/read": {
+        "c/harfbuzz": 180.0,
+        "python/fonttools": 0.0048,
+        "rust/rustybuzz": 130.0,
+        "rust/ttf-parser": 4500.0
+      },
+      "corpus-noto-sans-2.015/shape/words-medium": {
+        "c/harfbuzz": 2.0,
+        "rust/rustybuzz": 0.85
+      },
+      "corpus-noto-sans-arabic-2.013/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.41,
+        "rust/ttf-parser": 0.075
+      },
+      "corpus-noto-sans-arabic-2.013/read": {
+        "c/harfbuzz": 110.0,
+        "python/fonttools": 0.011,
+        "rust/rustybuzz": 98.0,
+        "rust/ttf-parser": 1700.0
+      },
+      "corpus-noto-sans-arabic-2.013/shape/words-medium": {
+        "c/harfbuzz": 2.7,
+        "rust/rustybuzz": 0.94
+      },
+      "corpus-noto-sans-devanagari-2.007/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.31,
+        "rust/ttf-parser": 0.053
+      },
+      "corpus-noto-sans-devanagari-2.007/read": {
+        "c/harfbuzz": 110.0,
+        "python/fonttools": 0.021,
+        "rust/rustybuzz": 85.0,
+        "rust/ttf-parser": 6500.0
+      },
+      "corpus-noto-sans-devanagari-2.007/shape/words-medium": {
+        "c/harfbuzz": 2.5,
+        "rust/rustybuzz": 0.82
+      },
+      "corpus-noto-serif-2.015/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.48,
+        "rust/ttf-parser": 0.1
+      },
+      "corpus-noto-serif-2.015/read": {
+        "c/harfbuzz": 200.0,
+        "python/fonttools": 0.0044,
+        "rust/rustybuzz": 140.0,
+        "rust/ttf-parser": 4600.0
+      },
+      "corpus-noto-serif-2.015/shape/words-medium": {
+        "c/harfbuzz": 2.1,
+        "rust/rustybuzz": 0.85
+      },
+      "corpus-source-sans-3.052/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.53,
+        "rust/ttf-parser": 0.097
+      },
+      "corpus-source-sans-3.052/read": {
+        "c/harfbuzz": 94.0,
+        "python/fonttools": 0.0076,
+        "rust/rustybuzz": 75.0,
+        "rust/ttf-parser": 1700.0
+      },
+      "corpus-source-sans-3.052/shape/words-medium": {
+        "c/harfbuzz": 2.2,
+        "rust/rustybuzz": 0.75
+      },
+      "inter/advance/words-medium": {
+        "c/harfbuzz": 0.16,
+        "rust/ttf-parser": 0.54
+      },
+      "inter/cmap/bmp-sweep": {
+        "c/harfbuzz": 0.64,
+        "rust/ttf-parser": 0.39
+      },
+      "inter/read": {
+        "c/harfbuzz": 100.0,
+        "python/fonttools": 0.0061,
+        "rust/rustybuzz": 71.0,
+        "rust/ttf-parser": 5300.0
+      },
+      "inter/shape/words-large": {
+        "c/harfbuzz": 1.8,
+        "rust/rustybuzz": 0.86
+      },
+      "inter/shape/words-medium": {
+        "c/harfbuzz": 2.1,
+        "rust/rustybuzz": 0.86
+      },
+      "inter/shape/words-small": {
+        "c/harfbuzz": 2.3,
+        "rust/rustybuzz": 0.88
+      }
+    },
+    "tolerance": 0.25
+  }
 }

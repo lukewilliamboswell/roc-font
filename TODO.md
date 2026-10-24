@@ -34,8 +34,10 @@ Chrome widths agree on package-mermaid's oracle texts.
   multiply and add (85 % of gvar extents time).
 - [ ] Variable fonts check their glyph outlines twice while reading (the
   required `glyf` check and again for `gvar`); share the one result.
-- [ ] Record time ratios on an idle machine (`bench.py --check
-  --update-baseline`, full run).
+- [ ] Reading cost: about 150x HarfBuzz (geometric mean; HarfBuzz checks
+  lazily, roc-font validates everything up front as OTS does, every glyph
+  outline included). Profile the OTS checks and the outline walk; the
+  default fonts are prepared at compile time and unaffected.
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
   `bench/roc/alloc.roc`, ratchet `requested_bytes` and `peak_live_bytes`.
 
