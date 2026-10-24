@@ -97,10 +97,10 @@ python3 scripts/record_oracle.py             # record what changed
 The review prints a summary such as:
 
 ----
-105 gating cases in 6 files: 97 agree, 5 known, 0 fail, 0 stale, 0 missing-record, 0 missing-font, 0 font-changed, 0 bad-expectation, 3 unsupported, 0 skipped; 0 bad known-failure ids
-scored hb-pending/M1-next: 22 cases, 0 agree, 22 differ, 0 unsupported, 0 skipped
+416 gating cases in 9 files: 311 agree, 52 known, 0 fail, 0 stale, 0 missing-record, 0 missing-font, 0 font-changed, 0 bad-expectation, 53 unsupported, 0 skipped; 0 bad known-failure ids
+scored hb-pending/M1-next: 16 cases, 0 agree, 12 differ, 4 unsupported, 0 skipped
 ...
-driver: .roc-font-tmp/conformance/driver, 5563 requests in one process, 0.05 s; roc: ...
+driver: .roc-font-tmp/conformance/driver, 6117 requests in one process, 0.12 s; roc: ...
 ----
 
 == Case format
@@ -492,7 +492,11 @@ bytes (roc-font ignores it).
 |===
 
 With no location flag the driver measures at `Font.Variation.{}`
-(Regular), never at the default instance. Results of the new kinds use the
+(Regular, where `Font.from_bytes` leaves a font), never at the default
+instance; this matches the records, because `resolve_location` gives the
+oracle `wght` 400 (and every other axis) when a case names no location.
+The driver reads each distinct font path and face once and applies a
+request's location with `Font.at`, which shares the font's tables. Results of the new kinds use the
 notation of "Font-fact kinds" exactly: `coords:` lists every `fvar` axis by
 tag in `fvar` order; `advances:` one decimal per requested glyph;
 `metrics:` the nine fields in the order shown; `extents:` `|`-separated
@@ -501,8 +505,20 @@ answers `unsupported:kind=<kind>`, `unsupported:face` or
 `unsupported:location` without sending the case; it runs a case on a
 variable font only when every resolved axis is at its default (Inter at
 Regular, Merriweather and Fira Code at `wght` 300). `DRIVER_PROTOCOL` in
-`scripts/_common.py` names the protocol the driver speaks; setting it to 2
-is the whole switch on the Python side.
+`scripts/_common.py` names the protocol the driver speaks (2 since
+2026-10-24); it is the whole switch on the Python side. An imported case's
+`--variations=` values are sent in canonical decimal form (`.3` as `0.3`,
+`1.0` as `1`), which denotes the same number.
+
+Two protocol 2 requests need public queries the package does not offer
+yet, so the driver answers them as unsupported rather than reading tables
+itself (the driver uses only the public API):
+
+* `instance=<n>` answers `unsupported:instance`: there is no way to list a
+  font's named instances and their coordinates.
+* `coords` on a variable font answers `unsupported:kind=coords`: the
+  normalised coordinates `Font.at` resolves are not observable. On a font
+  `Font.axes` reports static (no axes) the answer is `coords:`.
 
 `_common.driver_request` writes requests; `Case.request` parses them (with
 expects for every field and error). By hand:
@@ -519,22 +535,26 @@ roc test tools/driver/Case.roc
 `conformance.py` rebuilds the binary into `.roc-font-tmp/conformance/`
 (or `$ROC_FONT_TMPDIR/conformance/`) whenever a driver or package source is
 newer, and sends every runnable case in one process. Measured on
-2026-10-24: building takes about 10 s; the 5563 requests of the full local
-run (our cases, the curated slice and the 6203-case HarfBuzz import) take
-0.05–0.07 s natively and about 20 s with `--opt=interpreter`.
+2026-10-24 with protocol 2: building takes about 7 s; the 6117 requests of
+the full local run (our cases, the curated slice and the 6203-case
+HarfBuzz import) take 0.12–0.13 s natively and about 65 s with
+`--opt=interpreter`, which gives the same result for every case.
 
 What the driver does with today's public API, and the limits that follow:
 
-* Code points map through `Font.glyph`; a code point the font does not map
-  becomes glyph 0 with glyph 0's advance, which is what HarfBuzz prints.
-  This is the driver's choice as a consumer, not the package's.
-* `Font.substitute` applies the default substitutions; each output glyph
-  keeps the index of its first code point, which becomes its cluster.
-* Advances are `Font.advance` plus `Font.kerning`'s change for each glyph.
-  Offsets are always 0: the API has no glyph offsets yet.
-* Only left-to-right text with the default features. When the API gains
-  `Font.shape` and the `Run` (architecture §5.4), only `glyphs` in
-  `main.roc` and the support rules in `_common.driver_request` change.
+* `shape` and `width` call `Font.shape_scalars` with the default
+  `ShapeOptions`, passing each code point's index (or UTF-8 byte offset with
+  `utf8-clusters`) as its offset, so the run's clusters are what hb-shape
+  prints. Only left-to-right text with the default features; other
+  options stay `unsupported` until the support rules in
+  `_common.driver_request` and `glyphs` in `main.roc` pass them on.
+* `advances`, `metrics` and `extents` call `Font.advance`, `Font.metrics`
+  and `Font.extents` on the font at the request's location. roc-font's
+  descent is a depth (positive below the baseline); the driver negates it
+  for the notation. `extents` gives `<gid>=empty` for `Empty`.
+* Where the package still measures a variable font at its default instance
+  (kerning and glyph boxes, see `Font.at`), cases at other locations are
+  known failures until that is wired.
 
 Some nightlies report problems inside the cached basic-cli platform and
 exit non-zero although the binary is built (or the interpreter ran).
@@ -867,7 +887,7 @@ Measured on 2026-10-24: 6203 cases in 308 files; the oracle recorded 6058
 fonts). AOTS's `--single-par` and the collections' `--face-index` are
 supported since extractor `shape` 2; 264 records are on variable fonts and
 carry a resolved location. The
-driver agreed on 204, 1011 were unsupported (an option the driver or the oracle cannot honour yet), and 4843
+driver (protocol 2) agreed on 424, 805 were unsupported (an option the driver or the oracle cannot honour yet), and 4829
 differed, 3825 of them because AdobeBlank2 maps everything through cmap
 format 13, which the reader rejects.
 

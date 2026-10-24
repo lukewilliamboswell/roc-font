@@ -897,10 +897,10 @@ DRIVER_NOOP_HB_OPTIONS = ("--font-funcs=ot", "--font-funcs=ft", "--single-par")
 
 # The protocol tools/driver speaks. 1: shape, read and width at the font's
 # default location, face 0. 2: also the font-fact kinds, faces and
-# locations (the flags above). Set to 2 when tools/driver/Case.roc parses
-# protocol 2; until then such cases are reported as unsupported without
-# being sent.
-DRIVER_PROTOCOL = 1
+# locations (the flags above); tools/driver/Case.roc parses it. The driver
+# itself answers `unsupported:instance` and `unsupported:kind=coords` (on a
+# variable font) while the public API cannot answer them.
+DRIVER_PROTOCOL = 2
 PROTOCOL_1_KINDS = ("shape", "read", "width")
 
 
@@ -920,6 +920,12 @@ def driver_location_flags(case: Case) -> list[str]:
         flags.append(f"axis={tag}:{value}")
     for item in case.settings.get("variations", []):
         tag, _, value = item.partition("=")
+        # hb-shape spells values freely (`.3`, `1.0`); the driver takes the
+        # canonical decimal, which denotes the same number.
+        try:
+            value = dec_text(Decimal(value))
+        except (InvalidOperation, ValueError):
+            pass
         flags.append(f"axis={tag}:{value}")
     return flags
 

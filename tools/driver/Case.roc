@@ -3,25 +3,49 @@
 ## `scripts/conformance.py` parses the JSONC case files and sends one request
 ## per line (scripts/_common.py, `driver_request`):
 ##
-##     <tag> TAB <font path> TAB <kind> TAB <code points> TAB <flags>
+##     <tag> TAB <font path> TAB <kind> TAB <items> TAB <flags>
 ##
-## `kind` is `shape`, `read` or `width`; code points are lower-case
-## hexadecimal without prefix, comma-separated (empty for empty text); flags
-## are comma-separated, from `no-clusters`, `no-positions`, `no-advances`,
-## `utf8-clusters` and `font-size=<n>`. Shaping results are printed in
-## hb-shape's text notation with glyph ids: `[gid=cluster@dx,dy+ax,ay|...]`.
-## See docs/conformance.adoc.
+## `kind` is `shape`, `read`, `width`, `coords`, `advances`, `metrics` or
+## `extents`. Items are lower-case hexadecimal without prefix,
+## comma-separated: code points for `shape` and `width` (empty for empty
+## text), glyph ids or the word `all` for `advances` and `extents`, empty
+## for the other kinds. Flags are comma-separated, from `no-clusters`,
+## `no-positions`, `no-advances`, `utf8-clusters` and `font-size=<n>`, and
+## (protocol 2) `face=<n>`, `instance=<n>`, `weight=<w>`, `width=<w>`,
+## `optical-size=<s>` and repeatable `axis=<tag>:<decimal>`. Shaping results
+## are printed in hb-shape's text notation with glyph ids:
+## `[gid=cluster@dx,dy+ax,ay|...]`. See docs/conformance.adoc.
 Case :: {}.{
 
+	## Which glyphs a font-fact request lists: every glyph of the font, in
+	## order, or the given ids in request order.
+	Glyphs : [All, Listed(List(U32))]
+
 	## What a request asks for.
-	Kind : [Shape, Read, Width]
+	Kind : [Shape, Read, Width, Coords, Advances(Glyphs), Metrics, Extents(Glyphs)]
 
 	## The output settings of a shaping request. `font_size` is 0 when not
 	## given.
 	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64 }
 
+	## Where to measure, mirroring `Font.Variation` (whose field types these
+	## are, structurally) and named instances.
+	Variation : {
+		weight : [Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)],
+		width : [UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded, Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)],
+		optical_size : [FontDefault, Size(Dec)],
+		axes : List({ tag : Str, value : Dec }),
+	}
+
+	## No location flag (`Font.Variation.{}`, Regular), a named instance, or
+	## a variation built from the location flags.
+	Location : [Regular, Instance(U32), At(Variation)]
+
+	## Everything the flags field selects.
+	Flags : { settings : Settings, face : U32, location : Location }
+
 	## One parsed request line.
-	Request : { tag : Str, font : Str, kind : Kind, scalars : List(U32), settings : Settings }
+	Request : { tag : Str, font : Str, kind : Kind, scalars : List(U32), settings : Settings, face : U32, location : Location }
 
 	## One positioned output glyph, in font units.
 	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64 }
@@ -32,29 +56,40 @@ Case :: {}.{
 	request = |line|
 		match line.split_on("\t") {
 			[tag, font, kind_text, points, flag_text] => {
-				kind = match kind_text {
-					"shape" => Ok(Shape)
-					"read" => Ok(Read)
-					"width" => Ok(Width)
-					_ => Err("kind")
+				parsed = match kind_text {
+					"shape" => Case.scalars(points).map_ok(|s| (Shape, s))
+					"width" => Case.scalars(points).map_ok(|s| (Width, s))
+					"advances" => Case.glyph_ids(points).map_ok(|g| (Advances(g), []))
+					"extents" => Case.glyph_ids(points).map_ok(|g| (Extents(g), []))
+					"read" => if (points.is_empty()) Ok((Read, [])) else Err(BadItems)
+					"coords" => if (points.is_empty()) Ok((Coords, [])) else Err(BadItems)
+					"metrics" => if (points.is_empty()) Ok((Metrics, [])) else Err(BadItems)
+					_ => Err(BadKind)
 				}
-				match (kind, Case.scalars(points), Case.flags(flag_text)) {
-					(Ok(k), Ok(s), Ok(settings)) =>
-						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind: k, scalars: s, settings })
-					(Err(why), _, _) => Err(Malformed({ tag, why }))
-					(_, Err(_), _) => Err(Malformed({ tag, why: "code-points" }))
-					(_, _, Err(flag)) => Err(Malformed({ tag, why: "flag-${flag}" }))
+				match (parsed, Case.flags(flag_text)) {
+					(Ok((kind, scalars)), Ok(f)) =>
+						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind, scalars, settings: f.settings, face: f.face, location: f.location })
+					(Err(BadKind), _) => Err(Malformed({ tag, why: "kind" }))
+					(Err(BadUnicodes), _) => Err(Malformed({ tag, why: "code-points" }))
+					(Err(_), _) => Err(Malformed({ tag, why: "items" }))
+					(_, Err(flag)) => Err(Malformed({ tag, why: "flag-${flag}" }))
 				}
 			}
 			[tag, ..] => Err(Malformed({ tag, why: "fields" }))
 			[] => Err(Malformed({ tag: "", why: "fields" }))
 		}
 
-	## Settings from the comma-separated flags field, or the first flag not
-	## understood.
-	flags : Str -> Try(Settings, Str)
+	## The settings, face and location from the comma-separated flags field,
+	## or the first flag not understood. `instance` cannot be combined with
+	## the other location flags.
+	flags : Str -> Try(Flags, Str)
 	flags = |field| {
 		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+		var $face = 0.U32
+		var $instance = 0.U32
+		var $has_instance = False
+		var $v = { weight: Regular, width: Normal, optical_size: FontDefault, axes: [] }
+		var $varied = False
 		var $bad = ""
 		for flag in field.split_on(",") {
 			if $bad.is_empty() and !flag.is_empty() {
@@ -75,13 +110,171 @@ Case :: {}.{
 							$bad = flag
 						}
 					}
+				} else if flag.starts_with("face=") {
+					match Case.decimal(flag.drop_prefix("face=")) {
+						Ok(n) if n <= 0xFFFF => {
+							$face = n.to_u32_wrap()
+						}
+						_ => {
+							$bad = flag
+						}
+					}
+				} else if flag.starts_with("instance=") {
+					match Case.decimal(flag.drop_prefix("instance=")) {
+						Ok(n) if n <= 0xFFFF and !$varied => {
+							$instance = n.to_u32_wrap()
+							$has_instance = True
+						}
+						_ => {
+							$bad = flag
+						}
+					}
 				} else {
-					$bad = flag
+					# The location flags; each is refused after `instance`.
+					parsed = if $has_instance {
+						Err({})
+					} else if flag.starts_with("weight=") {
+						Case.weight(flag.drop_prefix("weight=")).map_ok(|w| { ..$v, weight: w })
+					} else if flag.starts_with("width=") {
+						Case.width_flag(flag.drop_prefix("width=")).map_ok(|w| { ..$v, width: w })
+					} else if flag.starts_with("optical-size=") {
+						text = flag.drop_prefix("optical-size=")
+						if (text == "FontDefault") Ok({ ..$v, optical_size: FontDefault }) else Case.dec(text).map_ok(|d| { ..$v, optical_size: Size(d) })
+					} else if flag.starts_with("axis=") {
+						match flag.drop_prefix("axis=").split_first(":") {
+							Ok({ before, after }) if !before.is_empty() => Case.dec(after).map_ok(|d| { ..$v, axes: $v.axes.append({ tag: before, value: d }) })
+							_ => Err({})
+						}
+					} else {
+						Err({})
+					}
+					match parsed {
+						Ok(next) => {
+							$v = next
+							$varied = True
+						}
+						Err(_) => {
+							$bad = flag
+						}
+					}
 				}
 			}
 		}
-		if ($bad.is_empty()) Ok($s) else Err($bad)
+		location = if $has_instance {
+			Instance($instance)
+		} else if $varied {
+			At($v)
+		} else {
+			Regular
+		}
+		if ($bad.is_empty()) Ok({ settings: $s, face: $face, location }) else Err($bad)
 	}
+
+	## `Font.Variation.weight` from a flag value: a CSS weight name or a
+	## decimal integer 0-65535.
+	weight : Str -> Try([Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)], {})
+	weight = |text|
+		match text {
+			"Thin" => Ok(Thin)
+			"ExtraLight" => Ok(ExtraLight)
+			"Light" => Ok(Light)
+			"Regular" => Ok(Regular)
+			"Medium" => Ok(Medium)
+			"SemiBold" => Ok(SemiBold)
+			"Bold" => Ok(Bold)
+			"ExtraBold" => Ok(ExtraBold)
+			"Black" => Ok(Black)
+			_ =>
+				match Case.decimal(text) {
+					Ok(n) if n <= 0xFFFF => Ok(Weight(n.to_u16_wrap()))
+					_ => Err({})
+				}
+		}
+
+	## `Font.Variation.width` from a flag value: a CSS width name or a
+	## decimal percentage.
+	width_flag : Str -> Try([UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded, Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)], {})
+	width_flag = |text|
+		match text {
+			"UltraCondensed" => Ok(UltraCondensed)
+			"ExtraCondensed" => Ok(ExtraCondensed)
+			"Condensed" => Ok(Condensed)
+			"SemiCondensed" => Ok(SemiCondensed)
+			"Normal" => Ok(Normal)
+			"SemiExpanded" => Ok(SemiExpanded)
+			"Expanded" => Ok(Expanded)
+			"ExtraExpanded" => Ok(ExtraExpanded)
+			"UltraExpanded" => Ok(UltraExpanded)
+			_ => Case.dec(text).map_ok(|d| Percent(d))
+		}
+
+	## A decimal `-?[0-9]+(.[0-9]+)?` with at most 10 integer digits and 18
+	## decimal places, exactly, as a `Dec`.
+	dec : Str -> Try(Dec, {})
+	dec = |text| {
+		negative = text.starts_with("-")
+		body = text.drop_prefix("-")
+		(whole, fraction, has_point) = match body.split_first(".") {
+			Ok({ before, after }) => (before, after, True)
+			Err(_) => (body, "", False)
+		}
+		fraction_digits = fraction.to_utf8()
+		ok = (!has_point or !fraction_digits.is_empty()) and fraction_digits.len() <= 18 and whole.to_utf8().len() <= 10
+		match (Case.decimal_digits(whole), Case.decimal_digits_or_empty(fraction)) {
+			(Ok(w), Ok(f)) if ok => {
+				var $scale = 1.I128
+				for _ in fraction_digits.len()..<18 {
+					$scale = $scale * 10
+				}
+				attos = w.to_i128() * 1_000_000_000_000_000_000 + f.to_i128() * $scale
+				Ok(Dec.from_attos(if (negative) -attos else attos))
+			}
+			_ => Err({})
+		}
+	}
+
+	## Decimal digits (at least one, at most 18) as a number.
+	decimal_digits : Str -> Try(U64, {})
+	decimal_digits = |text| {
+		digits = text.to_utf8()
+		var $value = 0.U64
+		var $ok = !digits.is_empty() and digits.len() <= 18
+		for b in digits {
+			if b >= '0' and b <= '9' {
+				$value = $value * 10 + (b - '0').to_u64()
+			} else {
+				$ok = False
+			}
+		}
+		if ($ok) Ok($value) else Err({})
+	}
+
+	decimal_digits_or_empty : Str -> Try(U64, {})
+	decimal_digits_or_empty = |text| if (text.is_empty()) Ok(0) else Case.decimal_digits(text)
+
+	## Glyph ids from the request field: `all`, or hexadecimal numbers below
+	## 2^32 without prefix, separated by commas. Empty means none.
+	glyph_ids : Str -> Try(Glyphs, [BadGlyphs])
+	glyph_ids = |field|
+		if field == "all" {
+			Ok(All)
+		} else {
+			var $out = []
+			var $ok = True
+			if !field.is_empty() {
+				for word in field.split_on(",") {
+					match Case.hex_digits(word, 8) {
+						Ok(value) => {
+							$out = $out.append(value.to_u32_wrap())
+						}
+						Err(_) => {
+							$ok = False
+						}
+					}
+				}
+			}
+			if ($ok) Ok(Listed($out)) else Err(BadGlyphs)
+		}
 
 	decimal : Str -> Try(U64, [BadNumber])
 	decimal = |text| {
@@ -120,10 +313,19 @@ Case :: {}.{
 	}
 
 	hex : Str -> Try(U32, [BadHex])
-	hex = |word| {
+	hex = |word|
+		match Case.hex_digits(word, 6) {
+			# Surrogates and values past U+10FFFF are not scalar values.
+			Ok(value) if value <= 0x10FFFF and (value < 0xD800 or value > 0xDFFF) => Ok(value.to_u32_wrap())
+			_ => Err(BadHex)
+		}
+
+	## One to `most` hexadecimal digits, either case, as a number.
+	hex_digits : Str, U64 -> Try(U64, {})
+	hex_digits = |word, most| {
 		digits = word.to_utf8()
 		var $value = 0.U64
-		var $ok = !digits.is_empty() and digits.len() <= 6
+		var $ok = !digits.is_empty() and digits.len().to_u64() <= most
 		for b in digits {
 			d = if b >= '0' and b <= '9' {
 				Ok((b - '0').to_u64())
@@ -143,12 +345,7 @@ Case :: {}.{
 				}
 			}
 		}
-		# Surrogates and values past U+10FFFF are not scalar values.
-		if $ok and $value <= 0x10FFFF and ($value < 0xD800 or $value > 0xDFFF) {
-			Ok($value.to_u32_wrap())
-		} else {
-			Err(BadHex)
-		}
+		if ($ok) Ok($value) else Err({})
 	}
 
 	## The UTF-8 byte offset of each scalar, followed by the total length, so
@@ -203,15 +400,51 @@ Case :: {}.{
 		}
 		"width:${$sum.to_str()}"
 	}
+
+	## Per-glyph advances as a font-fact result.
+	advances : List(I64) -> Str
+	advances = |values| "advances:${Str.join_with(values.map(|a| a.to_str()), ",")}"
+
+	## The nine line and decoration metrics as a font-fact result, in the
+	## notation's order (descent negative below the baseline).
+	metrics : { ascent : I64, descent : I64, line_gap : I64, cap_height : I64, x_height : I64, underline_position : I64, underline_thickness : I64, strikeout_position : I64, strikeout_thickness : I64 } -> Str
+	metrics = |m| {
+		pairs = [
+			("ascent", m.ascent),
+			("descent", m.descent),
+			("line_gap", m.line_gap),
+			("cap_height", m.cap_height),
+			("x_height", m.x_height),
+			("underline_position", m.underline_position),
+			("underline_thickness", m.underline_thickness),
+			("strikeout_position", m.strikeout_position),
+			("strikeout_thickness", m.strikeout_thickness),
+		]
+		"metrics:${Str.join_with(pairs.map(|(name, value)| "${name}=${value.to_str()}"), ",")}"
+	}
+
+	## Glyph ink boxes as a font-fact result, one entry per glyph in request
+	## order.
+	extents : List({ glyph : U64, box : [Box({ x_min : I64, y_min : I64, x_max : I64, y_max : I64 }), Empty] }) -> Str
+	extents = |entries| {
+		parts = entries.map(
+			|e|
+				match e.box {
+					Box(b) => "${e.glyph.to_str()}=${b.x_min.to_str()},${b.y_min.to_str()},${b.x_max.to_str()},${b.y_max.to_str()}"
+					Empty => "${e.glyph.to_str()}=empty"
+				},
+		)
+		"extents:${Str.join_with(parts, "|")}"
+	}
 }
 
 plain : Case.Settings
 plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
 
-expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True } })
-expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain })
-expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain })
-expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 } })
+expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular })
+expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular })
+expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain, face: 0, location: Regular })
+expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 }, face: 0, location: Regular })
 expect Case.request("t\tf.ttf\tshape\t41") == Err(Malformed({ tag: "t", why: "fields" }))
 expect Case.request("t\tf.ttf\tdraw\t41\t") == Err(Malformed({ tag: "t", why: "kind" }))
 expect Case.request("t\tf.ttf\tshape\td800\t") == Err(Malformed({ tag: "t", why: "code-points" }))
@@ -223,6 +456,38 @@ expect Case.scalars("41,,42") == Err(BadUnicodes)
 expect Case.scalars("110000") == Err(BadUnicodes)
 expect Case.scalars("U+0041") == Err(BadUnicodes)
 expect Case.flags("font-size=0") == Err("font-size=0")
+expect Case.request("t\tf.ttf\tcoords\t41\t") == Err(Malformed({ tag: "t", why: "items" }))
+expect Case.request("t\tf.ttf\tadvances\t0,zz\t") == Err(Malformed({ tag: "t", why: "items" }))
+expect Case.request("t\tf.ttf\tmetrics\t\tface=2") == Ok({ tag: "t", font: "f.ttf", kind: Metrics, scalars: [], settings: plain, face: 2, location: Regular })
+expect Case.request("t\tf.ttf\tadvances\t0,1c8,ffffffff\t") == Ok({ tag: "t", font: "f.ttf", kind: Advances(Listed([0, 456, 0xFFFFFFFF])), scalars: [], settings: plain, face: 0, location: Regular })
+expect Case.request("t\tf.ttf\textents\tall\tinstance=8") == Ok({ tag: "t", font: "f.ttf", kind: Extents(All), scalars: [], settings: plain, face: 0, location: Instance(8) })
+expect Case.glyph_ids("") == Ok(Listed([]))
+expect Case.glyph_ids("100000000") == Err(BadGlyphs)
+
+expect {
+	at = |v| Ok({ settings: plain, face: 0, location: At(v) })
+	base = { weight: Regular, width: Normal, optical_size: FontDefault, axes: [] }
+	Case.flags("weight=Bold") == at({ ..base, weight: Bold })
+		and Case.flags("weight=650,width=SemiCondensed,optical-size=12.5") == at({ ..base, weight: Weight(650), width: SemiCondensed, optical_size: Size(12.5) })
+		and Case.flags("width=87.5,optical-size=FontDefault") == at({ ..base, width: Percent(87.5) })
+		and Case.flags("axis=wght:700,axis=HV:-0.25,axis=wght:300.000000000000000001") == at({ ..base, axes: [{ tag: "wght", value: 700 }, { tag: "HV", value: -0.25 }, { tag: "wght", value: 300.000000000000000001 }] })
+}
+
+expect Case.flags("instance=1,weight=Bold") == Err("weight=Bold")
+expect Case.flags("weight=Bold,instance=1") == Err("instance=1")
+expect Case.flags("axis=wght:.5") == Err("axis=wght:.5")
+expect Case.flags("axis=wght:1.") == Err("axis=wght:1.")
+expect Case.flags("axis=:1") == Err("axis=:1")
+expect Case.flags("axis=wght:1.0000000000000000001") == Err("axis=wght:1.0000000000000000001")
+expect Case.flags("weight=Heavy") == Err("weight=Heavy")
+expect Case.flags("weight=65536") == Err("weight=65536")
+expect Case.flags("face=x") == Err("face=x")
+expect Case.dec("-0.5") == Ok(-0.5)
+expect Case.dec("1000000000") == Ok(1000000000)
+expect Case.advances([1200, -3]) == "advances:1200,-3"
+expect Case.advances([]) == "advances:"
+expect Case.metrics({ ascent: 1984, descent: -494, line_gap: 0, cap_height: 1490, x_height: 1118, underline_position: -395, underline_thickness: 46, strikeout_position: 671, strikeout_thickness: 46 }) == "metrics:ascent=1984,descent=-494,line_gap=0,cap_height=1490,x_height=1118,underline_position=-395,underline_thickness=46,strikeout_position=671,strikeout_thickness=46"
+expect Case.extents([{ glyph: 0, box: Box({ x_min: 80, y_min: -104, x_max: 1120, y_max: 1478 }) }, { glyph: 3, box: Empty }]) == "extents:0=80,-104,1120,1478|3=empty"
 expect Case.utf8_offsets([0x41, 0xE9, 0x20AC, 0x1F600]) == [0, 1, 3, 6, 10]
 
 expect {

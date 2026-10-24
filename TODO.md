@@ -20,10 +20,9 @@ repositories are relative to `~/Documents/Github/`.
   1; FeatureVariations in the shaping plan) and phase 3 (`TableGlyfPoints`,
   `TableGvar` extents) into `Font.at`; `TableGvar`'s extents replace
   `TableGlyf`'s header boxes.
-- [ ] Driver protocol 2 (`docs/conformance.adoc`, "The driver"): kinds
-  `coords`, `advances`, `metrics`, `extents`, flags `face`, `instance`,
-  `weight`, `width`, `optical-size`, `axis`; then `DRIVER_PROTOCOL = 2`.
-  Unlocks 250 recorded cases (default fonts at many locations, collections).
+- [ ] `Font.instances` and `Font.coordinates` (named instances and the
+  normalised coordinates `at` resolves to); then the driver answers
+  `instance=` and `coords` (20 + 35 recorded cases wait on them).
 - [ ] Fuzz targets for the variation readers (`TableVar`, `LayoutVar`,
   `TableGvar`): totality, determinism, bounded steps, differential values
   at fuzzed locations.

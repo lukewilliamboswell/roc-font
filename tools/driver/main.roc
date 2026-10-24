@@ -16,9 +16,15 @@ import Case
 ##
 ##     <tag><TAB><result>
 ##
+## Protocol 2: each distinct (font path, face) is read once; every request
+## then measures at its own location with `Font.at`, which is cheap.
+##
 ## A result is hb-shape notation with glyph ids, `width:<n>`, `read:accept`,
-## `read:reject`, `unsupported:--font-size=<n>` (a size other than the units
-## per em), `error:font-file` (the font could not be read from disk) or
+## `read:reject`, `read:drop=<tags>`, a font-fact result (`coords:`,
+## `advances:`, `metrics:`, `extents:`), `unsupported:<what>` (a font size
+## other than the units per em, or what the public API cannot answer yet:
+## named instances, and normalised coordinates of a variable font),
+## `error:font-file` (the font could not be read from disk) or
 ## `error:malformed-request:<why>`. See docs/conformance.adoc.
 ##
 ## With `--explain` as an argument, a rejected font's line gets a third
@@ -37,11 +43,12 @@ main! = |args| {
 		if !line.is_empty() {
 			match Case.request(line) {
 				Ok(req) => {
-					state = match $fonts.get(req.font) {
+					key = "${req.face.to_str()}\t${req.font}"
+					state = match $fonts.get(key) {
 						Ok(found) => found
 						Err(_) => {
-							loaded = load!(req.font)
-							$fonts = $fonts.insert(req.font, loaded)
+							loaded = load!(req.font, req.face)
+							$fonts = $fonts.insert(key, loaded)
 							loaded
 						}
 					}
@@ -63,22 +70,18 @@ main! = |args| {
 	Ok({})
 }
 
-## A font read for the driver: measured at its default location (protocol
-## 1 compares with HarfBuzz's default instance; without `at` a variable font
-## measures at Regular), with the tags of the tables lenient reading dropped.
+## A font read for the driver, at `Font.Variation.{}` (Regular, as
+## `from_bytes` leaves it), with the tags of the tables lenient reading
+## dropped.
 FontState : [Ready({ font : Font, dropped : List(Str) }), Rejected(Str), NoFile]
 
-load! : Str => FontState
-load! = |path|
+load! : Str, U32 => FontState
+load! = |path, face|
 	match Path.read_bytes!(Path.utf8(path)) {
 		Err(_) => NoFile
 		Ok(bytes) =>
-			match Font.from_bytes(bytes, Font.ReadOptions.{}) {
-				Ok(read) => {
-					axes = Font.axes(read).map(|a| { tag: a.tag, value: a.default })
-					font = Font.at(read, Font.Variation.{ axes })
-					Ready({ font, dropped: dropped_tags(Font.dropped(read)) })
-				}
+			match Font.from_bytes(bytes, Font.ReadOptions.{ face }) {
+				Ok(font) => Ready({ font, dropped: dropped_tags(Font.dropped(font)) })
 				Err(problems) => Rejected(Str.inspect(problems))
 			}
 	}
@@ -106,17 +109,61 @@ run = |state, req|
 	match state {
 		NoFile => "error:font-file"
 		Rejected(_) => "read:reject"
-		Ready({ font, dropped }) =>
-			match req.kind {
-				Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
-				Width => Case.width(glyphs(font, req.settings, req.scalars))
-				Shape =>
-					if req.settings.font_size != 0 and req.settings.font_size != Font.units_per_em(font).to_u64() {
-						"unsupported:--font-size=${req.settings.font_size.to_str()}"
-					} else {
-						Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
-					}
+		Ready({ font: read, dropped }) =>
+			match req.location {
+				# The public API has no named-instance query yet.
+				Instance(_) => "unsupported:instance"
+				Regular => answer(read, dropped, req)
+				At(v) => answer(Font.at(read, Font.Variation.{ weight: v.weight, width: v.width, optical_size: v.optical_size, axes: v.axes }), dropped, req)
 			}
+	}
+
+answer : Font, List(Str), Case.Request -> Str
+answer = |font, dropped, req|
+	match req.kind {
+		Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
+		Width => Case.width(glyphs(font, req.settings, req.scalars))
+		Shape =>
+			if req.settings.font_size != 0 and req.settings.font_size != Font.units_per_em(font).to_u64() {
+				"unsupported:--font-size=${req.settings.font_size.to_str()}"
+			} else {
+				Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
+			}
+		# A static font has no coordinates; a variable font's normalised
+		# coordinates are not observable through the public API yet.
+		Coords => if (Font.axes(font).is_empty()) "coords:" else "unsupported:kind=coords"
+		Advances(which) => Case.advances(ids(font, which).map(|g| Font.advance(font, g).to_i64()))
+		Metrics => {
+			m = Font.metrics(font)
+			# roc-font's descent is a depth (positive below the baseline);
+			# the notation's is a position, as HarfBuzz reports it.
+			Case.metrics({ ascent: m.ascent.to_i64(), descent: -(m.descent.to_i64()), line_gap: m.line_gap.to_i64(), cap_height: m.cap_height.to_i64(), x_height: m.x_height.to_i64(), underline_position: m.underline.position.to_i64(), underline_thickness: m.underline.thickness.to_i64(), strikeout_position: m.strikeout.position.to_i64(), strikeout_thickness: m.strikeout.thickness.to_i64() })
+		}
+		Extents(which) =>
+			Case.extents(
+				ids(font, which).map(
+					|g|
+						match Font.extents(font, g) {
+							Extents(b) => { glyph: g.to_u64(), box: Box({ x_min: b.x_min.to_i64(), y_min: b.y_min.to_i64(), x_max: b.x_max.to_i64(), y_max: b.y_max.to_i64() }) }
+							Empty => { glyph: g.to_u64(), box: Empty }
+						},
+				),
+			)
+	}
+
+# The glyph ids a font-fact request lists: `all` is every glyph in order.
+ids : Font, Case.Glyphs -> List(U32)
+ids = |font, which|
+	match which {
+		All => {
+			count = Font.glyph_count(font)
+			var $out = List.with_capacity(count.to_u64())
+			for g in 0..<count {
+				$out = $out.append(g)
+			}
+			$out
+		}
+		Listed(list) => list
 	}
 
 # Shape the scalars with the default options. Each scalar's offset is its
