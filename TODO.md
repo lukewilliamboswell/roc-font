@@ -256,7 +256,9 @@ reading, planning and shaping pass seeded native runs; `roc docs` reviewed.
 
 ### M4. Browser parity and GSUB flags
 
-- [ ] cmap formats 0, 6, 10, 13 and 14.
+- [x] cmap formats 0, 6, 10, 13, HarfBuzz's subtable priority, symbol
+  (3,0) and Mac Roman remapping (`TableCmap`).
+- [ ] cmap format 14 (variation sequences; needs a query API).
 - [ ] `GDEF` glyph classes, mark attachment classes, mark filtering sets;
   GSUB lookup flags.
 - [ ] GSUB types 3 (with the `aalt`/`salt` value) and 8.
@@ -385,9 +387,16 @@ Nested contextual lookups still recurse (depth 8); convert to a work list
 when M3 raises the depth.
 
 Performance findings to act on:
-- Reading allocates about once per cmap group or ligature (30k allocations
-  for 30k format-12 groups; 69k for 52k ligatures; 5.4k for Inter). Flat,
-  preallocated arrays (or reading in place, §4.2) are the M3 fix.
+- Done (reader + shaper rewrites, 2026-10-24): reading allocates O(tables).
+  Inter 5396 -> 111; huge cmap 30035 -> 16; 90k kern pairs 485 -> 23;
+  52k ligatures 68641 -> 272. cmap is a flat sorted index (§4.3, justified
+  by instruction counts: in-place search was 1.2–4x slower per lookup);
+  kerning is read in place with a per-lookup glyph digest. Read is about
+  21x HarfBuzz (was 62x), measured before the merge; re-measure idle.
+- HarfBuzz suite after the cmap work: `read:reject` 3841 -> 9. The largest
+  remaining group of differences is cluster merging (3999 cases with the
+  same glyphs but different clusters or positions, mostly AdobeBlank2's
+  emoji grapheme clusters).
 - Shaping Inter takes 24 / 121 / 740 allocations at 0.5 / 4 / 32 KiB; the
   ligature-heavy font 234 / 1146 / 8446. Linear, but the constant is worth
   cutting.

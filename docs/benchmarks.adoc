@@ -197,6 +197,11 @@ beyond the tolerance; while the baseline holds no ratios, none are checked. Rati
 them on an idle machine, and treat a failure on different hardware as a
 prompt to look, not a verdict.
 
+On a shared or loaded machine, compare instruction counts instead of time
+(`perf stat -e instructions:u` on the native benchmark binary): they are
+deterministic for a given build and input and move with real work, while
+wall-clock times varied by ±50 % under load during the reader rewrite.
+
 == Comparison programs
 
 [cols="1,2,3",options="header"]

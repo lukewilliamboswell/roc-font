@@ -1,5 +1,6 @@
 import Font
 import FontTest
+import LayoutKerning
 import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
 ## The tests of `Font`. Test-only: `main.roc` does not import this module, so
@@ -136,7 +137,7 @@ expect FontTest.file(FontTest.basic) == FontTest.file(FontTest.basic)
 expect {
 	bytes = FontTest.file(FontTest.basic)
 	match (Font.from_bytes(bytes), Font.from_bytes(bytes)) {
-		(Ok(a), Ok(b)) => a.advances == b.advances and a.ranges == b.ranges and a.ink == b.ink and a.ascent == b.ascent
+		(Ok(a), Ok(b)) => a.advances == b.advances and [0x40, 0x41, 0x43].map(|c| Font.glyph(a, c)) == [0x40, 0x41, 0x43].map(|c| Font.glyph(b, c)) and a.ink == b.ink and a.ascent == b.ascent
 		_ => False
 	}
 }
@@ -167,6 +168,18 @@ expect {
 expect {
 	cmap = FontTest.cmap4([{ first: 0xFFFE, last: 0xFFFE, delta: 4, glyphs: [] }])
 	glyphs_for(cmap_only(3, 1, cmap), [0xFFFD, 0xFFFE, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 9999, 9999, 9999]
+}
+
+# A delta segment whose glyphs wrap past 65535 to 0 mid-segment: the
+# character drawn by glyph 0 is unmapped and the next ones continue from
+# glyph 1. Glyph 0 at the start of a segment is unmapped too.
+expect glyphs_for(cmap_only(3, 1, FontTest.cmap4([{ first: 0x41, last: 0x45, delta: 65536 - 0x43, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44, 0x45, 0x46]) == [9999, 9999, 9999, 1, 2, 9999]
+expect glyphs_for(cmap_only(3, 1, FontTest.cmap4([{ first: 0x41, last: 0x43, delta: 65536 - 0x41, glyphs: [] }, { first: 0x44, last: 0x44, delta: 65536 + 3 - 0x44, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44]) == [9999, 1, 2, 3]
+
+# A glyph array segment that ends at U+FFFF needs no entry for it.
+expect {
+	cmap = FontTest.cmap4([{ first: 0xFFFD, last: 0xFFFE, delta: 0, glyphs: [2, 3] }])
+	glyphs_for(cmap_only(3, 1, cmap), [0xFFFC, 0xFFFD, 0xFFFE, 0xFFFF]) == [9999, 2, 3, 9999]
 }
 
 # Platform 0 (Unicode) is a Unicode mapping too.
@@ -215,6 +228,10 @@ expect {
 	glyphs_for(cmap_only(3, 10, cmap), [0x50, 0x51, 0x52, 0x55, 0x60]) == [2, 3, 9999, 9999, 9999]
 }
 
+# A group starting at glyph 0 maps its first character to nothing and the
+# rest from glyph 1.
+expect glyphs_for(cmap_only(3, 10, FontTest.cmap12([{ first: 0x41, last: 0x43, glyph: 0 }])), [0x41, 0x42, 0x43]) == [9999, 1, 2]
+
 # The highest code point Unicode allows.
 expect glyphs_for(cmap_only(0, 4, FontTest.cmap12([{ first: 0x10FFFF, last: 0x10FFFF, glyph: 3 }])), [0x10FFFF]) == [3]
 
@@ -239,17 +256,147 @@ expect {
 	problems_of(cmap_only(3, 10, subtable)) == [BadTable("cmap")]
 }
 
+# ------------------------------------------------------------ cmap format 0
+
+# Character codes up to 255 index a byte array; glyph 0 and glyphs the font
+# does not have leave a code unmapped.
+expect {
+	glyphs = List.repeat(0, 0x41).concat([1, 0, 3, 9])
+	glyphs_for(cmap_only(0, 3, FontTest.cmap0(glyphs)), [0x40, 0x41, 0x42, 0x43, 0x44, 0xFF, 0x100, 0x141]) == [9999, 1, 9999, 3, 9999, 9999, 9999, 9999]
+}
+
+# A truncated byte array is a bad table.
+expect problems_of(cmap_only(3, 1, FontTest.cmap0([1, 2, 3]).drop_last(1))) == [BadTable("cmap")]
+
+# ------------------------------------------------------------ cmap formats 6 and 10
+
+# A trimmed array maps consecutive codes from its first; codes before or
+# after it are unmapped.
+expect glyphs_for(cmap_only(3, 1, FontTest.cmap6(0x41, [1, 0, 3, 7])), [0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x10041]) == [9999, 1, 9999, 3, 9999, 9999, 9999]
+expect glyphs_for(cmap_only(3, 10, FontTest.cmap10(0x1F600, [2, 3])), [0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0xF600]) == [9999, 2, 3, 9999, 9999]
+
+# An empty array maps nothing.
+expect glyphs_for(cmap_only(3, 1, FontTest.cmap6(0x41, [])), [0x41]) == [9999]
+
+# An array past the end of the table, or a count larger than the table
+# (checked before anything is read), is a bad table.
+expect problems_of(cmap_only(3, 1, FontTest.cmap6(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 1, FontTest.cmap6(0x41, []).take_first(8))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontTest.cmap10(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontTest.patch(FontTest.cmap10(0x41, [1]), 16, FontTest.u32(0xFFFFFFFF)))) == [BadTable("cmap")]
+
+# ------------------------------------------------------------ cmap format 13
+
+# Every character of a group maps to the group's one glyph.
+expect {
+	cmap = FontTest.cmap13([{ first: 0x41, last: 0x5A, glyph: 2 }, { first: 0x10000, last: 0x10FFFF, glyph: 3 }])
+	glyphs_for(cmap_only(3, 10, cmap), [0x40, 0x41, 0x50, 0x5A, 0x5B, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 2, 2, 9999, 9999, 3, 3]
+}
+
+# A group whose glyph the font does not have maps nothing.
+expect glyphs_for(cmap_only(0, 6, FontTest.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }])), [0x41, 0x43]) == [9999, 9999]
+
+# Groups out of order, overlapping or past Unicode, and a truncated table,
+# are bad tables.
+expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x55, last: 0x56, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x41, last: 0x110000, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x41, last: 0x42, glyph: 1 }]).drop_last(1))) == [BadTable("cmap")]
+
 # ------------------------------------------------------------ cmap selection
 
-# No Unicode subtable: a Macintosh one, a format 12 one under an encoding
-# that is not Unicode, a format 4 one under the full-repertoire encoding,
-# an unknown format, an offset past the table, or no subtables at all.
-expect problems_of(cmap_only(1, 0, FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(3, 0, FontTest.cmap12([{ first: 0x41, last: 0x41, glyph: 1 }]))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(3, 10, FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(3, 1, FontTest.u16(6).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
-expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(1)).concat(FontTest.u16(3)).concat(FontTest.u16(1)).concat(FontTest.u32(5000)))) == [NoUnicodeMapping]
+# A Windows symbol map (3, 0) is preferred to every other map. A code point
+# up to U+00FF that it does not have is looked up again at U+F000 and up;
+# others are not.
+expect {
+	table = FontTest.cmap([
+		{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 3 - 0x41, glyphs: [] }]) },
+		{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0x42, last: 0x42, delta: 65536 + 3 - 0x42, glyphs: [] }, { first: 0xF041, last: 0xF041, delta: 65536 + 1 - 0xF041, glyphs: [] }, { first: 0xF141, last: 0xF141, delta: 65536 + 2 - 0xF141, glyphs: [] }]) },
+	])
+	glyphs_for(basic_with("cmap", table), [0x41, 0x42, 0xF041, 0x141, 0xF042]) == [1, 3, 1, 9999, 9999]
+}
+
+# A symbol map in any format works the same way.
+expect glyphs_for(cmap_only(3, 0, FontTest.cmap12([{ first: 0xF041, last: 0xF042, glyph: 1 }])), [0x41, 0x42, 0x43]) == [1, 2, 9999]
+
+# A symbol font in a Windows 3.1 Arabic font page holds Arabic in the
+# private use area: U+0020 is at U+F120 in the simplified page and U+F220
+# in the traditional one. Another font page is plain Unicode.
+expect {
+	cmap = FontTest.cmap([{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0xF120, last: 0xF120, delta: 65536 + 1 - 0xF120, glyphs: [] }, { first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
+	with_page = |page| basic_with("cmap", cmap).append({ tag: "OS/2", data: FontTest.os2_page(page) })
+	glyphs_for(with_page(0xB200), [0x20, 0xF120]) == [1, 1]
+		and glyphs_for(with_page(0xB300), [0x20, 0xF220]) == [2, 2]
+		and glyphs_for(with_page(0xB100), [0x20, 0xF120]) == [9999, 1]
+		and glyphs_for(with_page(0), [0x20, 0xF020]) == [9999, 9999]
+}
+
+# The font page counts only in a version 0 `OS/2` table.
+expect {
+	cmap = FontTest.cmap([{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
+	os2 = FontTest.patch(FontTest.os2_page(0xB300), 0, FontTest.u16(1))
+	glyphs_for(basic_with("cmap", cmap).append({ tag: "OS/2", data: os2 }), [0x20]) == [9999]
+}
+
+# A Macintosh Roman map is read directly for ASCII and through Mac Roman
+# for the rest: U+00C4 is 0x80 there and U+00A0 is 0xCA; U+0080 is not in
+# Mac Roman. Another Macintosh encoding maps ASCII only.
+expect {
+	glyphs = List.repeat(0, 0x41).concat([1]).concat(List.repeat(0, 0x80 - 0x42)).concat([2]).concat(List.repeat(0, 0xCA - 0x81)).concat([3])
+	glyphs_for(cmap_only(1, 0, FontTest.cmap0(glyphs)), [0x41, 0xC4, 0xA0, 0x80, 0xCA]) == [1, 2, 3, 9999, 9999]
+		and glyphs_for(cmap_only(1, 1, FontTest.cmap0(glyphs)), [0x41, 0xC4, 0x80]) == [1, 9999, 9999]
+}
+
+# The order of preference, whatever the record order: full Unicode maps
+# (3, 10), (0, 6), (0, 4), then (3, 1), (0, 3) to (0, 0), then Macintosh.
+expect {
+	a_to = |g| FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + g - 0x41, glyphs: [] }])
+	pick = |records| glyphs_for(basic_with("cmap", FontTest.cmap(records.map(|r| { system: r.system, encoding: r.encoding, subtable: a_to(r.glyph) }))), [0x41])
+	pick([{ system: 1, encoding: 0, glyph: 3 }, { system: 0, encoding: 0, glyph: 2 }]) == [2]
+		and pick([{ system: 0, encoding: 3, glyph: 2 }, { system: 3, encoding: 1, glyph: 1 }]) == [1]
+		and pick([{ system: 3, encoding: 1, glyph: 1 }, { system: 0, encoding: 4, glyph: 3 }]) == [3]
+		and pick([{ system: 0, encoding: 4, glyph: 3 }, { system: 3, encoding: 10, glyph: 2 }]) == [2]
+		and pick([{ system: 0, encoding: 1, glyph: 3 }, { system: 0, encoding: 2, glyph: 1 }]) == [1]
+}
+
+# A subtable in a format that is not read (here 8, and 14, which holds
+# variation sequences) is passed over for the next preferred one.
+expect {
+	table = FontTest.cmap([
+		{ system: 3, encoding: 1, subtable: FontTest.u16(8).concat(List.repeat(0, 30)) },
+		{ system: 0, encoding: 5, subtable: FontTest.u16(14).concat(List.repeat(0, 8)) },
+		{ system: 1, encoding: 0, subtable: FontTest.cmap0(List.repeat(0, 0x41).append(2)) },
+	])
+	glyphs_for(basic_with("cmap", table), [0x41]) == [2]
+}
+
+# No map to use: an unknown platform or encoding, only formats that are not
+# read, or no subtables at all.
+expect problems_of(cmap_only(2, 1, FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(3, 2, FontTest.cmap12([{ first: 0x41, last: 0x41, glyph: 1 }]))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(0, 5, FontTest.u16(14).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(3, 1, FontTest.u16(2).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
 expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(0)))) == [NoUnicodeMapping]
+
+# The chosen record's offset past the end of the table is a bad table, not
+# a missing map.
+expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(1)).concat(FontTest.u16(3)).concat(FontTest.u16(1)).concat(FontTest.u32(5000)))) == [BadTable("cmap")]
+
+# A broken map that is not chosen is not read.
+expect {
+	table = FontTest.cmap([
+		{ system: 1, encoding: 0, subtable: FontTest.cmap0([]).take_first(10) },
+		{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 1 - 0x41, glyphs: [] }]) },
+	])
+	glyphs_for(basic_with("cmap", table), [0x41]) == [1]
+}
+
+# A bad character map is reported with the other tables' problems.
+expect {
+	tables = basic_with("cmap", FontTest.cmap([{ system: 3, encoding: 10, subtable: FontTest.cmap13([{ first: 0x50, last: 0x41, glyph: 1 }]) }]))
+		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontTest.maxp(0) } else t)
+	problems_of(tables) == [BadTable("maxp"), BadTable("cmap")]
+}
 
 # More encoding records than the table holds.
 expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(3)).concat(List.repeat(0, 8)))) == [BadTable("cmap")]
@@ -427,7 +574,7 @@ expect {
 				} else if t.tag == "hhea" {
 					{ tag: t.tag, data: FontTest.hhea(1, 1, 0) }
 				} else if t.tag == "cmap" {
-					{ tag: t.tag, data: FontTest.cmap([{ system: 1, encoding: 0, subtable: FontTest.cmap4([]) }]) }
+					{ tag: t.tag, data: FontTest.cmap([{ system: 2, encoding: 0, subtable: FontTest.cmap4([]) }]) }
 				} else {
 					t
 				},
@@ -660,7 +807,8 @@ expect {
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3, 2]) == [-9.0, 0.0, 0.0, 0.0]
 }
 
-# A pair set shared by many first glyphs is read once, not once per glyph.
+# A pair set shared by many first glyphs is not copied: reading keeps one
+# subtable, whose sets are read in place.
 expect {
 	n = 300
 	set = FontTest.pack([U16(n)].concat(FontTest.counting(n).join_map(|g| [U16(g), I16(-1)])))
@@ -671,8 +819,8 @@ expect {
 		.append({ tag: "GPOS", data: gpos([{ kind: 2, subtables: [subtable] }]) })
 	match read_tables(tables) {
 		Ok(font) => {
-			stored = font.kerning.join_map(|lookup| lookup.map(Font.stored_size)).sum()
-			Font.kerning(font, [5, 7, 299, 0]) == [-1.0, -1.0, -1.0, 0.0] and stored < 4 * n
+			stored = LayoutKerning.stored_size(font.kerning)
+			Font.kerning(font, [5, 7, 299, 0]) == [-1.0, -1.0, -1.0, 0.0] and stored == 2
 		}
 		Err(_) => False
 	}

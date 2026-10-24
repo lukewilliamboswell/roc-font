@@ -167,6 +167,47 @@ FontTest :: {}.{
 			.concat(FontTest.u32(groups.len()))
 			.concat(groups.join_map(|g| FontTest.u32(g.first).concat(FontTest.u32(g.last)).concat(FontTest.u32(g.glyph))))
 
+	## A format 13 subtable of groups (first, last, the one glyph they all
+	## map to).
+	cmap13 : List({ first : U64, last : U64, glyph : U64 }) -> List(U8)
+	cmap13 = |groups| FontTest.u16(13).concat(FontTest.cmap12(groups).drop_first(2))
+
+	## A format 0 subtable: the glyphs of character codes 0 up to 255, in
+	## order; codes past the list map to glyph 0.
+	cmap0 : List(U64) -> List(U8)
+	cmap0 = |glyphs|
+		FontTest.u16(0)
+			.concat(FontTest.u16(262))
+			.concat(FontTest.u16(0))
+			.concat(glyphs.take_first(256).map(|g| g.to_u8_wrap()))
+			.concat(List.repeat(0, 256 - glyphs.len().min(256)))
+
+	## A format 6 subtable: consecutive character codes from `first`.
+	cmap6 : U64, List(U64) -> List(U8)
+	cmap6 = |first, glyphs|
+		FontTest.u16(6)
+			.concat(FontTest.u16(10 + 2 * glyphs.len()))
+			.concat(FontTest.u16(0))
+			.concat(FontTest.u16(first))
+			.concat(FontTest.u16(glyphs.len()))
+			.concat(glyphs.join_map(FontTest.u16))
+
+	## A format 10 subtable: consecutive character codes from `first`.
+	cmap10 : U64, List(U64) -> List(U8)
+	cmap10 = |first, glyphs|
+		FontTest.u16(10)
+			.concat(FontTest.u16(0))
+			.concat(FontTest.u32(20 + 2 * glyphs.len()))
+			.concat(FontTest.u32(0))
+			.concat(FontTest.u32(first))
+			.concat(FontTest.u32(glyphs.len()))
+			.concat(glyphs.join_map(FontTest.u16))
+
+	## A version 0 `OS/2` table (78 bytes) whose `fsSelection` holds a
+	## Windows 3.1 font page in its high byte; other fields are zero.
+	os2_page : U64 -> List(U8)
+	os2_page = |page| FontTest.patch(List.repeat(0, 78), 62, FontTest.u16(page))
+
 	## The tables of a minimal valid font with four glyphs: glyph 0 (the
 	## missing glyph), 1 for `A`, 2 for `B`, 3 for `C`, advances 500, 600,
 	## 700 and 800, 1000 units per em. Tests replace or add tables.
@@ -396,6 +437,12 @@ FontTest :: {}.{
 		characters = FontTest.cmap([
 			{ system: 0, encoding: 3, subtable: FontTest.cmap4([{ first: 'A', last: 'Z', delta: 65536 - 64, glyphs: [] }, { first: 'a', last: 'c', delta: 0, glyphs: [27, 0, 29] }]) },
 			{ system: 3, encoding: 10, subtable: FontTest.cmap12([{ first: 'A', last: 'Z', glyph: 1 }, { first: 0x1F600, last: 0x1F600, glyph: 30 }]) },
+			# Less preferred maps in the other formats, for mutations that
+			# change which map is chosen.
+			{ system: 0, encoding: 6, subtable: FontTest.cmap13([{ first: 0x2190, last: 0x21FF, glyph: 31 }]) },
+			{ system: 0, encoding: 4, subtable: FontTest.cmap10(0x1F650, [32, 33]) },
+			{ system: 1, encoding: 0, subtable: FontTest.cmap0(List.repeat(0, 0x41).concat([1, 2, 3]).concat(List.repeat(0, 0x80 - 0x44)).concat([4])) },
+			{ system: 1, encoding: 1, subtable: FontTest.cmap6(0x41, [1, 0, 3]) },
 		])
 		FontTest.file([
 			{ tag: "head", data: FontTest.head(2048, True) },
@@ -474,6 +521,8 @@ FontTest :: {}.{
 		mapped = of_kind(0)
 		subtable = if first % 2 == 0 {
 			FontTest.cmap4(mapped.map(|base| { first: 0x400 + 2 * base, last: 0x401 + 2 * base, delta: (65536 + base - (0x400 + 2 * base)) % 65536, glyphs: [] }))
+		} else if first % 8 == 7 {
+			FontTest.cmap13(mapped.map(|base| { first: 0x10000 + 2 * base, last: 0x10001 + 2 * base, glyph: base }))
 		} else {
 			FontTest.cmap12(mapped.map(|base| { first: 0x10000 + 2 * base, last: 0x10001 + 2 * base, glyph: base }))
 		}

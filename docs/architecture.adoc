@@ -189,7 +189,9 @@ example a cmap flattened into sorted ranges, or GPOS pair classes. An index
 is built in reading only when (a) it is valid for every query on that font,
 and (b) a native benchmark shows the saving across the expected number of
 queries outweighs its cost in reading time and peak memory. Each index
-records the benchmark that justified it in a comment.
+records the benchmark that justified it in a comment. The cmap is the
+first such index: a flat sorted range list beat searching the subtable in
+place by 1.2–4x per lookup, measured in instructions.
 
 === 4.4 Strict and lenient reading
 
