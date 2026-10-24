@@ -23,3 +23,6 @@ bench/compare/rust/target/
 __pycache__/
 
 .DS_Store
+
+# Claude Code session state (locks, local settings, worktrees)
+/.claude/
