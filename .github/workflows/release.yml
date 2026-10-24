@@ -124,6 +124,9 @@ jobs:
             roc bump --old "$bundle" --expect "$VERSION" package/main.roc
           fi
 
+      - name: Install the pinned fontTools
+        run: python3 -m pip install --user --require-hashes --no-deps -r bench/compare/python/requirements.txt
+
       - name: Run every check
         run: blueprint run check
 
