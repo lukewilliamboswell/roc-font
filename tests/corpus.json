@@ -9,12 +9,23 @@
       "sha256": "d07a007327277708a2a73ae437887cdbaf282937f6d03ca5467723e9099af586",
       "size": 20295260,
       "strip_components": 1,
-      "include": ["COPYING", "test/shape/data/", "test/fuzzing/fonts/"],
+      "include": [
+        "COPYING",
+        "test/shape/data/",
+        "test/fuzzing/fonts/"
+      ],
       "licence": {
         "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
         "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
       },
-      "tags": ["shaping-tests", "in-house", "aots", "text-rendering-tests", "malformed", "many-scripts"],
+      "tags": [
+        "shaping-tests",
+        "in-house",
+        "aots",
+        "text-rendering-tests",
+        "malformed",
+        "many-scripts"
+      ],
       "notes": "HarfBuzz release matching the uharfbuzz 0.56.3 oracle. test/shape/data holds the in-house, AOTS and text-rendering-tests suites (.tests files and fonts; import them with `fetch_corpus.py import-hb-tests`); test/fuzzing/fonts holds malformed fonts. Only those paths and COPYING are extracted. Test fonts carry their own licences, listed by the HarfBuzz repository.",
       "verified": true
     },
@@ -28,7 +39,12 @@
         "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
         "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
       },
-      "tags": ["glyf", "aat", "trak", "small"],
+      "tags": [
+        "glyf",
+        "aat",
+        "trak",
+        "small"
+      ],
       "verified": true
     },
     {
@@ -42,7 +58,10 @@
         "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/COPYING",
         "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
       },
-      "tags": ["malformed", "fuzzing"],
+      "tags": [
+        "malformed",
+        "fuzzing"
+      ],
       "verified": true
     },
     {
@@ -55,7 +74,10 @@
         "url": "https://raw.githubusercontent.com/khaledhosny/ots/v9.3.0/LICENSE",
         "sha256": "0d74de3c3cd3196a9ed1bc612cfd5f81d7509d66c4be34a50f99d61bd1ad00d4"
       },
-      "tags": ["malformed", "ots-bad"],
+      "tags": [
+        "malformed",
+        "ots-bad"
+      ],
       "notes": "From OTS's tests/fonts/bad: OTS must reject it.",
       "verified": true
     },
@@ -69,7 +91,40 @@
         "url": "https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt",
         "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
       },
-      "tags": ["latin", "greek", "cyrillic", "glyf", "variable", "gsub", "gpos"],
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "variable",
+        "gsub",
+        "gpos"
+      ],
+      "verified": true
+    },
+    {
+      "id": "inter-4.1",
+      "kind": "archive",
+      "url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip",
+      "sha256": "9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e",
+      "size": 33707794,
+      "members": {
+        "extras/ttf/Inter-Regular.ttf": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt",
+        "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+      },
+      "tags": [
+        "latin",
+        "greek",
+        "cyrillic",
+        "glyf",
+        "gsub",
+        "gpos",
+        "chrome"
+      ],
+      "notes": "Static Inter 4.1 Regular: same glyph ids, advances, cmap, GSUB and GPOS as tests/fonts/Inter-Regular-metrics.ttf, but complete, so Chrome (whose OTS refuses the metrics subset for lacking `name`) loads it. Used by tests/cases/chrome.jsonc.",
       "verified": true
     },
     {
@@ -85,7 +140,13 @@
         "url": "https://raw.githubusercontent.com/notofonts/arabic/NotoSansArabic-v2.013/OFL.txt",
         "sha256": "a7a5a25eb188bf1cd96982030d53e23c33485c69b1044a562254226857ee13af"
       },
-      "tags": ["arabic", "glyf", "marks", "cursive", "rtl"],
+      "tags": [
+        "arabic",
+        "glyf",
+        "marks",
+        "cursive",
+        "rtl"
+      ],
       "verified": true
     },
     {
@@ -101,7 +162,12 @@
         "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/3.052R/LICENSE.md",
         "sha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c"
       },
-      "tags": ["latin", "cff", "gsub", "gpos"],
+      "tags": [
+        "latin",
+        "cff",
+        "gsub",
+        "gpos"
+      ],
       "verified": true
     }
   ]

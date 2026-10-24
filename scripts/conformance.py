@@ -2,11 +2,17 @@
 """Compare roc-font with recorded oracle results (architecture §7.1).
 
 Builds the native driver (tools/driver/main.roc) when its sources or the
-package changed, runs every selected case file through it in one process,
-and compares each result with the case's record in tests/oracle/records/ by
-string equality. No oracle needs to be installed.
+package changed, parses the selected JSONC case files (scripts/_common.py),
+streams every runnable case to the driver in one process over its line
+protocol, and compares each result with the case's record in
+tests/oracle/records/ by string equality. No oracle needs to be installed.
+Options the driver cannot honour are answered here as `unsupported:<option>`
+without being sent.
 
-Outcomes per case:
+Case files are *gating* unless tests/scores.json declares them *scored* (by
+a path prefix under tests/cases, such as `harfbuzz/` for the full HarfBuzz
+import or `hb-pending/` for curated cases a later milestone will make
+pass). Outcomes per gating case:
 
     agree           the driver's result equals the record
     known           differs, and tests/known-failures.json lists the case
@@ -15,20 +21,45 @@ Outcomes per case:
     MISSING-RECORD  no record, or the record's key no longer matches the case
                     or font (run scripts/record_oracle.py)
     MISSING-FONT    a font inside the repository is missing
+    FONT-CHANGED    the font's SHA-256 differs from the case's `font_sha256` pin
     BAD-EXPECTATION the case's own glyph-id expectation differs from its record
     unsupported     the driver or the oracle cannot honour an option yet
     skipped         the font is in tests/corpus/ and has not been fetched, or is
                     an absolute system font path that does not exist here
 
-The run fails on FAIL, STALE, MISSING-RECORD, MISSING-FONT and BAD-EXPECTATION, and on
-known-failures entries naming cases that do not exist; `--strict` also fails
-on unsupported cases. The script never edits tests/known-failures.json.
+Scored cases count as agree, differ, unsupported or skipped per suite (the
+first two path components of the case file, such as `harfbuzz/in-house` or
+`hb-pending/M4`); differences there never need a known-failures entry, and
+an entry naming a scored case is an error. MISSING-RECORD, MISSING-FONT,
+FONT-CHANGED and BAD-EXPECTATION fail in scored suites too. Each fully selected suite is
+compared with its line in tests/scores.json, a ratchet like the allocation
+baseline:
+
+    SCORE-DROP      fewer cases agree than recorded: fails
+    SCORE-CHANGED   more agree, or the same number but a different set, or
+                    other counts moved: fails until `--update-scores`
+    SCORE-NEW       a suite with no recorded score: fails until recorded
+    SUITE-CHANGED   the suite's cases differ from the recorded ones (a
+                    different import): fails until recorded
+
+A scored suite declared in scores.json with no case files here (the HarfBuzz
+import is local and git-ignored) is skipped with a note, never a failure, and
+so is a suite whose skipped count differs from the recorded one (fonts not
+fetched, or system fonts present). `--update-scores` records every fully run
+suite and prints what changed.
+
+The run fails on FAIL, STALE, MISSING-RECORD, MISSING-FONT, FONT-CHANGED,
+BAD-EXPECTATION and the SCORE-/SUITE- outcomes, and on known-failures entries naming cases
+that do not exist; `--strict` also fails on unsupported gating cases. The
+script never edits tests/known-failures.json.
 
     python3 scripts/conformance.py                 # every case file
     python3 scripts/conformance.py inter reading   # case files matching these
     python3 scripts/conformance.py --diff          # show expected and actual
     python3 scripts/conformance.py --interpreter   # run the driver with --opt=interpreter
     python3 scripts/conformance.py --explain       # add the reader's problems to differences
+    python3 scripts/conformance.py --update-scores # record scored suites' counts
+    python3 scripts/conformance.py --json out.json # every case's outcome, for triage
 
 Standard library only. The compiler is $ROC, or `roc` on PATH.
 """
@@ -36,19 +67,23 @@ Standard library only. The compiler is $ROC, or `roc` on PATH.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
+import time
 from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _common import (  # noqa: E402
+    CASES_DIR,
     DRIVER_DIR,
     ROOT,
     TMP_ROOT,
     case_files,
+    driver_request,
     has_glyph_names,
     is_corpus_font,
     load_known_failures,
@@ -58,11 +93,18 @@ from _common import (  # noqa: E402
     rel,
     roc_command,
     roc_version,
+    sha256_bytes,
     sha256_file,
 )
 
 DRIVER_BIN = TMP_ROOT / "conformance" / "driver"
-FAILING = ("FAIL", "STALE", "MISSING-RECORD", "MISSING-FONT", "BAD-EXPECTATION")
+SCORES = ROOT / "tests" / "scores.json"
+SCORES_ABOUT = (
+    "Scored conformance suites (architecture §7.1). `scored` lists path prefixes under tests/cases whose case files are scored "
+    "rather than gating; `suites` holds each suite's counts, written only by `scripts/conformance.py --update-scores`. "
+    "agree_ids and case_ids are digests of the agreeing and of all case ids, so a changed set is caught at equal counts."
+)
+FAILING = ("FAIL", "STALE", "MISSING-RECORD", "MISSING-FONT", "FONT-CHANGED", "BAD-EXPECTATION")
 
 
 def driver_sources() -> list[Path]:
@@ -102,38 +144,130 @@ def build_driver(roc: str, force: bool) -> int:
     return 0
 
 
-def run_driver(command_prefix: list[str], files: list[Path], explain: bool) -> tuple[dict[tuple[str, int], str], dict[tuple[str, int], str]]:
-    command = command_prefix + (["--explain"] if explain else []) + [rel(p) for p in files]
-    completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
+def run_driver(command_prefix: list[str], cases: list, explain: bool) -> tuple[dict[str, str], dict[str, str], dict]:
+    """Send every runnable case to the driver in one process (the line
+    protocol of tools/driver/Case.roc, written by _common.driver_request).
+    Returns results and explanations by case id, and timing figures. A case
+    the driver cannot honour gets `unsupported:<option>` without being sent."""
+    results: dict[str, str] = {}
+    explanations: dict[str, str] = {}
+    lines = []
+    for case in cases:
+        if not case.font_path.is_file():
+            continue
+        line, unsupported = driver_request(case, str(case.font_path))
+        if line is None:
+            results[case.id] = f"unsupported:{unsupported}"
+        else:
+            lines.append(line)
+    command = command_prefix + (["--explain"] if explain else [])
+    started = time.perf_counter()
+    completed = subprocess.run(command, cwd=ROOT, input="".join(l + "\n" for l in lines), capture_output=True, text=True, check=False)
+    elapsed = time.perf_counter() - started
     located, ours = reported_problems(completed.stderr)
     if completed.returncode != 0 and (ours or not located):
         print(completed.stdout[-2000:] + completed.stderr[-2000:])
         raise SystemExit(f"driver exited with {completed.returncode}")
-    results: dict[tuple[str, int], str] = {}
-    explanations: dict[tuple[str, int], str] = {}
-    for line in completed.stdout.splitlines():
-        where, sep, rest = line.partition("\t")
+    answered = 0
+    for out in completed.stdout.splitlines():
+        tag, sep, rest = out.partition("\t")
         if not sep:
             continue  # interpreter chatter, never a result line
         result, _, why = rest.partition("\t")
-        file, _, number = where.rpartition(":")
-        if number.isdigit():
-            results[(file, int(number))] = result
-            if why:
-                explanations[(file, int(number))] = why
-    return results, explanations
+        results[tag] = result
+        answered += 1
+        if why:
+            explanations[tag] = why
+    return results, explanations, {"requests": len(lines), "answered": answered, "seconds": elapsed}
+
+
+# ------------------------------------------------------------------ scoring
+
+
+def load_scores() -> dict:
+    if not SCORES.exists():
+        return {"about": SCORES_ABOUT, "schema": 1, "scored": [], "suites": {}}
+    data = json.loads(SCORES.read_text(encoding="utf-8"))
+    if data.get("schema") != 1:
+        raise SystemExit(f"{rel(SCORES)}: unknown schema {data.get('schema')!r}")
+    for prefix in data.get("scored", []):
+        if not prefix.endswith("/") or prefix.startswith("/"):
+            raise SystemExit(f"{rel(SCORES)}: scored prefix {prefix!r} must be a directory under tests/cases ending in '/'")
+    return data
+
+
+def write_scores(data: dict) -> None:
+    data["suites"] = {name: data["suites"][name] for name in sorted(data["suites"])}
+    SCORES.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def suite_of(path: Path, prefixes: list[str]) -> str | None:
+    """The scored suite a case file belongs to, or None when it gates: the
+    prefix's directory plus one more path component, without `.jsonc`."""
+    stem = path.resolve().relative_to(CASES_DIR).with_suffix("").as_posix()
+    for prefix in prefixes:
+        if stem.startswith(prefix):
+            depth = prefix.rstrip("/").count("/") + 2
+            return "/".join(stem.split("/")[:depth])
+    return None
+
+
+def ids_digest(ids: list[str]) -> str:
+    return sha256_bytes("\n".join(sorted(ids)).encode("utf-8"))[:16]
+
+
+def score_line(name: str, score: dict) -> str:
+    return (
+        f"{name}: {score['cases']} cases, {score['agree']} agree, {score['differ']} differ, "
+        f"{score['unsupported']} unsupported, {score['skipped']} skipped"
+    )
+
+
+# --------------------------------------------------------------------- main
+
+
+def classify(case, record, actual: str, font_hashes: dict[Path, str]) -> tuple[str, str]:
+    """Outcome before known-failures are applied: one of agree, differ,
+    unsupported, skipped, MISSING-RECORD, MISSING-FONT, BAD-EXPECTATION."""
+    font = case.font_path
+    if not font.is_file():
+        if is_corpus_font(font):
+            return "skipped", "font not fetched (scripts/fetch_corpus.py)"
+        if case.font.startswith("/"):
+            return "skipped", "system font not installed"
+        return "MISSING-FONT", f"no font at {rel(font)}"
+    if font not in font_hashes:
+        font_hashes[font] = sha256_file(font)
+    if case.font_sha256 and case.font_sha256 != font_hashes[font]:
+        return "FONT-CHANGED", f"{rel(font)} has sha256 {font_hashes[font]}, the case pins {case.font_sha256}"
+    if record is None:
+        return "MISSING-RECORD", "no record"
+    provenance = record["provenance"]
+    if record["key"] != record_key(case, font_hashes[font], provenance["tools"], provenance["extractor"]):
+        return "MISSING-RECORD", "record key is stale (case or font changed)"
+    if record["status"] != "ok":
+        return "unsupported", f"oracle: {record['detail']}"
+    expected = record["result"]
+    written = case.expected.strip()
+    if written not in ("*", "?") and not has_glyph_names(written) and written != expected:
+        return "BAD-EXPECTATION", f"case says {written}, record says {expected}"
+    if actual.startswith("unsupported:"):
+        return "unsupported", f"driver: {actual}"
+    return ("agree", "") if actual == expected else ("differ", "")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("cases", nargs="*", help="case files, or substrings of their paths under tests/cases")
     parser.add_argument("--diff", action="store_true", help="print expected and actual for every difference")
-    parser.add_argument("--verbose", action="store_true", help="also list known failures and unsupported cases")
-    parser.add_argument("--strict", action="store_true", help="fail on unsupported cases too")
+    parser.add_argument("--verbose", action="store_true", help="also list known failures and unsupported gating cases")
+    parser.add_argument("--strict", action="store_true", help="fail on unsupported gating cases too")
     parser.add_argument("--rebuild", action="store_true", help="rebuild the driver even if it looks current")
     parser.add_argument("--no-build", action="store_true", help="use the existing driver binary")
     parser.add_argument("--interpreter", action="store_true", help="run the driver with `roc --opt=interpreter`")
     parser.add_argument("--explain", action="store_true", help="show the reader's problems for rejected fonts")
+    parser.add_argument("--update-scores", action="store_true", help="record the counts of every fully run scored suite")
+    parser.add_argument("--json", type=Path, help="write every case's outcome, expected and actual result to this file")
     args = parser.parse_args()
 
     roc = roc_command()
@@ -149,6 +283,9 @@ def main() -> int:
         print("no case files selected", file=sys.stderr)
         return 1
     known = {entry["id"]: entry["reason"] for entry in load_known_failures()}
+    scores = load_scores()
+    prefixes = list(scores.get("scored", []))
+    every_file_suite = {path.resolve(): suite_of(path, prefixes) for path in case_files()}
 
     cases = []
     problems = []
@@ -156,62 +293,58 @@ def main() -> int:
         parsed, file_problems = parse_case_file(path)
         cases += parsed
         problems += file_problems
-    results, explanations = run_driver(prefix, files, args.explain)
+    results, explanations, timing = run_driver(prefix, cases, args.explain)
 
-    outcomes: list[tuple[str, object, str]] = []  # (outcome, case, note)
+    outcomes: list[tuple[str, object, str]] = []  # gating: (outcome, case, note)
+    scored: dict[str, Counter] = {}
+    scored_ids: dict[str, dict[str, list[str]]] = {}
+    scored_failures: list[tuple[str, object, str]] = []
+    dump = []
     font_hashes: dict[Path, str] = {}
     records_by_file = {path.resolve(): load_records(path) for path in files}
     for case in cases:
-        font = case.font_path
-        if not font.is_file():
-            if is_corpus_font(font):
-                outcomes.append(("skipped", case, "font not fetched (scripts/fetch_corpus.py)"))
-            elif case.font.startswith("/"):
-                outcomes.append(("skipped", case, "system font not installed"))
-            else:
-                outcomes.append(("MISSING-FONT", case, f"no font at {rel(font)}"))
-            continue
         record = records_by_file[case.file].get(case.id)
-        actual = results.get((case.rel_file, case.line), "error:no-driver-output")
-        if record is None:
-            outcomes.append(("MISSING-RECORD", case, "no record"))
-            continue
-        if font.is_file():
-            if font not in font_hashes:
-                font_hashes[font] = sha256_file(font)
-            provenance = record["provenance"]
-            if record["key"] != record_key(case, font_hashes[font], provenance["tools"], provenance["extractor"]):
-                outcomes.append(("MISSING-RECORD", case, "record key is stale (case or font changed)"))
-                continue
-        if record["status"] != "ok":
-            outcomes.append(("unsupported", case, f"oracle: {record['detail']}"))
-            continue
-        expected = record["result"]
-        written = case.expected.strip()
-        if written not in ("*", "?") and not has_glyph_names(written) and written != expected:
-            outcomes.append(("BAD-EXPECTATION", case, f"case says {written}, record says {expected}"))
-            continue
-        if actual.startswith("unsupported:"):
-            outcomes.append(("unsupported", case, f"driver: {actual}"))
-            continue
-        agrees = actual == expected
-        if case.id in known:
-            outcomes.append(("STALE" if agrees else "known", case, known[case.id]))
+        actual = results.get(case.id, "error:no-driver-output")
+        outcome, note = classify(case, record, actual, font_hashes)
+        suite = every_file_suite.get(case.file)
+        if outcome == "differ":
+            why = explanations.get(case.id)
+            note = f"\n    expected {record['result']}\n    actual   {actual}" + (f"\n    reader   {why}" if why else "")
+        if suite is not None:
+            if outcome in FAILING:
+                scored_failures.append((outcome, case, note))
+            scored.setdefault(suite, Counter())[outcome] += 1
+            scored_ids.setdefault(suite, {}).setdefault(outcome, []).append(case.id)
+        elif outcome in ("agree", "differ"):
+            agrees = outcome == "agree"
+            if case.id in known:
+                outcomes.append(("STALE" if agrees else "known", case, known[case.id] + ("" if agrees else note)))
+            else:
+                outcomes.append(("agree" if agrees else "FAIL", case, note))
         else:
-            outcomes.append(("agree" if agrees else "FAIL", case, ""))
-        if not agrees:
-            why = explanations.get((case.rel_file, case.line))
-            extra = f"\n    expected {expected}\n    actual   {actual}" + (f"\n    reader   {why}" if why else "")
-            outcomes[-1] = outcomes[-1][:2] + (outcomes[-1][2] + extra,)
+            outcomes.append((outcome, case, note))
+        if args.json:
+            dump.append({
+                "id": case.id,
+                "file": case.rel_file,
+                "line": case.line,
+                "suite": suite,
+                "outcome": outcome,
+                "note": note.strip().split("\n")[0] if outcome != "differ" else "",
+                "expected": record["result"] if record else None,
+                "actual": actual,
+            })
 
-    selected_ids = {c.id for c in cases}
+    gating_ids = {c.id for c in cases if every_file_suite.get(c.file) is None}
+    scored_case_ids = {c.id for c in cases if every_file_suite.get(c.file) is not None}
     selected_stems = {c.id.rsplit("/", 1)[0] for c in cases}
-    unknown = sorted(i for i in known if i.rsplit("/", 1)[0] in selected_stems and i not in selected_ids)
+    unknown = sorted(i for i in known if i.rsplit("/", 1)[0] in selected_stems and i not in gating_ids | scored_case_ids)
     if not args.cases:
-        unknown = sorted(i for i in known if i not in selected_ids)
+        unknown = sorted(i for i in known if i not in gating_ids and i not in scored_case_ids)
+    listed_scored = sorted(i for i in known if i in scored_case_ids)
 
     counts = Counter(outcome for outcome, _, _ in outcomes)
-    for outcome, case, note in outcomes:
+    for outcome, case, note in outcomes + scored_failures:
         show = outcome in FAILING or (args.verbose and outcome in ("known", "unsupported", "skipped"))
         if show:
             first, _, rest = note.partition("\n")
@@ -220,17 +353,118 @@ def main() -> int:
                 print(rest)
     for case_id in unknown:
         print(f"{'STALE':15} {case_id}  listed in tests/known-failures.json but no such case")
+    for case_id in listed_scored:
+        print(f"{'STALE':15} {case_id}  listed in tests/known-failures.json but the case is scored; scored cases need no entry")
     for problem in problems:
         print(f"{'FORMAT':15} {problem}")
 
-    order = ["agree", "known", "FAIL", "STALE", "MISSING-RECORD", "MISSING-FONT", "BAD-EXPECTATION", "unsupported", "skipped"]
+    score_failures, notes, updated = judge_scores(scores, scored, scored_ids, files, every_file_suite, args.update_scores)
+    for line in score_failures:
+        print(line)
+
+    order = ["agree", "known", "FAIL", "STALE", "MISSING-RECORD", "MISSING-FONT", "FONT-CHANGED", "BAD-EXPECTATION", "unsupported", "skipped"]
     summary = ", ".join(f"{counts.get(name, 0)} {name.lower()}" for name in order)
-    print(f"{len(cases)} cases in {len(files)} files: {summary}; {len(unknown)} unknown known-failure ids")
-    print(f"driver: {'interpreter' if args.interpreter else rel(DRIVER_BIN)}; roc: {roc_version(roc)}")
-    failed = any(counts.get(name) for name in FAILING) or unknown or problems
+    gating_files = sum(1 for p in files if every_file_suite.get(p.resolve()) is None)
+    print(f"{len(gating_ids)} gating cases in {gating_files} files: {summary}; {len(unknown) + len(listed_scored)} bad known-failure ids")
+    for name in sorted(scored):
+        c = scored[name]
+        extra = "".join(f", {c[k]} {k.lower()}" for k in FAILING if c.get(k))
+        print(f"scored {name}: {sum(c.values())} cases, {c['agree']} agree, {c['differ']} differ, {c['unsupported']} unsupported, {c['skipped']} skipped{extra}")
+    for note in notes:
+        print(f"  note: {note}")
+    if updated:
+        write_scores(scores)
+        print(f"updated {rel(SCORES)}: {', '.join(updated)}")
+    print(
+        f"driver: {'interpreter' if args.interpreter else rel(DRIVER_BIN)}, {timing['requests']} requests in one process, "
+        f"{timing['seconds']:.2f} s; roc: {roc_version(roc)}"
+    )
+    if args.json:
+        args.json.write_text(json.dumps(dump, indent=1) + "\n", encoding="utf-8")
+    failed = (
+        any(counts.get(name) for name in FAILING)
+        or scored_failures
+        or unknown
+        or listed_scored
+        or problems
+        or (score_failures and not args.update_scores)
+    )
     if args.strict and counts.get("unsupported"):
         failed = True
     return 1 if failed else 0
+
+
+def judge_scores(
+    scores: dict,
+    scored: dict[str, Counter],
+    scored_ids: dict[str, dict[str, list[str]]],
+    files: list[Path],
+    every_file_suite: dict[Path, str | None],
+    update: bool,
+) -> tuple[list[str], list[str], list[str]]:
+    """Compare each fully run scored suite with tests/scores.json. Returns
+    failure lines, notes, and the suites whose scores were (re)recorded."""
+    failures: list[str] = []
+    notes: list[str] = []
+    updated: list[str] = []
+    recorded: dict = scores.setdefault("suites", {})
+    selected = {p.resolve() for p in files}
+    present = {s for s in every_file_suite.values() if s is not None}
+    for name in sorted(set(recorded) - present):
+        notes.append(f"scored suite {name} has no case files here (not imported); skipped")
+    for name in sorted(present):
+        suite_files = {p for p, s in every_file_suite.items() if s == name}
+        if name not in scored:
+            continue
+        if not suite_files <= selected:
+            notes.append(f"scored suite {name} was only partly selected; its score is not compared")
+            continue
+        c = scored[name]
+        ids = scored_ids[name]
+        now = {
+            "cases": sum(c.values()),
+            "agree": c["agree"],
+            "differ": c["differ"],
+            "unsupported": c["unsupported"],
+            "skipped": c["skipped"],
+            "agree_ids": ids_digest(ids.get("agree", [])),
+            "case_ids": ids_digest([i for group in ids.values() for i in group]),
+        }
+        if any(c.get(k) for k in FAILING):
+            notes.append(f"scored suite {name} has cases that cannot be compared ({', '.join(k for k in FAILING if c.get(k))}); its score is not compared")
+            continue
+        before = recorded.get(name)
+        if update:
+            if before != now:
+                change = "new" if before is None else f"agree {before['agree']} -> {now['agree']}"
+                recorded[name] = now
+                updated.append(f"{name} ({change})")
+            continue
+        if before is None:
+            failures.append(f"{'SCORE-NEW':15} {score_line(name, now)}; record it with --update-scores")
+            continue
+        if before["case_ids"] != now["case_ids"] or before["cases"] != now["cases"]:
+            failures.append(
+                f"{'SUITE-CHANGED':15} {name}: {now['cases']} cases here, {before['cases']} when scored; "
+                "re-import the pinned version, or review and run --update-scores"
+            )
+            continue
+        if before["skipped"] != now["skipped"]:
+            notes.append(f"scored suite {name}: {now['skipped']} cases skipped here, {before['skipped']} when scored; score not comparable, skipped")
+            continue
+        if now["agree"] < before["agree"]:
+            failures.append(f"{'SCORE-DROP':15} {name}: {now['agree']} agree, {before['agree']} recorded (a regression)")
+        elif now != before:
+            what = (
+                f"{now['agree']} agree, {before['agree']} recorded"
+                if now["agree"] != before["agree"]
+                else "same agree count but a different agreeing set or other counts"
+            )
+            failures.append(
+                f"{'SCORE-CHANGED':15} {name}: {what} ({score_line(name, now).split(': ', 1)[1]}); "
+                "review, then run --update-scores to lock it in"
+            )
+    return failures, notes, updated
 
 
 if __name__ == "__main__":

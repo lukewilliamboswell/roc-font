@@ -1,0 +1,39 @@
+// Width cases for the pinned Chrome oracle (tools/oracle/chrome/width.mjs).
+// A `width` case asks for the text's advance width in font units as Chrome
+// lays it out (span layout, the browser's default features): "width:<n>".
+// The driver answers with the sum of its run's advances.
+//
+// Chrome's OTS refuses tests/fonts/Inter-Regular-metrics.ttf (it has no
+// `name` table), so these cases use the complete static Inter 4.1 Regular
+// from the corpus (`fetch_corpus.py fetch inter-4.1`), which has the same
+// glyph ids, advances, cmap, GSUB and GPOS. Canvas measureText is not the
+// reference: it shapes word by word.
+{
+  "schema": 1,
+  "defaults": {
+    "kind": "width",
+    "font": "../corpus/inter-4.1/extras/ttf/Inter-Regular.ttf",
+    "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82"
+  },
+  "cases": [
+    { "id": "inter-hello", "text": "Hello", "expected": "width:4936" },
+    { "id": "inter-kern-avatar", "text": "AVATAR", "expected": "width:7664" },
+    { "id": "inter-calt-arrow", "text": "a->b", "expected": "width:4358" },
+    { "id": "inter-calt-raised-asterisk", "text": "H*", "expected": "width:2843" },
+    // Canvas measureText shapes word by word and gives 4882 here; layout
+    // shapes the whole run, as HarfBuzz does.
+    { "id": "inter-asterisk-before-space", "text": "Y* w", "expected": "width:4668" },
+    { "id": "inter-no-default-fi-ligature", "text": "office", "expected": "width:5524" },
+    { "id": "inter-sentence", "text": "The quick brown fox.", "expected": "width:20366" },
+    { "id": "inter-supplementary-plane", "unicodes": "U+1F852", "expected": "width:5492" },
+    { "id": "inter-empty-text", "text": "", "expected": "width:0" },
+    // A code point the font does not map would be drawn by a fallback font:
+    // the oracle answers `unsupported`.
+    { "id": "inter-missing-glyph", "unicodes": "U+0041,U+0E01", "expected": "oracle" },
+    // Chrome's OTS refuses the metrics subset: the oracle answers `error`.
+    { "id": "inter-metrics-subset-refused", "font": "../fonts/Inter-Regular-metrics.ttf", "font_sha256": null, "text": "A", "expected": "oracle" },
+    // The crafted fixture: A V with a legacy `kern` value of -100.
+    { "id": "tiny-kern-pair", "font": "fixtures/tiny.ttf", "font_sha256": null, "text": "AV", "expected": "width:1080" },
+    { "id": "tiny-space-and-a", "font": "fixtures/tiny.ttf", "font_sha256": null, "text": "A A", "expected": "width:1450" }
+  ]
+}

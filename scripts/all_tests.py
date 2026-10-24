@@ -118,7 +118,10 @@ def run_all(ctx: Context, commands: Sequence[Sequence[str]]) -> Result:
 
 
 def test_modules() -> list[str]:
-    return sorted(str(path.relative_to(ROOT)) for path in (ROOT / "package").glob("*Tests.roc"))
+    modules = sorted(str(path.relative_to(ROOT)) for path in (ROOT / "package").glob("*Tests.roc"))
+    # The conformance harness's protocol parser carries its own expects.
+    driver = ROOT / "tools" / "driver" / "Case.roc"
+    return modules + ([str(driver.relative_to(ROOT))] if driver.is_file() else [])
 
 
 def fuzz_sources() -> list[str]:

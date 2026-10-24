@@ -1,0 +1,73 @@
+{
+  "about": "Scored conformance suites (architecture §7.1). `scored` lists path prefixes under tests/cases whose case files are scored rather than gating; `suites` holds each suite's counts, written only by `scripts/conformance.py --update-scores`. agree_ids and case_ids are digests of the agreeing and of all case ids, so a changed set is caught at equal counts.",
+  "schema": 1,
+  "scored": [
+    "harfbuzz/",
+    "hb-pending/"
+  ],
+  "suites": {
+    "harfbuzz/aots": {
+      "cases": 276,
+      "agree": 0,
+      "differ": 0,
+      "unsupported": 276,
+      "skipped": 0,
+      "agree_ids": "e3b0c44298fc1c14",
+      "case_ids": "44b4173cdfd7b6e6"
+    },
+    "harfbuzz/in-house": {
+      "cases": 5174,
+      "agree": 82,
+      "differ": 4706,
+      "unsupported": 241,
+      "skipped": 145,
+      "agree_ids": "72b139e1ceebafce",
+      "case_ids": "3c811eff499e4cc5"
+    },
+    "harfbuzz/text-rendering-tests": {
+      "cases": 753,
+      "agree": 122,
+      "differ": 137,
+      "unsupported": 494,
+      "skipped": 0,
+      "agree_ids": "99722398df453488",
+      "case_ids": "55452f88535d02f1"
+    },
+    "hb-pending/M1-next": {
+      "cases": 22,
+      "agree": 0,
+      "differ": 22,
+      "unsupported": 0,
+      "skipped": 0,
+      "agree_ids": "e3b0c44298fc1c14",
+      "case_ids": "afb1155ff94efeeb"
+    },
+    "hb-pending/M3": {
+      "cases": 86,
+      "agree": 0,
+      "differ": 12,
+      "unsupported": 74,
+      "skipped": 0,
+      "agree_ids": "e3b0c44298fc1c14",
+      "case_ids": "10d248ecfb09ea44"
+    },
+    "hb-pending/M4": {
+      "cases": 64,
+      "agree": 0,
+      "differ": 17,
+      "unsupported": 47,
+      "skipped": 0,
+      "agree_ids": "e3b0c44298fc1c14",
+      "case_ids": "9813a5d43a19e002"
+    },
+    "hb-pending/post-0.1": {
+      "cases": 66,
+      "agree": 0,
+      "differ": 6,
+      "unsupported": 60,
+      "skipped": 0,
+      "agree_ids": "e3b0c44298fc1c14",
+      "case_ids": "4d531a6403c70179"
+    }
+  }
+}

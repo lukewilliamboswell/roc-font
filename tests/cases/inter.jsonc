@@ -1,0 +1,36 @@
+// Shaping cases on the committed Inter metrics subset (tests/fonts/), in the
+// JSONC case format (docs/conformance.adoc). Expectations are HarfBuzz's
+// output with glyph ids; "?" asks record_oracle.py --fill-expected to write
+// it, "oracle" leaves the record as the only reference.
+// Inter's metrics subset keeps hmtx, cmap, GSUB, GPOS and glyph bounding
+// boxes, but no outlines, `name` or `post` (see tools/font_subset.mjs).
+{
+  "schema": 1,
+  "defaults": {"font": "../fonts/Inter-Regular-metrics.ttf"},
+  "cases": [
+    { "id": "plain-hello", "text": "Hello", "expected": "[161=0+1522|614=1+1194|736=2+496|736=3+496|790=4+1228]" },
+    { "id": "plain-space-digits", "text": "1 2 3", "expected": "[1342=0+833|1777=1+576|1343=2+1249|1777=3+576|1345=4+1265]" },
+    { "id": "kern-avatar", "text": "AVATAR", "expected": "[2=0+1273|456=1+1273|2=2+1239|411=3+1148|2=4+1413|384=5+1318]" },
+    { "id": "kern-to", "text": "To", "expected": "[411=0+1162|790=1+1228]" },
+    { "id": "kern-yo-period", "text": "Yo.", "expected": "[472=0+1233|790=1+1228|1502=2+590]" },
+    { "id": "calt-arrow", "text": "->", "expected": "[1805=0+1954]" },
+    { "id": "calt-arrow-in-word", "text": "a->b", "expected": "[507=0+1150|1805=1+1954|578=3+1254]" },
+    { "id": "calt-double-arrow", "text": "x=>y", "expected": "[993=0+1049|1808=1+1954|998=3+1151]" },
+    { "id": "calt-long-arrow", "text": "<-->", "expected": "[1815=0+3584]" },
+    { "id": "calt-case-parens", "text": "(A)", "expected": "[1446=0+747|2=1+1413|1447=2+747]" },
+    { "id": "calt-raised-asterisk", "text": "H*", "expected": "[161=0+1522|1548=1+1321]" },
+    { "id": "no-default-fi-ligature", "text": "office", "expected": "[790=0+1228|647=1+678|647=2+758|689=3+496|586=4+1170|614=5+1194]" },
+    { "id": "missing-glyph-alone", "unicodes": "U+0E01", "expected": "[0=0+1344]" },
+    { "id": "missing-glyph-between", "unicodes": "U+0041,U+0E01,U+0042", "expected": "[2=0+1413|0=1+1344|65=2+1340]" },
+    { "id": "empty-text", "unicodes": "", "expected": "[]" },
+    { "id": "supplementary-plane", "unicodes": "U+1F852", "expected": "[1807=0+5492]" },
+    { "id": "utf8-clusters", "unicodes": "U+0041,U+0E01,U+00E9,U+2192,U+0042", "options": {"utf8_clusters": true}, "expected": "[2=0+1413|0=1+1344|618=4+1194|1805=6+1954|65=9+1340]" },
+    { "id": "utf8-clusters-ligature", "unicodes": "U+00E9,U+002D,U+003E,U+00E9", "options": {"utf8_clusters": true}, "expected": "[618=0+1194|1805=2+1954|618=4+1194]" },
+    { "id": "ned", "text": "AVA", "options": {"output": ["ned"]}, "expected": "[2|456@1273,0|2@2546,0]" },
+    { "id": "no-positions", "text": "AVA", "options": {"output": ["no-positions"]}, "expected": "[2=0|456=1|2=2]" },
+    { "id": "decomposed-e-acute", "unicodes": "U+0065,U+0301", "expected": "[618=0+1194]" },
+    { "id": "soft-hyphen-hidden", "unicodes": "U+0041,U+00AD,U+0042", "expected": "[2=0+1413|1777=1+0|65=2+1340]" },
+    { "id": "zwj-hidden", "unicodes": "U+0041,U+200D,U+0042", "expected": "[2=0+1413|1777=0+0|65=2+1340]" },
+    { "id": "kern-off", "text": "AV", "options": {"features": ["-kern"]}, "expected": "[2=0+1413|456=1+1413]" }
+  ]
+}

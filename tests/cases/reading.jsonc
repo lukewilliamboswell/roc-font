@@ -1,0 +1,24 @@
+// Reading cases: kind "read" asks whether a font reads (sent to the oracle as
+// the --read-outcome option, a roc-font extension of hb-shape's options). Results are read:accept,
+// read:reject or read:drop=<tags> (tables a lenient reader would drop,
+// limited to the tables roc-font reads). The oracle is OTS when installed,
+// otherwise fontTools. Fixtures are made by tests/cases/fixtures/generate.py.
+{
+  "schema": 1,
+  "defaults": {"font": "fixtures/tiny.ttf", "kind": "read"},
+  "cases": [
+    { "id": "tiny", "expected": "read:accept" },
+    { "id": "no-kern", "font": "fixtures/no-kern.ttf", "expected": "read:accept" },
+    { "id": "empty-file", "font": "fixtures/empty.ttf", "expected": "read:reject" },
+    { "id": "header-only", "font": "fixtures/header-only.ttf", "expected": "read:reject" },
+    { "id": "bad-magic", "font": "fixtures/bad-magic.ttf", "expected": "read:reject" },
+    { "id": "truncated-half", "font": "fixtures/truncated-half.ttf", "expected": "read:reject" },
+    { "id": "hmtx-past-end", "font": "fixtures/hmtx-past-end.ttf", "expected": "read:reject" },
+    { "id": "kern-past-end", "font": "fixtures/kern-past-end.ttf", "expected": "read:reject" },
+    { "id": "kern-bad-pairs", "font": "fixtures/kern-bad-pairs.ttf", "expected": "read:reject" },
+    { "id": "kern-unsorted", "font": "fixtures/kern-unsorted.ttf", "expected": "read:drop=kern" },
+    { "id": "no-cmap", "font": "fixtures/no-cmap.ttf", "expected": "read:reject" },
+    { "id": "upem-zero", "font": "fixtures/upem-zero.ttf", "expected": "read:reject" },
+    { "id": "inter-metrics-subset", "font": "../fonts/Inter-Regular-metrics.ttf", "expected": "read:reject" }
+  ]
+}

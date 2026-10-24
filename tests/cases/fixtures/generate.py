@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the tiny font fixtures used by tests/cases/reading.cases.
+"""Generate the tiny font fixtures used by tests/cases/reading.jsonc.
 
 Every fixture is derived from one crafted TrueType font (`tiny.ttf`: four
 glyphs, a format 4 cmap for space, A and V, and a `kern` pair A V = -100),

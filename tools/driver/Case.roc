@@ -1,100 +1,117 @@
-## Conformance case lines and results, without effects.
+## The driver's request protocol and result notation, without effects.
 ##
-## A case line is HarfBuzz's `.tests` format:
-## `font-path;hb-shape options;code points;expected`. Results are printed in
-## hb-shape's text notation with glyph ids (`--no-glyph-names` is implied):
-## `[gid=cluster@dx,dy+ax,ay|...]`. Reading cases (option `--read-outcome`)
-## print `read:accept` or `read:reject`. See docs/conformance.adoc.
+## `scripts/conformance.py` parses the JSONC case files and sends one request
+## per line (scripts/_common.py, `driver_request`):
+##
+##     <tag> TAB <font path> TAB <kind> TAB <code points> TAB <flags>
+##
+## `kind` is `shape`, `read` or `width`; code points are lower-case
+## hexadecimal without prefix, comma-separated (empty for empty text); flags
+## are comma-separated, from `no-clusters`, `no-positions`, `no-advances`,
+## `utf8-clusters` and `font-size=<n>`. Shaping results are printed in
+## hb-shape's text notation with glyph ids: `[gid=cluster@dx,dy+ax,ay|...]`.
+## See docs/conformance.adoc.
 Case :: {}.{
 
-	## What one line of a case file holds.
-	Line : [Blank, Comment, Directive, Malformed, Shape({ font : Str, options : List(Str), unicodes : Str, expected : Str })]
+	## What a request asks for.
+	Kind : [Shape, Read, Width]
 
-	## The output and input settings the driver understands.
-	Settings : { read : Bool, clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool }
+	## The output settings of a shaping request. `font_size` is 0 when not
+	## given.
+	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64 }
+
+	## One parsed request line.
+	Request : { tag : Str, font : Str, kind : Kind, scalars : List(U32), settings : Settings }
 
 	## One positioned output glyph, in font units.
 	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64 }
 
-	## Classify a line. `#` starts a comment or a disabled case and `@` a
-	## runner directive (backend selection), as in HarfBuzz's runner; neither
-	## is run.
-	classify : Str -> Line
-	classify = |raw| {
-		line = raw.trim()
-		if line.is_empty() {
-			Blank
-		} else if line.starts_with("#") {
-			Comment
-		} else if line.starts_with("@") {
-			Directive
-		} else {
-			match line.split_on(";") {
-				[font, options, unicodes, expected] =>
-					Shape({ font, options: options.split_on(" ").keep_if(|o| !o.is_empty()), unicodes, expected })
-				_ => Malformed
+	## Parse one request line. A malformed line yields its tag (the text
+	## before the first tab, or the whole line) and what was wrong.
+	request : Str -> Try(Request, [Malformed({ tag : Str, why : Str })])
+	request = |line|
+		match line.split_on("\t") {
+			[tag, font, kind_text, points, flag_text] => {
+				kind = match kind_text {
+					"shape" => Ok(Shape)
+					"read" => Ok(Read)
+					"width" => Ok(Width)
+					_ => Err("kind")
+				}
+				match (kind, Case.scalars(points), Case.flags(flag_text)) {
+					(Ok(k), Ok(s), Ok(settings)) =>
+						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind: k, scalars: s, settings })
+					(Err(why), _, _) => Err(Malformed({ tag, why }))
+					(_, Err(_), _) => Err(Malformed({ tag, why: "code-points" }))
+					(_, _, Err(flag)) => Err(Malformed({ tag, why: "flag-${flag}" }))
+				}
 			}
+			[tag, ..] => Err(Malformed({ tag, why: "fields" }))
+			[] => Err(Malformed({ tag: "", why: "fields" }))
 		}
-	}
 
-	## Settings from hb-shape options, or the first option the driver does not
-	## support.
-	settings : List(Str) -> Try(Settings, Str)
-	settings = |options| {
-		var $s = { read: False, clusters: True, positions: True, advances: True, utf8: False }
+	## Settings from the comma-separated flags field, or the first flag not
+	## understood.
+	flags : Str -> Try(Settings, Str)
+	flags = |field| {
+		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
 		var $bad = ""
-		for option in options {
-			if $bad.is_empty() {
-				if option == "--read-outcome" {
-					$s = { ..$s, read: True }
-				} else if option == "--no-glyph-names" or option == "--font-funcs=ot" or option == "--font-funcs=ft" {
-					{}
-				} else if option == "--no-clusters" {
+		for flag in field.split_on(",") {
+			if $bad.is_empty() and !flag.is_empty() {
+				if flag == "no-clusters" {
 					$s = { ..$s, clusters: False }
-				} else if option == "--no-positions" {
+				} else if flag == "no-positions" {
 					$s = { ..$s, positions: False }
-				} else if option == "--no-advances" {
+				} else if flag == "no-advances" {
 					$s = { ..$s, advances: False }
-				} else if option == "--ned" {
-					$s = { ..$s, clusters: False, advances: False }
-				} else if option == "--utf8-clusters" {
+				} else if flag == "utf8-clusters" {
 					$s = { ..$s, utf8: True }
-				} else if option.starts_with("--direction=") and Case.is_ltr(option.drop_prefix("--direction=")) {
-					{}
+				} else if flag.starts_with("font-size=") {
+					match Case.decimal(flag.drop_prefix("font-size=")) {
+						Ok(size) if size > 0 => {
+							$s = { ..$s, font_size: size }
+						}
+						_ => {
+							$bad = flag
+						}
+					}
 				} else {
-					$bad = option
+					$bad = flag
 				}
 			}
 		}
 		if ($bad.is_empty()) Ok($s) else Err($bad)
 	}
 
-	# hb_direction_from_string reads only the first letter, in either case.
-	is_ltr : Str -> Bool
-	is_ltr = |value|
-		match value.to_utf8() {
-			['l', ..] => True
-			['L', ..] => True
-			_ => False
+	decimal : Str -> Try(U64, [BadNumber])
+	decimal = |text| {
+		digits = text.to_utf8()
+		var $value = 0.U64
+		var $ok = !digits.is_empty() and digits.len() <= 9
+		for b in digits {
+			if b >= '0' and b <= '9' {
+				$value = $value * 10 + (b - '0').to_u64()
+			} else {
+				$ok = False
+			}
 		}
+		if ($ok) Ok($value) else Err(BadNumber)
+	}
 
-	## Code points from hb-shape's `--unicodes` syntax: hexadecimal numbers,
-	## each optionally prefixed `U+`, `u+` or `0x`, separated by commas or
-	## spaces. An empty field is empty text.
+	## Code points from the request field: lower- or upper-case hexadecimal
+	## numbers without prefix, separated by commas. Empty means empty text.
 	scalars : Str -> Try(List(U32), [BadUnicodes])
 	scalars = |field| {
 		var $out = []
 		var $ok = True
-		for item in field.split_on(",") {
-			for word in item.split_on(" ") {
-				if !word.is_empty() {
-					match Case.hex(word) {
-						Ok(value) => {
-							$out = $out.append(value)
-						}
-						Err(_) => {
-							$ok = False
-						}
+		if !field.is_empty() {
+			for word in field.split_on(",") {
+				match Case.hex(word) {
+					Ok(value) => {
+						$out = $out.append(value)
+					}
+					Err(_) => {
+						$ok = False
 					}
 				}
 			}
@@ -104,13 +121,7 @@ Case :: {}.{
 
 	hex : Str -> Try(U32, [BadHex])
 	hex = |word| {
-		digits = match word.to_utf8() {
-			['U', '+', .. as rest] => rest
-			['u', '+', .. as rest] => rest
-			['0', 'x', .. as rest] => rest
-			['0', 'X', .. as rest] => rest
-			other => other
-		}
+		digits = word.to_utf8()
 		var $value = 0.U64
 		var $ok = !digits.is_empty() and digits.len() <= 6
 		for b in digits {
@@ -158,7 +169,7 @@ Case :: {}.{
 	## A run in hb-shape text notation, as `hb_buffer_serialize` writes it
 	## with `HB_BUFFER_SERIALIZE_FLAG_NO_GLYPH_NAMES`: offsets only when
 	## non-zero, a vertical advance only when non-zero, and with
-	## `--no-advances` the offsets become pen positions. An empty run is `[]`.
+	## `no-advances` the offsets become pen positions. An empty run is `[]`.
 	serialize : Settings, List(Glyph) -> Str
 	serialize = |s, glyphs| {
 		var $parts = List.with_capacity(glyphs.len())
@@ -183,69 +194,49 @@ Case :: {}.{
 		"[${Str.join_with($parts, "|")}]"
 	}
 
-	## The directory part of a path, with its trailing slash, or "" for a bare
-	## name.
-	directory : Str -> Str
-	directory = |path| {
-		bytes = path.to_utf8()
-		var $cut = 0
-		var $i = 0
-		for b in bytes {
-			$i = $i + 1
-			if b == '/' {
-				$cut = $i
-			}
+	## The total horizontal advance of a run, as a width result.
+	width : List(Glyph) -> Str
+	width = |glyphs| {
+		var $sum = 0.I64
+		for g in glyphs {
+			$sum = $sum + g.ax
 		}
-		Str.from_utf8_lossy(bytes.sublist({ start: 0, len: $cut }))
+		"width:${$sum.to_str()}"
 	}
-
-	## A case's font path, resolved against the directory of the file that
-	## names it. An absolute path may carry HarfBuzz's `@sha1` suffix, which
-	## is dropped.
-	resolve : Str, Str -> Str
-	resolve = |case_file, font|
-		if font.starts_with("/") {
-			match font.split_first("@") {
-				Ok(parts) => parts.before
-				Err(_) => font
-			}
-		} else {
-			"${Case.directory(case_file)}${font}"
-		}
 }
 
-expect Case.classify("") == Blank
-expect Case.classify("# id: plain") == Comment
-expect Case.classify("@font-funcs=ot") == Directive
-expect Case.classify("a;b;c") == Malformed
-expect Case.classify("f.ttf;--ned  --no-glyph-names;U+0041;[1]") == Shape({ font: "f.ttf", options: ["--ned", "--no-glyph-names"], unicodes: "U+0041", expected: "[1]" })
-expect Case.scalars("U+0041,U+1F600") == Ok([0x41, 0x1F600])
+plain : Case.Settings
+plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+
+expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True } })
+expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain })
+expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain })
+expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 } })
+expect Case.request("t\tf.ttf\tshape\t41") == Err(Malformed({ tag: "t", why: "fields" }))
+expect Case.request("t\tf.ttf\tdraw\t41\t") == Err(Malformed({ tag: "t", why: "kind" }))
+expect Case.request("t\tf.ttf\tshape\td800\t") == Err(Malformed({ tag: "t", why: "code-points" }))
+expect Case.request("t\tf.ttf\tshape\t41\tbold") == Err(Malformed({ tag: "t", why: "flag-bold" }))
+expect Case.request("t\t\tshape\t41\t") == Err(Malformed({ tag: "t", why: "empty-field" }))
+expect Case.scalars("41,1F600") == Ok([0x41, 0x1F600])
 expect Case.scalars("") == Ok([])
-expect Case.scalars("0x41 42") == Ok([0x41, 0x42])
-expect Case.scalars("U+D800") == Err(BadUnicodes)
-expect Case.scalars("U+110000") == Err(BadUnicodes)
-expect Case.scalars("U+00G1") == Err(BadUnicodes)
+expect Case.scalars("41,,42") == Err(BadUnicodes)
+expect Case.scalars("110000") == Err(BadUnicodes)
+expect Case.scalars("U+0041") == Err(BadUnicodes)
+expect Case.flags("font-size=0") == Err("font-size=0")
 expect Case.utf8_offsets([0x41, 0xE9, 0x20AC, 0x1F600]) == [0, 1, 3, 6, 10]
-expect Case.settings(["--no-glyph-names", "--direction=ltr"]) == Ok({ read: False, clusters: True, positions: True, advances: True, utf8: False })
-expect Case.settings(["--ned"]) == Ok({ read: False, clusters: False, positions: True, advances: False, utf8: False })
-expect Case.settings(["--features=-kern"]) == Err("--features=-kern")
-expect Case.settings(["--direction=rtl"]) == Err("--direction=rtl")
-expect Case.resolve("tests/cases/inter.cases", "../fonts/a.ttf") == "tests/cases/../fonts/a.ttf"
-expect Case.resolve("-", "a.ttf") == "a.ttf"
-expect Case.resolve("x/y.cases", "/abs/a.ttf@0123abcd") == "/abs/a.ttf"
 
 expect {
-	s = { read: False, clusters: True, positions: True, advances: True, utf8: False }
-	Case.serialize(s, [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0 }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7 }]) == "[2=0+1273|456=1@-5,10+1273,7]"
+	Case.serialize(plain, [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0 }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7 }]) == "[2=0+1273|456=1@-5,10+1273,7]"
 }
 
-expect {
-	s = { read: False, clusters: True, positions: True, advances: True, utf8: False }
-	Case.serialize(s, []) == "[]"
-}
+expect Case.serialize(plain, []) == "[]"
 
 expect {
-	# With --ned, offsets accumulate the advances, as hb_buffer_serialize does.
-	s = { read: False, clusters: False, positions: True, advances: False, utf8: False }
+	# With no-clusters and no-advances (hb-shape --ned), offsets accumulate
+	# the advances, as hb_buffer_serialize does.
+	s = { ..plain, clusters: False, advances: False }
 	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0 }]) == "[1|2@100,0]"
 }
+
+expect Case.width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
+expect Case.width([]) == "width:0"

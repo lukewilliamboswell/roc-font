@@ -1,0 +1,13 @@
+{
+  "name": "roc-font-chrome-oracle",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Authoring only: measures text widths in a pinned Chrome to record reference facts for roc-font. Never part of the Roc package.",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "puppeteer": "25.16.0"
+  }
+}

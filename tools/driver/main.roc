@@ -7,81 +7,58 @@ import cli.OsStr
 import cli.Path
 import cli.Stdin
 import cli.Stdout
-import cli.Stderr
 import rf.Font
 import Case
 
-## Conformance driver: reads HarfBuzz-format case files named on the command
-## line (or one from stdin when none, or `-`, is named), reads each distinct
-## font once, runs every case and prints one line per case:
+## Conformance driver. Reads requests on stdin, one per line, in the protocol
+## of Case.roc (written by scripts/conformance.py from the JSONC case files),
+## reads each distinct font once, and prints one line per request, in order:
 ##
-##     <case file>:<line number><TAB><result>
+##     <tag><TAB><result>
 ##
-## A result is hb-shape notation with glyph ids, `read:accept`,
-## `read:reject`, `unsupported:<option>` (an option the driver cannot honour
-## yet), `error:font-file` (the font could not be read from disk) or
-## `error:malformed-case`. See docs/conformance.adoc.
+## A result is hb-shape notation with glyph ids, `width:<n>`, `read:accept`,
+## `read:reject`, `unsupported:--font-size=<n>` (a size other than the units
+## per em), `error:font-file` (the font could not be read from disk) or
+## `error:malformed-request:<why>`. See docs/conformance.adoc.
 ##
-## With `--explain` as the first argument, a rejected font's line gets a third
+## With `--explain` as an argument, a rejected font's line gets a third
 ## tab-separated column listing the reader's problems. It is for triage and
 ## is never compared with oracle records.
 main! : List(OsStr) => Try({}, _)
 main! = |args| {
-	all_names = args.map(OsStr.display)
-	explain = all_names.first() == Ok("--explain")
-	names = if (explain) all_names.drop_first(1) else all_names
-	sources = if (names.is_empty()) ["-"] else names
+	explain = args.map(OsStr.display).contains("--explain")
+	input = match Stdin.read_to_end!() {
+		Ok(bytes) => Str.from_utf8_lossy(bytes)
+		Err(_) => ""
+	}
 	var $fonts = Dict.with_capacity(16)
-	for source in sources {
-		text = if source == "-" {
-			match Stdin.read_to_end!() {
-				Ok(bytes) => Ok(Str.from_utf8_lossy(bytes))
-				Err(_) => Err({})
-			}
-		} else {
-			match Path.read_bytes!(Path.utf8(source)) {
-				Ok(bytes) => Ok(Str.from_utf8_lossy(bytes))
-				Err(_) => Err({})
-			}
-		}
-		match text {
-			Err(_) => {
-				Stderr.line!("driver: cannot read case file ${source}") ?? {}
-				return Err(Exit(2))
-			}
-			Ok(content) => {
-				var $out = []
-				var $number = 0.U64
-				for line in content.split_on("\n") {
-					$number = $number + 1
-					match Case.classify(line) {
-						Shape(c) => {
-							path = Case.resolve(source, c.font)
-							state = match $fonts.get(path) {
-								Ok(found) => found
-								Err(_) => {
-									loaded = load!(path)
-									$fonts = $fonts.insert(path, loaded)
-									loaded
-								}
-							}
-							why = match state {
-								Rejected(problems) if explain => "\t${problems}"
-								_ => ""
-							}
-							$out = $out.append("${source}:${$number.to_str()}\t${run(state, c.options, c.unicodes)}${why}")
+	var $out = []
+	for line in input.split_on("\n") {
+		if !line.is_empty() {
+			match Case.request(line) {
+				Ok(req) => {
+					state = match $fonts.get(req.font) {
+						Ok(found) => found
+						Err(_) => {
+							loaded = load!(req.font)
+							$fonts = $fonts.insert(req.font, loaded)
+							loaded
 						}
-						Malformed => {
-							$out = $out.append("${source}:${$number.to_str()}\terror:malformed-case")
-						}
-						_ => {}
 					}
+					why = match state {
+						Rejected(problems) if explain => "\t${problems}"
+						_ => ""
+					}
+					$out = $out.append("${req.tag}\t${run(state, req)}${why}")
 				}
-				if !$out.is_empty() {
-					Stdout.write!("${Str.join_with($out, "\n")}\n") ?? {}
+				Err(Malformed(bad)) => {
+					$out = $out.append("${bad.tag}\terror:malformed-request:${bad.why}")
 				}
 			}
 		}
+	}
+	if !$out.is_empty() {
+		Stdout.write!("${Str.join_with($out, "\n")}\n") ?? {}
 	}
 	Ok({})
 }
@@ -99,18 +76,20 @@ load! = |path|
 			}
 	}
 
-run : FontState, List(Str), Str -> Str
-run = |state, options, unicodes|
-	match Case.settings(options) {
-		Err(option) => "unsupported:${option}"
-		Ok(settings) =>
-			match Case.scalars(unicodes) {
-				Err(_) => "error:malformed-case"
-				Ok(scalars) =>
-					match state {
-						NoFile => "error:font-file"
-						Rejected(_) => "read:reject"
-						Ready(font) => if (settings.read) "read:accept" else shape(font, settings, scalars)
+run : FontState, Case.Request -> Str
+run = |state, req|
+	match state {
+		NoFile => "error:font-file"
+		Rejected(_) => "read:reject"
+		Ready(font) =>
+			match req.kind {
+				Read => "read:accept"
+				Width => Case.width(glyphs(font, req.settings, req.scalars))
+				Shape =>
+					if req.settings.font_size != 0 and req.settings.font_size.to_f64() != Font.units_per_em(font) {
+						"unsupported:--font-size=${req.settings.font_size.to_str()}"
+					} else {
+						Case.serialize(req.settings, glyphs(font, req.settings, req.scalars))
 					}
 			}
 	}
@@ -118,27 +97,27 @@ run = |state, options, unicodes|
 # The current public API shapes in four steps: map code points to glyphs,
 # apply the default substitutions, take advances and add pair kerning.
 # Offsets are always zero and clusters are code point indices (converted to
-# UTF-8 byte offsets for `--utf8-clusters`). A code point the font does not
+# UTF-8 byte offsets for `utf8-clusters`). A code point the font does not
 # map is drawn with glyph 0, as hb-shape does; that is this driver's choice,
 # not the package's.
-shape : Font, Case.Settings, List(U32) -> Str
-shape = |font, settings, scalars| {
+glyphs : Font, Case.Settings, List(U32) -> List(Case.Glyph)
+glyphs = |font, settings, scalars| {
 	var $items = List.with_capacity(scalars.len())
 	var $index = 0
 	for code_point in scalars {
 		$items = $items.append({ glyph: Font.glyph(font, code_point) ?? 0, cluster: $index })
 		$index = $index + 1
 	}
-	glyphs = Font.substitute(font, $items)
-	kerning = Font.kerning(font, glyphs.map(|g| g.glyph))
+	substituted = Font.substitute(font, $items)
+	kerning = Font.kerning(font, substituted.map(|g| g.glyph))
 	offsets = Case.utf8_offsets(scalars)
-	var $run = List.with_capacity(glyphs.len())
+	var $run = List.with_capacity(substituted.len())
 	var $i = 0
-	for g in glyphs {
+	for g in substituted {
 		advance = Font.advance(font, g.glyph) + (kerning.get($i) ?? 0.0)
 		cluster = if (settings.utf8) (offsets.get(g.cluster) ?? 0) else g.cluster
 		$run = $run.append({ glyph: g.glyph, cluster, dx: 0, dy: 0, ax: advance.to_i64_wrap(), ay: 0 })
 		$i = $i + 1
 	}
-	Case.serialize(settings, $run)
+	$run
 }

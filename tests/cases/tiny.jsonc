@@ -1,0 +1,14 @@
+// Shaping cases on the crafted fixture tests/cases/fixtures/tiny.ttf: four
+// glyphs (.notdef, space, A, V) and a legacy `kern` table with A V = -100.
+// Regenerate fixtures with tests/cases/fixtures/generate.py.
+{
+  "schema": 1,
+  "defaults": {"font": "fixtures/tiny.ttf"},
+  "cases": [
+    { "id": "kern-table-pair", "text": "AV", "expected": "[2=0+550|3=1@-50,0+530]" },
+    { "id": "kern-table-no-pair", "text": "VA", "expected": "[3=0+580|2=1+600]" },
+    { "id": "space-and-missing", "text": "A B", "expected": "[2=0+600|1=1+250|0=2+500]" },
+    { "id": "no-kern-table", "font": "fixtures/no-kern.ttf", "text": "AV", "expected": "[2=0+600|3=1+580]" },
+    { "id": "empty-text", "unicodes": "", "expected": "[]" }
+  ]
+}
