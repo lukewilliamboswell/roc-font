@@ -157,7 +157,8 @@ Conformance (§7.1, §7.2):
   out, each font read once.
 - [ ] `scripts/conformance.py` and `tests/known-failures.json` (fails on
   new differences and on stale entries; never edits the list).
-- [ ] Generator for a small slice of records as Roc expect modules.
+- [ ] Conformance cases as JSONC; Python driver streams a line protocol to
+  the basic-cli harness (no generated `.roc` expects, §7.1).
 - [ ] Unhappy-path cases: OTS accept / reject / drop-table expectations.
 
 Benchmarks (§9):
@@ -197,7 +198,7 @@ case in section 6; both fuzz targets run natively from corpus seeds.
 - [ ] No behaviour change.
 
 Exit: conformance results and allocation baseline unchanged; `roc docs`
-shows no internal helper or type; bundle contains no test modules or fonts.
+shows no internal helper or type; bundle contains no test modules or test fonts.
 
 ### M3. API to the architecture
 
@@ -237,7 +238,8 @@ reading, planning and shaping pass seeded native runs; `roc docs` reviewed.
 
 Exit: HarfBuzz agreement on all Latin, Greek and Cyrillic cases in the
 in-house and text-rendering-tests suites, except listed known failures
-each with a reason; Chrome widths agree on package-mermaid's oracle texts.
+each with a reason; Chrome widths agree on package-mermaid's oracle texts
+(measured on full Inter 4.1: Chrome's OTS refuses the metrics-only subset).
 
 ### M5. package-mermaid switchover
 
@@ -260,7 +262,8 @@ settled with roc-pdf's feedback.
 - [ ] All checks from `AGENTS.md` ("Verify the contract"), interpreter and
   native.
 - [ ] `roc docs` reviewed as the API.
-- [ ] Bundle contains no fonts, tests, tools or benches.
+- [ ] Bundle contains the three default fonts with licences and no test
+  fonts, tests, tools or benches.
 - [ ] README example compiles against the released API.
 
 Exit: tagged release; checks pass; `git diff --check` clean.
@@ -324,8 +327,13 @@ Conformance findings to act on:
   Inter subset for lacking `name` (deliberate).
 - Build the scored-suite mode (§7.1): per-suite agree counts that ratchet,
   so the imported HarfBuzz suites track progress without gating.
-- Build the generator from a slice of records to Roc expect modules.
-- Add a FreeType case kind (extents) and a Chrome oracle; OTS is pinned for
+- Move cases to JSONC with the Python driver and line-protocol harness
+  (decided 2026-10-24: no generated `.roc` expect modules).
+- Chrome width oracle done (`tools/oracle/chrome/`, kind `width`, exact to
+  1/64 unit). Canvas `measureText` shapes per word and disagrees across
+  spaces (`Y* w`: 4882 vs 4668): check whether package-mermaid's
+  TextMeasure models canvas or layout.
+- Add a FreeType case kind (extents); OTS is pinned for
   Linux x86-64 only.
 
 Performance findings to act on:
@@ -369,7 +377,7 @@ Performance findings to act on:
 | fontTools | 4.61.1 in user site-packages (`~/.local`), so not visible under `python3 -I` |
 | FreeType | `libfreetype` 2.13.2 (pkg-config 26.1.20) with headers; no Python binding |
 | OTS | not installed (`ots-sanitize` missing) |
-| Chrome | package-mermaid's oracle pins Puppeteer 25.16.0 and its Chrome; system Chrome 153 |
+| Chrome | Puppeteer 25.16.0 with Chrome 156.0.8078.47 from `~/.cache/puppeteer`; needs Node 22+ (Node 23 via nvm works, system Node 18 does not) |
 | Rust | `cargo` 1.95.0 (for ttf-parser and rustybuzz comparisons) |
 
 No HarfBuzz, rustybuzz, ttf-parser, fontTools or OTS source checkouts sit

@@ -30,6 +30,8 @@ bits on every platform, in apps, packages, `expect`s and WebAssembly.
 * Shaping: Unicode text plus script, language, direction and feature
   choices in; a run of glyph ids, advances, offsets, clusters and flags
   out.
+* Three default fonts, sans, serif and mono, ready to use without
+  supplying bytes (§5.8).
 * Later: subsetting (glyph closure and table rewrite) for PDF embedding, and
   variable-font instancing of metrics and outlines.
 
@@ -54,10 +56,10 @@ segmentation
 consumes their results (runs of one script and direction) and does not
 duplicate their tables.
 
-|Font discovery, fallback across fonts, bundled fonts
+|Font discovery, fallback across fonts, a font library
 |Policy that differs per consumer (Mermaid guesses emoji widths; roc-pdf
-embeds a specific font). An optional asset package may ship font bytes;
-the library never does.
+embeds a specific font). The package ships three defaults (§5.8) and no
+more; every other font is the caller's bytes.
 
 |Decompressing WOFF and WOFF2
 |A container concern, not a font concern. Accept decompressed `sfnt` bytes;
@@ -362,6 +364,36 @@ shaping queries will accept an optional `Location`; a cheap derived value
 validates `fvar`, `avar`, `HVAR`, `MVAR` and `gvar` once, independent of any
 location.
 
+=== 5.8 Default fonts
+
+The package ships three default fonts, a sans, a serif and a mono, so
+callers can measure and shape without supplying bytes. Each face is
+exposed as a prepared `Font`, its exact bytes (hosts draw with them and
+PDFs embed them, so they must be the bytes that were measured) and its
+licence text.
+
+Why in the core package: each default is read with `Font.from_bytes` in a
+top-level value, so Roc evaluates it at compile time. Compile-time results
+are cached per package version and shared by every app that uses it, so
+preparation is paid once, and first use costs nanoseconds instead of a
+read (measured: about 200 ns against about 1 ms for Inter). A file that
+fails to read is a compile-time crash, so a shipped default is proven
+valid on every build. Faces an app never uses add nothing to its binary.
+The cost is download size, bounded by shipping exactly three faces: the
+whole package, fonts included, stays under 15 MB uncompressed, which is
+small for a Roc package and leaves room for full variable fonts.
+
+Rules:
+
+* fonts are freely licensed (SIL OFL or similar), shipped unmodified, with
+  their licence text, which keeps reserved font names safe (subsetting
+  counts as modifying);
+* each is pinned by version and SHA-256; replacing or upgrading a default
+  changes measurements, so it is a breaking change of the package;
+* the defaults are variable fonts once variations are supported (§5.7),
+  so one file covers every weight; until then the default instance is
+  used.
+
 [#shaping]
 == 6. Shaping
 
@@ -444,15 +476,21 @@ slow to install and slow to run; roc-font is fast. So oracle results are
 recorded once and cached, and the expensive part never runs in the normal
 loop.
 
-* *Cases* are lines in `tests/cases/*.cases`, in HarfBuzz's own test format
-  exactly as its `run-tests.py` reads it (`font;options;code points;expected`,
-  with `#` comments and disabled cases, `@` directives and `*` for "any").
-  One format means HarfBuzz's test suite, the text-rendering-tests and our
-  own cases all run through the same driver without conversion. Three
-  extensions: `# id: <name>` names the next case, `?` as the expected value
-  means "fill from the oracle", and the `--read-outcome` option makes a
-  reading case whose result is `read:accept`, `read:reject` or
-  `read:drop=<tags>`, which is how unhappy paths share the same files.
+* *Cases* are data, not code: JSONC files in `tests/cases/*.jsonc`. Each
+  case has a unique id, a reason, a font (with its pinned hash when it
+  comes from the corpus), a kind (`shape`, `read`, and later `width`,
+  `metrics`, ...), the text, structured options and the expected result
+  or "fill from the oracle". Comments and reasons sit beside the data they
+  explain, and a new kind of check is a new field, not a new file format.
+  Unhappy paths (fonts that must be rejected, or must have a table dropped)
+  are `read` cases in the same files. External suites such as HarfBuzz's
+  `.tests` files are import sources only: importing converts them to JSONC
+  and records where each case came from.
+* *No generated Roc.* Cases are never turned into `.roc` expect modules.
+  Unit expects in `package/*Tests.roc` are written by hand for one reader
+  or stage; agreement with oracles is the conformance driver's job. One
+  source of truth per case keeps cases cheap to add in bulk and keeps
+  `roc test` fast.
 * *Results* are serialised in `hb-shape` notation with glyph ids and UTF-8
   clusters (`--no-glyph-names --utf8-clusters`:
   `[gid=cluster@dx,dy+adv|...]`), so comparison is string equality and a
@@ -463,13 +501,16 @@ loop.
   is a SHA-256 over every input that can change it: font bytes, case,
   options, oracle tool versions and the extractor's version. A record is
   recomputed only when its key changes, and forcing a re-record must
-  reproduce it byte for byte. Records are committed so `roc test` and the
-  driver need no oracle installed.
-* *The driver* (`tools/driver/`) is one native Roc binary. It reads cases on
-  stdin or from files named on the command line, reads each font once per
-  run, shapes every case and prints one result line per case. Build once,
-  then run thousands of happy and unhappy cases in seconds (6245 cases took
-  about 0.9 s on the seed).
+  reproduce it byte for byte. Records are committed so the driver needs no
+  oracle installed.
+* *The driver* is split at the language boundary. `scripts/conformance.py`
+  parses and normalises the JSONC, then streams a minimal line protocol
+  (one request per line) to the *harness*, one native basic-cli Roc binary
+  in `tools/driver/`. The harness reads each font once per run, answers
+  every request and prints one result line per request; it never parses
+  JSONC or HarfBuzz syntax. Build once, then run thousands of happy and
+  unhappy cases in one process in seconds (6245 cases took about 0.9 s on
+  the seed).
 * *The review* (`scripts/conformance.py`) runs the driver, compares with the
   records and fails on any difference not listed in
   `tests/known-failures.json` with a reason, and on any listed case that now
@@ -486,17 +527,15 @@ loop.
   known-failures list.
 * *Curated imports.* Our own case files are the authority; external
   suites are sources we curate from, not trees we vendor. A curation list
-  (`tests/cases/curated.json`) names each imported case by suite, file and
+  (`tests/cases/curated.jsonc`) names each imported case by suite, file and
   line, with the reason it is in scope, and `scripts/fetch_corpus.py
-  import-hb-tests --curated` copies exactly those cases, with their fonts'
-  pinned hashes, into gating case files. As each milestone lands, the next
+  import-hb-tests --curated` converts exactly those cases, with their fonts'
+  pinned hashes, into gating JSONC case files. As each milestone lands, the next
   slice is promoted. Whole suites are never committed: the source tarball
   is pinned by hash in `tests/corpus.json`, so a full import is
   reproducible on demand. Generated cases (corpus fonts with written or
   fuzzed text) supply volume; curated imports supply the hard cases we
   would not think to write.
-* A small, representative slice of records is generated into Roc expect
-  modules so plain `roc test` enforces agreement with no tooling at all.
 
 Oracles, each pinned by exact version and recorded in every record's
 provenance:
@@ -520,7 +559,12 @@ reference for §4.4. fontTools is only a weak fallback here: it accepts
 fonts browsers reject (units per em of 0, for example)
 
 |Pinned Chrome (Puppeteer)
-|browser default features and end-to-end widths, as package-mermaid uses
+|end-to-end advance widths with browser default features. Measured from
+layout (a `white-space: pre` span) at a font size equal to units per em, so
+one pixel is one font unit and the result is exact to 1/64 unit. Canvas
+`measureText` shapes word by word, so contextual rules across spaces
+differ; it is not the reference. Chrome loads fonts through OTS, so fonts
+OTS rejects (such as a subset without `name`) cannot be measured
 |===
 
 === 7.2 Corpus
@@ -654,11 +698,11 @@ tests/
   fonts/                 small committed fixtures with licences
   corpus.json            pinned external fonts (URL, SHA-256, licence)
   corpus/                fetched fonts (ignored)
-  cases/*.cases          conformance cases, HarfBuzz test format
+  cases/*.jsonc          conformance cases (data; imports converted to JSONC)
   oracle/records/        cached oracle results (JSON lines, committed)
   known-failures.json    deliberate divergences, each with a reason
 tools/
-  driver/                native Roc conformance driver (cases in, results out)
+  driver/                native basic-cli harness (line protocol in, results out)
   oracle/                pinned oracle extractors and requirements
 bench/
   roc/                   Roc benchmark programs

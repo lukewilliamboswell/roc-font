@@ -16,8 +16,11 @@ and plans live in `TODO.md`, not here.
 - Do not add rendering, rasterisation, hinting emulation, pixel rounding,
   line wrapping, font fallback policy, font discovery, file I/O or UI
   concerns. These belong to consumers.
-- Do not bundle fonts in the package. Test fonts live under `tests/fonts/`
-  with their licences, and only test modules and fuzz apps import them.
+- The package ships exactly three default fonts (sans, serif, mono),
+  unmodified, freely licensed, with their licence text, prepared at
+  compile time so a bad file is a build error. Any other font is the
+  caller's bytes. Test fonts live under `tests/fonts/` with their
+  licences, and only test modules and fuzz apps import them.
 - Leave Unicode text segmentation (graphemes, line breaks, bidi, script
   runs) to the `unicode` package. Consume its results; do not duplicate
   its tables.
@@ -185,11 +188,14 @@ shaping stage:
 - check agreement with a reference implementation (HarfBuzz, fontTools,
   FreeType, OTS, a pinned browser) through cached oracle records, replayed
   by the native conformance driver, so agreement is enforced without the
-  oracle installed; list every deliberate divergence with its reason;
+  oracle installed; cases are JSONC data run by the Python driver through
+  the Roc harness, never generated `.roc` files; list every deliberate
+  divergence with its reason;
 - test aggregated problems, truncated and corrupted files, and empty and
   degenerate inputs;
 - generate `roc docs` and confirm internal helpers do not appear;
-- bundle the package and confirm it contains no fonts or test modules; and
+- bundle the package and confirm it contains only the default fonts (with
+  licences) and no test fonts or test modules; and
 - run `git diff --check`.
 
 If a check cannot run, run the others and report which were skipped and why.
