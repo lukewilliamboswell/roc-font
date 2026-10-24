@@ -1,0 +1,112 @@
+= roc-font 0.1.0-rc1
+
+A release candidate for 0.1.0, published so consumers can try the API and
+report problems before 0.1.0 is fixed. Everything below describes what
+0.1.0 is planned to be; names may still change on feedback.
+
+The first release of roc-font: read TrueType and OpenType fonts and turn
+text into positioned glyphs, in pure Roc, with three fonts built in. It
+needs no host, no system fonts and no file access.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.25.0/CZsY7tYZwR3rj9kYbpaCfxki2yVAaRL8bBwMLvB2xkbA.tar.zst",
+	font: "{package-url}",
+}
+
+import font.Font
+----
+
+Build with the Roc nightly this release was tested with, which the
+release page lists under Compilers. The release also attaches
+`roc-font-examples-0.1.0-rc1.zip` (the examples, naming this release, with
+the output they were tested to print), the API reference and the manual
+as a PDF.
+
+== What it provides
+
+* **Reading fonts.** `Font.from_bytes` reads a TrueType or OpenType font
+  file, or one font of a collection, and checks every offset, count and
+  length before using it. When a file cannot be used, it reports every
+  problem it found, naming the table and byte offset where they help. By
+  default reading accepts what browsers accept and reports what it left
+  out with `Font.dropped`; `strict: True` rejects a font for any problem,
+  for files you will pass on, such as into a PDF. After a successful read,
+  every query and every shaping call has a defined result.
+* **Font facts, in font units.** Units per em; ascent, descent and line gap
+  as browsers take them; cap and x height; underline and strikeout; the
+  glyph for each character; each glyph's advance and bounding box; every
+  character the font maps; the family name and glyph names.
+* **Shaping.** `Font.shape` turns a string into glyph ids, advances, offsets
+  and clusters (the UTF-8 byte offset in your text of what each glyph
+  draws), with flags marking where breaking a line would mean shaping
+  both sides again and which glyphs stand in for characters the font
+  lacks.
+  `Font.width` is the shaped width. Shaping applies the font's
+  substitutions (ligatures, contextual and stylistic alternates, all eight
+  substitution lookup types) and its kerning, the browser default features
+  unless you choose others, over the whole text or a byte range. You can
+  set the script, language, direction and cluster level, and plan once to
+  shape many strings.
+* **Variable fonts.** `Font.at` moves a font to any weight, width, optical
+  size or other axis, named as in CSS. Advances, metrics, kerning and glyph
+  boxes follow. `Font.axes`, `Font.instances` and `Font.coordinates`
+  describe the font's design space.
+* **Three built-in fonts.** `Font.sans` (Inter 4.1), `Font.serif`
+  (Merriweather 4.009) and `Font.mono` (Fira Code 6.2), all variable, all
+  under the SIL Open Font License 1.1, are read when your program is
+  compiled and cost nothing in a program that does not use them. Their
+  bytes and licence texts are exposed too, so you can embed the font you
+  measured with.
+
+== How closely it matches the references
+
+roc-font is compared with reference implementations through recorded
+results, so every check runs without the references installed.
+
+* **Shaping matches HarfBuzz 14.6.0** on the cases every change must pass:
+  of 463 recorded cases (HarfBuzz shaping, Chrome widths, OTS reading and
+  font facts), 445 agree, 16 are documented differences, 2 use
+  options the test driver cannot express yet, and none fail.
+* **On HarfBuzz's own test suites**, roc-font's glyphs and positions equal
+  HarfBuzz's in 4,087 of the 4,961 in-house cases it runs (82 %); most of
+  the 874 differences are in scripts HarfBuzz gives their own shaper
+  (Tibetan, Indic, Arabic, Thai). In the text-rendering-tests suite 212 of
+  352 agree; most of the 140 differences need Apple's `morx` and `mort`
+  tables, which roc-font does not apply, or are fonts OTS refuses.
+* **Variable fonts are bit-identical with HarfBuzz.** roc-font repeats
+  HarfBuzz's single-precision arithmetic on integers; normalised
+  coordinates and advances differed in none of 11,920,275 advances
+  compared over grids and random locations of the three built-in fonts.
+* **Reading follows OTS**, the font sanitiser Chrome and Firefox load fonts
+  through: a font is accepted when OTS 9.3.0 would accept it, and only the
+  parts OTS drops (the variation tables as one unit, an unsorted `kern`
+  table) are left out. Over 1,278 fonts it refuses exactly the fonts OTS
+  refuses, except that it does not require the `OS/2`, `name` and `post`
+  tables or outlines to be present.
+
+== Known limits
+
+* **Complex scripts use the default shaper.** Scripts that need their own
+  shaper (Arabic joining, the Indic scripts, Khmer, Myanmar, Thai, Hangul
+  and the Universal Shaping Engine scripts) are shaped as HarfBuzz's
+  default shaper shapes them, which is not how they should look. Hebrew
+  has its shaper.
+* **Positioning is kerning only.** Pair adjustment and the TrueType `kern`
+  table are applied; single adjustment, cursive attachment, mark
+  attachment and contextual positioning lookups are not yet.
+* **No CFF outlines.** Fonts with `CFF` or `CFF2` outlines are read and
+  shaped, but their outlines are not, so `Font.extents` is `Empty` for
+  their glyphs.
+* **No Apple Advanced Typography.** The `morx`, `mort` and `trak` tables
+  are not applied.
+* **`avar` version 2 is not supported**: such a font reads as its default
+  design, with the variation space left out and reported by `Font.dropped`.
+* **Plain font files only.** WOFF and WOFF2 files must be decompressed
+  first, and text runs horizontally, left to right or right to left.
+* roc-font does not detect scripts or reorder mixed-direction paragraphs.
+  Split text into runs of one script and direction first, for example with
+  the `unicode` package.

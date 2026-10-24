@@ -46,7 +46,8 @@ Chrome widths agree on package-mermaid's oracle texts.
   dry-run build, signed commits, no bot bypass), verified with a pull
   request whose check fails; then integrate by pull request. Everything
   else in `blueprint run check-settings` already passes.
-- [ ] Every check in `AGENTS.md` on interpreter and native; tag 0.1.0.
+- [ ] Every check in `AGENTS.md` on interpreter and native; release
+  0.1.0-rc1, gather consumer feedback (package-mermaid, roc-pdf), then 0.1.0.
 
 ## After 0.1.0
 
