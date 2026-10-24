@@ -64,13 +64,12 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Consumers
 
-- [ ] package-mermaid (`roc-graph-layout`, branch `feature/package-mermaid`,
-  worktree `.claude/worktrees/package-mermaid/`): depend on roc-font, delete
-  its local `Font.roc`/`FontShape.roc`/`FontTest.roc`, keep
-  `TextMeasure.roc`; its Mermaid oracle suite (`tests/mermaid/`,
-  `OracleSizes.roc`, `tools/mermaid-oracle/`) passes unchanged. Check
-  whether `TextMeasure` models canvas `measureText` (word by word) or
-  layout.
+- [ ] package-mermaid: proven on `roc-graph-layout` branch
+  `feature/package-mermaid-roc-font` (worktree
+  `.claude/worktrees/mermaid-roc-font`, roc-font `70f5adb` vendored):
+  oracle sizes and SVGs byte-identical, 0 differences over 99,771
+  measurements, 2.8x faster. After the 0.1.0 release, switch the vendored
+  copy to the released package URL and merge.
 - [ ] roc-pdf (`roc-pdf/package/`): kerning and default ligatures in
   `KernelFacadeShape.roc`; a `Text.Store` producer from `Run`; under its
   pinned allocation and work counts (`roc-pdf/AGENTS.md`). Settle public

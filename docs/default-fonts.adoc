@@ -355,6 +355,17 @@ all). Not yet supported, and needed for these fonts beyond ASCII or beyond
 the default location: `avar`/`HVAR`/`MVAR`/`gvar`, `GDEF` variation deltas
 in `GPOS`, GPOS mark attachment (types 4, 5, 6) and lookup flags.
 
+=== Variable Inter is not static Inter
+
+The variable Inter file and the static Inter Regular file carry the same
+version string (4.001;git-9221beed3) but are not identical at Regular. A
+comparison of 99,771 measurements found two differences in the font data,
+not in roc-font: the bounding box of U+1EC8 (441 units right edge in the
+static file, 424 in the variable one) and the kerning of U+04B0 U+0247
+(-116 against -157). A consumer whose reference is a browser drawing static
+Inter (package-mermaid's oracle) should keep reading that static file with
+`Font.from_bytes`; `Font.sans` is the variable file.
+
 == Cost of shipping them
 
 Measured on the 2026-10-23 nightly (x86-64 Linux, LLVM `--opt=speed`, a
