@@ -190,6 +190,12 @@ shaping stage:
   contract (totality, determinism, bounded growth, index alignment, finite
   output), seed it with real fonts, and distil every corpus crash into a
   permanent `## fuzz regression:` expect;
+- besides whole-pipeline targets, give each hot feature (a cmap format, a
+  coverage or class table, one lookup type, kerning, a variation store) a
+  narrow target that measures allocations at two or more generated sizes
+  of just that feature, so a scaling or performance problem is pinned to
+  the feature that causes it rather than found later in an end-to-end
+  number;
 - check agreement with a reference implementation (HarfBuzz, fontTools,
   FreeType, OTS, a pinned browser) through cached oracle records, replayed
   by the native conformance driver, so agreement is enforced without the

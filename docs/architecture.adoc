@@ -588,7 +588,19 @@ Every reading or shaping stage has a roc-fuzz target asserting its
 contract: totality, determinism, finite output, bounded growth, index
 alignment and clusters in range. Allocation is checked with
 `Fuzz.measure_allocs!` at two sizes against a linear bound, and leaks with
-`Fuzz.expect_no_leaks!`. A differential target shapes fuzzed text on corpus
+`Fuzz.expect_no_leaks!`.
+
+Whole-pipeline targets say *that* reading or shaping scales badly; they
+cannot say *where*. So each hot feature also gets a narrow target: the
+fuzzer's input chooses the contents of a font or run that exercises only
+that feature (one cmap format, a coverage table, a class definition, one
+lookup type, pair kerning, an item variation store), built at two or more
+sizes, and the target asserts allocation growth across sizes within a
+linear (or, for lookups, constant) bound. A regression then fails in the
+target named after its cause. The shaper's nested-list reference counting
+cost is the kind of problem these isolate early.
+
+A differential target shapes fuzzed text on corpus
 fonts and compares with recorded HarfBuzz output. Every crash is distilled
 into a permanent `## fuzz regression:` expect. The smoke run (fixed seed,
 seeds-only corpus) is deterministic and part of `all_tests.py`; the

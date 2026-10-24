@@ -317,6 +317,15 @@ imported locally (6203 cases; not committed, regenerate with
 `scripts/fetch_corpus.py import-hb-tests`): 83 agree, 1267 unsupported,
 4708 differ.
 
+Narrow fuzz targets with allocation scaling (AGENTS.md, §7.3), one per
+hot feature, each generating that feature at 2+ sizes:
+- [ ] cmap formats 4, 12 (and 0/6/10/13 once merged): read and lookup.
+- [ ] Coverage formats 1/2 and class definitions 1/2: read and query.
+- [ ] GSUB per lookup type (1, 2, 4, 5/6 contextual, 7 extension):
+  read allocations O(lookups), apply allocations constant per call.
+- [ ] GPOS pair kerning formats 1/2 and `kern`: read and apply.
+- [ ] Item variation store and HVAR (with the variable-font work).
+
 Conformance findings to act on:
 - 3861 of the 4708 differences come from 7 fonts using cmap formats 0, 6,
   10, 13 or a (3,0) symbol cmap, which the reader rejects with
