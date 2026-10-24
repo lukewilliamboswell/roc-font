@@ -72,9 +72,9 @@ FONT_SUFFIXES = (".ttf", ".otf", ".ttc", ".otc")
 
 @dataclass(frozen=True)
 class TargetConfig:
-    # Candidate sources, first existing wins. Targets live in package/ until
-    # a test-support package root lets fuzz/ import FontTest (see
-    # docs/fuzzing.adoc, "Layout").
+    # Candidate sources, first existing wins. Targets import the package
+    # through package/main.roc, as consumers do, and the test-only builders
+    # through tests/support/main.roc (see docs/fuzzing.adoc, "Layout").
     sources: tuple[Path, ...]
     seeds: Path
     dictionary: Path
@@ -367,8 +367,8 @@ To turn each failure into a permanent regression:
   1. python3 scripts/run_fuzz.py show {name} {example}
   2. python3 scripts/run_fuzz.py replay {name} {example}
   3. python3 scripts/run_fuzz.py minimize {name} {example} {display(WORK_ROOT / 'minimized' / name)}/<short-name>
-  4. Rebuild the minimal input with FontTest (or as literal bytes) and add a
-     top-level expect to the matching unit test module, documented with a
+  4. Rebuild the minimal input with FontBuild (or as literal bytes) and add a
+     top-level expect to the matching module of tests/api/, documented with a
      `## fuzz regression:` comment naming the target, the contract broken
      and the cause. It must fail before the fix and pass after.
   5. Fix the reader or shaper, then rerun this target with the same corpus.

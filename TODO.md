@@ -10,9 +10,9 @@ repositories are relative to `~/Documents/Github/`.
 
 The package is a faithful extraction of package-mermaid's font code
 (`SEEDED_FROM.md`): `package/Font.roc` (reading, metrics, cmap, kerning) and
-`package/FontShape.roc` (default GSUB), with unit tests in
-`package/FontTests.roc` and `package/FontShapeTests.roc`, a synthetic font
-builder in `package/FontTest.roc`, and two fuzz targets in `package/`.
+`package/FontShape.roc` (default GSUB), with unit tests of the public API
+in `tests/api/`, a synthetic font builder in `tests/support/FontBuild.roc`,
+and two fuzz targets in `fuzz/`.
 `package/main.roc` exposes only `Font`. Public entry point today:
 `Font.from_bytes : List(U8) -> Try(Font, List(Problem))`.
 
@@ -50,7 +50,7 @@ and §9 exists yet. It is being scaffolded under `tools/`, `tests/`,
 | Subsetting | none (roc-pdf has one) | later | §1.1 |
 | Variations | `TableVar` reads fvar, avar v1, item variation store, HVAR, MVAR; not wired into `Font` | `Font.Variation` + `Font.at`, Regular default, phases 1–3 in 0.1.0 | §5.7 |
 | Docs surface | `roc docs` lists about 50 internal readers as items of `Font` (`read_head`, `u16`, `fits`, `pair_in_sets`, `kern_pairs`, ...) and internal types `Table`, `Runs`, `Subtable` | only public namesakes; readers in unexposed `Sfnt`, `Table*`, `Layout*`, `Shaper*` modules | §5.1 |
-| Fuzz targets | `fuzz/font-read.roc`, `fuzz/font-shape.roc` via `package/testing.roc` (shape asserts the old `4n+32` bound) | one target per stage, differential target | §7.3, §10 |
+| Fuzz targets | `fuzz/font-read.roc`, `fuzz/font-shape.roc` via `package/main.roc` + `tests/support/` (shape asserts the old `4n+32` bound) | one target per stage, differential target | §7.3, §10 |
 
 ## 3. Decided (see the architecture, do not reopen without evidence)
 

@@ -7,8 +7,9 @@ edge values for mutation. `scripts/run_fuzz.py` adds every real font found in
 `tests/fonts/` and `tests/corpus/` as a further seed.
 
 The targets are `font-read.roc` and `font-shape.roc`. They import the
-package through `package/testing.roc`, a test-support package root that
-exposes `Font` and `FontTest` and is never reached from `package/main.roc`.
+package through `package/main.roc`, exactly what ships, and the test-only
+byte builders (`FontBuild`) through `tests/support/main.roc`, which
+`package/main.roc` never reaches.
 
 Run every target briefly with the compiler pinned in `.roc-version`:
 

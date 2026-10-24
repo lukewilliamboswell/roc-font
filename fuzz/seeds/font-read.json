@@ -1,8 +1,8 @@
 {
-  "about": "Reviewed starting inputs for the font-read target. Each input is either a font file (it starts with a font signature) or a recipe read by FontTest.fuzz_font: the first byte modulo 4 picks a base (0 Inter, 1 the synthetic sample, 2 the sample cut short at the length in the next two bytes, 3 no base) and each following group of four bytes patches one byte (three-byte position, wrapped to the length, then the new value). The same bytes also choose the contents of the scaled fonts used for the allocation check. Real font files from tests/fonts/ and tests/corpus/ are added by scripts/run_fuzz.py.",
+  "about": "Reviewed starting inputs for the font-read target. Each input is either a font file (it starts with a font signature) or a recipe read by FontBuild.fuzz_font: the first byte modulo 4 picks a base (0 Inter, 1 the synthetic sample, 2 the sample cut short at the length in the next two bytes, 3 no base) and each following group of four bytes patches one byte (three-byte position, wrapped to the length, then the new value). The same bytes also choose the contents of the scaled fonts used for the allocation check. Real font files from tests/fonts/ and tests/corpus/ are added by scripts/run_fuzz.py.",
   "seeds": [
     {"why": "Inter, unpatched: the ordinary success path", "parts": [{"hex": "00"}]},
-    {"why": "the synthetic sample font, unpatched: every table kind FontTest builds", "parts": [{"hex": "01"}]},
+    {"why": "the synthetic sample font, unpatched: every table kind FontBuild builds", "parts": [{"hex": "01"}]},
     {"why": "sample cut to the 12-byte directory header: tables missing", "parts": [{"hex": "02 00 0c"}]},
     {"why": "sample cut to 64 bytes: table records truncated", "parts": [{"hex": "02 00 40"}]},
     {"why": "sample cut to 256 bytes: tables past the end", "parts": [{"hex": "02 01 00"}]},

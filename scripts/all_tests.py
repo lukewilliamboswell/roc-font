@@ -5,8 +5,10 @@ Steps (select with --only, drop with --skip, list with --list):
 
     roc-version       the compiler matches .roc-version (debug builds warn)
     fmt               roc fmt --check on every directory holding .roc files
-    check             roc check package/main.roc and every fuzz target
-    test              roc test on every package/*Tests.roc (dev backend)
+    check             roc check package/main.roc, the API test app and every fuzz target
+    test              roc test on the API test app (tests/api/main.roc), every
+                      in-package package/*Tests.roc and the driver's Case.roc
+                      (dev backend)
     test-interpreter  the same with --opt=interpreter
     fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded)
     conformance       scripts/conformance.py, when present
@@ -117,11 +119,19 @@ def run_all(ctx: Context, commands: Sequence[Sequence[str]]) -> Result:
     return Result("PASS", f"{len(commands)} command(s)", text)
 
 
+API_TESTS = "tests/api/main.roc"
+
+
 def test_modules() -> list[str]:
+    # The tests of the public API: an app that imports package/main.roc, as
+    # consumers do, and the test-only builders in tests/support/.
+    api = [API_TESTS] if (ROOT / API_TESTS).is_file() else []
+    # In-package tests of internal modules, for what the public API cannot
+    # observe; they use inline bytes or committed fixtures, never the builders.
     modules = sorted(str(path.relative_to(ROOT)) for path in (ROOT / "package").glob("*Tests.roc"))
     # The conformance harness's protocol parser carries its own expects.
     driver = ROOT / "tools" / "driver" / "Case.roc"
-    return modules + ([str(driver.relative_to(ROOT))] if driver.is_file() else [])
+    return api + modules + ([str(driver.relative_to(ROOT))] if driver.is_file() else [])
 
 
 def fuzz_sources() -> list[str]:
@@ -173,14 +183,14 @@ def step_fmt(ctx: Context) -> Result:
 
 
 def step_check(ctx: Context) -> Result:
-    files = ["package/main.roc", *fuzz_sources()]
+    files = ["package/main.roc", API_TESTS, *fuzz_sources()]
     return run_all(ctx, [[ctx.roc, "check", path] for path in files])
 
 
 def tests_with(ctx: Context, extra: Sequence[str]) -> Result:
     modules = test_modules()
     if not modules:
-        return Result("FAIL", "no package/*Tests.roc modules found")
+        return Result("FAIL", f"no test modules found ({API_TESTS}, package/*Tests.roc)")
     cache = ["--no-cache"] if ctx.args.no_cache else []
     result = run_all(ctx, [[ctx.roc, "test", *extra, *cache, module] for module in modules])
     counts = re.findall(r"All \((\d+)\) tests passed", result.output)
@@ -301,7 +311,7 @@ def step_bundle(ctx: Context) -> Result:
             content = archive.extractfile(member).read(4) if member.isfile() else b""  # type: ignore[union-attr]
             if base.lower().endswith(FONT_SUFFIXES) or content in FONT_MAGICS:
                 problems.append(f"{member.name} is a font")
-            if base.endswith("Tests.roc") or base == "FontTest.roc" or base.startswith("fuzz"):
+            if base.endswith("Tests.roc") or base == "FontBuild.roc" or base.startswith("fuzz"):
                 problems.append(f"{member.name} is a test module or fuzz target")
             if not base.endswith(".roc"):
                 problems.append(f"{member.name} is not a Roc module")

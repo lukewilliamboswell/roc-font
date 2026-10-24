@@ -89,10 +89,15 @@ and plans live in `TODO.md`, not here.
   namesake.
 - Keep public modules small. Table readers and shaping internals must not
   leak into generated API docs.
-- Test builders and test fonts never enter the package's import graph:
-  `package/main.roc` must not reach them, so `roc bundle` leaves them out.
-  Apps that need them (fuzz targets, drivers) import through the
-  test-support root `package/testing.roc`.
+- Test what you fly: public-behaviour tests (`tests/api/`), fuzz targets,
+  the conformance harness and benchmarks import the package through
+  `package/main.roc`, exactly what ships, and use only the public API. The
+  test-only byte builders live in their own package, `tests/support/`
+  (`FontBuild`), which imports nothing from roc-font. `package/main.roc`
+  never reaches either, so `roc bundle` leaves them and the test fonts
+  out. In-package `package/*Tests.roc` modules are only for what the
+  public API cannot observe, and use inline bytes or committed fixtures,
+  never the builders.
 
 ## Keep internals precise and composable
 

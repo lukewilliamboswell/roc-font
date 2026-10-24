@@ -30,10 +30,10 @@ current list.
 
 |`font-read`
 |A font file (input starting with a font signature: `00 01 00 00`,
-`OTTO`, `true` or `ttcf`), or a recipe read by `FontTest.fuzz_font`: the
+`OTTO`, `true` or `ttcf`), or a recipe read by `FontBuild.fuzz_font`: the
 first byte picks a base (Inter, the synthetic sample, the sample cut short,
 or nothing) and each following four bytes patch one byte. The same bytes
-choose the contents of `FontTest.scaled` fonts.
+choose the contents of `FontBuild.scaled` fonts.
 |Reading never crashes and is deterministic (two reads give identical
 results). A rejection names at least one problem. An accepted font has
 finite metrics, `units_per_em` in 16..16384 and at least one glyph;
@@ -56,7 +56,7 @@ deterministic and finite.
 Both targets also check *cost*:
 
 * *Allocation linearity.* `Fuzz.measure_allocs!` counts the allocations of
-  the operation at two sizes: reading `FontTest.scaled` fonts built from 2
+  the operation at two sizes: reading `FontBuild.scaled` fonts built from 2
   and 16 copies of the input's choices, and shaping the text repeated 2 and
   16 times. The larger may take at most `10 × small + 256` allocations: an
   8-fold input with headroom for constant overhead. Quadratic behaviour
@@ -78,27 +78,27 @@ its target exists, is seeded and is registered in `scripts/run_fuzz.py`.
 == Layout
 
 The targets live in `fuzz/` as `font-read.roc` and `font-shape.roc`. They
-need `FontTest`, which `package/main.roc` deliberately does not expose, so
-they import the package through a second package root,
-`package/testing.roc`, which exposes `Font` and `FontTest`:
+import the package through `package/main.roc`, exactly what ships, so they
+exercise the same root every consumer uses. The byte builders they need
+live in a separate test-only package, `tests/support/` (module
+`FontBuild`), which imports nothing from roc-font:
 
 [source,roc]
 ----
 app [target] {
-	font: "../package/testing.roc",
+	build: "../tests/support/main.roc",
+	font: "../package/main.roc",
 	fuzz: platform "<pinned roc-fuzz URL>",
 }
 
+import build.FontBuild
 import font.Font
-import font.FontTest
 ----
 
-`package/main.roc` never reaches `testing.roc`, so `roc bundle` and `roc
-docs` are unchanged. Simpler routes do not work on the current nightly:
-importing `font.FontTest` through `main.roc` fails with "package module is
-private", pointing a dependency directly at `package/FontTest.roc` does not
-make its items available, and a symlink fails with "resolves outside this
-package's source root".
+`package/main.roc` never reaches `tests/support/`, so `roc bundle` and
+`roc docs` are unchanged. The unit tests of the public API in `tests/api/`
+import the same two packages. A symlinked module does not work on the
+current nightly ("resolves outside this package's source root").
 
 Everything else lives in `fuzz/`:
 
@@ -193,10 +193,13 @@ truncated input, or a compiler difference before suspecting the library.
 python3 scripts/run_fuzz.py minimize font-read <input> .roc-font-tmp/fuzz/minimized/<name>
 ----
 . *Distil* the minimal input into the smallest structure that still fails,
-  preferably built with `FontTest` so the test reads as a font, otherwise
-  as literal bytes. Add it as a top-level `expect` in the unit test module
-  for the stage (`package/FontTests.roc`, `package/FontShapeTests.roc`),
-  preceded by a doc comment that starts `## fuzz regression:` and names the
+  preferably built with `FontBuild` so the test reads as a font, otherwise
+  as literal bytes. Add it as a top-level `expect` in the public API test
+  module for the stage (`tests/api/FontTests.roc` for reading and queries,
+  `tests/api/SubstituteTests.roc` for substitution), going through `Font`
+  as a consumer would. Only a failure the public API cannot observe goes in
+  an in-package `package/<Module>Tests.roc`, built from inline bytes or a
+  committed fixture, never the builders. Precede it with a doc comment that starts `## fuzz regression:` and names the
   target, the contract that broke and the cause:
 +
 [source,roc]
@@ -204,7 +207,7 @@ python3 scripts/run_fuzz.py minimize font-read <input> .roc-font-tmp/fuzz/minimi
 ## fuzz regression: font-read. The sample font cut to 64 bytes, its table
 ## records pointing past the end, must be rejected with a problem.
 expect
-	match Font.from_bytes(FontTest.sample.take_first(64)) {
+	match Font.from_bytes(FontBuild.sample.take_first(64)) {
 		Err(problems) => problems.len() > 0
 		Ok(_) => False
 	}

@@ -250,7 +250,7 @@ alias in `Font`.
 |Table readers, the GSUB/GPOS engine, per-script shapers. Named after the
 OpenType specification. Never exposed; never in generated docs.
 
-|Test only: `*Test.roc`, `*Tests.roc`, fuzz targets, fixtures
+|Test only: `tests/support/` (FontBuild), `tests/api/`, in-package `*Tests.roc`, fuzz targets, fixtures
 |Builders of synthetic fonts and expectations. Never reachable from
 `package/main.roc`, so `roc bundle` leaves them out.
 |===
@@ -542,7 +542,7 @@ Four layers, each with a different job. None replaces another.
 |Unit expects
 |Fast, precise checks of one reader or stage on crafted fonts, including
 aggregated problems and degenerate input. Run by `roc test`.
-|`package/*Tests.roc`
+|`tests/api/` (public API, through `package/main.roc`); `package/*Tests.roc` only for internals the API cannot observe
 
 |Conformance
 |Agreement with reference implementations on thousands of real cases.
@@ -576,7 +576,7 @@ loop.
   `.tests` files are import sources only: importing converts them to JSONC
   and records where each case came from.
 * *No generated Roc.* Cases are never turned into `.roc` expect modules.
-  Unit expects in `package/*Tests.roc` are written by hand for one reader
+  Unit expects in `tests/api/` (and in-package `package/*Tests.roc`) are written by hand for one reader
   or stage; agreement with oracles is the conformance driver's job. One
   source of truth per case keeps cases cheap to add in bulk and keeps
   `roc test` fast.
@@ -791,12 +791,13 @@ benchmark corpus, not only the fuzz corpus.
 == 10. Repository layout
 
 ----
-package/                 the package: public Font, internal modules, unit tests
+package/                 the package: public Font, internal modules, in-package tests
   main.roc               exposes only public modules
-  testing.roc            test-support root (Font + test builders) for fuzz/
 fuzz/                    roc-fuzz targets, seeds/, dictionaries/
 tests/
   fonts/                 small committed fixtures with licences
+  api/                   public API tests: app importing package/main.roc and support/
+  support/               test-only package of byte builders (FontBuild)
   corpus.json            pinned external fonts (URL, SHA-256, licence)
   corpus/                fetched fonts (ignored)
   cases/*.jsonc          conformance cases (data; imports converted to JSONC)
@@ -816,10 +817,13 @@ docs/                    this document and contributor chapters
 ----
 
 Nothing under `tests/`, `tools/`, `bench/`, `fuzz/` or `scripts/` is
-reachable from `package/main.roc`. Apps outside `package/` that need test
-builders import them through `package/testing.roc`, a second package root
-that `main.roc` never reaches; `roc bundle package/main.roc` gives the same
-archive with or without it.
+reachable from `package/main.roc`. Fuzz targets and the public API tests
+in `tests/api/` import `package/main.roc`, exactly what ships ("test what
+you fly"), and the builders from the separate test-only package
+`tests/support/`; `roc bundle package/main.roc` is unaffected by either.
+A symlinked or second package root was rejected: the compiler refuses
+symlinks outside a package's source root, and a second root exposing test
+builders would mean testing a package no consumer imports.
 
 `python3 scripts/all_tests.py` runs every check in §7 and §9 with the
 compiler named in `.roc-version`; `scripts/public_api.json` lists the items

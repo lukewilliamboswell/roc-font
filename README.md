@@ -50,12 +50,12 @@ Checks run with the Roc nightly named in `.roc-version` (set `ROC` to its
 ```sh
 python3 scripts/all_tests.py           # every check: fmt, check, tests, fuzz smoke, docs, bundle
 python3 scripts/run_fuzz.py smoke      # just the fuzz targets in fuzz/
-roc test package/FontTests.roc         # tests of the reader
-roc test package/FontShapeTests.roc    # tests of substitution
+roc test tests/api/main.roc            # tests of the public API
 ```
 
-Tests live in modules that `package/main.roc` does not import, so neither
-they nor the test font in `tests/fonts/` are part of the published package.
+Tests live in `tests/api/` and `tests/support/`, which `package/main.roc`
+does not reach, so neither they nor the test fonts are part of the
+published package.
 
 ## Licence
 

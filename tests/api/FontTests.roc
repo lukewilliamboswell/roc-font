@@ -1,11 +1,9 @@
-import Font
-import FontTest
-import LayoutKerning
-import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
+import font.Font
+import build.FontBuild
+import "../../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
-## The tests of `Font`. Test-only: `main.roc` does not import this module, so
-## neither it nor the Inter test font is part of the published package. Run
-## with `roc test package/FontTests.roc`.
+## The tests of reading a font and querying it, through the public `Font`
+## API exactly as the package ships it. Run with `roc test tests/api/main.roc`.
 FontTests :: {}.{}
 
 # Inter Regular (version 4, SIL Open Font License 1.1), as a metrics-only
@@ -68,11 +66,11 @@ expect {
 
 # ------------------------------------------------------------ test helpers
 #
-# Synthetic fonts are built from `FontTest.basic`: four glyphs (0 missing,
+# Synthetic fonts are built from `FontBuild.basic`: four glyphs (0 missing,
 # 1 `A`, 2 `B`, 3 `C`) with advances 500 to 800 and 1000 units per em.
 
 read_tables : List({ tag : Str, data : List(U8) }) -> Try(Font, List(Font.Problem))
-read_tables = |tables| Font.from_bytes(FontTest.file(tables))
+read_tables = |tables| Font.from_bytes(FontBuild.file(tables))
 
 problems_of : List({ tag : Str, data : List(U8) }) -> List(Font.Problem)
 problems_of = |tables|
@@ -83,7 +81,7 @@ problems_of = |tables|
 
 # `basic` with one table replaced or added.
 basic_with : Str, List(U8) -> List({ tag : Str, data : List(U8) })
-basic_with = |tag, data| FontTest.replace(FontTest.basic, tag, data)
+basic_with = |tag, data| FontBuild.replace(FontBuild.basic, tag, data)
 
 # The glyph of each code point, 9999 where the font has none.
 glyphs_for : List({ tag : Str, data : List(U8) }), List(U32) -> List(U64)
@@ -95,7 +93,7 @@ glyphs_for = |tables, code_points|
 
 # A font whose only character map is the given subtable.
 cmap_only : U64, U64, List(U8) -> List({ tag : Str, data : List(U8) })
-cmap_only = |system, encoding, subtable| basic_with("cmap", FontTest.cmap([{ system, encoding, subtable }]))
+cmap_only = |system, encoding, subtable| basic_with("cmap", FontBuild.cmap([{ system, encoding, subtable }]))
 
 kerning_of : List({ tag : Str, data : List(U8) }), List(U64) -> List(F64)
 kerning_of = |tables, glyphs|
@@ -106,19 +104,19 @@ kerning_of = |tables, glyphs|
 
 # A `GPOS` table whose `kern` feature uses every lookup given.
 gpos : List({ kind : U64, subtables : List(List(U8)) }) -> List(U8)
-gpos = |lookups| FontTest.layout("DFLT", [{ tag: "kern", lookups: FontTest.counting(lookups.len()) }], lookups)
+gpos = |lookups| FontBuild.layout("DFLT", [{ tag: "kern", lookups: FontBuild.counting(lookups.len()) }], lookups)
 
 # Pairs (1, 2) -50 and (1, 3) -30, and (2, 1) +20, x advance of the first
 # glyph only.
 simple_pairs : List(U8)
-simple_pairs = FontTest.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 2, values: [-50] }, { second: 3, values: [-30] }] }, { glyph: 2, pairs: [{ second: 1, values: [20] }] }])
+simple_pairs = FontBuild.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 2, values: [-50] }, { second: 3, values: [-30] }] }, { glyph: 2, pairs: [{ second: 1, values: [20] }] }])
 
 # ------------------------------------------------------------ reading a font
 
 # The minimal font: metrics, glyph count and advances. Without `OS/2` the
 # vertical metrics come from `hhea`; without `loca`/`glyf` nothing has ink.
 expect {
-	match read_tables(FontTest.basic) {
+	match read_tables(FontBuild.basic) {
 		Ok(font) =>
 			Font.glyph_total(font) == 4
 				and Font.units_per_em(font) == 1000.0
@@ -133,11 +131,18 @@ expect {
 }
 
 # Reading is deterministic.
-expect FontTest.file(FontTest.basic) == FontTest.file(FontTest.basic)
+expect FontBuild.file(FontBuild.basic) == FontBuild.file(FontBuild.basic)
 expect {
-	bytes = FontTest.file(FontTest.basic)
+	bytes = FontBuild.file(FontBuild.basic)
 	match (Font.from_bytes(bytes), Font.from_bytes(bytes)) {
-		(Ok(a), Ok(b)) => a.advances == b.advances and [0x40, 0x41, 0x43].map(|c| Font.glyph(a, c)) == [0x40, 0x41, 0x43].map(|c| Font.glyph(b, c)) and a.ink == b.ink and a.ascent == b.ascent
+		(Ok(a), Ok(b)) => {
+			glyphs = [0, 1, 2, 3, 4]
+			glyphs.map(|g| Font.advance(a, g)) == glyphs.map(|g| Font.advance(b, g))
+				and [0x40, 0x41, 0x43].map(|c| Font.glyph(a, c)) == [0x40, 0x41, 0x43].map(|c| Font.glyph(b, c))
+				and glyphs.map(|g| Font.ink(a, g)) == glyphs.map(|g| Font.ink(b, g))
+				and Font.ascent(a) == Font.ascent(b)
+				and Font.descent(a) == Font.descent(b)
+		}
 		_ => False
 	}
 }
@@ -147,7 +152,7 @@ expect {
 # Delta segments: the first and last character of each segment map, the
 # characters just outside do not.
 expect {
-	cmap = FontTest.cmap4([{ first: 0x20, last: 0x22, delta: 65536 - 0x1F, glyphs: [] }, { first: 0x30, last: 0x30, delta: 65536 - 0x2D, glyphs: [] }])
+	cmap = FontBuild.cmap4([{ first: 0x20, last: 0x22, delta: 65536 - 0x1F, glyphs: [] }, { first: 0x30, last: 0x30, delta: 65536 - 0x2D, glyphs: [] }])
 	glyphs_for(cmap_only(3, 1, cmap), [0x1F, 0x20, 0x21, 0x22, 0x23, 0x2F, 0x30, 0x31]) == [9999, 1, 2, 3, 9999, 9999, 3, 9999]
 }
 
@@ -155,7 +160,7 @@ expect {
 # a delta, beside a delta segment; a zero entry leaves its character
 # unmapped.
 expect {
-	cmap = FontTest.cmap4([
+	cmap = FontBuild.cmap4([
 		{ first: 0x41, last: 0x42, delta: 1, glyphs: [1, 2] },
 		{ first: 0x50, last: 0x50, delta: 65536 - 0x4F, glyphs: [] },
 		{ first: 0x61, last: 0x63, delta: 0, glyphs: [3, 0, 2] },
@@ -166,93 +171,93 @@ expect {
 # The delta wraps modulo 65536 at the top of the range; U+FFFF and code
 # points beyond the Basic Multilingual Plane are never mapped by format 4.
 expect {
-	cmap = FontTest.cmap4([{ first: 0xFFFE, last: 0xFFFE, delta: 4, glyphs: [] }])
+	cmap = FontBuild.cmap4([{ first: 0xFFFE, last: 0xFFFE, delta: 4, glyphs: [] }])
 	glyphs_for(cmap_only(3, 1, cmap), [0xFFFD, 0xFFFE, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 9999, 9999, 9999]
 }
 
 # A delta segment whose glyphs wrap past 65535 to 0 mid-segment: the
 # character drawn by glyph 0 is unmapped and the next ones continue from
 # glyph 1. Glyph 0 at the start of a segment is unmapped too.
-expect glyphs_for(cmap_only(3, 1, FontTest.cmap4([{ first: 0x41, last: 0x45, delta: 65536 - 0x43, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44, 0x45, 0x46]) == [9999, 9999, 9999, 1, 2, 9999]
-expect glyphs_for(cmap_only(3, 1, FontTest.cmap4([{ first: 0x41, last: 0x43, delta: 65536 - 0x41, glyphs: [] }, { first: 0x44, last: 0x44, delta: 65536 + 3 - 0x44, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44]) == [9999, 1, 2, 3]
+expect glyphs_for(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x41, last: 0x45, delta: 65536 - 0x43, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44, 0x45, 0x46]) == [9999, 9999, 9999, 1, 2, 9999]
+expect glyphs_for(cmap_only(3, 1, FontBuild.cmap4([{ first: 0x41, last: 0x43, delta: 65536 - 0x41, glyphs: [] }, { first: 0x44, last: 0x44, delta: 65536 + 3 - 0x44, glyphs: [] }])), [0x41, 0x42, 0x43, 0x44]) == [9999, 1, 2, 3]
 
 # A glyph array segment that ends at U+FFFF needs no entry for it.
 expect {
-	cmap = FontTest.cmap4([{ first: 0xFFFD, last: 0xFFFE, delta: 0, glyphs: [2, 3] }])
+	cmap = FontBuild.cmap4([{ first: 0xFFFD, last: 0xFFFE, delta: 0, glyphs: [2, 3] }])
 	glyphs_for(cmap_only(3, 1, cmap), [0xFFFC, 0xFFFD, 0xFFFE, 0xFFFF]) == [9999, 2, 3, 9999]
 }
 
 # Platform 0 (Unicode) is a Unicode mapping too.
-expect glyphs_for(cmap_only(0, 3, FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 - 0x40, glyphs: [] }])), [0x41]) == [1]
+expect glyphs_for(cmap_only(0, 3, FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 - 0x40, glyphs: [] }])), [0x41]) == [1]
 
 # A character mapped to a glyph the font does not have is unmapped, and a
 # run that only partly fits keeps the characters whose glyphs exist.
 expect {
-	cmap = FontTest.cmap4([{ first: 0x44, last: 0x44, delta: 65536 + 9 - 0x44, glyphs: [] }, { first: 0x45, last: 0x48, delta: 65536 + 2 - 0x45, glyphs: [] }])
+	cmap = FontBuild.cmap4([{ first: 0x44, last: 0x44, delta: 65536 + 9 - 0x44, glyphs: [] }, { first: 0x45, last: 0x48, delta: 65536 + 2 - 0x45, glyphs: [] }])
 	glyphs_for(cmap_only(3, 1, cmap), [0x44, 0x45, 0x46, 0x47, 0x48]) == [9999, 2, 3, 9999, 9999]
 }
 
 # Segments out of order are a bad table.
 expect {
-	cmap = FontTest.cmap4([{ first: 0x50, last: 0x51, delta: 0, glyphs: [] }, { first: 0x41, last: 0x42, delta: 0, glyphs: [] }])
+	cmap = FontBuild.cmap4([{ first: 0x50, last: 0x51, delta: 0, glyphs: [] }, { first: 0x41, last: 0x42, delta: 0, glyphs: [] }])
 	problems_of(cmap_only(3, 1, cmap)) == [BadTable("cmap")]
 }
 
 expect {
-	cmap = FontTest.cmap4([{ first: 0x41, last: 0x45, delta: 0, glyphs: [] }, { first: 0x45, last: 0x46, delta: 0, glyphs: [] }])
+	cmap = FontBuild.cmap4([{ first: 0x41, last: 0x45, delta: 0, glyphs: [] }, { first: 0x45, last: 0x46, delta: 0, glyphs: [] }])
 	problems_of(cmap_only(3, 1, cmap)) == [BadTable("cmap")]
 }
 
 # A glyph array that runs past the end of the table.
 expect {
-	table = FontTest.cmap([{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x43, delta: 0, glyphs: [1, 2, 3] }]) }])
+	table = FontBuild.cmap([{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x43, delta: 0, glyphs: [1, 2, 3] }]) }])
 	problems_of(basic_with("cmap", table.drop_last(2))) == [BadTable("cmap")]
 }
 
 # A segment count larger than the table.
 expect {
-	table = FontTest.cmap([{ system: 3, encoding: 1, subtable: FontTest.u16(4).concat(FontTest.u16(14)).concat(FontTest.u16(0)).concat(FontTest.u16(0xFFFE)).concat(List.repeat(0, 6)) }])
+	table = FontBuild.cmap([{ system: 3, encoding: 1, subtable: FontBuild.u16(4).concat(FontBuild.u16(14)).concat(FontBuild.u16(0)).concat(FontBuild.u16(0xFFFE)).concat(List.repeat(0, 6)) }])
 	problems_of(basic_with("cmap", table)) == [BadTable("cmap")]
 }
 
 # ------------------------------------------------------------ cmap format 12
 
 expect {
-	cmap = FontTest.cmap12([{ first: 0x41, last: 0x43, glyph: 1 }, { first: 0x1F600, last: 0x1F601, glyph: 2 }])
+	cmap = FontBuild.cmap12([{ first: 0x41, last: 0x43, glyph: 1 }, { first: 0x1F600, last: 0x1F601, glyph: 2 }])
 	glyphs_for(cmap_only(3, 10, cmap), [0x40, 0x41, 0x43, 0x44, 0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0x10FFFF]) == [9999, 1, 3, 9999, 9999, 2, 3, 9999, 9999]
 }
 
 # Groups whose glyphs run past the last glyph keep the glyphs that exist.
 expect {
-	cmap = FontTest.cmap12([{ first: 0x50, last: 0x55, glyph: 2 }, { first: 0x60, last: 0x60, glyph: 4 }])
+	cmap = FontBuild.cmap12([{ first: 0x50, last: 0x55, glyph: 2 }, { first: 0x60, last: 0x60, glyph: 4 }])
 	glyphs_for(cmap_only(3, 10, cmap), [0x50, 0x51, 0x52, 0x55, 0x60]) == [2, 3, 9999, 9999, 9999]
 }
 
 # A group starting at glyph 0 maps its first character to nothing and the
 # rest from glyph 1.
-expect glyphs_for(cmap_only(3, 10, FontTest.cmap12([{ first: 0x41, last: 0x43, glyph: 0 }])), [0x41, 0x42, 0x43]) == [9999, 1, 2]
+expect glyphs_for(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x41, last: 0x43, glyph: 0 }])), [0x41, 0x42, 0x43]) == [9999, 1, 2]
 
 # The highest code point Unicode allows.
-expect glyphs_for(cmap_only(0, 4, FontTest.cmap12([{ first: 0x10FFFF, last: 0x10FFFF, glyph: 3 }])), [0x10FFFF]) == [3]
+expect glyphs_for(cmap_only(0, 4, FontBuild.cmap12([{ first: 0x10FFFF, last: 0x10FFFF, glyph: 3 }])), [0x10FFFF]) == [3]
 
 # Format 12 is preferred to format 4, whatever the record order.
 expect {
-	table = FontTest.cmap([
-		{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 - 0x40, glyphs: [] }]) },
-		{ system: 3, encoding: 10, subtable: FontTest.cmap12([{ first: 0x41, last: 0x41, glyph: 2 }]) },
+	table = FontBuild.cmap([
+		{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 - 0x40, glyphs: [] }]) },
+		{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x41, last: 0x41, glyph: 2 }]) },
 	])
 	glyphs_for(basic_with("cmap", table), [0x41]) == [2]
 }
 
-expect problems_of(cmap_only(3, 10, FontTest.cmap12([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap12([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x55, last: 0x56, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap12([{ first: 0x50, last: 0x4F, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap12([{ first: 0x10FFFF, last: 0x110000, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x55, last: 0x56, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x50, last: 0x4F, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap12([{ first: 0x10FFFF, last: 0x110000, glyph: 1 }]))) == [BadTable("cmap")]
 
 # A huge group count is checked against the table before anything is
 # allocated.
 expect {
-	subtable = FontTest.u16(12).concat(FontTest.u16(0)).concat(FontTest.u32(16)).concat(FontTest.u32(0)).concat(FontTest.u32(0xFFFFFFFF))
+	subtable = FontBuild.u16(12).concat(FontBuild.u16(0)).concat(FontBuild.u32(16)).concat(FontBuild.u32(0)).concat(FontBuild.u32(0xFFFFFFFF))
 	problems_of(cmap_only(3, 10, subtable)) == [BadTable("cmap")]
 }
 
@@ -262,46 +267,46 @@ expect {
 # does not have leave a code unmapped.
 expect {
 	glyphs = List.repeat(0, 0x41).concat([1, 0, 3, 9])
-	glyphs_for(cmap_only(0, 3, FontTest.cmap0(glyphs)), [0x40, 0x41, 0x42, 0x43, 0x44, 0xFF, 0x100, 0x141]) == [9999, 1, 9999, 3, 9999, 9999, 9999, 9999]
+	glyphs_for(cmap_only(0, 3, FontBuild.cmap0(glyphs)), [0x40, 0x41, 0x42, 0x43, 0x44, 0xFF, 0x100, 0x141]) == [9999, 1, 9999, 3, 9999, 9999, 9999, 9999]
 }
 
 # A truncated byte array is a bad table.
-expect problems_of(cmap_only(3, 1, FontTest.cmap0([1, 2, 3]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 1, FontBuild.cmap0([1, 2, 3]).drop_last(1))) == [BadTable("cmap")]
 
 # ------------------------------------------------------------ cmap formats 6 and 10
 
 # A trimmed array maps consecutive codes from its first; codes before or
 # after it are unmapped.
-expect glyphs_for(cmap_only(3, 1, FontTest.cmap6(0x41, [1, 0, 3, 7])), [0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x10041]) == [9999, 1, 9999, 3, 9999, 9999, 9999]
-expect glyphs_for(cmap_only(3, 10, FontTest.cmap10(0x1F600, [2, 3])), [0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0xF600]) == [9999, 2, 3, 9999, 9999]
+expect glyphs_for(cmap_only(3, 1, FontBuild.cmap6(0x41, [1, 0, 3, 7])), [0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x10041]) == [9999, 1, 9999, 3, 9999, 9999, 9999]
+expect glyphs_for(cmap_only(3, 10, FontBuild.cmap10(0x1F600, [2, 3])), [0x1F5FF, 0x1F600, 0x1F601, 0x1F602, 0xF600]) == [9999, 2, 3, 9999, 9999]
 
 # An empty array maps nothing.
-expect glyphs_for(cmap_only(3, 1, FontTest.cmap6(0x41, [])), [0x41]) == [9999]
+expect glyphs_for(cmap_only(3, 1, FontBuild.cmap6(0x41, [])), [0x41]) == [9999]
 
 # An array past the end of the table, or a count larger than the table
 # (checked before anything is read), is a bad table.
-expect problems_of(cmap_only(3, 1, FontTest.cmap6(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 1, FontTest.cmap6(0x41, []).take_first(8))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap10(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.patch(FontTest.cmap10(0x41, [1]), 16, FontTest.u32(0xFFFFFFFF)))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 1, FontBuild.cmap6(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 1, FontBuild.cmap6(0x41, []).take_first(8))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap10(0x41, [1, 2]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.patch(FontBuild.cmap10(0x41, [1]), 16, FontBuild.u32(0xFFFFFFFF)))) == [BadTable("cmap")]
 
 # ------------------------------------------------------------ cmap format 13
 
 # Every character of a group maps to the group's one glyph.
 expect {
-	cmap = FontTest.cmap13([{ first: 0x41, last: 0x5A, glyph: 2 }, { first: 0x10000, last: 0x10FFFF, glyph: 3 }])
+	cmap = FontBuild.cmap13([{ first: 0x41, last: 0x5A, glyph: 2 }, { first: 0x10000, last: 0x10FFFF, glyph: 3 }])
 	glyphs_for(cmap_only(3, 10, cmap), [0x40, 0x41, 0x50, 0x5A, 0x5B, 0xFFFF, 0x10000, 0x10FFFF]) == [9999, 2, 2, 2, 9999, 9999, 3, 3]
 }
 
 # A group whose glyph the font does not have maps nothing.
-expect glyphs_for(cmap_only(0, 6, FontTest.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }])), [0x41, 0x43]) == [9999, 9999]
+expect glyphs_for(cmap_only(0, 6, FontBuild.cmap13([{ first: 0x41, last: 0x43, glyph: 4 }])), [0x41, 0x43]) == [9999, 9999]
 
 # Groups out of order, overlapping or past Unicode, and a truncated table,
 # are bad tables.
-expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x55, last: 0x56, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x41, last: 0x110000, glyph: 1 }]))) == [BadTable("cmap")]
-expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x41, last: 0x42, glyph: 1 }]).drop_last(1))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x41, last: 0x42, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap13([{ first: 0x50, last: 0x55, glyph: 1 }, { first: 0x55, last: 0x56, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap13([{ first: 0x41, last: 0x110000, glyph: 1 }]))) == [BadTable("cmap")]
+expect problems_of(cmap_only(3, 10, FontBuild.cmap13([{ first: 0x41, last: 0x42, glyph: 1 }]).drop_last(1))) == [BadTable("cmap")]
 
 # ------------------------------------------------------------ cmap selection
 
@@ -309,22 +314,22 @@ expect problems_of(cmap_only(3, 10, FontTest.cmap13([{ first: 0x41, last: 0x42, 
 # up to U+00FF that it does not have is looked up again at U+F000 and up;
 # others are not.
 expect {
-	table = FontTest.cmap([
-		{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 3 - 0x41, glyphs: [] }]) },
-		{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0x42, last: 0x42, delta: 65536 + 3 - 0x42, glyphs: [] }, { first: 0xF041, last: 0xF041, delta: 65536 + 1 - 0xF041, glyphs: [] }, { first: 0xF141, last: 0xF141, delta: 65536 + 2 - 0xF141, glyphs: [] }]) },
+	table = FontBuild.cmap([
+		{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 3 - 0x41, glyphs: [] }]) },
+		{ system: 3, encoding: 0, subtable: FontBuild.cmap4([{ first: 0x42, last: 0x42, delta: 65536 + 3 - 0x42, glyphs: [] }, { first: 0xF041, last: 0xF041, delta: 65536 + 1 - 0xF041, glyphs: [] }, { first: 0xF141, last: 0xF141, delta: 65536 + 2 - 0xF141, glyphs: [] }]) },
 	])
 	glyphs_for(basic_with("cmap", table), [0x41, 0x42, 0xF041, 0x141, 0xF042]) == [1, 3, 1, 9999, 9999]
 }
 
 # A symbol map in any format works the same way.
-expect glyphs_for(cmap_only(3, 0, FontTest.cmap12([{ first: 0xF041, last: 0xF042, glyph: 1 }])), [0x41, 0x42, 0x43]) == [1, 2, 9999]
+expect glyphs_for(cmap_only(3, 0, FontBuild.cmap12([{ first: 0xF041, last: 0xF042, glyph: 1 }])), [0x41, 0x42, 0x43]) == [1, 2, 9999]
 
 # A symbol font in a Windows 3.1 Arabic font page holds Arabic in the
 # private use area: U+0020 is at U+F120 in the simplified page and U+F220
 # in the traditional one. Another font page is plain Unicode.
 expect {
-	cmap = FontTest.cmap([{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0xF120, last: 0xF120, delta: 65536 + 1 - 0xF120, glyphs: [] }, { first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
-	with_page = |page| basic_with("cmap", cmap).append({ tag: "OS/2", data: FontTest.os2_page(page) })
+	cmap = FontBuild.cmap([{ system: 3, encoding: 0, subtable: FontBuild.cmap4([{ first: 0xF120, last: 0xF120, delta: 65536 + 1 - 0xF120, glyphs: [] }, { first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
+	with_page = |page| basic_with("cmap", cmap).append({ tag: "OS/2", data: FontBuild.os2_page(page) })
 	glyphs_for(with_page(0xB200), [0x20, 0xF120]) == [1, 1]
 		and glyphs_for(with_page(0xB300), [0x20, 0xF220]) == [2, 2]
 		and glyphs_for(with_page(0xB100), [0x20, 0xF120]) == [9999, 1]
@@ -333,8 +338,8 @@ expect {
 
 # The font page counts only in a version 0 `OS/2` table.
 expect {
-	cmap = FontTest.cmap([{ system: 3, encoding: 0, subtable: FontTest.cmap4([{ first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
-	os2 = FontTest.patch(FontTest.os2_page(0xB300), 0, FontTest.u16(1))
+	cmap = FontBuild.cmap([{ system: 3, encoding: 0, subtable: FontBuild.cmap4([{ first: 0xF220, last: 0xF220, delta: 65536 + 2 - 0xF220, glyphs: [] }]) }])
+	os2 = FontBuild.patch(FontBuild.os2_page(0xB300), 0, FontBuild.u16(1))
 	glyphs_for(basic_with("cmap", cmap).append({ tag: "OS/2", data: os2 }), [0x20]) == [9999]
 }
 
@@ -343,15 +348,15 @@ expect {
 # Mac Roman. Another Macintosh encoding maps ASCII only.
 expect {
 	glyphs = List.repeat(0, 0x41).concat([1]).concat(List.repeat(0, 0x80 - 0x42)).concat([2]).concat(List.repeat(0, 0xCA - 0x81)).concat([3])
-	glyphs_for(cmap_only(1, 0, FontTest.cmap0(glyphs)), [0x41, 0xC4, 0xA0, 0x80, 0xCA]) == [1, 2, 3, 9999, 9999]
-		and glyphs_for(cmap_only(1, 1, FontTest.cmap0(glyphs)), [0x41, 0xC4, 0x80]) == [1, 9999, 9999]
+	glyphs_for(cmap_only(1, 0, FontBuild.cmap0(glyphs)), [0x41, 0xC4, 0xA0, 0x80, 0xCA]) == [1, 2, 3, 9999, 9999]
+		and glyphs_for(cmap_only(1, 1, FontBuild.cmap0(glyphs)), [0x41, 0xC4, 0x80]) == [1, 9999, 9999]
 }
 
 # The order of preference, whatever the record order: full Unicode maps
 # (3, 10), (0, 6), (0, 4), then (3, 1), (0, 3) to (0, 0), then Macintosh.
 expect {
-	a_to = |g| FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + g - 0x41, glyphs: [] }])
-	pick = |records| glyphs_for(basic_with("cmap", FontTest.cmap(records.map(|r| { system: r.system, encoding: r.encoding, subtable: a_to(r.glyph) }))), [0x41])
+	a_to = |g| FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + g - 0x41, glyphs: [] }])
+	pick = |records| glyphs_for(basic_with("cmap", FontBuild.cmap(records.map(|r| { system: r.system, encoding: r.encoding, subtable: a_to(r.glyph) }))), [0x41])
 	pick([{ system: 1, encoding: 0, glyph: 3 }, { system: 0, encoding: 0, glyph: 2 }]) == [2]
 		and pick([{ system: 0, encoding: 3, glyph: 2 }, { system: 3, encoding: 1, glyph: 1 }]) == [1]
 		and pick([{ system: 3, encoding: 1, glyph: 1 }, { system: 0, encoding: 4, glyph: 3 }]) == [3]
@@ -362,50 +367,50 @@ expect {
 # A subtable in a format that is not read (here 8, and 14, which holds
 # variation sequences) is passed over for the next preferred one.
 expect {
-	table = FontTest.cmap([
-		{ system: 3, encoding: 1, subtable: FontTest.u16(8).concat(List.repeat(0, 30)) },
-		{ system: 0, encoding: 5, subtable: FontTest.u16(14).concat(List.repeat(0, 8)) },
-		{ system: 1, encoding: 0, subtable: FontTest.cmap0(List.repeat(0, 0x41).append(2)) },
+	table = FontBuild.cmap([
+		{ system: 3, encoding: 1, subtable: FontBuild.u16(8).concat(List.repeat(0, 30)) },
+		{ system: 0, encoding: 5, subtable: FontBuild.u16(14).concat(List.repeat(0, 8)) },
+		{ system: 1, encoding: 0, subtable: FontBuild.cmap0(List.repeat(0, 0x41).append(2)) },
 	])
 	glyphs_for(basic_with("cmap", table), [0x41]) == [2]
 }
 
 # No map to use: an unknown platform or encoding, only formats that are not
 # read, or no subtables at all.
-expect problems_of(cmap_only(2, 1, FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(3, 2, FontTest.cmap12([{ first: 0x41, last: 0x41, glyph: 1 }]))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(0, 5, FontTest.u16(14).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
-expect problems_of(cmap_only(3, 1, FontTest.u16(2).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
-expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(0)))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(2, 1, FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 0, glyphs: [] }]))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(3, 2, FontBuild.cmap12([{ first: 0x41, last: 0x41, glyph: 1 }]))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(0, 5, FontBuild.u16(14).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
+expect problems_of(cmap_only(3, 1, FontBuild.u16(2).concat(List.repeat(0, 8)))) == [NoUnicodeMapping]
+expect problems_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(0)))) == [NoUnicodeMapping]
 
 # The chosen record's offset past the end of the table is a bad table, not
 # a missing map.
-expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(1)).concat(FontTest.u16(3)).concat(FontTest.u16(1)).concat(FontTest.u32(5000)))) == [BadTable("cmap")]
+expect problems_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(1)).concat(FontBuild.u16(3)).concat(FontBuild.u16(1)).concat(FontBuild.u32(5000)))) == [BadTable("cmap")]
 
 # A broken map that is not chosen is not read.
 expect {
-	table = FontTest.cmap([
-		{ system: 1, encoding: 0, subtable: FontTest.cmap0([]).take_first(10) },
-		{ system: 3, encoding: 1, subtable: FontTest.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 1 - 0x41, glyphs: [] }]) },
+	table = FontBuild.cmap([
+		{ system: 1, encoding: 0, subtable: FontBuild.cmap0([]).take_first(10) },
+		{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 0x41, last: 0x41, delta: 65536 + 1 - 0x41, glyphs: [] }]) },
 	])
 	glyphs_for(basic_with("cmap", table), [0x41]) == [1]
 }
 
 # A bad character map is reported with the other tables' problems.
 expect {
-	tables = basic_with("cmap", FontTest.cmap([{ system: 3, encoding: 10, subtable: FontTest.cmap13([{ first: 0x50, last: 0x41, glyph: 1 }]) }]))
-		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontTest.maxp(0) } else t)
+	tables = basic_with("cmap", FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap13([{ first: 0x50, last: 0x41, glyph: 1 }]) }]))
+		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontBuild.maxp(0) } else t)
 	problems_of(tables) == [BadTable("maxp"), BadTable("cmap")]
 }
 
 # More encoding records than the table holds.
-expect problems_of(basic_with("cmap", FontTest.u16(0).concat(FontTest.u16(3)).concat(List.repeat(0, 8)))) == [BadTable("cmap")]
+expect problems_of(basic_with("cmap", FontBuild.u16(0).concat(FontBuild.u16(3)).concat(List.repeat(0, 8)))) == [BadTable("cmap")]
 
 # ------------------------------------------------------------ hmtx
 
 # Glyphs past the long metrics take the last advance.
 expect {
-	match read_tables(FontTest.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontTest.hhea(800, -200, 2) } else if (t.tag == "hmtx") { tag: t.tag, data: FontTest.hmtx([500, 600]).concat([0, 0, 0, 0]) } else t)) {
+	match read_tables(FontBuild.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontBuild.hhea(800, -200, 2) } else if (t.tag == "hmtx") { tag: t.tag, data: FontBuild.hmtx([500, 600]).concat([0, 0, 0, 0]) } else t)) {
 		Ok(font) => [0, 1, 2, 3, 4].map(|g| Font.advance(font, g)) == [500.0, 600.0, 600.0, 600.0, 0.0]
 		Err(_) => False
 	}
@@ -413,7 +418,7 @@ expect {
 
 # One long metric covers every glyph.
 expect {
-	match read_tables(FontTest.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontTest.hhea(800, -200, 1) } else if (t.tag == "hmtx") { tag: t.tag, data: FontTest.hmtx([432]) } else t)) {
+	match read_tables(FontBuild.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontBuild.hhea(800, -200, 1) } else if (t.tag == "hmtx") { tag: t.tag, data: FontBuild.hmtx([432]) } else t)) {
 		Ok(font) => [0, 1, 2, 3].map(|g| Font.advance(font, g)) == [432.0, 432.0, 432.0, 432.0]
 		Err(_) => False
 	}
@@ -421,7 +426,7 @@ expect {
 
 # More long metrics than glyphs: only the glyphs' metrics are needed.
 expect {
-	match read_tables(basic_with("hhea", FontTest.hhea(800, -200, 60000))) {
+	match read_tables(basic_with("hhea", FontBuild.hhea(800, -200, 60000))) {
 		Ok(font) => Font.advance(font, 3) == 800.0
 		Err(_) => False
 	}
@@ -429,23 +434,23 @@ expect {
 
 # The largest advance a font can hold.
 expect {
-	match read_tables(basic_with("hmtx", FontTest.hmtx([65535, 0, 1, 2]))) {
+	match read_tables(basic_with("hmtx", FontBuild.hmtx([65535, 0, 1, 2]))) {
 		Ok(font) => Font.advance(font, 0) == 65535.0
 		Err(_) => False
 	}
 }
 
-expect problems_of(basic_with("hmtx", FontTest.hmtx([500, 600, 700]))) == [BadTable("hmtx")]
-expect problems_of(FontTest.without(FontTest.basic, "hmtx")) == [MissingTable("hmtx")]
+expect problems_of(basic_with("hmtx", FontBuild.hmtx([500, 600, 700]))) == [BadTable("hmtx")]
+expect problems_of(FontBuild.without(FontBuild.basic, "hmtx")) == [MissingTable("hmtx")]
 
 # ------------------------------------------------------------ loca and glyf
 
 outline_glyphs : List(List(U8))
-outline_glyphs = [[], FontTest.outline(10, 490), [], FontTest.outline(-5, 700)]
+outline_glyphs = [[], FontBuild.outline(10, 490), [], FontBuild.outline(-5, 700)]
 
 with_outlines : Bool, { loca : List(U8), glyf : List(U8) } -> List({ tag : Str, data : List(U8) })
 with_outlines = |long, tables|
-	basic_with("head", FontTest.head(1000, long))
+	basic_with("head", FontBuild.head(1000, long))
 		.append({ tag: "loca", data: tables.loca })
 		.append({ tag: "glyf", data: tables.glyf })
 
@@ -458,23 +463,23 @@ inks_of = |tables|
 
 # Glyph extents from short and from long offsets; glyphs without an
 # outline, and glyph indices past the last glyph, have no ink.
-expect inks_of(with_outlines(False, FontTest.outlines(outline_glyphs, False))) == [NoInk, Ink({ left: 10.0, right: 490.0 }), NoInk, Ink({ left: -5.0, right: 700.0 }), NoInk]
-expect inks_of(with_outlines(True, FontTest.outlines(outline_glyphs, True))) == [NoInk, Ink({ left: 10.0, right: 490.0 }), NoInk, Ink({ left: -5.0, right: 700.0 }), NoInk]
+expect inks_of(with_outlines(False, FontBuild.outlines(outline_glyphs, False))) == [NoInk, Ink({ left: 10.0, right: 490.0 }), NoInk, Ink({ left: -5.0, right: 700.0 }), NoInk]
+expect inks_of(with_outlines(True, FontBuild.outlines(outline_glyphs, True))) == [NoInk, Ink({ left: 10.0, right: 490.0 }), NoInk, Ink({ left: -5.0, right: 700.0 }), NoInk]
 
 # A glyph shorter than its header, and one whose extent is inverted.
-expect inks_of(with_outlines(False, FontTest.outlines([[], [1, 2, 3, 4], FontTest.outline(5, 4), []], False))) == [NoInk, NoInk, NoInk, NoInk, NoInk]
+expect inks_of(with_outlines(False, FontBuild.outlines([[], [1, 2, 3, 4], FontBuild.outline(5, 4), []], False))) == [NoInk, NoInk, NoInk, NoInk, NoInk]
 
 # The `loca` format must match `head`: short offsets read as long ones
 # run past the end of `loca`.
-expect problems_of(with_outlines(True, FontTest.outlines(outline_glyphs, False))) == [BadTable("loca")]
+expect problems_of(with_outlines(True, FontBuild.outlines(outline_glyphs, False))) == [BadTable("loca")]
 
 # Too few offsets, an offset past `glyf`, and offsets that go backwards.
-expect problems_of(with_outlines(False, { loca: FontTest.outlines(outline_glyphs, False).loca.drop_last(2), glyf: FontTest.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
-expect problems_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 10, 0, 11], glyf: FontTest.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
-expect problems_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 2, 0, 10], glyf: FontTest.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
+expect problems_of(with_outlines(False, { loca: FontBuild.outlines(outline_glyphs, False).loca.drop_last(2), glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
+expect problems_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 10, 0, 11], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
+expect problems_of(with_outlines(False, { loca: [0, 0, 0, 5, 0, 5, 0, 2, 0, 10], glyf: FontBuild.outlines(outline_glyphs, False).glyf })) == [BadTable("loca")]
 
 # `loca` without `glyf` (or the reverse) gives no extents.
-expect inks_of(basic_with("loca", FontTest.outlines(outline_glyphs, False).loca)) == [NoInk, NoInk, NoInk, NoInk, NoInk]
+expect inks_of(basic_with("loca", FontBuild.outlines(outline_glyphs, False).loca)) == [NoInk, NoInk, NoInk, NoInk, NoInk]
 
 # ------------------------------------------------------------ vertical metrics
 
@@ -485,11 +490,11 @@ vertical_of = |tables|
 		Err(_) => { ascent: -1.0, descent: -1.0 }
 	}
 
-expect vertical_of(basic_with("OS/2", FontTest.os2({ use_typo: True, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 900.0, descent: 300.0 }
-expect vertical_of(basic_with("OS/2", FontTest.os2({ use_typo: False, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 800.0, descent: 200.0 }
-expect vertical_of(FontTest.replace(basic_with("hhea", FontTest.hhea(0, 0, 4)), "OS/2", FontTest.os2({ use_typo: False, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 900.0, descent: 300.0 }
-expect vertical_of(FontTest.replace(basic_with("hhea", FontTest.hhea(0, 0, 4)), "OS/2", FontTest.os2({ use_typo: False, typo_ascent: 0, typo_descent: 0, win_ascent: 1000, win_descent: 400 }))) == { ascent: 1000.0, descent: 400.0 }
-expect vertical_of(basic_with("hhea", FontTest.hhea(0, 0, 4))) == { ascent: 0.0, descent: 0.0 }
+expect vertical_of(basic_with("OS/2", FontBuild.os2({ use_typo: True, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 900.0, descent: 300.0 }
+expect vertical_of(basic_with("OS/2", FontBuild.os2({ use_typo: False, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 800.0, descent: 200.0 }
+expect vertical_of(FontBuild.replace(basic_with("hhea", FontBuild.hhea(0, 0, 4)), "OS/2", FontBuild.os2({ use_typo: False, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }))) == { ascent: 900.0, descent: 300.0 }
+expect vertical_of(FontBuild.replace(basic_with("hhea", FontBuild.hhea(0, 0, 4)), "OS/2", FontBuild.os2({ use_typo: False, typo_ascent: 0, typo_descent: 0, win_ascent: 1000, win_descent: 400 }))) == { ascent: 1000.0, descent: 400.0 }
+expect vertical_of(basic_with("hhea", FontBuild.hhea(0, 0, 4))) == { ascent: 0.0, descent: 0.0 }
 
 # ------------------------------------------------------------ problems
 
@@ -498,19 +503,19 @@ expect problems_of([]) == [MissingTable("head"), MissingTable("hhea"), MissingTa
 
 # Signatures: TrueType, `true` and `OTTO` are fonts; a collection is not.
 expect {
-	match Font.from_bytes(FontTest.u32(0x74727565).concat(FontTest.file(FontTest.basic).drop_first(4))) {
+	match Font.from_bytes(FontBuild.u32(0x74727565).concat(FontBuild.file(FontBuild.basic).drop_first(4))) {
 		Ok(_) => True
 		Err(_) => False
 	}
 }
 expect {
-	match Font.from_bytes(FontTest.u32(0x4F54544F).concat(FontTest.file(FontTest.basic).drop_first(4))) {
+	match Font.from_bytes(FontBuild.u32(0x4F54544F).concat(FontBuild.file(FontBuild.basic).drop_first(4))) {
 		Ok(_) => True
 		Err(_) => False
 	}
 }
 expect {
-	match Font.from_bytes(FontTest.u32(0x74746366).concat(FontTest.file(FontTest.basic).drop_first(4))) {
+	match Font.from_bytes(FontBuild.u32(0x74746366).concat(FontBuild.file(FontBuild.basic).drop_first(4))) {
 		Err(found) => found == [NotAFont]
 		Ok(_) => False
 	}
@@ -518,63 +523,63 @@ expect {
 
 # A table directory longer than the file.
 expect {
-	match Font.from_bytes(FontTest.patch(FontTest.file(FontTest.basic), 4, FontTest.u16(200))) {
+	match Font.from_bytes(FontBuild.patch(FontBuild.file(FontBuild.basic), 4, FontBuild.u16(200))) {
 		Err(found) => found == [NotAFont]
 		Ok(_) => False
 	}
 }
 
 # Each required table missing on its own.
-expect ["head", "hhea", "maxp", "cmap"].all(|tag| problems_of(FontTest.without(FontTest.basic, tag)) == [MissingTable(tag)])
+expect ["head", "hhea", "maxp", "cmap"].all(|tag| problems_of(FontBuild.without(FontBuild.basic, tag)) == [MissingTable(tag)])
 
 # Without `head`, `hhea` or `maxp` the tables that depend on them are not
 # read, so only the missing table is reported.
-expect problems_of(FontTest.without(FontTest.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == [MissingTable("maxp")]
+expect problems_of(FontBuild.without(FontBuild.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == [MissingTable("maxp")]
 
 # Tables too short for their fields, and empty counts.
-expect problems_of(basic_with("head", FontTest.head(1000, False).drop_last(1))) == [BadTable("head")]
-expect problems_of(basic_with("hhea", FontTest.hhea(800, -200, 4).drop_last(1))) == [BadTable("hhea")]
-expect problems_of(basic_with("hhea", FontTest.hhea(800, -200, 0))) == [BadTable("hhea")]
-expect problems_of(basic_with("maxp", FontTest.maxp(0))) == [BadTable("maxp")]
+expect problems_of(basic_with("head", FontBuild.head(1000, False).drop_last(1))) == [BadTable("head")]
+expect problems_of(basic_with("hhea", FontBuild.hhea(800, -200, 4).drop_last(1))) == [BadTable("hhea")]
+expect problems_of(basic_with("hhea", FontBuild.hhea(800, -200, 0))) == [BadTable("hhea")]
+expect problems_of(basic_with("maxp", FontBuild.maxp(0))) == [BadTable("maxp")]
 expect problems_of(basic_with("maxp", [0, 0, 0, 0, 0])) == [BadTable("maxp")]
-expect problems_of(basic_with("OS/2", FontTest.os2({ use_typo: False, typo_ascent: 0, typo_descent: 0, win_ascent: 0, win_descent: 0 }).take_first(77))) == [BadTable("OS/2")]
+expect problems_of(basic_with("OS/2", FontBuild.os2({ use_typo: False, typo_ascent: 0, typo_descent: 0, win_ascent: 0, win_descent: 0 }).take_first(77))) == [BadTable("OS/2")]
 expect problems_of(basic_with("cmap", [0, 0, 0])) == [BadTable("cmap")]
 
 # A table whose length runs past the end of the file.
 expect {
-	bytes = FontTest.file(FontTest.basic)
+	bytes = FontBuild.file(FontBuild.basic)
 	# The first record is `head`; its length is at byte 12 + 12.
-	match Font.from_bytes(FontTest.patch(bytes, 24, FontTest.u32(100000))) {
+	match Font.from_bytes(FontBuild.patch(bytes, 24, FontBuild.u32(100000))) {
 		Err(found) => found == [BadTable("head")]
 		Ok(_) => False
 	}
 }
 expect {
-	bytes = FontTest.file(FontTest.basic)
-	match Font.from_bytes(FontTest.patch(bytes, 20, FontTest.u32(0xFFFFFFFF))) {
+	bytes = FontBuild.file(FontBuild.basic)
+	match Font.from_bytes(FontBuild.patch(bytes, 20, FontBuild.u32(0xFFFFFFFF))) {
 		Err(found) => found == [BadTable("head")]
 		Ok(_) => False
 	}
 }
 
 # Units per em must lie in 16 to 16384.
-expect problems_of(basic_with("head", FontTest.head(15, False))) == [BadUnitsPerEm]
-expect problems_of(basic_with("head", FontTest.head(16385, False))) == [BadUnitsPerEm]
-expect problems_of(basic_with("head", FontTest.head(0, False))) == [BadUnitsPerEm]
-expect problems_of(basic_with("head", FontTest.head(16, False))) == []
-expect problems_of(basic_with("head", FontTest.head(16384, False))) == []
+expect problems_of(basic_with("head", FontBuild.head(15, False))) == [BadUnitsPerEm]
+expect problems_of(basic_with("head", FontBuild.head(16385, False))) == [BadUnitsPerEm]
+expect problems_of(basic_with("head", FontBuild.head(0, False))) == [BadUnitsPerEm]
+expect problems_of(basic_with("head", FontBuild.head(16, False))) == []
+expect problems_of(basic_with("head", FontBuild.head(16384, False))) == []
 
 # Independent problems are reported together, in table order.
 expect {
-	tables = FontTest.basic
+	tables = FontBuild.basic
 		.map(
 			|t|
 				if t.tag == "head" {
-					{ tag: t.tag, data: FontTest.head(1, False) }
+					{ tag: t.tag, data: FontBuild.head(1, False) }
 				} else if t.tag == "hhea" {
-					{ tag: t.tag, data: FontTest.hhea(1, 1, 0) }
+					{ tag: t.tag, data: FontBuild.hhea(1, 1, 0) }
 				} else if t.tag == "cmap" {
-					{ tag: t.tag, data: FontTest.cmap([{ system: 2, encoding: 0, subtable: FontTest.cmap4([]) }]) }
+					{ tag: t.tag, data: FontBuild.cmap([{ system: 2, encoding: 0, subtable: FontBuild.cmap4([]) }]) }
 				} else {
 					t
 				},
@@ -584,7 +589,7 @@ expect {
 }
 
 expect {
-	tables = FontTest.basic
+	tables = FontBuild.basic
 		.map(|t| if (t.tag == "hmtx") { tag: t.tag, data: [0, 1] } else t)
 		.concat([{ tag: "GSUB", data: List.repeat(0xFF, 12) }, { tag: "GPOS", data: List.repeat(0xFF, 12) }, { tag: "loca", data: [0] }, { tag: "glyf", data: [] }])
 	problems_of(tables) == [BadTable("GSUB"), BadTable("hmtx"), BadTable("loca"), BadTable("GPOS")]
@@ -594,14 +599,14 @@ expect {
 # rejected with problems; nothing crashes.
 full_font : List(U8)
 full_font = {
-	outlines = FontTest.outlines(outline_glyphs, False)
-	FontTest.file(
-		FontTest.basic.concat([
-			{ tag: "OS/2", data: FontTest.os2({ use_typo: True, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }) },
+	outlines = FontBuild.outlines(outline_glyphs, False)
+	FontBuild.file(
+		FontBuild.basic.concat([
+			{ tag: "OS/2", data: FontBuild.os2({ use_typo: True, typo_ascent: 900, typo_descent: -300, win_ascent: 1000, win_descent: 400 }) },
 			{ tag: "loca", data: outlines.loca },
 			{ tag: "glyf", data: outlines.glyf },
 			{ tag: "GPOS", data: gpos([{ kind: 2, subtables: [simple_pairs] }]) },
-			{ tag: "GSUB", data: FontTest.layout("latn", [{ tag: "liga", lookups: [0] }], [{ kind: 4, subtables: [FontTest.pack([U16(1), Ref(FontTest.coverage1([1])), U16(1), Ref(FontTest.pack([U16(1), Ref(FontTest.pack([U16(3), U16(2), U16(2)]))]))])] }]) },
+			{ tag: "GSUB", data: FontBuild.layout("latn", [{ tag: "liga", lookups: [0] }], [{ kind: 4, subtables: [FontBuild.pack([U16(1), Ref(FontBuild.coverage1([1])), U16(1), Ref(FontBuild.pack([U16(1), Ref(FontBuild.pack([U16(3), U16(2), U16(2)]))]))])] }]) },
 		]),
 	)
 }
@@ -655,7 +660,7 @@ expect {
 # use: format 12 is preferred, metrics repeat past the long ones, `OS/2`
 # typographic metrics apply, and `GPOS` overrides `kern`.
 expect {
-	match Font.from_bytes(FontTest.sample) {
+	match Font.from_bytes(FontBuild.sample) {
 		Ok(font) =>
 			Font.glyph_total(font) == 40
 				and Font.units_per_em(font) == 2048.0
@@ -676,7 +681,7 @@ expect {
 		|choices|
 			[1, 2, 16].all(
 				|copies|
-					match Font.from_bytes(FontTest.scaled(choices, copies)) {
+					match Font.from_bytes(FontBuild.scaled(choices, copies)) {
 						Ok(font) => Font.glyph_total(font) == 16 + 4 * choices.len() * copies
 						Err(_) => False
 					},
@@ -685,8 +690,8 @@ expect {
 }
 
 # Patching bytes wraps positions to the length.
-expect FontTest.mutate([1, 2, 3], [0, 0, 4, 9, 0, 0, 0, 7, 0, 0]) == [7, 9, 3]
-expect FontTest.mutate([], [0, 0, 4, 9]) == []
+expect FontBuild.mutate([1, 2, 3], [0, 0, 4, 9, 0, 0, 0, 7, 0, 0]) == [7, 9, 3]
+expect FontBuild.mutate([], [0, 0, 4, 9]) == []
 
 # ------------------------------------------------------------ GPOS kerning
 
@@ -701,127 +706,125 @@ expect kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [simple_pairs] 
 # The x advance is found after an x placement in the value record; other
 # fields are ignored.
 expect {
-	subtable = FontTest.pair1(0x05 + 0x0A, 0, [{ glyph: 1, pairs: [{ second: 2, values: [7, 8, -40, 9] }] }])
+	subtable = FontBuild.pair1(0x05 + 0x0A, 0, [{ glyph: 1, pairs: [{ second: 2, values: [7, 8, -40, 9] }] }])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2]) == [-40.0, 0.0]
 }
 
 # A record without an x advance adjusts nothing.
 expect {
-	subtable = FontTest.pair1(0x01, 0, [{ glyph: 1, pairs: [{ second: 2, values: [7] }] }])
+	subtable = FontBuild.pair1(0x01, 0, [{ glyph: 1, pairs: [{ second: 2, values: [7] }] }])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2]) == [0.0, 0.0]
 }
 
 # With a value for the second glyph, the second glyph is adjusted and the
 # pair after it is skipped.
 expect {
-	subtable = FontTest.pair1(4, 4, [{ glyph: 1, pairs: [{ second: 2, values: [-10, 5] }] }, { glyph: 2, pairs: [{ second: 3, values: [-7, 0] }] }])
+	subtable = FontBuild.pair1(4, 4, [{ glyph: 1, pairs: [{ second: 2, values: [-10, 5] }] }, { glyph: 2, pairs: [{ second: 3, values: [-7, 0] }] }])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3, 1, 2]) == [-10.0, 5.0, 0.0, -10.0, 5.0]
 }
 expect {
-	subtable = FontTest.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 2, values: [-10] }] }, { glyph: 2, pairs: [{ second: 3, values: [-7] }] }])
+	subtable = FontBuild.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 2, values: [-10] }] }, { glyph: 2, pairs: [{ second: 3, values: [-7] }] }])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3]) == [-10.0, -7.0, 0.0]
 }
 
 # Format 2: classes. Glyph 1 is first class 0, glyphs 2 and 3 first class
 # 1; glyphs 2 and 3 are second class 1, others second class 0.
 class_pairs : List(U8)
-class_pairs = FontTest.pair2(4, 0, FontTest.coverage1([1, 2, 3]), FontTest.classes1(1, [0, 1, 1]), FontTest.classes2([{ first: 2, last: 3, class: 1 }]), 2, 2, [0, -11, -22, -33])
+class_pairs = FontBuild.pair2(4, 0, FontBuild.coverage1([1, 2, 3]), FontBuild.classes1(1, [0, 1, 1]), FontBuild.classes2([{ first: 2, last: 3, class: 1 }]), 2, 2, [0, -11, -22, -33])
 
 expect kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [class_pairs] }])), [1, 2, 3, 1, 0, 1]) == [-11.0, -33.0, -22.0, 0.0, 0.0, 0.0]
 
 # A first glyph outside the coverage is not adjusted, even when its class
 # has values.
 expect {
-	subtable = FontTest.pair2(4, 0, FontTest.coverage1([2]), FontTest.classes1(1, [1, 1, 1]), FontTest.classes2([]), 2, 1, [0, -5])
+	subtable = FontBuild.pair2(4, 0, FontBuild.coverage1([2]), FontBuild.classes1(1, [1, 1, 1]), FontBuild.classes2([]), 2, 1, [0, -5])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3]) == [0.0, -5.0, 0.0]
 }
 
 # A class past the class counts is not adjusted.
 expect {
-	subtable = FontTest.pair2(4, 0, FontTest.coverage1([1, 2]), FontTest.classes1(1, [0, 5]), FontTest.classes1(1, [7, 0, 0]), 1, 1, [-5])
+	subtable = FontBuild.pair2(4, 0, FontBuild.coverage1([1, 2]), FontBuild.classes1(1, [0, 5]), FontBuild.classes1(1, [7, 0, 0]), 1, 1, [-5])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 2, 1, 1]) == [-5.0, 0.0, 0.0, 0.0, 0.0]
 }
 
 # Format 2 with a second value record skips the pair after it.
 expect {
-	subtable = FontTest.pair2(4, 4, FontTest.coverage1([1, 2, 3]), FontTest.classes1(1, [0, 0, 0]), FontTest.classes1(1, [0, 0, 0]), 1, 1, [-3, 2])
+	subtable = FontBuild.pair2(4, 4, FontBuild.coverage1([1, 2, 3]), FontBuild.classes1(1, [0, 0, 0]), FontBuild.classes1(1, [0, 0, 0]), 1, 1, [-3, 2])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3]) == [-3.0, 2.0, 0.0]
 }
 
 # In a lookup, the first subtable that has the pair decides it; later
 # lookups add to it.
 expect {
-	first = FontTest.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 3, values: [-1] }] }])
+	first = FontBuild.pair1(4, 0, [{ glyph: 1, pairs: [{ second: 3, values: [-1] }] }])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [first, simple_pairs] }])), [1, 2, 1, 3]) == [-50.0, 20.0, -1.0, 0.0]
 }
 expect kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [simple_pairs] }, { kind: 2, subtables: [class_pairs] }])), [1, 2]) == [-61.0, 0.0]
 
 # Extension lookups (type 9) hold their subtables behind a 32-bit offset.
-expect kerning_of(basic_with("GPOS", gpos([{ kind: 9, subtables: [FontTest.extension(2, simple_pairs), FontTest.extension(2, class_pairs)] }])), [1, 2, 3]) == [-50.0, -33.0, 0.0]
+expect kerning_of(basic_with("GPOS", gpos([{ kind: 9, subtables: [FontBuild.extension(2, simple_pairs), FontBuild.extension(2, class_pairs)] }])), [1, 2, 3]) == [-50.0, -33.0, 0.0]
 
 # Lookups of other types, extensions of other types, and lookups of other
 # features are not kerning.
-expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontTest.extension(4, simple_pairs)] }])), [1, 2]) == [0.0, 0.0]
-expect kerning_of(basic_with("GPOS", FontTest.layout("DFLT", [{ tag: "mark", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [0.0, 0.0]
+expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontBuild.extension(4, simple_pairs)] }])), [1, 2]) == [0.0, 0.0]
+expect kerning_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "mark", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [0.0, 0.0]
 
 # Pair formats 1 and 2 with a coverage of format 2.
 expect {
-	subtable = FontTest.pack([U16(1), Ref(FontTest.coverage2([{ first: 1, last: 2, index: 0 }])), U16(4), U16(0), U16(2), Ref(FontTest.pack([U16(1), U16(3), I16(-9)])), Ref(FontTest.pack([U16(1), U16(3), I16(-8)]))])
+	subtable = FontBuild.pack([U16(1), Ref(FontBuild.coverage2([{ first: 1, last: 2, index: 0 }])), U16(4), U16(0), U16(2), Ref(FontBuild.pack([U16(1), U16(3), I16(-9)])), Ref(FontBuild.pack([U16(1), U16(3), I16(-8)]))])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 3, 2, 3]) == [-9.0, 0.0, -8.0, 0.0]
 }
 
 # A GPOS table takes precedence over a `kern` table.
-expect kerning_of(basic_with("GPOS", gpos([])).append({ tag: "kern", data: FontTest.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -5 }] }]) }), [1, 2]) == [0.0, 0.0]
+expect kerning_of(basic_with("GPOS", gpos([])).append({ tag: "kern", data: FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -5 }] }]) }), [1, 2]) == [0.0, 0.0]
 
 # Broken GPOS tables: a lookup index past the lookups, an unknown pair
 # format, a coverage past the table, a truncated table, and pair sets that
 # do not fit.
-expect problems_of(basic_with("GPOS", FontTest.layout("DFLT", [{ tag: "kern", lookups: [3] }], [{ kind: 2, subtables: [simple_pairs] }]))) == [BadTable("GPOS")]
-expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontTest.patch(simple_pairs, 0, FontTest.u16(3))] }]))) == [BadTable("GPOS")]
-expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontTest.patch(simple_pairs, 2, FontTest.u16(60000))] }]))) == [BadTable("GPOS")]
+expect problems_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "kern", lookups: [3] }], [{ kind: 2, subtables: [simple_pairs] }]))) == [BadTable("GPOS")]
+expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontBuild.patch(simple_pairs, 0, FontBuild.u16(3))] }]))) == [BadTable("GPOS")]
+expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontBuild.patch(simple_pairs, 2, FontBuild.u16(60000))] }]))) == [BadTable("GPOS")]
 expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [simple_pairs] }]).drop_last(3))) == [BadTable("GPOS")]
 expect problems_of(basic_with("GPOS", [0, 1, 0, 0, 0, 10, 0, 10, 0, 10, 0, 0])) == []
 expect problems_of(basic_with("GPOS", [0, 1, 0, 0, 0, 10, 0, 10, 0, 10])) == [BadTable("GPOS")]
 expect problems_of(basic_with("GPOS", [0, 1, 0, 0, 0, 10, 0])) == [BadTable("GPOS")]
 
 # A class grid larger than the table.
-expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontTest.pair2(4, 0, FontTest.coverage1([1]), FontTest.classes1(1, [0]), FontTest.classes1(1, [0]), 100, 100, [])] }]))) == [BadTable("GPOS")]
+expect problems_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontBuild.pair2(4, 0, FontBuild.coverage1([1]), FontBuild.classes1(1, [0]), FontBuild.classes1(1, [0]), 100, 100, [])] }]))) == [BadTable("GPOS")]
 
 ## fuzz regression: a class grid whose value records are empty takes no
 ## bytes however many classes it has; it must not take time or memory in
 ## proportion to the 65535 x 65535 cells.
-expect kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontTest.pair2(0, 0, FontTest.coverage1([1]), FontTest.classes1(1, [0]), FontTest.classes1(1, [0]), 65535, 65535, [])] }])), [1, 2]) == [0.0, 0.0]
+expect kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [FontBuild.pair2(0, 0, FontBuild.coverage1([1]), FontBuild.classes1(1, [0]), FontBuild.classes1(1, [0]), 65535, 65535, [])] }])), [1, 2]) == [0.0, 0.0]
 
 # Coverage ranges that overlap are read as browsers read them, and are
 # not expanded glyph by glyph: a few bytes of them could list billions of
 # glyphs. A range that goes backwards covers nothing.
 expect {
 	ranges = List.repeat({ first: 0, last: 65535, index: 0 }, 20).append({ first: 9, last: 2, index: 0 })
-	subtable = FontTest.pack([U16(1), Ref(FontTest.coverage2(ranges)), U16(4), U16(0), U16(0)])
+	subtable = FontBuild.pack([U16(1), Ref(FontBuild.coverage2(ranges)), U16(4), U16(0), U16(0)])
 	tables = basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }]))
 	problems_of(tables) == [] and kerning_of(tables, [1, 2]) == [0.0, 0.0]
 }
 expect {
-	set = FontTest.pack([U16(1), U16(2), I16(-9)])
-	subtable = FontTest.pack([U16(1), Ref(FontTest.coverage2([{ first: 3, last: 1, index: 0 }, { first: 1, last: 1, index: 0 }])), U16(4), U16(0), U16(1), Ref(set)])
+	set = FontBuild.pack([U16(1), U16(2), I16(-9)])
+	subtable = FontBuild.pack([U16(1), Ref(FontBuild.coverage2([{ first: 3, last: 1, index: 0 }, { first: 1, last: 1, index: 0 }])), U16(4), U16(0), U16(1), Ref(set)])
 	kerning_of(basic_with("GPOS", gpos([{ kind: 2, subtables: [subtable] }])), [1, 2, 3, 2]) == [-9.0, 0.0, 0.0, 0.0]
 }
 
-# A pair set shared by many first glyphs is not copied: reading keeps one
-# subtable, whose sets are read in place.
+# A pair set shared by many first glyphs kerns every glyph that shares it.
+# (That reading keeps one subtable, read in place, is checked inside the
+# package: `package/LayoutKerningTests.roc`.)
 expect {
 	n = 300
-	set = FontTest.pack([U16(n)].concat(FontTest.counting(n).join_map(|g| [U16(g), I16(-1)])))
+	set = FontBuild.pack([U16(n)].concat(FontBuild.counting(n).join_map(|g| [U16(g), I16(-1)])))
 	# Every set offset points at the one set, after the coverage.
-	subtable = FontTest.pack([U16(1), U16(10 + 2 * n), U16(4), U16(0), U16(n)].concat(List.repeat(U16(20 + 2 * n), n)).append(Raw(FontTest.coverage2([{ first: 0, last: n - 1, index: 0 }]))).append(Raw(set)))
-	tables = FontTest.basic
-		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontTest.maxp(n) } else t)
+	subtable = FontBuild.pack([U16(1), U16(10 + 2 * n), U16(4), U16(0), U16(n)].concat(List.repeat(U16(20 + 2 * n), n)).append(Raw(FontBuild.coverage2([{ first: 0, last: n - 1, index: 0 }]))).append(Raw(set)))
+	tables = FontBuild.basic
+		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontBuild.maxp(n) } else t)
 		.append({ tag: "GPOS", data: gpos([{ kind: 2, subtables: [subtable] }]) })
 	match read_tables(tables) {
-		Ok(font) => {
-			stored = LayoutKerning.stored_size(font.kerning)
-			Font.kerning(font, [5, 7, 299, 0]) == [-1.0, -1.0, -1.0, 0.0] and stored == 2
-		}
+		Ok(font) => Font.kerning(font, [5, 7, 299, 0]) == [-1.0, -1.0, -1.0, 0.0]
 		Err(_) => False
 	}
 }
@@ -832,24 +835,24 @@ expect {
 expect {
 	lookups = 300
 	header = [U32(0x00010000), U16(10), U16(12), U16(0)]
-	features = [U16(0), U16(1), Tag("kern"), U16(8), U16(0), U16(lookups)].concat(FontTest.counting(lookups).map(|i| U16(i)))
+	features = [U16(0), U16(1), Tag("kern"), U16(8), U16(0), U16(lookups)].concat(FontBuild.counting(lookups).map(|i| U16(i)))
 	# The lookup list: every offset points at one lookup after the list.
 	lookup_at = 2 + 2 * lookups
 	list = [U16(lookups)].concat(List.repeat(U16(lookup_at), lookups))
 	lookup = [U16(2), U16(0), U16(lookups)].concat(List.repeat(U16(6 + 2 * lookups), lookups))
-	table = FontTest.pack(header).concat(FontTest.pack(features)).concat(FontTest.pack(list)).concat(FontTest.pack(lookup)).concat(simple_pairs)
-	patched = FontTest.patch(table, 8, FontTest.u16(24 + 2 * lookups))
+	table = FontBuild.pack(header).concat(FontBuild.pack(features)).concat(FontBuild.pack(list)).concat(FontBuild.pack(lookup)).concat(simple_pairs)
+	patched = FontBuild.patch(table, 8, FontBuild.u16(24 + 2 * lookups))
 	problems_of(basic_with("GPOS", patched)) == [BadTable("GPOS")]
 }
 
 # ------------------------------------------------------------ legacy kern
 
-expect kerning_of(basic_with("kern", FontTest.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: -30 }] }])), [1, 2, 3, 1]) == [-50.0, -30.0, 0.0, 0.0]
+expect kerning_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: -30 }] }])), [1, 2, 3, 1]) == [-50.0, -30.0, 0.0, 0.0]
 
 # Each horizontal subtable is applied in turn and the adjustments add up;
 # vertical and cross-stream subtables are ignored.
 expect {
-	kern = FontTest.kern([
+	kern = FontBuild.kern([
 		{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] },
 		{ coverage: 0, pairs: [{ left: 1, right: 2, value: -1000 }] },
 		{ coverage: 5, pairs: [{ left: 1, right: 2, value: -2000 }] },
@@ -858,8 +861,8 @@ expect {
 	kerning_of(basic_with("kern", kern), [1, 2]) == [-43.0, 0.0]
 }
 
-expect problems_of(basic_with("kern", FontTest.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == [BadTable("kern")]
-expect problems_of(basic_with("kern", FontTest.patch(FontTest.kern([]), 2, FontTest.u16(3)))) == [BadTable("kern")]
+expect problems_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == [BadTable("kern")]
+expect problems_of(basic_with("kern", FontBuild.patch(FontBuild.kern([]), 2, FontBuild.u16(3)))) == [BadTable("kern")]
 
 # A `kern` table in Apple's layout (version 1.0), as browsers read it:
 # horizontal format 0 subtables kern; vertical, cross-stream and variation
@@ -869,12 +872,12 @@ apple_kern = |subtables| {
 	body = subtables.join_map(
 		|t| {
 			n = t.pairs.len()
-			FontTest.u32(16 + 6 * n)
+			FontBuild.u32(16 + 6 * n)
 				.concat([t.coverage.to_u8_wrap(), t.format.to_u8_wrap(), 0, 0])
-				.concat(FontTest.pack([U16(n), U16(0), U16(0), U16(0)].concat(t.pairs.join_map(|p| [U16(p.left), U16(p.right), I16(p.value)]))))
+				.concat(FontBuild.pack([U16(n), U16(0), U16(0), U16(0)].concat(t.pairs.join_map(|p| [U16(p.left), U16(p.right), I16(p.value)]))))
 		},
 	)
-	FontTest.u32(0x00010000).concat(FontTest.u32(subtables.len())).concat(body)
+	FontBuild.u32(0x00010000).concat(FontBuild.u32(subtables.len())).concat(body)
 }
 
 expect {
@@ -889,8 +892,8 @@ expect {
 	kerning_of(basic_with("kern", kern), [1, 2, 3]) == [-51.0, 4.0, 0.0]
 }
 expect problems_of(basic_with("kern", apple_kern([{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == [BadTable("kern")]
-expect problems_of(basic_with("kern", FontTest.patch(apple_kern([]), 4, FontTest.u32(0xFFFFFFFF)))) == [BadTable("kern")]
-expect problems_of(basic_with("kern", FontTest.patch(apple_kern([{ coverage: 0, format: 0, pairs: [] }]), 8, FontTest.u32(8)))) == [BadTable("kern")]
+expect problems_of(basic_with("kern", FontBuild.patch(apple_kern([]), 4, FontBuild.u32(0xFFFFFFFF)))) == [BadTable("kern")]
+expect problems_of(basic_with("kern", FontBuild.patch(apple_kern([{ coverage: 0, format: 0, pairs: [] }]), 8, FontBuild.u32(8)))) == [BadTable("kern")]
 expect kerning_of(basic_with("kern", apple_kern([])), [1, 2]) == [0.0, 0.0]
 
 # ------------------------------------------------------------ Inter

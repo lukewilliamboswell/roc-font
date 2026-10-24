@@ -1,18 +1,19 @@
 app [target] {
-	font: "../package/testing.roc",
+	build: "../tests/support/main.roc",
+	font: "../package/main.roc",
 	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
 }
 
 import fuzz.Fuzz
 import font.Font
-import font.FontTest
+import build.FontBuild
 import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
 ## The shaping contract on arbitrary text. The input is the text's bytes
 ## (read as UTF-8, invalid sequences replaced), then optionally a 0xFF byte
 ## (never part of UTF-8) and a font: a real font file or a recipe for a
 ## nearly valid one, as the font reading target takes them (see
-## `FontTest.fuzz_font`). Without a font, or with one that cannot be read,
+## `FontBuild.fuzz_font`). Without a font, or with one that cannot be read,
 ## the text is shaped with Inter.
 ##
 ## Substitution is deterministic, keeps every glyph's cluster inside the
@@ -25,7 +26,7 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	split = split_at_marker(bytes)
-	read = if (split.font.is_empty()) Err([]) else Font.from_bytes(FontTest.fuzz_font(split.font, inter_file))
+	read = if (split.font.is_empty()) Err([]) else Font.from_bytes(FontBuild.fuzz_font(split.font, inter_file))
 	font = read ?? inter
 	text = Str.from_utf8_lossy(split.text)
 	code_points = decode(text.to_utf8())

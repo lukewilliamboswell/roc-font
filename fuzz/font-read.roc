@@ -1,11 +1,12 @@
 app [target] {
-	font: "../package/testing.roc",
+	build: "../tests/support/main.roc",
+	font: "../package/main.roc",
 	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
 }
 
 import fuzz.Fuzz
 import font.Font
-import font.FontTest
+import build.FontBuild
 import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
 ## The font reading contract on untrusted bytes: reading never crashes, is
@@ -16,16 +17,16 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## its clusters in range and never grows a run past `4 n + 32` glyphs.
 ##
 ## Inputs are fonts or recipes for nearly valid fonts (see
-## `FontTest.fuzz_font`): real font files, or Inter or the synthetic
-## `FontTest.sample` with bytes patched or cut short.
+## `FontBuild.fuzz_font`): real font files, or Inter or the synthetic
+## `FontBuild.sample` with bytes patched or cut short.
 ##
 ## Reading cost also grows linearly: the input's bytes choose the contents
-## of `FontTest.scaled` fonts, read at 2 and 16 copies; the larger must not
+## of `FontBuild.scaled` fonts, read at 2 and 16 copies; the larger must not
 ## take more than about 8 times the allocations, and reading must free what
 ## it allocates.
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
-	font_bytes = FontTest.fuzz_font(bytes, inter_file)
+	font_bytes = FontBuild.fuzz_font(bytes, inter_file)
 	first = Font.from_bytes(font_bytes)
 	if summary(first) != summary(Font.from_bytes(font_bytes)) {
 		crash "reading the same bytes twice gave different results"
@@ -35,8 +36,8 @@ test! = |bytes| {
 		Err(_) => {}
 		Ok(font) => check(font)
 	}
-	small = FontTest.scaled(bytes, 2)
-	large = FontTest.scaled(bytes, 16)
+	small = FontBuild.scaled(bytes, 2)
+	large = FontBuild.scaled(bytes, 16)
 	small_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(small))
 	large_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(large))
 	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large))
@@ -109,7 +110,7 @@ check = |font| {
 			_ => {}
 		}
 	}
-	runs = [glyphs, [], [1], [7, 1, 2, 3, 1, 2], List.repeat(1, 40), FontTest.counting(64)]
+	runs = [glyphs, [], [1], [7, 1, 2, 3, 1, 2], List.repeat(1, 40), FontBuild.counting(64)]
 	for run in runs {
 		kerned = Font.kerning(font, run)
 		if kerned.len() != run.len() or !kerned.all(finite) {
