@@ -1,0 +1,14 @@
+= roc-font 0.1.0
+
+The first release of roc-font: read TrueType and OpenType fonts and shape
+Latin, Greek and Cyrillic text in pure Roc. A summary of what it offers is
+written when the release is prepared.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	font: "{package-url}",
+}
+----

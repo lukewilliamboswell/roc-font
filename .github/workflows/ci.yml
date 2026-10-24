@@ -1,0 +1,51 @@
+name: CI
+
+# Checks the working tree with the same task a contributor runs locally:
+# `blueprint run check`, which is scripts/all_tests.py. The package compiler
+# is the nightly named in .roc-version; the checks fail on any other.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # This job name is the required status check.
+    name: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the compiler pin
+        id: pin
+        run: |
+          tag="$(tr -d '[:space:]' < .roc-version)"
+          case "$tag" in
+            nightly-*) echo "tag=$tag" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::.roc-version does not name a nightly: $tag"; exit 1 ;;
+          esac
+
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+
+      - name: Install the pinned Roc nightly
+        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        with:
+          version: nightly-new-compiler
+          nightly-tag: ${{ steps.pin.outputs.tag }}
+
+      - run: blueprint check
+
+      - name: Run every check
+        run: blueprint run check

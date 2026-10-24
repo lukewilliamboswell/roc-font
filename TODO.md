@@ -123,14 +123,3 @@ Chrome widths agree on package-mermaid's oracle texts.
 4. WOFF/WOFF2: a module here or a separate package?
 5. Cluster levels beyond `Graphemes` and `Characters`?
 6. Which `unicode` version can a paragraph layer pin?
-
-## Compiler notes (nightly-2026-10-23)
-
-- Booleans are `True`/`False`. Nested defaulted records work.
-- Avoid until fixed on the nightly: wrapping a record field in a tag and
-  reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
-  ARC pass; `Dict(k, {})` hangs native builds.
-- The nightly reports type errors inside basic-cli 0.23.0/0.25.0 yet
-  builds; the scripts tolerate only problems inside the cached platform.
-- The pre-nightly debug `roc` on `PATH` panics on this code; use
-  `.roc-version`'s nightly (`ROC=...`).

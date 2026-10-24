@@ -1,0 +1,8 @@
+# Shared actions are pinned by full commit SHA; Dependabot proposes each new
+# revision as a pull request to review like any other dependency update.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -1,0 +1,73 @@
+name: Nightly compatibility
+
+# Does the release people download today still work with today's Roc
+# nightly? The shared roc-automation workflow tests the examples archive
+# attached to the latest final release, exactly as published, and keeps one
+# tracking issue. It never commits, merges or publishes.
+#
+# Until a release carries a roc-font-examples-<tag>.zip archive there is
+# nothing to test: the gate job says so and the compatibility job is
+# skipped, so a scheduled run stays green without claiming a result.
+on:
+  schedule:
+    - cron: '17 13 * * *'
+  workflow_dispatch:
+    inputs:
+      nightly-tag:
+        description: "Nightly to test, e.g. nightly-2026-10-23-18478ff; empty uses the latest"
+        type: string
+        default: ''
+      release-tag:
+        description: "Release to test, e.g. 0.1.0; empty uses the latest final release"
+        type: string
+        default: ''
+
+permissions: {}
+
+jobs:
+  gate:
+    name: Find a published examples archive
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      ready: ${{ steps.find.outputs.ready }}
+    steps:
+      # Checks out nothing and runs no repository code.
+      - id: find
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED: ${{ inputs.release-tag }}
+        run: |
+          set -euo pipefail
+          tag="$REQUESTED"
+          if [ -z "$tag" ]; then
+            tag="$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --exclude-pre-releases \
+              --limit 1 --json tagName --jq '.[0].tagName // empty')"
+          fi
+          if [ -z "$tag" ]; then
+            echo "::notice::No final release yet; there is no published release to test."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          count="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" \
+            --jq "[.assets[].name | select(. == \"roc-font-examples-$tag.zip\")] | length")"
+          if [ "$count" = 1 ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Release $tag has no roc-font-examples-$tag.zip; there is nothing to test."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  compatibility:
+    needs: gate
+    if: needs.gate.outputs.ready == 'true'
+    permissions:
+      contents: read
+      issues: write
+    uses: lukewilliamboswell/roc-automation/.github/workflows/nightly-compatibility.yml@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+    with:
+      nightly-tag: ${{ inputs.nightly-tag || '' }}
+      release-tag: ${{ inputs.release-tag || '' }}
+      runners: '["ubuntu-24.04"]'

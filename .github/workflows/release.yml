@@ -1,0 +1,273 @@
+name: Release
+
+# Dispatched by hand from the default branch with a version, it builds what
+# the release holds, tests those exact files and hands them to
+# roc-automation's publish-release action, which stages a draft, verifies
+# every asset against the tested file and only then publishes. A pull
+# request runs the same build and tests as a dry run and publishes nothing.
+#
+# The compiler is the nightly named in .roc-version; the rendered notes
+# record it.
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Release version, e.g. 0.1.0, or 0.1.0-rc1 for a release candidate"
+        required: true
+        type: string
+  pull_request:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.event_name == 'workflow_dispatch' && 'release' || format('release-dry-run-{0}', github.ref) }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
+
+env:
+  # The manual's PDF joins the release once `blueprint run docs` succeeds on
+  # every chapter under docs/; see docs.yml.
+  BUILD_MANUAL: 'false'
+
+jobs:
+  build:
+    # This job name is a required status check.
+    name: Build release candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+      prerelease: ${{ steps.validate.outputs.prerelease }}
+      nightly: ${{ steps.pin.outputs.tag }}
+    steps:
+      - name: Require the default branch for publication
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" != branch ] || [ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            echo "::error::Releases run from the default branch only"
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the compiler pin
+        id: pin
+        run: |
+          tag="$(tr -d '[:space:]' < .roc-version)"
+          case "$tag" in
+            nightly-*) echo "tag=$tag" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::.roc-version does not name a nightly: $tag"; exit 1 ;;
+          esac
+
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+
+      - name: Install the pinned Roc nightly
+        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        with:
+          version: nightly-new-compiler
+          nightly-tag: ${{ steps.pin.outputs.tag }}
+
+      # A release needs its notes, a well-formed version and an unused tag.
+      # A dry run takes the newest notes under docs/releases/ and skips the
+      # tag check, because it never publishes.
+      - name: Validate the release request
+        id: validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED: ${{ inputs.release_version }}
+          DRY_RUN: ${{ github.event_name != 'workflow_dispatch' }}
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = true ]; then
+            version="$(ls docs/releases/*.adoc | sed 's|.*/||; s|\.adoc$||' | sort -V | tail -n 1)"
+          else
+            version="$REQUESTED"
+          fi
+          if ! printf '%s' "$version" | grep -Eq '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc[1-9][0-9]*)?$'; then
+            echo "::error::not a release version: '$version' (use X.Y.Z or X.Y.Z-rcN)"
+            exit 1
+          fi
+          test -f "docs/releases/$version.adoc" || { echo "::error::docs/releases/$version.adoc is missing"; exit 1; }
+          if [ "$DRY_RUN" != true ]; then
+            refs="$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$version" --jq "[.[] | select(.ref == \"refs/tags/$version\")] | length")"
+            test "$refs" = 0 || { echo "::error::tag $version already exists"; exit 1; }
+          fi
+          case "$version" in *-rc*) prerelease=true ;; *) prerelease=false ;; esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
+
+      # Stops a version that understates the change in the public API since
+      # the latest final release. The first release has nothing to compare.
+      - name: Check the version with roc bump
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.validate.outputs.version }}
+          DRY_RUN: ${{ github.event_name != 'workflow_dispatch' }}
+        run: |
+          set -euo pipefail
+          previous="$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --exclude-pre-releases \
+            --limit 1 --json tagName --jq '.[0].tagName // empty')"
+          if [ -z "$previous" ]; then
+            echo "::notice::No earlier release; roc bump has nothing to compare with."
+            exit 0
+          fi
+          bundle="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$previous" \
+            --jq '[.assets[] | select(.name | endswith(".tar.zst"))] | if length == 1 then .[0].browser_download_url else error("expected one bundle") end')"
+          if [ "$DRY_RUN" = true ] && [ "$previous" = "$VERSION" ]; then
+            roc bump --old "$bundle" package/main.roc
+          else
+            roc bump --old "$bundle" --expect "$VERSION" package/main.roc
+          fi
+
+      - name: Run every check
+        run: blueprint run check
+
+      - name: Bundle the package
+        run: |
+          set -euo pipefail
+          mkdir -p release/assets
+          roc bundle package/main.roc --output-dir release/assets
+          test "$(find release/assets -name '*.tar.zst' | wc -l)" = 1
+
+      - name: Package the API reference
+        env:
+          VERSION: ${{ steps.validate.outputs.version }}
+        run: |
+          set -euo pipefail
+          roc docs package/main.roc --output="$RUNNER_TEMP/roc-font-docs-$VERSION"
+          (cd "$RUNNER_TEMP" && zip -qr "$GITHUB_WORKSPACE/release/assets/roc-font-docs-$VERSION.zip" "roc-font-docs-$VERSION")
+
+      - id: renderer
+        if: env.BUILD_MANUAL == 'true'
+        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        with:
+          task: docs-path
+          label: roc-docs tools-0.2.0
+
+      - id: docs
+        if: env.BUILD_MANUAL == 'true'
+        uses: lukewilliamboswell/roc-automation/actions/build-docs@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        with:
+          renderer-binary: ${{ steps.renderer.outputs.binary }}
+          pdf-filename: roc-font-${{ steps.validate.outputs.version }}.pdf
+          docs-version: ${{ steps.validate.outputs.version }}
+
+      - name: Add the manual
+        if: env.BUILD_MANUAL == 'true'
+        env:
+          PDF: ${{ steps.docs.outputs.pdf-path }}
+        run: cp "$PDF" release/assets/
+
+      # Fills {package-url} with the bundle's release URL, refuses notes that
+      # leave a placeholder or never use it, converts the small AsciiDoc
+      # subset the notes use to Markdown for the release body, and records
+      # the compiler.
+      - name: Render the release notes
+        env:
+          VERSION: ${{ steps.validate.outputs.version }}
+        run: |
+          set -euo pipefail
+          bundle="$(basename "$(find release/assets -name '*.tar.zst')")"
+          export PACKAGE_URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$VERSION/$bundle"
+          export COMPILER="$(roc version)"
+          python3 -I - "docs/releases/$VERSION.adoc" release/notes.md <<'PY'
+          import os, re, sys
+          source, target = sys.argv[1], sys.argv[2]
+          text = open(source, encoding="utf-8").read()
+          if "{package-url}" not in text:
+              sys.exit(f"{source} never uses {{package-url}}")
+          text = text.replace("{package-url}", os.environ["PACKAGE_URL"])
+          left = re.findall(r"\{[a-z-]+-url\}", text)
+          if left:
+              sys.exit(f"{source} leaves placeholders: {', '.join(sorted(set(left)))}")
+          out, in_source, language = [], False, ""
+          for line in text.splitlines():
+              block = re.fullmatch(r"\[source,\s*([A-Za-z0-9_+-]+)\]", line.strip())
+              if block:
+                  language = block.group(1)
+                  continue
+              if line.strip() == "----":
+                  out.append("```" + language if not in_source else "```")
+                  in_source, language = not in_source, ""
+                  continue
+              heading = re.match(r"^(=+) (.*)$", line) if not in_source else None
+              out.append("#" * len(heading.group(1)) + " " + heading.group(2) if heading else line)
+          out += ["", "## Compilers", "", "```", os.environ["COMPILER"], "```", ""]
+          open(target, "w", encoding="utf-8").write("\n".join(out))
+          PY
+          cat release/notes.md
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-candidate
+          path: release/
+          if-no-files-found: error
+          retention-days: 7
+
+  test:
+    # This job name is a required status check.
+    name: Test release candidate
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the Roc nightly the build used
+        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        with:
+          version: nightly-new-compiler
+          nightly-tag: ${{ needs.build.outputs.nightly }}
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-candidate
+          path: candidate
+
+      # The public API tests run against the exact bundle: it is unpacked
+      # where package/ would be, beside a copy of the test sources.
+      - name: Run the API tests against the bundle
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/exact"
+          mkdir -p "$work/package" "$work/tests"
+          tar --zstd -xf candidate/assets/*.tar.zst -C "$work/package"
+          cp -r tests/api tests/support tests/fonts "$work/tests/"
+          cd "$work"
+          roc check tests/api/main.roc
+          roc test tests/api/main.roc
+          roc test --opt=interpreter tests/api/main.roc
+
+  # Holds the write token, checks out nothing and runs no repository code:
+  # it publishes the files the jobs above built and tested.
+  publish:
+    name: Publish GitHub release
+    needs: [build, test]
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-candidate
+          path: candidate
+
+      - uses: lukewilliamboswell/roc-automation/actions/publish-release@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        with:
+          version: ${{ needs.build.outputs.version }}
+          prerelease: ${{ needs.build.outputs.prerelease }}
+          notes-file: candidate/notes.md
+          assets: |
+            candidate/assets/*

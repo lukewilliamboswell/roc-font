@@ -1,0 +1,37 @@
+(
+	(fetched ((
+		(name "roc-docs")
+		(obtained Both)
+		(served ("release-assets.githubusercontent.com"))
+		(sha256 "d2c97b7d6233bd178016fa56a5631453249878238b76a67f4c3342964214ca95")
+		(size 21589960)
+		(system "x86_64-linux")
+		(urls ("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.2.0/roc-docs-x86_64-linux"))
+		(witness "https://api.github.com/repos/lukewilliamboswell/roc-automation/releases/tags/tools-0.2.0")) (
+		(name "roc-docs")
+		(obtained Published)
+		(served ())
+		(sha256 "07e284f775b23758c9f077b8e9428921c554030587eca14c174de160a9f129bc")
+		(size 17088736)
+		(system "aarch64-linux")
+		(urls ("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.2.0/roc-docs-aarch64-linux"))
+		(witness "https://api.github.com/repos/lukewilliamboswell/roc-automation/releases/tags/tools-0.2.0")) (
+		(name "roc-docs")
+		(obtained Published)
+		(served ())
+		(sha256 "6f5784e32de871ee4e23e0b27a0b9c5cfdeea9e135914f87b748bc5e08ab3333")
+		(size 17026096)
+		(system "aarch64-darwin")
+		(urls ("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.2.0/roc-docs-aarch64-darwin"))
+		(witness "https://api.github.com/repos/lukewilliamboswell/roc-automation/releases/tags/tools-0.2.0"))))
+	(format (
+		(major 2)
+		(minor 0)))
+	(hints ())
+	(intent (
+		(build_sources ())
+		(inputs ())
+		(overlays ())
+		(resolvers ())
+		(sources ())))
+	(sources ()))

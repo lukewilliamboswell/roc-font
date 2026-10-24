@@ -1,0 +1,101 @@
+= The roc-font manual
+:doctype: book
+:author: The roc-font contributors
+:revnumber: {docs-version}
+:toc: left
+:toclevels: 2
+:sectanchors:
+
+[.lead]
+roc-font reads font files and turns text into positioned glyphs, in pure
+Roc. Give it the bytes of a TrueType or OpenType font and it returns font
+facts in font units (metrics, the glyph for each character, advances,
+extents) and the glyphs a run of text becomes after the font's default
+ligatures and kerning. It needs no host, no system fonts and no file
+access, so it behaves the same in an application, a package, a test or a
+browser.
+
+ifdef::backend-html5[]
+link:roc-font.pdf[Download this manual as a PDF] ·
+link:api/index.html[API reference] ·
+https://github.com/lukewilliamboswell/roc-font[View roc-font on GitHub].
+endif::[]
+
+.How to use this manual
+****
+Using roc-font in a program:: Read <<use-roc-font>>, then the API reference
+generated from the package, which is the authority for every public name.
+Changing roc-font itself:: Read <<contribute-to-roc-font>>, then the
+chapter for the part you are changing.
+Upgrading:: See <<release-notes>>.
+****
+
+[#use-roc-font]
+== Use roc-font
+
+roc-font is for programs that need to know how much room text takes, or
+which glyphs to draw for it, without asking an operating system: layout
+engines, PDF writers, diagram renderers and games.
+
+You provide:
+
+* the bytes of a font file, which you load however your platform allows;
+* the text to measure or shape.
+
+roc-font returns:
+
+* font-wide facts such as units per em, ascent and descent;
+* the glyph for each Unicode code point, and each glyph's advance and
+  outline extent;
+* the glyphs of a run after the font's default substitutions, with
+  clusters pointing back into your text, and the kerning between them.
+
+Every result is in font units. Divide by the font's units per em and
+multiply by the font size to get the size you draw at; rounding to a pixel
+grid is yours to choose, because every renderer rounds differently.
+
+Reading is the only step that can fail. Font bytes are treated as
+untrusted: a file that cannot be used is reported with every problem
+found, and every query on a font that was read successfully has a defined
+result, including empty text and missing glyphs.
+
+roc-font does not rasterise, hint, wrap lines, choose fallback fonts or find
+fonts on the system. Those belong to the program that uses it. Unicode text
+segmentation (graphemes, line breaks, bidirectional text, script runs) is
+left to a Unicode package.
+
+The package is before its first release and its API is provisional. The
+`README.md` in the repository has a short, complete example, and the API
+reference lists each operation with its documentation.
+
+[#contribute-to-roc-font]
+== Contribute to roc-font
+
+`CONTRIBUTING.md` in the repository says what to install, which compiler to
+use and how to run the checks a pull request must pass. The chapters below
+explain the design and each kind of test:
+
+* <<roc-font-architecture>> is the design roc-font is moving towards and the
+  reasons behind each choice.
+* <<conformance-testing-roc-font>> compares roc-font with HarfBuzz, Chrome
+  and other references through recorded results.
+* <<fuzzing-roc-font>> describes each fuzz target's contract and how a crash
+  becomes a permanent regression test.
+* <<benchmarks>> covers the timing comparison and the allocation ratchet.
+* <<the-default-fonts>> records which fonts roc-font ships, their licences
+  and provenance.
+* <<variable-fonts-in-roc-font>> scopes variable-font support.
+
+include::architecture.adoc[leveloffset=+1]
+
+include::conformance.adoc[leveloffset=+1]
+
+include::fuzzing.adoc[leveloffset=+1]
+
+include::benchmarks.adoc[leveloffset=+1]
+
+include::default-fonts.adoc[leveloffset=+1]
+
+include::variable-fonts.adoc[leveloffset=+1]
+
+include::releases.adoc[leveloffset=+1]
