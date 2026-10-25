@@ -20,11 +20,14 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## lie inside the text, in order for left-to-right text and in reverse for
 ## right-to-left; it never has more than 64 glyphs per byte of text (or
 ## 16384 in all), HarfBuzz's bound; only the unsafe-to-break flag is set;
-## the same with features turned off over part of the text; shaping with a
+## the same with features turned off over part of the text, and with
+## script and language tags (real ones, and the text's first bytes as a
+## language tag), deterministically; shaping with a
 ## plan agrees with shaping directly, and so does shaping scalars with
 ## their offsets, tracing them (with one origin per glyph, the same twice)
 ## and checking the budgets (complete, or over budget with that same run
-## and at least one bound named); the width is the sum of the advances.
+## and at least one bound named, the bounds tracing names); the width is
+## the sum of the advances.
 ## Shaping 8 times the
 ## text (16 against 2 copies) must not take more than about 8 times the
 ## allocations, and must free what it allocates.
@@ -48,27 +51,54 @@ test! = |bytes| {
 	if Str.inspect(Font.shape_scalars(font, plan, scalars)) != Str.inspect(ltr) {
 		crash "shaping scalars with their offsets differs from shaping the text"
 	}
-	traced = Font.shape_traced(font, plan, scalars)
+	traced_result = Font.shape_traced(font, plan, scalars)
+	traced = match traced_result {
+		Ok(t) => { run: t.run, origins: t.origins, budgets: [] }
+		Err(OverBudget(t)) => t
+	}
 	if Str.inspect(traced.run) != Str.inspect(ltr) or traced.origins.len() != ltr.glyphs.len() {
 		crash "a traced run differs from the run, or its origins are not index-aligned"
 	}
-	if Str.inspect(Font.shape_traced(font, plan, scalars).origins) != Str.inspect(traced.origins) {
-		crash "tracing the same text twice gave different origins"
+	if Str.inspect(Font.shape_traced(font, plan, scalars)) != Str.inspect(traced_result) {
+		crash "tracing the same text twice gave different results"
 	}
-	match Font.shape_checked(font, plan, text) {
-		Ok(run) =>
+	checked_budgets = match Font.shape_checked(font, plan, text) {
+		Ok(run) => {
 			if Str.inspect(run) != Str.inspect(ltr) {
 				crash "a checked run differs from the run"
 			}
-		Err(OverBudget({ run, budgets })) =>
+			[]
+		}
+		Err(OverBudget({ run, budgets })) => {
 			if Str.inspect(run) != Str.inspect(ltr) or budgets.is_empty() {
 				crash "an over-budget run differs from the run, or names no bound"
 			}
+			budgets
+		}
+	}
+	if Str.inspect(checked_budgets) != Str.inspect(traced.budgets) {
+		crash "traced and checked shaping name different bounds"
 	}
 	rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft, script: "Hebr" })
 	check_run!(n, rtl, True)
 	latin_rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft })
 	check_run!(n, latin_rtl, True)
+	# Script and language tags: one of a few real ones, and the text's
+	# first bytes as a language tag, so arbitrary tags plan totally and
+	# deterministically.
+	scripts = ["", "Latn", "Arab", "Deva", "Mymr", "Hant", "Zzzz", "12"]
+	languages = ["", "en", "tr", "zh-Hant-HK", "sr-Latn", "x-hbotABC", "fr-x-hbscgrek", "el-polyton"]
+	script = scripts.get(n % scripts.len()) ?? ""
+	language = languages.get((n // 8) % languages.len()) ?? ""
+	raw_language = Str.from_utf8_lossy(split.text.take_first(16))
+	for chosen in [language, raw_language] {
+		tagged = Font.ShapeOptions.{ script, language: chosen, direction: LeftToRight }
+		tagged_run = Font.shape(font, text, tagged)
+		check_run!(n, tagged_run, False)
+		if Str.inspect(tagged_run) != Str.inspect(Font.shape_planned(font, Font.plan(font, tagged), text)) {
+			crash "shaping with a script and language is not deterministic"
+		}
+	}
 	half = n // 2
 	ranged = Font.shape(font, text, Font.ShapeOptions.{ features: [Font.Feature.{ tag: "liga", value: 0, end: half }, Font.Feature.{ tag: "kern", value: 0, start: half }, Font.Feature.{ tag: "smcp" }] })
 	check_run!(n, ranged, False)

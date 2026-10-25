@@ -54,6 +54,30 @@ Sorted :: {}.{
 		$out
 	}
 
+	## The values in increasing order: in place by insertion for short
+	## lists (at most 64 values, a few hundred moves), by `merge_sort` for
+	## longer ones.
+	sort : List(U64) -> List(U64)
+	sort = |values| {
+		n = values.len()
+		if n > 64 {
+			return Sorted.merge_sort(values)
+		}
+		var $out = values
+		for i in 1..<n {
+			v = $out.get(i) ?? 0
+			var $j = i
+			while $j > 0 and ($out.get($j - 1) ?? 0) > v {
+				# `$j <= i < n`.
+				$out = $out.set($j, $out.get($j - 1) ?? 0) ?? []
+				$j = $j - 1
+			}
+			# `$j <= i < n`.
+			$out = $out.set($j, v) ?? []
+		}
+		$out
+	}
+
 	## The values in increasing order: runs of width 1, 2, 4, ... merged
 	## from one list into the other until one run holds everything. Ties
 	## keep their order (it does not matter for numbers).
@@ -102,3 +126,11 @@ expect Sorted.unique([9, 9, 4, 0, 0]) == [0, 4, 9]
 expect Sorted.unique([3, 1, 2, 3, 0, 9, 1, 8, 2]) == [0, 1, 2, 3, 8, 9]
 expect Sorted.unique([5, 5, 5]) == [5]
 expect Sorted.unique([2, 1, 3]) == [1, 2, 3]
+
+# `sort` by insertion (short lists) and by merging (long ones) agree.
+expect Sorted.sort([]) == []
+expect Sorted.sort([3, 1, 2, 3, 0]) == [0, 1, 2, 3, 3]
+expect {
+	long = List.repeat(0, 200).map_with_index(|_, i| (i * 7919) % 211)
+	Sorted.sort(long) == Sorted.merge_sort(long) and Sorted.sort(long.take_first(64)) == Sorted.merge_sort(long.take_first(64))
+}

@@ -25,6 +25,28 @@ ShaperTags :: {}.{
 		$t
 	}
 
+	## HarfBuzz's script aliases, as tags: made once, when the program is
+	## compiled.
+	script_aliases : List((U64, U64))
+	script_aliases = [
+		("Qaai", "Zinh"),
+		("Qaac", "Copt"),
+		("Aran", "Arab"),
+		("Cyrs", "Cyrl"),
+		("Geok", "Geor"),
+		("Hans", "Hani"),
+		("Hant", "Hani"),
+		("Jamo", "Hang"),
+		("Latf", "Latn"),
+		("Latg", "Latn"),
+		("Syre", "Syrc"),
+		("Syrj", "Syrc"),
+		("Syrn", "Syrc"),
+	].map(|(from, to)| (ShaperTags.tag_of(from), ShaperTags.tag_of(to)))
+
+	unknown_script : U64
+	unknown_script = ShaperTags.tag_of("Zzzz")
+
 	## The ISO 15924 script a code names, normalised to one capital and
 	## three small letters, with HarfBuzz's aliases; `Zzzz` (unknown) for
 	## anything that does not look like a script code.
@@ -32,31 +54,42 @@ ShaperTags :: {}.{
 	script_of = |code| {
 		raw = ShaperTags.tag_from_bytes(code.to_utf8())
 		tag = raw.bitwise_and(0xDFDFDFDF).bitwise_or(0x00202020)
-		aliases = [
-			("Qaai", "Zinh"),
-			("Qaac", "Copt"),
-			("Aran", "Arab"),
-			("Cyrs", "Cyrl"),
-			("Geok", "Geor"),
-			("Hans", "Hani"),
-			("Hant", "Hani"),
-			("Jamo", "Hang"),
-			("Latf", "Latn"),
-			("Latg", "Latn"),
-			("Syre", "Syrc"),
-			("Syrj", "Syrc"),
-			("Syrn", "Syrc"),
-		]
-		match aliases.find_first(|(from, _)| ShaperTags.tag_of(from) == tag) {
-			Ok((_, to)) => ShaperTags.tag_of(to)
+		match ShaperTags.script_aliases.find_first(|(from, _)| from == tag) {
+			Ok((_, to)) => to
 			Err(_) =>
 				if tag.bitwise_and(0xE0E0E0E0) == 0x40606060 {
 					tag
 				} else {
-					ShaperTags.tag_of("Zzzz")
+					ShaperTags.unknown_script
 				}
 		}
 	}
+
+	## Scripts with newer OpenType tags (the Indic `2` versions, to which
+	## the `3` versions are tried first) and with old tags not spelt as the
+	## script code, as tags made when the program is compiled.
+	new_script_tags : List((U64, U64))
+	new_script_tags = [
+		("Beng", "bng2"),
+		("Deva", "dev2"),
+		("Gujr", "gjr2"),
+		("Guru", "gur2"),
+		("Knda", "knd2"),
+		("Mlym", "mlm2"),
+		("Orya", "ory2"),
+		("Taml", "tml2"),
+		("Telu", "tel2"),
+		("Mymr", "mym2"),
+	].map(|(iso, t)| (ShaperTags.tag_of(iso), ShaperTags.tag_of(t)))
+
+	old_script_tags : List((U64, U64))
+	old_script_tags = [("Zmth", "math"), ("Hira", "kana"), ("Hrkt", "kana"), ("Laoo", "lao "), ("Yiii", "yi  "), ("Nkoo", "nko "), ("Vaii", "vai ")].map(|(iso, t)| (ShaperTags.tag_of(iso), ShaperTags.tag_of(t)))
+
+	myanmar : U64
+	myanmar = ShaperTags.tag_of("Mymr")
+
+	latin_tags : List(U64)
+	latin_tags = [ShaperTags.tag_of("latn")]
 
 	## The OpenType script tags to try for an ISO 15924 code, best first.
 	## An empty code is Latin (`latn`), as a browser shapes Latin text whose
@@ -64,37 +97,29 @@ ShaperTags :: {}.{
 	script_tags : Str -> List(U64)
 	script_tags = |code|
 		if code.is_empty() {
-			[ShaperTags.tag_of("latn")]
+			ShaperTags.latin_tags
 		} else {
 			script = ShaperTags.script_of(code)
-			new_tags = [
-				("Beng", "bng2"),
-				("Deva", "dev2"),
-				("Gujr", "gjr2"),
-				("Guru", "gur2"),
-				("Knda", "knd2"),
-				("Mlym", "mlm2"),
-				("Orya", "ory2"),
-				("Taml", "tml2"),
-				("Telu", "tel2"),
-				("Mymr", "mym2"),
-			]
-			newer = match new_tags.find_first(|(iso, _)| ShaperTags.tag_of(iso) == script) {
-				Ok(("Mymr", t)) => [ShaperTags.tag_of(t)]
-				Ok((_, t)) => {
-					two = ShaperTags.tag_of(t)
-					# The `3` versions replace the last byte.
-					[two.bitwise_and(0xFFFFFF00).bitwise_or('3'.to_u64()), two]
-				}
+			newer = match ShaperTags.new_script_tags.find_first(|(iso, _)| iso == script) {
+				Ok((iso, two)) if iso == ShaperTags.myanmar => [two]
+				# The `3` versions replace the last byte.
+				Ok((_, two)) => [two.bitwise_and(0xFFFFFF00).bitwise_or('3'.to_u64()), two]
 				Err(_) => []
 			}
-			old_tags = [("Zmth", "math"), ("Hira", "kana"), ("Hrkt", "kana"), ("Laoo", "lao "), ("Yiii", "yi  "), ("Nkoo", "nko "), ("Vaii", "vai ")]
-			old = match old_tags.find_first(|(iso, _)| ShaperTags.tag_of(iso) == script) {
-				Ok((_, t)) => ShaperTags.tag_of(t)
+			old = match ShaperTags.old_script_tags.find_first(|(iso, _)| iso == script) {
+				Ok((_, t)) => t
 				Err(_) => script.bitwise_or(0x20000000)
 			}
 			newer.append(old)
 		}
+
+	## Scripts written right to left, and scripts written both ways, as
+	## tags made when the program is compiled.
+	rtl_scripts : List(U64)
+	rtl_scripts = ["Arab", "Hebr", "Syrc", "Thaa", "Cprt", "Khar", "Phnx", "Nkoo", "Lydi", "Avst", "Armi", "Phli", "Prti", "Sarb", "Orkh", "Samr", "Mand", "Merc", "Mero", "Mani", "Mend", "Nbat", "Narb", "Palm", "Phlp", "Hatr", "Adlm", "Rohg", "Sogo", "Sogd", "Elym", "Chrs", "Yezi", "Ougr", "Gara", "Sidt"].map(ShaperTags.tag_of)
+
+	either_scripts : List(U64)
+	either_scripts = ["Hung", "Ital", "Runr", "Tfng"].map(ShaperTags.tag_of)
 
 	## A script's natural horizontal direction: `Rtl`, `Ltr`, or `Either`
 	## for scripts written both ways and for an empty code.
@@ -104,11 +129,9 @@ ShaperTags :: {}.{
 			Either
 		} else {
 			script = ShaperTags.script_of(code)
-			rtl = ["Arab", "Hebr", "Syrc", "Thaa", "Cprt", "Khar", "Phnx", "Nkoo", "Lydi", "Avst", "Armi", "Phli", "Prti", "Sarb", "Orkh", "Samr", "Mand", "Merc", "Mero", "Mani", "Mend", "Nbat", "Narb", "Palm", "Phlp", "Hatr", "Adlm", "Rohg", "Sogo", "Sogd", "Elym", "Chrs", "Yezi", "Ougr", "Gara", "Sidt"]
-			either = ["Hung", "Ital", "Runr", "Tfng"]
-			if rtl.any(|s| ShaperTags.tag_of(s) == script) {
+			if ShaperTags.rtl_scripts.contains(script) {
 				Rtl
-			} else if either.any(|s| ShaperTags.tag_of(s) == script) {
+			} else if ShaperTags.either_scripts.contains(script) {
 				Either
 			} else {
 				Ltr
@@ -153,11 +176,11 @@ ShaperTags :: {}.{
 				}
 				{ limit: $limit, private: $private }
 			}
-		scripts = match ShaperTags.private_tag(split.private, "-hbsc", Lower) {
+		scripts = match ShaperTags.private_tag(split.private, ShaperTags.hbsc, Lower) {
 			Ok(t) => Given(t)
 			Err(_) => NotGiven
 		}
-		languages = match ShaperTags.private_tag(split.private, "-hbot", Upper) {
+		languages = match ShaperTags.private_tag(split.private, ShaperTags.hbot, Upper) {
 			Ok(t) => [t]
 			Err(_) =>
 				match ShaperTags.complex_tags(lang, split.limit) {
@@ -180,16 +203,16 @@ ShaperTags :: {}.{
 			Err(_) => False
 		}
 		after = lang.drop_first(1)
-		matched = ShaperLanguages.complex.find_first(
+		matched = ShaperTags.complex_rules.find_first(
 			|rule| {
-				a = rule.a.to_utf8()
-				b = rule.b.to_utf8()
+				a = rule.a
+				b = rule.b
 				if rule.kind == 0 {
 					match dash {
 						Ok(p) => variant_ok and ShaperTags.subtag_matches(lang, p, limit, b)
 						Err(_) => False
 					}
-				} else if rule.first.to_utf8() != [first] {
+				} else if rule.first != first {
 					False
 				} else if rule.kind == 1 {
 					after == a
@@ -202,13 +225,20 @@ ShaperTags :: {}.{
 			},
 		)
 		match matched {
-			Ok(rule) => {
-				t = rule.tags.to_utf8()
-				Ok(ShaperTags.indices(t.len() // 4).map(|k| ShaperTags.tag_at(t, 4 * k)))
-			}
+			Ok(rule) => Ok(rule.tags)
 			Err(_) => Err(NoRule)
 		}
 	}
+
+	## `ShaperLanguages.complex` as bytes and tags, made once when the
+	## program is compiled, so matching a language tag allocates nothing.
+	complex_rules : List({ first : U8, kind : U8, a : List(U8), b : List(U8), tags : List(U64) })
+	complex_rules = ShaperLanguages.complex.map(
+		|rule| {
+			t = rule.tags.to_utf8()
+			{ first: rule.first.to_utf8().first() ?? 0, kind: rule.kind, a: rule.a.to_utf8(), b: rule.b.to_utf8(), tags: ShaperTags.indices(t.len() // 4).map(|k| ShaperTags.tag_at(t, 4 * k)) }
+		},
+	)
 
 	indices : U64 -> List(U64)
 	indices = |n| {
@@ -262,11 +292,19 @@ ShaperTags :: {}.{
 		}
 	}
 
-	## A raw tag after `prefix` in a private-use subtag: eight hexadecimal
+	hbsc : List(U8)
+	hbsc = "-hbsc".to_utf8()
+
+	hbot : List(U8)
+	hbot = "-hbot".to_utf8()
+
+	default_script : U64
+	default_script = ShaperTags.tag_of("DFLT")
+
+	## A raw tag after `pre` in a private-use subtag: eight hexadecimal
 	## digits after a `-`, or up to four letters and digits (padded).
-	private_tag : List(U8), Str, [Lower, Upper] -> Try(U64, [NotGiven])
-	private_tag = |private, prefix, case| {
-		pre = prefix.to_utf8()
+	private_tag : List(U8), List(U8), [Lower, Upper] -> Try(U64, [NotGiven])
+	private_tag = |private, pre, case| {
 		var $at = Err(NotFound)
 		var $k = 0
 		while $k + pre.len() <= private.len() {
@@ -307,7 +345,7 @@ ShaperTags :: {}.{
 					} else {
 						t = ShaperTags.tag_from_bytes($chars)
 						# `DFLT` in any case is the default script tag.
-						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.tag_of("DFLT")) t.bitwise_xor((0xFFFFFFFF).bitwise_xor(0xDFDFDFDF)) else t)
+						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.default_script) t.bitwise_xor((0xFFFFFFFF).bitwise_xor(0xDFDFDFDF)) else t)
 					}
 				}
 			}

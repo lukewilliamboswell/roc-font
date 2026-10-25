@@ -1,4 +1,5 @@
 import Bytes
+import Sorted
 
 ## The script list, language systems and feature list shared by `GSUB`
 ## and `GPOS` (OpenType "Layout common table formats"): which features a
@@ -150,15 +151,16 @@ LayoutCommon := {
 	## offset of the script table, or `NoScript`.
 	select_script : LayoutCommon, List(U64) -> [Script(U64), NoScript]
 	select_script = |common, candidates| {
-		all = candidates.concat([LayoutCommon.tag("DFLT"), LayoutCommon.tag("dflt"), LayoutCommon.tag("latn")])
+		# The candidates, then the fallbacks, without joining the lists.
+		total = candidates.len() + LayoutCommon.fallback_scripts.len()
 		var $found = NoScript
 		var $k = 0
-		while $k < all.len() {
-			key = all.get($k) ?? 0
+		while $k < total {
+			key = if ($k < candidates.len()) candidates.get($k) ?? 0 else LayoutCommon.fallback_scripts.get($k - candidates.len()) ?? 0
 			match LayoutCommon.bsearch(common.data, common.script_list + 2, common.script_count, 6, key) {
 				Ok(index) => {
 					$found = Script(common.script_list + Bytes.u16(common.data, common.script_list + 2 + 6 * index + 4))
-					$k = all.len()
+					$k = total
 				}
 				Err(_) => {
 					$k = $k + 1
@@ -168,11 +170,18 @@ LayoutCommon := {
 		$found
 	}
 
+	## The scripts tried after the candidates: `DFLT`, `dflt` and `latn`.
+	fallback_scripts : List(U64)
+	fallback_scripts = [LayoutCommon.tag("DFLT"), LayoutCommon.tag("dflt"), LayoutCommon.tag("latn")]
+
+	default_langsys : U64
+	default_langsys = LayoutCommon.tag("dflt")
+
 	## The tag of the script `select_script` chooses for candidate tags, or
 	## 0 when the table has none of them (HarfBuzz's `chosen_script`).
 	select_script_tag : LayoutCommon, List(U64) -> U64
 	select_script_tag = |common, candidates| {
-		all = candidates.concat([LayoutCommon.tag("DFLT"), LayoutCommon.tag("dflt"), LayoutCommon.tag("latn")])
+		all = candidates.concat(LayoutCommon.fallback_scripts)
 		match all.find_first(|key| LayoutCommon.bsearch(common.data, common.script_list + 2, common.script_count, 6, key).is_ok()) {
 			Ok(key) => key
 			Err(_) => 0
@@ -189,14 +198,16 @@ LayoutCommon := {
 			Script(script) => {
 				data = common.data
 				count = Bytes.u16(data, script + 2)
-				all = candidates.append(LayoutCommon.tag("dflt"))
+				# The candidates, then `dflt`, without joining them.
+				total = candidates.len() + 1
 				var $found = Bytes.u16(data, script)
 				var $k = 0
-				while $k < all.len() {
-					match LayoutCommon.bsearch(data, script + 4, count, 6, all.get($k) ?? 0) {
+				while $k < total {
+					key = if ($k < candidates.len()) candidates.get($k) ?? 0 else LayoutCommon.default_langsys
+					match LayoutCommon.bsearch(data, script + 4, count, 6, key) {
 						Ok(index) => {
 							$found = Bytes.u16(data, script + 4 + 6 * index + 4)
-							$k = all.len()
+							$k = total
 						}
 						Err(_) => {
 							$k = $k + 1
@@ -229,6 +240,54 @@ LayoutCommon := {
 			}
 			$found
 		}
+
+	## Tags as keys for `find_features`: each tag with its position, in
+	## increasing order. A tag is four bytes, so `tag << 32 | position`
+	## orders by tag, then position.
+	feature_keys : List(U64) -> List(U64)
+	feature_keys = |tags| Sorted.sort(tags.map_with_index(|t, i| t.shl_wrap(32).bitwise_or(i.bitwise_and(0xFFFFFFFF))))
+
+	## `find_feature` for many tags at once, given as `feature_keys`: the
+	## feature index of each tag in a language system (the first listed
+	## feature with the tag), or `no_feature`, by the tags' positions. One
+	## pass over the language system's features, each found among the
+	## keys by binary search, so the work grows with the features plus the
+	## tags, not their product.
+	find_features : LayoutCommon, U64, List(U64) -> List(U64)
+	find_features = |common, langsys, keys| {
+		n = keys.len()
+		if langsys == LayoutCommon.no_langsys or n == 0 {
+			return List.repeat(LayoutCommon.no_feature, n)
+		}
+		data = common.data
+		count = Bytes.u16(data, langsys + 4)
+		var $found = List.repeat(LayoutCommon.no_feature, n)
+		for k in 0..<count {
+			index = Bytes.u16(data, langsys + 6 + 2 * k)
+			key = Bytes.u32(data, common.feature_list + 2 + 6 * index)
+			# The first sorted key with this tag, if any.
+			var $low = 0
+			var $high = n
+			while $low < $high {
+				mid = ($low + $high) // 2
+				if (keys.get(mid) ?? 0).shr_zf_wrap(32) < key {
+					$low = mid + 1
+				} else {
+					$high = mid
+				}
+			}
+			var $at = $low
+			while $at < n and (keys.get($at) ?? 0).shr_zf_wrap(32) == key {
+				slot = (keys.get($at) ?? 0).bitwise_and(0xFFFFFFFF)
+				if ($found.get(slot) ?? 0) == LayoutCommon.no_feature {
+					# `slot` is a position below `n`, the list's length.
+					$found = $found.set(slot, index) ?? []
+				}
+				$at = $at + 1
+			}
+		}
+		$found
+	}
 
 	## A language system's required feature, or `no_feature`.
 	required_feature : LayoutCommon, U64 -> U64
@@ -286,3 +345,50 @@ LayoutCommon := {
 		$used
 	}
 }
+
+# ----------------------------------------------------------------------
+
+# Tests. Top-level expects and helpers are not part of the module's API.
+# Run with `roc test package/LayoutCommon.roc`.
+
+be16 : U64 -> List(U8)
+be16 = |v| [v.shr_zf_wrap(8).bitwise_and(0xFF).to_u8_wrap(), v.bitwise_and(0xFF).to_u8_wrap()]
+
+# A feature list of `liga`, `clig` and `liga` again (at offset 0, records
+# of a tag and an unused offset), and a language system at offset 20
+# listing features 2, 1 and 0 in that order.
+features_and_langsys : LayoutCommon
+features_and_langsys = {
+	data: be16(3)
+		.concat("liga".to_utf8())
+		.concat(be16(0))
+		.concat("clig".to_utf8())
+		.concat(be16(0))
+		.concat("liga".to_utf8())
+		.concat(be16(0))
+		.concat(be16(0))
+		.concat(be16(0))
+		.concat(be16(0xFFFF))
+		.concat(be16(3))
+		.concat(be16(2))
+		.concat(be16(1))
+		.concat(be16(0)),
+	script_list: 0,
+	script_count: 0,
+	feature_list: 0,
+	feature_count: 3,
+	lookup_count: 0,
+}
+
+# `find_features` finds what `find_feature` finds, for each tag, repeats
+# included: the first feature the language system lists with the tag.
+expect {
+	common = features_and_langsys
+	tags = ["liga", "clig", "kern", "liga"].map(LayoutCommon.tag)
+	found = LayoutCommon.find_features(common, 20, LayoutCommon.feature_keys(tags))
+	found == [2, 1, LayoutCommon.no_feature, 2] and found == tags.map(|t| LayoutCommon.find_feature(common, 20, t))
+}
+
+# No language system, or no tags, finds nothing.
+expect LayoutCommon.find_features(features_and_langsys, LayoutCommon.no_langsys, LayoutCommon.feature_keys([LayoutCommon.tag("liga")])) == [LayoutCommon.no_feature]
+expect LayoutCommon.find_features(features_and_langsys, 20, []) == []

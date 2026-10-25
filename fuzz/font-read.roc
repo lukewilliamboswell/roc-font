@@ -212,7 +212,7 @@ check_run! = |text, run, rtl| {
 	}
 	# Bit 0 is unsafe to break; bit 1 marks glyph 0 drawn for a character
 	# the font does not map.
-	if !run.flags.all(|f| f <= 3) or run.flags.map2(run.glyphs, |f, g| Font.missing(f) and g != 0).any(|bad| bad) {
+	if !run.flags.all(|f| f <= 3) or run.flags.map2(run.glyphs, |f, g| Font.is_missing(f) and g != 0).any(|bad| bad) {
 		crash "a flag other than unsafe-to-break or missing is set, or missing on a real glyph"
 	}
 	ranges = Font.cluster_ranges(run, bytes)

@@ -2,8 +2,8 @@ import font.Font
 import build.FontBuild
 
 ## Tests of measuring with a plan (`width_planned`), listing a font's
-## features (`features`), reading run flags (`unsafe_to_break`,
-## `missing`), the text each glyph draws (`cluster_ranges`), problems in
+## features (`features`), reading run flags (`is_unsafe_to_break`,
+## `is_missing`), the text each glyph draws (`cluster_ranges`), problems in
 ## words (`describe_problem`) and glyph boxes a font's outlines cannot
 ## give (`extents` with `Unknown`), through the public `Font` API. Run
 ## with `roc test tests/api/main.roc`.
@@ -82,14 +82,14 @@ expect {
 
 # ------------------------------------------------------------ flags
 
-expect [0, 1, 2, 3].map(Font.unsafe_to_break) == [False, True, False, True]
-expect [0, 1, 2, 3].map(Font.missing) == [False, False, True, True]
+expect [0, 1, 2, 3].map(Font.is_unsafe_to_break) == [False, True, False, True]
+expect [0, 1, 2, 3].map(Font.is_missing) == [False, False, True, True]
 
 # Inter has no Hebrew: every letter is missing, the brackets and the space
 # are not.
 expect {
 	run = Font.shape(Font.sans, "שלום (עולם)", Font.ShapeOptions.{ script: "Hebr" })
-	run.flags.count_if(Font.missing) == 8 and run.glyphs.len() == 11 and run.flags.map2(run.glyphs, |f, g| Font.missing(f) == (g == 0)).all(|ok| ok)
+	run.flags.count_if(Font.is_missing) == 8 and run.glyphs.len() == 11 and run.flags.map2(run.glyphs, |f, g| Font.is_missing(f) == (g == 0)).all(|ok| ok)
 }
 
 # Merriweather joins "fi" into one glyph, one cluster, so there is no
@@ -98,7 +98,7 @@ expect {
 # it (uharfbuzz 0.56.3, wght 400).
 expect {
 	run = Font.shape(Font.serif, "a fit", Font.ShapeOptions.{})
-	run.clusters == [0, 1, 2, 4] and run.flags.map(Font.unsafe_to_break) == [False, False, False, True]
+	run.clusters == [0, 1, 2, 4] and run.flags.map(Font.is_unsafe_to_break) == [False, False, False, True]
 }
 
 # ------------------------------------------------------------ cluster_ranges
@@ -173,4 +173,33 @@ expect
 expect {
 	space = Font.glyph(Font.serif, ' ') ?? 0
 	Font.extents(Font.serif, space) == Empty
+}
+
+# `Font.Extents` names the box, so a caller can keep or pass one on.
+box_width : Font.Extents -> I32
+box_width = |box| box.x_max - box.x_min
+
+expect {
+	h = Font.glyph(Font.sans, 'H') ?? 0
+	match Font.extents(Font.sans, h) {
+		Extents(box) => box_width(box) > 0 and box.y_min == 0 and box.y_max > 0
+		Empty | Unknown => False
+	}
+}
+
+# ------------------------------------------------------------ UTF-8 bytes
+
+# Text held as UTF-8 bytes: `Str.from_utf8` then `shape_planned`, or the
+# caller's own decoding with byte offsets and `shape_scalars`, give the
+# same run, with clusters pointing into the bytes.
+expect {
+	bytes = "fi café ->".to_utf8()
+	plan = Font.plan(Font.sans, Font.ShapeOptions.{})
+	from_str = match Str.from_utf8(bytes) {
+		Ok(text) => Font.shape_planned(Font.sans, plan, text)
+		Err(_) => Font.shape_planned(Font.sans, plan, "")
+	}
+	# Every character here is one byte but `é`, two bytes from offset 6.
+	scalars = [{ scalar: 'f', offset: 0 }, { scalar: 'i', offset: 1 }, { scalar: ' ', offset: 2 }, { scalar: 'c', offset: 3 }, { scalar: 'a', offset: 4 }, { scalar: 'f', offset: 5 }, { scalar: 0xE9, offset: 6 }, { scalar: ' ', offset: 8 }, { scalar: '-', offset: 9 }, { scalar: '>', offset: 10 }]
+	from_str == Font.shape_scalars(Font.sans, plan, scalars) and from_str.clusters.all(|c| c < bytes.len())
 }

@@ -65,8 +65,10 @@ INTER = ROOT / "tests" / "fonts" / "Inter-Regular-metrics.ttf"
 CORPUS_DIR = ROOT / "tests" / "corpus"
 CORPUS_MANIFEST = ROOT / "tests" / "corpus.json"
 SCHEMA_VERSION = 1
-OPS = ("read", "cmap", "advance", "kerning", "shape")
+OPS = ("read", "cmap", "advance", "kerning", "shape", "labels", "plan-labels")
 SIZES = {"small": 512, "medium": 4096, "large": 32768}
+# Label counts for the `labels` and `plan-labels` operations.
+LABEL_COUNTS = {"small": 16, "medium": 128, "large": 1024}
 FONTTOOLS_PIN = "4.61.1"
 
 
@@ -106,6 +108,21 @@ def words_text(name: str, size: int) -> bytes:
         out.append(piece)
         length += len(piece)
     return b"".join(out)
+
+
+# Short Latin labels as a diagram or a form measures them: one to three
+# words, a few with an f-ligature, kerning pairs or digits.
+LABEL_WORDS = ("Start", "End", "Yes", "No", "OK", "Cancel", "Save", "Load", "User", "Server", "Database",
+               "Request", "Response", "Error", "Retry", "Wait", "Login", "Logout", "Cache", "Queue",
+               "Worker", "Config", "Profile", "Settings", "Offline", "Valid?", "Done", "Step 1", "Step 2",
+               "API", "Auth", "Token", "Payment", "Order", "Invoice", "Tax", "AVA", "Yearly", "Week 12")
+
+
+def labels_text(name: str, count: int) -> bytes:
+    """`count` labels of one to three words, one per line."""
+    rng = random.Random(seed_for(name))
+    labels = [" ".join(rng.choice(LABEL_WORDS) for _ in range(rng.choice((1, 1, 2, 2, 3)))) for _ in range(count)]
+    return "\n".join(labels).encode()
 
 
 def sweep_text(name: str, code_points: list[int], count: int | None = None) -> bytes:
@@ -318,6 +335,10 @@ def build_cases(notes: dict[str, str]) -> list[Case]:
     for size, text in words.items():
         cases.append(Case(inter, "kerning", f"words-{size}", text, size))
         cases.append(Case(inter, "shape", f"words-{size}", text, size))
+    for size, count in LABEL_COUNTS.items():
+        text = labels_text(f"labels-{size}", count)
+        cases.append(Case(inter, "labels", f"labels-{size}", text, size))
+        cases.append(Case(inter, "plan-labels", f"labels-{size}", text, size))
 
     version = fonttools_version()
     if version is None:

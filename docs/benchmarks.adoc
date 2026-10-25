@@ -32,7 +32,7 @@ to quote numbers. The full run uses seven batches of about 200 ms.
 Narrow a run with these options:
 
 `--ops read,shape`:: Only these operations (`read`, `cmap`, `advance`,
-`kerning`, `shape`).
+`kerning`, `shape`, `labels`, `plan-labels`).
 `--langs roc,c`:: Only these implementations (`roc`, `c`, `rust`, `python`).
 `--only inter,large`:: Only cases matching one of these: a case id
 (`inter/shape/words-large`), font id (`adv-huge-cmap`), size (`small`,
@@ -79,6 +79,13 @@ optimised away. The operations are:
 `kerning`:: `Font.kerning` over the glyphs of the whole text.
 `shape`:: the whole pipeline from UTF-8 text: decode, map characters to
 glyphs, `Font.substitute`, then advances and `Font.kerning`.
+`labels`:: short labels, one per line of the text, each shaped with
+`Font.shape_planned` and the default features, the plan made once before
+the clock starts: the fixed cost of a shaping call, as a diagram or form
+that measures many short strings pays it.
+`plan-labels`:: the same labels, each shaped with `Font.shape`, which makes
+a plan per label: the fixed cost of planning as well. The difference
+between the two is what planning once saves.
 
 For each case and implementation, `scripts/bench.py`:
 
@@ -129,10 +136,13 @@ digits, accented letters and curly quotes, which exercise Inter's default
 features. `bmp-sweep` is every scalar from U+0020 to U+2FFF except the C1
 controls, shuffled; `plane1-sweep` is 16 384 shuffled code points over and
 past the huge `cmap`; `cjk-*` and `letters-*` draw from the adversarial
-fonts' own characters at the three sizes.
+fonts' own characters at the three sizes. `labels-small`, `labels-medium`
+and `labels-large` are 16, 128 and 1024 Latin labels of one to three
+words (such as `Retry`, `User Request` or `Week 12 Payment`), one per
+line.
 
-Every hot operation runs at three increasing sizes (kerning and shaping on
-Inter, kerning on the pairs font, shaping on the ligature font), and reading
+Every hot operation runs at three increasing sizes (kerning, shaping and
+labels on Inter, kerning on the pairs font, shaping on the ligature font), and reading
 runs on fonts from 175 KiB to 1.6 MiB, so the report shows growth in both
 time and allocations (architecture §9.4).
 
@@ -245,7 +255,9 @@ features, Latin script, English, left to right.
 |===
 
 Kerning on its own has no direct equivalent in these libraries, so it is
-measured for Roc only, and it is included in `shape`.
+measured for Roc only, and it is included in `shape`. The `labels` and
+`plan-labels` operations have no comparison program yet and are measured
+for Roc only.
 
 Checksums are defined the same way everywhere (`read`: glyph count plus
 units per em; `cmap`: the sum of glyph index plus one over characters the

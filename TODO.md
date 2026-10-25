@@ -23,6 +23,15 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
   `bench/roc/alloc.roc`, ratchet `requested_bytes` and `peak_live_bytes`.
 
+### 0.1.0 polish from rc1 consumers
+
+- [ ] package-mermaid on rc1: oracle sizes and SVGs byte-identical
+  (`roc-graph-layout` branch `feature/package-mermaid-roc-font`, 4f77271,
+  after regenerating its metrics-only Inter with real contours).
+- [ ] roc-pdf on rc1: 417 cases pass, only its 4 roc-font cases re-pinned
+  (`roc-pdf-wt-roc-font`, branch `feature/roc-font-latin`, last change
+  staged pending signing).
+
 ### Release pipeline
 
 - [ ] The workflow's `GITHUB_TOKEN` cannot create releases on roc-font

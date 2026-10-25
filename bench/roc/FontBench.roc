@@ -29,13 +29,19 @@ import font.Font
 ## - `shape`: `Font.shape_planned` on the text with the default features,
 ##   the plan made in `prepare`; the checksum folds glyphs, clusters and
 ##   advances.
+## - `labels`: short labels, one per line of the text (as a diagram or a
+##   form measures them), each shaped with `Font.shape_planned` and the
+##   default features, the plan made once in `prepare`; the checksum folds
+##   as `shape` does. It measures the fixed cost of one shaping call.
+## - `plan-labels`: the same labels, each shaped with `Font.shape`, which
+##   makes a plan for every label: the fixed cost of planning as well.
 ##
 ## Queries measure at the font's default instance (every axis at its
 ## default), as the operations did before variations, so checksums stay
 ## comparable across versions and with comparators.
 FontBench :: {}.{
 
-	Prepared : { op : Str, bytes : List(U8), font : [Ready(Font), NotRead], text : Str, code_points : List(U32), glyphs : List(U32), plan : [Planned(Font.ShapePlan), NotPlanned] }
+	Prepared : { op : Str, bytes : List(U8), font : [Ready(Font), NotRead], text : Str, code_points : List(U32), glyphs : List(U32), plan : [Planned(Font.ShapePlan), NotPlanned], labels : List(Str) }
 
 	## The default substitutions, turned off for the `kerning` operation.
 	no_substitutions : List(Font.Feature)
@@ -57,7 +63,7 @@ FontBench :: {}.{
 			code_points = decoded.map(|c| c.code_point)
 			text_str = Str.from_utf8_lossy(text)
 			if op == "read" {
-				Ok({ op, bytes, font: NotRead, text: text_str, code_points: [], glyphs: [], plan: NotPlanned })
+				Ok({ op, bytes, font: NotRead, text: text_str, code_points: [], glyphs: [], plan: NotPlanned, labels: [] })
 			} else {
 				match Font.from_bytes(bytes, Font.ReadOptions.{}) {
 					Err(problems) => Err("the font could not be read: ${Str.inspect(problems)}")
@@ -65,12 +71,16 @@ FontBench :: {}.{
 						font = Font.at(read, Font.Variation.{ axes: Font.axes(read).map(|a| { tag: a.tag, value: a.default }) })
 						glyphs = code_points.map(|cp| Font.glyph(font, cp) ?? 0)
 						if op == "cmap" or op == "advance" {
-							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: NotPlanned })
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: NotPlanned, labels: [] })
 						} else if op == "kerning" {
 							plan = Font.plan(font, Font.ShapeOptions.{ features: FontBench.no_substitutions })
-							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(plan) })
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(plan), labels: [] })
 						} else if op == "shape" {
-							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(Font.plan(font, Font.ShapeOptions.{})) })
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(Font.plan(font, Font.ShapeOptions.{})), labels: [] })
+						} else if op == "labels" {
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: Planned(Font.plan(font, Font.ShapeOptions.{})), labels: text_str.split_on("\n") })
+						} else if op == "plan-labels" {
+							Ok({ op, bytes, font: Ready(font), text: text_str, code_points, glyphs, plan: NotPlanned, labels: text_str.split_on("\n") })
 						} else {
 							Err("unknown operation ${op}")
 						}
@@ -110,6 +120,20 @@ FontBench :: {}.{
 			}
 			("kerning", Ready(font), Planned(plan)) => Ok(FontBench.kerning(font, plan, p.code_points))
 			("shape", Ready(font), Planned(plan)) => Ok(FontBench.shape(font, plan, p.text))
+			("labels", Ready(font), Planned(plan)) => {
+				var $sum = 0.U64
+				for label in p.labels {
+					$sum = $sum.plus_wrap(FontBench.shape(font, plan, label))
+				}
+				Ok($sum)
+			}
+			("plan-labels", Ready(font), _) => {
+				var $sum = 0.U64
+				for label in p.labels {
+					$sum = $sum.plus_wrap(FontBench.checksum(Font.shape(font, label, Font.ShapeOptions.{})))
+				}
+				Ok($sum)
+			}
 			_ => Err(0)
 		}
 
@@ -128,8 +152,11 @@ FontBench :: {}.{
 	}
 
 	shape : Font, Font.ShapePlan, Str -> U64
-	shape = |font, plan, text| {
-		shaped = Font.shape_planned(font, plan, text)
+	shape = |font, plan, text| FontBench.checksum(Font.shape_planned(font, plan, text))
+
+	## Glyphs, clusters and advances of a run, folded with wrapping.
+	checksum : Font.Run -> U64
+	checksum = |shaped| {
 		var $sum = 0.U64
 		for i in 0..<shaped.glyphs.len() {
 			g = (shaped.glyphs.get(i) ?? 0).to_u64()
