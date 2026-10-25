@@ -242,8 +242,11 @@ and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
   AOTS suite's format 4 `cmap` fields, for example) are therefore refused
   too, by design.
 * *Strict* (`ReadOptions.{ strict: True }`, wanted by roc-pdf) rejects
-  the font for any problem, including checksum mismatches and overlapping or
-  unordered tables.
+  the font for any problem lenient reading would drop a table for. It
+  does not yet check table checksums, directory order, overlapping or
+  duplicate tables or `fsType`; roc-pdf keeps those checks until strict
+  reading gains them (`TODO.md`). A zero-length table is refused in both
+  modes, as OTS refuses it.
 
 Both modes report every independent problem in one result. A problem
 names the table by its tag and, where it helps, the byte offset in the file
