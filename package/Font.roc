@@ -591,25 +591,25 @@ Font :: { face : Face }.{
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
 
-	## Shape characters as `shape_scalars` does, and also say which
-	## substitution produced each glyph (see `GlyphOrigin`) and whether
-	## shaping finished, as `shape_checked` says it: one call for a caller
-	## that needs both. `origins` has one entry per glyph, in the run's
-	## (visual) order. The run is the one `shape_scalars` gives; only this
+	## Shape text as `shape_planned` does, and also say which substitution
+	## produced each glyph (see `GlyphOrigin`) and whether shaping
+	## finished, as `shape_checked` says it: one call for a caller that
+	## needs both. `origins` has one entry per glyph, in the run's (visual)
+	## order. The run is the one `shape_planned` gives; only this
 	## call pays for the origins (one more list, and naming the features of
 	## the plan's substitution steps). When a bound stopped substitution
 	## early, the result is `OverBudget` with the run and origins made so
 	## far and every bound that stopped it.
 	##
 	## ```
-	## match Font.shape_traced(font, plan, [{ scalar: 'f', offset: 0 }, { scalar: 'i', offset: 1 }]) {
+	## match Font.shape_traced(font, plan, "fi") {
 	##     Ok({ run, origins }) => origins # [Ligature({ feature: "liga", components: 2 })] in a font with an fi ligature
 	##     Err(OverBudget({ run, origins, budgets })) => ...
 	## }
 	## ```
-	shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
-	shape_traced = |font, shape_plan, scalars| {
-		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+	shape_traced : Font, ShapePlan, Str -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
+	shape_traced = |font, shape_plan, text| {
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
 		if shaped.stopped == 0 {
 			Ok({ run: shaped.run, origins })

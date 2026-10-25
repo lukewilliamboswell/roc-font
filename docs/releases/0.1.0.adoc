@@ -103,11 +103,13 @@ results, so every check runs without the references installed.
 
 Feedback from package-mermaid and roc-pdf on the release candidate:
 
-* **`Font.shape_traced` also reports budgets.** It returns
+* **`Font.shape_traced` takes text and also reports budgets.** It takes
+  a `Str`, as `shape_planned` and `shape_checked` do, and returns
   `Try({ run, origins }, [OverBudget({ run, origins, budgets })])`, so a
-  caller that needs both origins and budgets shapes once. Where rc1 code
-  read `traced.run` and `traced.origins`, match on `Ok({ run, origins })`
-  (and `Err(OverBudget({ run, origins, budgets }))`, which still holds the
+  caller that needs the run, its origins and its budgets shapes once.
+  Where rc1 code passed scalars, pass the text; where it read
+  `traced.run` and `traced.origins`, match on `Ok({ run, origins })` (and
+  `Err(OverBudget({ run, origins, budgets }))`, which still holds the
   whole text's run).
 * **`Font.Extents` names the glyph box**
   (`{ x_min, y_min, x_max, y_max }`); `Font.extents` returns

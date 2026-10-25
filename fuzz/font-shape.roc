@@ -51,7 +51,7 @@ test! = |bytes| {
 	if Str.inspect(Font.shape_scalars(font, plan, scalars)) != Str.inspect(ltr) {
 		crash "shaping scalars with their offsets differs from shaping the text"
 	}
-	traced_result = Font.shape_traced(font, plan, scalars)
+	traced_result = Font.shape_traced(font, plan, text)
 	traced = match traced_result {
 		Ok(t) => { run: t.run, origins: t.origins, budgets: [] }
 		Err(OverBudget(t)) => t
@@ -59,7 +59,7 @@ test! = |bytes| {
 	if Str.inspect(traced.run) != Str.inspect(ltr) or traced.origins.len() != ltr.glyphs.len() {
 		crash "a traced run differs from the run, or its origins are not index-aligned"
 	}
-	if Str.inspect(Font.shape_traced(font, plan, scalars)) != Str.inspect(traced_result) {
+	if Str.inspect(Font.shape_traced(font, plan, text)) != Str.inspect(traced_result) {
 		crash "tracing the same text twice gave different results"
 	}
 	checked_budgets = match Font.shape_checked(font, plan, text) {

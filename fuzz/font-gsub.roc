@@ -218,7 +218,7 @@ check! = |file, text, source| {
 	}
 	check_run!(n, Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft }), True)
 	plan = Font.plan(font, Font.ShapeOptions.{})
-	traced = match Font.shape_traced(font, plan, scalars_of(text)) {
+	traced = match Font.shape_traced(font, plan, text) {
 		Ok(t) => t
 		Err(OverBudget({ run: over_run, origins, budgets: _ })) => { run: over_run, origins }
 	}
@@ -244,25 +244,6 @@ check! = |file, text, source| {
 		crash "a small text went over budget"
 	}
 	font
-}
-
-## Scalars of valid UTF-8 text with the byte offset each starts at.
-scalars_of : Str -> List({ scalar : U32, offset : U64 })
-scalars_of = |text| {
-	bytes = text.to_utf8()
-	var $out = []
-	var $i = 0
-	while $i < bytes.len() {
-		b = (bytes.get($i) ?? 0).to_u32()
-		len = if (b < 0x80) 1 else if (b < 0xE0) 2 else if (b < 0xF0) 3 else 4
-		var $cp = if (len == 1) b else if (len == 2) b.bitwise_and(0x1F) else if (len == 3) b.bitwise_and(0x0F) else b.bitwise_and(0x07)
-		for k in 1..<len {
-			$cp = $cp.shl_wrap(6).bitwise_or((bytes.get($i + k) ?? 0).to_u32().bitwise_and(0x3F))
-		}
-		$out = $out.append({ scalar: $cp, offset: $i })
-		$i = $i + len
-	}
-	$out
 }
 
 ## A run's lists are index-aligned, its clusters lie inside the text and
