@@ -30,26 +30,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Read the compiler pin
-        id: pin
-        run: |
-          tag="$(tr -d '[:space:]' < .roc-version)"
-          case "$tag" in
-            nightly-*) echo "tag=$tag" >> "$GITHUB_OUTPUT" ;;
-            *) echo "::error::.roc-version does not name a nightly: $tag"; exit 1 ;;
-          esac
-
       - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
         with:
           cache: 'true'
           cache-workload: docs
 
       # Only the API reference needs a compiler.
-      - name: Install the pinned Roc nightly
+      - name: Install the latest Roc nightly
         uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
         with:
           version: nightly-new-compiler
-          nightly-tag: ${{ steps.pin.outputs.tag }}
 
       - id: renderer
         uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@1f3bc71102cf2d07c324b6009a41823efd21c9aa

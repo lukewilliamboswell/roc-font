@@ -7,10 +7,10 @@
 #     blueprint run docs           # the manual as a site, Markdown and PDF in .docs-out/
 #     blueprint update             # refresh Blueprint.lock after changing a recipe
 #
-# The package compiler is the bare `roc` on PATH, never a fetched program.
-# It must be the nightly named in .roc-version: scripts/all_tests.py fails
-# its roc-version step otherwise. Set ROC to that compiler's path when
-# another `roc` comes first on PATH. The checks are Python 3 scripts using
+# The package compiler is the bare `roc` on PATH, never a fetched program:
+# the latest Roc nightly, as in CI (nothing pins it; scripts/all_tests.py's
+# compiler step reports which one ran). Set ROC to its path when another
+# `roc` comes first on PATH. The checks are Python 3 scripts using
 # the standard library only, so no tooling compiler is fetched.
 app [config] { pf: platform "https://github.com/lukewilliamboswell/roc-blueprint/releases/download/0.8.0/FbJymjYdCxx9vqMcau7r4tQfeAbnVGqqJoYrLGqPCqKu.tar.zst" }
 
@@ -28,7 +28,7 @@ config = [
 	# whitespace. Extra arguments go to scripts/all_tests.py (--only, --skip, --list).
 	Task("check", [Use("package"), Run(["python3", "scripts/all_tests.py"])]),
 	# The unit and API tests alone, on the dev backend.
-	Task("test", [Use("package"), Run(["python3", "scripts/all_tests.py", "--only", "roc-version,test"])]),
+	Task("test", [Use("package"), Run(["python3", "scripts/all_tests.py", "--only", "compiler,test"])]),
 	# Build every fuzz target natively and replay its seeds briefly.
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
 	# Replay the recorded HarfBuzz, Chrome and reading oracle results.

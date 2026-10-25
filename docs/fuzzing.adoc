@@ -255,9 +255,9 @@ scripts/run_fuzz.py         build, seed, run, harvest
 
 == Running
 
-The scripts use `$ROC`, or `roc` on `PATH`. Use the compiler pinned in
-`.roc-version`: different compiler builds can disagree, and a fuzz binary
-is always native.
+The scripts use `$ROC`, or `roc` on `PATH`. Use the latest Roc nightly, as
+CI does: nothing pins the compiler, different compiler builds can disagree,
+and a fuzz binary is always native. Every run records the compiler it used.
 
 [source,sh]
 ----
@@ -266,7 +266,7 @@ python3 scripts/run_fuzz.py smoke font-cmap font-var  # some targets
 python3 scripts/run_fuzz.py smoke font-shape --runs=20000
 python3 scripts/run_fuzz.py campaign --seconds=600 # each target, persistent corpus
 python3 scripts/run_fuzz.py nightly                # 1800 s per target
-python3 scripts/run_fuzz.py check-pin              # targets use the pinned roc-fuzz
+python3 scripts/run_fuzz.py check-pin              # targets use the pinned roc-fuzz platform
 ----
 
 `smoke` starts each target from a fresh corpus holding only the seeds,

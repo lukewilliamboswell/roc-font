@@ -6,8 +6,9 @@ name: Release
 # every asset against the tested file and only then publishes. A pull
 # request runs the same build and tests as a dry run and publishes nothing.
 #
-# The compiler is the nightly named in .roc-version; the rendered notes
-# record it.
+# The compiler is the latest Roc nightly, resolved once in the build job and
+# passed to the test job, so one run uses one compiler; the rendered notes
+# record it. A release requires the checks to pass on that nightly.
 on:
   workflow_dispatch:
     inputs:
@@ -38,7 +39,7 @@ jobs:
     outputs:
       version: ${{ steps.validate.outputs.version }}
       prerelease: ${{ steps.validate.outputs.prerelease }}
-      nightly: ${{ steps.pin.outputs.tag }}
+      nightly: ${{ steps.nightly.outputs.tag }}
     steps:
       - name: Require the default branch for publication
         if: github.event_name == 'workflow_dispatch'
@@ -54,22 +55,25 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Read the compiler pin
-        id: pin
+      - name: Resolve the latest Roc nightly
+        id: nightly
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          tag="$(tr -d '[:space:]' < .roc-version)"
+          set -euo pipefail
+          tag="$(gh api repos/roc-lang/nightlies/releases/latest --jq .tag_name)"
           case "$tag" in
             nightly-*) echo "tag=$tag" >> "$GITHUB_OUTPUT" ;;
-            *) echo "::error::.roc-version does not name a nightly: $tag"; exit 1 ;;
+            *) echo "::error::the latest roc-lang/nightlies release is not a nightly: $tag"; exit 1 ;;
           esac
 
       - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
 
-      - name: Install the pinned Roc nightly
+      - name: Install that Roc nightly
         uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
         with:
           version: nightly-new-compiler
-          nightly-tag: ${{ steps.pin.outputs.tag }}
+          nightly-tag: ${{ steps.nightly.outputs.tag }}
 
       # A release needs its notes, a well-formed version and an unused tag.
       # A dry run takes the newest notes under docs/releases/ and skips the

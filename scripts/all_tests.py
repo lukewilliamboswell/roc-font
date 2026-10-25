@@ -3,7 +3,7 @@
 
 Steps (select with --only, drop with --skip, list with --list):
 
-    roc-version       the compiler matches .roc-version (debug builds warn)
+    compiler          reports the compiler in use (`roc version`; debug builds warn)
     fmt               roc fmt --check on every directory holding .roc files
     check             roc check package/main.roc; then, against the served
                       bundle, the API test app, every fuzz target, the
@@ -217,28 +217,22 @@ def fuzz_sources() -> list[str]:
 # ----------------------------------------------------------------- steps
 
 
-def step_roc_version(ctx: Context) -> Result:
-    pin_file = ROOT / ".roc-version"
-    if not pin_file.is_file():
-        return Result("FAIL", ".roc-version is missing")
-    pinned = pin_file.read_text(encoding="utf-8").strip()
+def step_compiler(ctx: Context) -> Result:
+    """Reports the compiler in use. Nothing pins it: CI and local work use
+    the latest Roc nightly, so this step records which one ran."""
     code, output = run([ctx.roc, "version"])
     if code != 0:
         return Result("FAIL", f"`{ctx.roc} version` failed", output)
     match = re.search(r"version\s+(\S+)", output)
     actual = match.group(1) if match else output.strip()
-    if actual == pinned:
-        return Result("PASS", f"{actual} ({ctx.roc})", output)
     if actual.startswith("debug-"):
         return Result(
             "WARN",
-            f"{ctx.roc} is a local debug build ({actual}); the project is tested with {pinned}. "
-            "Results may differ (formatting already does); set ROC to the pinned nightly.",
+            f"{ctx.roc} is a local debug build ({actual}); results may differ from a nightly "
+            "(formatting already does). CI uses the latest nightly; set ROC to it.",
             output,
         )
-    if ctx.args.allow_roc_mismatch:
-        return Result("WARN", f"{actual} differs from the pinned {pinned} (--allow-roc-mismatch)", output)
-    return Result("FAIL", f"{actual} differs from the pinned {pinned}; set ROC or update .roc-version deliberately", output)
+    return Result("PASS", f"{actual} ({ctx.roc})", output)
 
 
 def step_fmt(ctx: Context) -> Result:
@@ -492,7 +486,7 @@ def step_diff_check(ctx: Context) -> Result:
 CONSUMER_STEPS = ("check", "test", "fuzz-smoke", "examples", "conformance", "bench")
 
 STEPS: dict[str, Callable[[Context], Result]] = {
-    "roc-version": step_roc_version,
+    "compiler": step_compiler,
     "fmt": step_fmt,
     "check": step_check,
     "test": step_test,
@@ -525,7 +519,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--only", help="comma-separated steps to run")
     parser.add_argument("--skip", help="comma-separated steps to leave out")
     parser.add_argument("--allow-known", action="store_true", help="accept KNOWN failures (exit 0 if nothing else failed)")
-    parser.add_argument("--allow-roc-mismatch", action="store_true", help="warn instead of failing on another release compiler")
     parser.add_argument("--no-cache", action="store_true", help="pass --no-cache to roc test")
     parser.add_argument("--fuzz-runs", type=int, help="inputs per fuzz target in the smoke step")
     parser.add_argument("--smoke", action="store_true",

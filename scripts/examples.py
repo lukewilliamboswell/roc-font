@@ -239,7 +239,8 @@ The examples of roc-font {version}, each depending on that release's bundle:
 
     {url}
 
-Run one from this directory with the Roc nightly the release names:
+Run one from this directory with the latest Roc nightly (the release
+notes name the nightly the release was tested with):
 
     roc examples/measure.roc
 

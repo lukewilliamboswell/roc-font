@@ -9,7 +9,7 @@ xref:architecture.adoc#benchmarks[architecture §9].
 
 == Run the benchmarks
 
-You need a Roc nightly. Point `ROC` at it; the harness falls back to `roc` on
+You need the latest Roc nightly, as CI uses. Point `ROC` at it; the harness falls back to `roc` on
 `PATH`, and warns when that is a debug build of the compiler. A C compiler
 with `pkg-config` and HarfBuzz headers, Rust (cargo) and Python with
 fontTools are optional: a missing toolchain is skipped and named in the
@@ -17,7 +17,7 @@ report. fontTools is also what generates the adversarial fonts.
 
 [source,console]
 ----
-$ export ROC=~/roc_nightly-linux_x86_64-2026-10-23-18478ff/roc
+$ export ROC=~/roc_nightly-linux_x86_64-2026-10-24-f6c6cfb/roc
 $ python3 scripts/bench.py --check            # allocation ratchet, about 15 seconds
 $ python3 scripts/bench.py --quick            # timing smoke run, under a minute
 $ python3 scripts/bench.py                    # full timing comparison, a few minutes
@@ -164,8 +164,18 @@ file's SHA-256 and the compiler version, and `--check` compares exactly:
   is an optional corpus case whose font is not fetched in this checkout;
 * a diagnostic that crashes for any other reason fails as `error`.
 
-When the compiler differs from the one the baseline names, a failing check
-says so, since a compiler change alone can change counts.
+The counts are compiler-specific, and nothing pins the compiler: local work
+and CI use the latest nightly. When the compiler differs from the one the
+baseline names, a failing check lists a `compiler-changed` note first and
+its last line says so: differences are then expected, and do not by
+themselves say anything about the change being checked. Confirm the same
+differences appear on `main` without the change, then re-baseline with the
+new compiler (below) in its own commit, saying which nightly moved the
+counts. Expect to re-baseline after every compiler change that touches code
+generation. Pull-request CI runs `scripts/all_tests.py --smoke`, whose
+benchmark step builds and runs one Roc-only pass with no ratchet, so a new
+nightly never fails CI through allocation counts; the ratchet is a local
+check, run before pushing a change to a hot path.
 
 To accept a change, run
 

@@ -83,7 +83,7 @@ package, never the reverse. No `.roc` file is generated.
 
 [source,sh]
 ----
-export ROC=/path/to/roc                      # the nightly named in .roc-version
+export ROC=/path/to/roc                      # the latest Roc nightly
 
 python3 scripts/conformance.py               # build the driver, run every case, compare
 python3 scripts/conformance.py inter --diff  # one case file, with expected/actual
@@ -1065,10 +1065,10 @@ nothing.
 
 == Known environment issues
 
-* `roc build` with nightly-2026-10-23-18478ff
-  report type problems inside basic-cli 0.23.0 and exit 1 although they
-  build correctly; `conformance.py` tolerates exactly that.
+* Some nightlies report type problems inside the cached basic-cli
+  platform and exit 1 although the binary builds correctly (nightly-2026-10-23
+  did with basic-cli 0.23.0); `conformance.py` tolerates exactly that.
 * An older local debug compiler (debug-7894793d) panics in its ARC
   certification pass when building any app that calls `Font.from_bytes`
-  (including the driver). Use the pinned nightly.
+  (including the driver). Use the latest nightly.
 * Width cases need Node 22 or later (`width.mjs`); Node 18 fails.

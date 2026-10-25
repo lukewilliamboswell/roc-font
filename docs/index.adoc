@@ -69,12 +69,14 @@ left to a Unicode package.
 
 Add roc-font to your application's header, with the bundle URL that the
 release notes of your chosen release give in place of `package-url` below,
-and use the Roc nightly those notes name:
+and use the latest Roc nightly (the notes name the nightly each release was
+tested with, and the latest final release is checked against every new
+nightly):
 
 [source,roc]
 ----
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.25.0/CZsY7tYZwR3rj9kYbpaCfxki2yVAaRL8bBwMLvB2xkbA.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
 	font: "{package-url}",
 }
 
