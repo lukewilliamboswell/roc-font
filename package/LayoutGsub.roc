@@ -62,9 +62,9 @@ LayoutGsub := {
 	gdef : LayoutGdef,
 }.{
 
-	Range : { first : U64, last : U64, index : U64 }
+	CoverageRange : { first : U64, last : U64, index : U64 }
 
-	Ranges : List(Range)
+	Ranges : List(CoverageRange)
 
 	## One lookup: its subtables are `subtables[start ..< start + count]`.
 	## `mode` is 0 when every subtable is a single substitution (applied in
