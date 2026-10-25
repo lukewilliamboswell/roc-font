@@ -1,9 +1,11 @@
 # Variable-layout fixtures
 
-Tiny generated fonts for `package/LayoutVarTests.roc`. They are not real
-typefaces: every glyph is empty, and only the layout and variation tables
-matter. Both have two axes, `wght` 100–400–900 and `wdth` 50–100–150, and no
-`avar`.
+Tiny generated fonts for the variable layout tests: the public API tests in
+`tests/api/VariationTests.roc` read them, and the expects in
+`package/LayoutVar.roc` embed their `GDEF`, `GPOS` and `GSUB` tables
+(printed by `../inline_tables.py`). They are not real typefaces: every
+glyph is empty, and only the layout and variation tables matter. Both have
+two axes, `wght` 100–400–900 and `wdth` 50–100–150, and no `avar`.
 
 - `kern-var.ttf`: a `GDEF` version 1.3 item variation store with five
   regions (an intermediate one and a two-axis one among them) and three data
@@ -30,7 +32,8 @@ They are generated, byte for byte reproducibly, by `generate.py` (fontTools
 
 `oracle.py` prints HarfBuzz 14.6.0's results for them (pair adjustments and
 coordinates at 16 locations; the matching `FeatureVariations` record at 112
-locations); the expects in `package/LayoutVarTests.roc` embed those values.
+locations); the expects in `tests/api/VariationTests.roc` embed those
+values.
 
 These files and the scripts are original work of the roc-font authors,
 released under the repository's licence (`LICENSE`, the Universal Permissive

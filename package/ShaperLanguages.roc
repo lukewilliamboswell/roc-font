@@ -5,7 +5,8 @@
 ## tags; a language subtag is padded with spaces.
 ##
 ## Internal data for `ShaperTags`. Each table is sorted by its language
-## subtag (`ShaperTagsTests` checks it), so lookups are binary searches.
+## subtag (the expects in `ShaperTags` check it), so lookups are binary
+## searches.
 ShaperLanguages :: {}.{
 
 	## Two-letter subtags: records of subtag and tag (8 bytes), a subtag

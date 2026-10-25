@@ -299,7 +299,7 @@ def gvar_table(axis_count, shared_tuples, glyph_datas):
 
 
 def outlines():
-    """Outlines with glyph variations, for package/TableGvarTests.roc:
+    """Outlines with glyph variations, for package/TableGvar.roc and tests/api:
     simple glyphs (one with a side bearing other than its xMin, so the
     left phantom point shifts it), composite glyphs (an offset, a scale,
     an x and y scale, a 2x2 transform with scaled offsets, USE_MY_METRICS,
