@@ -92,15 +92,25 @@ and plans live in `TODO.md`, not here.
   namesake.
 - Keep public modules small. Table readers and shaping internals must not
   leak into generated API docs.
-- Test what you fly: public-behaviour tests (`tests/api/`), fuzz targets,
-  the conformance harness and benchmarks import the package through
-  `package/main.roc`, exactly what ships, and use only the public API. The
-  test-only byte builders live in their own package, `tests/support/`
-  (`FontBuild`), which imports nothing from roc-font. `package/main.roc`
-  never reaches either, so `roc bundle` leaves them and the test fonts
-  out. In-package `package/*Tests.roc` modules are only for what the
-  public API cannot observe, and use inline bytes or committed fixtures,
-  never the builders.
+- Test what you fly: every consumer of the package (the public-behaviour
+  tests in `tests/api/`, fuzz targets, the conformance driver, benchmarks
+  and examples) is checked against the artifact users import: the
+  `roc bundle` output, served from a loopback address and imported by URL
+  through `--replace-dep ./package/main.roc <url>` (`scripts/flight.py`),
+  never the source tree. They use only the public API. `all_tests.py`
+  runs them in a mirror of the checkout whose `package/main.roc` does not
+  compile, so a step that slipped back to source fails. The test-only byte
+  builders live in their own package, `tests/support/` (`FontBuild`),
+  which imports nothing from roc-font. `package/main.roc` never reaches
+  either, so `roc bundle` leaves them and the test fonts out.
+- The package's own top-level `expect`s, beside the code they test and run
+  by `roc test package/main.roc`, are the only source-level tests; there
+  are no `*Tests.roc` files. Test-only helpers are top-level values not
+  associated with the module's type, so `roc docs` never shows them. Use
+  expects only for what the public API cannot observe, and never import
+  files under `tests/` from a package module (it would bundle test fonts):
+  copy a small fixture table in with `tests/fonts/inline_tables.py` or
+  build the bytes in Roc. Never use the builders.
 
 ## Keep internals precise and composable
 
@@ -193,7 +203,8 @@ shaping stage:
 
 - format every changed Roc file (`roc fmt --check package/`);
 - run `roc check package/main.roc` and the tests on the default (dev)
-  backend; benchmarks build with `--opt=speed`. The interpreter is not
+  backend, the consumers against the served bundle (`all_tests.py` does
+  both; never weaken a consumer step to compile `package/` directly); benchmarks build with `--opt=speed`. The interpreter is not
   used;
 - build and run at least one optimised native binary exercising the
   changed path (a benchmark or fuzz target);

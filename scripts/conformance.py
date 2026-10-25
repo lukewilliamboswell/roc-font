@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Compare roc-font with recorded oracle results (architecture §7.1).
 
-Builds the native driver (tools/driver/main.roc) when its sources or the
-package changed, parses the selected JSONC case files (scripts/_common.py),
+Builds the native driver (tools/driver/main.roc) against the package bundle
+`roc bundle` makes, served on loopback (scripts/flight.py), when the driver
+or the bundle changed (`--source` compiles package/ directly instead, for
+quick local iteration only), parses the selected JSONC case files (scripts/_common.py),
 streams every runnable case to the driver in one process over its line
 protocol, and compares each result with the case's record in
 tests/oracle/records/ by string equality. No oracle needs to be installed.
@@ -77,6 +79,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import flight  # noqa: E402
 from _common import (  # noqa: E402
     CASES_DIR,
     DRIVER_DIR,
@@ -100,6 +103,8 @@ from _common import (  # noqa: E402
 )
 
 DRIVER_BIN = TMP_ROOT / "conformance" / "driver"
+# The package the driver was built against: the bundle's name, or `source`.
+DRIVER_PACKAGE = TMP_ROOT / "conformance" / "driver.package"
 SCORES = ROOT / "tests" / "scores.json"
 SCORES_ABOUT = (
     "Scored conformance suites (architecture §7.1). `scored` lists path prefixes under tests/cases whose case files are scored "
@@ -109,40 +114,51 @@ SCORES_ABOUT = (
 FAILING = ("FAIL", "STALE", "MISSING-RECORD", "MISSING-FONT", "FONT-CHANGED", "BAD-EXPECTATION")
 
 
-def driver_sources() -> list[Path]:
-    return sorted(DRIVER_DIR.glob("*.roc")) + sorted((ROOT / "package").glob("*.roc"))
+def driver_sources(dep: list[str]) -> list[Path]:
+    package = [] if dep else sorted((ROOT / "package").glob("*.roc"))
+    return sorted(DRIVER_DIR.glob("*.roc")) + package
 
 
-def reported_problems(output: str) -> tuple[list[str], list[str]]:
+def reported_problems(output: str, package: str = "source") -> tuple[list[str], list[str]]:
     """Files roc reported problems in, and those outside the cached platform.
 
     Some nightlies report problems inside the cached basic-cli platform and
     exit non-zero although the binary is built.
-    That is accepted; a problem reported in this repository's files never is.
+    That is accepted; a problem reported in this repository's files, or in
+    the roc-font bundle (`package`, also unpacked in the package cache),
+    never is.
     """
     located = re.findall(r"^── [✗●] .*? ─+ (\S+?):\d+:\d+", output, flags=re.MULTILINE)
-    return located, [path for path in located if "/.cache/roc/packages/" not in path]
+    bundle = package.removesuffix(".tar.zst")
+    return located, [path for path in located
+                     if "/.cache/roc/packages/" not in path or (package != "source" and bundle in path)]
 
 
-def build_driver(roc: str, force: bool) -> int:
-    if not force and DRIVER_BIN.exists():
+def build_driver(roc: str, force: bool, dep: list[str]) -> int:
+    """Build the driver against `dep` (flight.replace_dep arguments, or
+    none for package/ sources) unless the binary is current."""
+    package = dep[-1].rsplit("/", 1)[-1] if dep else "source"
+    if not force and DRIVER_BIN.exists() and DRIVER_PACKAGE.is_file():
         built = DRIVER_BIN.stat().st_mtime
-        if all(p.stat().st_mtime <= built for p in driver_sources()):
+        if (DRIVER_PACKAGE.read_text(encoding="utf-8") == package
+                and all(p.stat().st_mtime <= built for p in driver_sources(dep))):
             return 0
     DRIVER_BIN.parent.mkdir(parents=True, exist_ok=True)
-    if DRIVER_BIN.exists():
-        DRIVER_BIN.unlink()
-    command = [roc, "build", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}"]
+    for stale in (DRIVER_BIN, DRIVER_PACKAGE):
+        if stale.exists():
+            stale.unlink()
+    command = [roc, "build", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}", *dep]
     print("+ " + " ".join(command), flush=True)
     completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
     output = completed.stdout + completed.stderr
-    located, ours = reported_problems(output)
+    located, ours = reported_problems(output, package)
     if not DRIVER_BIN.exists() or ours or (completed.returncode != 0 and not located):
         print(output)
         print("building the driver failed", file=sys.stderr)
         return completed.returncode or 1
     if completed.returncode != 0:
         print(f"  note: roc exited {completed.returncode} for {len(located)} problems reported inside the cached platform; the driver was built")
+    DRIVER_PACKAGE.write_text(package, encoding="utf-8")
     return 0
 
 
@@ -306,14 +322,18 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true", help="fail on unsupported gating cases too")
     parser.add_argument("--rebuild", action="store_true", help="rebuild the driver even if it looks current")
     parser.add_argument("--no-build", action="store_true", help="use the existing driver binary")
+    parser.add_argument("--source", action="store_true",
+                        help="build the driver from package/ sources instead of the served bundle (quick local iteration)")
     parser.add_argument("--explain", action="store_true", help="show the reader's problems for rejected fonts")
     parser.add_argument("--update-scores", action="store_true", help="record the counts of every fully run scored suite")
     parser.add_argument("--json", type=Path, help="write every case's outcome, expected and actual result to this file")
     args = parser.parse_args()
 
     roc = roc_command()
-    if not args.no_build and build_driver(roc, args.rebuild) != 0:
-        return 1
+    if not args.no_build:
+        with flight.flight(roc, source=args.source) as dep:
+            if build_driver(roc, args.rebuild, dep) != 0:
+                return 1
     prefix = [str(DRIVER_BIN)]
 
     files = case_files(args.cases)

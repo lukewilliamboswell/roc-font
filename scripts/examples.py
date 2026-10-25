@@ -6,8 +6,10 @@ attaches. Standard library only.
     python3 scripts/examples.py package --version 0.1.0 --bundle dist/<hash>.tar.zst --output-dir dist
     python3 scripts/examples.py test-archive --archive dist/roc-font-examples-0.1.0.zip --bundle dist/<hash>.tar.zst
 
-`check` builds every app under examples/ against the working tree's package
-and runs each case recorded for it in tests/examples.json (its arguments and
+`check` builds every app under examples/ against the package bundle `roc
+bundle` makes from the working tree, served on loopback in place of
+`../package/main.roc` (scripts/flight.py; `--source` compiles package/
+directly instead, for quick local iteration only), and runs each case recorded for it in tests/examples.json (its arguments and
 standard input, from the repository root), comparing standard output,
 standard error and exit status exactly. Every example must have a case, and
 every recorded app must exist, so nothing is skipped silently. The example
@@ -34,19 +36,18 @@ from __future__ import annotations
 
 import argparse
 import difflib
-import http.server
 import json
 import os
 import re
-import shutil
-import socketserver
 import stat
 import subprocess
 import sys
 import tempfile
-import threading
 import zipfile
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import flight  # noqa: E402
 
 ROOT = Path(os.environ.get("ROC_FONT_ROOT", Path(__file__).resolve().parents[1])).resolve()
 SPEC = ROOT / "tests" / "examples.json"
@@ -190,8 +191,9 @@ def command_check(args: argparse.Namespace) -> int:
         say("FAIL", problem)
     if problems:
         return 1
-    with tempfile.TemporaryDirectory(prefix="roc-font-examples-") as work:
-        failures = run_suite(spec, ROOT, Path(work), [], update=args.update)
+    with tempfile.TemporaryDirectory(prefix="roc-font-examples-") as work, \
+            flight.flight(roc(), source=args.source) as dep:
+        failures = run_suite(spec, ROOT, Path(work), dep, update=args.update)
     if args.update:
         SPEC.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         say("DONE", f"rewrote {SPEC.relative_to(ROOT)}")
@@ -319,24 +321,6 @@ def extract(archive_path: Path, into: Path) -> Path:
     return into / root_name
 
 
-class _Bundle(http.server.BaseHTTPRequestHandler):
-    path_served = ""
-    body = b""
-
-    def do_GET(self) -> None:  # noqa: N802 (http.server's name)
-        if self.path != self.path_served:
-            self.send_error(404)
-            return
-        self.send_response(200)
-        self.send_header("Content-Type", "application/zstd")
-        self.send_header("Content-Length", str(len(self.body)))
-        self.end_headers()
-        self.wfile.write(self.body)
-
-    def log_message(self, *args: object) -> None:
-        pass
-
-
 def command_test_archive(args: argparse.Namespace) -> int:
     archive_path, bundle = Path(args.archive).resolve(), Path(args.bundle).resolve()
     with tempfile.TemporaryDirectory(prefix="roc-font-archive-") as temporary:
@@ -354,16 +338,10 @@ def command_test_archive(args: argparse.Namespace) -> int:
             if path.is_file() and original.is_file() and path.read_bytes() != original.read_bytes():
                 if not only_dependency_differs(original.read_text(encoding="utf-8"), path.read_text(encoding="utf-8"), url):
                     raise SystemExit(f"{rel}: the archived copy differs from the checkout in more than the dependency")
-        handler = type("Handler", (_Bundle,), {"path_served": "/" + bundle.name, "body": bundle.read_bytes()})
-        with socketserver.TCPServer(("127.0.0.1", 0), handler) as server:
-            threading.Thread(target=server.serve_forever, daemon=True).start()
-            served = f"http://127.0.0.1:{server.server_address[1]}/{bundle.name}"
+        with flight.serve(bundle, prune_cache=False) as served:
             say("SERVE", f"{served} in place of {url}")
             env = dict(os.environ, XDG_CACHE_HOME=str(work / "cache"))
-            try:
-                failures = run_suite(spec, root, work, ["--replace-dep", url, served], env)
-            finally:
-                server.shutdown()
+            failures = run_suite(spec, root, work, ["--replace-dep", url, served], env)
     total = sum(len(app["cases"]) for app in spec["apps"])
     say("DONE" if not failures else "FAIL", f"{total - failures} of {total} archived example cases match")
     return 1 if failures else 0
@@ -374,6 +352,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     check = sub.add_parser("check", help="run the examples against the working tree")
     check.add_argument("--update", action="store_true", help="rewrite the recorded output")
+    check.add_argument("--source", action="store_true",
+                       help="build against package/ sources instead of the served bundle (quick local iteration)")
     package = sub.add_parser("package", help="write the examples archive for a release")
     package.add_argument("--version", required=True)
     package.add_argument("--bundle", required=True, help="the release's .tar.zst bundle")

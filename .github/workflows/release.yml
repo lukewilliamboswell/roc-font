@@ -129,11 +129,6 @@ jobs:
         # Fuzzing and benchmarks only smoke-test here; full runs are local.
         run: blueprint run check -- --smoke
 
-      # Every example, built against the checkout's package, compared with
-      # the output recorded in tests/examples.json.
-      - name: Run the examples
-        run: python3 scripts/examples.py check
-
       - name: Bundle the package
         run: |
           set -euo pipefail
@@ -252,22 +247,16 @@ jobs:
           name: release-candidate
           path: candidate
 
-      # The public API tests run against the exact bundle: it is unpacked
-      # where package/ would be, beside a copy of the test sources.
-      - name: Run the API tests against the bundle
+      # The consumer checks (the API tests, the fuzz targets, driver and
+      # benchmark programs type-check, and every example's recorded output)
+      # run against the exact release bundle, served from a loopback
+      # address in place of package/main.roc, in a mirror of the checkout
+      # whose package sources are replaced by a file that does not compile.
+      - name: Run the API tests and examples against the bundle
         run: |
           set -euo pipefail
-          work="$RUNNER_TEMP/exact"
-          mkdir -p "$work/package"
-          tar --zstd -xf candidate/assets/*.tar.zst -C "$work/package"
-          # The API tests and every directory they import files from, found
-          # from their imports so a new fixture directory cannot be missed.
-          imported="$(grep -ho 'import "\.\./\.\./[^"]*"' tests/api/*.roc tests/support/*.roc \
-            | sed 's|^import "\.\./\.\./||; s|"$||' | xargs -r -n1 dirname | sort -u)"
-          rsync -a --relative tests/api tests/support $imported "$work/"
-          cd "$work"
-          roc check tests/api/main.roc
-          roc test tests/api/main.roc
+          python3 -I scripts/all_tests.py --only check,test,examples \
+            --bundle "$(find candidate/assets -name '*.tar.zst')"
 
       # The archive names the bundle's release URL, which does not exist
       # yet: the bundle is served from a loopback address in its place, with

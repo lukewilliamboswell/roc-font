@@ -215,8 +215,13 @@ not finished until its target exists, is seeded and is registered in
 
 == Layout
 
-The targets live in `fuzz/` as `<target>.roc`. They import the package through `package/main.roc`, exactly what ships, so they
-exercise the same root every consumer uses. The byte builders they need
+The targets live in `fuzz/` as `<target>.roc`. They name the package as
+`../package/main.roc`, but `run_fuzz.py` always builds them against the
+`roc bundle` output, exactly what ships: it bundles the package, serves
+the bundle from a loopback address (`scripts/flight.py`) and passes
+`--replace-dep ./package/main.roc <url>` to `roc build --fuzz`, so they
+exercise the artifact every consumer imports (`--source` compiles
+`package/` directly, for quick local iteration only). The byte builders they need
 live in a separate test-only package, `tests/support/` (module
 `FontBuild`), which imports nothing from roc-font:
 
@@ -342,8 +347,8 @@ python3 scripts/run_fuzz.py minimize font-read <input> .roc-font-tmp/fuzz/minimi
   `tests/api/SubstituteTests.roc` for substitution, and
   `tests/api/FuzzRegressionTests.roc` for failures of the narrow targets),
   going through `Font` as a consumer would. Only a failure the public API cannot observe goes in
-  an in-package `package/<Module>Tests.roc`, built from inline bytes or a
-  committed fixture, never the builders. Precede it with a doc comment that starts `## fuzz regression:` and names the
+  the package itself, as a top-level `expect` in the module that failed,
+  built from inline bytes or a committed fixture, never the builders. Precede it with a doc comment that starts `## fuzz regression:` and names the
   target, the contract that broke and the cause:
 +
 [source,roc]

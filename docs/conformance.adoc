@@ -434,8 +434,9 @@ could not be read from disk) and `error:malformed-request:<why>`.
 
 == The driver
 
-`tools/driver/main.roc` is a basic-cli app importing `../../package/main.roc`.
-It reads requests on stdin, one per line, reads each distinct font once (a
+`tools/driver/main.roc` is a basic-cli app importing `../../package/main.roc`;
+`conformance.py` always builds it against the served `roc bundle` output
+instead (`--replace-dep`, see below). It reads requests on stdin, one per line, reads each distinct font once (a
 cache keyed by path), and prints one line per request in order:
 
 ----
@@ -581,10 +582,19 @@ printf 'x\ttests/fonts/Inter-Regular-metrics.ttf\tshape\t41,56\t\n' | .roc-font-
 roc test tools/driver/Case.roc
 ----
 
-`conformance.py` rebuilds the binary into `.roc-font-tmp/conformance/`
-(or `$ROC_FONT_TMPDIR/conformance/`) whenever a driver or package source is
-newer, and sends every runnable case in one process. Measured on
-2026-10-24 with protocol 2: building takes about 7 s; the 6117 requests of
+The driver is a consumer like any other, so it is tested as shipped:
+`conformance.py` runs `roc bundle package/main.roc`, serves the bundle from
+a loopback address (`scripts/flight.py`) and builds the driver with
+`--replace-dep ./package/main.roc <url>`, never from the package's
+sources (under `all_tests.py`, from a mirror of the checkout where those
+sources are absent). It rebuilds the binary into
+`.roc-font-tmp/conformance/` (or `$ROC_FONT_TMPDIR/conformance/`) whenever
+a driver source is newer or the bundle differs from the one it was built
+against (recorded beside it in `driver.package`), and sends every runnable
+case in one process. `--source` builds from `package/` directly, for quick
+local iteration only.
+
+Measured on 2026-10-24 with protocol 2: building takes about 7 s; the 6117 requests of
 the full local run (our cases, the curated slice and the 6203-case
 HarfBuzz import) take 0.12–0.13 s natively (protocol 3: 6623 requests,
 0.25 s).

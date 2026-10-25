@@ -20,6 +20,10 @@ Typical use:
     python3 scripts/run_fuzz.py minimize font-read <input> <output>
     python3 scripts/run_fuzz.py check-pin          # verify the roc-fuzz pin
 
+Targets import the package bundle `roc bundle` makes, served on loopback
+(scripts/flight.py), never package/ sources; `--source` compiles package/
+directly for quick local iteration only.
+
 Every harvested crash must be distilled into a permanent `## fuzz
 regression:` expect before the fix lands; see docs/fuzzing.adoc.
 
@@ -41,6 +45,9 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import flight  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -294,9 +301,9 @@ def command_output(command: Sequence[str]) -> str:
 def git_revision() -> str:
     """The commit under test, `+dirty` when the tree differs from it."""
     try:
-        head = subprocess.run(["git", "rev-parse", "--verify", "-q", "HEAD"], cwd=ROOT,
+        head = subprocess.run(["git", "rev-parse", "--verify", "-q", "HEAD"], cwd=flight.checkout(),
                               capture_output=True, text=True, check=False)
-        status = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT,
+        status = subprocess.run(["git", "status", "--porcelain"], cwd=flight.checkout(),
                                 capture_output=True, text=True, check=False)
     except OSError:
         return "unknown"
@@ -455,15 +462,15 @@ def binary_path(name: str) -> Path:
     return WORK_ROOT / "bin" / name
 
 
-def build_target(name: str, roc: str, no_build: bool) -> int:
+def build_target(name: str, args: argparse.Namespace) -> int:
     output = binary_path(name)
-    if no_build:
+    if args.no_build:
         if not output.is_file():
             print(f"error: --no-build given but {display(output)} does not exist", file=sys.stderr)
             return 2
         return 0
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = [roc, "build", "--fuzz", display(TARGETS[name].source()), f"--output={output}"]
+    command = [args.roc, "build", "--fuzz", display(TARGETS[name].source()), f"--output={output}", *args.dep]
     print(f"+ {shlex.join(command)}", flush=True)
     try:
         return subprocess.run(command, cwd=ROOT, check=False).returncode
@@ -520,7 +527,7 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
     if not config.dictionary.is_file():
         raise ValueError(f"missing fuzz dictionary: {display(config.dictionary)}")
     corpus = prepare_corpus(name, max_input_size, fresh=mode == "smoke")
-    status = build_target(name, args.roc, args.no_build)
+    status = build_target(name, args)
     if status != 0:
         result["outcome"] = "build failed"
         return result
@@ -614,7 +621,7 @@ def run_artifact_command(args: argparse.Namespace) -> int:
             raise ValueError(f"refusing to overwrite {output_path}")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         arguments.append(str(output_path))
-    status = build_target(args.target, args.roc, args.no_build)
+    status = build_target(args.target, args)
     if status != 0:
         return status
     command = [str(binary_path(args.target)), *arguments]
@@ -656,6 +663,8 @@ def add_build_options(parser: argparse.ArgumentParser) -> None:
                         help="Roc compiler (default: $ROC or roc)")
     parser.add_argument("--no-build", action="store_true",
                         help="reuse the binary already under .roc-font-tmp/fuzz/bin")
+    parser.add_argument("--source", action="store_true",
+                        help="compile package/ sources instead of the served bundle (quick local iteration)")
 
 
 def add_run_options(parser: argparse.ArgumentParser) -> None:
@@ -705,8 +714,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = make_parser()
     args = parser.parse_args(argv)
     try:
-        if args.command in ("smoke", "campaign", "nightly"):
-            return run_mode(args)
+        if args.command in ("smoke", "campaign", "nightly", "show", "replay", "minimize"):
+            command = run_mode if args.command in ("smoke", "campaign", "nightly") else run_artifact_command
+            # No bundle is needed to reuse binaries already built.
+            with flight.flight(args.roc, source=args.source or args.no_build) as args.dep:
+                return command(args)
         if args.command == "list":
             return list_targets(args)
         if args.command == "check-pin":
@@ -716,7 +728,6 @@ def main(argv: Sequence[str] | None = None) -> int:
             if not problems:
                 print(f"roc-fuzz pin ok: {ROC_FUZZ_URL}")
             return 1 if problems else 0
-        return run_artifact_command(args)
     except ValueError as problem:
         parser.error(str(problem))
     except KeyboardInterrupt:
