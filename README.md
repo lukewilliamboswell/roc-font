@@ -31,7 +31,7 @@ How wide is "Hello, world!" at 16 px? This is
 
 ```roc
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.25.0/CZsY7tYZwR3rj9kYbpaCfxki2yVAaRL8bBwMLvB2xkbA.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
 	font: "{package-url}",
 }
 
@@ -91,7 +91,9 @@ app [main!] {
 import font.Font
 ```
 
-Use the Roc nightly the release notes name. To use a font of your own, load
+Use the latest Roc nightly. Each release's notes name the nightly it was
+tested with, and the latest final release is checked against every new
+nightly. To use a font of your own, load
 its bytes however your platform allows and read them once with
 `Font.from_bytes`; reading is the only step that can fail, and it reports
 every problem it finds. Every query and every shaping call on a font that

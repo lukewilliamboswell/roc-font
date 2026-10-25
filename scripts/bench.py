@@ -21,8 +21,11 @@ Modes:
 Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz`
 (roc-fuzz's Fuzz.measure_allocs!). They are deterministic for one compiler
 and input, and are compared exactly with bench/baseline.json: any increase or
-decrease fails until --update-baseline records it. Elapsed time is compared
-only as a ratio against the other implementations measured in the same run.
+decrease fails until --update-baseline records it. The baseline records its
+compiler; nothing pins the compiler (work uses the latest nightly), so after a
+compiler change the ratchet says so and the baseline is re-recorded. Elapsed
+time is compared only as a ratio against the other implementations measured
+in the same run.
 
 The Roc programs import the package bundle `roc bundle` makes, served on
 loopback (scripts/flight.py), never package/ sources; `--source` compiles
@@ -725,12 +728,27 @@ def ratchet(baseline: dict, measured: dict[str, dict], all_ids: set[str], compil
                              "message": (f"{key} rose from {old.get(key)} to {new[key]}" if worse else
                                          f"{key} fell from {old.get(key)} to {new[key]}; lock it in with "
                                          "--update-baseline")})
-    base_compiler = baseline.get("compiler", {}).get("version")
-    if base_compiler and base_compiler != compiler and any(f["fail"] for f in findings):
-        findings.append({"case": "-", "status": "compiler-changed", "fail": False,
-                         "message": f"baseline recorded with {base_compiler}, measured with {compiler}; "
-                                    "allocation counts are compiler-specific"})
+    if any(f["fail"] for f in findings) and compiler_changed(baseline, compiler):
+        # Listed first: after a compiler change, differing counts are expected.
+        findings.insert(0, {"case": "-", "status": "compiler-changed", "fail": False,
+                            "message": compiler_change_note(baseline, compiler)})
     return findings
+
+
+def compiler_changed(baseline: dict, compiler: str) -> bool:
+    base_compiler = baseline.get("compiler", {}).get("version")
+    return bool(base_compiler) and base_compiler != compiler
+
+
+def compiler_change_note(baseline: dict, compiler: str) -> str:
+    """Allocation counts are compiler-specific, and nothing pins the
+    compiler: CI and local work use the latest nightly. Differences measured
+    with another compiler than the baseline's are expected and say nothing
+    about this change on their own."""
+    return (f"the baseline was recorded with {baseline['compiler']['version']}, this run used {compiler}. "
+            "Allocation counts are compiler-specific, so differences are expected after a compiler change. "
+            "Check that the same differences appear without your change (on the default branch), then "
+            "re-baseline with this compiler: python3 scripts/bench.py --check --update-baseline")
 
 
 def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case], filtered: bool,
@@ -1097,8 +1115,11 @@ def run(args, dep: list[str]) -> int:
         log("error: a Roc benchmark failed to build or run")
         failed = True
     if measured:
-        log("ratchet: " + ("FAILED" if any(f["fail"] for f in findings) else "passed")
-            + ("" if baseline else " (no baseline yet; run --update-baseline)"))
+        ratchet_failed = any(f["fail"] for f in findings)
+        log("ratchet: " + ("FAILED" if ratchet_failed else "passed")
+            + ("" if baseline else " (no baseline yet; run --update-baseline)")
+            + (" with a different compiler than the baseline's; see compiler-changed above"
+               if ratchet_failed and compiler_changed(baseline, compiler) else ""))
     if not baseline and measured:
         failed = True
     return 1 if failed else 0

@@ -9,15 +9,17 @@ needs no host, no system fonts and no file access.
 [source,roc]
 ----
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.25.0/CZsY7tYZwR3rj9kYbpaCfxki2yVAaRL8bBwMLvB2xkbA.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
 	font: "{package-url}",
 }
 
 import font.Font
 ----
 
-Build with the Roc nightly this release was tested with, which the
-release page lists under Compilers. The release also attaches
+Build with the latest Roc nightly. The release page lists the nightly
+this release was tested with under Compilers. While it is the latest
+final release, a daily check builds and runs its examples, unchanged, with
+each new nightly; a failure there leads to a patch release. The release also attaches
 `roc-font-examples-0.1.0.zip` (the examples, naming this release, with
 the output they were tested to print), the API reference and the manual
 as a PDF.

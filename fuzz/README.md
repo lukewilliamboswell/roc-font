@@ -21,7 +21,7 @@ time). All of them import the package through `package/main.roc`, exactly what s
 byte builders (`FontBuild`) through `tests/support/main.roc`, which
 `package/main.roc` never reaches.
 
-Run every target briefly with the compiler pinned in `.roc-version`:
+Run every target briefly with the latest Roc nightly:
 
 ```sh
 python3 scripts/run_fuzz.py smoke

@@ -195,10 +195,16 @@ never changes a result on a legitimate font.
 
 ## Verify the contract, not only the numbers
 
-`python3 scripts/all_tests.py` runs these checks with the compiler named in
-`.roc-version`. CI runs it with `--smoke` (fuzzing and benchmarks only
-build and run briefly); the allocation ratchet and fuzz campaigns are
-local, so run the full script before pushing hot-path or stage changes. For a public API change or a new table, lookup type or
+`python3 scripts/all_tests.py` runs these checks with the latest Roc
+nightly; nothing pins the compiler, and the script reports which one ran.
+CI runs it with `--smoke` (fuzzing and benchmarks only build and run
+briefly) on every pull request and daily on `main`; the allocation ratchet
+and fuzz campaigns are local, so run the full script before pushing
+hot-path or stage changes. Published final releases get roc-automation's
+shared nightly compatibility check daily. A release requires the checks to
+pass on the latest nightly. A new nightly can break an untouched change:
+compare with the scheduled run on `main` first, and fix a compiler-caused
+break (including re-recording allocation counts) on its own. For a public API change or a new table, lookup type or
 shaping stage:
 
 - format every changed Roc file (`roc fmt --check package/`);

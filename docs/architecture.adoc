@@ -996,7 +996,6 @@ scripts/                 all_tests.py, flight.py, fetch_corpus.py,
                          record_oracle.py, conformance.py, run_fuzz.py,
                          bench.py, examples.py
 docs/                    this document and contributor chapters
-.roc-version             the nightly every check runs with
 ----
 
 Nothing under `tests/`, `tools/`, `bench/`, `fuzz/`, `examples/` or
@@ -1012,10 +1011,24 @@ A symlinked or second package root was rejected: the compiler refuses
 symlinks outside a package's source root, and a second root exposing test
 builders would mean testing a package no consumer imports.
 
-`python3 scripts/all_tests.py` runs every check in §7 and §9 with the
-compiler named in `.roc-version`, the consumer steps against the served
-bundle in a mirror without the package's sources; `scripts/public_api.json` lists the items
-`roc docs` may show; the generated docs must show exactly its `public` list.
+`python3 scripts/all_tests.py` runs every check in §7 and §9, the consumer
+steps against the served bundle in a mirror without the package's sources;
+`scripts/public_api.json` lists the items `roc docs` may show; the generated
+docs must show exactly its `public` list.
+
+No compiler version is pinned. The package targets the latest Roc nightly,
+the compiler its consumers have: pull-request CI and local work use it, and
+`all_tests.py` reports which one ran. A pin would let the package drift from
+what consumers compile with; release 0.1.0-rc1, checked only on its pinned
+nightly, failed for consumers on the next one. Instead, `ci.yml` also runs
+the checks on `main` daily against that day's nightly, so `main` and the
+next release candidate are checked continuously; a release is cut only when
+the checks pass on the latest nightly and its notes record that compiler;
+and `nightly.yml`, roc-automation's shared nightly compatibility check, runs
+the latest final release's examples archive, unchanged, on every new
+nightly. The cost is that a new nightly can fail an unrelated pull request,
+and that compiler-specific results (formatting, allocation counts, §9) are
+re-recorded when the compiler changes them.
 
 [#references]
 == 11 Lessons taken from mature libraries

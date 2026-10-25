@@ -11,11 +11,12 @@ first change; it applies to people as much as to agents.
 
 ## What you need
 
-- **The Roc nightly named in [`.roc-version`](.roc-version).** Download it
-  from [roc-lang/nightlies](https://github.com/roc-lang/nightlies/releases)
-  and put its `roc` first on `PATH`, or set `ROC` to its path. The checks
-  refuse any other release compiler, and warn on a local debug build,
-  because formatting and code generation differ between nightlies.
+- **The latest Roc nightly.** Download it from
+  [roc-lang/nightlies](https://github.com/roc-lang/nightlies/releases)
+  and put its `roc` first on `PATH`, or set `ROC` to its path. Nothing pins
+  the compiler: CI uses the latest nightly too, and the checks report which
+  compiler ran. They warn on a local debug build, because formatting and
+  code generation differ from a nightly's.
 - **Python 3.10 or later.** The check scripts under `scripts/` use the
   standard library only. `zstd` (or Python 3.14) lets the bundle check look
   inside the bundle; without it that step is skipped.
@@ -34,7 +35,7 @@ One command runs everything a pull request must pass:
 blueprint run check            # or: python3 scripts/all_tests.py
 ```
 
-It runs, in order and reporting each step: the compiler pin, `roc fmt
+It runs, in order and reporting each step: the compiler in use, `roc fmt
 --check`, `roc check`, the tests on the dev backend, an example check,
 a native smoke run of every fuzz target (with `--smoke`, the two
 whole-pipeline targets only), the replay of recorded oracle
@@ -80,21 +81,40 @@ The other tasks in `Blueprint.roc`:
 
 | Task | What it runs |
 | --- | --- |
-| `test` | the compiler pin and the tests on the dev backend |
+| `test` | the compiler report and the tests on the dev backend |
 | `fuzz-smoke` | `scripts/run_fuzz.py smoke`: build each fuzz target and replay its seeds |
 | `conformance` | `scripts/conformance.py`: compare with the recorded oracle results |
 | `bench-quick` | `scripts/bench.py --quick`: a timing smoke run against the comparison programs present |
 | `docs` | render the manual in `docs/` into `.docs-out/` |
 | `examples` | build and run every example in `examples/` against its recorded output (`-- --update` re-records) |
 
-Pull-request CI runs `blueprint run check -- --smoke` with the nightly in
-`.roc-version` (`.github/workflows/ci.yml`). `--smoke` keeps CI fast:
+Pull-request CI runs `blueprint run check -- --smoke` with the latest Roc
+nightly (`.github/workflows/ci.yml`). `--smoke` keeps CI fast:
 fuzz targets run 200 inputs each and the benchmarks run one Roc-only pass,
 proving both build and run. The allocation ratchet, the comparison
 programs and fuzz campaigns are local: run the full `blueprint run check`
 (and `scripts/run_fuzz.py campaign`) before pushing a change to a hot path
 or a reading or shaping stage. Dedicated CI jobs for them can be added
 when there is a need.
+
+### The compiler moves
+
+Every check uses the latest nightly, so a new nightly can fail a pull
+request that did not change anything it touches. Before treating such a
+failure as the change's fault, compare with the latest scheduled run of
+`ci.yml` on `main`: it runs the same check every day against that day's
+nightly, so `main`, and the next release candidate cut from it, is always
+known to work (or known to be broken) with the current compiler. Fix a
+compiler-caused break in its own pull request.
+
+Published final releases are covered by `.github/workflows/nightly.yml`,
+roc-automation's shared nightly compatibility check: every day it builds
+and runs the latest final release's examples archive, unchanged, with the
+latest nightly, and keeps one tracking issue open while that fails. It
+skips release candidates. A failure there calls for a patch release.
+
+A release is cut only when the checks pass on the latest nightly; the
+release notes record the compiler it was tested with.
 
 ## Where things live
 
@@ -146,21 +166,23 @@ user deciding whether to upgrade, and included from `docs/releases.adoc`.
 Write `{package-url}` where the bundle URL goes; the release workflow fills
 it in.
 
-## Changing the compiler pin
+## When a new nightly changes results
 
-Move `.roc-version` to a newer nightly in its own pull request. Expect
-formatting and allocation counts to change: run `roc fmt` on every
-directory the checks format, record new counts with
-`python3 scripts/bench.py --check --update-baseline` and explain the
-change, and review the compiler notes below.
+A new nightly can change formatting and allocation counts. Run `roc fmt`
+on every directory the checks format; when the allocation ratchet reports
+`compiler-changed` (the baseline was recorded with another compiler),
+confirm the same counts change on `main` without your change, record them
+with `python3 scripts/bench.py --check --update-baseline` and explain the
+change; and review the compiler notes below.
 
-## Compiler notes (nightly-2026-10-23)
+## Compiler notes (last reviewed on nightly-2026-10-24)
 
 - Booleans are `True`/`False`. Nested defaulted records work.
 - Avoid until fixed on the nightly: wrapping a record field in a tag and
   reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
   ARC pass; `Dict(k, {})` hangs native builds.
-- The nightly reports type errors inside basic-cli 0.23.0/0.25.0 yet
-  builds; the scripts tolerate only problems inside the cached platform.
-- The pre-nightly debug `roc` on `PATH` panics on this code; use
-  `.roc-version`'s nightly (`ROC=...`).
+- Some nightlies report type errors inside a cached basic-cli platform yet
+  build; the scripts tolerate only problems inside the cached platform.
+  basic-cli 0.26.0 reports none on nightly-2026-10-24.
+- A local debug `roc` on `PATH` may panic on this code; use the latest
+  nightly (`ROC=...`).

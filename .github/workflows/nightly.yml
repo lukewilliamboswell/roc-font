@@ -10,6 +10,10 @@ name: Nightly compatibility
 # output in spec.json, and the release's bundle URL. Before the first final
 # release there is nothing to test, and selection fails saying so. The job
 # is the canonical single call, so the downstream dashboard can verify it.
+#
+# The shared workflow skips prereleases, so release candidates are not
+# tested here; ci.yml's daily schedule checks main, where the next release
+# candidate comes from, against the latest nightly instead.
 on:
   schedule:
     - cron: '17 13 * * *'
