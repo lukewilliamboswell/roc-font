@@ -256,9 +256,13 @@ jobs:
         run: |
           set -euo pipefail
           work="$RUNNER_TEMP/exact"
-          mkdir -p "$work/package" "$work/tests"
+          mkdir -p "$work/package"
           tar --zstd -xf candidate/assets/*.tar.zst -C "$work/package"
-          cp -r tests/api tests/support tests/fonts "$work/tests/"
+          # The API tests and every directory they import files from, found
+          # from their imports so a new fixture directory cannot be missed.
+          imported="$(grep -ho 'import "\.\./\.\./[^"]*"' tests/api/*.roc tests/support/*.roc \
+            | sed 's|^import "\.\./\.\./||; s|"$||' | xargs -r -n1 dirname | sort -u)"
+          rsync -a --relative tests/api tests/support $imported "$work/"
           cd "$work"
           roc check tests/api/main.roc
           roc test tests/api/main.roc
