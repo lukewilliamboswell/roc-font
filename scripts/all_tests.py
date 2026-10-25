@@ -5,10 +5,13 @@ Steps (select with --only, drop with --skip, list with --list):
 
     roc-version       the compiler matches .roc-version (debug builds warn)
     fmt               roc fmt --check on every directory holding .roc files
-    check             roc check package/main.roc, the API test app and every fuzz target
-    test              roc test on the API test app (tests/api/main.roc), every
-                      in-package package/*Tests.roc and the driver's Case.roc
-                      (dev backend)
+    check             roc check package/main.roc; then, against the served
+                      bundle, the API test app, every fuzz target, the
+                      conformance driver and the benchmark programs
+    test              roc test package/main.roc (the package's own expects,
+                      the only tests of its source); then, against the served
+                      bundle, the API test app (tests/api/main.roc) and the
+                      driver's Case.roc (dev backend)
     fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded; with
                       --smoke only the whole-pipeline targets font-read and
                       font-shape, 200 inputs each)
@@ -23,6 +26,15 @@ Steps (select with --only, drop with --skip, list with --list):
                       for byte), no other font, test module or fuzz target, and
                       stays under roc's 10 MB package limit
     diff-check        git diff --check, plus the same check on untracked files
+
+Test what you fly: before the steps, the package is bundled once with
+`roc bundle`, served on a loopback address (scripts/flight.py) and every
+consumer step (check and test of the consumers, fuzz-smoke, examples,
+conformance, bench) runs in a mirror of the checkout whose package/main.roc
+is a sentinel that does not compile, with `--replace-dep` pointing at the
+served bundle. A consumer that compiled package/ sources instead fails.
+--bundle FILE serves a given bundle (the release's asset) instead;
+--source compiles package/ in place, for quick local iteration only.
 
 Each step ends PASS, FAIL, SKIP (with the reason), WARN (passed with a
 caveat) or KNOWN (a failure recorded as known; it still fails the run
@@ -39,6 +51,7 @@ The compiler is $ROC, or `roc` on PATH. Standard library only.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import io
 import json
 import os
@@ -50,6 +63,9 @@ import tarfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Sequence
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import flight  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,6 +89,11 @@ class Context:
     roc: str
     args: argparse.Namespace
     notes: list[str] = field(default_factory=list)
+    # Where consumer steps run, and the roc arguments that point them at the
+    # served bundle (flight.replace_dep). With --source: ROOT and none.
+    consumer_root: Path = ROOT
+    dep: list[str] = field(default_factory=list)
+    url: str | None = None
 
 
 # ----------------------------------------------------------------- helpers
@@ -84,11 +105,12 @@ def resolve_command(command: str) -> str:
     return command
 
 
-def run(command: Sequence[str], *, env: dict[str, str] | None = None) -> tuple[int, str]:
-    print(f"  + {' '.join(str(part) for part in command)}", flush=True)
+def run(command: Sequence[str], *, env: dict[str, str] | None = None, cwd: Path = ROOT) -> tuple[int, str]:
+    where = "" if cwd == ROOT else f"(in {cwd.relative_to(ROOT) if cwd.is_relative_to(ROOT) else cwd}) "
+    print(f"  + {where}{' '.join(str(part) for part in command)}", flush=True)
     try:
         completed = subprocess.run(
-            [str(part) for part in command], cwd=ROOT, env=env, check=False,
+            [str(part) for part in command], cwd=cwd, env=env, check=False,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
         )
     except OSError as problem:
@@ -111,18 +133,30 @@ def fresh_dir(path: Path) -> Path:
 
 
 def child_env(ctx: Context) -> dict[str, str]:
+    """The environment of a consumer script: the served bundle, the shared
+    working directory and the real checkout (for reports' git revision)."""
     env = os.environ.copy()
     env["ROC"] = ctx.roc
+    env["ROC_FONT_TMPDIR"] = str(TMP_ROOT)
+    env[flight.CHECKOUT_ENV] = str(ROOT)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    if ctx.url:
+        env[flight.URL_ENV] = ctx.url
+    else:
+        env.pop(flight.URL_ENV, None)
     return env
 
 
-def run_all(ctx: Context, commands: Sequence[Sequence[str]]) -> Result:
+def run_all(ctx: Context, commands: Sequence[Sequence[str]], cwd: Path = ROOT,
+            accept: Callable[[str], bool] | None = None) -> Result:
+    """Run each command; one fails on a non-zero exit unless `accept`
+    accepts its output."""
     outputs: list[str] = []
     failed: list[str] = []
     for command in commands:
-        code, output = run(command)
+        code, output = run(command, cwd=cwd)
         outputs.append(f"$ {' '.join(command)}\n{output.rstrip()}")
-        if code != 0:
+        if code != 0 and not (accept and accept(output)):
             failed.append(" ".join(command))
     text = "\n".join(outputs)
     if failed:
@@ -131,18 +165,37 @@ def run_all(ctx: Context, commands: Sequence[Sequence[str]]) -> Result:
 
 
 API_TESTS = "tests/api/main.roc"
+# The consumers of the package, compiled against the served bundle.
+DRIVER = "tools/driver/main.roc"
+BENCH_APPS = ("bench/roc/font.roc", "bench/roc/alloc.roc")
 
 
-def test_modules() -> list[str]:
-    # The tests of the public API: an app that imports package/main.roc, as
-    # consumers do, and the test-only builders in tests/support/.
+def consumer_test_modules() -> list[str]:
+    # The tests of the public API: an app that imports the package, as users
+    # do, and the test-only builders in tests/support/.
     api = [API_TESTS] if (ROOT / API_TESTS).is_file() else []
-    # In-package tests of internal modules, for what the public API cannot
-    # observe; they use inline bytes or committed fixtures, never the builders.
-    modules = sorted(str(path.relative_to(ROOT)) for path in (ROOT / "package").glob("*Tests.roc"))
     # The conformance harness's protocol parser carries its own expects.
     driver = ROOT / "tools" / "driver" / "Case.roc"
-    return api + modules + ([str(driver.relative_to(ROOT))] if driver.is_file() else [])
+    return api + ([str(driver.relative_to(ROOT))] if driver.is_file() else [])
+
+
+def consumer_apps() -> list[str]:
+    apps = [API_TESTS, *fuzz_sources(), *BENCH_APPS]
+    return [app for app in apps if (ROOT / app).is_file()]
+
+
+def only_platform_problems(ctx: Context) -> Callable[[str], bool]:
+    """Accepts roc output whose problems all lie inside the cached basic-cli
+    platform (the nightly reports some there; CONTRIBUTING.md, compiler
+    notes), never one in this repository or in the roc-font bundle."""
+    from conformance import reported_problems  # scripts/ is on sys.path
+
+    package = ctx.url.rsplit("/", 1)[-1] if ctx.url else "source"
+
+    def accept(output: str) -> bool:
+        located, ours = reported_problems(output, package)
+        return bool(located) and not ours
+    return accept
 
 
 def fuzz_sources() -> list[str]:
@@ -193,25 +246,57 @@ def step_fmt(ctx: Context) -> Result:
     return run_all(ctx, [[ctx.roc, "fmt", "--check", f"{name}/"] for name in dirs])
 
 
+def merge(results: Sequence[Result]) -> Result:
+    failed = [r for r in results if r.status == "FAIL"]
+    text = "\n".join(r.output for r in results)
+    if failed:
+        return Result("FAIL", "; ".join(r.detail for r in failed), text)
+    return Result("PASS", "; ".join(r.detail for r in results), text)
+
+
+def sentinel_control(ctx: Context) -> Result:
+    """The mirror's package/main.roc must make a source build fail; otherwise
+    a passing consumer step would prove nothing."""
+    code, output = run([ctx.roc, "check", API_TESTS], cwd=ctx.consumer_root)
+    if code == 0:
+        return Result("FAIL", "the mirror's sentinel package/main.roc compiled; consumer steps would not prove "
+                      "they used the bundle", output)
+    return Result("PASS", "sentinel control: a source build fails in the mirror")
+
+
 def step_check(ctx: Context) -> Result:
-    files = ["package/main.roc", API_TESTS, *fuzz_sources()]
-    return run_all(ctx, [[ctx.roc, "check", path] for path in files])
+    source = run_all(ctx, [[ctx.roc, "check", "package/main.roc"]])
+    source.detail = "package source: " + source.detail
+    consumers = run_all(ctx, [[ctx.roc, "check", path, *ctx.dep] for path in consumer_apps()], cwd=ctx.consumer_root)
+    consumers.detail = ("consumers against the bundle: " if ctx.dep else "consumers against source: ") + consumers.detail
+    parts = [source, consumers]
+    if (ROOT / DRIVER).is_file():
+        driver = run_all(ctx, [[ctx.roc, "check", DRIVER, *ctx.dep]], cwd=ctx.consumer_root,
+                         accept=only_platform_problems(ctx))
+        driver.detail = "driver: " + driver.detail
+        parts.append(driver)
+    return merge(parts)
 
 
-def tests_with(ctx: Context, extra: Sequence[str]) -> Result:
-    modules = test_modules()
-    if not modules:
-        return Result("FAIL", f"no test modules found ({API_TESTS}, package/*Tests.roc)")
-    cache = ["--no-cache"] if ctx.args.no_cache else []
-    result = run_all(ctx, [[ctx.roc, "test", *extra, *cache, module] for module in modules])
-    counts = re.findall(r"All \((\d+)\) tests passed", result.output)
-    if result.status == "PASS":
-        result.detail = f"{len(modules)} modules, {sum(int(c) for c in counts)} expects"
-    return result
+def count_expects(result: Result) -> int:
+    return sum(int(c) for c in re.findall(r"All \((\d+)\) tests passed", result.output))
 
 
 def step_test(ctx: Context) -> Result:
-    return tests_with(ctx, [])
+    cache = ["--no-cache"] if ctx.args.no_cache else []
+    # The package's own expects (in every module package/main.roc reaches):
+    # the only tests that compile package/ source.
+    source = run_all(ctx, [[ctx.roc, "test", *cache, "package/main.roc"]])
+    if source.status == "PASS":
+        source.detail = f"package source: {count_expects(source)} expects"
+    modules = consumer_test_modules()
+    if not modules:
+        return Result("FAIL", f"no consumer test modules found ({API_TESTS})")
+    consumers = run_all(ctx, [[ctx.roc, "test", *ctx.dep, *cache, module] for module in modules], cwd=ctx.consumer_root)
+    if consumers.status == "PASS":
+        consumers.detail = (f"{'bundle' if ctx.dep else 'source'}: {len(modules)} consumer modules, "
+                            f"{count_expects(consumers)} expects")
+    return merge([source, consumers])
 
 
 SMOKE_FUZZ_RUNS = 200
@@ -221,17 +306,16 @@ SMOKE_FUZZ_TARGETS = ["font-read", "font-shape"]
 
 def step_fuzz_smoke(ctx: Context) -> Result:
     command = [sys.executable, "scripts/run_fuzz.py", "smoke", "--roc", ctx.roc]
+    if not ctx.url:
+        command.append("--source")
     if ctx.args.smoke:
         command += SMOKE_FUZZ_TARGETS
     runs = ctx.args.fuzz_runs or (SMOKE_FUZZ_RUNS if ctx.args.smoke else None)
     if runs:
         command.append(f"--runs={runs}")
-    print(f"  + {' '.join(command)}", flush=True)
-    completed = subprocess.run(command, cwd=ROOT, env=child_env(ctx), check=False,
-                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
-    output = completed.stdout or ""
+    code, output = run(command, env=child_env(ctx), cwd=ctx.consumer_root)
     summary = output[output.find("fuzz smoke summary"):] if "fuzz smoke summary" in output else ""
-    if completed.returncode != 0:
+    if code != 0:
         return Result("FAIL", "a fuzz target failed or did not build; see the crash instructions above", output)
     return Result("PASS", " / ".join(line.split()[0] + " " + line.split()[1] for line in summary.splitlines()[1:] if line.strip()), output)
 
@@ -240,12 +324,10 @@ def optional_script(ctx: Context, script: str, arguments: Sequence[str], why_mis
     path = ROOT / "scripts" / script
     if not path.is_file():
         return Result("SKIP", f"scripts/{script} does not exist yet ({why_missing})")
-    command = [sys.executable, f"scripts/{script}", *arguments]
-    print(f"  + {' '.join(command)}", flush=True)
-    completed = subprocess.run(command, cwd=ROOT, env=child_env(ctx), check=False,
-                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
-    status = "PASS" if completed.returncode == 0 else "FAIL"
-    return Result(status, f"exit {completed.returncode}", completed.stdout or "")
+    command = [sys.executable, f"scripts/{script}", *arguments, *([] if ctx.url else ["--source"])]
+    code, output = run(command, env=child_env(ctx), cwd=ctx.consumer_root)
+    against = "the served bundle" if ctx.url else "package/ source"
+    return Result("PASS" if code == 0 else "FAIL", f"exit {code}, against {against}", output)
 
 
 def step_examples(ctx: Context) -> Result:
@@ -406,6 +488,9 @@ def step_diff_check(ctx: Context) -> Result:
     return Result("FAIL" if bad else "PASS", detail, text)
 
 
+# Steps that compile consumers of the package, against the served bundle.
+CONSUMER_STEPS = ("check", "test", "fuzz-smoke", "examples", "conformance", "bench")
+
 STEPS: dict[str, Callable[[Context], Result]] = {
     "roc-version": step_roc_version,
     "fmt": step_fmt,
@@ -445,6 +530,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--fuzz-runs", type=int, help="inputs per fuzz target in the smoke step")
     parser.add_argument("--smoke", action="store_true",
                         help="CI mode: short fuzz smoke, benchmark smoke without the ratchet")
+    parser.add_argument("--bundle", type=Path,
+                        help="serve this bundle to the consumer steps instead of bundling package/ (a release asset)")
+    parser.add_argument("--source", action="store_true",
+                        help="consumer steps compile package/ in place instead of the served bundle (quick local iteration)")
     parser.add_argument("--verbose", action="store_true", help="print each step's full output")
     parser.add_argument("--list", action="store_true", help="list the steps and exit")
     args = parser.parse_args(argv)
@@ -454,9 +543,34 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(name)
         return 0
 
+    if args.source and args.bundle:
+        parser.error("--source and --bundle exclude each other")
     only, skip = parse_steps(args.only), set(parse_steps(args.skip))
     selected = [name for name in STEPS if (not only or name in only)]
     ctx = Context(roc=args.roc, args=args)
+    with contextlib.ExitStack() as stack:
+        if not args.source and any(name in CONSUMER_STEPS and name not in skip for name in selected):
+            print("\n== flight", flush=True)
+            try:
+                ctx.dep = stack.enter_context(flight.flight(ctx.roc, bundle=args.bundle, work=WORK / "flight"))
+            except RuntimeError as problem:
+                print(problem)
+                print("\nchecks FAILED: could not bundle the package for the consumer steps")
+                return 1
+            ctx.url = ctx.dep[-1]
+            ctx.consumer_root = flight.make_mirror(WORK / "mirror")
+            control = sentinel_control(ctx)
+            print(f"   {control.status}: consumer steps run in {ctx.consumer_root}, against {ctx.url}; "
+                  f"{control.detail}", flush=True)
+            if control.status != "PASS":
+                print(tail(control.output, 40))
+                print("\nchecks FAILED: the mirror cannot prove consumer steps use the bundle")
+                return 1
+        return run_steps(ctx, selected, skip)
+
+
+def run_steps(ctx: Context, selected: list[str], skip: set[str]) -> int:
+    args = ctx.args
     results: list[tuple[str, Result]] = []
     for name in STEPS:
         if name not in selected:

@@ -468,8 +468,8 @@ one delta per glyph and per applied adjustment.
 
 === 7.1 Unit expects (done for phase 1)
 
-`package/TableVarTests.roc`, 65 expects, passing with the default backend
-and `--opt=interpreter`:
+Top-level expects in `package/TableVar.roc` (40) and public-API tests in
+`tests/api/VariationTests.roc` (25), on the dev backend:
 
 * three generated fixtures in `tests/fonts/variable/` (1-1.5 KB each,
   reproducible from `generate.py`, values from `oracle.py`): coordinates,

@@ -1,8 +1,11 @@
 # Variable-font fixtures
 
-Tiny generated fonts for `package/TableVarTests.roc` and
-`package/TableGvarTests.roc`. They are not real typefaces: only the
-variation tables, and for `var-outlines.ttf` a few outlines, matter.
+Tiny generated fonts for the variation tests: the public API tests in
+`tests/api/` (`ReadTests.roc`, `VariationTests.roc`) read them, and the
+expects in `package/TableVar.roc` and `package/TableGvar.roc` embed some of
+their tables (printed by `../inline_tables.py`). They are not real
+typefaces: only the variation tables, and for `var-outlines.ttf` a few
+outlines, matter.
 
 - `var-mapped.ttf`: two axes (`wght` 100–400–900, `wdth` 75–100–125), a
   non-linear `avar` map on `wght`, three named instances, an `HVAR` with five
@@ -30,8 +33,7 @@ They are generated, byte for byte reproducibly, by `generate.py` (fontTools
 
 `oracle.py` prints HarfBuzz 14.6.0's coordinates, advances and metrics for
 them, and glyph extents for `var-outlines.ttf`; the expects in
-`package/TableVarTests.roc` and `package/TableGvarTests.roc` embed those
-values.
+`tests/api/VariationTests.roc` embed those values.
 
 fontTools 4.61.1 cannot read `var-format1.ttf`'s `HVAR`: it reads `HVAR`
 advance maps with its format 0 layout only. HarfBuzz reads it, and the

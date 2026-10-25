@@ -35,7 +35,7 @@ blueprint run check            # or: python3 scripts/all_tests.py
 ```
 
 It runs, in order and reporting each step: the compiler pin, `roc fmt
---check`, `roc check`, the tests on the dev backend,
+--check`, `roc check`, the tests on the dev backend, an example check,
 a native smoke run of every fuzz target (with `--smoke`, the two
 whole-pipeline targets only), the replay of recorded oracle
 results, the allocation ratchet, a check that `roc docs` shows exactly the
@@ -47,6 +47,34 @@ and list them with `--list`:
 blueprint run check -- --only fmt,check,test
 python3 scripts/all_tests.py --skip fuzz-smoke
 ```
+
+### Test what you fly
+
+The checks test the bundle users import, never the source tree. Before
+the steps, `scripts/all_tests.py` runs `roc bundle package/main.roc` once,
+serves the bundle from a loopback address (`scripts/flight.py`) and
+compiles every consumer of the package (the API tests in `tests/api/`, the
+fuzz targets, the conformance driver, the benchmark programs and the
+examples) with `--replace-dep ./package/main.roc <url>`. Those steps run in
+a hard-linked mirror of the checkout under `.roc-font-tmp/all-tests/mirror`
+whose `package/main.roc` is a sentinel that does not compile, so a step
+that compiled the sources fails. The package's own top-level `expect`s,
+run by `roc test package/main.roc`, are the only source-level tests.
+
+`scripts/run_fuzz.py`, `conformance.py`, `bench.py` and `examples.py check`
+also serve a fresh bundle when run on their own. For quick local iteration
+each takes `--source` (as does `all_tests.py`) to compile `package/`
+directly; never use it to decide that a change is ready. To run any other
+command against a served bundle:
+
+```sh
+python3 -I scripts/flight.py -- sh -c \
+  'roc test --replace-dep ./package/main.roc "$ROC_FONT_BUNDLE_URL" tests/api/main.roc'
+```
+
+`all_tests.py --bundle FILE` serves a given
+bundle instead, which is how the release workflow tests the exact asset it
+publishes.
 
 The other tasks in `Blueprint.roc`:
 
@@ -72,9 +100,8 @@ when there is a need.
 
 | Path | Contents |
 | --- | --- |
-| `package/` | the package; `package/main.roc` is what ships |
-| `package/*Tests.roc` | tests of internal modules, for what the public API cannot observe |
-| `tests/api/` | tests of the public API, importing `package/main.roc` as a consumer does |
+| `package/` | the package; `package/main.roc` is what ships; each module's top-level `expect`s test internals the public API cannot observe |
+| `tests/api/` | tests of the public API, run against the served bundle as a consumer imports it |
 | `tests/support/` | test-only font builders, never reached from `package/main.roc` |
 | `tests/fonts/`, `tests/cases/` | test fonts with their licences, conformance cases and fixtures |
 | `tests/oracle/records/` | recorded reference results that `roc test` and the review replay |

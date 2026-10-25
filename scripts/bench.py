@@ -24,6 +24,10 @@ and input, and are compared exactly with bench/baseline.json: any increase or
 decrease fails until --update-baseline records it. Elapsed time is compared
 only as a ratio against the other implementations measured in the same run.
 
+The Roc programs import the package bundle `roc bundle` makes, served on
+loopback (scripts/flight.py), never package/ sources; `--source` compiles
+package/ directly for quick local iteration only.
+
 Reports go to .roc-font-tmp/bench/<label>/ (or $ROC_FONT_TMPDIR/bench/).
 See docs/benchmarks.adoc.
 """
@@ -45,6 +49,9 @@ import statistics
 import subprocess
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import flight  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCH = ROOT / "bench"
@@ -407,9 +414,11 @@ def tool_version(command: list[str]) -> str:
 
 
 class Builder:
-    def __init__(self, out: Path, roc: str, python: str, log):
+    def __init__(self, out: Path, roc: str, python: str, log, dep: list[str]):
         self.out = out
         self.roc = roc
+        # flight.replace_dep arguments: the Roc programs import the served bundle.
+        self.dep = dep
         self.python = python
         self.log = log
         self.skipped: dict[str, str] = {}
@@ -442,14 +451,14 @@ class Builder:
         self.roc_version()
         binary = self.out / "bin" / "roc-font"
         if not self.run("roc", [self.roc, "build", "--opt=speed", str(BENCH / "roc" / "font.roc"),
-                                f"--output={binary}"]):
+                                f"--output={binary}", *self.dep]):
             return []
         return [Impl("roc/roc-font", "roc", [str(binary)], OPS, "roc build --opt=speed")]
 
     def alloc_binary(self) -> Path | None:
         self.roc_version()
         binary = self.out / "bin" / "roc-alloc"
-        if self.run("roc-alloc", [self.roc, "build", "--fuzz", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}"]):
+        if self.run("roc-alloc", [self.roc, "build", "--fuzz", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}", *self.dep]):
             return binary
         return None
 
@@ -919,8 +928,8 @@ def machine() -> dict:
 
 
 def git_state() -> dict:
-    commit = tool_version(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
-    status = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--", "package", "bench", "scripts"],
+    commit = tool_version(["git", "-C", str(flight.checkout()), "rev-parse", "HEAD"])
+    status = subprocess.run(["git", "-C", str(flight.checkout()), "status", "--porcelain", "--", "package", "bench", "scripts"],
                             capture_output=True, text=True).stdout
     return {"commit": commit, "dirty": bool(status.strip())}
 
@@ -950,6 +959,8 @@ def parse_args(argv: list[str] | None = None):
                     help="allowed worsening of a recorded time ratio in a full run (default 0.25)")
     ap.add_argument("--no-allocations", action="store_true", help="timing run without the allocation ratchet")
     ap.add_argument("--corpus-only", action="store_true", help="write the case files and manifest, then stop")
+    ap.add_argument("--source", action="store_true",
+                    help="build the Roc programs from package/ sources instead of the served bundle (quick local iteration)")
     args = ap.parse_args(argv)
     args.repetitions = args.repetitions or (3 if args.quick else 7)
     args.target_ms = args.target_ms or (20.0 if args.quick else 200.0)
@@ -968,6 +979,12 @@ def parse_args(argv: list[str] | None = None):
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    roc = str(Path(args.roc).expanduser().resolve()) if "/" in args.roc else args.roc
+    with flight.flight(roc, source=args.source or args.corpus_only) as dep:
+        return run(args, dep)
+
+
+def run(args, dep: list[str]) -> int:
     out = args.output_dir.resolve() / args.label
     out.mkdir(parents=True, exist_ok=True)
 
@@ -989,7 +1006,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     _install_wait_hook()
-    builder = Builder(out, args.roc, args.python, log)
+    builder = Builder(out, args.roc, args.python, log, dep)
     builder.versions["fonttools_generator"] = fonttools_version()
     baseline = load_baseline()
     sha_by_id = {m["id"]: m["case_sha256"] for m in manifest}

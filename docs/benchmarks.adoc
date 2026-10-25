@@ -270,9 +270,13 @@ one-line description, pin the library, and run
   at three sizes, and add it to every comparator that has an equivalent.
 * *A public API change:* only `bench/roc/FontBench.roc` calls the package.
 
-The Roc programs import the package through `../../package/main.roc`, so
-they see only its public API, and nothing under `bench/` is reachable from
-`package/main.roc`.
+The Roc programs name the package as `../../package/main.roc`, so they see
+only its public API, and nothing under `bench/` is reachable from
+`package/main.roc`. `bench.py` always builds them against the `roc bundle`
+output, served from a loopback address (`scripts/flight.py`, with
+`--replace-dep ./package/main.roc <url>`), so the timings and allocation
+counts are those of the artifact users import; `--source` builds from
+`package/` directly, for quick local iteration only.
 
 == Read a report
 

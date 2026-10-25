@@ -23,20 +23,30 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
   `bench/roc/alloc.roc`, ratchet `requested_bytes` and `peak_live_bytes`.
 
+### Release pipeline
+
+- [ ] The workflow's `GITHUB_TOKEN` cannot create releases on roc-font
+  (HTTP 403; a user token needs the `workflow` scope for the same request),
+  though roc-ansi's can with identical settings. 0.1.0-rc1 was published
+  locally from the run's tested artifact (assets verified byte for byte).
+  Fix before 0.1.0: find the difference, or give `publish-release` a
+  release token (fine-grained: Contents and Workflows write) from the
+  `release` environment.
+
 ### Consumers
 
 - [ ] package-mermaid: proven on `roc-graph-layout` branch
   `feature/package-mermaid-roc-font` (worktree
   `.claude/worktrees/mermaid-roc-font`, roc-font `70f5adb` vendored):
   oracle sizes and SVGs byte-identical, 0 differences over 99,771
-  measurements, 2.8x faster. After the 0.1.0 release, switch the vendored
-  copy to the released package URL and merge.
+  measurements, 2.8x faster. Switch the vendored copy to the 0.1.0-rc1
+  URL, re-run its oracle suite, and report API feedback.
 - [ ] roc-pdf: proven on branch `feature/roc-font-latin` (worktree
   `~/Documents/Github/roc-pdf-wt-roc-font`, roc-font `ad2e6bb` vendored,
   staged, commit pending signing): kerning and ligatures via
   `KernelOpenTypeShape`, a `Text.Store` producer, 417 cases with 0 baseline
   differences, 15 strings exact against HarfBuzz. Rebase on roc-pdf's
-  `main` and switch to the release URL after 0.1.0.
+  `main`, switch to the 0.1.0-rc1 URL, and report API feedback.
 
 ### Release
 
@@ -46,8 +56,8 @@ Chrome widths agree on package-mermaid's oracle texts.
   dry-run build, signed commits, no bot bypass), verified with a pull
   request whose check fails; then integrate by pull request. Everything
   else in `blueprint run check-settings` already passes.
-- [ ] Every check in `AGENTS.md`; release
-  0.1.0-rc1, gather consumer feedback (package-mermaid, roc-pdf), then 0.1.0.
+- [ ] Gather 0.1.0-rc1 feedback (package-mermaid, roc-pdf), settle names,
+  then release 0.1.0 with every check in `AGENTS.md`.
 
 ## After 0.1.0
 

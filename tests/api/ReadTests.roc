@@ -368,6 +368,49 @@ expect Font.glyph_name(read_or_crash(japanese_file), 1) == Err(Missing)
 expect Font.glyph_name(read_or_crash(mac_file), 100000) == Err(Missing)
 expect Font.glyph_name(read_or_crash(FontBuild.file(FontBuild.basic)), 0) == Err(Missing)
 
+# A Japanese Windows name is used when it is the only one. fontTools
+# 4.61.1 agrees.
+expect Font.family_name(read_or_crash(japanese_file)) == Ok("\u(65e5)\u(672c)\u(8a9e)\u(30d5)\u(30a9)\u(30f3)\u(30c8)")
+
+# Glyph names from `post` version 1.0 (the first standard names, none past
+# the font's 8 glyphs), 2.0 (standard and stored names; a byte past ASCII
+# is ISO 8859-1) and 3.0 (no names).
+expect [0, 7, 8].map(|g| Font.glyph_name(read_or_crash(mac_file), g)) == [Ok(".notdef"), Ok("dollar"), Err(Missing)]
+expect [1, 3, 4, 5].map(|g| Font.glyph_name(read_or_crash(ranking_file), g)) == [Ok("space"), Ok("a.alt"), Ok("caf\u(e9)"), Ok("uni1F600")]
+expect Font.glyph_name(read_or_crash(japanese_file), 0) == Err(Missing)
+
+# FNV-1a (64-bit) of the names of glyphs 0 up to `count`, each followed by
+# a line feed, a glyph without a name as `-`.
+name_digest : Font, U32 -> U64
+name_digest = |font, count| {
+	var $h = 0xcbf29ce484222325
+	for g in 0..<count {
+		line = match Font.glyph_name(font, g) {
+			Ok(name) => "${name}\n"
+			Err(Missing) => "-\n"
+		}
+		for b in line.to_utf8() {
+			$h = $h.bitwise_xor(b.to_u64()).times_wrap(0x100000001b3)
+		}
+	}
+	$h
+}
+
+# Every glyph name of the three defaults (2937, 2384 and 2030 glyphs, every
+# one named) against digests of fontTools' (the `post` table's names behind
+# `getGlyphOrder()`, before fontTools renames duplicates and fills in
+# missing names), and a few names in full. Past the last glyph there is no
+# name.
+expect name_digest(Font.sans, 2937) == 0xb7b085b99b56c404
+expect name_digest(Font.serif, 2384) == 0x241538cea64013dd
+expect name_digest(Font.mono, 2030) == 0xd2f4f7f08ede18b7
+expect Font.glyph_name(Font.sans, 1) == Ok(".null")
+expect Font.glyph_name(Font.sans, 1468) == Ok("uni204C")
+expect Font.glyph_name(Font.serif, 2383) == Ok("cy.i_part.")
+expect Font.glyph_name(Font.mono, 1015) == Ok("zero.zero")
+expect Font.glyph_name(Font.sans, 2937) == Err(Missing)
+expect Font.glyph_name(Font.sans, 4294967295) == Err(Missing)
+
 # ------------------------------------------------------------ code points
 
 expect Font.code_points(read_or_crash(FontBuild.file(FontBuild.basic))) == [0x41, 0x42, 0x43]

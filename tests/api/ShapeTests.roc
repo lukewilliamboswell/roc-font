@@ -267,3 +267,36 @@ expect {
 		Err(_) => False
 	}
 }
+
+# ------------------------------------------------------------ cluster levels against HarfBuzz
+
+# Graphemes and characters as the units of clusters: glyphs, clusters and
+# flags as HarfBuzz 14.6.0 (uharfbuzz 0.56.3) gives them at cluster levels 0
+# and 1 (mark offsets come from `GPOS` mark positioning, which is not
+# compared here).
+by_level : Str, Font.ClusterLevel, Font.Direction -> { glyphs : List(U32), clusters : List(U64), flags : List(U8) }
+by_level = |text, clusters, direction| {
+	run = Font.shape(inter, text, Font.ShapeOptions.{ script: "Latn", direction, clusters })
+	{ glyphs: run.glyphs, clusters: run.clusters, flags: run.flags }
+}
+
+# A letter and a combining acute: one cluster at the grapheme level; two at
+# the character level, unsafe to break between them.
+expect by_level("x\u(301)", Graphemes, LeftToRight) == { glyphs: [993, 1770], clusters: [0, 0], flags: [0, 0] }
+expect by_level("x\u(301)", Characters, LeftToRight) == { glyphs: [993, 1770], clusters: [0, 1], flags: [0, 1] }
+
+# Marks reordered by combining class merge the clusters of what moved, at
+# either level.
+expect by_level("x\u(301)\u(323)y", Graphemes, LeftToRight).clusters == [0, 0, 0, 5]
+expect by_level("x\u(301)\u(323)y", Characters, LeftToRight) == { glyphs: [993, 1775, 1770, 998], clusters: [0, 1, 1, 5], flags: [0, 1, 1, 0] }
+
+# An emoji modifier and a ZWJ sequence continue the grapheme before them.
+expect by_level("\u(1F44D)\u(1F3FD)", Graphemes, LeftToRight) == { glyphs: [0, 0], clusters: [0, 0], flags: [2, 2] }
+expect by_level("\u(1F44D)\u(1F3FD)", Characters, LeftToRight) == { glyphs: [0, 0], clusters: [0, 4], flags: [2, 3] }
+expect by_level("a\u(200D)\u(1F600)b", Graphemes, LeftToRight) == { glyphs: [507, 1777, 0, 578], clusters: [0, 0, 0, 8], flags: [0, 0, 2, 0] }
+expect by_level("a\u(200D)\u(1F600)b", Characters, LeftToRight) == { glyphs: [507, 1777, 0, 578], clusters: [0, 1, 4, 8], flags: [0, 1, 3, 0] }
+
+# Shaped against the script's direction, graphemes reverse whole; at the
+# character level their clusters merge as they do.
+expect by_level("x\u(301)\u(323)y", Characters, RightToLeft).clusters == [5, 0, 0, 0]
+expect by_level("\u(1F44D)\u(1F3FD)", Characters, RightToLeft).clusters == [0, 0]

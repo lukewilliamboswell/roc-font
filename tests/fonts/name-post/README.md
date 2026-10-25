@@ -1,8 +1,10 @@
 # `name` and `post` fixtures
 
-Tiny generated fonts for `package/TableNameTests.roc` and
-`package/TablePostTests.roc`. They are not real typefaces: every glyph is
-empty, and only the `name` and `post` tables matter.
+Tiny generated fonts for the `name` and `post` tests: the public API tests
+in `tests/api/ReadTests.roc` read them, and the expects in
+`package/TableName.roc` and `package/TablePost.roc` embed some of their
+tables (printed by `../inline_tables.py`). They are not real typefaces:
+every glyph is empty, and only the `name` and `post` tables matter.
 
 - `mac-roman-v1.ttf`: a family name only on the Macintosh Roman platform
   (1, 0, language 0), with characters past ASCII (`Café™ Mac`); `post`

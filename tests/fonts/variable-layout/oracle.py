@@ -1,5 +1,5 @@
 """Print HarfBuzz's results for the fixtures in this directory, in the shape
-the expects in package/LayoutVarTests.roc embed them.
+the expects in tests/api/VariationTests.roc embed them.
 
     tools/oracle/.venv/bin/python -I tests/fonts/variable-layout/oracle.py
 
