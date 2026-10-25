@@ -35,8 +35,9 @@ blueprint run check            # or: python3 scripts/all_tests.py
 ```
 
 It runs, in order and reporting each step: the compiler pin, `roc fmt
---check`, `roc check`, the tests on the dev backend and on the interpreter,
-a native smoke run of every fuzz target, the replay of recorded oracle
+--check`, `roc check`, the tests on the dev backend,
+a native smoke run of every fuzz target (with `--smoke`, the two
+whole-pipeline targets only), the replay of recorded oracle
 results, the allocation ratchet, a check that `roc docs` shows exactly the
 public API, a check that the bundle holds no fonts, tests or fuzz targets,
 and `git diff --check`. Select steps with `--only`, drop them with `--skip`
@@ -51,7 +52,7 @@ The other tasks in `Blueprint.roc`:
 
 | Task | What it runs |
 | --- | --- |
-| `test` | the compiler pin and the tests, dev backend and interpreter |
+| `test` | the compiler pin and the tests on the dev backend |
 | `fuzz-smoke` | `scripts/run_fuzz.py smoke`: build each fuzz target and replay its seeds |
 | `conformance` | `scripts/conformance.py`: compare with the recorded oracle results |
 | `bench-quick` | `scripts/bench.py --quick`: a timing smoke run against the comparison programs present |

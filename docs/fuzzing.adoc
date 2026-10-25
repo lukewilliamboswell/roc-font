@@ -251,8 +251,8 @@ scripts/run_fuzz.py         build, seed, run, harvest
 == Running
 
 The scripts use `$ROC`, or `roc` on `PATH`. Use the compiler pinned in
-`.roc-version`: the interpreter, the native backend and different compiler
-builds can disagree, and a fuzz binary is always native.
+`.roc-version`: different compiler builds can disagree, and a fuzz binary
+is always native.
 
 [source,sh]
 ----
@@ -358,7 +358,7 @@ expect
 ----
 +
 . *Confirm* the expect fails before the fix and passes after, with both
-  `roc test` and `roc test --opt=interpreter`.
+  `roc test`.
 . *Fix* the reader or shaper. If the target's contract itself was wrong,
   change the target and its doc comment in the same commit and say why.
 . *Rerun* the target on its corpus to make sure nothing nearby still fails.
