@@ -9,9 +9,9 @@ Steps (select with --only, drop with --skip, list with --list):
     test              roc test on the API test app (tests/api/main.roc), every
                       in-package package/*Tests.roc and the driver's Case.roc
                       (dev backend)
-    test-interpreter  the same with --opt=interpreter
-    fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded;
-                      200 inputs per target with --smoke)
+    fuzz-smoke        scripts/run_fuzz.py smoke (native builds, seeded; with
+                      --smoke only the whole-pipeline targets font-read and
+                      font-shape, 200 inputs each)
     examples          scripts/examples.py check: every example's recorded output
     conformance       scripts/conformance.py, when present
     bench             scripts/bench.py --check --quick, when present (with
@@ -29,8 +29,8 @@ caveat) or KNOWN (a failure recorded as known; it still fails the run
 unless --allow-known is given). The exit status is 0 only when no step
 failed.
 
---smoke is what CI runs: fuzzing and benchmarks only prove they build and
-run, so pull requests stay fast. The allocation ratchet, comparison
+--smoke is what CI runs: only the two whole-pipeline fuzz targets and a
+benchmark pass prove they build and run, so pull requests stay fast. The allocation ratchet, comparison
 programs and fuzz campaigns are local (architecture §7.3, §9).
 
 The compiler is $ROC, or `roc` on PATH. Standard library only.
@@ -214,15 +214,15 @@ def step_test(ctx: Context) -> Result:
     return tests_with(ctx, [])
 
 
-def step_test_interpreter(ctx: Context) -> Result:
-    return tests_with(ctx, ["--opt=interpreter"])
-
-
 SMOKE_FUZZ_RUNS = 200
+# The whole-pipeline targets; the narrow per-feature targets run locally.
+SMOKE_FUZZ_TARGETS = ["font-read", "font-shape"]
 
 
 def step_fuzz_smoke(ctx: Context) -> Result:
     command = [sys.executable, "scripts/run_fuzz.py", "smoke", "--roc", ctx.roc]
+    if ctx.args.smoke:
+        command += SMOKE_FUZZ_TARGETS
     runs = ctx.args.fuzz_runs or (SMOKE_FUZZ_RUNS if ctx.args.smoke else None)
     if runs:
         command.append(f"--runs={runs}")
@@ -411,7 +411,6 @@ STEPS: dict[str, Callable[[Context], Result]] = {
     "fmt": step_fmt,
     "check": step_check,
     "test": step_test,
-    "test-interpreter": step_test_interpreter,
     "fuzz-smoke": step_fuzz_smoke,
     "examples": step_examples,
     "conformance": step_conformance,

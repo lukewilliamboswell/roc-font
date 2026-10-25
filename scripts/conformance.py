@@ -57,7 +57,6 @@ script never edits tests/known-failures.json.
     python3 scripts/conformance.py                 # every case file
     python3 scripts/conformance.py inter reading   # case files matching these
     python3 scripts/conformance.py --diff          # show expected and actual
-    python3 scripts/conformance.py --interpreter   # run the driver with --opt=interpreter
     python3 scripts/conformance.py --explain       # add the reader's problems to differences
     python3 scripts/conformance.py --update-scores # record scored suites' counts
     python3 scripts/conformance.py --json out.json # every case's outcome, for triage
@@ -118,7 +117,7 @@ def reported_problems(output: str) -> tuple[list[str], list[str]]:
     """Files roc reported problems in, and those outside the cached platform.
 
     Some nightlies report problems inside the cached basic-cli platform and
-    exit non-zero although the binary is built (or the interpreter ran).
+    exit non-zero although the binary is built.
     That is accepted; a problem reported in this repository's files never is.
     """
     located = re.findall(r"^── [✗●] .*? ─+ (\S+?):\d+:\d+", output, flags=re.MULTILINE)
@@ -215,7 +214,7 @@ def run_driver(command_prefix: list[str], cases: list, explain: bool, locations:
     for out in completed.stdout.splitlines():
         tag, sep, rest = out.partition("\t")
         if not sep:
-            continue  # interpreter chatter, never a result line
+            continue  # compiler chatter, never a result line
         result, _, why = rest.partition("\t")
         results[tag] = result
         answered += 1
@@ -307,19 +306,15 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true", help="fail on unsupported gating cases too")
     parser.add_argument("--rebuild", action="store_true", help="rebuild the driver even if it looks current")
     parser.add_argument("--no-build", action="store_true", help="use the existing driver binary")
-    parser.add_argument("--interpreter", action="store_true", help="run the driver with `roc --opt=interpreter`")
     parser.add_argument("--explain", action="store_true", help="show the reader's problems for rejected fonts")
     parser.add_argument("--update-scores", action="store_true", help="record the counts of every fully run scored suite")
     parser.add_argument("--json", type=Path, help="write every case's outcome, expected and actual result to this file")
     args = parser.parse_args()
 
     roc = roc_command()
-    if args.interpreter:
-        prefix = [roc, str(DRIVER_DIR / "main.roc"), "--opt=interpreter", "--"]
-    else:
-        if not args.no_build and build_driver(roc, args.rebuild) != 0:
-            return 1
-        prefix = [str(DRIVER_BIN)]
+    if not args.no_build and build_driver(roc, args.rebuild) != 0:
+        return 1
+    prefix = [str(DRIVER_BIN)]
 
     files = case_files(args.cases)
     if not files:
@@ -425,7 +420,7 @@ def main() -> int:
         write_scores(scores)
         print(f"updated {rel(SCORES)}: {', '.join(updated)}")
     print(
-        f"driver: {'interpreter' if args.interpreter else rel(DRIVER_BIN)}, {timing['requests']} requests in one process, "
+        f"driver: {rel(DRIVER_BIN)}, {timing['requests']} requests in one process, "
         f"{timing['seconds']:.2f} s; roc: {roc_version(roc)}"
     )
     if args.json:

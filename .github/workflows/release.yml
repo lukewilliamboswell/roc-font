@@ -123,7 +123,9 @@ jobs:
             roc bump --old "$bundle" --expect "$VERSION" package/main.roc
           fi
 
+      # ci.yml already checks every pull request; a real release checks again.
       - name: Run every check
+        if: github.event_name != 'pull_request'
         # Fuzzing and benchmarks only smoke-test here; full runs are local.
         run: blueprint run check -- --smoke
 
@@ -266,7 +268,6 @@ jobs:
           cd "$work"
           roc check tests/api/main.roc
           roc test tests/api/main.roc
-          roc test --opt=interpreter tests/api/main.roc
 
       # The archive names the bundle's release URL, which does not exist
       # yet: the bundle is served from a loopback address in its place, with

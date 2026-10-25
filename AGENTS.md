@@ -192,10 +192,11 @@ local, so run the full script before pushing hot-path or stage changes. For a pu
 shaping stage:
 
 - format every changed Roc file (`roc fmt --check package/`);
-- run `roc check package/main.roc` and the tests, with the default backend
-  and `--opt=interpreter`;
-- build and run at least one NATIVE binary exercising the changed path; the
-  interpreter and native backend can disagree;
+- run `roc check package/main.roc` and the tests on the default (dev)
+  backend; benchmarks build with `--opt=speed`. The interpreter is not
+  used;
+- build and run at least one optimised native binary exercising the
+  changed path (a benchmark or fuzz target);
 - give every new reading or shaping stage a fuzz target asserting its
   contract (totality, determinism, bounded growth, index alignment, finite
   output), seed it with real fonts, and distil every corpus crash into a

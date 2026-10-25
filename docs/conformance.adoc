@@ -87,7 +87,6 @@ export ROC=/path/to/roc                      # the nightly named in .roc-version
 
 python3 scripts/conformance.py               # build the driver, run every case, compare
 python3 scripts/conformance.py inter --diff  # one case file, with expected/actual
-python3 scripts/conformance.py --interpreter # the same through `roc --opt=interpreter`
 
 # Only when cases, fonts or oracle versions change:
 python3 scripts/record_oracle.py --setup     # once: tools/oracle/.venv and ots-sanitize
@@ -578,7 +577,7 @@ expects for every field and error). By hand:
 roc build tools/driver/main.roc --output=.roc-font-tmp/conformance/driver
 printf 'x\ttests/fonts/Inter-Regular-metrics.ttf\tshape\t41,56\t\n' | .roc-font-tmp/conformance/driver
 # x	[2=0+1273|456=1+1413]
-roc tools/driver/main.roc --opt=interpreter -- --explain < requests.txt
+.roc-font-tmp/conformance/driver --explain < requests.txt
 roc test tools/driver/Case.roc
 ----
 
@@ -588,8 +587,7 @@ newer, and sends every runnable case in one process. Measured on
 2026-10-24 with protocol 2: building takes about 7 s; the 6117 requests of
 the full local run (our cases, the curated slice and the 6203-case
 HarfBuzz import) take 0.12–0.13 s natively (protocol 3: 6623 requests,
-0.25 s) and about 65 s with
-`--opt=interpreter`, which gives the same result for every case.
+0.25 s).
 
 What the driver does with today's public API, and the limits that follow:
 
@@ -609,7 +607,7 @@ What the driver does with today's public API, and the limits that follow:
   known failures until that is wired.
 
 Some nightlies report problems inside the cached basic-cli platform and
-exit non-zero although the binary is built (or the interpreter ran).
+exit non-zero although the binary is built.
 `conformance.py` accepts that, but fails on any problem reported in this
 repository's files.
 
@@ -810,7 +808,7 @@ review. Recorded on 2026-10-24:
 
 Upper-case outcomes fail the run; `--strict` makes gating `unsupported`
 fail too. Options: case-file selectors (substrings of paths under
-`tests/cases`), `--diff`, `--verbose`, `--explain`, `--interpreter`,
+`tests/cases`), `--diff`, `--verbose`, `--explain`,
 `--rebuild`, `--no-build`, `--update-scores`, and `--json <file>` (every
 case's outcome, expected and actual result, for triage and curation).
 
@@ -1057,9 +1055,9 @@ nothing.
 
 == Known environment issues
 
-* `roc build` and `roc … --opt=interpreter` with nightly-2026-10-23-18478ff
+* `roc build` with nightly-2026-10-23-18478ff
   report type problems inside basic-cli 0.23.0 and exit 1 although they
-  build and run correctly; `conformance.py` tolerates exactly that.
+  build correctly; `conformance.py` tolerates exactly that.
 * An older local debug compiler (debug-7894793d) panics in its ARC
   certification pass when building any app that calls `Font.from_bytes`
   (including the driver). Use the pinned nightly.

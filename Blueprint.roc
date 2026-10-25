@@ -21,14 +21,14 @@ config = [
 	Systems(["x86_64-linux", "aarch64-linux", "aarch64-darwin"]),
 	# The released documentation renderer; its bytes are pinned in Blueprint.lock.
 	Environment("docs", [Programs([Fetch("roc-docs", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.2.0/roc-docs-{system}"))]), Expect(["realpath", "sh"])]),
-	# The package compiler and the check scripts' interpreter come from the machine.
+	# The package compiler and Python for the check scripts come from the machine.
 	Environment("package", [Expect(["roc", "python3", "git"])]),
-	# Every check, in order: fmt, check, tests (dev and interpreter), fuzz
+	# Every check, in order: fmt, check, tests (dev backend), fuzz
 	# smoke, conformance replay, allocation ratchet, API docs, bundle and
 	# whitespace. Extra arguments go to scripts/all_tests.py (--only, --skip, --list).
 	Task("check", [Use("package"), Run(["python3", "scripts/all_tests.py"])]),
-	# The unit and API tests alone, on the dev backend and the interpreter.
-	Task("test", [Use("package"), Run(["python3", "scripts/all_tests.py", "--only", "roc-version,test,test-interpreter"])]),
+	# The unit and API tests alone, on the dev backend.
+	Task("test", [Use("package"), Run(["python3", "scripts/all_tests.py", "--only", "roc-version,test"])]),
 	# Build every fuzz target natively and replay its seeds briefly.
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
 	# Replay the recorded HarfBuzz, Chrome and reading oracle results.
