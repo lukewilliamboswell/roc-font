@@ -29,9 +29,6 @@ font_with = |gsub|
 		Err(_) => crash "a trace test font could not be read"
 	}
 
-scalars_of : List(U64) -> List({ scalar : U32, offset : U64 })
-scalars_of = |glyphs| glyphs.map_with_index(|g, i| { scalar: (0x10000 + g).to_u32_wrap(), offset: 4 * i })
-
 text_of : List(U64) -> Str
 text_of = |glyphs| {
 	var $bytes = []
@@ -46,7 +43,7 @@ text_of = |glyphs| {
 traced : List(U8), List(U64), Font.ShapeOptions -> { glyphs : List(U32), origins : List(Font.GlyphOrigin) }
 traced = |gsub, glyphs, options| {
 	font = font_with(gsub)
-	t = run_and_origins(Font.shape_traced(font, Font.plan(font, options), scalars_of(glyphs)))
+	t = run_and_origins(Font.shape_traced(font, Font.plan(font, options), text_of(glyphs)))
 	{ glyphs: t.run.glyphs, origins: t.origins }
 }
 
@@ -134,13 +131,13 @@ expect {
 	traced(gsub, [5, 6], Font.ShapeOptions.{ direction: RightToLeft }) == { glyphs: [6, 15], origins: [Mapped, Substituted({ feature: "liga" })] }
 }
 
-# The traced run is the run `shape_scalars` gives.
+# The traced run is the run `shape_planned` gives.
 expect {
 	font = font_with(table([{ tag: "liga", lookups: [0] }], [{ kind: 4, subtables: [FontBuild.ligature([1], [[{ glyph: 9, rest: [2, 3] }]])] }]))
 	plan = Font.plan(font, Font.ShapeOptions.{})
-	scalars = scalars_of([4, 1, 2, 3, 4])
-	match Font.shape_traced(font, plan, scalars) {
-		Ok({ run, origins }) => run == Font.shape_scalars(font, plan, scalars) and origins.len() == run.glyphs.len()
+	text = text_of([4, 1, 2, 3, 4])
+	match Font.shape_traced(font, plan, text) {
+		Ok({ run, origins }) => run == Font.shape_planned(font, plan, text) and origins.len() == run.glyphs.len()
 		Err(_) => False
 	}
 }
@@ -148,7 +145,7 @@ expect {
 # A real font: Fira Code draws `->` with contextual alternates, and its
 # space with no substitution.
 expect {
-	t = run_and_origins(Font.shape_traced(Font.mono, Font.plan(Font.mono, Font.ShapeOptions.{}), [{ scalar: '-', offset: 0 }, { scalar: '>', offset: 1 }, { scalar: ' ', offset: 2 }]))
+	t = run_and_origins(Font.shape_traced(Font.mono, Font.plan(Font.mono, Font.ShapeOptions.{}), "-> "))
 	t.origins.len() == t.run.glyphs.len() and t.origins.take_first(2).all(|o| o == Substituted({ feature: "calt" })) and t.origins.last() == Ok(Mapped)
 }
 
@@ -173,9 +170,9 @@ expect {
 expect {
 	font = font_with(growing)
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
-	scalars = scalars_of(List.repeat(1, 300))
-	match Font.shape_traced(font, tight, scalars) {
-		Err(OverBudget({ run, origins, budgets })) => budgets == [Growth] and run == Font.shape_scalars(font, tight, scalars) and origins.len() == run.glyphs.len()
+	text = text_of(List.repeat(1, 300))
+	match Font.shape_traced(font, tight, text) {
+		Err(OverBudget({ run, origins, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text) and origins.len() == run.glyphs.len()
 		Ok(_) => False
 	}
 }
@@ -184,9 +181,9 @@ expect {
 expect {
 	font = font_with(growing)
 	plan = Font.plan(font, Font.ShapeOptions.{})
-	scalars = scalars_of(List.repeat(1, 10))
-	match Font.shape_traced(font, plan, scalars) {
-		Ok({ run, origins }) => run == Font.shape_scalars(font, plan, scalars) and origins.take_first(1) == [Multiple({ feature: "liga" })]
+	text = text_of(List.repeat(1, 10))
+	match Font.shape_traced(font, plan, text) {
+		Ok({ run, origins }) => run == Font.shape_planned(font, plan, text) and origins.take_first(1) == [Multiple({ feature: "liga" })]
 		Err(_) => False
 	}
 }
