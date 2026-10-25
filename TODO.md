@@ -29,18 +29,8 @@ Chrome widths agree on package-mermaid's oracle texts.
   (`roc-graph-layout` branch `feature/package-mermaid-roc-font`, 4f77271,
   after regenerating its metrics-only Inter with real contours).
 - [ ] roc-pdf on rc1: 417 cases pass, only its 4 roc-font cases re-pinned
-  (`roc-pdf-wt-roc-font`, branch `feature/roc-font-latin`, last change
-  staged pending signing).
-
-### Release pipeline
-
-- [ ] The workflow's `GITHUB_TOKEN` cannot create releases on roc-font
-  (HTTP 403; a user token needs the `workflow` scope for the same request),
-  though roc-ansi's can with identical settings. 0.1.0-rc1 was published
-  locally from the run's tested artifact (assets verified byte for byte).
-  Fix before 0.1.0: find the difference, or give `publish-release` a
-  release token (fine-grained: Contents and Workflows write) from the
-  `release` environment.
+  (`roc-pdf-wt-roc-font`, branch `feature/roc-font-latin`, fd005b4).
+  Re-verify on main's API (`shape_traced` result, `is_missing`).
 
 ### Consumers
 
@@ -51,8 +41,7 @@ Chrome widths agree on package-mermaid's oracle texts.
   measurements, 2.8x faster. Switch the vendored copy to the 0.1.0-rc1
   URL, re-run its oracle suite, and report API feedback.
 - [ ] roc-pdf: proven on branch `feature/roc-font-latin` (worktree
-  `~/Documents/Github/roc-pdf-wt-roc-font`, roc-font `ad2e6bb` vendored,
-  staged, commit pending signing): kerning and ligatures via
+  `~/Documents/Github/roc-pdf-wt-roc-font`, on 0.1.0-rc1): kerning and ligatures via
   `KernelOpenTypeShape`, a `Text.Store` producer, 417 cases with 0 baseline
   differences, 15 strings exact against HarfBuzz. Rebase on roc-pdf's
   `main`, switch to the 0.1.0-rc1 URL, and report API feedback.
@@ -60,11 +49,6 @@ Chrome widths agree on package-mermaid's oracle texts.
 ### Release
 
 - [ ] Re-check the figures in `docs/releases/0.1.0.adoc` if anything lands before tagging.
-- [ ] Just before tagging: the default-branch ruleset from roc-automation's
-  settings chapter (pull request, required checks `check` and the release
-  dry-run build, signed commits, no bot bypass), verified with a pull
-  request whose check fails; then integrate by pull request. Everything
-  else in `blueprint run check-settings` already passes.
 - [ ] Gather 0.1.0-rc1 feedback (package-mermaid, roc-pdf), settle names,
   then release 0.1.0 with every check in `AGENTS.md`.
 
@@ -82,9 +66,14 @@ Chrome widths agree on package-mermaid's oracle texts.
   default fonts are prepared at compile time and unaffected.
 
 1. roc-ray measurement and terrocotta's measurer.
-2. roc-pdf's strict checks (checksums, overlap, composite cycles, `fsType`,
-   work counters) and subsetting (`KernelFontSubset.roc`,
-   `KernelFontPlan.roc`).
+2. roc-pdf's strict checks (checksums, directory order, overlapping and
+   duplicate tables, composite cycles, `fsType`) in strict reading, and raw
+   table access for its subsetting, which stays in roc-pdf
+   (`roc-pdf-wt-roc-font-replace`, `development/roc-font-replacement.md`).
+   Also from that study: PostScript, full and ID-1 names; stored `head`
+   and `hhea` values and left side bearings; ligature origins with lookup
+   and input glyphs; a feature-free (kerning-only) shaping switch; a lower
+   per-call shaping floor (15-17 allocations however short the text).
 3. GPOS single, cursive, mark attachment, contextual positioning.
 4. Outlines as a listing; CFF and CFF2.
 5. Complex-script shapers (Arabic, Indic, USE, Hangul, Tibetan, Thai)
@@ -94,10 +83,7 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ## Open questions
 
-1. Can roc-pdf accept aggregated problems instead of a first error, and
-   does it need work counters in the public result?
-2. Subsetting: in roc-font, or in roc-pdf on raw table access?
-3. roc-ray: glyph-id drawing with a host atlas, or code-point drawing?
-4. WOFF/WOFF2: a module here or a separate package?
-5. Cluster levels beyond `Graphemes` and `Characters`?
-6. Which `unicode` version can a paragraph layer pin?
+1. roc-ray: glyph-id drawing with a host atlas, or code-point drawing?
+2. WOFF/WOFF2: a module here or a separate package?
+3. Cluster levels beyond `Graphemes` and `Characters`?
+4. Which `unicode` version can a paragraph layer pin?

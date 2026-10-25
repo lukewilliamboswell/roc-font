@@ -609,3 +609,10 @@ expect [1, 2, 3, 4].map(|g| Font.extents(Font.mono, g)) == [box(41, 0, 1159, 137
 expect Font.sans_bytes.len() == 879708 and Font.serif_bytes.len() == 4628080 and Font.mono_bytes.len() == 286320
 expect [Font.sans_licence, Font.serif_licence, Font.mono_licence].all(|l| l.contains("SIL OPEN FONT LICENSE Version 1.1"))
 expect Font.sans_licence.contains("The Inter Project Authors") and Font.serif_licence.contains("Merriweather") and Font.mono_licence.contains("The Fira Code Project Authors")
+
+# The route `Font.at` documents to a font's own default design puts every
+# axis at its default, whatever `Variation.{}` chose.
+at_design : Font -> Font
+at_design = |font| Font.at(font, Font.Variation.{ axes: Font.axes(font).map(|axis| { tag: axis.tag, value: axis.default }) })
+
+expect [Font.sans, Font.serif, Font.mono].map(|font| Font.coordinates(at_design(font)).map(|c| c.value)) == [[0, 0], [0, 0, 0], [0]]

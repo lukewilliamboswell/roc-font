@@ -319,6 +319,14 @@ Font :: { face : Face }.{
 	## ```
 	## bold = Font.at(font, Font.Variation.{ weight: Bold })
 	## ```
+	##
+	## A font is read at `Variation.{}`, as a browser draws it. To measure
+	## the font's own default design instead (what a PDF embeds), give every
+	## axis its default:
+	##
+	## ```
+	## design = Font.at(font, Font.Variation.{ axes: Font.axes(font).map(|axis| { tag: axis.tag, value: axis.default }) })
+	## ```
 	at : Font, Variation -> Font
 	at = |font, variation| { face: Face.moved_to(font.face, variation.weight, variation.width, variation.optical_size, variation.axes) }
 
