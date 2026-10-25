@@ -396,10 +396,14 @@ LayoutGsub := {
 		var $ops = 0
 		var $stopped = 0
 		var $work = { scratch: [], frames: [], positions: [] }
+		# A digest of the run's glyphs, made again after each lookup that
+		# runs: a lookup whose digest misses it cannot start anywhere, so
+		# it is passed over without visiting the run.
+		var $digest = LayoutGsub.run_digest($run)
 		for step_index in 0..<plan.len() {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
-			if lookup.count > 0 and LayoutGsub.any_start(lookup, $run, step.mask) {
+			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
 				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
@@ -424,10 +428,33 @@ LayoutGsub := {
 					$stopped = stopped
 					$work = work
 				}
+				$digest = LayoutGsub.run_digest($run)
 			}
 		}
 		{ items: $run, stopped: $stopped }
 	}
+
+	## The digest of every glyph of a run, in the form of a lookup's (see
+	## `may_start`).
+	run_digest : List(Item) -> { d0 : U64, d1 : U64, d2 : U64 }
+	run_digest = |run| {
+		var $d0 = 0
+		var $d1 = 0
+		var $d2 = 0
+		for item in run {
+			g = item.glyph
+			$d0 = $d0.bitwise_or((1.U64).shl_wrap(g.bitwise_and(63).to_u8_wrap()))
+			$d1 = $d1.bitwise_or((1.U64).shl_wrap(g.shr_wrap(4).bitwise_and(63).to_u8_wrap()))
+			$d2 = $d2.bitwise_or((1.U64).shl_wrap(g.shr_wrap(9).bitwise_and(63).to_u8_wrap()))
+		}
+		{ d0: $d0, d1: $d1, d2: $d2 }
+	}
+
+	## Whether a lookup's digest and a run's share a glyph's bits in every
+	## mask: needed for any glyph of the run to pass `may_start`.
+	digests_meet : Lookup, { d0 : U64, d1 : U64, d2 : U64 } -> Bool
+	digests_meet = |lookup, digest|
+		lookup.d0.bitwise_and(digest.d0) != 0 and lookup.d1.bitwise_and(digest.d1) != 0 and lookup.d2.bitwise_and(digest.d2) != 0
 
 	applies : U64, U64 -> Bool
 	applies = |item_mask, lookup_mask| item_mask.bitwise_and(lookup_mask) != 0

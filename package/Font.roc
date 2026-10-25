@@ -32,6 +32,11 @@ import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
 ##   `shape_planned`.
 ## - A font of your own? `from_bytes`, and `describe_problem` for anything
 ##   wrong with it.
+## - Text as UTF-8 bytes (read from a file or the network)? Make it a
+##   `Str` with `Str.from_utf8` and shape that: clusters are then offsets
+##   into the bytes. Bytes that may not be valid UTF-8 can be decoded by
+##   the caller and shaped with `shape_scalars`, each scalar with the
+##   byte offset it starts at, so clusters still point into the bytes.
 ##
 ## ```
 ## units = Font.width(Font.sans, "Hello, world!") # 12111
@@ -216,19 +221,24 @@ Font :: { face : Face }.{
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
+	## A glyph's bounding box (its ink), in font units, y up from the
+	## baseline: from `x_min` to `x_max` across and from `y_min` to `y_max`
+	## up. See `extents`.
+	Extents : { x_min : I32, y_min : I32, x_max : I32, y_max : I32 }
+
 	## A glyph's bounding box (its ink) at the font's location, in font
 	## units, y up from the baseline:
 	##
 	## - `Extents`: the box. As HarfBuzz gives it, the left edge is the
 	##   glyph's left side bearing, and away from a variable font's default
 	##   design the box is measured on the outline moved there.
-	## - `Empty`: the glyph draws nothing (such as a space), or the glyph id
-	##   is past the font.
+	## - `Empty`: the glyph draws nothing (such as a space, or a glyph whose
+	##   outline has no contours), or the glyph id is past the font.
 	## - `Unknown`: the font's outlines are in a form roc-font does not
 	##   read (CFF or CFF2 outlines, or bitmaps only), so the glyph may draw
 	##   something whose box cannot be measured. Fall back on the font's
 	##   `metrics` and the glyph's `advance`.
-	extents : Font, U32 -> [Extents({ x_min : I32, y_min : I32, x_max : I32, y_max : I32 }), Empty, Unknown]
+	extents : Font, U32 -> [Extents(Extents), Empty, Unknown]
 	extents = |font, id| Face.extents(font.face, id.to_u64())
 
 	## Every code point the font maps to a glyph, in increasing order: what a
@@ -422,11 +432,11 @@ Font :: { face : Face }.{
 	## - `clusters`: the UTF-8 byte offset in the text of the first character
 	##   each glyph draws (for `shape_scalars`, the offset given with it),
 	##   never clamped;
-	## - `flags`: facts about each glyph, read with `unsafe_to_break` (bit
-	##   0: breaking the text at the start of the glyph's cluster would
+	## - `flags`: facts about each glyph, read with `is_unsafe_to_break`
+	##   (bit 0: breaking the text at the start of the glyph's cluster would
 	##   change the glyphs on either side, so both sides must be shaped
-	##   again) and `missing` (bit 1: glyph 0 drawn for a character the font
-	##   does not map, where a browser would fall back to another font).
+	##   again) and `is_missing` (bit 1: glyph 0 drawn for a character the
+	##   font does not map, where a browser would fall back to another font).
 	##
 	## `cluster_ranges` gives the part of the text each glyph draws.
 	##
@@ -443,13 +453,13 @@ Font :: { face : Face }.{
 	##   with no glyph of its own (joined into a ligature, or removed by a
 	##   substitution) is drawn by the cluster it was merged into.
 	## - A character the font does not map is drawn with glyph 0, never left
-	##   out, and the glyph is `missing`; only a substitution in the font
+	##   out, and the glyph is missing (`is_missing`); only a substitution in the font
 	##   may replace that glyph. The exceptions are default-ignorable
 	##   characters (such as a zero-width joiner, a soft hyphen or a
 	##   variation selector), which draw nothing visible: the font's space
 	##   glyph with no advance, or no glyph when the font has no space. A
 	##   glyph 0 the font itself gives (by its character map or a
-	##   substitution) is not `missing`.
+	##   substitution) is not missing.
 	## - Empty text gives a run of empty lists; glyph ids past the font have
 	##   an advance of 0.
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
@@ -476,11 +486,21 @@ Font :: { face : Face }.{
 	## substitution. A substitution made by a contextual rule is credited to
 	## the feature whose rule it is (`calt` for a contextual alternate),
 	## even when the rule calls on substitutions that features do not list
-	## themselves. A substitution several features share (such as `liga`
-	## and `clig` listing the same one) is credited to the first of them, in
-	## tag order, that is on for the glyph. A one-for-one substitution of a
-	## ligature or of a glyph of a multiple substitution keeps its kind (the
-	## glyph still draws the same characters) and takes the later feature.
+	## themselves. A one-for-one substitution of a ligature or of a glyph of
+	## a multiple substitution keeps its kind (the glyph still draws the
+	## same characters) and takes the later feature.
+	##
+	## Fonts often list one substitution under several features (`liga`
+	## and `clig` listing the same ligatures, say). It is credited to one of
+	## them that is on for the glyph: `liga` first, then the other features
+	## shaping applies by default (such as `clig`, `calt` or `ccmp`), then
+	## features the options turned on, each group in tag order. So a
+	## ligature is reported as `liga` whenever `liga` lists it and is on.
+	##
+	## An origin names a kind and a feature only: it carries no lookup
+	## index and no input glyphs. The characters a glyph stands for are
+	## its cluster's (see `cluster_ranges`), and `components` counts what a
+	## ligature joined.
 	GlyphOrigin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }), Multiple({ feature : Str }), Inserted({ feature : Str })]
 
 	## A bound that stopped substitution before it finished: `Growth` and
@@ -555,26 +575,39 @@ Font :: { face : Face }.{
 	## Shape characters a paragraph layer has already split up (by script,
 	## direction or font): each Unicode scalar value with the offset to
 	## report as its cluster (normally its UTF-8 byte offset in the
-	## paragraph), so runs of one paragraph report offsets into it.
+	## paragraph), so runs of one paragraph report offsets into it. It also
+	## shapes text a caller decoded itself, such as UTF-8 bytes that may be
+	## invalid, with clusters pointing into the bytes.
 	## Scalars sharing an offset form one cluster. Clusters in the run are
 	## these offsets, unchanged.
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
 
 	## Shape characters as `shape_scalars` does, and also say which
-	## substitution produced each glyph (see `GlyphOrigin`). `origins` has
-	## one entry per glyph, in the run's (visual) order. The run is the one
-	## `shape_scalars` gives; only this call pays for the origins (one more
-	## list, and naming the features of the plan's substitution steps).
+	## substitution produced each glyph (see `GlyphOrigin`) and whether
+	## shaping finished, as `shape_checked` says it: one call for a caller
+	## that needs both. `origins` has one entry per glyph, in the run's
+	## (visual) order. The run is the one `shape_scalars` gives; only this
+	## call pays for the origins (one more list, and naming the features of
+	## the plan's substitution steps). When a bound stopped substitution
+	## early, the result is `OverBudget` with the run and origins made so
+	## far and every bound that stopped it.
 	##
 	## ```
-	## traced = Font.shape_traced(font, plan, [{ scalar: 'f', offset: 0 }, { scalar: 'i', offset: 1 }])
-	## # traced.origins == [Ligature({ feature: "liga", components: 2 })] in a font with an fi ligature
+	## match Font.shape_traced(font, plan, [{ scalar: 'f', offset: 0 }, { scalar: 'i', offset: 1 }]) {
+	##     Ok({ run, origins }) => origins # [Ligature({ feature: "liga", components: 2 })] in a font with an fi ligature
+	##     Err(OverBudget({ run, origins, budgets })) => ...
+	## }
 	## ```
-	shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> { run : Run, origins : List(GlyphOrigin) }
+	shape_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
 	shape_traced = |font, shape_plan, scalars| {
 		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
-		{ run: shaped.run, origins: Shaper.origins(font.face, shape_plan.plan, shaped.items) }
+		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
+		if shaped.stopped == 0 {
+			Ok({ run: shaped.run, origins })
+		} else {
+			Err(OverBudget({ run: shaped.run, origins, budgets: Shaper.budgets(shaped.stopped) }))
+		}
 	}
 
 	## How wide text is, in font units: the sum of the advances of the run
@@ -612,20 +645,20 @@ Font :: { face : Face }.{
 	## breaker reuse the run's glyphs as they are.
 	##
 	## ```
-	## safe_breaks = run.flags.map(|flags| !Font.unsafe_to_break(flags))
+	## safe_breaks = run.flags.map(|flags| !Font.is_unsafe_to_break(flags))
 	## ```
-	unsafe_to_break : U8 -> Bool
-	unsafe_to_break = |flags| flags.bitwise_and(1) != 0
+	is_unsafe_to_break : U8 -> Bool
+	is_unsafe_to_break = |flags| flags.bitwise_and(1) != 0
 
 	## Whether a glyph's entry in `Run.flags` says the glyph is glyph 0
 	## drawn for a character the font does not map: where a browser would
 	## draw the character with another font.
 	##
 	## ```
-	## needs_fallback = run.flags.any(Font.missing)
+	## needs_fallback = run.flags.any(Font.is_missing)
 	## ```
-	missing : U8 -> Bool
-	missing = |flags| flags.bitwise_and(2) != 0
+	is_missing : U8 -> Bool
+	is_missing = |flags| flags.bitwise_and(2) != 0
 
 	## The part of the text each glyph of a run draws, as UTF-8 byte ranges
 	## `start ..< end`, one per glyph in the run's order (so in

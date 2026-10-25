@@ -46,9 +46,17 @@ text_of = |glyphs| {
 traced : List(U8), List(U64), Font.ShapeOptions -> { glyphs : List(U32), origins : List(Font.GlyphOrigin) }
 traced = |gsub, glyphs, options| {
 	font = font_with(gsub)
-	t = Font.shape_traced(font, Font.plan(font, options), scalars_of(glyphs))
+	t = run_and_origins(Font.shape_traced(font, Font.plan(font, options), scalars_of(glyphs)))
 	{ glyphs: t.run.glyphs, origins: t.origins }
 }
+
+# The run and origins of a traced result, finished or not.
+run_and_origins : Try({ run : Font.Run, origins : List(Font.GlyphOrigin) }, [OverBudget({ run : Font.Run, origins : List(Font.GlyphOrigin), budgets : List(Font.Budget) })]) -> { run : Font.Run, origins : List(Font.GlyphOrigin) }
+run_and_origins = |result|
+	match result {
+		Ok(t) => t
+		Err(OverBudget({ run, origins, budgets: _ })) => { run, origins }
+	}
 
 # A `GSUB` table whose features (tag, lookups) list the lookups given.
 table : List({ tag : Str, lookups : List(U64) }), List({ kind : U64, subtables : List(List(U8)) }) -> List(U8)
@@ -98,13 +106,26 @@ expect {
 	off == { glyphs: [9], origins: [Ligature({ feature: "liga", components: 2 })] } and on == { glyphs: [19], origins: [Ligature({ feature: "smcp", components: 2 })] }
 }
 
-# A lookup two features list is credited to the first, in tag order, that
-# is on for the glyph.
+# A lookup two features list is credited to one that is on for the
+# glyph: `liga` before `clig`, although `clig` comes first in tag order.
 expect {
 	gsub = table([{ tag: "liga", lookups: [0] }, { tag: "clig", lookups: [0] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }])
 	both = traced(gsub, [5], Font.ShapeOptions.{})
-	liga_only = traced(gsub, [5, 5], Font.ShapeOptions.{ features: [Font.Feature.{ tag: "clig", value: 0, start: 4 }] })
-	both.origins == [Substituted({ feature: "clig" })] and liga_only.origins == [Substituted({ feature: "clig" }), Substituted({ feature: "liga" })]
+	clig_only = traced(gsub, [5, 5], Font.ShapeOptions.{ features: [Font.Feature.{ tag: "liga", value: 0, start: 4 }] })
+	both.origins == [Substituted({ feature: "liga" })] and clig_only.origins == [Substituted({ feature: "liga" }), Substituted({ feature: "clig" })]
+}
+
+# A feature shaping applies by default is credited before one the
+# options turned on, whatever their tag order.
+expect {
+	gsub = table([{ tag: "afrc", lookups: [0] }, { tag: "ccmp", lookups: [0] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }])
+	traced(gsub, [5], Font.ShapeOptions.{ features: [Font.Feature.{ tag: "afrc" }] }).origins == [Substituted({ feature: "ccmp" })]
+}
+
+# Among features the options turned on, tag order decides.
+expect {
+	gsub = table([{ tag: "smcp", lookups: [0] }, { tag: "afrc", lookups: [0] }], [{ kind: 1, subtables: [FontBuild.single1([5], 1)] }])
+	traced(gsub, [5], Font.ShapeOptions.{ features: [Font.Feature.{ tag: "smcp" }, Font.Feature.{ tag: "afrc" }] }).origins == [Substituted({ feature: "afrc" })]
 }
 
 # Origins follow the run's visual order.
@@ -118,13 +139,16 @@ expect {
 	font = font_with(table([{ tag: "liga", lookups: [0] }], [{ kind: 4, subtables: [FontBuild.ligature([1], [[{ glyph: 9, rest: [2, 3] }]])] }]))
 	plan = Font.plan(font, Font.ShapeOptions.{})
 	scalars = scalars_of([4, 1, 2, 3, 4])
-	Font.shape_traced(font, plan, scalars).run == Font.shape_scalars(font, plan, scalars)
+	match Font.shape_traced(font, plan, scalars) {
+		Ok({ run, origins }) => run == Font.shape_scalars(font, plan, scalars) and origins.len() == run.glyphs.len()
+		Err(_) => False
+	}
 }
 
 # A real font: Fira Code draws `->` with contextual alternates, and its
 # space with no substitution.
 expect {
-	t = Font.shape_traced(Font.mono, Font.plan(Font.mono, Font.ShapeOptions.{}), [{ scalar: '-', offset: 0 }, { scalar: '>', offset: 1 }, { scalar: ' ', offset: 2 }])
+	t = run_and_origins(Font.shape_traced(Font.mono, Font.plan(Font.mono, Font.ShapeOptions.{}), [{ scalar: '-', offset: 0 }, { scalar: '>', offset: 1 }, { scalar: ' ', offset: 2 }]))
 	t.origins.len() == t.run.glyphs.len() and t.origins.take_first(2).all(|o| o == Substituted({ feature: "calt" })) and t.origins.last() == Ok(Mapped)
 }
 
@@ -142,6 +166,28 @@ expect {
 	match Font.shape_checked(font, tight, text) {
 		Err(OverBudget({ run, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text)
 		Ok(_) => False
+	}
+}
+
+# Traced shaping says so too, with the origins of the run made so far.
+expect {
+	font = font_with(growing)
+	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
+	scalars = scalars_of(List.repeat(1, 300))
+	match Font.shape_traced(font, tight, scalars) {
+		Err(OverBudget({ run, origins, budgets })) => budgets == [Growth] and run == Font.shape_scalars(font, tight, scalars) and origins.len() == run.glyphs.len()
+		Ok(_) => False
+	}
+}
+
+# Within the bound the traced run is complete.
+expect {
+	font = font_with(growing)
+	plan = Font.plan(font, Font.ShapeOptions.{})
+	scalars = scalars_of(List.repeat(1, 10))
+	match Font.shape_traced(font, plan, scalars) {
+		Ok({ run, origins }) => run == Font.shape_scalars(font, plan, scalars) and origins.take_first(1) == [Multiple({ feature: "liga" })]
+		Err(_) => False
 	}
 }
 

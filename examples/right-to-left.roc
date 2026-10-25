@@ -61,12 +61,12 @@ main! = |args| {
 
 		# A glyph is `missing` when the font has no glyph for the
 		# character, so glyph 0 (the font's "missing" box) stands in.
-		missing = Font.missing(run.flags.get(i) ?? 0)
+		missing = Font.is_missing(run.flags.get(i) ?? 0)
 		name = Font.glyph_name(font, glyph) ?? ""
 		Stdout.line!("${pad(glyph.to_str(), 7)}${pad(name, 13)}${pad(cluster.to_str(), 9)}${if (missing) "yes" else "no"}")?
 	}
 
-	missing_count = run.flags.count_if(Font.missing)
+	missing_count = run.flags.count_if(Font.is_missing)
 	Stdout.line!("")?
 	Stdout.line!("${missing_count.to_str()} of ${run.glyphs.len().to_str()} glyphs need a fallback font.")?
 	Ok({})

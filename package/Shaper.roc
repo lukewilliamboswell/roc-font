@@ -1,3 +1,4 @@
+import Bytes
 import Face
 import LayoutCommon
 import LayoutGdef
@@ -115,6 +116,70 @@ Shaper :: {}.{
 	request : Str, U64, Bool -> Request
 	request = |name, value, global| { tag: Shaper.tag(name), max: value, default: if (global) value else 0, global, fallback: False, manual: False, random: False, stage: 1 }
 
+	## The features HarfBuzz's default shaper asks for, in the order it adds
+	## them, for left-to-right and right-to-left text. Made once, when the
+	## program is compiled, as is everything below that only depends on
+	## them, so planning with the default features builds no requests.
+	default_requests : [Ltr, Rtl] -> List(Request)
+	default_requests = |direction| {
+		direction_features = match direction {
+			Ltr => [Shaper.request("ltra", 1, True), Shaper.request("ltrm", 1, True)]
+			Rtl => [Shaper.request("rtla", 1, True), Shaper.request("rtlm", 1, False)]
+		}
+		fractions = [Shaper.request("frac", 1, False), Shaper.request("numr", 1, False), Shaper.request("dnom", 1, False)]
+		random = [{ ..Shaper.request("rand", 255, True), random: True }]
+		markers = ["Harf", "HARF", "Buzz", "BUZZ"].map(|t| Shaper.request(t, 1, True))
+		common = ["abvm", "blwm", "ccmp", "locl"].map(|t| Shaper.request(t, 1, True)).concat(["mark", "mkmk"].map(|t| { ..Shaper.request(t, 1, True), manual: True })).append(Shaper.request("rlig", 1, True))
+		horizontal = ["calt", "clig", "curs", "dist"].map(|t| Shaper.request(t, 1, True)).append({ ..Shaper.request("kern", 1, True), fallback: True }).concat(["liga", "rclt"].map(|t| Shaper.request(t, 1, True)))
+		[{ ..Shaper.request("rvrn", 1, True), stage: 0 }].concat(direction_features).concat(fractions).concat(random).concat(markers).concat(common).concat(horizontal)
+	}
+
+	ltr_requests : List(Request)
+	ltr_requests = Shaper.default_requests(Ltr)
+
+	rtl_requests : List(Request)
+	rtl_requests = Shaper.default_requests(Rtl)
+
+	## The default requests merged, for a plan without features of the
+	## caller's (HarfBuzz merges them unsorted then: their tags differ).
+	ltr_merged : List(Request)
+	ltr_merged = Shaper.merge(Shaper.ltr_requests)
+
+	rtl_merged : List(Request)
+	rtl_merged = Shaper.merge(Shaper.rtl_requests)
+
+	## Each default merged request's tag as a key for
+	## `LayoutCommon.find_features`.
+	ltr_keys : List(U64)
+	ltr_keys = LayoutCommon.feature_keys(Shaper.ltr_merged.map(|f| f.tag))
+
+	rtl_keys : List(U64)
+	rtl_keys = LayoutCommon.feature_keys(Shaper.rtl_merged.map(|f| f.tag))
+
+	hebrew_script : U64
+	hebrew_script = Shaper.tag("Hebr")
+
+	hebrew_tag : U64
+	hebrew_tag = Shaper.tag("hebr")
+
+	kern_tag : U64
+	kern_tag = Shaper.tag("kern")
+
+	frac_tag : U64
+	frac_tag = Shaper.tag("frac")
+
+	numr_tag : U64
+	numr_tag = Shaper.tag("numr")
+
+	dnom_tag : U64
+	dnom_tag = Shaper.tag("dnom")
+
+	rtlm_tag : U64
+	rtlm_tag = Shaper.tag("rtlm")
+
+	mark_tag : U64
+	mark_tag = Shaper.tag("mark")
+
 	plan : Face, Options -> Plan
 	plan = |face, options| Shaper.plan_with_clusters(face, options, Graphemes)
 
@@ -124,36 +189,47 @@ Shaper :: {}.{
 	## character keeps its own cluster, and only substitutions merge them).
 	plan_with_clusters : Face, Options, [Graphemes, Characters] -> Plan
 	plan_with_clusters = |face, options, clusters| {
+		native = ShaperTags.script_direction(options.script)
 		requested = match options.direction {
 			LeftToRight => Ltr
 			RightToLeft => Rtl
 			FromScript =>
-				match ShaperTags.script_direction(options.script) {
+				match native {
 					Rtl => Rtl
 					_ => Ltr
 				}
 		}
-		native = ShaperTags.script_direction(options.script)
-		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Hebr")
+		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
 		# The features HarfBuzz's default shaper asks for, then the caller's.
-		direction_features = match requested {
-			Ltr => [Shaper.request("ltra", 1, True), Shaper.request("ltrm", 1, True)]
-			Rtl => [Shaper.request("rtla", 1, True), Shaper.request("rtlm", 1, False)]
-		}
-		fractions = [Shaper.request("frac", 1, False), Shaper.request("numr", 1, False), Shaper.request("dnom", 1, False)]
-		random = [{ ..Shaper.request("rand", 255, True), random: True }]
-		markers = ["Harf", "HARF", "Buzz", "BUZZ"].map(|t| Shaper.request(t, 1, True))
-		common = ["abvm", "blwm", "ccmp", "locl"].map(|t| Shaper.request(t, 1, True)).concat(["mark", "mkmk"].map(|t| { ..Shaper.request(t, 1, True), manual: True })).append(Shaper.request("rlig", 1, True))
-		horizontal = ["calt", "clig", "curs", "dist"].map(|t| Shaper.request(t, 1, True)).append({ ..Shaper.request("kern", 1, True), fallback: True }).concat(["liga", "rclt"].map(|t| Shaper.request(t, 1, True)))
-		user = options.features.map(
-			|f| {
-				global = f.start == 0 and f.end == Shaper.text_end
-				v = f.value.to_u64()
-				{ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: 1 }
-			},
-		)
-		requests = [{ ..Shaper.request("rvrn", 1, True), stage: 0 }].concat(direction_features).concat(fractions).concat(random).concat(markers).concat(common).concat(horizontal).concat(user)
-		merged = Shaper.merge(if (user.is_empty()) requests else Shaper.sort_by_tag(requests))
+		merged =
+			if options.features.is_empty() {
+				match requested {
+					Ltr => Shaper.ltr_merged
+					Rtl => Shaper.rtl_merged
+				}
+			} else {
+				defaults = match requested {
+					Ltr => Shaper.ltr_requests
+					Rtl => Shaper.rtl_requests
+				}
+				var $requests = List.with_capacity(defaults.len() + options.features.len())
+				$requests = $requests.concat(defaults)
+				for f in options.features {
+					global = f.start == 0 and f.end == Shaper.text_end
+					v = f.value.to_u64()
+					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: 1 })
+				}
+				Shaper.merge(Shaper.sort_by_tag($requests))
+			}
+		keys =
+			if options.features.is_empty() {
+				match requested {
+					Ltr => Shaper.ltr_keys
+					Rtl => Shaper.rtl_keys
+				}
+			} else {
+				LayoutCommon.feature_keys(merged.map(|f| f.tag))
+			}
 		lang = ShaperTags.language_tags(options.language)
 		script_tags = match lang.scripts {
 			Given(t) => [t]
@@ -168,19 +244,24 @@ Shaper :: {}.{
 		gsub_required = LayoutCommon.required_feature(gsub_common, gsub_langsys)
 		gpos_required = LayoutCommon.required_feature(gpos_common, gpos_langsys)
 		gsub_required_tag = if (gsub_required == LayoutCommon.no_feature) 0 else LayoutCommon.feature_tag(gsub_common, gsub_required)
+		# Each request's feature in each table, found in one pass over each
+		# language system.
+		gsub_found = LayoutCommon.find_features(gsub_common, gsub_langsys, keys)
+		gpos_found = LayoutCommon.find_features(gpos_common, gpos_langsys, keys)
 		# Allocate mask bits as HarfBuzz's map builder does.
-		var $mapped = []
+		var $mapped = List.with_capacity(merged.len())
 		var $next_bit = Shaper.first_bit
 		var $global_mask = Shaper.global_bit
 		var $gsub_required_stage = 0
-		for f in merged {
+		for k in 0..<merged.len() {
+			f = merged.get(k) ?? Shaper.request("", 0, False)
 			bits = if (f.global and f.max == 1) 0 else Shaper.bit_storage(f.max).min(8)
 			if f.max != 0 and $next_bit + bits < Shaper.global_shift {
 				if gsub_required_tag == f.tag {
 					$gsub_required_stage = f.stage
 				}
-				gsub_index = LayoutCommon.find_feature(gsub_common, gsub_langsys, f.tag)
-				gpos_index = LayoutCommon.find_feature(gpos_common, gpos_langsys, f.tag)
+				gsub_index = gsub_found.get(k) ?? LayoutCommon.no_feature
+				gpos_index = gpos_found.get(k) ?? LayoutCommon.no_feature
 				found = gsub_index != LayoutCommon.no_feature or gpos_index != LayoutCommon.no_feature
 				if found or f.fallback {
 					{ shift, mask } =
@@ -216,7 +297,7 @@ Shaper :: {}.{
 		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, 2, Gsub, gsub_varied)
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
-		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.tag("hebr")
+		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
 		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
 		gpos =
 			if apply_gpos {
@@ -224,9 +305,8 @@ Shaper :: {}.{
 			} else {
 				[]
 			}
-		kern_tag = Shaper.tag("kern")
-		kern_mask = mask_of(kern_tag)
-		has_gpos_kern = match mapped.find_first(|m| m.tag == kern_tag) {
+		kern_mask = mask_of(Shaper.kern_tag)
+		has_gpos_kern = match mapped.find_first(|m| m.tag == Shaper.kern_tag) {
 			Ok(m) => m.gpos != LayoutCommon.no_feature
 			Err(_) => False
 		}
@@ -253,13 +333,13 @@ Shaper :: {}.{
 			kern,
 			global_mask: $global_mask,
 			ranges: $ranges,
-			frac_mask: one_mask_of(Shaper.tag("frac")),
-			numr_mask: one_mask_of(Shaper.tag("numr")),
-			dnom_mask: one_mask_of(Shaper.tag("dnom")),
-			rtlm_mask: one_mask_of(Shaper.tag("rtlm")),
+			frac_mask: one_mask_of(Shaper.frac_tag),
+			numr_mask: one_mask_of(Shaper.numr_tag),
+			dnom_mask: one_mask_of(Shaper.dnom_tag),
+			rtlm_mask: one_mask_of(Shaper.rtlm_tag),
 			hebrew,
 			characters: clusters == Characters,
-			has_gpos_mark: one_mask_of(Shaper.tag("mark")) != 0,
+			has_gpos_mark: one_mask_of(Shaper.mark_tag) != 0,
 			# HarfBuzz positions marks itself when nothing else does: no
 			# `GPOS` and no `kern` with cross-stream kerning (which
 			# roc-font does not read).
@@ -287,17 +367,19 @@ Shaper :: {}.{
 	}
 
 	## Requests sorted by tag, keeping the order of requests for one tag
-	## (HarfBuzz sorts by tag, then by the order of adding). Insertion sort:
-	## the list is short.
+	## (HarfBuzz sorts by tag, then by the order of adding): sorted as
+	## `tag << 32 | position` keys (a tag is four bytes), then gathered.
 	sort_by_tag : List(Request) -> List(Request)
 	sort_by_tag = |requests| {
-		var $out = []
-		for r in requests {
-			var $at = $out.len()
-			while $at > 0 and ($out.get($at - 1) ?? r).tag > r.tag {
-				$at = $at - 1
+		keys = Sorted.sort(requests.map_with_index(|r, i| r.tag.shl_wrap(32).bitwise_or(i.bitwise_and(0xFFFFFFFF))))
+		var $out = List.with_capacity(requests.len())
+		for key in keys {
+			match requests.get(key.bitwise_and(0xFFFFFFFF)) {
+				Ok(r) => {
+					$out = $out.append(r)
+				}
+				Err(_) => {}
 			}
-			$out = $out.take_first($at).append(r).concat($out.drop_first($at))
 		}
 		$out
 	}
@@ -361,46 +443,78 @@ Shaper :: {}.{
 	## have them at the face's location (`varied_feature_lookups`).
 	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied -> List(LayoutGsub.Step)
 	lookups = |common, required, required_stage, mapped, stages, table, varied| {
-		feature_lookups = |index| Shaper.varied_feature_lookups(common, varied, index)
-		var $out = []
-		for stage in 0..<stages {
-			var $masks = List.repeat(0, common.lookup_count)
-			# Bit 0: some feature asks; bit 1: some feature joins manually; bit
-			# 2: the first feature to list it is `rand`.
-			var $kinds = List.repeat(0.U64, common.lookup_count)
-			if required != LayoutCommon.no_feature and required_stage == stage {
-				for lookup in feature_lookups(required) {
-					# Feature lookups are below the lookup count.
-					$masks = $masks.set(lookup, ($masks.get(lookup) ?? 0).bitwise_or(Shaper.global_bit)) ?? []
-					$kinds = $kinds.set(lookup, ($kinds.get(lookup) ?? 0).bitwise_or(1)) ?? []
-				}
+		count = common.lookup_count
+		# Every stage's lookups in one list: stage `s`, lookup `l` at
+		# `s * count + l` (a feature's stage is below `stages`), each entry
+		# the lookup's mask (bits 0 to 31) and its kind (bits 32 to 34). Bit
+		# 32: some feature asks; bit 33: some feature joins manually; bit 34:
+		# the first feature to list it is `rand`.
+		asks = 0x100000000.U64
+		joins = 0x200000000
+		random_first = 0x400000000
+		var $entries = List.repeat(0.U64, stages * count)
+		# Lookups are read where the font lists them unless feature
+		# variations are in force.
+		in_place = varied.subs.is_empty() and varied.lookup_vars.is_empty()
+		if required != LayoutCommon.no_feature and required_stage < stages {
+			base = required_stage * count
+			feature_lookups = if (in_place) LayoutCommon.feature_lookups(common, required) else Shaper.varied_feature_lookups(common, varied, required)
+			for lookup in feature_lookups {
+				# Feature lookups are below the lookup count.
+				$entries = $entries.set(base + lookup, ($entries.get(base + lookup) ?? 0).bitwise_or(Shaper.global_bit).bitwise_or(asks)) ?? []
 			}
-			for m in mapped {
-				index = match table {
-					Gsub => m.gsub
-					Gpos => m.gpos
-				}
-				feature_stage = match table {
-					Gsub => m.stage.min(stages - 1)
-					Gpos => 0
-				}
-				if index != LayoutCommon.no_feature and feature_stage == stage {
-					for lookup in feature_lookups(index) {
-						kind = $kinds.get(lookup) ?? 0
-						first = if (kind.bitwise_and(1) == 0 and m.random) 4 else 0
-						manual = if (m.manual) 2 else 0
-						$masks = $masks.set(lookup, ($masks.get(lookup) ?? 0).bitwise_or(m.mask)) ?? []
-						$kinds = $kinds.set(lookup, kind.bitwise_or(1).bitwise_or(first).bitwise_or(manual)) ?? []
+		}
+		for m in mapped {
+			index = match table {
+				Gsub => m.gsub
+				Gpos => m.gpos
+			}
+			feature_stage = match table {
+				Gsub => m.stage.min(stages - 1)
+				Gpos => 0
+			}
+			if index != LayoutCommon.no_feature and feature_stage < stages {
+				base = feature_stage * count
+				added = m.mask.bitwise_and(0xFFFFFFFF).bitwise_or(asks).bitwise_or(if (m.manual) joins else 0)
+				if in_place {
+					# `LayoutCommon.feature_lookups` without making the list.
+					data = common.data
+					offset = if (index >= common.feature_count) 0 else Bytes.u16(data, common.feature_list + 2 + 6 * index + 4)
+					if offset != 0 {
+						at = common.feature_list + offset
+						for k in 0..<Bytes.u16(data, at + 2) {
+							lookup = Bytes.u16(data, at + 4 + 2 * k)
+							if lookup < count {
+								entry = $entries.get(base + lookup) ?? 0
+								first = if (entry.bitwise_and(asks) == 0 and m.random) random_first else 0
+								# `lookup` is below the lookup count.
+								$entries = $entries.set(base + lookup, entry.bitwise_or(added).bitwise_or(first)) ?? []
+							}
+						}
+					}
+				} else {
+					for lookup in Shaper.varied_feature_lookups(common, varied, index) {
+						entry = $entries.get(base + lookup) ?? 0
+						first = if (entry.bitwise_and(asks) == 0 and m.random) random_first else 0
+						# Feature lookups are below the lookup count.
+						$entries = $entries.set(base + lookup, entry.bitwise_or(added).bitwise_or(first)) ?? []
 					}
 				}
 			}
-			for index in 0..<common.lookup_count {
-				mask = $masks.get(index) ?? 0
-				kind = $kinds.get(index) ?? 0
-				if mask != 0 {
-					automatic = kind.bitwise_and(2) == 0
-					$out = $out.append({ index, mask, auto_zwnj: automatic, auto_zwj: automatic, random: kind.bitwise_and(4) != 0 })
-				}
+		}
+		var $steps = 0
+		for entry in $entries {
+			if entry.bitwise_and(0xFFFFFFFF) != 0 {
+				$steps = $steps + 1
+			}
+		}
+		var $out = List.with_capacity($steps)
+		for at in 0..<(stages * count) {
+			entry = $entries.get(at) ?? 0
+			mask = entry.bitwise_and(0xFFFFFFFF)
+			if mask != 0 {
+				automatic = entry.bitwise_and(joins) == 0
+				$out = $out.append({ index: at % count, mask, auto_zwnj: automatic, auto_zwj: automatic, random: entry.bitwise_and(random_first) != 0 })
 			}
 		}
 		$out
@@ -1067,14 +1181,35 @@ Shaper :: {}.{
 	## public `GlyphOrigin` kinds.
 	Origin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }), Multiple({ feature : Str }), Inserted({ feature : Str })]
 
+	## Which of several features listing one lookup an origin credits
+	## first: `liga` (0), then the features shaping applies by default
+	## (1), then the others (2); ties go by tag.
+	credit_rank : U64 -> U64
+	credit_rank = |t|
+		if t == Shaper.liga_tag {
+			0
+		} else if Shaper.default_tags.contains(t) {
+			1
+		} else {
+			2
+		}
+
+	liga_tag : U64
+	liga_tag = Shaper.tag("liga")
+
+	## The tags of every default request, in either direction.
+	default_tags : List(U64)
+	default_tags = Shaper.ltr_requests.concat(Shaper.rtl_requests).map(|r| r.tag)
+
 	## The features that list each `GSUB` step's lookup, in the plan's step
-	## order, each step's features in increasing tag order, with each tag's
+	## order, each step's features in the order origins credit them
+	## (`credit_rank`, then tag), with each tag's
 	## text made once here (not once per glyph). Built as
 	## `lookups` builds the steps (stage by stage, each stage in lookup
 	## order, from the required feature and the mapped features of the
 	## stage, their lookups replaced by feature variations), so the lists
 	## align with `p.gsub`. Only traced shaping calls it.
-	step_features : Face, Plan -> List(List({ tag : U64, mask : U64, text : Str }))
+	step_features : Face, Plan -> List(List({ rank : U64, tag : U64, mask : U64, text : Str }))
 	step_features = |face, p| {
 		common = LayoutGsub.common_of(Face.gsub(face))
 		varied = { subs: p.gsub_subs, fv: Face.feature_variations(face).gsub, lookup_vars: p.gsub_lookup_vars }
@@ -1083,11 +1218,11 @@ Shaper :: {}.{
 		var $out = []
 		for stage in 0..<stages {
 			var $found = List.repeat([], common.lookup_count)
-			add = |found, lookup, wanted, mask| {
-				entry = { tag: wanted, mask, text: Shaper.tag_text(wanted) }
+			add = |found, lookup, wanted, rank, mask| {
+				entry = { rank, tag: wanted, mask, text: Shaper.tag_text(wanted) }
 				list = found.get(lookup) ?? []
 				var $at = list.len()
-				while $at > 0 and (list.get($at - 1) ?? entry).tag > wanted {
+				while $at > 0 and Shaper.credited_after(list.get($at - 1) ?? entry, entry) {
 					$at = $at - 1
 				}
 				# Feature lookups are below the lookup count, the list's length.
@@ -1096,13 +1231,14 @@ Shaper :: {}.{
 			if p.gsub_required != LayoutCommon.no_feature and p.gsub_required_stage == stage {
 				required_tag = LayoutCommon.feature_tag(common, p.gsub_required)
 				for lookup in feature_lookups(p.gsub_required) {
-					$found = add($found, lookup, required_tag, Shaper.global_bit)
+					# The required feature always applies, as defaults do.
+					$found = add($found, lookup, required_tag, Shaper.credit_rank(required_tag).min(1), Shaper.global_bit)
 				}
 			}
 			for m in p.mapped {
 				if m.gsub != LayoutCommon.no_feature and m.stage.min(stages - 1) == stage {
 					for lookup in feature_lookups(m.gsub) {
-						$found = add($found, lookup, m.tag, m.mask)
+						$found = add($found, lookup, m.tag, Shaper.credit_rank(m.tag), m.mask)
 					}
 				}
 			}
@@ -1115,6 +1251,10 @@ Shaper :: {}.{
 		$out
 	}
 
+	## Whether origins credit feature `a` after feature `b`.
+	credited_after : { rank : U64, tag : U64, mask : U64, text : Str }, { rank : U64, tag : U64, mask : U64, text : Str } -> Bool
+	credited_after = |a, b| a.rank > b.rank or (a.rank == b.rank and a.tag > b.tag)
+
 	## A four-byte tag as text, as the font stores it (bytes that are not
 	## UTF-8 become U+FFFD).
 	# A tag's four bytes as ISO 8859-1, so every tag is four characters and
@@ -1125,7 +1265,7 @@ Shaper :: {}.{
 	## The origin of every glyph of a finished run (`Shaped.items`): what
 	## made it, and the feature of the plan step that made it. A step's
 	## lookup that several features list is credited to the first of them,
-	## in tag order, that is on for the glyph (to the first of them when
+	## in `step_features` order, that is on for the glyph (to the first of them when
 	## none is: a lookup a contextual rule called may change a glyph the
 	## rule's feature is not on for).
 	origins : Face, Plan, List(LayoutGsub.Item) -> List(Origin)

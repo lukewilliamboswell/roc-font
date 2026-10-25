@@ -218,7 +218,10 @@ check! = |file, text, source| {
 	}
 	check_run!(n, Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft }), True)
 	plan = Font.plan(font, Font.ShapeOptions.{})
-	traced = Font.shape_traced(font, plan, scalars_of(text))
+	traced = match Font.shape_traced(font, plan, scalars_of(text)) {
+		Ok(t) => t
+		Err(OverBudget({ run: over_run, origins, budgets: _ })) => { run: over_run, origins }
+	}
 	if Str.inspect(traced.run) != Str.inspect(run) or traced.origins.len() != run.glyphs.len() {
 		crash "a traced run differs from the run, or its origins are not index-aligned"
 	}

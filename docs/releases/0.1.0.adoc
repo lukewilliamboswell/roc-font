@@ -85,6 +85,52 @@ results, so every check runs without the references installed.
   table) are left out. Over 1,278 fonts it refuses exactly the fonts OTS
   refuses, except that it does not require the `OS/2`, `name` and `post`
   tables or outlines to be present.
+* **What "accepts what OTS accepts" covers.** It is about damaged tables:
+  a table that is present but broken rejects the font exactly when OTS
+  would reject it, or is left out exactly as OTS drops it. A *missing*
+  optional table is a deliberate divergence: OTS refuses a font without
+  `OS/2`, `name` or `post`, while roc-font reads it (metrics then come
+  from the horizontal header, and the family and glyph names are
+  `Missing`), because metrics-only and subset fonts that leave these out
+  are common in tests and tooling.
+* **Glyph boxes follow HarfBuzz.** A glyph whose `glyf` entry has no
+  contours (a space, or every glyph of a metrics-only subset that keeps
+  the header boxes) has no extents: `Font.extents` is `Empty`, as
+  HarfBuzz reports zero extents, even when the entry's header stores a
+  box. The seed read that header box instead.
+
+== Changes since 0.1.0-rc1
+
+Feedback from package-mermaid and roc-pdf on the release candidate:
+
+* **`Font.shape_traced` also reports budgets.** It returns
+  `Try({ run, origins }, [OverBudget({ run, origins, budgets })])`, so a
+  caller that needs both origins and budgets shapes once. Where rc1 code
+  read `traced.run` and `traced.origins`, match on `Ok({ run, origins })`
+  (and `Err(OverBudget({ run, origins, budgets }))`, which still holds the
+  whole text's run).
+* **`Font.Extents` names the glyph box**
+  (`{ x_min, y_min, x_max, y_max }`); `Font.extents` returns
+  `[Extents(Extents), Empty, Unknown]`, the same values as before, so
+  matching code is unchanged.
+* **Flag predicates follow Roc's naming:** `Font.unsafe_to_break` is now
+  `Font.is_unsafe_to_break`, and `Font.missing` is `Font.is_missing`.
+* **Origins credit `liga` first.** A substitution several features list
+  (fonts often list the same ligatures under `liga` and `clig`) is
+  credited to one that is on for the glyph: `liga` first, then the other
+  features shaping applies by default, then features the options turned
+  on, each group in tag order. rc1 used tag order alone, which reported
+  such ligatures as `clig`. Origins carry no lookup index or input
+  glyphs; this is now documented on `Font.GlyphOrigin`.
+* **Text as UTF-8 bytes** is documented: `Str.from_utf8` then
+  `Font.shape_planned`, or decode yourself and pass each scalar with its
+  byte offset to `Font.shape_scalars`.
+* **Planning is cheaper.** `Font.plan` (and so `Font.shape` and
+  `Font.width`, which plan per call) costs 9 allocations for Inter
+  instead of 121, and 14 instead of 767 with a language set, and about a
+  fifth of the instructions. Shaping short labels with a plan per label
+  takes about 7.5 µs per label instead of 17.7 µs on the machine the
+  benchmarks ran on; with one plan for all, about 3.4 µs.
 
 == Known limits
 
@@ -97,7 +143,7 @@ results, so every check runs without the references installed.
   table are applied; single adjustment, cursive attachment, mark
   attachment and contextual positioning lookups are not yet.
 * **No CFF outlines.** Fonts with `CFF` or `CFF2` outlines are read and
-  shaped, but their outlines are not, so `Font.extents` is `Empty` for
+  shaped, but their outlines are not, so `Font.extents` is `Unknown` for
   their glyphs.
 * **No Apple Advanced Typography.** The `morx`, `mort` and `trak` tables
   are not applied.
