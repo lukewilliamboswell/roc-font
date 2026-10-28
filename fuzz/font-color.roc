@@ -78,6 +78,23 @@ test! = |bytes| {
 					}
 				}
 			}
+			for value in [0.Dec, 1, 256, 16384] {
+				settings = Font.Variation.{ axes: ["wght", "AX02", "AX03", "AX04"].map(|tag| { tag, value }) }
+				precise_moved = Font.at(font, settings)
+				precise_again = Font.at(again, settings)
+				observed = Font.color_glyph(precise_moved, 1)
+				if observed != Font.color_glyph(precise_again, 1) {
+					crash "precise/default color location is nondeterministic"
+				}
+				match observed {
+					Present(g) => {
+						if !valid_graph(g, Font.glyph_count(font), candidate.len()) {
+							crash "precise/default color graph is invalid"
+						}
+					}
+					Absent => {}
+				}
+			}
 		}
 		Err(_) => {}
 	}
