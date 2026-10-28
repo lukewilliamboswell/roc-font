@@ -105,6 +105,9 @@ from _common import (  # noqa: E402
 DRIVER_BIN = TMP_ROOT / "conformance" / "driver"
 # The package the driver was built against: the bundle's name, or `source`.
 DRIVER_PACKAGE = TMP_ROOT / "conformance" / "driver.package"
+# Proven external matrices share this optimized driver, avoiding one
+# identical native build per script while retaining exact comparisons.
+EXTERNAL_CASES = (ROOT / "tests/fonts/complex/indic-cases.jsonc",)
 SCORES = ROOT / "tests" / "scores.json"
 SCORES_ABOUT = (
     "Scored conformance suites (architecture §7.1). `scored` lists path prefixes under tests/cases whose case files are scored "
@@ -122,11 +125,9 @@ def driver_sources(dep: list[str]) -> list[Path]:
 def reported_problems(output: str, package: str = "source") -> tuple[list[str], list[str]]:
     """Files roc reported problems in, and those outside the cached platform.
 
-    Some nightlies report problems inside the cached basic-cli platform and
-    exit non-zero although the binary is built.
-    That is accepted; a problem reported in this repository's files, or in
-    the roc-font bundle (`package`, also unpacked in the package cache),
-    never is.
+    Problems inside the cached basic-cli platform are identified separately
+    for diagnostics. A native build must still exit successfully; neither
+    platform errors nor errors in the bundle are accepted.
     """
     located = re.findall(r"^── [✗●] .*? ─+ (\S+?):\d+:\d+", output, flags=re.MULTILINE)
     bundle = package.removesuffix(".tar.zst")
@@ -138,27 +139,26 @@ def build_driver(roc: str, force: bool, dep: list[str]) -> int:
     """Build the driver against `dep` (flight.replace_dep arguments, or
     none for package/ sources) unless the binary is current."""
     package = dep[-1].rsplit("/", 1)[-1] if dep else "source"
+    identity = package + " opt=speed"
     if not force and DRIVER_BIN.exists() and DRIVER_PACKAGE.is_file():
         built = DRIVER_BIN.stat().st_mtime
-        if (DRIVER_PACKAGE.read_text(encoding="utf-8") == package
+        if (DRIVER_PACKAGE.read_text(encoding="utf-8") == identity
                 and all(p.stat().st_mtime <= built for p in driver_sources(dep))):
             return 0
     DRIVER_BIN.parent.mkdir(parents=True, exist_ok=True)
     for stale in (DRIVER_BIN, DRIVER_PACKAGE):
         if stale.exists():
             stale.unlink()
-    command = [roc, "build", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}", *dep]
+    command = [roc, "build", "--opt=speed", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}", *dep]
     print("+ " + " ".join(command), flush=True)
     completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
     output = completed.stdout + completed.stderr
     located, ours = reported_problems(output, package)
-    if not DRIVER_BIN.exists() or ours or (completed.returncode != 0 and not located):
+    if not DRIVER_BIN.exists() or ours or completed.returncode != 0:
         print(output)
         print("building the driver failed", file=sys.stderr)
         return completed.returncode or 1
-    if completed.returncode != 0:
-        print(f"  note: roc exited {completed.returncode} for {len(located)} problems reported inside the cached platform; the driver was built")
-    DRIVER_PACKAGE.write_text(package, encoding="utf-8")
+    DRIVER_PACKAGE.write_text(identity, encoding="utf-8")
     return 0
 
 
@@ -337,6 +337,14 @@ def main() -> int:
     prefix = [str(DRIVER_BIN)]
 
     files = case_files(args.cases)
+    for path in EXTERNAL_CASES:
+        if not args.cases or any(selector in str(path.relative_to(ROOT)) or Path(selector).resolve() == path.resolve() for selector in args.cases):
+            files.append(path)
+    for selector in args.cases:
+        path = Path(selector)
+        if path.is_file() and path.suffix == ".jsonc":
+            files.append(path.resolve())
+    files = sorted({p.resolve() for p in files})
     if not files:
         print("no case files selected", file=sys.stderr)
         return 1
@@ -351,6 +359,10 @@ def main() -> int:
         parsed, file_problems = parse_case_file(path)
         cases += parsed
         problems += file_problems
+    ids = [case.id for case in cases]
+    if len(ids) != len(set(ids)):
+        print("duplicate case IDs across selected files; use distinct case-file basenames", file=sys.stderr)
+        return 1
     locations = Locations()
     records_by_file = {path.resolve(): load_records(path) for path in files}
     guesses = {}

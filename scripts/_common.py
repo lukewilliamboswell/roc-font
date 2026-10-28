@@ -1157,6 +1157,11 @@ def record_key(case: Case, font_sha256: str, tools: dict[str, str], extractor: i
 
 
 def records_path(case_file: Path) -> Path:
+    # Explicit external case files keep records beside them, matching the
+    # recorder. Their basename preserves the case-ID namespace.
+    resolved = case_file.resolve()
+    if not resolved.is_relative_to(CASES_DIR.resolve()):
+        return resolved.with_name(resolved.stem + "-records.jsonl")
     return RECORDS_DIR / (case_stem(case_file) + ".jsonl")
 
 
