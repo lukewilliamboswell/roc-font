@@ -6,7 +6,7 @@ import TableGlyf
 ## positioning, vertical origins and variation-instance metrics.
 GraphiteMetrics := { advances : List(U16), boxes : List(TableGlyf.Bounds) }.{
 	make : Face -> GraphiteMetrics
-	make = |face| { advances: face.advances, boxes: face.boxes }
+	make = |face| { advances: face.advances, boxes: face.graphite_boxes }
 
 	get : GraphiteMetrics, U64, U64, I32 -> I32
 	get = |font, glyph, metric, _level| {
