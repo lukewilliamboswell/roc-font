@@ -1,0 +1,1152 @@
+{
+  "harfbuzz": "14.6.0",
+  "binaries": {
+    "before": {
+      "path": "/private/tmp/roc-font-gpos/.roc-font-tmp/bench/gpos-final/bin/roc-font",
+      "sha256": "ad8e51729f02e393d4def190dbb9905556df4734bc75535107619b545c3a3005"
+    },
+    "after": {
+      "path": "/private/tmp/roc-font-position-context/.roc-font-tmp/context-complete/roc-font",
+      "sha256": "43f15ffab38ad221224b024e259bd4e11b0181735a5ba9360648084211b83ce8"
+    },
+    "before-alloc": {
+      "path": "/private/tmp/roc-font-context-before-speed/.roc-font-tmp/context-before-speed/roc-alloc",
+      "sha256": "c816a2c66cd941331d283a54ffc11d218dce271e394af2a4ef155f95748f3cd6"
+    },
+    "after-alloc": {
+      "path": "/private/tmp/roc-font-position-context/.roc-font-tmp/context-complete/roc-alloc",
+      "sha256": "551675b66b2c3241ccce4891d898360f987b8297742c4bfa309b774890029b32"
+    },
+    "harfbuzz": {
+      "path": "/private/tmp/roc-font-hb14-bench/c-harfbuzz",
+      "sha256": "2c7b7b60f055b1b676907dde59a9244285902e582505891eda339409a6bf5138"
+    }
+  },
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "unavailable_reason": "roc-fuzz0.4.3 exposes allocation counts, not allocator byte sizes; RSS is reported separately",
+  "peak_rss_source": "wait4 ru_maxrss; on Linux this includes the harness's own peak, so compare within a run only",
+  "cases": [
+    {
+      "records": 256,
+      "font_sha256": "a23580bdd58b846bb728e06bf64cf4689e4ec219df18117d017dfa519a52099a",
+      "timing": {
+        "before": {
+          "median_ns": 34920.48885976409,
+          "iterations": 763,
+          "checksum": 767,
+          "samples": [
+            {
+              "iterations": 763,
+              "elapsed_ns": 26858500,
+              "successes": 763,
+              "checksum": 585221,
+              "peak_rss_bytes": 2949120
+            },
+            {
+              "iterations": 763,
+              "elapsed_ns": 26644333,
+              "successes": 763,
+              "checksum": 585221,
+              "peak_rss_bytes": 2965504
+            },
+            {
+              "iterations": 763,
+              "elapsed_ns": 26199375,
+              "successes": 763,
+              "checksum": 585221,
+              "peak_rss_bytes": 2818048
+            },
+            {
+              "iterations": 763,
+              "elapsed_ns": 26856500,
+              "successes": 763,
+              "checksum": 585221,
+              "peak_rss_bytes": 3080192
+            },
+            {
+              "iterations": 763,
+              "elapsed_ns": 26502250,
+              "successes": 763,
+              "checksum": 585221,
+              "peak_rss_bytes": 2949120
+            }
+          ],
+          "peak_rss_bytes": 3080192
+        },
+        "after": {
+          "median_ns": 22922.998722860793,
+          "iterations": 783,
+          "checksum": 767,
+          "samples": [
+            {
+              "iterations": 783,
+              "elapsed_ns": 17948708,
+              "successes": 783,
+              "checksum": 600561,
+              "peak_rss_bytes": 3276800
+            },
+            {
+              "iterations": 783,
+              "elapsed_ns": 18024542,
+              "successes": 783,
+              "checksum": 600561,
+              "peak_rss_bytes": 3194880
+            },
+            {
+              "iterations": 783,
+              "elapsed_ns": 17780042,
+              "successes": 783,
+              "checksum": 600561,
+              "peak_rss_bytes": 3162112
+            },
+            {
+              "iterations": 783,
+              "elapsed_ns": 17938667,
+              "successes": 783,
+              "checksum": 600561,
+              "peak_rss_bytes": 3325952
+            },
+            {
+              "iterations": 783,
+              "elapsed_ns": 18330292,
+              "successes": 783,
+              "checksum": 600561,
+              "peak_rss_bytes": 3145728
+            }
+          ],
+          "peak_rss_bytes": 3325952
+        },
+        "harfbuzz": {
+          "median_ns": 4548.387096774193,
+          "iterations": 93,
+          "checksum": 767,
+          "samples": [
+            {
+              "iterations": 93,
+              "elapsed_ns": 425000,
+              "successes": 93,
+              "checksum": 71331,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 93,
+              "elapsed_ns": 423000,
+              "successes": 93,
+              "checksum": 71331,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 93,
+              "elapsed_ns": 422000,
+              "successes": 93,
+              "checksum": 71331,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 93,
+              "elapsed_ns": 422000,
+              "successes": 93,
+              "checksum": 71331,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 93,
+              "elapsed_ns": 428000,
+              "successes": 93,
+              "checksum": 71331,
+              "peak_rss_bytes": 2260992
+            }
+          ],
+          "peak_rss_bytes": 2260992
+        }
+      },
+      "allocation": {
+        "before-alloc": {
+          "allocations": 25,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 767
+        },
+        "after-alloc": {
+          "allocations": 22,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 767
+        }
+      },
+      "after_before_ratio": 0.6564340726991659,
+      "after_harfbuzz_ratio": 5.039808229848827
+    },
+    {
+      "records": 2048,
+      "font_sha256": "a57613c39f3208552c2e6eea1f7a7aa486ba032c4afc5f834bbe73869d446d33",
+      "timing": {
+        "before": {
+          "median_ns": 272502.0344827586,
+          "iterations": 348,
+          "checksum": 2559,
+          "samples": [
+            {
+              "iterations": 348,
+              "elapsed_ns": 94830708,
+              "successes": 348,
+              "checksum": 890532,
+              "peak_rss_bytes": 3489792
+            },
+            {
+              "iterations": 348,
+              "elapsed_ns": 97872208,
+              "successes": 348,
+              "checksum": 890532,
+              "peak_rss_bytes": 3407872
+            },
+            {
+              "iterations": 348,
+              "elapsed_ns": 94713709,
+              "successes": 348,
+              "checksum": 890532,
+              "peak_rss_bytes": 3457024
+            },
+            {
+              "iterations": 348,
+              "elapsed_ns": 94455167,
+              "successes": 348,
+              "checksum": 890532,
+              "peak_rss_bytes": 3473408
+            },
+            {
+              "iterations": 348,
+              "elapsed_ns": 95004750,
+              "successes": 348,
+              "checksum": 890532,
+              "peak_rss_bytes": 3424256
+            }
+          ],
+          "peak_rss_bytes": 3489792
+        },
+        "after": {
+          "median_ns": 173282.44990548203,
+          "iterations": 529,
+          "checksum": 2559,
+          "samples": [
+            {
+              "iterations": 529,
+              "elapsed_ns": 92333958,
+              "successes": 529,
+              "checksum": 1353711,
+              "peak_rss_bytes": 3686400
+            },
+            {
+              "iterations": 529,
+              "elapsed_ns": 91509875,
+              "successes": 529,
+              "checksum": 1353711,
+              "peak_rss_bytes": 3522560
+            },
+            {
+              "iterations": 529,
+              "elapsed_ns": 91666416,
+              "successes": 529,
+              "checksum": 1353711,
+              "peak_rss_bytes": 3522560
+            },
+            {
+              "iterations": 529,
+              "elapsed_ns": 91699125,
+              "successes": 529,
+              "checksum": 1353711,
+              "peak_rss_bytes": 3457024
+            },
+            {
+              "iterations": 529,
+              "elapsed_ns": 90658375,
+              "successes": 529,
+              "checksum": 1353711,
+              "peak_rss_bytes": 3489792
+            }
+          ],
+          "peak_rss_bytes": 3686400
+        },
+        "harfbuzz": {
+          "median_ns": 33535.796766743646,
+          "iterations": 1299,
+          "checksum": 2559,
+          "samples": [
+            {
+              "iterations": 1299,
+              "elapsed_ns": 43214000,
+              "successes": 1299,
+              "checksum": 3324141,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 1299,
+              "elapsed_ns": 43528000,
+              "successes": 1299,
+              "checksum": 3324141,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 1299,
+              "elapsed_ns": 43599000,
+              "successes": 1299,
+              "checksum": 3324141,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 1299,
+              "elapsed_ns": 43563000,
+              "successes": 1299,
+              "checksum": 3324141,
+              "peak_rss_bytes": 2260992
+            },
+            {
+              "iterations": 1299,
+              "elapsed_ns": 45535000,
+              "successes": 1299,
+              "checksum": 3324141,
+              "peak_rss_bytes": 2260992
+            }
+          ],
+          "peak_rss_bytes": 2260992
+        }
+      },
+      "allocation": {
+        "before-alloc": {
+          "allocations": 25,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 2559
+        },
+        "after-alloc": {
+          "allocations": 22,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 2559
+        }
+      },
+      "after_before_ratio": 0.6358941511552118,
+      "after_harfbuzz_ratio": 5.167089099171801
+    },
+    {
+      "records": 8192,
+      "font_sha256": "f66b3b2e9a658baa32d3e1064b3c16dc600087bc8b626028c3801ccff5bf51e9",
+      "timing": {
+        "before": {
+          "median_ns": 1087548.6853932585,
+          "iterations": 89,
+          "checksum": 8703,
+          "samples": [
+            {
+              "iterations": 89,
+              "elapsed_ns": 96884250,
+              "successes": 89,
+              "checksum": 774567,
+              "peak_rss_bytes": 4341760
+            },
+            {
+              "iterations": 89,
+              "elapsed_ns": 96791833,
+              "successes": 89,
+              "checksum": 774567,
+              "peak_rss_bytes": 4259840
+            },
+            {
+              "iterations": 89,
+              "elapsed_ns": 97021875,
+              "successes": 89,
+              "checksum": 774567,
+              "peak_rss_bytes": 4358144
+            },
+            {
+              "iterations": 89,
+              "elapsed_ns": 96450875,
+              "successes": 89,
+              "checksum": 774567,
+              "peak_rss_bytes": 4112384
+            },
+            {
+              "iterations": 89,
+              "elapsed_ns": 95650584,
+              "successes": 89,
+              "checksum": 774567,
+              "peak_rss_bytes": 4292608
+            }
+          ],
+          "peak_rss_bytes": 4358144
+        },
+        "after": {
+          "median_ns": 687197.5524475524,
+          "iterations": 143,
+          "checksum": 8703,
+          "samples": [
+            {
+              "iterations": 143,
+              "elapsed_ns": 98801333,
+              "successes": 143,
+              "checksum": 1244529,
+              "peak_rss_bytes": 3653632
+            },
+            {
+              "iterations": 143,
+              "elapsed_ns": 98269250,
+              "successes": 143,
+              "checksum": 1244529,
+              "peak_rss_bytes": 3686400
+            },
+            {
+              "iterations": 143,
+              "elapsed_ns": 98016667,
+              "successes": 143,
+              "checksum": 1244529,
+              "peak_rss_bytes": 3768320
+            },
+            {
+              "iterations": 143,
+              "elapsed_ns": 98305750,
+              "successes": 143,
+              "checksum": 1244529,
+              "peak_rss_bytes": 3751936
+            },
+            {
+              "iterations": 143,
+              "elapsed_ns": 98072334,
+              "successes": 143,
+              "checksum": 1244529,
+              "peak_rss_bytes": 3751936
+            }
+          ],
+          "peak_rss_bytes": 3768320
+        },
+        "harfbuzz": {
+          "median_ns": 132612.43144424132,
+          "iterations": 547,
+          "checksum": 8703,
+          "samples": [
+            {
+              "iterations": 547,
+              "elapsed_ns": 72826000,
+              "successes": 547,
+              "checksum": 4760541,
+              "peak_rss_bytes": 2293760
+            },
+            {
+              "iterations": 547,
+              "elapsed_ns": 72264000,
+              "successes": 547,
+              "checksum": 4760541,
+              "peak_rss_bytes": 2293760
+            },
+            {
+              "iterations": 547,
+              "elapsed_ns": 72054000,
+              "successes": 547,
+              "checksum": 4760541,
+              "peak_rss_bytes": 2293760
+            },
+            {
+              "iterations": 547,
+              "elapsed_ns": 72539000,
+              "successes": 547,
+              "checksum": 4760541,
+              "peak_rss_bytes": 2293760
+            },
+            {
+              "iterations": 547,
+              "elapsed_ns": 75811000,
+              "successes": 547,
+              "checksum": 4760541,
+              "peak_rss_bytes": 2293760
+            }
+          ],
+          "peak_rss_bytes": 2293760
+        }
+      },
+      "allocation": {
+        "before-alloc": {
+          "allocations": 25,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 8703
+        },
+        "after-alloc": {
+          "allocations": 22,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 8703
+        }
+      },
+      "after_before_ratio": 0.631877507349532,
+      "after_harfbuzz_ratio": 5.181999492532447
+    }
+  ],
+  "harfbuzz_library": {
+    "path": "/private/tmp/roc-font-hb14-bench/src/libharfbuzz.0.dylib",
+    "sha256": "6fa7187e6aa42d4602101240984dccbb5587b6174b076124a204f6eb7a49b5e7"
+  },
+  "adversarial": [
+    {
+      "font": "cycle-8192.ttf",
+      "sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "timing": {
+        "before": {
+          "median_ns": 415363709.0,
+          "iterations": 1,
+          "checksum": 511,
+          "samples": [
+            {
+              "iterations": 1,
+              "elapsed_ns": 415363709,
+              "successes": 1,
+              "checksum": 511,
+              "peak_rss_bytes": 17629184
+            },
+            {
+              "iterations": 1,
+              "elapsed_ns": 413623417,
+              "successes": 1,
+              "checksum": 511,
+              "peak_rss_bytes": 17874944
+            },
+            {
+              "iterations": 1,
+              "elapsed_ns": 427449958,
+              "successes": 1,
+              "checksum": 511,
+              "peak_rss_bytes": 18382848
+            },
+            {
+              "iterations": 1,
+              "elapsed_ns": 428151542,
+              "successes": 1,
+              "checksum": 511,
+              "peak_rss_bytes": 18251776
+            },
+            {
+              "iterations": 1,
+              "elapsed_ns": 412892083,
+              "successes": 1,
+              "checksum": 511,
+              "peak_rss_bytes": 17580032
+            }
+          ],
+          "peak_rss_bytes": 18382848
+        },
+        "after": {
+          "median_ns": 10351108.4,
+          "iterations": 10,
+          "checksum": 511,
+          "samples": [
+            {
+              "iterations": 10,
+              "elapsed_ns": 103511084,
+              "successes": 10,
+              "checksum": 5110,
+              "peak_rss_bytes": 4014080
+            },
+            {
+              "iterations": 10,
+              "elapsed_ns": 105890292,
+              "successes": 10,
+              "checksum": 5110,
+              "peak_rss_bytes": 4046848
+            },
+            {
+              "iterations": 10,
+              "elapsed_ns": 103346542,
+              "successes": 10,
+              "checksum": 5110,
+              "peak_rss_bytes": 3817472
+            },
+            {
+              "iterations": 10,
+              "elapsed_ns": 105458666,
+              "successes": 10,
+              "checksum": 5110,
+              "peak_rss_bytes": 4177920
+            },
+            {
+              "iterations": 10,
+              "elapsed_ns": 102826292,
+              "successes": 10,
+              "checksum": 5110,
+              "peak_rss_bytes": 3964928
+            }
+          ],
+          "peak_rss_bytes": 4177920
+        }
+      },
+      "reference": {
+        "reference_failure": "Pinned Python oracle reports MemoryError; native C comparator does not check buffer successful. Its timing is not a successful shape oracle.",
+        "native_timing_only": {
+          "median_ns": 2198.6206896551726,
+          "iterations": 1450,
+          "checksum": 511,
+          "samples": [
+            {
+              "iterations": 1450,
+              "elapsed_ns": 3180000,
+              "successes": 1450,
+              "checksum": 740950,
+              "peak_rss_bytes": 2310144
+            },
+            {
+              "iterations": 1450,
+              "elapsed_ns": 3188000,
+              "successes": 1450,
+              "checksum": 740950,
+              "peak_rss_bytes": 2310144
+            },
+            {
+              "iterations": 1450,
+              "elapsed_ns": 3245000,
+              "successes": 1450,
+              "checksum": 740950,
+              "peak_rss_bytes": 2310144
+            },
+            {
+              "iterations": 1450,
+              "elapsed_ns": 3263000,
+              "successes": 1450,
+              "checksum": 740950,
+              "peak_rss_bytes": 2310144
+            },
+            {
+              "iterations": 1450,
+              "elapsed_ns": 3181000,
+              "successes": 1450,
+              "checksum": 740950,
+              "peak_rss_bytes": 2310144
+            }
+          ],
+          "peak_rss_bytes": 2310144
+        }
+      },
+      "allocation": {
+        "before-alloc": {
+          "allocations": 32799,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 511
+        },
+        "after-alloc": {
+          "allocations": 65569,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 511
+        }
+      },
+      "comparison_caveat": "Before has 16384 minimum operations; after and HB 14.6 have 65536. Timing ratios do not compare equal allowed work."
+    },
+    {
+      "font": "fanout-8192.ttf",
+      "sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "timing": {
+        "before": {
+          "median_ns": 2213880.8139534886,
+          "iterations": 43,
+          "checksum": 16893,
+          "samples": [
+            {
+              "iterations": 43,
+              "elapsed_ns": 106724375,
+              "successes": 43,
+              "checksum": 726399,
+              "peak_rss_bytes": 8683520
+            },
+            {
+              "iterations": 43,
+              "elapsed_ns": 101031375,
+              "successes": 43,
+              "checksum": 726399,
+              "peak_rss_bytes": 7618560
+            },
+            {
+              "iterations": 43,
+              "elapsed_ns": 94747584,
+              "successes": 43,
+              "checksum": 726399,
+              "peak_rss_bytes": 7094272
+            },
+            {
+              "iterations": 43,
+              "elapsed_ns": 94916125,
+              "successes": 43,
+              "checksum": 726399,
+              "peak_rss_bytes": 7077888
+            },
+            {
+              "iterations": 43,
+              "elapsed_ns": 95196875,
+              "successes": 43,
+              "checksum": 726399,
+              "peak_rss_bytes": 7061504
+            }
+          ],
+          "peak_rss_bytes": 8683520
+        },
+        "after": {
+          "median_ns": 5568555.555555556,
+          "iterations": 18,
+          "checksum": 66039,
+          "samples": [
+            {
+              "iterations": 18,
+              "elapsed_ns": 100118583,
+              "successes": 18,
+              "checksum": 1188702,
+              "peak_rss_bytes": 4063232
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 99744167,
+              "successes": 18,
+              "checksum": 1188702,
+              "peak_rss_bytes": 4063232
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 100976500,
+              "successes": 18,
+              "checksum": 1188702,
+              "peak_rss_bytes": 4030464
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 101655125,
+              "successes": 18,
+              "checksum": 1188702,
+              "peak_rss_bytes": 3997696
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 100234000,
+              "successes": 18,
+              "checksum": 1188702,
+              "peak_rss_bytes": 4145152
+            }
+          ],
+          "peak_rss_bytes": 4145152
+        }
+      },
+      "reference": {
+        "median_ns": 1069900.0,
+        "iterations": 90,
+        "checksum": 66039,
+        "samples": [
+          {
+            "iterations": 90,
+            "elapsed_ns": 94330000,
+            "successes": 90,
+            "checksum": 5943510,
+            "peak_rss_bytes": 2326528
+          },
+          {
+            "iterations": 90,
+            "elapsed_ns": 96291000,
+            "successes": 90,
+            "checksum": 5943510,
+            "peak_rss_bytes": 2326528
+          },
+          {
+            "iterations": 90,
+            "elapsed_ns": 99049000,
+            "successes": 90,
+            "checksum": 5943510,
+            "peak_rss_bytes": 2326528
+          },
+          {
+            "iterations": 90,
+            "elapsed_ns": 96550000,
+            "successes": 90,
+            "checksum": 5943510,
+            "peak_rss_bytes": 2326528
+          },
+          {
+            "iterations": 90,
+            "elapsed_ns": 95308000,
+            "successes": 90,
+            "checksum": 5943510,
+            "peak_rss_bytes": 2326528
+          }
+        ],
+        "peak_rss_bytes": 2326528
+      },
+      "allocation": {
+        "before-alloc": {
+          "allocations": 30,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 16893
+        },
+        "after-alloc": {
+          "allocations": 32,
+          "leaked": 0,
+          "result": "ok",
+          "checksum": 66039
+        }
+      },
+      "comparison_caveat": "Before has 16384 minimum operations; after and HB 14.6 have 65536. Timing ratios do not compare equal allowed work."
+    }
+  ],
+  "mixed_attachment_scaling": [
+    {
+      "padding_glyphs": 8,
+      "font_sha256": "124ffc6adc262f79c8e7e46da68ac074fe64b29b7f323d48b68ed4078f4642db",
+      "timing": {
+        "after": {
+          "median_ns": 5657592.611111111,
+          "iterations": 18,
+          "checksum": 4058,
+          "samples": [
+            {
+              "iterations": 18,
+              "elapsed_ns": 101836667,
+              "successes": 18,
+              "checksum": 73044,
+              "peak_rss_bytes": 3915776
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 101673625,
+              "successes": 18,
+              "checksum": 73044,
+              "peak_rss_bytes": 3801088
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 101353959,
+              "successes": 18,
+              "checksum": 73044,
+              "peak_rss_bytes": 3915776
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 101915709,
+              "successes": 18,
+              "checksum": 73044,
+              "peak_rss_bytes": 3883008
+            },
+            {
+              "iterations": 18,
+              "elapsed_ns": 101967958,
+              "successes": 18,
+              "checksum": 73044,
+              "peak_rss_bytes": 3948544
+            }
+          ],
+          "peak_rss_bytes": 3948544
+        },
+        "harfbuzz": {
+          "median_ns": 1069409.0909090908,
+          "iterations": 88,
+          "checksum": 4058,
+          "samples": [
+            {
+              "iterations": 88,
+              "elapsed_ns": 94437000,
+              "successes": 88,
+              "checksum": 357104,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 88,
+              "elapsed_ns": 94478000,
+              "successes": 88,
+              "checksum": 357104,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 88,
+              "elapsed_ns": 92584000,
+              "successes": 88,
+              "checksum": 357104,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 88,
+              "elapsed_ns": 94108000,
+              "successes": 88,
+              "checksum": 357104,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 88,
+              "elapsed_ns": 92870000,
+              "successes": 88,
+              "checksum": 357104,
+              "peak_rss_bytes": 2326528
+            }
+          ],
+          "peak_rss_bytes": 2326528
+        }
+      },
+      "allocation": {
+        "allocations": 38,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 4058
+      },
+      "after_harfbuzz_ratio": 5.290391356502931
+    },
+    {
+      "padding_glyphs": 64,
+      "font_sha256": "124ffc6adc262f79c8e7e46da68ac074fe64b29b7f323d48b68ed4078f4642db",
+      "timing": {
+        "after": {
+          "median_ns": 6388726.5625,
+          "iterations": 16,
+          "checksum": 34214,
+          "samples": [
+            {
+              "iterations": 16,
+              "elapsed_ns": 102209250,
+              "successes": 16,
+              "checksum": 547424,
+              "peak_rss_bytes": 3997696
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 103354125,
+              "successes": 16,
+              "checksum": 547424,
+              "peak_rss_bytes": 3997696
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 102219625,
+              "successes": 16,
+              "checksum": 547424,
+              "peak_rss_bytes": 3833856
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 102535916,
+              "successes": 16,
+              "checksum": 547424,
+              "peak_rss_bytes": 3850240
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 101179083,
+              "successes": 16,
+              "checksum": 547424,
+              "peak_rss_bytes": 3915776
+            }
+          ],
+          "peak_rss_bytes": 3997696
+        },
+        "harfbuzz": {
+          "median_ns": 1224158.536585366,
+          "iterations": 82,
+          "checksum": 34214,
+          "samples": [
+            {
+              "iterations": 82,
+              "elapsed_ns": 98944000,
+              "successes": 82,
+              "checksum": 2805548,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 101401000,
+              "successes": 82,
+              "checksum": 2805548,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 101877000,
+              "successes": 82,
+              "checksum": 2805548,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 100381000,
+              "successes": 82,
+              "checksum": 2805548,
+              "peak_rss_bytes": 2326528
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 98596000,
+              "successes": 82,
+              "checksum": 2805548,
+              "peak_rss_bytes": 2326528
+            }
+          ],
+          "peak_rss_bytes": 2326528
+        }
+      },
+      "allocation": {
+        "allocations": 39,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 34214
+      },
+      "after_harfbuzz_ratio": 5.218871879389526
+    },
+    {
+      "padding_glyphs": 256,
+      "font_sha256": "124ffc6adc262f79c8e7e46da68ac074fe64b29b7f323d48b68ed4078f4642db",
+      "timing": {
+        "after": {
+          "median_ns": 6455411.5,
+          "iterations": 16,
+          "checksum": 161414,
+          "samples": [
+            {
+              "iterations": 16,
+              "elapsed_ns": 103286584,
+              "successes": 16,
+              "checksum": 2582624,
+              "peak_rss_bytes": 4128768
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 102850625,
+              "successes": 16,
+              "checksum": 2582624,
+              "peak_rss_bytes": 4079616
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 108447625,
+              "successes": 16,
+              "checksum": 2582624,
+              "peak_rss_bytes": 4112384
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 104924834,
+              "successes": 16,
+              "checksum": 2582624,
+              "peak_rss_bytes": 3997696
+            },
+            {
+              "iterations": 16,
+              "elapsed_ns": 102577417,
+              "successes": 16,
+              "checksum": 2582624,
+              "peak_rss_bytes": 3981312
+            }
+          ],
+          "peak_rss_bytes": 4128768
+        },
+        "harfbuzz": {
+          "median_ns": 1217817.0731707318,
+          "iterations": 82,
+          "checksum": 161414,
+          "samples": [
+            {
+              "iterations": 82,
+              "elapsed_ns": 99861000,
+              "successes": 82,
+              "checksum": 13235948,
+              "peak_rss_bytes": 2342912
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 100031000,
+              "successes": 82,
+              "checksum": 13235948,
+              "peak_rss_bytes": 2342912
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 98276000,
+              "successes": 82,
+              "checksum": 13235948,
+              "peak_rss_bytes": 2342912
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 99800000,
+              "successes": 82,
+              "checksum": 13235948,
+              "peak_rss_bytes": 2342912
+            },
+            {
+              "iterations": 82,
+              "elapsed_ns": 104449000,
+              "successes": 82,
+              "checksum": 13235948,
+              "peak_rss_bytes": 2342912
+            }
+          ],
+          "peak_rss_bytes": 2342912
+        }
+      },
+      "allocation": {
+        "allocations": 39,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 161414
+      },
+      "after_harfbuzz_ratio": 5.300805549714102
+    }
+  ],
+  "date": "2026-10-28T04:23:21.007737+00:00",
+  "machine": {
+    "description": "arm (8 CPUs, arm64)",
+    "cpu": "arm",
+    "cpus": 8,
+    "arch": "arm64",
+    "os": "macOS-26.3.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.3"
+  },
+  "source_provenance": {
+    "before_timing": {
+      "commit": "72f7eeec639a13873a90a374ff020fe3e00eb3b1",
+      "layout_position_blob": "a3458ef6884a86d609ec77211b9176dbff8b84b8",
+      "flags": [
+        "--opt=speed"
+      ]
+    },
+    "before_allocation": {
+      "commit": "99a0b4f9a3601deb68775d9a34a4467a0afeb2d5",
+      "layout_position_blob": "36d4707f943f7ee8f7a9a81e0b3d26fc078b91a8",
+      "flags": [
+        "--fuzz",
+        "--opt=speed"
+      ]
+    },
+    "after": {
+      "worker_commit": "e194cf8",
+      "package_source_commit": "7815361",
+      "package_tree": "0e909898d94ef7b230a47ae99329e9c77adeb73b",
+      "bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+      "timing_flags": [
+        "--opt=speed"
+      ],
+      "allocation_flags": [
+        "--fuzz",
+        "--opt=speed"
+      ]
+    },
+    "compiler": "nightly-2026-10-27-de79a0f",
+    "comparison_scope": "Before timing and allocation source snapshots differ in pre-existing manual-ZWJ support. Both retain eager pending-call materialization; after includes lazy frames, manual-index guard, bounded attachments and ordered arithmetic. Results are not attributed solely to lazy frames."
+  },
+  "allocation_baseline_update": {
+    "ordinary_records": [
+      256,
+      2048,
+      8192
+    ],
+    "previous_calls": [
+      25,
+      25,
+      25
+    ],
+    "current_calls": [
+      22,
+      22,
+      22
+    ],
+    "matching_speed_flags": true,
+    "leaked": 0
+  }
+}

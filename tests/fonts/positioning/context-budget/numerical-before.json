@@ -1,0 +1,360 @@
+{
+  "compiler": "nightly-2026-10-27-de79a0f",
+  "binary_sha256": "21d87d9c2b4efad84c32b98b229b98578a439d94b5b2d69cc34f0729eefbf892",
+  "worker_commit": "fa74a0d",
+  "package_bundle": "ESjKZje8HxDc6o24rfVgPcQiYeLYVhm2jgMPzon6ieRw.tar.zst",
+  "harfbuzz": "14.6.0",
+  "cases": [
+    {
+      "font": "saturating-advance.ttf",
+      "font_sha256": "0e536bfba9ebd7508fb4c8a06e3b463e4da8a92a2080fcf335650102e34ddd79",
+      "text_sha256": "ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb",
+      "text_scalars": 64,
+      "sample_indices": [
+        0,
+        1,
+        2
+      ],
+      "before": {
+        "glyphs": [
+          1,
+          1,
+          1
+        ],
+        "advances": [
+          [
+            -73218,
+            0
+          ],
+          [
+            1074717182,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1,
+          2
+        ]
+      },
+      "reference": {
+        "glyphs": [
+          1,
+          1,
+          1
+        ],
+        "advances": [
+          [
+            -268435457,
+            0
+          ],
+          [
+            806354943,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1,
+          2
+        ]
+      },
+      "before_budgets": [
+        "Operations"
+      ]
+    },
+    {
+      "font": "saturating-placement.ttf",
+      "font_sha256": "6740cb708c136260da904b7f4162c1172a1a856d191cd167a082e163b40edf21",
+      "text_sha256": "ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb",
+      "text_scalars": 64,
+      "sample_indices": [
+        0,
+        1,
+        2
+      ],
+      "before": {
+        "glyphs": [
+          1,
+          1,
+          1
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            -73728,
+            0
+          ],
+          [
+            1074716672,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1,
+          2
+        ]
+      },
+      "reference": {
+        "glyphs": [
+          1,
+          1,
+          1
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            -268435457,
+            0
+          ],
+          [
+            806354943,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1,
+          2
+        ]
+      },
+      "before_budgets": [
+        "Operations"
+      ]
+    },
+    {
+      "font": "attachment-mixed-advances.ttf",
+      "font_sha256": "124ffc6adc262f79c8e7e46da68ac074fe64b29b7f323d48b68ed4078f4642db",
+      "text_sha256": "39e9c824b73e2175e19c0c55a6d45f4448784606966b45c98c22630944d2599f",
+      "text_scalars": 32,
+      "sample_indices": [
+        0,
+        1,
+        2
+      ],
+      "before": {
+        "glyphs": [
+          1,
+          2,
+          3
+        ],
+        "advances": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            2147483647,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0
+        ]
+      },
+      "reference": {
+        "glyphs": [
+          1,
+          2,
+          3
+        ],
+        "advances": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            2147483646,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0
+        ]
+      },
+      "before_budgets": []
+    },
+    {
+      "font": "attachment-distance.ttf",
+      "font_sha256": "bd728af76731bbcbde7eedefb0fc83826f66d74486932e1aabbbea782f63a756",
+      "text_sha256": "762f61bb1dd819a5a0c9afe6185cbe3077c22003cef266fe8c8dd5c52fd427df",
+      "text_scalars": 32770,
+      "sample_indices": [
+        0,
+        32769
+      ],
+      "before": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -410,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          32768
+        ]
+      },
+      "reference": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          32768
+        ]
+      },
+      "before_budgets": []
+    }
+  ]
+}

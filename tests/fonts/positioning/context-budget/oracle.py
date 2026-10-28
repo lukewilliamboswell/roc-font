@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib,json,subprocess
 import fontTools,uharfbuzz as hb
+from fontTools.ttLib import TTFont
 HERE=Path(__file__).resolve().parent
 
 def shape(path,text,direction,coordinate=0):
@@ -12,6 +13,13 @@ def shape(path,text,direction,coordinate=0):
  offsets=[];offset=0
  for char in text:offsets.append(offset);offset+=len(char.encode())
  return {'glyphs':[i.codepoint for i in b.glyph_infos], 'advances':[[p.x_advance,p.y_advance] for p in (b.glyph_positions or [])], 'offsets':[[p.x_offset,p.y_offset] for p in (b.glyph_positions or [])], 'clusters':[offsets[i.cluster] for i in b.glyph_infos]}
+
+def work_graph(path):
+ f=TTFont(path);lookups=f['GPOS'].table.LookupList.Lookup
+ widths=lookups[0].SubTable[0];names=f.getGlyphOrder()
+ advances=[f['hmtx'][names[i]][0]+widths.Value[widths.Coverage.glyphs.index(names[i])].XAdvance for i in [1,2]]
+ attach=lookups[1].SubTable[0];initial=attach.BaseArray.BaseRecord[0].BaseAnchor[0].XCoordinate-attach.MarkArray.MarkRecord[0].MarkAnchor.XCoordinate
+ return {'inner_calls':lookups[2].SubTable[0].PosCount,'leaves_per_inner':lookups[3].SubTable[0].PosCount,'leaf_x_placement':lookups[4].SubTable[0].Value.XPlacement,'parent_advances':advances,'initial_offset':initial,'mark_glyph':f.getGlyphID(lookups[4].SubTable[0].Coverage.glyphs[0])}
 
 def main():
  cases=[]
@@ -29,6 +37,9 @@ def main():
   for text in texts:
    for direction in ['ltr','rtl']:
     c={'id':f'{path.stem}-{len(cases)}','font':path.name,'text':text,'direction':direction,'depth':64,'operations':4096,'weight':1 if path.stem.startswith('device-') or path.stem in ['float-anchor','pair-absolute'] else 0}
+    if path.stem=='attachment-mixed-advances' and len(text)==10:
+     c['divergence']={'kind':'WorkBudgetAccounting','reason':'Only interrupted partial progress differs: Roc counts lookup applications and script work; HarfBuzz additionally spends2 on the initial grapheme merge and3 on MarkBase unsafe flags. Completed larger runs must match exactly.'}
+     c['work_graph']=work_graph(path)
     if path.stem.startswith(('saturating-','device-')) or (path.stem=='attachment-mixed-advances' and max(65536,4096*len(text))<73737):c['expected_budgets']=['Operations']
     c['font_sha256']=hashlib.sha256(path.read_bytes()).hexdigest();c['oracle']=shape(path,text,direction,c['weight'])
     if path.stem=='attachment-distance':

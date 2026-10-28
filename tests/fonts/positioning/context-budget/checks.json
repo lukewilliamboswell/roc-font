@@ -1,0 +1,66 @@
+{
+  "compiler": "nightly-2026-10-27-de79a0f",
+  "worker_source_commit": "e194cf8",
+  "package_source_commit": "7815361",
+  "served_bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+  "optimized_build_flags": {
+    "query": [
+      "--opt=speed"
+    ],
+    "fuzz": [
+      "--fuzz",
+      "--opt=speed"
+    ],
+    "roc-font": [
+      "--opt=speed"
+    ],
+    "roc-alloc": [
+      "--fuzz",
+      "--opt=speed"
+    ]
+  },
+  "optimized_binary_sha256": {
+    "query": "669cec4a67fbf5b19718fc7ffb009c969f9b850dc15c1a300e3ac9a0163ec476",
+    "fuzz": "035eb3418f892a513afc0ca9b9ac5ece8e97d517026c7a80dbdcbe7692bffaa2",
+    "roc-font": "43f15ffab38ad221224b024e259bd4e11b0181735a5ba9360648084211b83ce8",
+    "roc-alloc": "551675b66b2c3241ccce4891d898360f987b8297742c4bfa309b774890029b32"
+  },
+  "build_errors": 0,
+  "build_warnings": 0,
+  "public_expects": 21,
+  "cached_cases": 140,
+  "native_cases": 134,
+  "repeat_output_identical": true,
+  "fuzz": {
+    "runs": 1000,
+    "seed": 1,
+    "edges": 4484,
+    "features": 10888,
+    "seconds": 72,
+    "peak_rss_mb": 38,
+    "crashes": 0,
+    "max_input_size": 1048576,
+    "log_sha256": "318adf2e64994439d975fa1230f23d30f51da8cb81684269a557bba1611def4c",
+    "seeds_sha256": "428da451d2e9d6e47480a04ba64c9a5c17fab4ddfebd55558e029897f0507e55"
+  },
+  "evidence_sha256": {
+    "cases.jsonc": "3f1ccbb8e7aaacbc4de6e8d25670db25072889e6d08d524fa313f0e161890fa7",
+    "ots.json": "10e0419cb481d0fd39d19a279aedc79c7348e0c81548203aa4530ed15d1784da",
+    "numerical-before.json": "a340d5be9355fd37c9164bb39c92e073c66f04ad6ba54c77cf7271a56545d3b2",
+    "after-native.json": "42ff4f2b5990bd5dd382ce08f8a9ea5d14c5448745e63e6146d7c9722ca0004a",
+    "operations-trace.json": "fe64c354738b2cee2d589df8cb8635bf2e974ac68f9d7c9fae92a57046dc7ccb"
+  },
+  "limitations": [
+    "Requested bytes and peak live allocator bytes are not exposed by roc-fuzz0.4.3; RSS is reported separately.",
+    "Cyclic HarfBuzz MemoryError is cached as reference failure, not a successful glyph oracle.",
+    "Historical before-native.json used an allocator without an explicit speed flag; after-native.json instead uses the rebuilt exact99a0b4f source with matching speed flags.",
+    "Integrated all_tests, generated docs, bundle-content and shared allocation baseline checks are integrator-owned.",
+    "Two WorkBudgetAccounting cases intentionally compare Roc interrupted progress to its independent graph model because HarfBuzz additionally charges buffer bookkeeping. Their raw HB records remain unchanged."
+  ],
+  "declared_divergences": {
+    "WorkBudgetAccounting": {
+      "cases": 2,
+      "scope": "Only exhausted mixed8 partial progress; independent fontTools graph interpretation, all other fields still compared to actual HB output."
+    }
+  }
+}

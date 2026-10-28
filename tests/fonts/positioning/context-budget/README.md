@@ -93,3 +93,49 @@ five samples, against a native comparator whose version must be 14.6.0.
 It records binary and font hashes, allocation calls, leak counts and peak
 RSS. Requested bytes and peak live allocator bytes are unavailable from
 roc-fuzz 0.4.3; RSS is a separate process measure.
+
+Two interrupted mixed runs declare `WorkBudgetAccounting`: the 8-padding
+case in each direction. The raw HarfBuzz cache is retained unchanged.
+Roc counts lookup applications and script work. HarfBuzz also charges
+buffer bookkeeping: two operations for the initial grapheme merge and
+three for marking the attachment unsafe. The pinned internal-counter
+probe and its actual trace are in `bench/context-ops.cc` and
+`operations-trace.json`.
+
+`verify.py` reads the graph facts decoded independently by fontTools and
+interprets its nine inner contexts, each with 8192 leaf updates. With a
+65536-operation budget, Roc executes eight inner calls and 65528 leaves;
+HarfBuzz's remaining 65531 permits eight inner calls and 65523 leaves.
+The verifier computes the Roc offset with sequential signed-32-bit
+saturation and subtraction of [-1,+1]. It checks every other cached glyph field against
+HarfBuzz and requires the public `Operations` report. No cached Roc result
+or blanket allowance for interrupted runs is used. Larger completed mixed
+cases still require exact HarfBuzz agreement.
+
+The final measurements in `after-native.json` use the same nightly and
+explicit speed optimization for both allocation binaries. The preserved
+historical allocator was rebuilt at its exact clean commit 99a0b4f; the
+older timing comparator is from 72f7eee. The report records that these
+snapshots also differ in earlier manual-ZWJ support, so improvements are
+not attributed solely to the pending-call representation.
+
+| Context records | Previous allocations | Final allocations | Final / previous time | Final / HarfBuzz time |
+| --- | --- | --- | --- | --- |
+| 256 | 25 | 22 | 0.656 | 5.04 |
+| 2048 | 25 | 22 | 0.636 | 5.17 |
+| 8192 | 25 | 22 | 0.632 | 5.18 |
+
+All measured operations leak zero allocations and ordinary benchmark
+checksums agree. Mixed-sign attachment runs with 8, 64 and 256 padding
+glyphs use 38, 39 and 39 allocations. Their full positions are independently
+checked by the native oracle replay; the generic benchmark checksum does
+not include offsets.
+
+For the cyclic font, measured peak process RSS falls from 17.53 MiB to
+3.98 MiB; finite fanout falls from 8.28 MiB to 3.95 MiB. The previous
+snapshot has a 16384-operation floor, while the final snapshot has 65536,
+so their adversarial timings and allocation counts do not compare equal
+allowed work. The cycle reference fails; its C timing is explicitly not
+a successful shape oracle. `numerical-before.json` separately preserves
+actual pre-fix advance, placement, mixed-attachment and parent-distance
+mismatches. `checks.json` records the final native and fuzz evidence.

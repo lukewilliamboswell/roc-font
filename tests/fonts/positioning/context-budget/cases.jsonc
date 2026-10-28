@@ -389,6 +389,21 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "divergence": {
+        "kind": "WorkBudgetAccounting",
+        "reason": "Only interrupted partial progress differs: Roc counts lookup applications and script work; HarfBuzz additionally spends2 on the initial grapheme merge and3 on MarkBase unsafe flags. Completed larger runs must match exactly."
+      },
+      "work_graph": {
+        "inner_calls": 9,
+        "leaves_per_inner": 8192,
+        "leaf_x_placement": 32767,
+        "parent_advances": [
+          -1,
+          1
+        ],
+        "initial_offset": 0,
+        "mark_glyph": 3
+      },
       "expected_budgets": [
         "Operations"
       ],
@@ -522,6 +537,21 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "divergence": {
+        "kind": "WorkBudgetAccounting",
+        "reason": "Only interrupted partial progress differs: Roc counts lookup applications and script work; HarfBuzz additionally spends2 on the initial grapheme merge and3 on MarkBase unsafe flags. Completed larger runs must match exactly."
+      },
+      "work_graph": {
+        "inner_calls": 9,
+        "leaves_per_inner": 8192,
+        "leaf_x_placement": 32767,
+        "parent_advances": [
+          -1,
+          1
+        ],
+        "initial_offset": 0,
+        "mark_glyph": 3
+      },
       "expected_budgets": [
         "Operations"
       ],
