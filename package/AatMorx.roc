@@ -38,7 +38,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	Feature : { type : U64, setting : U64, enable : U64, disable : U64 }
 	Chain : { flags : U64, feature_start : U64, feature_count : U64, sub_start : U64, sub_count : U64 }
 	Subtable : { coverage : U64, flags : U64, body : Body }
-	Body : [Rearrange(AatState), Contextual({ machine : AatState, lookups : List(AatLookup) }), Noncontextual(AatLookup), Insertion({ machine : AatState, glyphs : List(U32) }), Ligature(Ligatures)]
+	Body : [Rearrange(AatState), Contextual({ machine : AatState, lookups : List(AatLookup), legacy_zero_missing : Bool }), Noncontextual(AatLookup), Insertion({ machine : AatState, glyphs : List(U32) }), Ligature(Ligatures)]
 	Ligatures : { machine : AatState, actions : List(U32), components : List(U16), glyphs : List(U16), glyph_count : U64, legacy : Bool, component_base : U64, glyph_base : U64 }
 	Requested : { type : U64, setting : U64, start : U64, end : U64, exclusive : Bool }
 	RangeFlags : { first : U64, last : U64, flags : U64 }
@@ -235,7 +235,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 			AatMorx.check_substitutions(lookup, glyphs)?
 			$lookups = $lookups.append(lookup)
 		}
-		Ok(Contextual({ machine, lookups: $lookups }))
+		Ok(Contextual({ machine, lookups: $lookups, legacy_zero_missing: False }))
 	}
 
 	check_substitutions : AatLookup, U64 -> Try({}, [Bad(U64)])
@@ -477,11 +477,11 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 										lookup = c.lookups.get(e.a) ?? AatLookup.empty
 										marked = $items.get($mark) ?? LayoutGsub.no_item
 										match AatLookup.get(lookup, marked.glyph) {
-											Found(g) => {
+											Found(g) if !c.legacy_zero_missing or g != 0 => {
 												$items = AatMorx.unsafe_range($items, $mark, ($index + 1).min($items.len()))
 												$items = $items.set($mark, AatMorx.replace($items.get($mark) ?? LayoutGsub.no_item, g.to_u64())) ?? []
 											}
-											Missing => {}
+											_ => {}
 										}
 									}
 									if e.b != 65535 and !$items.is_empty() {
@@ -489,10 +489,10 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 										lookup = c.lookups.get(e.b) ?? AatLookup.empty
 										current = $items.get(at) ?? LayoutGsub.no_item
 										match AatLookup.get(lookup, current.glyph) {
-											Found(g) => {
+											Found(g) if !c.legacy_zero_missing or g != 0 => {
 												$items = $items.set(at, AatMorx.replace(current, g.to_u64())) ?? []
 											}
-											Missing => {}
+											_ => {}
 										}
 									}
 									if e.flags.bitwise_and(0x8000) != 0 {
