@@ -1,0 +1,92 @@
+{
+  "cases": [
+    {
+      "marks": 8,
+      "font_sha256": "1fdf35e278edae55d66c03af0432fb572c6a4f56bd01cb3aa4426e04a12b23c9",
+      "allocation": {
+        "allocations": 48,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 1010
+      },
+      "times_ns": {
+        "roc": {
+          "median_ns": 15420.625,
+          "min_ns": 14965.83,
+          "max_ns": 15482.5,
+          "stdev_ns": 282.13911951080684,
+          "spread_pct": 3.350512706197058
+        },
+        "harfbuzz": {
+          "median_ns": 1900.0,
+          "min_ns": 1895.0,
+          "max_ns": 2805.0,
+          "stdev_ns": 523.951333617923,
+          "spread_pct": 47.89473684210526
+        }
+      },
+      "roc_over_harfbuzz": 8.116118421052631
+    },
+    {
+      "marks": 64,
+      "font_sha256": "9c7dfcc34a266761ca79f7ec591ef56251a38a4403294b4aedfddd6290975cc3",
+      "allocation": {
+        "allocations": 104,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 1066
+      },
+      "times_ns": {
+        "roc": {
+          "median_ns": 20222.08,
+          "min_ns": 20179.17,
+          "max_ns": 32422.295,
+          "stdev_ns": 7056.217082355459,
+          "spread_pct": 60.54335162357185
+        },
+        "harfbuzz": {
+          "median_ns": 2230.0,
+          "min_ns": 2200.0,
+          "max_ns": 2310.0,
+          "stdev_ns": 56.86240703077327,
+          "spread_pct": 4.932735426008969
+        }
+      },
+      "roc_over_harfbuzz": 9.068197309417041
+    },
+    {
+      "marks": 256,
+      "font_sha256": "daee19ad18fa0dc6ab8682ef8eb394f325d01dd96b20e7ff8a5c5e5a31a375a2",
+      "allocation": {
+        "allocations": 296,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 1258
+      },
+      "times_ns": {
+        "roc": {
+          "median_ns": 66718.335,
+          "min_ns": 64583.335,
+          "max_ns": 86501.25,
+          "stdev_ns": 12085.231681991385,
+          "spread_pct": 32.85141183454293
+        },
+        "harfbuzz": {
+          "median_ns": 3400.0,
+          "min_ns": 3360.0,
+          "max_ns": 4730.0,
+          "stdev_ns": 779.6794213008318,
+          "spread_pct": 40.294117647058826
+        }
+      },
+      "roc_over_harfbuzz": 19.623039705882356
+    }
+  ],
+  "memory_bytes": "unavailable in roc-fuzz 0.4.3",
+  "compiler": "Roc nightly-2026-10-27-de79a0f",
+  "bundle": "7biWtctKqXtuUtuTfLGyqtyntXVp58iJwRqDkktY3r8H.tar.zst",
+  "build": "roc build --opt=speed bench/roc/font.roc --replace-dep ./package/main.roc <served-bundle>",
+  "allocation_build": "roc build --fuzz bench/roc/alloc.roc --replace-dep ./package/main.roc <served-bundle>",
+  "reference": "native HarfBuzz14.6.0 standard benchmark comparator",
+  "note": "Concurrent compiler activity; time samples have substantial spread. Allocation counts are deterministic."
+}

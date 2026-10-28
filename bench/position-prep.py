@@ -50,6 +50,7 @@ def main():
     ap.add_argument('--binary', type=Path, help='reuse an optimized bundle benchmark already built')
     ap.add_argument('--output', type=Path, required=True)
     args = ap.parse_args()
+    assert bench.fonttools_version() == bench.FONTTOOLS_PIN, "use pinned fontTools"
     with tempfile.TemporaryDirectory(prefix='position-prep-') as temp:
         work = Path(temp)
         binary = args.binary or work / 'roc-font'
@@ -71,7 +72,7 @@ def main():
                 times[name] = bench.summarize(samples)
             results.append({'marks': count, 'font_sha256': hashlib.sha256(raw).hexdigest(), 'allocation': allocation, 'times_ns': times, 'roc_over_harfbuzz': times['roc']['median_ns']/times['harfbuzz']['median_ns']})
             print(json.dumps(results[-1]), flush=True)
-        args.output.write_text(json.dumps({'cases': results, 'memory_bytes': 'unavailable in roc-fuzz 0.4.3'}, indent=2)+'\n')
+        args.output.write_text(json.dumps({'cases': results, 'compiler': subprocess.check_output([args.roc, 'version'], text=True).strip(), 'native_binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(), 'allocation_binary_sha256': hashlib.sha256(args.alloc.read_bytes()).hexdigest(), 'reference_binary_sha256': hashlib.sha256(args.harfbuzz.read_bytes()).hexdigest(), 'memory_bytes': 'unavailable in roc-fuzz 0.4.3'}, indent=2)+'\n')
 
 
 if __name__ == '__main__':
