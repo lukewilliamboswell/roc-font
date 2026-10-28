@@ -1,0 +1,14 @@
+{
+ "about":"Context record count, ignored sequence indices, depth zero, cyclic nesting, valid huge fanout and skip-mark matching.",
+ "seeds":[
+  {"why":"cyclic context depth zero","parts":[{"hex":"00"}]},
+  {"why":"finite fanout depth zero","parts":[{"hex":"01"}]},
+  {"why":"ignored records do not consume budget or depth","parts":[{"hex":"02"}]},
+  {"why":"matched position index skips marks","parts":[{"hex":"03"}]},
+  {"why":"cyclic context depth three","parts":[{"hex":"0c"}]},
+  {"why":"finite fanout operations floor","parts":[{"hex":"09"}]},
+  {"why":"cyclic context full depth","parts":[{"hex":"10"}]},
+  {"why":"valid huge record list bytes","parts":[{"file":"tests/fonts/positioning/context-budget/many-8192.ttf"}]},
+  {"why":"recursive huge fanout font bytes","parts":[{"file":"tests/fonts/positioning/context-budget/fanout-8192.ttf"}]}
+ ]
+}

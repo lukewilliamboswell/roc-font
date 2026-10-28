@@ -1,0 +1,3746 @@
+// Generated with oracle.py. Resource failures are not glyph oracles.
+{
+  "harfbuzz": "14.6.0",
+  "uharfbuzz": "0.56.3",
+  "fontTools": "4.61.1",
+  "cases": [
+    {
+      "id": "attach-shift-0",
+      "font": "attach-shift.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "f04b795972f6ab678271ad272622ebe11ba8a1e4b47853fd6d33be55f4bee827",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -403,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "attach-shift-1",
+      "font": "attach-shift.ttf",
+      "text": "á",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "f04b795972f6ab678271ad272622ebe11ba8a1e4b47853fd6d33be55f4bee827",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -403,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-1-2",
+      "font": "chain-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "chain-1-3",
+      "font": "chain-1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-1-4",
+      "font": "chain-1.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "chain-1-5",
+      "font": "chain-1.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-1-6",
+      "font": "chain-1.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-1-7",
+      "font": "chain-1.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-1-8",
+      "font": "chain-1.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-1-9",
+      "font": "chain-1.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-1-10",
+      "font": "chain-1.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "chain-1-11",
+      "font": "chain-1.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-2-12",
+      "font": "chain-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "chain-2-13",
+      "font": "chain-2.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-2-14",
+      "font": "chain-2.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "chain-2-15",
+      "font": "chain-2.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-2-16",
+      "font": "chain-2.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-2-17",
+      "font": "chain-2.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-2-18",
+      "font": "chain-2.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-2-19",
+      "font": "chain-2.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-2-20",
+      "font": "chain-2.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "chain-2-21",
+      "font": "chain-2.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-3-22",
+      "font": "chain-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "chain-3-23",
+      "font": "chain-3.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-3-24",
+      "font": "chain-3.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "chain-3-25",
+      "font": "chain-3.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-3-26",
+      "font": "chain-3.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-3-27",
+      "font": "chain-3.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-3-28",
+      "font": "chain-3.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "chain-3-29",
+      "font": "chain-3.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chain-3-30",
+      "font": "chain-3.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "chain-3-31",
+      "font": "chain-3.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-1-32",
+      "font": "context-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "context-1-33",
+      "font": "context-1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-1-34",
+      "font": "context-1.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "context-1-35",
+      "font": "context-1.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-1-36",
+      "font": "context-1.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            520,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-1-37",
+      "font": "context-1.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-1-38",
+      "font": "context-1.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-1-39",
+      "font": "context-1.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-1-40",
+      "font": "context-1.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "context-1-41",
+      "font": "context-1.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-2-42",
+      "font": "context-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "context-2-43",
+      "font": "context-2.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-2-44",
+      "font": "context-2.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "context-2-45",
+      "font": "context-2.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-2-46",
+      "font": "context-2.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            520,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-2-47",
+      "font": "context-2.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-2-48",
+      "font": "context-2.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-2-49",
+      "font": "context-2.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-2-50",
+      "font": "context-2.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "context-2-51",
+      "font": "context-2.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-3-52",
+      "font": "context-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "context-3-53",
+      "font": "context-3.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-3-54",
+      "font": "context-3.ttf",
+      "text": "áb",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          3
+        ]
+      }
+    },
+    {
+      "id": "context-3-55",
+      "font": "context-3.ttf",
+      "text": "áb",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          3,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-3-56",
+      "font": "context-3.ttf",
+      "text": "a‍b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            520,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-3-57",
+      "font": "context-3.ttf",
+      "text": "a‍b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-3-58",
+      "font": "context-3.ttf",
+      "text": "a‌b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-3-59",
+      "font": "context-3.ttf",
+      "text": "a‌b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "context-3-60",
+      "font": "context-3.ttf",
+      "text": "á́b",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          1,
+          3,
+          3,
+          2
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            537,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          0,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "context-3-61",
+      "font": "context-3.ttf",
+      "text": "á́b",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "oracle": {
+        "glyphs": [
+          2,
+          1,
+          3,
+          3
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          5,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "cycle-8192-62",
+      "font": "cycle-8192.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "oracle": {
+        "reference_failure": "MemoryError: HarfBuzz marked the buffer unsuccessful (resource bound)"
+      }
+    },
+    {
+      "id": "cycle-8192-63",
+      "font": "cycle-8192.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "oracle": {
+        "reference_failure": "MemoryError: HarfBuzz marked the buffer unsuccessful (resource bound)"
+      }
+    },
+    {
+      "id": "fanout-8192-64",
+      "font": "fanout-8192.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            66038,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "fanout-8192-65",
+      "font": "fanout-8192.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            66038,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "ignored-8192-66",
+      "font": "ignored-8192.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "ignored-8192-67",
+      "font": "ignored-8192.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-2048-68",
+      "font": "many-2048.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "a57613c39f3208552c2e6eea1f7a7aa486ba032c4afc5f834bbe73869d446d33",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            2558,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-2048-69",
+      "font": "many-2048.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "a57613c39f3208552c2e6eea1f7a7aa486ba032c4afc5f834bbe73869d446d33",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            2558,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-256-70",
+      "font": "many-256.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "a23580bdd58b846bb728e06bf64cf4689e4ec219df18117d017dfa519a52099a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            766,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-256-71",
+      "font": "many-256.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "a23580bdd58b846bb728e06bf64cf4689e4ec219df18117d017dfa519a52099a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            766,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-64-72",
+      "font": "many-64.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "cc18775ce483c2e54ef4fc75cb6e343090a484030366d782d91801679198d73c",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            574,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-64-73",
+      "font": "many-64.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "cc18775ce483c2e54ef4fc75cb6e343090a484030366d782d91801679198d73c",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            574,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-8-74",
+      "font": "many-8.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            518,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-8-75",
+      "font": "many-8.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            518,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-8192-76",
+      "font": "many-8192.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "f66b3b2e9a658baa32d3e1064b3c16dc600087bc8b626028c3801ccff5bf51e9",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            8702,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-8192-77",
+      "font": "many-8192.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "f66b3b2e9a658baa32d3e1064b3c16dc600087bc8b626028c3801ccff5bf51e9",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            8702,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "nested-order-78",
+      "font": "nested-order.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -396,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "nested-order-79",
+      "font": "nested-order.ttf",
+      "text": "á",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -396,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "shift-attach-80",
+      "font": "shift-attach.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "987b40bee91097dda2981ae0f669fbdcbfe4ae1d497a55e543ddd3e3d8460227",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -410,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "shift-attach-81",
+      "font": "shift-attach.ttf",
+      "text": "á",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "987b40bee91097dda2981ae0f669fbdcbfe4ae1d497a55e543ddd3e3d8460227",
+      "oracle": {
+        "glyphs": [
+          1,
+          3
+        ],
+        "advances": [
+          [
+            510,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            -410,
+            700
+          ]
+        ],
+        "clusters": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16383-82",
+      "font": "wide-16383.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7ad7ba50d480e244a529318b3c9843aee5fb4f3f9c67d6eb60f2030a9ea5425",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16893,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16383-83",
+      "font": "wide-16383.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b7ad7ba50d480e244a529318b3c9843aee5fb4f3f9c67d6eb60f2030a9ea5425",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16893,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16384-84",
+      "font": "wide-16384.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b6820f6ae347453432a1e9c0d6f0c4d6be44694a55507163361d9f39c42d6f92",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16894,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16384-85",
+      "font": "wide-16384.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "b6820f6ae347453432a1e9c0d6f0c4d6be44694a55507163361d9f39c42d6f92",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16894,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16385-86",
+      "font": "wide-16385.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "db4c8dce7ca22edddaf05e1e94de105e7962e012e81ffd17d2c2d0d0eb18fd42",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16895,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "wide-16385-87",
+      "font": "wide-16385.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 1024,
+      "font_sha256": "db4c8dce7ca22edddaf05e1e94de105e7962e012e81ffd17d2c2d0d0eb18fd42",
+      "oracle": {
+        "glyphs": [
+          1
+        ],
+        "advances": [
+          [
+            16895,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "many-8-depth0",
+      "font": "many-8.ttf",
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 0,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "many-8-depth1",
+      "font": "many-8.ttf",
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 1,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "many-8-depth2",
+      "font": "many-8.ttf",
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 2,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "many-8-depth3",
+      "font": "many-8.ttf",
+      "font_sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 3,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "ignored-8192-depth0",
+      "font": "ignored-8192.ttf",
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 0,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "ignored-8192-depth1",
+      "font": "ignored-8192.ttf",
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 1,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "ignored-8192-depth2",
+      "font": "ignored-8192.ttf",
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 2,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "ignored-8192-depth3",
+      "font": "ignored-8192.ttf",
+      "font_sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 3,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "nested-order-depth0",
+      "font": "nested-order.ttf",
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 0,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "nested-order-depth1",
+      "font": "nested-order.ttf",
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 1,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "nested-order-depth2",
+      "font": "nested-order.ttf",
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 2,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "nested-order-depth3",
+      "font": "nested-order.ttf",
+      "font_sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "text": "á",
+      "direction": "ltr",
+      "depth": 3,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "cycle-8192-depth0",
+      "font": "cycle-8192.ttf",
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 0,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "cycle-8192-depth1",
+      "font": "cycle-8192.ttf",
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 1,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "cycle-8192-depth2",
+      "font": "cycle-8192.ttf",
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 2,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "cycle-8192-depth3",
+      "font": "cycle-8192.ttf",
+      "font_sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 3,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "fanout-8192-depth0",
+      "font": "fanout-8192.ttf",
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 0,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "fanout-8192-depth1",
+      "font": "fanout-8192.ttf",
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 1,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "fanout-8192-depth2",
+      "font": "fanout-8192.ttf",
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 2,
+      "operations": 1024,
+      "contract_only": true
+    },
+    {
+      "id": "fanout-8192-depth3",
+      "font": "fanout-8192.ttf",
+      "font_sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "text": "a",
+      "direction": "ltr",
+      "depth": 3,
+      "operations": 1024,
+      "contract_only": true
+    }
+  ]
+}
