@@ -44,6 +44,10 @@
 # hb-ot-shaper-indic.cc, hb-ot-shaper-indic.hh.
 
 import ShaperTags
+import ShaperNormalize
+import ShaperIndicData
+import ShaperIndicMachine
+import LayoutGsub
 
 ## Prepared Indic script facts. The orchestrator owns font selection and
 ## feature lookup compilation; this module owns syllables and reordering.
@@ -104,6 +108,32 @@ ShaperIndic := {
 		else {
 			$stage
 		}
+	}
+
+	## Save shaping properties after normalization, before mapping drops cp.
+	setup : List(ShaperNormalize.Char) -> List(ShaperNormalize.Char)
+	setup = |chars| {
+		var $chars = chars
+		for i in 0..<$chars.len() {
+			ch = $chars.get(i) ?? ShaperNormalize.no_char
+			property = ShaperIndicData.get(ch.cp)
+			mask = ShaperIndic.set_category(ShaperIndic.set_position(ch.mask, property.position), property.category)
+			$chars = $chars.set(i, { ..ch, mask }) ?? []
+		}
+		$chars
+	}
+
+	setup_syllables : List(LayoutGsub.Item), U64 -> { items : List(LayoutGsub.Item), operations : U64, stopped : U64 }
+	setup_syllables = ShaperIndicMachine.run
+
+	clear_syllables : List(LayoutGsub.Item) -> List(LayoutGsub.Item)
+	clear_syllables = |items| {
+		var $items = items
+		for i in 0..<$items.len() {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			$items = $items.set(i, { ..item, mask: ShaperIndic.set_syllable(item.mask, 0) }) ?? []
+		}
+		$items
 	}
 
 	# Bits 39..44 category, 45..48 visual position, 49..56 syllable.
