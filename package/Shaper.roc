@@ -5,6 +5,7 @@ import LayoutGdef
 import LayoutGsub
 import LayoutKerning
 import LayoutVar
+import ShaperArabic
 import ShaperNormalize
 import ShaperTags
 import ShaperUnicode
@@ -12,7 +13,8 @@ import Sorted
 import TablePost
 import TableCmap
 
-## Shaping as HarfBuzz 14.6.0's default and Hebrew shapers shape: choosing
+## Shaping with HarfBuzz 14.6.0's default, Hebrew and Arabic joining models:
+## choosing
 ## lookups for a script, language, direction and features (a plan, as
 ## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
 ## (Unicode properties, grapheme clusters, the script's own direction,
@@ -22,10 +24,10 @@ import TableCmap
 ## default-ignorable characters, unsafe-to-break flags).
 ##
 ## Internal. Not done, each a documented difference from HarfBuzz: the
-## shapers of complex scripts (Arabic joining, Indic, Khmer, Myanmar, the
+## shapers of other complex scripts (Indic, Khmer, Myanmar, the
 ## Universal Shaping Engine, Thai, Hangul; their text shapes as the
 ## default shaper shapes it), vertical text,
-## adjustment and the character cluster level. Features beyond the 27
+## Arabic presentation-form fallback/stretching and extra cluster levels. Features beyond the 27
 ## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
 Shaper :: {}.{
 
@@ -58,6 +60,8 @@ Shaper :: {}.{
 		dnom_mask : U64,
 		rtlm_mask : U64,
 		hebrew : Bool,
+		arabic : Bool,
+		arabic_masks : ShaperArabic.Masks,
 		characters : Bool,
 		has_gpos_mark : Bool,
 		fallback_marks : Bool,
@@ -156,6 +160,26 @@ Shaper :: {}.{
 	rtl_keys : List(U64)
 	rtl_keys = LayoutCommon.feature_keys(Shaper.rtl_merged.map(|f| f.tag))
 
+	arabic_requests : [Ltr, Rtl] -> List(Request)
+	arabic_requests = |direction| {
+		base = Shaper.default_requests(direction).map(|r| { ..r, stage: ShaperArabic.stage(r.tag), manual: r.manual or ShaperArabic.manual_zwj(r.tag) })
+		forms = ShaperArabic.form_names.map(
+			|name| {
+				r = Shaper.request(name, 1, False)
+				{ ..r, stage: ShaperArabic.stage(r.tag), manual: True }
+			},
+		)
+		base.concat(forms).append({ ..Shaper.request("mset", 1, True), stage: 11, manual: True })
+	}
+	arabic_ltr_merged : List(Request)
+	arabic_ltr_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.arabic_requests(Ltr)))
+	arabic_rtl_merged : List(Request)
+	arabic_rtl_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.arabic_requests(Rtl)))
+	arabic_ltr_keys : List(U64)
+	arabic_ltr_keys = LayoutCommon.feature_keys(Shaper.arabic_ltr_merged.map(|f| f.tag))
+	arabic_rtl_keys : List(U64)
+	arabic_rtl_keys = LayoutCommon.feature_keys(Shaper.arabic_rtl_merged.map(|f| f.tag))
+
 	hebrew_script : U64
 	hebrew_script = Shaper.tag("Hebr")
 
@@ -200,32 +224,33 @@ Shaper :: {}.{
 				}
 		}
 		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
+		arabic = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Arab")
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => Shaper.ltr_merged
-					Rtl => Shaper.rtl_merged
+					Ltr => if (arabic) Shaper.arabic_ltr_merged else Shaper.ltr_merged
+					Rtl => if (arabic) Shaper.arabic_rtl_merged else Shaper.rtl_merged
 				}
 			} else {
 				defaults = match requested {
-					Ltr => Shaper.ltr_requests
-					Rtl => Shaper.rtl_requests
+					Ltr => if (arabic) Shaper.arabic_requests(Ltr) else Shaper.ltr_requests
+					Rtl => if (arabic) Shaper.arabic_requests(Rtl) else Shaper.rtl_requests
 				}
 				var $requests = List.with_capacity(defaults.len() + options.features.len())
 				$requests = $requests.concat(defaults)
 				for f in options.features {
 					global = f.start == 0 and f.end == Shaper.text_end
 					v = f.value.to_u64()
-					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: 1 })
+					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: if (arabic) ShaperArabic.stage(Shaper.feature_tag(f.tag)) else 1 })
 				}
 				Shaper.merge(Shaper.sort_by_tag($requests))
 			}
 		keys =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => Shaper.ltr_keys
-					Rtl => Shaper.rtl_keys
+					Ltr => if (arabic) Shaper.arabic_ltr_keys else Shaper.ltr_keys
+					Rtl => if (arabic) Shaper.arabic_rtl_keys else Shaper.rtl_keys
 				}
 			} else {
 				LayoutCommon.feature_keys(merged.map(|f| f.tag))
@@ -294,14 +319,14 @@ Shaper :: {}.{
 		variations = Face.feature_variations(face)
 		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub, lookup_vars: LayoutVar.lookup_variations_at(variations.gsub, variations.lv, variations.coords) }
 		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos, lookup_vars: LayoutVar.lookup_variations_at(variations.gpos, variations.lv, variations.coords) }
-		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, 2, Gsub, gsub_varied)
+		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, if (arabic) 12 else 2, Gsub, gsub_varied, arabic)
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
 		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
 		gpos =
 			if apply_gpos {
-				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied).map(|s| { index: s.index, mask: s.mask })
+				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied, arabic).map(|s| { index: s.index, mask: s.mask })
 			} else {
 				[]
 			}
@@ -338,6 +363,8 @@ Shaper :: {}.{
 			dnom_mask: one_mask_of(Shaper.dnom_tag),
 			rtlm_mask: one_mask_of(Shaper.rtlm_tag),
 			hebrew,
+			arabic,
+			arabic_masks: if (arabic) { isol: one_mask_of(Shaper.tag("isol")), fina: one_mask_of(Shaper.tag("fina")), fin2: one_mask_of(Shaper.tag("fin2")), fin3: one_mask_of(Shaper.tag("fin3")), medi: one_mask_of(Shaper.tag("medi")), med2: one_mask_of(Shaper.tag("med2")), init: one_mask_of(Shaper.tag("init")) } else ShaperArabic.no_masks,
 			characters: clusters == Characters,
 			has_gpos_mark: one_mask_of(Shaper.mark_tag) != 0,
 			# HarfBuzz positions marks itself when nothing else does: no
@@ -441,8 +468,8 @@ Shaper :: {}.{
 	## both do). The language system's required feature applies everywhere,
 	## in `required_stage`. A feature's lookups are as feature variations
 	## have them at the face's location (`varied_feature_lookups`).
-	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied -> List(LayoutGsub.Step)
-	lookups = |common, required, required_stage, mapped, stages, table, varied| {
+	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied, Bool -> List(LayoutGsub.Step)
+	lookups = |common, required, required_stage, mapped, stages, table, varied, arabic| {
 		count = common.lookup_count
 		# Every stage's lookups in one list: stage `s`, lookup `l` at
 		# `s * count + l` (a feature's stage is below `stages`), each entry
@@ -514,7 +541,7 @@ Shaper :: {}.{
 			mask = entry.bitwise_and(0xFFFFFFFF)
 			if mask != 0 {
 				automatic = entry.bitwise_and(joins) == 0
-				$out = $out.append({ index: at % count, mask, auto_zwnj: automatic, auto_zwj: automatic, random: entry.bitwise_and(random_first) != 0 })
+				$out = $out.append({ index: at % count, mask, auto_zwnj: arabic or automatic, auto_zwj: automatic, random: entry.bitwise_and(random_first) != 0 })
 			}
 		}
 		$out
@@ -681,7 +708,10 @@ Shaper :: {}.{
 	## Shape, keeping the finished items and the bounds that stopped
 	## substitution (see `Shaped`).
 	shape_items : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Shaped
-	shape_items = |face, location, p, scalars| {
+	shape_items = |face, location, p, scalars| Shaper.shape_items_with_context(face, location, p, scalars, { before: [], after: [] })
+
+	shape_items_with_context : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }), { before : List(U32), after : List(U32) } -> Shaped
+	shape_items_with_context = |face, location, p, scalars, context| {
 		n = scalars.len()
 		if n == 0 {
 			return { run: Shaper.empty_run, items: [], stopped: 0 }
@@ -709,7 +739,8 @@ Shaper :: {}.{
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
-		masked = Shaper.setup_masks(p, normalized, found.fraction_slash, !backward)
+		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else normalized
+		masked = Shaper.setup_masks(p, joined, found.fraction_slash, !backward)
 		gdef = Face.gdef(face)
 		classes = LayoutGdef.has_glyph_classes(gdef)
 		count0 = masked.len()
