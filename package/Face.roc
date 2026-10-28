@@ -35,6 +35,8 @@ import TableColorImages
 import TablePalette
 import TableColor
 import TableGraphite
+import AatTracking
+import TableStat
 import TableAatKern
 import TableAatAnchor
 
@@ -97,6 +99,7 @@ Face := {
 	kerx : TableAatKern,
 	aat_kern : TableAatKern,
 	anchors : TableAatAnchor,
+	tracking : AatTracking,
 	gdef : LayoutGdef,
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
@@ -288,6 +291,34 @@ Face := {
 				kerx = Face.read_aat_kern(bytes, tables, "kerx", glyph_count)
 				aat_kern = Face.read_aat_kern(bytes, tables, "kern", glyph_count)
 				$optional = $optional.concat(kerx.problems)
+				modern = match Sfnt.located(bytes, tables, "STAT", 20) {
+					Missing => False
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("STAT", at))
+						False
+					}
+					Found(found) => match TableStat.read(found.data) {
+						Ok(_) => True
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("STAT", found.offset + at))
+							False
+						}
+					}
+				}
+				tracking = match Sfnt.located(bytes, tables, "trak", 12) {
+					Missing => AatTracking.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("trak", at))
+						AatTracking.none
+					}
+					Found(found) => match AatTracking.read(found.data) {
+						Ok(value) => if (modern) value else AatTracking.none
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("trak", found.offset + at))
+							AatTracking.none
+						}
+					}
+				}
 				anchors = match Sfnt.located(bytes, tables, "ankr", 12) {
 					Missing => TableAatAnchor.none
 					Bad(at) => {
@@ -621,6 +652,7 @@ Face := {
 								kerx: kerx.value,
 								aat_kern: if (cff_only) TableAatKern.none else aat_kern.value,
 								anchors,
+								tracking,
 								gdef,
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,

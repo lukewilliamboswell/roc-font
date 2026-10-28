@@ -12,17 +12,29 @@ evidence behind it. Measurements below were taken on 2026-10-24 with
 HarfBuzz 14.6.0 (uharfbuzz 0.56.3) and fontTools 4.61.1 from
 `tools/oracle/`.
 
-== Current metric boundary
+== Current implementation
 
-Outline and bounding-box queries apply `gvar`; advance variation currently
-uses `HVAR`. When a variable font omits `HVAR`, advances remain the stored
-`hmtx` values even if `gvar` changes its phantom-point advance. This affects
-a few older Windows variable fonts and Skia. The recorded HarfBuzz corpus
-provides direct reference cases for that remaining metric feature.
+Outline and bounding-box queries apply `gvar`; horizontal advances use
+`HVAR`, with a `gvar` phantom-point fallback when it is absent. Composite
+metrics follow the last `USE_MY_METRICS` component before transforms.
+Vertical metrics use `VVAR`, or the corresponding phantom points; vertical
+origin queries retain the font's specified fallback policy.
 
-The phases below describe the original design, including that unlanded
-advance fallback. Current remaining implementation work is tracked in
-`TODO.md`.
+`avar` versions 1 and 2 are implemented. Version 2 applies its cross-axis
+variation-store deltas simultaneously to the version-1 coordinate vector.
+Repeated axis tags set every matching axis, with the last query setting
+winning. Axis counts are bounded by checked format lengths, including the
+instance-record width, rather than an arbitrary 64-axis limit.
+CFF2 variation locations feed checked blend programs and cubic paths.
+
+The dedicated `tests/fonts/variation-complete` matrix contains 139
+HarfBuzz cases, 61 independent FreeType comparisons, 33 OTS-accepted
+positive fonts and three-size allocation evidence. These figures describe
+the dedicated tests, not every font or the final integration gate.
+
+The phases and estimates below describe the original implementation plan.
+Current work is tracked in `TODO.md`; historical size estimates are not
+current estimates for the implemented features.
 
 == 1 Scope and phases
 
@@ -65,11 +77,11 @@ from phantom points when a font has no `HVAR` (no default needs it).
 scalar (§3.5).
 |===
 
-Out of scope for 0.1.0, each with its reason: `avar` version 2 (no default
-uses it; `TableVar` already has the store and map it needs, so it is about
-50 more lines when a font asks), `VVAR` and vertical layout, `CFF2`
-outlines (no default uses CFF), `cvar` and hinting (out of scope by
-architecture §1.2), `STAT` (naming policy for consumers).
+The original plan deferred `avar` version 2, `VVAR`, vertical layout and
+CFF2 outlines; these are now implemented on the integration branch.
+`cvar` and hinting remain outside the package boundary. Consumer naming
+policy for `STAT` remains outside it; its checked presence selects modern
+Apple tracking without introducing a style-selection policy.
 
 == 2 What the default fonts need
 
@@ -437,10 +449,9 @@ and the byte offset in it. Independent problems are reported together
 
 * `fvar`: at least 16 bytes; major version 1; axis record size 20; instance
   record size `4 × axes + 4` or `+ 6` (with a PostScript name id); axes and
-  instances inside the table; `min <= default <= max` per axis; at most 64
-  axes (provisional, until `Font.Limits` carries it; real fonts use under
-  20, the format allows 65 535).
-* `avar`: major version 1 (version 2 is `UnsupportedVersion`); axis count
+  instances inside the table; `min <= default <= max` per axis. Counts
+  must fit all encoded record widths and checked table spans.
+* `avar`: major version 1 or 2; axis count
   equal to `fvar`'s; each map inside the table; a map is empty (identity) or
   maps -1 to -1, 0 to 0 and 1 to 1, with source coordinates strictly
   increasing, targets never decreasing and all values in [-1, 1]. Under

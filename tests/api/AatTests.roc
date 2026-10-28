@@ -7,9 +7,18 @@ import "../fonts/aat/insertion-logical.ttf" as insertion : List(U8)
 import "../fonts/aat/direct-features.ttf" as feature_direct : List(U8)
 import "../fonts/aat/ligature-features.ttf" as feature_ligature : List(U8)
 import "../fonts/aat/language.ttf" as languages : List(U8)
+import "../fonts/aat/tracking-1-0.ttf" as tracking : List(U8)
+import "../fonts/aat/tracking-0-0.ttf" as old_tracking : List(U8)
 
 ## Apple font programs through the public served package.
 AatTests :: {}.{}
+
+expect {
+	font = Font.from_bytes(tracking, Font.ReadOptions.{ strict: True }) ?? crash "valid modern tracking fixture"
+	old = Font.from_bytes(old_tracking, Font.ReadOptions.{ strict: True }) ?? crash "valid old tracking fixture"
+	advance = |size| Font.shape(font, "ab", Font.ShapeOptions.{ point_size: size }).advances.map(|p| p.x)
+	advance(0) == [110, 120] and advance(6) == [100, 110] and advance(18) == [120, 130] and advance(24) == [130, 140] and Font.shape(old, "ab", Font.ShapeOptions.{ point_size: 24 }).advances.map(|p| p.x) == [110, 120]
+}
 
 expect {
 	font = Font.from_bytes(languages, Font.ReadOptions.{ strict: True }) ?? crash "valid AAT language fixture"

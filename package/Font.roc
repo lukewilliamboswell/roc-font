@@ -55,15 +55,15 @@ Font :: { face : Face }.{
 	##
 	## - `face`: which font of a collection (a `.ttc` file) to read, from 0.
 	##   A single font file has only face 0.
-	## - `strict`: reject the font for any problem, for a file you will pass
-	##   on (embed in a PDF, say) and want to work everywhere. By default
-	##   reading is lenient, as browsers are: a font reads exactly when a browser would
-	##   draw it. A broken table a browser rejects the font for (including
-	##   substitutions, positioning, names, `OS/2` and `post`) rejects it
-	##   here too; what a browser leaves out is left out and reported by
-	##   `dropped`: a faulty legacy `kern` table, a faulty `avar`, or faulty
-	##   variation data, which drops all of the font's variations (it then
-	##   reads as its default design).
+	## - `strict`: reject the font for any reported problem. By default,
+	##   broken optional data is left out and reported by `dropped`;
+	##   broken required data rejects the font. Faulty variation data drops
+	##   the variations as a unit, so the font reads at its default design;
+	##   a faulty `avar` alone leaves its other variation data usable.
+	##   Successful reading proves these queries and shaping calls are
+	##   defined. It does not certify that another reader or renderer
+	##   accepts the same font: supported Apple tables and valid CFF
+	##   calculator programs can be rejected or discarded by sanitizers.
 	## - `limits`: bounds on the work and memory a file may ask for.
 	ReadOptions := { face : U32 ?? 0, strict : Bool ?? False, limits : Limits ?? Limits.{} }
 
@@ -78,8 +78,8 @@ Font :: { face : Face }.{
 	## - `max_depth`: how deeply contextual substitution and positioning
 	##   lookups may call further lookups while shaping.
 	##
-	## The defaults (256 MiB, 1024 faces, 16384 lookups, depth 64) admit
-	## every real font with room to spare.
+	## The defaults are 256 MiB, 1024 faces, 16384 lookups and depth 64.
+	## Increase a bound when reading a font that needs more preparation.
 	##
 	## TrueType outlines also have fixed work and numerical bounds checked
 	## while reading. In particular, a conservative coordinate envelope for
@@ -878,7 +878,11 @@ Font :: { face : Face }.{
 	## stretching apply when selected by the font and script.
 	## Other scripts use the default shaping model, which applies the
 	## font's lookups without script-specific syllable reordering.
-	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+	## `point_size` selects size-dependent Apple tracking, in typographic
+	## points. Zero and negative values use the reference default of 12.
+	## It does not scale the returned font-unit coordinates or choose a
+	## variation location; select an optical-size axis with `Font.at`.
+	ShapeOptions := { point_size : Dec ?? 0, script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left
 	## to right, also for right-to-left text):
@@ -988,7 +992,7 @@ Font :: { face : Face }.{
 	plan = |font, options| {
 		limits = options.limits
 		chosen = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
+		{ plan: Shaper.plan_with_clusters(font.face, { point_size: options.point_size, script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
 	}
 
 	## Shape text: the glyphs that draw it, where, and which part of the

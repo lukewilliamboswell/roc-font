@@ -23,6 +23,7 @@ import TablePost
 import TableCmap
 import TableAatKern
 import ShaperAatPosition
+import AatTracking
 import AatLanguage
 import AatMorx
 import AatFeatureSelect
@@ -43,6 +44,7 @@ import AatFeatureSelect
 Shaper :: {}.{
 
 	Options : {
+		point_size : Dec,
 		script : Str,
 		language : Str,
 		direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop],
@@ -59,6 +61,7 @@ Shaper :: {}.{
 	## lookups, kept (they are already built) so that `step_features` can
 	## name the features of each step for traced shaping.
 	Plan : {
+		tracking : I64,
 		backward : Bool,
 		aat : Bool,
 		aat_features : AatMorx.Plan,
@@ -527,6 +530,7 @@ Shaper :: {}.{
 			}
 		}
 		{
+			tracking: AatTracking.value(face.tracking, vertical, options.point_size),
 			backward: requested == Rtl,
 			aat,
 			aat_features: if aat {
@@ -1421,11 +1425,23 @@ Shaper :: {}.{
 	# buffer reversal. Legacy kerning follows GPOS; kerx replaces it.
 	aat_position : Face, Face.Location, Plan, List(LayoutGsub.Item), ShaperAatPosition.Initial, Bool, U64 -> ShaperAatPosition.Applied
 	aat_position = |face, location, p, items, initial, backward, budget| {
-		if p.aat_position == NoAatPosition {
-			return { items, advances: initial.advances, major: initial.major, cross: initial.cross, operations: 0, stopped: 0 }
+		applied = if p.aat_position == NoAatPosition {
+			{ items, advances: initial.advances, major: initial.major, cross: initial.cross, operations: 0, stopped: 0 }
+		} else {
+			table = if (p.aat_position == Kerx) face.kerx else face.aat_kern
+			ShaperAatPosition.apply(table, face.anchors, items, initial, { vertical: p.vertical, backward, kern_mask: p.aat_kern_mask, budget, point: |glyph, index| Face.contour_point(face, location, glyph, index) })
 		}
-		table = if (p.aat_position == Kerx) face.kerx else face.aat_kern
-		ShaperAatPosition.apply(table, face.anchors, items, initial, { vertical: p.vertical, backward, kern_mask: p.aat_kern_mask, budget, point: |glyph, index| Face.contour_point(face, location, glyph, index) })
+		if p.tracking == 0 {
+			return applied
+		}
+		var $advances = applied.advances
+		for i in 0..<applied.items.len() {
+			item = applied.items.get(i) ?? LayoutGsub.no_item
+			if i == 0 or item.props.bitwise_and(ShaperUnicode.continuation) == 0 {
+				$advances = $advances.set(i, LayoutVar.position_add($advances.get(i) ?? 0, p.tracking)) ?? []
+			}
+		}
+		{ ..applied, advances: $advances }
 	}
 
 	## The widths HarfBuzz gives spaces the font lacks, drawn with the space
