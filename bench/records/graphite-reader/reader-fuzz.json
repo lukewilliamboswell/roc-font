@@ -1,0 +1,65 @@
+{
+  "schema_version": "roc-fuzz-ci/v1",
+  "target": "font-graphite-tables",
+  "started_at_unix_ms": 1793185953722,
+  "finished_at_unix_ms": 1793185971393,
+  "duration_ms": 17670,
+  "outcome": "passed",
+  "finding_kind": null,
+  "provenance": {
+    "source_revision": null,
+    "roc_version": null,
+    "platform_release": null,
+    "platform_sha256": null
+  },
+  "configuration": {
+    "corpus": ".roc-font-tmp/graphite-reader-fuzz/corpus",
+    "time_seconds": null,
+    "runs": "1000",
+    "max_input_size": "64",
+    "memory_limit_mb": "2048",
+    "timeout_seconds": "10",
+    "dictionary": null,
+    "seed": "314",
+    "leak_detection": true,
+    "command": [
+      "/private/tmp/roc-font-graphite/.roc-font-tmp/graphite-reader-fuzz/target",
+      "run",
+      ".roc-font-tmp/graphite-reader-fuzz/corpus",
+      "--runs=1000",
+      "--max-input-size=64",
+      "--seed=314",
+      "--timeout=10",
+      "--memory-limit=2048",
+      "--artifact-dir=.roc-font-tmp/graphite-reader-fuzz/report/failures",
+      "--print-final-stats"
+    ]
+  },
+  "executable": {
+    "name": "target",
+    "sha256": "4707c0397fa6c913244b5320c57003124828cc510c073503f6574b096f80826a"
+  },
+  "termination": {
+    "exit_code": 0,
+    "signal": null
+  },
+  "libfuzzer": {
+    "coverage_kind": "sanitizer_edge_feedback",
+    "executed_units": 1000,
+    "average_exec_per_sec": 58,
+    "new_units_added": 106,
+    "slowest_unit_time_sec": 0,
+    "peak_rss_mb": 36,
+    "coverage_edges": 2925,
+    "coverage_features": 5361
+  },
+  "failures": [],
+  "log": {
+    "path": "run.log",
+    "size": 13968,
+    "sha256": "4bdaf44d005546e6e75990c44ff30c242369a9f7ab4c5fd1e4be3d904a716910"
+  },
+  "bundle": "http://127.0.0.1:53448/HwG6rUBZpmTiFqHRxjsKPwXmwFrVptLmjuHKe4BjLRue.tar.zst",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "source_target_sha256": "3d83ba6dedaece30227413e955c2267b729c79803720b6b1d8fbfbbaeefab14e"
+}
