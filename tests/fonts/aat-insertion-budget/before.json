@@ -1,0 +1,27 @@
+{
+  "source": "6653e4a unchanged AAT path; Oct28 general public allocation consumer",
+  "binary_sha256": "238d0f3f8fc5c887cf1e49c8d85d3127a936f5c3303a9a012a85b67466b33c03",
+  "rows": [
+    {
+      "scalars": 1,
+      "seconds": 35.45261187502183,
+      "exit_code": 77,
+      "stdout": "",
+      "stderr": "INFO: Running with entropic power schedule (0xFF, 100).\nINFO: Seed: 2061643991\nINFO: Loaded 1 modules   (49081 inline 8-bit counters): 49081 [0x104784500, 0x1047904b9), \nINFO: Loaded 1 PC tables (49081 PCs): 49081 [0x1047904c0,0x104850050), \n/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/bench/latest-compiler-baseline/bin/roc-alloc: Running 1 inputs 1 time(s) each.\nRunning: /private/tmp/aat-insertion-before/shape-1.case\n[roc crashed] ALLOCATION_DIAGNOSTIC allocations=32783 leaked=0 result=ok checksum=20136577\n==85364== ERROR: libFuzzer: deadly signal\nNOTE: libFuzzer has rudimentary signal handlers.\n      Combine libFuzzer with AddressSanitizer or similar for better crash reports.\nSUMMARY: libFuzzer: deadly signal\n"
+    },
+    {
+      "scalars": 4,
+      "seconds": 35.91859245800879,
+      "exit_code": 77,
+      "stdout": "",
+      "stderr": "INFO: Running with entropic power schedule (0xFF, 100).\nINFO: Seed: 2097090227\nINFO: Loaded 1 modules   (49081 inline 8-bit counters): 49081 [0x104ed4500, 0x104ee04b9), \nINFO: Loaded 1 PC tables (49081 PCs): 49081 [0x104ee04c0,0x104fa0050), \n/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/bench/latest-compiler-baseline/bin/roc-alloc: Running 1 inputs 1 time(s) each.\nRunning: /private/tmp/aat-insertion-before/shape-4.case\n[roc crashed] ALLOCATION_DIAGNOSTIC allocations=32783 leaked=0 result=ok checksum=20138506\n==85386== ERROR: libFuzzer: deadly signal\nNOTE: libFuzzer has rudimentary signal handlers.\n      Combine libFuzzer with AddressSanitizer or similar for better crash reports.\nSUMMARY: libFuzzer: deadly signal\n"
+    },
+    {
+      "scalars": 16,
+      "seconds": 35.39094583399128,
+      "exit_code": 77,
+      "stdout": "",
+      "stderr": "INFO: Running with entropic power schedule (0xFF, 100).\nINFO: Seed: 2133008277\nINFO: Loaded 1 modules   (49081 inline 8-bit counters): 49081 [0x100f64500, 0x100f704b9), \nINFO: Loaded 1 PC tables (49081 PCs): 49081 [0x100f704c0,0x101030050), \n/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/bench/latest-compiler-baseline/bin/roc-alloc: Running 1 inputs 1 time(s) each.\nRunning: /private/tmp/aat-insertion-before/shape-16.case\n[roc crashed] ALLOCATION_DIAGNOSTIC allocations=32783 leaked=0 result=ok checksum=20146312\n==85428== ERROR: libFuzzer: deadly signal\nNOTE: libFuzzer has rudimentary signal handlers.\n      Combine libFuzzer with AddressSanitizer or similar for better crash reports.\nSUMMARY: libFuzzer: deadly signal\n"
+    }
+  ]
+}
