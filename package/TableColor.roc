@@ -1189,3 +1189,19 @@ expect {
 	}
 	$safe
 }
+
+# A valid chain at the depth boundary remains accepted, while the next
+# level fails preparation before a query can consume an unbounded stack.
+color_chain : U64 -> List(U8)
+color_chain = |depth| [0, 1].concat(List.repeat(0, 12)).concat([0, 0, 0, 34]).concat(List.repeat(0, 16))
+	.concat([0, 0, 0, 1, 0, 1, 0, 0, 0, 10])
+	.concat(List.repeat([14, 0, 0, 8, 0, 0, 0, 0], depth).join_map(|b| b))
+	.concat([10, 0, 0, 6, 0, 1, 2, 0, 0, 64, 0])
+expect match TableColor.read(color_chain(63), 36, 3, 0) {
+	Ok(_) => True
+	Err(_) => False
+}
+expect match TableColor.read(color_chain(64), 36, 3, 0) {
+	Err(_) => True
+	Ok(_) => False
+}

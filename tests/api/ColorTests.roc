@@ -209,3 +209,80 @@ expect {
 		}
 	)
 }
+
+# CPAL v0 and optional-v1 metadata absence preserve colors and have no
+# invented labels or background preferences.
+expect {
+	font = read(replace("CPAL", FontBuild.patch(cpal, 0, [0, 0])))
+	Font.color_palette_color(font, 1, 2) == Present({ red: 9, green: 8, blue: 7, alpha: 0 }) and Font.color_palette_name(font, 0) == Err(Missing) and Font.color_entry_name(font, 0) == Err(Missing) and Font.color_palettes(font).all(|p| !p.light_background and !p.dark_background)
+}
+expect {
+	font = read(replace("CPAL", FontBuild.patch(cpal, 16, List.repeat(0, 12))))
+	Font.color_palette_name(font, 1) == Err(Missing) and Font.color_entry_name(font, 1) == Err(Missing) and Font.color_palettes(font).all(|p| !p.light_background and !p.dark_background)
+}
+expect {
+	# Empty COLRv1 has a complete header and no roots or paints.
+	font = read(replace("COLR", [0, 1].concat(List.repeat(0, 32))))
+	Font.dropped(font).is_empty() and Font.color_glyph(font, 1) == Absent
+}
+expect {
+	# Zero and single-stop gradients remain explicit font facts. Rendering
+	# their defined degenerate result is a downstream operation.
+	[0.U64, 1].all(
+		|n| {
+			font = read(replace("COLR", FontBuild.patch(colr, 335, FontBuild.u16(n))))
+			match Font.color_glyph(font, 4) {
+				Present(g) => g.stops.len() == n
+				Absent => False
+			}
+		},
+	)
+}
+expect {
+	# Unknown enum values have format-defined behavior, rather than failing
+	# or accidentally selecting the last known mode.
+	pad = read(replace("COLR", FontBuild.patch(colr, 334, [255])))
+	clear = read(replace("COLR", FontBuild.patch(colr, 673, [255])))
+	(
+		match Font.color_glyph(pad, 4) {
+			Present(g) => g.nodes.any(
+				|p| match p {
+					LinearGradient(l) => l.extend == Pad
+					_ => False
+				},
+			)
+			Absent => False
+		}
+	) and (
+		match Font.color_glyph(clear, 32) {
+			Present(g) => g.nodes.any(
+				|p| match p {
+					Composite(c) => c.mode == Clear
+					_ => False
+				},
+			)
+			Absent => False
+		}
+	)
+}
+expect {
+	# With no item variation store, even variable paint formats ignore their
+	# variation indices. The original values and explicit map bytes survive.
+	bytes = FontBuild.patch(colr, 30, [0, 0, 0, 0])
+	font = Font.at(read(replace("COLR", bytes)), Font.Variation.{ weight: Weight(900) })
+	Font.color_glyph(font, 5) == Font.color_glyph(varied, 5)
+}
+expect {
+	# Invalid palette flags and two independent optional array references
+	# are reported together, while both colors and paints are dropped.
+	bad = FontBuild.patch(FontBuild.patch(FontBuild.patch(cpal, 44, [128, 0, 0, 0]), 20, [255, 255, 255, 255]), 24, [255, 255, 255, 255])
+	match Font.from_bytes(replace("CPAL", bad), Font.ReadOptions.{ strict: True }) {
+		Err(ps) => ps.keep_if(
+			|p| match p {
+				BadTable(b) => b.table == "CPAL"
+				_ => False
+			},
+		).len() == 3
+		Ok(_) => False
+	}
+}
