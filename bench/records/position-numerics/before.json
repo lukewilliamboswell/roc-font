@@ -1,0 +1,148 @@
+{
+  "source_git": "419c7e02f0a397f7aa908179e5453d3dd1891672",
+  "bundle": "HCWySKxepGVz1nzsTfR1gqRXBZHaZ1FXJApuznXxhU8X.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "harfbuzz": "14.6.0",
+  "rows": [
+    {
+      "case": "inter/shape/words-small",
+      "case_sha256": "96e2df2aac5f6cfc701a4ad32b94f080e3905a4ebcf5338fee65678f39e55147",
+      "alloc": {
+        "allocations": 21,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 1052465
+      },
+      "roc_checksum": 134715520,
+      "hb_checksum": 134715520,
+      "timing": {
+        "roc": {
+          "samples_ns": [
+            228145.8359375,
+            202426.4296875,
+            200950.515625,
+            205145.1796875,
+            201029.6171875
+          ],
+          "median_ns": 202426.4296875
+        },
+        "hb": {
+          "samples_ns": [
+            56992.1875,
+            51875.0,
+            52140.625,
+            51164.0625,
+            51281.25
+          ],
+          "median_ns": 51875.0
+        }
+      },
+      "ratio": 3.902196234939759,
+      "text_bytes": 505
+    },
+    {
+      "case": "inter/shape/words-medium",
+      "case_sha256": "9867e5b43308628c209e546283c590d3706188afcee5f9f70dbc14a5e60d6969",
+      "alloc": {
+        "allocations": 21,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 15164805
+      },
+      "roc_checksum": 1941095040,
+      "hb_checksum": 1941095040,
+      "timing": {
+        "roc": {
+          "samples_ns": [
+            1654641.6015625,
+            1662461.265625,
+            1656279.6171875,
+            1671085.2890625,
+            1663303.3828125
+          ],
+          "median_ns": 1662461.265625
+        },
+        "hb": {
+          "samples_ns": [
+            467734.375,
+            463882.8125,
+            472523.4375,
+            471101.5625,
+            472335.9375
+          ],
+          "median_ns": 471101.5625
+        }
+      },
+      "ratio": 3.5288808145801895,
+      "text_bytes": 4088
+    },
+    {
+      "case": "inter/shape/words-large",
+      "case_sha256": "c0cc1271cc9139862c960a5d20ea8a6325fc770194bcc9fd914978850c2c2bd8",
+      "alloc": {
+        "allocations": 21,
+        "leaked": 0,
+        "result": "ok",
+        "checksum": 556772012
+      },
+      "roc_checksum": 71266817536,
+      "hb_checksum": 71266817536,
+      "timing": {
+        "roc": {
+          "samples_ns": [
+            15245374.0234375,
+            15091554.0390625,
+            15089700.84375,
+            15139859.375,
+            15221350.9140625
+          ],
+          "median_ns": 15139859.375
+        },
+        "hb": {
+          "samples_ns": [
+            4049953.125,
+            3984742.1875,
+            3923515.625,
+            3919023.4375,
+            3954710.9375
+          ],
+          "median_ns": 3954710.9375
+        }
+      },
+      "ratio": 3.82830998630984,
+      "text_bytes": 32761
+    }
+  ],
+  "binaries_sha256": {
+    "alloc": "2d9dcf7594a79e885d52639f965a477e95d4e13d45b8ae4abe38ba1c523fff9b",
+    "bench": "95a4ffabb28c6ae8a1118e6afd0a721279c9eb0e6a222b8b04f007f0840d1884"
+  },
+  "bundle_sha256": "228aed8b9bdf996a3f46e7f73b2e811608b24ace3c03741db36a27d37d5ac176",
+  "bundled_source_sha256": {
+    "LayoutVar.roc": "1799e7bb98fa72b3adc64e6050b26fc67d2699dd1b9c26b8a99e10c020723d01",
+    "LayoutKerning.roc": "464bace7d08c5c43d3f4a0b5c66e40e9c9f6b320086592c3479cdcfc740b51ff",
+    "TableVar.roc": "6cec532965c3502d42c3af206fba8443077003426c6692783e60346d4dc04ffa"
+  },
+  "consumer_source_sha256": {
+    "FontBench.roc": "26a97add5ef910847956270c0ba274de91c7d29aecd00357c0619bc83b5e59ce",
+    "alloc.roc": "2b2d58545c0f48ccf518e19c5174ffd0d28f59754da1247c8f6bcaa9866afd90",
+    "font.roc": "a5e4baecea62587e14759fa6707fb8c79a75b3c802d2b3f380a0097e60fcd2c0"
+  },
+  "flags": {
+    "alloc": [
+      "--fuzz",
+      "--opt=speed"
+    ],
+    "bench": [
+      "--opt=speed"
+    ]
+  },
+  "reference_binary_sha256": "2c7b7b60f055b1b676907dde59a9244285902e582505891eda339409a6bf5138",
+  "reference_version_reported": "14.6.0",
+  "notes": [
+    "Font reading and planning are outside measured regions;128 operations per sample,five samples per size.",
+    "Every shape checksum agrees with same-run native HB14.6.0. No timing speedup claim; samples ran amid integration builds.",
+    "Before source commit419c7e0; after source commit0809d47 plus LK source override later committed04101f1. Immutable bundle/source hashes identify exact inputs.",
+    "Requested bytes and peak live bytes unavailable in roc-fuzz0.4.3; all21/21/21 allocation cases report zero leaks."
+  ]
+}

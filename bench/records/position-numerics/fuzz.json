@@ -1,0 +1,26 @@
+{
+  "bundle": "BRXYTXhLGhM45FXnczoFN8ppHg5UtiHZUecc4kYpokdB.tar.zst",
+  "targets": [
+    {
+      "target": "font-gpos",
+      "runs": 1000,
+      "seed": 266,
+      "result": "pass",
+      "binary_sha256": "a2011b3b8cf84216fe9b0dbabef5c52017f601566a66e1ee9e27ee15df569e55",
+      "log_tail": "tRepeatedBytes-\n#860\tNEW    cov: 2168 ft: 4605 corp: 173/3074b lim: 33 exec/s: 860 rss: 31Mb L: 16/33 MS: 5 CrossOver-ShuffleBytes-PersAutoDict-ChangeBit-ShuffleBytes- DE: \"\\002\\340\\000\\000\"-\n#888\tNEW    cov: 2168 ft: 4608 corp: 174/3106b lim: 33 exec/s: 888 rss: 31Mb L: 32/33 MS: 3 ShuffleBytes-CrossOver-CrossOver-\n#930\tNEW    cov: 2168 ft: 4610 corp: 175/3116b lim: 33 exec/s: 930 rss: 31Mb L: 10/33 MS: 2 EraseBytes-PersAutoDict- DE: \"\\026\\000\\000\\000\\000\\000\\000\\000\"-\n#959\tNEW    cov: 2168 ft: 4611 corp: 176/3136b lim: 33 exec/s: 959 rss: 31Mb L: 20/33 MS: 4 CrossOver-ChangeByte-EraseBytes-InsertRepeatedBytes-\n#993\tNEW    cov: 2168 ft: 4612 corp: 177/3140b lim: 33 exec/s: 993 rss: 31Mb L: 4/33 MS: 4 ChangeBinInt-InsertRepeatedBytes-ShuffleBytes-EraseBytes-\n#1000\tDONE   cov: 2168 ft: 4612 corp: 177/3140b lim: 33 exec/s: 1000 rss: 31Mb\n###### Recommended dictionary. ######\n\"\\337\\006\" # Uses: 10\n\"\\237\\377\" # Uses: 8\n\"\\377\\377\\377\\377\\377\\377\\377\\377\" # Uses: 5\n\"\\002\\340\\000\\000\" # Uses: 13\n\"\\001\\000\\000\\000\\000\\000\\000\\012\" # Uses: 3\n\"\\026\\000\\000\\000\\000\\000\\000\\000\" # Uses: 2\n\"\\000\\000\\000`\" # Uses: 5\n\"E \" # Uses: 4\n\"\\377\\236\" # Uses: 1\n\"\\376\\376\\356\\004\" # Uses: 2\n\"\\377\\377\\377\\346\" # Uses: 3\n\"\\001\\000\\000\\000\\000\\000\\000\\011\" # Uses: 4\n\"\\377\\376\\356\\016\" # Uses: 5\n\"\\341\\015\" # Uses: 6\n\"\\000\\000\\000\\000\\000\\000\\000\\211\" # Uses: 5\n\"\\000\\000\\000\\000\\000\\000\\001 \" # Uses: 1\n\"\\001\\000\\000\\000\" # Uses: 0\n###### End of recommended dictionary. ######\nDone 1000 runs in 1 second(s)\n"
+    },
+    {
+      "target": "font-layout-var",
+      "runs": 1000,
+      "seed": 267,
+      "result": "pass",
+      "binary_sha256": "c5e257111ccc16f042f9e272258e95baac4691c4fcb2547d642bb3a6290fae7a",
+      "log_tail": "orp: 419/20Kb lim: 65 exec/s: 197 rss: 36Mb L: 2/65 MS: 1 ChangeByte-\n#996\tNEW    cov: 4265 ft: 11406 corp: 420/20Kb lim: 65 exec/s: 199 rss: 36Mb L: 60/65 MS: 4 InsertByte-ShuffleBytes-InsertByte-CMP- DE: \"\\000\\000\\000\\000\\000\\000\\000\\000\"-\n#997\tNEW    cov: 4265 ft: 11407 corp: 421/20Kb lim: 65 exec/s: 199 rss: 36Mb L: 14/65 MS: 1 CrossOver-\n#1000\tDONE   cov: 4265 ft: 11407 corp: 421/20Kb lim: 65 exec/s: 200 rss: 36Mb\n###### Recommended dictionary. ######\n\"vdth\" # Uses: 12\n\"\\017\\000\\000\\000\\000\\000\\000\\000\" # Uses: 2\n\"\\377\\376\\356\\021\" # Uses: 1\n\"\\001\\000\\000~\" # Uses: 2\n\"a\\000\\000\\000\" # Uses: 8\n\"\\001\\000\\000\\000\\000\\000\\000\\013\" # Uses: 5\n\"\\000\\000\\000\\000\\000\\000\\000\\004\" # Uses: 10\n\"\\030\\000\\000\\000\\000\\000\\000\\000\" # Uses: 6\n\"\\023\\340\" # Uses: 1\n\"\\000\\000\\000\\000\" # Uses: 4\n\"\\377\\377\\377\\234\" # Uses: 2\n\"\\377\\377\\377\\377\\377\\377\\377\\377\" # Uses: 2\n\"\\023\\000\\000\\000\\000\\000\\000\\000\" # Uses: 5\n\"\\026\\000\\000\\000\\000\\000\\000\\000\" # Uses: 0\n\"\\000\\000\\000\\000\\000\\000\\000\\000\" # Uses: 0\n\"\\377\\377\\377\\377\\377\\377\\377\\003\" # Uses: 2\n\"\\235\\377\" # Uses: 1\n\"\\004\\000\\000\\000\\000\\000\\000\\000\" # Uses: 1\n\"\\001\\000\\340\\026\" # Uses: 0\n\"\\346\\377\\377\\377\" # Uses: 1\n\"\\031\\000\\000\\000\\000\\000\\000\\000\" # Uses: 0\n\"\\215\\000\\000\\000\" # Uses: 0\n\"\\377\\362\\337\\365\" # Uses: 1\n\"\\020\\340\" # Uses: 1\n\"\\377\\376\\356\\025\" # Uses: 0\n\"\\377\\377\\377\\377\" # Uses: 0\n\"\\003\\000\\000\\000\\000\\000\\000\\000\" # Uses: 0\n\"\\376\\377\\377\\377\" # Uses: 0\n###### End of recommended dictionary. ######\nDone 1000 runs in 5 second(s)\n"
+    }
+  ],
+  "flags": [
+    "--fuzz",
+    "--opt=speed"
+  ],
+  "contract": "Existing narrow pair and layout-variation targets assert alignment,determinism,bounded output,generated-size allocation scaling and leaks through the served bundle."
+}
