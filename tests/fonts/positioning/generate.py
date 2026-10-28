@@ -126,6 +126,43 @@ def anchor_point(fb):
         anchor.AnchorPoint = 0
 
 
+def chain_classes(fb):
+    sub = ot.ChainContextPos()
+    sub.Format = 2
+    sub.Coverage = coverage(['a'])
+    for name, values in [('BacktrackClassDef', {'c': 1, 'd': 1}), ('InputClassDef', {'a': 1}), ('LookAheadClassDef', {'b': 1})]:
+        definition = ot.ClassDef()
+        definition.classDefs = values
+        setattr(sub, name, definition)
+    rule = ot.ChainPosClassRule()
+    rule.BacktrackGlyphCount, rule.Backtrack = 1, [1]
+    rule.InputGlyphCount, rule.Input = 1, []
+    rule.LookAheadGlyphCount, rule.LookAhead = 1, [1]
+    rule.PosCount, rule.PosLookupRecord = 1, [positional_record()]
+    group = ot.ChainPosClassSet()
+    group.ChainPosClassRuleCount, group.ChainPosClassRule = 1, [rule]
+    sub.ChainPosClassSetCount, sub.ChainPosClassSet = 2, [None, group]
+    fb.font['GPOS'].table.LookupList.Lookup[1].SubTable = [sub]
+
+
+def single_variation(fb):
+    fb.setupFvar([('wght', 100, 400, 900, 'Weight')], [])
+    region = buildVarRegionList([{'wght': (0, 1, 1)}], ['wght'])
+    store = buildVarStore(region, [buildVarData([0], [[80], [120]], optimize=False)])
+    gdef = fb.font['GDEF'].table
+    gdef.Version, gdef.VarStore = 0x00010003, store
+    sub = fb.font['GPOS'].table.LookupList.Lookup[0].SubTable[0]
+    for field, inner in [('XPlaDevice', 0), ('YPlaDevice', 1), ('XAdvDevice', 0)]:
+        device = ot.Device()
+        device.StartSize, device.EndSize, device.DeltaFormat = 0, inner, 0x8000
+        setattr(sub.Value, field, device)
+    sub.ValueFormat |= 0x70
+
+
+def null_base(fb):
+    fb.font['GPOS'].table.LookupList.Lookup[0].SubTable[0].BaseArray.BaseRecord[0].BaseAnchor[0] = None
+
+
 def main():
     save('single', 'feature dist { pos a <11 17 23 0>; pos b <31 37 41 0>; } dist;')
     save('single-extension', 'lookup Shift useExtension { pos a <11 17 23 0>; } Shift; feature dist { lookup Shift; } dist;')
@@ -139,12 +176,15 @@ def main():
         save(f'context-{format}', "lookup Shift { pos a <11 17 23 0>; } Shift; feature dist { pos a' lookup Shift b; } dist;", context_format(format))
     save('chained', "lookup Shift { pos a <11 17 23 0>; } Shift; feature dist { pos c a' lookup Shift b; } dist;")
     save('chained-coverage', "lookup Shift { pos a <11 17 23 0>; } Shift; feature dist { pos [c d] a' lookup Shift [b c]; } dist;")
+    save('chained-classes', "lookup Shift { pos a <11 17 23 0>; } Shift; feature dist { pos c a' lookup Shift b; } dist;", chain_classes)
     save('mark-propagation', 'feature mark { pos base a <anchor 300 700> mark @TOP; } mark; feature dist { pos a <13 29 47 0>; } dist;')
     save('mark-filter', '@KEEP = [acute]; feature mark { lookupflag UseMarkFilteringSet @KEEP; pos base a <anchor 300 700> mark @TOP; } mark;')
     save('anchor-point', 'feature mark { pos base a <anchor 300 700> mark @TOP; } mark;', anchor_point)
     save('recursive', "lookup Shift { pos a <11 17 23 0>; } Shift; feature dist { pos a' lookup Shift b; } dist;", recursive)
     save('context-cursive', 'lookup Join { ' + curs + " } Join; feature curs { pos b' lookup Join c; } curs;")
     save('variable-anchor', 'feature mark { pos base a <anchor 300 700> mark @TOP; } mark;', variation)
+    save('variable-single', 'feature dist { pos a <11 17 23 0>; } dist;', single_variation)
+    save('null-base-anchor', 'feature mark { pos base a <anchor 300 700> mark @TOP; } mark;', null_base)
     cases = []
     for fixture, texts in {
         'single': ['abca'], 'single-extension': ['aba'],
@@ -157,11 +197,15 @@ def main():
         'mark-propagation': ['a\u0301'], 'mark-filter': ['a\u0301\u0300'],
         'context-cursive': ['abc'], 'variable-anchor': ['a\u0301'],
         'anchor-point': ['a\u0301'],
+        'chained-classes': ['cabdab'], 'variable-single': ['aba'], 'null-base-anchor': ['a\u0301'],
     }.items():
         for ti, text in enumerate(texts):
             for direction in ['ltr', 'rtl']:
                 cases.append({'id': f'{fixture}-{ti}-{direction}', 'font': f'../fonts/positioning/{fixture}.ttf', 'text': text, 'options': {'script': 'Latn', 'direction': direction}, 'expected': 'oracle'})
     cases.append({'id': 'variable-anchor-bold', 'font': '../fonts/positioning/variable-anchor.ttf', 'text': 'a\u0301', 'variations': {'wght': 900}, 'expected': 'oracle'})
+    for weight in [550, 900]:
+        cases.append({'id': f'variable-single-{weight}', 'font': '../fonts/positioning/variable-single.ttf', 'text': 'aba', 'variations': {'wght': weight}, 'expected': 'oracle'})
+        cases.append({'id': f'variable-anchor-{weight}', 'font': '../fonts/positioning/variable-anchor.ttf', 'text': 'a\u0301', 'variations': {'wght': weight}, 'expected': 'oracle'})
     for font in sorted(HERE.glob('*.ttf')):
         cases.append({'id': 'read-' + font.stem, 'kind': 'read', 'font': '../fonts/positioning/' + font.name, 'expected': 'oracle'})
     path = HERE.parents[1] / 'cases' / 'positioning.jsonc'
