@@ -13,11 +13,12 @@ LayoutPosition := {
 	subtables : List({ kind : U64, at : U64, context : U64, d0 : U64, d1 : U64, d2 : U64 }),
 	contexts : LayoutGsub,
 	active : Bool,
+	mark_starts : List(U64),
 }.{
 	Lookup : { start : U64, end : U64, props : U64 }
 	Sub : { kind : U64, at : U64, context : U64, d0 : U64, d1 : U64, d2 : U64 }
 	none : LayoutPosition
-	none = { data: [], lookups: [], subtables: [], contexts: LayoutGsub.none, active: False }
+	none = { data: [], lookups: [], subtables: [], contexts: LayoutGsub.none, active: False, mark_starts: [] }
 	no_lookup : Lookup
 	no_lookup = { start: 0, end: 0, props: 0 }
 	no_sub : Sub
@@ -38,6 +39,28 @@ LayoutPosition := {
 	needs_run = |p, plan, items| {
 		if !p.active {
 			return False
+		}
+		var $other = False
+		for step in plan {
+			lookup = p.lookups.get(step.index) ?? LayoutPosition.no_lookup
+			for k in lookup.start..<lookup.end {
+				s = p.subtables.get(k) ?? LayoutPosition.no_sub
+				if s.kind != 2 and (s.kind < 4 or s.kind > 6) {
+					$other = True
+				}
+			}
+		}
+		if !$other {
+			var $mark = False
+			for item in items {
+				word = p.mark_starts.get(item.glyph // 64) ?? 0
+				if word.shr_zf_wrap(item.glyph.bitwise_and(63).to_u8_wrap()).bitwise_and(1) != 0 {
+					$mark = True
+				}
+			}
+			if !$mark {
+				return False
+			}
 		}
 		run = LayoutGsub.run_digest(items)
 		for step in plan {
@@ -77,6 +100,7 @@ LayoutPosition := {
 		validation = { data, glyphs, lookups: count, sets: Absent, budget: 64 * data.len() + 1048576 }
 		var $active = False
 		var $deltas = []
+		var $mark_starts = List.repeat(0.U64, (glyphs + 63) // 64)
 		for i in 0..<count {
 			at = list + Bytes.u16(data, list + 2 + 2 * i)
 			if !Bytes.fits(at, 6, data.len()) {
@@ -131,6 +155,21 @@ LayoutPosition := {
 						(LayoutGsub.read_coverage(data, target.at + Bytes.u16(data, target.at + 2), $built.steps)?).value
 					}
 					for r in ranges {
+						if target.kind >= 4 and target.kind <= 6 and r.first <= r.last {
+							first_word = r.first // 64
+							last_word = r.last // 64
+							$built = { ..$built, steps: LayoutPosition.spend(data, $built.steps, last_word - first_word + 1)? }
+							for word in first_word..=last_word {
+								low = r.first.max(word * 64)
+								high = r.last.min(word * 64 + 63)
+								mask = LayoutGsub.digest_range(0, 0, low, high)
+								# OTS permits format-2 ranges extending past the font.
+								# Only glyphs the font has can start this path.
+								if word < $mark_starts.len() {
+									$mark_starts = $mark_starts.set(word, ($mark_starts.get(word) ?? 0).bitwise_or(mask)) ?? []
+								}
+							}
+						}
 						$d0 = LayoutGsub.digest_range($d0, 0, r.first, r.last)
 						$d1 = LayoutGsub.digest_range($d1, 4, r.first, r.last)
 						$d2 = LayoutGsub.digest_range($d2, 9, r.first, r.last)
@@ -147,7 +186,7 @@ LayoutPosition := {
 				}
 			}
 		}
-		Ok({ value: { data, lookups: $lookups, subtables: $subs, contexts: LayoutGsub.from_contexts($built), active: $active }, deltas: $deltas })
+		Ok({ value: { data, lookups: $lookups, subtables: $subs, contexts: LayoutGsub.from_contexts($built), active: $active, mark_starts: $mark_starts }, deltas: $deltas })
 	}
 
 	spend : List(U8), U64, U64 -> Try(U64, [Bad(U64)])
