@@ -14,11 +14,11 @@ prove that a missing dotted-circle glyph does not substitute glyph zero.
 
 `generate_cases.py` authors the finite JSONC input matrix in
 adjacent `myanmar.jsonc`. It covers two real font families and the three
-original fonts, both directions, kinzi, stacks, medials, below-vowel mark
+original boundary fonts and four CCMP/reorder stress fonts, both directions, kinzi, stacks, medials, below-vowel mark
 classes, repeated pre-vowels and variation selectors, broken clusters,
 explicit/missing dotted circles, joiners, language selection and disabled
-features. Long syllables cross the255-item unsafe-flag and128-item indexing
-boundaries. The pinned standard HarfBuzz14.6.0 oracle records glyphs,
+features. Long syllables cross HarfBuzz's64-glyph syllable-visit boundary
+while retaining one DFA serial. The pinned standard HarfBuzz14.6.0 oracle records glyphs,
 clusters, advances, offsets and unsafe flags; replay uses the optimized
 native conformance driver importing the served package bundle, without
 HarfBuzz installed. No `.roc` test source is generated from an oracle.
@@ -26,9 +26,9 @@ HarfBuzz installed. No `.roc` test source is generated from an oracle.
 Reproduce the original fonts and matrix with fontTools4.61.1, then record:
 
 ```
-python generate_synthetic.py
-python generate_cases.py
-ROC_FONT_ORACLE_VENV=/path/to/pinned/venv python scripts/record_oracle.py myanmar
+python tests/fonts/shaping/myanmar/generate_synthetic.py
+python tests/fonts/shaping/myanmar/generate_cases.py
+ROC_FONT_ORACLE_VENV=/path/to/pinned/venv python scripts/record_oracle.py tests/fonts/shaping/myanmar/myanmar.jsonc
 ```
 
 The implementation follows the pinned Myanmar Ragel machine and reordering
@@ -48,3 +48,21 @@ encoding mode is not claimed by this modern Unicode model.
 The matrix stays outside global gating cases until exact native agreement
 proves the Myanmar model activation. Moving the data does not change any
 font bytes, expected result or reference key.
+
+
+The staged matrix has674 exact records. All nine fixture fonts pass OTS9.3.
+The four `sort-*.ttf` fonts first multiply one consonant into8,32,64 or256
+copies in `ccmp`, after syllable assignment, before visual reordering. They
+exercise metadata preservation across GSUB expansion and the64-glyph visit
+limit. The fixed32-copy fixture fits a31-pre-vowel sequence into one63-glyph
+visit and stresses stable ordering/cluster merges within that bound.
+
+`fuzz/font-myanmar.roc` measures allocation growth at2/8/32 repetitions and
+checks determinism, index alignment, font glyph references, monotone input
+clusters, growth bounds and leaks. An explicit modern-font witness prevents
+accidentally testing only a generic model. `bench/myanmar.py` compares the
+same ordinary/stress inputs at8/64/256 repetitions with native HarfBuzz14.6,
+using an explicit Myanmar plan and complete checksum agreement. It reports
+allocation calls, elapsed time and same-run reference ratios independently.
+Requested and peak live allocation bytes are not exposed by roc-fuzz0.4.3;
+those metrics are explicitly unavailable rather than approximated by RSS.

@@ -9693,6 +9693,62 @@
         ]
       },
       "expected": "oracle"
+    },
+    {
+      "id": "sort-8",
+      "font": "sort-8.ttf",
+      "text": "ကေေေေေေေေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sort-64",
+      "font": "sort-64.ttf",
+      "text": "ကေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sort-256",
+      "font": "sort-256.ttf",
+      "text": "ကေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sort-32-window",
+      "font": "sort-32.ttf",
+      "text": "ကေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
     }
   ]
 }
