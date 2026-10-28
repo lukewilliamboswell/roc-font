@@ -1,0 +1,189 @@
+{
+  "about": "AAT pair/state/attachment/tuple/legacy formats, real licensed font, epsilon cycle bounds and wide point conversion.",
+  "seeds": [
+    {
+      "why": "narrow AAT mutation mode0",
+      "parts": [
+        {
+          "hex": "00"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode1",
+      "parts": [
+        {
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode2",
+      "parts": [
+        {
+          "hex": "02"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode3",
+      "parts": [
+        {
+          "hex": "03"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode4",
+      "parts": [
+        {
+          "hex": "04"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode5",
+      "parts": [
+        {
+          "hex": "05"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode6",
+      "parts": [
+        {
+          "hex": "06"
+        }
+      ]
+    },
+    {
+      "why": "narrow AAT mutation mode7",
+      "parts": [
+        {
+          "hex": "07"
+        }
+      ]
+    },
+    {
+      "why": "Jellee-Roman",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/Jellee-Roman.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx0",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx0.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx1",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx1.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx1-cycle",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx1-cycle.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx1-cross",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx1-cross.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx4-anchor",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx4-anchor.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx4-chain",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx4-chain.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx4-point-variable",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx4-point-variable.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx4-point-wide-positive-1",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx4-point-wide-positive-1.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx4-point-wide-negative-2",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx4-point-wide-negative-2.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx6-long-tuple",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx6-long-tuple.ttf"
+        }
+      ]
+    },
+    {
+      "why": "apple-kern1",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/apple-kern1.ttf"
+        }
+      ]
+    },
+    {
+      "why": "apple-kern2",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/apple-kern2.ttf"
+        }
+      ]
+    },
+    {
+      "why": "ot-kern1",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/ot-kern1.ttf"
+        }
+      ]
+    },
+    {
+      "why": "kerx3-coverage",
+      "parts": [
+        {
+          "file": "tests/fonts/aat-position/kerx3-coverage.ttf"
+        }
+      ]
+    }
+  ]
+}
