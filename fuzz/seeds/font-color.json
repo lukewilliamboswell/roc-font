@@ -1,0 +1,15 @@
+{
+  "about":"Narrow CPAL/COLR graph controls, all formats, explicit maps, extreme precision and licensed real emoji fonts.",
+  "seeds":[
+    {"why":"real emoji DAG without mutation","parts":[{"hex":"00"}]},
+    {"why":"all32paint formats without mutation","parts":[{"hex":"01"}]},
+    {"why":"explicit variation index map","parts":[{"hex":"02"}]},
+    {"why":"four-axis tiny and wide geometry","parts":[{"hex":"03"}]},
+    {"why":"generated increasing feature sizes","parts":[{"hex":"04"}]},
+    {"why":"empty raw input","parts":[]},
+    {"why":"real ZWJ/VS16 font bytes","parts":[{"file":"tests/fonts/color/noto-emoji-subset.ttf"}]},
+    {"why":"all-format variable font bytes","parts":[{"file":"tests/fonts/color/color-all.ttf"}]},
+    {"why":"explicit-map font bytes","parts":[{"file":"tests/fonts/color/color-map.ttf"}]},
+    {"why":"wide long-word rows and four-axis scalar bytes","parts":[{"file":"tests/fonts/color/color-precision.ttf"}]}
+  ]
+}

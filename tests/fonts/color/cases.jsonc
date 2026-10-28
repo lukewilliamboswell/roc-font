@@ -1,0 +1,16 @@
+{
+  // All32formats at default, intermediate and maximum normalized locations;
+  // explicit map includes its required final-entry fallback.
+  "cases": [
+    {"id":"v0", "font":"color-v0.ttf", "weight":400},
+    {"id":"all-default", "font":"color-all.ttf", "weight":400},
+    {"id":"all-half", "font":"color-all.ttf", "weight":650},
+    {"id":"all-max", "font":"color-all.ttf", "weight":900},
+    {"id":"map-default", "font":"color-map.ttf", "weight":400},
+    {"id":"map-half", "font":"color-map.ttf", "weight":650},
+    {"id":"map-max", "font":"color-map.ttf", "weight":900},
+    {"id":"precision-tiny", "font":"color-precision.ttf", "weight":1, "precision":true},
+    {"id":"precision-wide", "font":"color-precision.ttf", "weight":16384, "precision":true},
+    {"id":"noto-emoji", "font":"noto-emoji-subset.ttf", "weight":400, "emoji":true}
+  ]
+}
