@@ -25,7 +25,7 @@ entry this run created is removed at the end so edits do not accumulate
 
 A parent process shares its served bundle with child scripts through
 ROC_FONT_BUNDLE_URL; a script started on its own serves its own. The
-mirror (`make_mirror`) is a hard-linked copy of the checkout without the
+mirror (`make_mirror`) is an independent copy of the checkout without the
 package's .roc files, whose package/main.roc is a sentinel that does not
 compile, so a consumer step run there fails unless it took the served
 bundle. (roc needs --replace-dep's OLD file to exist, hence a sentinel
@@ -184,7 +184,7 @@ def flight(roc: str, *, source: bool = False, bundle: Path | None = None,
 
 def make_mirror(dest: Path, root: Path = ROOT) -> Path:
     """A copy of `root` at `dest` without the package's Roc sources: files
-    are hard links (copies across file systems), package/ keeps only its
+    are independent copies, package/ keeps only its
     data files, and package/main.roc is a sentinel that does not compile.
     Consumers run here prove they used the bundle."""
     root, dest = root.resolve(), dest.resolve()
@@ -215,10 +215,10 @@ def make_mirror(dest: Path, root: Path = ROOT) -> Path:
             if path.is_symlink():
                 os.symlink(os.readlink(path), target / name)
                 continue
-            try:
-                os.link(path, target / name)
-            except OSError:
-                shutil.copy2(path, target / name)
+            # Consumer files must stay consistent with the bundle prepared
+            # for this run while implementation work continues. Hard links
+            # allow in-place checkout edits to change an active mirror.
+            shutil.copy2(path, target / name)
     (dest / "package").mkdir(exist_ok=True)
     (dest / "package" / "main.roc").write_text(SENTINEL, encoding="utf-8")
     return dest
