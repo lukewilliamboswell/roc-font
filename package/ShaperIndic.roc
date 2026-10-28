@@ -431,13 +431,22 @@ ShaperIndic := {
 				if ShaperIndic.pos(item) == 4 {
 					var $pos_value = 4
 					var $probe_index = 0
-					probe_features = [2, 4, 3, 1]
+					front = [plan.virama_glyph, item.glyph]
+					back = [item.glyph, plan.virama_glyph]
 					while $probe_index < 8 and $pos_value == 4 and $work.stopped == 0 {
-						feature = probe_features.get($probe_index // 2) ?? 2
-						glyphs = if $probe_index % 2 == 0 {
-							[plan.virama_glyph, item.glyph]
+						feature = if $probe_index < 2 {
+							2
+						} else if $probe_index < 4 {
+							4
+						} else if $probe_index < 6 {
+							3
 						} else {
-							[item.glyph, plan.virama_glyph]
+							1
+						}
+						glyphs = if $probe_index % 2 == 0 {
+							front
+						} else {
+							back
 						}
 						result = ShaperIndic.probe($work, oracle, feature, glyphs)
 						$work = result.work
@@ -458,8 +467,10 @@ ShaperIndic := {
 		}
 	}
 
-	initial_syllable : ShaperIndic, Work, U64, U64, Probe -> Work
-	initial_syllable = |plan, work, start, end, oracle| {
+	Scratch : { sorted : List(LayoutGsub.Item), buckets : List({ count : U64, cursor : U64 }) }
+
+	initial_syllable : ShaperIndic, Work, U64, U64, Probe, Scratch -> { work : Work, scratch : Scratch }
+	initial_syllable = |plan, work, start, end, oracle, scratch| {
 		cfg = ShaperIndic.config(plan.script)
 		var $work = work
 		if plan.script == ShaperTags.tag_of("Knda") and end - start >= 3 and ShaperIndic.cat(ShaperIndic.at($work.items, start)) == 15 and ShaperIndic.cat(ShaperIndic.at($work.items, start + 1)) == 4 and ShaperIndic.cat(ShaperIndic.at($work.items, start + 2)) == 6 {
@@ -599,7 +610,11 @@ ShaperIndic := {
 		# Stable counting sort over the fifteen defined visual positions.
 		# Scalar counts/cursors and one flat output replace comparison sort.
 		saved_syllable = ShaperIndic.syllable(ShaperIndic.at($work.items, start).mask)
-		var $buckets = List.repeat({ count: 0, cursor: 0 }, 15)
+		{ sorted, buckets } = scratch
+		var $buckets = buckets
+		for i in 0..<15 {
+			$buckets = $buckets.set(i, { count: 0, cursor: 0 }) ?? []
+		}
 		for i in start..<end {
 			pos_value = ShaperIndic.pos(ShaperIndic.at($work.items, i))
 			bucket = $buckets.get(pos_value) ?? { count: 0, cursor: 0 }
@@ -611,7 +626,10 @@ ShaperIndic := {
 			$buckets = $buckets.set(i, { ..bucket, cursor: $cursor }) ?? []
 			$cursor = $cursor + bucket.count
 		}
-		var $sorted = List.repeat(LayoutGsub.no_item, end - start)
+		var $sorted = sorted
+		while $sorted.len() < end - start {
+			$sorted = $sorted.append(LayoutGsub.no_item)
+		}
 		for i in start..<end {
 			item = ShaperIndic.at($work.items, i)
 			pos_value = ShaperIndic.pos(item)
@@ -749,13 +767,17 @@ ShaperIndic := {
 				}
 			}
 		}
-		$work
+		{ work: $work, scratch: { sorted: $sorted, buckets: $buckets } }
 	}
 
 	initial : ShaperIndic, List(LayoutGsub.Item), Probe, Dotted, U64, U64 -> { items : List(LayoutGsub.Item), operations : U64, stopped : U64 }
 	initial = |plan, items, oracle, dotted, limit, budget| {
 		var $work = ShaperIndic.update_positions(plan, { items, operations: 0, stopped: 0, budget }, oracle)
 		$work = ShaperIndic.dotted_circles($work, dotted, limit)
+		if $work.stopped != 0 or $work.items.is_empty() {
+			return { items: $work.items, operations: $work.operations, stopped: $work.stopped }
+		}
+		var $scratch = { sorted: [], buckets: List.repeat({ count: 0, cursor: 0 }, 15) }
 		var $start = 0
 		while $start < $work.items.len() and $work.stopped == 0 {
 			syllable_id = ShaperIndic.syllable(ShaperIndic.at($work.items, $start).mask)
@@ -766,7 +788,9 @@ ShaperIndic := {
 			}
 			kind = syllable_id.bitwise_and(15)
 			if kind <= 2 or kind == 4 {
-				$work = ShaperIndic.initial_syllable(plan, $work, $start, $end, oracle)
+				reordered = ShaperIndic.initial_syllable(plan, $work, $start, $end, oracle, $scratch)
+				$work = reordered.work
+				$scratch = reordered.scratch
 			}
 			$start = $end
 		}

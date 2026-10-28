@@ -1,0 +1,64 @@
+{
+  "label": "optimized",
+  "measurement_git": "31f37415186d0acb20a7101bd65a8d7c4e71bc77",
+  "source_git": "83a3714ccb09d6751cc7bb5a3761f0e6fa8dd788",
+  "bundle": "ExbTsWqosuZ5Cfpoqiaf9zXsPwbxJGvjS9a9og3C7KA3.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "e5e2b029f1eaf71b4d7b53a8e3962a5ad21930208e82875049a6bf0fc3358a05",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 768,
+      "scalar_count": 288,
+      "allocations": 298,
+      "leaked": 0,
+      "roc_seconds": 0.0004748626328125,
+      "hb_seconds": 7.3125e-05,
+      "roc_to_hb_ratio": 6.493847970085469
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 3072,
+      "scalar_count": 1152,
+      "allocations": 1114,
+      "leaked": 0,
+      "roc_seconds": 0.001929453125,
+      "hb_seconds": 0.00029403125,
+      "roc_to_hb_ratio": 6.562068232543309
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 12288,
+      "scalar_count": 4608,
+      "allocations": 4378,
+      "leaked": 0,
+      "roc_seconds": 0.0077312604140625,
+      "hb_seconds": 0.0011993828125,
+      "roc_to_hb_ratio": 6.446032353879925
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Before model activation generic shaping differs from HB; ratios compare cost on identical inputs. After-model correctness is established separately by the cached oracle matrix.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.",
+    "Immutable served bundle includes the allocation optimization as an uncommitted ShaperIndic source override; hash recorded above. Quiet reuse timing follows all three optimized builds, excluding compiler overlap. The public220case native replay and10publiccontract tests pass."
+  ],
+  "source_overrides_sha256": {
+    "package/ShaperIndic.roc": "c7887b16e602588bd67e0c922c3e7038627814594648aff2819e2191647382ab"
+  },
+  "binary_sha256": {
+    "bench": "61eac2f5159918d2510aa13699ce10cb53fcdb90e21a7da2d3b342a1fddc3c1a",
+    "alloc": "bae8d71f1099df3aae18013fa306c602d055c6c8438b965a89ce5e2580bba017"
+  },
+  "fuzz": {
+    "runs": 1000,
+    "seed": 262,
+    "max_input_size": 4096,
+    "elapsed_seconds": 211,
+    "result": "pass",
+    "allocation_scaling_and_leak_assertions": "pass",
+    "binary_sha256": "28a2b2fe615f4ba2ca5f6723339bb900a77f27e2527d5e43d29e7256d1282807",
+    "bundle": "ExbTsWqosuZ5Cfpoqiaf9zXsPwbxJGvjS9a9og3C7KA3.tar.zst"
+  }
+}
