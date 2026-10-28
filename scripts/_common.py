@@ -1094,6 +1094,11 @@ def driver_request(case: Case, font: str, location: dict | None = None, protocol
         if s.get("remove_default_ignorables") and any(is_default_ignorable(c) for c in case.scalars):
             return None, "--remove-default-ignorables"
         for option in s.get("hb_options", []):
+            if option in ("--cluster-level=0", "--cluster-level=1"):
+                if protocol < 3:
+                    return None, option
+                flags.append(option.removeprefix("--"))
+                continue
             if option == "--show-flags":
                 if protocol < 3:
                     return None, option
