@@ -164,9 +164,15 @@ with an explicit baseline update in the same change. Elapsed time is
 judged as a ratio against the reference implementations measured in the
 same run, never as an absolute number.
 
-Shaping budgets follow pinned HarfBuzz 14.6's `hb-limits.hh` (output at
-most `max(256 n, 65536)` glyphs, at most `max(4096 n, 65536)` lookup applications) so that a budget
-never changes a result on a legitimate font.
+Shaping budget factors follow pinned HarfBuzz 14.6's `hb-limits.hh`:
+output at most `max(256 n, 65536)` glyphs and at most
+`max(4096 n, 65536)` lookup applications, so ordinary fonts complete.
+Roc charges the lookup and script work documented by `ShapeLimits`;
+HarfBuzz also charges its buffer bookkeeping. Once a budget is exhausted,
+partial progress need not match between engines. Keep actual reference
+records, declare each such divergence, and test Roc's partial result and
+diagnostics against an independent work model. Complete runs still require
+reference agreement.
 
 ## Preserve totality, determinism and numerical safety
 

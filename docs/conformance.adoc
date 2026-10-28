@@ -11,8 +11,8 @@ architecture §7.1 and §7.2.
 
 == Overview
 
-An oracle (HarfBuzz, OTS, fontTools, Chrome) is slow to install and slow to
-run; roc-font is fast. So each oracle answer is recorded once, committed, and
+Oracle tools (HarfBuzz, OTS, fontTools and Chrome) are not required for
+normal checks. Each reference answer is recorded once, committed and
 replayed by string comparison. The normal loop needs only Python's standard
 library and a Roc compiler.
 
@@ -1072,3 +1072,20 @@ nothing.
   certification pass when building any app that calls `Font.from_bytes`
   (including the driver). Use the latest nightly.
 * Width cases need Node 22 or later (`width.mjs`); Node 18 fails.
+
+== Resource-limited partial runs
+
+`ShapeLimits` uses the pinned reference's growth and operation factors,
+but counts the lookup and script work documented by the public API.
+HarfBuzz additionally debits its buffer cluster merges, flag spans and
+copying. After either counter is exhausted, the engines can have made
+different partial progress. Such a partial run does not establish a
+successful shaping difference.
+
+The context-positioning fixtures retain actual HarfBuzz partial results and
+declare two mixed-advance work-accounting divergences explicitly. A separate
+literal call-graph interpreter checks Roc's stopped position and
+`Operations` report; the verifier still compares every other field and
+requires exact agreement for the completed cases. The adjacent source probe
+records the reference's two grapheme-merge and three attachment-flag charges.
+No reference result is replaced with a Roc-generated golden.

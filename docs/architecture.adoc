@@ -749,6 +749,10 @@ the reference's signed 16-bit relative-distance limits and propagation cap.
 Monotone advance ranges use wide prefix sums. Mixed signs use a flat ordered
 saturation tree, preserving per-advance rounding bounds in logarithmic time
 rather than rescanning long ranges quadratically.
+Work-limit factors match the pinned reference, while Roc counts its public
+lookup/script operations and HarfBuzz additionally counts buffer bookkeeping.
+After exhaustion, partial progress can differ; explicit resource cases retain
+reference facts and check the Roc contract with an independent work model.
 
 *PDF and inspection.* Raw-table queries retain original bytes and directory
 order, including tables the shaping pipeline does not interpret. Names,
