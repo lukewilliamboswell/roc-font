@@ -1,0 +1,12 @@
+{
+  "about": "Reviewed controls for outline and caret geometry plus malformed and numerical-limit fixtures.",
+  "seeds": [
+    {"why": "empty mutation input", "parts": []},
+    {"why": "minimum control values", "parts": [{"hex": "00"}]},
+    {"why": "maximum control values", "parts": [{"hex": "ff ff ff ff"}]},
+    {"why": "real variable outline and carets", "parts": [{"file": "tests/fonts/outlines-carets/outlines-carets.ttf"}]},
+    {"why": "deep identity", "parts": [{"file": "tests/fonts/outlines-carets/deep-identity.ttf"}]},
+    {"why": "numerical resource limit", "parts": [{"file": "tests/fonts/outlines-carets/numeric-overflow.ttf"}]},
+    {"why": "invalid point caret", "parts": [{"file": "tests/fonts/outlines-carets/bad-point.ttf"}]}
+  ]
+}

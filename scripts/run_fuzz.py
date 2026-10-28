@@ -188,6 +188,48 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-outlines": TargetConfig(
+        sources=(FUZZ_ROOT / "font-outlines.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-outlines.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65536,
+        timeout=10,
+        contract=(
+            "TrueType paths and caret facts at 32/128/512 points: finite "
+            "bounded deterministic geometry, variable locations, explicit "
+            "absence and cardinality, linear allocation growth; no leaks"
+        ),
+        font_files=True,
+    ),
+    "font-position": TargetConfig(
+        sources=(FUZZ_ROOT / "font-position.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-position.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65536,
+        timeout=10,
+        contract=(
+            "GPOS single, cursive, marks and contextual lookups at two "
+            "generated sizes: deterministic finite aligned runs, bounded "
+            "nested application, linear allocation growth; no leaks"
+        ),
+        font_files=True,
+    ),
+    "font-metadata": TargetConfig(
+        sources=(FUZZ_ROOT / "font-metadata.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-metadata.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65536,
+        timeout=10,
+        contract=(
+            "original font metadata, raw tables and signed bearings at "
+            "4/32/256 glyphs; original byte equality, bounds, totality, "
+            "determinism, linear reading, constant per-query allocations; no leaks"
+        ),
+        font_files=True,
+    ),
     "font-math": TargetConfig(
         sources=(FUZZ_ROOT / "font-math.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-math.json",

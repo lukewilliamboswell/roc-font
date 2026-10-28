@@ -1,0 +1,10 @@
+{
+  "about": "Signed stored-bearing boundaries and mutation controls; licensed font corpus files also seed this target.",
+  "seeds": [
+    {"why": "empty input and minimum signed generated bearing", "parts": []},
+    {"why": "negative stored bearing", "parts": [{"hex": "00"}]},
+    {"why": "zero stored bearing", "parts": [{"hex": "80"}]},
+    {"why": "positive stored bearing", "parts": [{"hex": "ff"}]},
+    {"why": "original font mutation", "parts": [{"hex": "01 00 00 04 ff"}]}
+  ]
+}
