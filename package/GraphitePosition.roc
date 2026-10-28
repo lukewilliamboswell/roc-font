@@ -6,7 +6,28 @@ import TableVar
 GraphitePosition :: {}.{
 
 	Applied : { state : GraphiteSlots, operations : U64, stopped : U64 }
+	Copied : { state : GraphiteSlots, operations : U64, stopped : U64, aborted : Bool }
 	Frame : { id : U64, x : U32, y : U32 }
+
+	# PUT_COPY may populate an independent output slot from a live or
+	# protected input. It never copies the input's child/sibling links.
+	# Overwriting another slot already participating in an attachment is a
+	# language abort; a true self-copy preserves the existing live forest.
+	copy_attachment_from : GraphiteSlots, U64, U64, U64, U64 -> Copied
+	copy_attachment_from = |state, destination, source, source_parent, budget| {
+		if destination == source {
+			return { state, operations: 0, stopped: 0, aborted: False }
+		}
+		dest = GraphiteSlots.get(state, destination)
+		if dest.parent != 0 or dest.child != 0 or destination == source_parent {
+			return { state, operations: 0, stopped: 0, aborted: True }
+		}
+		if source_parent == 0 {
+			return { state, operations: 0, stopped: 0, aborted: False }
+		}
+		attached = GraphitePosition.attach(state, destination, source_parent, budget)
+		{ state: attached.state, operations: attached.operations, stopped: attached.stopped, aborted: False }
+	}
 
 	# Geometry uses separate rounded binary32 operations. VM writes are
 	# signed32 values and the slot pool is U64-addressed: even summing a
@@ -373,4 +394,13 @@ expect {
 		$ok = $ok and answer.value == (wanted.get(i) ?? -1) and answer.stopped == 0
 	}
 	$ok
+}
+
+expect {
+	f = attachment_fixture
+	a = GraphitePosition.attach(f.state, f.a, f.b, 100)
+	b = GraphitePosition.copy_attachment_from(a.state, f.a, f.b, 0, 100)
+	c = GraphitePosition.copy_attachment_from(a.state, f.c, f.a, f.b, 100)
+	d = GraphitePosition.copy_attachment_from(a.state, f.b, f.b, 0, 100)
+	b.aborted and !c.aborted and !d.aborted and GraphiteSlots.get(c.state, f.c).parent == f.b and GraphiteSlots.get(c.state, f.a).sibling == f.c and GraphiteSlots.get(d.state, f.b).child == f.a
 }
