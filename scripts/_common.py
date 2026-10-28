@@ -1095,6 +1095,8 @@ def driver_request(case: Case, font: str, location: dict | None = None, protocol
             return None, "--remove-default-ignorables"
         for option in s.get("hb_options", []):
             if option.startswith("--text-range="):
+                if protocol < 3:
+                    return None, option
                 value = option.partition("=")[2]
                 if not re.fullmatch(r"[0-9]+:[0-9]+", value) or any(int(n) > 0xFFFFFFFFFFFFFFFF for n in value.split(":")):
                     return None, option

@@ -1,0 +1,14 @@
+{
+  "about": "Reviewed controls cover all color bitmap index formats, duplicate chains and licensed real emoji artwork.",
+  "seeds": [
+    {"why": "empty controls", "parts": []},
+    {"why": "index format 1", "parts": [{"hex": "00 00"}]},
+    {"why": "index format 2", "parts": [{"hex": "01 01"}]},
+    {"why": "index format 3", "parts": [{"hex": "02 02"}]},
+    {"why": "index format 4", "parts": [{"hex": "03 03"}]},
+    {"why": "index format 5", "parts": [{"hex": "04 04"}]},
+    {"why": "all encoded artwork formats", "parts": [{"file": "tests/fonts/color-images/images.ttf"}]},
+    {"why": "real emoji sequences and PNG data", "parts": [{"file": "tests/fonts/color-images/emoji-subset.ttf"}]},
+    {"why": "duplicate cycle rejection", "parts": [{"file": "tests/fonts/color-images/bad-sbix-cycle.ttf"}]}
+  ]
+}

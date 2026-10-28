@@ -21,6 +21,9 @@ import MathTests
 import OutlineTests
 import CaretTests
 import PositionTests
+import ColorImageTests
+import ArabicTests
+import ContextTests
 
 ## The tests of roc-font's public API. They import the package through
 ## `package/main.roc`, exactly what ships, and build their fonts with the

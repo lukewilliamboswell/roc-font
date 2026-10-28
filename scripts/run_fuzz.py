@@ -188,6 +188,34 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-arabic": TargetConfig(
+        sources=(FUZZ_ROOT / "font-arabic.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-arabic.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=32,
+        timeout=10,
+        contract=(
+            "Arabic joining and positioning in two real families at 2/16 "
+            "text sizes: join controls, both directions and cluster levels, "
+            "bounded deterministic runs and linear allocations; no leaks"
+        ),
+        font_files=False,
+    ),
+    "font-color-images": TargetConfig(
+        sources=(FUZZ_ROOT / "font-color-images.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-color-images.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65536,
+        timeout=10,
+        contract=(
+            "SVG/sbix/CBDT encoded glyph assets at 8/64 glyphs, all CBLC "
+            "index formats, duplicate chains, exact native strike metrics, "
+            "deterministic payloads, linear allocation growth and no leaks"
+        ),
+        font_files=True,
+    ),
     "font-outlines": TargetConfig(
         sources=(FUZZ_ROOT / "font-outlines.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-outlines.json",

@@ -42,6 +42,20 @@ shift may double a permitted envelope. No coordinates are silently repaired.
 Public tests are `tests/api/OutlineTests.roc` and `CaretTests.roc`;
 `tests/api/outlines-carets.roc` is their dedicated app. They must import the
 served bundle using `scripts/flight.py`, as all package consumers do.
+`verify.py` replays all 45 cached records through the optimized native
+`query.roc` driver, using JSONC cases with pinned font hashes. It compares
+paths after removing only redundant straight closing segments. The fixture's
+point-based caret uses the corresponding explicit HarfBuzz drawing point,
+retaining fractional intermediate coordinates, rather than its unavailable
+OpenType contour callback. Both default and endpoint positions also have
+the independent fontTools geometry check described above.
+The pinned native HarfBuzz build contracts matrix multiply-add expressions;
+roc-font explicitly emulates that binary32 fused operation so the cached
+reference is reproduced on every Roc host. `fma-proof.c`, `fma-proof.py`
+and `fma-oracle.json` record the concrete fused/unfused distinction and
+independent `fmaf` answers. This specifies our arithmetic; it does not
+claim that every differently compiled HarfBuzz binary makes the same
+floating-point contraction choices.
 `fuzz/font-outlines.roc` exercises generated32/128/512-point outlines and
 carets, real built-in font seeds, mutated bytes, finite output,
 determinism, cardinality, bounded path output, allocation scaling and leaks.
