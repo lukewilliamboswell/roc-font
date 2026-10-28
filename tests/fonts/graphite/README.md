@@ -36,3 +36,14 @@ python tests/fonts/graphite/record_abort.py --check
 The last command validates cached case/font/oracle keys without loading the
 reference library. `oracle.json` records its actual engine version and binary
 SHA256; pkg-config's API package version is not the engine version.
+
+The four unmodified SIL families named in `real-fonts.json` come from the pinned
+Graphite2 source archive; their adjacent licences travel with the font bytes.
+`check_real.py` verifies both font hashes and their archive members. The public
+reader tests load each through the served package and assert that no Graphite
+table is dropped. This is a reader proof, not a shaping agreement claim.
+
+Real compiler output can disagree with OTS's interpretation of advisory Silf
+header offsets. These files are retained unmodified and validated using their
+actual checked spans; Graphite2 accepts them. The original small fixtures above
+also satisfy OTS's stricter header interpretation.
