@@ -1,0 +1,552 @@
+{
+  "google_fonts_commit": "ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b",
+  "families": [
+    {
+      "script": "Beng",
+      "block": 2432,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansBeng.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansbengali/NotoSansBengali%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "dcd42978094e584a849c84a51450eeac40c8826057d566ea6d4b9627a403a05a",
+          "size": 463668
+        },
+        {
+          "file": "NotoSansBeng-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansbengali/OFL.txt",
+          "sha256": "754f0e221aa7d5a915489f3bf1f20fe53ddc35ab2834a4d91656d78f9622de70",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "WideBengSans.ttf",
+        "sha256": "cb6390604e62f96f97ad9030e8488269a9721b360b957fd49932b70bfccf0a8b",
+        "size": 115844,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "bng2",
+          "cyrl",
+          "grek",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Beng",
+      "block": 2432,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifBeng.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifbengali/NotoSerifBengali%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "083180a7b47cf3b101ed55a8724aa1b38869daa9baf23b7cf198f9d225365aba",
+          "size": 981812
+        },
+        {
+          "file": "NotoSerifBeng-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifbengali/OFL.txt",
+          "sha256": "754f0e221aa7d5a915489f3bf1f20fe53ddc35ab2834a4d91656d78f9622de70",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "WideBengSerif.ttf",
+        "sha256": "0f53e0cd3915112486711d6579f46192a7a6564e1524b2b1582c7dd0b8c24956",
+        "size": 215384,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "beng",
+          "bng2",
+          "cyrl",
+          "grek",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Guru",
+      "block": 2560,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansGuru.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansgurmukhi/NotoSansGurmukhi%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "1e6f728fa620e566f842d81e220265813faa12771214765d289c98e035adc5f2",
+          "size": 268608
+        },
+        {
+          "file": "NotoSansGuru-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansgurmukhi/OFL.txt",
+          "sha256": "3f7451b7e2c8381be0c5712f7b0dd5c2d75fe787ae16a99f18b7fa45627a0fde",
+          "size": 4384
+        }
+      ],
+      "subset": {
+        "file": "WideGuruSans.ttf",
+        "sha256": "c94ed0d244ecbfc10e76856c26f47e1c756081638cc80d6a642f5c4815cb0ed5",
+        "size": 33672,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "gur2",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Guru",
+      "block": 2560,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifGuru.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifgurmukhi/NotoSerifGurmukhi%5Bwght%5D.ttf",
+          "sha256": "0d15ba8362035a032156c0516038cb8ed93507f7a7762df3e65eaad9218d764b",
+          "size": 144664
+        },
+        {
+          "file": "NotoSerifGuru-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifgurmukhi/OFL.txt",
+          "sha256": "3f7451b7e2c8381be0c5712f7b0dd5c2d75fe787ae16a99f18b7fa45627a0fde",
+          "size": 4384
+        }
+      ],
+      "subset": {
+        "file": "WideGuruSerif.ttf",
+        "sha256": "d032409669973d49fa5bc7cd7d85b292fea8847a39f6ddccdda2be9cb531da00",
+        "size": 41704,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "DFLT",
+          "gur2",
+          "guru",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Gujr",
+      "block": 2688,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansGujr.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansgujarati/NotoSansGujarati%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "9901d8552f1dd5d2c50dbd4caa6f6e174e74e8264f06594ab259ae6e7b1ac428",
+          "size": 672904
+        },
+        {
+          "file": "NotoSansGujr-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansgujarati/OFL.txt",
+          "sha256": "c0b88977aa18b5e4fd05d646d560da89fde61b6581fa4507cb00dd90bd1bf7d4",
+          "size": 4384
+        }
+      ],
+      "subset": {
+        "file": "WideGujrSans.ttf",
+        "sha256": "2d206b64c08806f47b3157d71c4d3c9f6c75b66ab0bf7fc5ad3fd9f983a94b4b",
+        "size": 139448,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "dev2",
+          "gjr2",
+          "grek",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Gujr",
+      "block": 2688,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifGujr.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifgujarati/NotoSerifGujarati%5Bwght%5D.ttf",
+          "sha256": "b76ad2086be5faa06a2e0d89e2ff58691d3754d1bb20f9dff0d7b10516c18831",
+          "size": 378356
+        },
+        {
+          "file": "NotoSerifGujr-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifgujarati/OFL.txt",
+          "sha256": "c0b88977aa18b5e4fd05d646d560da89fde61b6581fa4507cb00dd90bd1bf7d4",
+          "size": 4384
+        }
+      ],
+      "subset": {
+        "file": "WideGujrSerif.ttf",
+        "sha256": "acd71d7e277507d377981bea5d9323c81c511cde8377f44ab6641ecf4fceb938",
+        "size": 113552,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "gjr2",
+          "grek",
+          "gujr",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Orya",
+      "block": 2816,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansOrya.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansoriya/NotoSansOriya%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "910342275d619081b896b4ed25fd9ad6ff320c25591b810de1fcc4beb153ba82",
+          "size": 613116
+        },
+        {
+          "file": "NotoSansOrya-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansoriya/OFL.txt",
+          "sha256": "c90ff15ade263a49148e35af34e9c177c6d56881e81260b29f10123e9e227eca",
+          "size": 4381
+        }
+      ],
+      "subset": {
+        "file": "WideOryaSans.ttf",
+        "sha256": "da1de460607eb1ddcca727e92ee0e0e0a492a42fcebb7e5a4507bc5d1f9e28e5",
+        "size": 142428,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "grek",
+          "latn",
+          "ory2"
+        ]
+      }
+    },
+    {
+      "script": "Orya",
+      "block": 2816,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifOrya.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriforiya/NotoSerifOriya%5Bwght%5D.ttf",
+          "sha256": "9fa2a08cb6a677d155a823bc58b4c587613780bd43013fd362369c251001502a",
+          "size": 241144
+        },
+        {
+          "file": "NotoSerifOrya-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriforiya/OFL.txt",
+          "sha256": "c90ff15ade263a49148e35af34e9c177c6d56881e81260b29f10123e9e227eca",
+          "size": 4381
+        }
+      ],
+      "subset": {
+        "file": "WideOryaSerif.ttf",
+        "sha256": "359f254991d1f3fcaf85bdc5eb516f905ddad49dba30a7d925d11cf61510c966",
+        "size": 118632,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "DFLT",
+          "latn",
+          "ory2",
+          "orya"
+        ]
+      }
+    },
+    {
+      "script": "Taml",
+      "block": 2944,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansTaml.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanstamil/NotoSansTamil%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "aa3a9b321f4b0bb2c40203ffbde9af89713227866e0e13f76e5b9eeea727cf88",
+          "size": 340668
+        },
+        {
+          "file": "NotoSansTaml-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanstamil/OFL.txt",
+          "sha256": "f8ff8ce7d0a81bf8d5e121c635ef027250c531f2fd37d5988b8dd6e45f19d7f1",
+          "size": 4381
+        }
+      ],
+      "subset": {
+        "file": "WideTamlSans.ttf",
+        "sha256": "3f371d7231e87394ecb05b81fc5a483f7f7344f2e331dbc18be57d8e1c88108d",
+        "size": 49504,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "latn",
+          "tml2"
+        ]
+      }
+    },
+    {
+      "script": "Taml",
+      "block": 2944,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifTaml.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriftamil/NotoSerifTamil%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "4b10fe56ee22907a80136c16dbe386ee20f3bf116332b35128bb35eeb775d91e",
+          "size": 420124
+        },
+        {
+          "file": "NotoSerifTaml-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriftamil/OFL.txt",
+          "sha256": "f8ff8ce7d0a81bf8d5e121c635ef027250c531f2fd37d5988b8dd6e45f19d7f1",
+          "size": 4381
+        }
+      ],
+      "subset": {
+        "file": "WideTamlSerif.ttf",
+        "sha256": "a0d457efdeda26f3c52060a0e8b27d575803150d89655ccc71de151d2aba7676",
+        "size": 58652,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "latn",
+          "taml",
+          "tml2"
+        ]
+      }
+    },
+    {
+      "script": "Telu",
+      "block": 3072,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansTelu.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanstelugu/NotoSansTelugu%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "e618af7bf999df192ed4f388eba2e563f2b5015034e9cbb317b5bd793bd7334d",
+          "size": 888808
+        },
+        {
+          "file": "NotoSansTelu-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanstelugu/OFL.txt",
+          "sha256": "481c72a8f1b4f645a7e6b10326be41b2da2c15cb470ff48a07fab773eed00102",
+          "size": 4382
+        }
+      ],
+      "subset": {
+        "file": "WideTeluSans.ttf",
+        "sha256": "67b33882c22586512ef0109e69e1c2040d482c064fed29375bbfcd28bf00968a",
+        "size": 146908,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "dev2",
+          "grek",
+          "latn",
+          "tel2"
+        ]
+      }
+    },
+    {
+      "script": "Telu",
+      "block": 3072,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifTelu.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriftelugu/NotoSerifTelugu%5Bwght%5D.ttf",
+          "sha256": "32210d8d514d9aad43bf927fbd47c7e3066ee6a20c0258678f2ee45915012a26",
+          "size": 543100
+        },
+        {
+          "file": "NotoSerifTelu-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoseriftelugu/OFL.txt",
+          "sha256": "481c72a8f1b4f645a7e6b10326be41b2da2c15cb470ff48a07fab773eed00102",
+          "size": 4382
+        }
+      ],
+      "subset": {
+        "file": "WideTeluSerif.ttf",
+        "sha256": "dd3de2f9d798cd8c2658d47b9f57a0474c04cd203cf4626a3967c6bee7a2c0f8",
+        "size": 207420,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "grek",
+          "latn",
+          "tel2"
+        ]
+      }
+    },
+    {
+      "script": "Knda",
+      "block": 3200,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansKnda.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanskannada/NotoSansKannada%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "cca4f3b3a8cb12fb261f1b43baf5d2f7f59d90fe123d41f0065ed3a183997ec9",
+          "size": 641372
+        },
+        {
+          "file": "NotoSansKnda-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanskannada/OFL.txt",
+          "sha256": "9d49a4e56df9b36403b139f48bf07fd87cc5e716cb3203c54b04b674adb16238",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "WideKndaSans.ttf",
+        "sha256": "6cf593a5734370f04807129d5842a4f2fcb7ba203cdde3c096bb68344b714311",
+        "size": 121584,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "grek",
+          "knd2",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Knda",
+      "block": 3200,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifKnda.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifkannada/NotoSerifKannada%5Bwght%5D.ttf",
+          "sha256": "3d97c98dd59251a85fcc6e95edf9be02b60147e92486927390247f1cd4d5eb37",
+          "size": 495384
+        },
+        {
+          "file": "NotoSerifKnda-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifkannada/OFL.txt",
+          "sha256": "9d49a4e56df9b36403b139f48bf07fd87cc5e716cb3203c54b04b674adb16238",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "WideKndaSerif.ttf",
+        "sha256": "2da64b2e3290fade4ed45382e518f203d2f9280aa3becca92d5232ddbf98abc7",
+        "size": 145140,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "DFLT",
+          "cyrl",
+          "grek",
+          "knd2",
+          "knda",
+          "latn"
+        ]
+      }
+    },
+    {
+      "script": "Mlym",
+      "block": 3328,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansMlym.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansmalayalam/NotoSansMalayalam%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "312e0e7c3cc15fa09eb42a8f749eeb246b593ed420e3c81aafe8d910c3a6fb56",
+          "size": 504204
+        },
+        {
+          "file": "NotoSansMlym-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansmalayalam/OFL.txt",
+          "sha256": "1df18163a0bf60f02131401ba1609df90051f40c4047684dda1c8a2e9586f7f2",
+          "size": 4385
+        }
+      ],
+      "subset": {
+        "file": "WideMlymSans.ttf",
+        "sha256": "4a8a659e2626aa6bb5255ea0c89a830bd3b983c705d8dac49f1a4965767db7d8",
+        "size": 79536,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "latn",
+          "mlm2",
+          "mlym"
+        ]
+      }
+    },
+    {
+      "script": "Mlym",
+      "block": 3328,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifMlym.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifmalayalam/NotoSerifMalayalam%5Bwght%5D.ttf",
+          "sha256": "eed354cadb35992df6e8b32fdb7edb399989b165f0f25e7a921009683db26e8e",
+          "size": 242048
+        },
+        {
+          "file": "NotoSerifMlym-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifmalayalam/OFL.txt",
+          "sha256": "1df18163a0bf60f02131401ba1609df90051f40c4047684dda1c8a2e9586f7f2",
+          "size": 4385
+        }
+      ],
+      "subset": {
+        "file": "WideMlymSerif.ttf",
+        "sha256": "310c0a761ecf51cc7a848b74369caf42822e8205ce372e7ae02fe8192e6f3e3b",
+        "size": 76132,
+        "source_axes": {
+          "wght": 400
+        },
+        "ot_scripts": [
+          "latn",
+          "mlm2",
+          "mlym"
+        ]
+      }
+    }
+  ]
+}
