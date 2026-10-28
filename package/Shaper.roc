@@ -21,6 +21,8 @@ import ShaperUnicode
 import Sorted
 import TablePost
 import TableCmap
+import AatMorx
+import AatFeatureSelect
 
 ## Horizontal OpenType shaping with default, Hebrew, Arabic/Syriac,
 ## Thai/Lao, Hangul, Indic, Khmer, Myanmar and USE models: choosing
@@ -55,6 +57,8 @@ Shaper :: {}.{
 	## name the features of each step for traced shaping.
 	Plan : {
 		backward : Bool,
+		aat : Bool,
+		aat_features : AatMorx.Plan,
 		vertical : Bool,
 		has_vert : Bool,
 		script : U64,
@@ -320,15 +324,19 @@ Shaper :: {}.{
 		gsub_common = LayoutGsub.common_of(gsub_table)
 		kerning = Face.kerning(face)
 		gpos_common = LayoutKerning.common_of(kerning)
-		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
+		aat = match face.aat {
+			Present(_) => !vertical or gsub_common.data.is_empty()
+			Absent => False
+		}
+		hebrew = !aat and !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
 		chosen_script = LayoutCommon.select_script_tag(gsub_common, script_tags)
-		indic = Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
-		use_model = ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script)
-		myanmar = ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")
-		khmer = ShaperTags.script_of(options.script) == Shaper.tag("Khmr")
-		hangul = ShaperTags.script_of(options.script) == Shaper.tag("Hang")
+		indic = !aat and Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
+		use_model = !aat and ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script)
+		myanmar = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")
+		khmer = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Khmr")
+		hangul = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Hang")
 		syriac = ShaperTags.script_of(options.script) == Shaper.tag("Syrc")
-		arabic = ShaperTags.script_of(options.script) == Shaper.tag("Arab") or (ShaperTags.script_of(options.script) == Shaper.tag("Syrc") and chosen_script != Shaper.tag("DFLT"))
+		arabic = !aat and (ShaperTags.script_of(options.script) == Shaper.tag("Arab") or (ShaperTags.script_of(options.script) == Shaper.tag("Syrc") and chosen_script != Shaper.tag("DFLT")))
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if vertical {
@@ -490,7 +498,8 @@ Shaper :: {}.{
 			Ok(m) => m.gpos != LayoutCommon.no_feature
 			Err(_) => False
 		}
-		fallback_position = !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
+		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
+		fallback_position = !aat_dumber and !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
 		# Legacy kern follows the shaper's fallback positioning policy;
 		# prepared GPOS lookups above remain independent of this fallback.
 		apply_kern = !vertical and fallback_position and (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
@@ -510,6 +519,13 @@ Shaper :: {}.{
 		}
 		{
 			backward: requested == Rtl,
+			aat,
+			aat_features: if aat {
+				match face.aat {
+					Present(table) => AatMorx.plan(table, AatFeatureSelect.requests(face.aat_features, options.features))
+					Absent => { spans: [], ranges: [] }
+				}
+			} else { spans: [], ranges: [] },
 			vertical,
 			has_vert: mapped.any(|m| m.tag == Shaper.tag("vert") and m.mask != 0),
 			script: ShaperTags.script_of(options.script),
@@ -518,7 +534,7 @@ Shaper :: {}.{
 			gsub_stage_count: stage_count,
 			staged,
 			model,
-			zero_marks: if (myanmar or use_model) Early else if (indic or khmer or hangul) Keep else Late,
+			zero_marks: if (aat_dumber) Keep else if (myanmar or use_model) Early else if (indic or khmer or hangul) Keep else Late,
 			fallback_position,
 			gpos,
 			gpos_auto_zwj,
@@ -533,8 +549,8 @@ Shaper :: {}.{
 			arabic,
 			hangul,
 			hangul_masks: if (hangul) { ljmo: one_mask_of(Shaper.tag("ljmo")), vjmo: one_mask_of(Shaper.tag("vjmo")), tjmo: one_mask_of(Shaper.tag("tjmo")), calt: one_mask_of(Shaper.tag("calt")) } else ShaperHangul.no_masks,
-			thai: ShaperTags.script_of(options.script) == Shaper.tag("Thai") or ShaperTags.script_of(options.script) == Shaper.tag("Laoo"),
-			thai_legacy: ShaperTags.script_of(options.script) == Shaper.tag("Thai") and LayoutCommon.select_script_tag(gsub_common, script_tags) != Shaper.tag("thai"),
+			thai: !aat and (ShaperTags.script_of(options.script) == Shaper.tag("Thai") or ShaperTags.script_of(options.script) == Shaper.tag("Laoo")),
+			thai_legacy: !aat and ShaperTags.script_of(options.script) == Shaper.tag("Thai") and LayoutCommon.select_script_tag(gsub_common, script_tags) != Shaper.tag("thai"),
 			arabic_masks,
 			arabic_fallback,
 			arabic_stch: arabic and one_mask_of(Shaper.tag("stch")) != 0,
@@ -1164,16 +1180,41 @@ Shaper :: {}.{
 				}
 			$items = $items.append({ glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) })
 		}
-		applied = match p.model {
+		applied = if p.aat {
+			match face.aat {
+				Present(table) => AatMorx.apply(table, $items, p.aat_features, p.vertical, backward, budget - pre_operations, limit)
+				Absent => { items: $items, operations: 0, stopped: 0 }
+			}
+		} else match p.model {
 			Simple => if (p.arabic and !p.staged.spans.is_empty()) Shaper.apply_arabic(p, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) }) else LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 			Indic(model) => Shaper.apply_indic(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 			Khmer(model) => Shaper.apply_khmer(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 			Myanmar(model) => Shaper.apply_myanmar(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 			Use(model) => Shaper.apply_use(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 		}
-		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
-		placed = positioned.placed
+		positioned = Shaper.position_checked(face, location, p, if (p.aat and !p.fallback_marks) AatMorx.remove_deleted(applied.items) else applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
+		placed = if (p.aat and p.fallback_marks) Shaper.remove_aat_deleted(positioned.placed) else positioned.placed
 		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped), aborted: False }
+	}
+
+	## Without GPOS, hidden AAT deletion placeholders participate in
+	## fallback mark boundaries before removal, as in the reference pipeline.
+	remove_aat_deleted : Placed -> Placed
+	remove_aat_deleted = |placed| {
+		if !placed.items.any(|item| item.glyph == 65535) {
+			return placed
+		}
+		var $ax = []
+		var $dx = []
+		var $dy = []
+		for i in 0..<placed.items.len() {
+			if (placed.items.get(i) ?? LayoutGsub.no_item).glyph != 65535 {
+				$ax = $ax.append(placed.ax.get(i) ?? 0)
+				$dx = $dx.append(placed.dx.get(i) ?? 0)
+				$dy = $dy.append(placed.dy.get(i) ?? 0)
+			}
+		}
+		{ items: AatMorx.remove_deleted(placed.items), ax: $ax, dx: $dx, dy: $dy }
 	}
 
 	# Unicode presentation-form fallback used only without a vert feature.
@@ -1861,7 +1902,7 @@ Shaper :: {}.{
 	## rule's feature is not on for).
 	origins : Face, Plan, List(LayoutGsub.Item) -> List(Origin)
 	origins = |face, p, items| {
-		features = Shaper.step_features(face, p)
+		features = if (p.aat) [] else Shaper.step_features(face, p)
 		items.map(
 			|item| {
 				kind = LayoutGsub.origin_kind(item)

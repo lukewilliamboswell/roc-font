@@ -28,6 +28,8 @@ import Bytes
 import AatLookup
 import AatState
 import LayoutGsub
+import ShaperUnicode
+import Sorted
 
 ## Checked extended Apple glyph metamorphosis chains. Internal. Table
 ## programs are bounded by the caller's shaping work and glyph budgets.
@@ -38,7 +40,10 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	Subtable : { coverage : U64, flags : U64, body : Body }
 	Body : [Rearrange(AatState), Contextual({ machine : AatState, lookups : List(AatLookup) }), Noncontextual(AatLookup), Insertion({ machine : AatState, glyphs : List(U32) }), Ligature(Ligatures)]
 	Ligatures : { machine : AatState, actions : List(U32), components : List(U16), glyphs : List(U16), glyph_count : U64 }
-	Requested : { type : U64, setting : U64 }
+	Requested : { type : U64, setting : U64, start : U64, end : U64, exclusive : Bool }
+	RangeFlags : { first : U64, last : U64, flags : U64 }
+	Plan : { spans : List({ start : U64, count : U64 }), ranges : List(RangeFlags) }
+	FlagsContext : { ranges : List(RangeFlags), start : U64, count : U64, fallback : U64, subflags : U64 }
 	Applied : { items : List(LayoutGsub.Item), operations : U64, stopped : U64 }
 
 	none : AatMorx
@@ -238,27 +243,77 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		if (AatLookup.values_valid(lookup, glyphs, glyphs, True)) Ok({}) else Err(Bad(0))
 	}
 
-	apply : AatMorx, List(LayoutGsub.Item), List(Requested), Bool, Bool, U64, U64 -> Applied
-	apply = |table, items, requested, vertical, backward, budget, limit| {
+	## Feature choices are reusable work for the exact font and plan.
+	## The common no-override path stores no additional range arrays.
+	plan : AatMorx, List(Requested) -> Plan
+	plan = |table, requested| {
+		if requested.is_empty() {
+			return { spans: [], ranges: [] }
+		}
+		var $boundaries = [0.U64]
+		for r in requested {
+			$boundaries = $boundaries.append(r.start)
+			if r.end != 0xFFFFFFFFFFFFFFFF {
+				$boundaries = $boundaries.append(r.end)
+			}
+		}
+		boundaries = Sorted.unique($boundaries)
+		var $spans = List.with_capacity(table.chains.len())
+		var $ranges = List.with_capacity(table.chains.len() * boundaries.len())
+		for chain in table.chains {
+			start = $ranges.len()
+			for i in 0..<boundaries.len() {
+				first = boundaries.get(i) ?? 0
+				last = match boundaries.get(i + 1) {
+					Ok(next) => next - 1
+					Err(_) => 0xFFFFFFFFFFFFFFFF
+				}
+				$ranges = $ranges.append({ first, last, flags: AatMorx.flags_for(table, chain, requested, first) })
+			}
+			$spans = $spans.append({ start, count: $ranges.len() - start })
+		}
+		{ spans: $spans, ranges: $ranges }
+	}
+
+	enabled : FlagsContext, U64 -> Bool
+	enabled = |ctx, cluster| {
+		if ctx.count == 0 {
+			return ctx.fallback.bitwise_and(ctx.subflags) != 0
+		}
+		var $lo = ctx.start
+		var $hi = ctx.start + ctx.count
+		while $lo < $hi {
+			mid = $lo + ($hi - $lo) // 2
+			r = ctx.ranges.get(mid) ?? { first: 0, last: 0, flags: 0 }
+			if cluster < r.first {
+				$hi = mid
+			} else if cluster > r.last {
+				$lo = mid + 1
+			} else {
+				return r.flags.bitwise_and(ctx.subflags) != 0
+			}
+		}
+		False
+	}
+
+	apply : AatMorx, List(LayoutGsub.Item), Plan, Bool, Bool, U64, U64 -> Applied
+	apply = |table, items, selected, vertical, backward, budget, limit| {
 		var $items = items
 		var $operations = 0
-		for chain in table.chains {
-			var $flags = chain.flags
-			for i in chain.feature_start..<(chain.feature_start + chain.feature_count) {
-				f = table.features.get(i) ?? { type: 0, setting: 0, enable: 0, disable: 0 }
-				if requested.any(|r| r.type == f.type and r.setting == f.setting) {
-					$flags = $flags.bitwise_and(f.disable).bitwise_or(f.enable)
-				}
-			}
+		for chain_index in 0..<table.chains.len() {
+			chain = table.chains.get(chain_index) ?? { flags: 0, feature_start: 0, feature_count: 0, sub_start: 0, sub_count: 0 }
+			span = selected.spans.get(chain_index) ?? { start: 0, count: 0 }
 			for i in chain.sub_start..<(chain.sub_start + chain.sub_count) {
 				match table.subtables.get(i) {
 					Err(_) => {}
 					Ok(sub) => {
 						coverage = sub.coverage.shr_zf_wrap(24)
-						if sub.flags.bitwise_and($flags) != 0 and (coverage.bitwise_and(0x20) != 0 or (coverage.bitwise_and(0x80) != 0) == vertical) {
+						ctx = { ranges: selected.ranges, start: span.start, count: span.count, fallback: chain.flags, subflags: sub.flags }
+						possible = if (span.count > 1) True else AatMorx.enabled(ctx, 0)
+						if possible and (coverage.bitwise_and(0x20) != 0 or (coverage.bitwise_and(0x80) != 0) == vertical) {
 							reverse = (coverage.bitwise_and(0x40) != 0) != (coverage.bitwise_and(0x10) == 0 and backward)
 							input = if (reverse) AatMorx.reversed($items) else $items
-							out = AatMorx.apply_body(sub.body, input, budget - $operations, limit)
+							out = AatMorx.apply_body(sub.body, input, budget - $operations, limit, ctx)
 							$items = if (reverse) AatMorx.reversed(out.items) else out.items
 							$operations = $operations + out.operations
 							if out.stopped != 0 {
@@ -272,13 +327,38 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		{ items: $items, operations: $operations, stopped: 0 }
 	}
 
-	apply_body : Body, List(LayoutGsub.Item), U64, U64 -> Applied
-	apply_body = |body, items, budget, limit| {
+	flags_for : AatMorx, Chain, List(Requested), U64 -> U64
+	flags_for = |table, chain, requested, cluster| {
+		var $flags = chain.flags
+		for i in chain.feature_start..<(chain.feature_start + chain.feature_count) {
+			f = table.features.get(i) ?? { type: 0, setting: 0, enable: 0, disable: 0 }
+			matches = AatMorx.selected(requested, f.type, f.setting, cluster) or (f.type == 3 and f.setting == 3 and AatMorx.selected(requested, 37, 1, cluster))
+			if matches {
+				$flags = $flags.bitwise_and(f.disable).bitwise_or(f.enable)
+			}
+		}
+		$flags
+	}
+
+	selected : List(Requested), U64, U64, U64 -> Bool
+	selected = |requested, type, setting, cluster| {
+		for r in requested {
+			if r.type == type and (r.exclusive or r.setting.bitwise_and(0xFFFE) == setting.bitwise_and(0xFFFE)) and cluster >= r.start and (cluster < r.end or r.end == 0xFFFFFFFFFFFFFFFF) {
+				# HarfBuzz's AAT map keeps the first active selector per
+				# exclusive group/on-off pair, unlike its OpenType masks.
+				return r.setting == setting
+			}
+		}
+		False
+	}
+
+	apply_body : Body, List(LayoutGsub.Item), U64, U64, FlagsContext -> Applied
+	apply_body = |body, items, budget, limit, ctx| {
 		var $items = items
 		var $operations = 0
 		match body {
-			Insertion(c) => return AatMorx.insert(c.machine, c.glyphs, $items, budget, limit)
-			Ligature(c) => return AatMorx.ligate(c, $items, budget)
+			Insertion(c) => return AatMorx.insert(c.machine, c.glyphs, $items, budget, limit, ctx)
+			Ligature(c) => return AatMorx.ligate(c, $items, budget, ctx)
 			Noncontextual(lookup) => {
 				for i in 0..<$items.len() {
 					if $operations >= budget {
@@ -286,15 +366,21 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 					}
 					$operations = $operations + 1
 					item = $items.get(i) ?? LayoutGsub.no_item
-					match AatLookup.get(lookup, item.glyph) {
-						Found(g) => {
-							$items = $items.set(i, AatMorx.replace(item, g.to_u64())) ?? []
+					if AatMorx.enabled(ctx, item.cluster) {
+						match AatLookup.get(lookup, item.glyph) {
+							Found(g) => {
+								$items = $items.set(i, AatMorx.replace(item, g.to_u64())) ?? []
+							}
+							Missing => {}
 						}
-						Missing => {}
 					}
 				}
 			}
 			Rearrange(machine) | Contextual({ machine, .. }) => {
+				kind = match body {
+					Rearrange(_) => 0
+					_ => 1
+				}
 				var $state = 0
 				var $index = 0
 				var $mark = 0
@@ -307,63 +393,93 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 					}
 					$operations = $operations + 1
 					item = $items.get($index) ?? LayoutGsub.no_item
-					class_id = if ($index == $items.len()) 0 else AatState.class(machine, item.glyph)
-					e = AatState.entry(machine, $state, class_id)
-					match body {
-						Rearrange(_) => {
-							if e.flags.bitwise_and(0x8000) != 0 {
-								$start = $index
-							}
-							if e.flags.bitwise_and(0x2000) != 0 {
-								$end = ($index + 1).min($items.len())
-							}
-							if e.flags.bitwise_and(15) != 0 and $start < $end {
-								$items = AatMorx.rearrange($items, $start, $end, ($index + 1).min($items.len()), e.flags.bitwise_and(15))
-							}
+					cluster = if ($index < $items.len()) item.cluster else ($items.last() ?? LayoutGsub.no_item).cluster
+					if !AatMorx.enabled(ctx, cluster) {
+						if $index == $items.len() {
+							break
 						}
-						Contextual(c) => {
-							if $index < $items.len() or $marked {
-								if e.a != 65535 and $mark < $items.len() {
-									lookup = c.lookups.get(e.a) ?? AatLookup.empty
-									marked = $items.get($mark) ?? LayoutGsub.no_item
-									match AatLookup.get(lookup, marked.glyph) {
-										Found(g) => {
-											$items = AatMorx.unsafe_range($items, $mark, ($index + 1).min($items.len()))
-											$items = $items.set($mark, AatMorx.replace($items.get($mark) ?? LayoutGsub.no_item, g.to_u64())) ?? []
-										}
-										Missing => {}
-									}
-								}
-								if e.b != 65535 and !$items.is_empty() {
-									at = $index.min($items.len() - 1)
-									lookup = c.lookups.get(e.b) ?? AatLookup.empty
-									current = $items.get(at) ?? LayoutGsub.no_item
-									match AatLookup.get(lookup, current.glyph) {
-										Found(g) => {
-											$items = $items.set(at, AatMorx.replace(current, g.to_u64())) ?? []
-										}
-										Missing => {}
-									}
-								}
-								if e.flags.bitwise_and(0x8000) != 0 {
-									$mark = $index
-									$marked = True
-								}
-							}
-						}
-						Noncontextual(_) | Insertion(_) | Ligature(_) => {}
-					}
-					$state = e.next
-					if $index == $items.len() {
-						break
-					}
-					if e.flags.bitwise_and(0x4000) == 0 {
+						$state = 0
 						$index = $index + 1
+					} else {
+						class_id = if ($index == $items.len()) 0 else AatState.class(machine, item.glyph)
+						e = AatState.entry(machine, $state, class_id)
+						if $index > 0 and $index < $items.len() and !AatMorx.safe_to_break(machine, kind, $state, class_id, e) {
+							$items = AatMorx.unsafe_range($items, $index - 1, $index + 1)
+						}
+						match body {
+							Rearrange(_) => {
+								if e.flags.bitwise_and(0x8000) != 0 {
+									$start = $index
+								}
+								if e.flags.bitwise_and(0x2000) != 0 {
+									$end = ($index + 1).min($items.len())
+								}
+								if e.flags.bitwise_and(15) != 0 and $start < $end {
+									$items = AatMorx.rearrange($items, $start, $end, ($index + 1).min($items.len()), e.flags.bitwise_and(15))
+								}
+							}
+							Contextual(c) => {
+								if $index < $items.len() or $marked {
+									if e.a != 65535 and $mark < $items.len() {
+										lookup = c.lookups.get(e.a) ?? AatLookup.empty
+										marked = $items.get($mark) ?? LayoutGsub.no_item
+										match AatLookup.get(lookup, marked.glyph) {
+											Found(g) => {
+												$items = AatMorx.unsafe_range($items, $mark, ($index + 1).min($items.len()))
+												$items = $items.set($mark, AatMorx.replace($items.get($mark) ?? LayoutGsub.no_item, g.to_u64())) ?? []
+											}
+											Missing => {}
+										}
+									}
+									if e.b != 65535 and !$items.is_empty() {
+										at = $index.min($items.len() - 1)
+										lookup = c.lookups.get(e.b) ?? AatLookup.empty
+										current = $items.get(at) ?? LayoutGsub.no_item
+										match AatLookup.get(lookup, current.glyph) {
+											Found(g) => {
+												$items = $items.set(at, AatMorx.replace(current, g.to_u64())) ?? []
+											}
+											Missing => {}
+										}
+									}
+									if e.flags.bitwise_and(0x8000) != 0 {
+										$mark = $index
+										$marked = True
+									}
+								}
+							}
+							Noncontextual(_) | Insertion(_) | Ligature(_) => {}
+						}
+						$state = e.next
+						if $index == $items.len() {
+							break
+						}
+						if e.flags.bitwise_and(0x4000) == 0 {
+							$index = $index + 1
+						}
 					}
 				}
 			}
 		}
 		{ items: $items, operations: $operations, stopped: 0 }
+	}
+
+	actionable : U64, AatState.Entry -> Bool
+	actionable = |kind, e| match kind {
+		0 => e.flags.bitwise_and(15) != 0
+		1 => e.a != 65535 or e.b != 65535
+		2 => e.flags.bitwise_and(0x2000) != 0
+		5 => e.flags.bitwise_and(0x03FF) != 0 and (e.a != 65535 or e.b != 65535)
+		_ => False
+	}
+
+	safe_to_break : AatState, U64, U64, U64, AatState.Entry -> Bool
+	safe_to_break = |machine, kind, state, class_id, e| {
+		start = AatState.entry(machine, 0, class_id)
+		!AatMorx.actionable(kind, e) and
+			(state == 0 or (e.flags.bitwise_and(0x4000) != 0 and e.next == 0) or
+				(!AatMorx.actionable(kind, start) and e.next == start.next and e.flags.bitwise_and(0x4000) == start.flags.bitwise_and(0x4000))) and
+				!AatMorx.actionable(kind, AatState.entry(machine, state, 0))
 	}
 
 	buffer : List(LayoutGsub.Item) -> LayoutGsub.Buf
@@ -372,8 +488,24 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	finish : LayoutGsub.Buf, U64, U64 -> Applied
 	finish = |buf, operations, stopped| { items: buf.out.concat(buf.info.drop_first(buf.idx)), operations, stopped }
 
-	ligate : Ligatures, List(LayoutGsub.Item), U64 -> Applied
-	ligate = |table, items, budget| {
+	remove_deleted : List(LayoutGsub.Item) -> List(LayoutGsub.Item)
+	remove_deleted = |items| {
+		if !items.any(|item| item.glyph == 65535) {
+			return items
+		}
+		var $buf = AatMorx.buffer(items)
+		while $buf.idx < $buf.info.len() {
+			if ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph == 65535 {
+				$buf = LayoutGsub.delete_glyph($buf)
+			} else {
+				$buf = LayoutGsub.next_glyph($buf)
+			}
+		}
+		$buf.out
+	}
+
+	ligate : Ligatures, List(LayoutGsub.Item), U64, FlagsContext -> Applied
+	ligate = |table, items, budget, ctx| {
 		var $buf = AatMorx.buffer(items)
 		var $operations = 0
 		var $state = 0
@@ -386,81 +518,98 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 				return AatMorx.finish($buf, $operations, 2)
 			}
 			$operations = $operations + 1
-			class_id = if ($buf.idx == $buf.info.len()) 0 else AatState.class(table.machine, ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph)
-			e = AatState.entry(table.machine, $state, class_id)
-			if e.flags.bitwise_and(0x8000) != 0 {
-				if $count > 0 and ($positions.get(($count - 1) % 64) ?? 0) == $buf.out.len() {
-					$count = $count - 1
+			if !AatMorx.enabled(ctx, AatMorx.buffer_cluster($buf)) {
+				if $buf.idx == $buf.info.len() {
+					break
 				}
-				$positions = $positions.set($count % 64, $buf.out.len()) ?? []
-				$count = $count + 1
-			}
-			if e.flags.bitwise_and(0x2000) != 0 and $count != 0 and $buf.idx < $buf.info.len() {
-				end = $buf.out.len()
-				var $cursor = $count
-				var $action = e.a
-				var $ligature = 0
-				var $done = False
-				while !$done {
-					if $operations >= budget {
-						return AatMorx.finish($buf, $operations, 2)
+				$state = 0
+				$buf = LayoutGsub.next_glyph($buf)
+			} else {
+				class_id = if ($buf.idx == $buf.info.len()) 0 else AatState.class(table.machine, ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph)
+				e = AatState.entry(table.machine, $state, class_id)
+				if !$buf.out.is_empty() and $buf.idx < $buf.info.len() and !AatMorx.safe_to_break(table.machine, 2, $state, class_id, e) {
+					start = $buf.out.len() - 1
+					end_index = $buf.idx + 1
+					$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, start, end_index)
+				}
+				if e.flags.bitwise_and(0x8000) != 0 {
+					if $count > 0 and ($positions.get(($count - 1) % 64) ?? 0) == $buf.out.len() {
+						$count = $count - 1
 					}
-					$operations = $operations + 1
-					if $cursor == 0 {
-						$count = 0
-						break
-					}
-					$cursor = $cursor - 1
-					$buf = LayoutGsub.move_to($buf, $positions.get($cursor % 64) ?? 0)
-					word = (table.actions.get($action) ?? 0).to_u64()
-					raw = word.bitwise_and(0x3FFFFFFF)
-					offset = if (raw.bitwise_and(0x20000000) != 0) raw.to_i64_wrap() - 1073741824 else raw.to_i64_wrap()
-					component_index = ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph.to_i64_wrap() + offset
-					# A text-dependent action outside the available component
-					# domain aborts this action stream, as the reference VM does;
-					# no missing operand becomes component or glyph zero.
-					if component_index < 0 {
-						break
-					}
-					component = match table.components.get(component_index.to_u64_wrap()) {
-						Ok(v) => v.to_u64()
-						Err(_) => break
-					}
-					$ligature = $ligature + component
-					if word.bitwise_and(0xC0000000) != 0 {
-						glyph = match table.glyphs.get($ligature) {
+					$positions = $positions.set($count % 64, $buf.out.len()) ?? []
+					$count = $count + 1
+				}
+				if e.flags.bitwise_and(0x2000) != 0 and $count != 0 and $buf.idx < $buf.info.len() {
+					end = $buf.out.len()
+					var $cursor = $count
+					var $action = e.a
+					var $ligature = 0
+					var $done = False
+					while !$done {
+						if $operations >= budget {
+							return AatMorx.finish($buf, $operations, 2)
+						}
+						$operations = $operations + 1
+						if $cursor == 0 {
+							$count = 0
+							break
+						}
+						$cursor = $cursor - 1
+						$buf = LayoutGsub.move_to($buf, $positions.get($cursor % 64) ?? 0)
+						word = (table.actions.get($action) ?? 0).to_u64()
+						raw = word.bitwise_and(0x3FFFFFFF)
+						offset = if (raw.bitwise_and(0x20000000) != 0) raw.to_i64_wrap() - 1073741824 else raw.to_i64_wrap()
+						component_index = ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph.to_i64_wrap() + offset
+						# A text-dependent action outside the available component
+						# domain aborts this action stream, as the reference VM does;
+						# no missing operand becomes component or glyph zero.
+						if component_index < 0 {
+							break
+						}
+						component = match table.components.get(component_index.to_u64_wrap()) {
 							Ok(v) => v.to_u64()
 							Err(_) => break
 						}
-						if glyph >= table.glyph_count and glyph != 65535 {
-							break
-						}
-						current = $buf.info.get($buf.idx) ?? LayoutGsub.no_item
-						$buf = { ..$buf, info: $buf.info.set($buf.idx, LayoutGsub.with_origin(AatMorx.replace(current, glyph), LayoutGsub.origin_ligature, 0, $count - $cursor)) ?? [] }
-						lig_end = ($positions.get(($count - 1) % 64) ?? 0) + 1
-						while $count - 1 > $cursor {
-							if $operations >= budget {
-								return AatMorx.finish($buf, $operations, 2)
+						$ligature = $ligature + component
+						if word.bitwise_and(0xC0000000) != 0 {
+							glyph = match table.glyphs.get($ligature) {
+								Ok(v) => v.to_u64()
+								Err(_) => break
 							}
-							$operations = $operations + 1
-							$count = $count - 1
-							$buf = LayoutGsub.move_to($buf, $positions.get($count % 64) ?? 0)
-							$buf = LayoutGsub.delete_glyph($buf)
+							if glyph >= table.glyph_count and glyph != 65535 {
+								break
+							}
+							current = $buf.info.get($buf.idx) ?? LayoutGsub.no_item
+							$buf = { ..$buf, info: $buf.info.set($buf.idx, LayoutGsub.with_origin(AatMorx.replace(current, glyph), LayoutGsub.origin_ligature, 0, $count - $cursor)) ?? [] }
+							lig_end = ($positions.get(($count - 1) % 64) ?? 0) + 1
+							while $count - 1 > $cursor {
+								if $operations >= budget {
+									return AatMorx.finish($buf, $operations, 2)
+								}
+								$operations = $operations + 1
+								$count = $count - 1
+								$buf = LayoutGsub.move_to($buf, $positions.get($count % 64) ?? 0)
+								# AAT deletion leaves a placeholder until all chains
+								# finish, preserving component-stack positions.
+								deleted = AatMorx.replace($buf.info.get($buf.idx) ?? LayoutGsub.no_item, 65535)
+								$buf = { ..$buf, info: $buf.info.set($buf.idx, deleted) ?? [] }
+								$buf = LayoutGsub.next_glyph($buf)
+							}
+							$buf = LayoutGsub.move_to($buf, lig_end)
+							$buf = AatMorx.merge_output($buf, $positions.get($cursor % 64) ?? 0)
 						}
-						$buf = LayoutGsub.move_to($buf, lig_end)
-						$buf = AatMorx.merge_output($buf, $positions.get($cursor % 64) ?? 0)
+						$done = word.bitwise_and(0x80000000) != 0
+						$action = $action + 1
 					}
-					$done = word.bitwise_and(0x80000000) != 0
-					$action = $action + 1
+					$buf = LayoutGsub.move_to($buf, end)
 				}
-				$buf = LayoutGsub.move_to($buf, end)
-			}
-			$state = e.next
-			if $buf.idx == $buf.info.len() {
-				break
-			}
-			if e.flags.bitwise_and(0x4000) == 0 {
-				$buf = LayoutGsub.next_glyph($buf)
+				$state = e.next
+				if $buf.idx == $buf.info.len() {
+					break
+				}
+				if e.flags.bitwise_and(0x4000) == 0 {
+					$buf = LayoutGsub.next_glyph($buf)
+				}
 			}
 		}
 		AatMorx.finish($buf, $operations, 0)
@@ -477,8 +626,8 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		{ info, out: $out, idx, output, serial, random, ops, stopped, aliased }
 	}
 
-	insert : AatState, List(U32), List(LayoutGsub.Item), U64, U64 -> Applied
-	insert = |machine, glyphs, items, budget, limit| {
+	insert : AatState, List(U32), List(LayoutGsub.Item), U64, U64, FlagsContext -> Applied
+	insert = |machine, glyphs, items, budget, limit, ctx| {
 		var $buf = AatMorx.buffer(items)
 		var $operations = 0
 		var $state = 0
@@ -488,41 +637,54 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 				return AatMorx.finish($buf, $operations, 2)
 			}
 			$operations = $operations + 1
-			class_id = if ($buf.idx == $buf.info.len()) 0 else AatState.class(machine, ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph)
-			e = AatState.entry(machine, $state, class_id)
-			marked_count = if (e.b == 65535) 0 else e.flags.bitwise_and(31)
-			current_count = if (e.a == 65535) 0 else e.flags.shr_zf_wrap(5).bitwise_and(31)
-			added = marked_count + current_count
-			if added > budget - $operations {
-				return AatMorx.finish($buf, $operations, 2)
-			}
-			if added > limit or $buf.out.len() + $buf.info.len() - $buf.idx > limit - added {
-				return AatMorx.finish($buf, $operations, 1)
-			}
-			$operations = $operations + added
-			mark_location = $buf.out.len()
-			if marked_count != 0 {
-				end = $buf.out.len()
-				$buf = LayoutGsub.move_to($buf, $mark)
-				$buf = AatMorx.insert_at($buf, glyphs, e.b, marked_count, e.flags.bitwise_and(0x0400) != 0)
-				$buf = LayoutGsub.move_to($buf, end + marked_count)
-				end_index = ($buf.idx + 1).min($buf.info.len())
-				$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, $mark, end_index)
-			}
-			if e.flags.bitwise_and(0x8000) != 0 {
-				$mark = mark_location
-			}
-			if current_count != 0 {
-				end = $buf.out.len()
-				$buf = AatMorx.insert_at($buf, glyphs, e.a, current_count, e.flags.bitwise_and(0x0800) != 0)
-				$buf = LayoutGsub.move_to($buf, if (e.flags.bitwise_and(0x4000) != 0) end else end + current_count)
-			}
-			$state = e.next
-			if $buf.idx == $buf.info.len() {
-				break
-			}
-			if e.flags.bitwise_and(0x4000) == 0 {
+			if !AatMorx.enabled(ctx, AatMorx.buffer_cluster($buf)) {
+				if $buf.idx == $buf.info.len() {
+					break
+				}
+				$state = 0
 				$buf = LayoutGsub.next_glyph($buf)
+			} else {
+				class_id = if ($buf.idx == $buf.info.len()) 0 else AatState.class(machine, ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph)
+				e = AatState.entry(machine, $state, class_id)
+				if !$buf.out.is_empty() and $buf.idx < $buf.info.len() and !AatMorx.safe_to_break(machine, 5, $state, class_id, e) {
+					start = $buf.out.len() - 1
+					end_index = $buf.idx + 1
+					$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, start, end_index)
+				}
+				marked_count = if (e.b == 65535) 0 else e.flags.bitwise_and(31)
+				current_count = if (e.a == 65535) 0 else e.flags.shr_zf_wrap(5).bitwise_and(31)
+				added = marked_count + current_count
+				if added > budget - $operations {
+					return AatMorx.finish($buf, $operations, 2)
+				}
+				if added > limit or $buf.out.len() + $buf.info.len() - $buf.idx > limit - added {
+					return AatMorx.finish($buf, $operations, 1)
+				}
+				$operations = $operations + added
+				mark_location = $buf.out.len()
+				if marked_count != 0 {
+					end = $buf.out.len()
+					$buf = LayoutGsub.move_to($buf, $mark)
+					$buf = AatMorx.insert_at($buf, glyphs, e.b, marked_count, e.flags.bitwise_and(0x0400) != 0)
+					$buf = LayoutGsub.move_to($buf, end + marked_count)
+					end_index = ($buf.idx + 1).min($buf.info.len())
+					$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, $mark, end_index)
+				}
+				if e.flags.bitwise_and(0x8000) != 0 {
+					$mark = mark_location
+				}
+				if current_count != 0 {
+					end = $buf.out.len()
+					$buf = AatMorx.insert_at($buf, glyphs, e.a, current_count, e.flags.bitwise_and(0x0800) != 0)
+					$buf = LayoutGsub.move_to($buf, if (e.flags.bitwise_and(0x4000) != 0) end else end + current_count)
+				}
+				$state = e.next
+				if $buf.idx == $buf.info.len() {
+					break
+				}
+				if e.flags.bitwise_and(0x4000) == 0 {
+					$buf = LayoutGsub.next_glyph($buf)
+				}
 			}
 		}
 		AatMorx.finish($buf, $operations, 0)
@@ -543,6 +705,9 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		{ info, out: $out, idx, output, serial, random, ops, stopped, aliased }
 	}
 
+	buffer_cluster : LayoutGsub.Buf -> U64
+	buffer_cluster = |buf| (if (buf.idx < buf.info.len()) buf.info.get(buf.idx) ?? LayoutGsub.no_item else buf.out.last() ?? LayoutGsub.no_item).cluster
+
 	reversed : List(a) -> List(a)
 	reversed = |list| {
 		var $out = List.with_capacity(list.len())
@@ -560,17 +725,17 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	replace : LayoutGsub.Item, U64 -> LayoutGsub.Item
 	replace = |item, glyph| {
 		changed = LayoutGsub.resubstituted({ ..item, glyph }, 0)
-		{ ..changed, props: changed.props.bitwise_or(LayoutGsub.substituted.shl_wrap(16)) }
+		props = changed.props.bitwise_or(LayoutGsub.substituted.shl_wrap(16))
+		{ ..changed, props: if (glyph == 65535) ShaperUnicode.with_category(props, ShaperUnicode.format).bitwise_or(ShaperUnicode.hidden) else props }
 	}
 
 	unsafe_range : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
 	unsafe_range = |items, start, end| {
-		var $items = items
-		for i in (start + 1)..<end {
-			item = $items.get(i) ?? LayoutGsub.no_item
-			$items = $items.set(i, { ..item, mask: item.mask.bitwise_or(LayoutGsub.unsafe) }) ?? []
+		if end <= start or end - start > 255 {
+			return items
 		}
-		$items
+		cluster = LayoutGsub.end_cluster(items, start, end, 0xFFFFFFFFFFFFFFFF)
+		LayoutGsub.flag_range(items, start, end, cluster)
 	}
 
 	rearrange : List(LayoutGsub.Item), U64, U64, U64, U64 -> List(LayoutGsub.Item)
@@ -591,7 +756,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		var $items = items
 		for i in 0..<ordered.len() {
 			item = ordered.get(i) ?? LayoutGsub.no_item
-			$items = $items.set(start + i, { ..item, cluster }) ?? []
+			$items = $items.set(start + i, LayoutGsub.set_cluster(item, cluster)) ?? []
 		}
 		AatMorx.unsafe_range($items, start, end.max(current_end))
 	}

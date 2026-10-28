@@ -1,0 +1,484 @@
+{
+  "reference": "HarfBuzz 14.6.0",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/src/hb-aat-layout.cc",
+      "sha256": "05a96327dec4cf218bdbc26decee6b6c5311f8b42f39bff89e0d6252249fa1a7"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/14.6.0/src/hb-aat-layout.h",
+      "sha256": "19260855effa365dabbea60543813bdb88c67835aa347b7970e416906f3ff392"
+    }
+  ],
+  "aalt_type": 17,
+  "entries": [
+    {
+      "tag": "afrc",
+      "type": 11,
+      "on": 1,
+      "off": 0
+    },
+    {
+      "tag": "c2pc",
+      "type": 38,
+      "on": 2,
+      "off": 0
+    },
+    {
+      "tag": "c2sc",
+      "type": 38,
+      "on": 1,
+      "off": 0
+    },
+    {
+      "tag": "calt",
+      "type": 36,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "case",
+      "type": 33,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "clig",
+      "type": 1,
+      "on": 18,
+      "off": 19
+    },
+    {
+      "tag": "cpsp",
+      "type": 33,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "cswh",
+      "type": 36,
+      "on": 4,
+      "off": 5
+    },
+    {
+      "tag": "dlig",
+      "type": 1,
+      "on": 4,
+      "off": 5
+    },
+    {
+      "tag": "expt",
+      "type": 20,
+      "on": 10,
+      "off": 16
+    },
+    {
+      "tag": "frac",
+      "type": 11,
+      "on": 2,
+      "off": 0
+    },
+    {
+      "tag": "fwid",
+      "type": 22,
+      "on": 1,
+      "off": 7
+    },
+    {
+      "tag": "halt",
+      "type": 22,
+      "on": 6,
+      "off": 7
+    },
+    {
+      "tag": "hist",
+      "type": 40,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "hkna",
+      "type": 34,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "hlig",
+      "type": 1,
+      "on": 20,
+      "off": 21
+    },
+    {
+      "tag": "hngl",
+      "type": 23,
+      "on": 1,
+      "off": 0
+    },
+    {
+      "tag": "hojo",
+      "type": 20,
+      "on": 12,
+      "off": 16
+    },
+    {
+      "tag": "hwid",
+      "type": 22,
+      "on": 2,
+      "off": 7
+    },
+    {
+      "tag": "ital",
+      "type": 32,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "jp04",
+      "type": 20,
+      "on": 11,
+      "off": 16
+    },
+    {
+      "tag": "jp78",
+      "type": 20,
+      "on": 2,
+      "off": 16
+    },
+    {
+      "tag": "jp83",
+      "type": 20,
+      "on": 3,
+      "off": 16
+    },
+    {
+      "tag": "jp90",
+      "type": 20,
+      "on": 4,
+      "off": 16
+    },
+    {
+      "tag": "liga",
+      "type": 1,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "lnum",
+      "type": 21,
+      "on": 1,
+      "off": 2
+    },
+    {
+      "tag": "mgrk",
+      "type": 15,
+      "on": 10,
+      "off": 11
+    },
+    {
+      "tag": "nlck",
+      "type": 20,
+      "on": 13,
+      "off": 16
+    },
+    {
+      "tag": "onum",
+      "type": 21,
+      "on": 0,
+      "off": 2
+    },
+    {
+      "tag": "ordn",
+      "type": 10,
+      "on": 3,
+      "off": 0
+    },
+    {
+      "tag": "palt",
+      "type": 22,
+      "on": 5,
+      "off": 7
+    },
+    {
+      "tag": "pcap",
+      "type": 37,
+      "on": 2,
+      "off": 0
+    },
+    {
+      "tag": "pkna",
+      "type": 22,
+      "on": 0,
+      "off": 7
+    },
+    {
+      "tag": "pnum",
+      "type": 6,
+      "on": 1,
+      "off": 4
+    },
+    {
+      "tag": "pwid",
+      "type": 22,
+      "on": 0,
+      "off": 7
+    },
+    {
+      "tag": "qwid",
+      "type": 22,
+      "on": 4,
+      "off": 7
+    },
+    {
+      "tag": "rlig",
+      "type": 1,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "ruby",
+      "type": 28,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "sinf",
+      "type": 10,
+      "on": 4,
+      "off": 0
+    },
+    {
+      "tag": "smcp",
+      "type": 37,
+      "on": 1,
+      "off": 0
+    },
+    {
+      "tag": "smpl",
+      "type": 20,
+      "on": 1,
+      "off": 16
+    },
+    {
+      "tag": "ss01",
+      "type": 35,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "ss02",
+      "type": 35,
+      "on": 4,
+      "off": 5
+    },
+    {
+      "tag": "ss03",
+      "type": 35,
+      "on": 6,
+      "off": 7
+    },
+    {
+      "tag": "ss04",
+      "type": 35,
+      "on": 8,
+      "off": 9
+    },
+    {
+      "tag": "ss05",
+      "type": 35,
+      "on": 10,
+      "off": 11
+    },
+    {
+      "tag": "ss06",
+      "type": 35,
+      "on": 12,
+      "off": 13
+    },
+    {
+      "tag": "ss07",
+      "type": 35,
+      "on": 14,
+      "off": 15
+    },
+    {
+      "tag": "ss08",
+      "type": 35,
+      "on": 16,
+      "off": 17
+    },
+    {
+      "tag": "ss09",
+      "type": 35,
+      "on": 18,
+      "off": 19
+    },
+    {
+      "tag": "ss10",
+      "type": 35,
+      "on": 20,
+      "off": 21
+    },
+    {
+      "tag": "ss11",
+      "type": 35,
+      "on": 22,
+      "off": 23
+    },
+    {
+      "tag": "ss12",
+      "type": 35,
+      "on": 24,
+      "off": 25
+    },
+    {
+      "tag": "ss13",
+      "type": 35,
+      "on": 26,
+      "off": 27
+    },
+    {
+      "tag": "ss14",
+      "type": 35,
+      "on": 28,
+      "off": 29
+    },
+    {
+      "tag": "ss15",
+      "type": 35,
+      "on": 30,
+      "off": 31
+    },
+    {
+      "tag": "ss16",
+      "type": 35,
+      "on": 32,
+      "off": 33
+    },
+    {
+      "tag": "ss17",
+      "type": 35,
+      "on": 34,
+      "off": 35
+    },
+    {
+      "tag": "ss18",
+      "type": 35,
+      "on": 36,
+      "off": 37
+    },
+    {
+      "tag": "ss19",
+      "type": 35,
+      "on": 38,
+      "off": 39
+    },
+    {
+      "tag": "ss20",
+      "type": 35,
+      "on": 40,
+      "off": 41
+    },
+    {
+      "tag": "subs",
+      "type": 10,
+      "on": 2,
+      "off": 0
+    },
+    {
+      "tag": "sups",
+      "type": 10,
+      "on": 1,
+      "off": 0
+    },
+    {
+      "tag": "swsh",
+      "type": 36,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "titl",
+      "type": 19,
+      "on": 4,
+      "off": 0
+    },
+    {
+      "tag": "tnam",
+      "type": 20,
+      "on": 14,
+      "off": 16
+    },
+    {
+      "tag": "tnum",
+      "type": 6,
+      "on": 0,
+      "off": 4
+    },
+    {
+      "tag": "trad",
+      "type": 20,
+      "on": 0,
+      "off": 16
+    },
+    {
+      "tag": "twid",
+      "type": 22,
+      "on": 3,
+      "off": 7
+    },
+    {
+      "tag": "unic",
+      "type": 3,
+      "on": 14,
+      "off": 15
+    },
+    {
+      "tag": "valt",
+      "type": 22,
+      "on": 5,
+      "off": 7
+    },
+    {
+      "tag": "vert",
+      "type": 4,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "vhal",
+      "type": 22,
+      "on": 6,
+      "off": 7
+    },
+    {
+      "tag": "vkna",
+      "type": 34,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "vpal",
+      "type": 22,
+      "on": 5,
+      "off": 7
+    },
+    {
+      "tag": "vrt2",
+      "type": 4,
+      "on": 0,
+      "off": 1
+    },
+    {
+      "tag": "vrtr",
+      "type": 4,
+      "on": 2,
+      "off": 3
+    },
+    {
+      "tag": "zero",
+      "type": 14,
+      "on": 4,
+      "off": 5
+    }
+  ]
+}

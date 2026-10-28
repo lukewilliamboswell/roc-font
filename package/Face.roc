@@ -26,11 +26,14 @@ import TableVmtx
 import TableVorg
 import TableVvar
 import AatMorx
+import AatFeatures
+import AatFeatureSelect
 import TableCff
 import TableMath
 import TableColorImages
 import TablePalette
 import TableColor
+import TableGraphite
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -85,6 +88,8 @@ Face := {
 	name : TableName,
 	gsub : LayoutGsub,
 	aat : [Present(AatMorx), Absent],
+	aat_features : AatFeatures,
+	graphite : TableGraphite,
 	gdef : LayoutGdef,
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
@@ -147,6 +152,62 @@ Face := {
 		fvar_axes : [Present(U64), Absent],
 	}
 
+	# Graphite tables form one program. A broken dependency drops that
+	# program as a unit; diagnostics retain the original file offsets.
+	read_graphite : List(U8), List(Sfnt.Table), U64, U64 -> { value : TableGraphite, problems : List(Problem) }
+	read_graphite = |bytes, tables, glyphs, max_bytes| {
+		if !tables.any(|t| t.tag == 0x53696C66) {
+			return { value: TableGraphite.none, problems: [] }
+		}
+		var $data = []
+		var $offsets = []
+		var $problems = []
+		for tag in ["Silf", "Gloc", "Glat", "Feat", "Sill"] {
+			match Sfnt.located(bytes, tables, tag, 0) {
+				Found(found) => {
+					$data = $data.append(found.data)
+					$offsets = $offsets.append(found.offset)
+				}
+				Missing => {
+					if tag == "Silf" or tag == "Gloc" or tag == "Glat" {
+						$problems = $problems.append(MissingTable(tag))
+					}
+					$data = $data.append([])
+					$offsets = $offsets.append(0)
+				}
+				Bad(at) => {
+					$problems = $problems.append(Sfnt.bad(tag, at))
+					$data = $data.append([])
+					$offsets = $offsets.append(at)
+				}
+			}
+		}
+		optional = |index, tag| if (tables.any(|t| t.tag == tag)) Present($data.get(index) ?? []) else Absent
+		prepared = TableGraphite.read({ silf: $data.get(0) ?? [], gloc: $data.get(1) ?? [], glat: $data.get(2) ?? [], feat: optional(3, 0x46656174), sill: optional(4, 0x53696C6C), glyph_count: glyphs }, max_bytes)
+		prepared_value = match prepared {
+			Ok(value) => value
+			Err(problems) => {
+				for problem in problems {
+					index = match problem.table {
+						"Silf" => 0
+						"Gloc" => 1
+						"Glat" => 2
+						"Feat" => 3
+						_ => 4
+					}
+					$problems = $problems.append(
+						match problem.reason {
+							Malformed => Sfnt.bad(problem.table, ($offsets.get(index) ?? 0) + problem.offset)
+							TooMuchWork => OverLimit(problem.table)
+						},
+					)
+				}
+				TableGraphite.none
+			}
+		}
+		{ value: if ($problems.is_empty()) prepared_value else TableGraphite.none, problems: Face.unique($problems) }
+	}
+
 	# ------------------------------------------------------------ reading
 
 	## How many faces a file holds.
@@ -202,6 +263,8 @@ Face := {
 				$optional = $optional.concat(vertical.problems)
 				vorg = TableVorg.from_tables(bytes, tables, glyph_count)
 				$optional = Face.collect($optional, vorg)
+				graphite = Face.read_graphite(bytes, tables, glyph_count, options.max_bytes)
+				$optional = $optional.concat(graphite.problems)
 				aat = match Sfnt.located(bytes, tables, "morx", 8) {
 					Missing => Absent
 					Bad(at) => {
@@ -213,6 +276,20 @@ Face := {
 						Err(Bad(at)) => {
 							$optional = $optional.append(Sfnt.bad("morx", found.offset + at))
 							Absent
+						}
+					}
+				}
+				aat_features = match Sfnt.located(bytes, tables, "feat", 12) {
+					Missing => AatFeatures.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("feat", at))
+						AatFeatures.none
+					}
+					Found(found) => match AatFeatures.read(found.data) {
+						Ok(value) => value
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("feat", found.offset + at))
+							AatFeatures.none
 						}
 					}
 				}
@@ -486,6 +563,8 @@ Face := {
 								name: Face.present(name ?? Absent, TableName.none),
 								gsub: LayoutGsub.with_gdef(gsub ?? LayoutGsub.none, gdef),
 								aat,
+								aat_features,
+								graphite: graphite.value,
 								gdef,
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
@@ -1254,6 +1333,12 @@ Face := {
 		}
 		if LayoutKerning.has_kern(face.kerning) {
 			$tags = $tags.append(Face.tag("kern").to_u64())
+		}
+		match face.aat {
+			Present(_) => {
+				$tags = $tags.concat(AatFeatureSelect.tags(face.aat_features))
+			}
+			Absent => {}
 		}
 		Sorted.unique($tags)
 	}
