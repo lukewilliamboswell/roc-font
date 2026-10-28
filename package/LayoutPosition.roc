@@ -33,7 +33,7 @@ LayoutPosition := {
 	Match : { state : State, next : U64, applied : Bool, calls : [Calls(ContextCalls), NoCalls] }
 
 	## Record lists stay in the checked prepared pool. At most one frame
-	## and64 matched glyph positions per permitted nesting level are live.
+	## and 64 matched glyph positions per permitted nesting level are live.
 	push_context : ContextCalls, List(Frame), List(U64) -> { frames : List(Frame), positions : List(U64) }
 	push_context = |calls, frames, pool| {
 		{ records, records_len, next, positions, depth } = calls
@@ -443,16 +443,22 @@ LayoutPosition := {
 	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), Bool, List(LayoutGsub.Item), List(I64), Bool, Limits -> State
 	position = |p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits| {
 		count = items.len()
+		# Most plans automatically skip ZWJ. Build the second previous-base
+		# index only when a manual-ZWJ lookup can consume it. Missing flags
+		# select automatic skipping, as in the lookup loop below.
+		manual = auto_zwj.any(|automatic| !automatic)
 		var $previous = List.with_capacity(count)
-		var $manual_previous = List.with_capacity(count)
+		var $manual_previous = List.with_capacity(if (manual) count else 0)
 		var $manual_last = 0
 		var $last = 0
 		for i in 0..<count {
 			$previous = $previous.append($last)
-			$manual_previous = $manual_previous.append($manual_last)
-			item = items.get(i) ?? LayoutGsub.no_item
-			if !LayoutGsub.is_mark_item(item) and !LayoutPosition.skip_ignorable(item, False) {
-				$manual_last = i + 1
+			if manual {
+				$manual_previous = $manual_previous.append($manual_last)
+				item = items.get(i) ?? LayoutGsub.no_item
+				if !LayoutGsub.is_mark_item(item) and !LayoutPosition.skip_ignorable(item, False) {
+					$manual_last = i + 1
+				}
 			}
 			if !LayoutGsub.is_mark_item(items.get(i) ?? LayoutGsub.no_item) and !LayoutGsub.is_default_ignorable(items.get(i) ?? LayoutGsub.no_item) {
 				$last = i + 1
