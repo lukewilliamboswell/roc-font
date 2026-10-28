@@ -29,7 +29,7 @@ def main():
         command=[args.roc,'build',str(HERE/'query.roc'),f'--output={binary}',*dep]
         if not args.dev:command.insert(2,'--opt=speed')
         built=subprocess.run(command,cwd=ROOT,text=True,capture_output=True)
-        if built.returncode not in (0,2) or not binary.is_file():
+        if built.returncode != 0 or not binary.is_file():
             sys.stderr.write(built.stdout+built.stderr);return 1
         run=subprocess.run([str(binary)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT)
         if run.returncode:

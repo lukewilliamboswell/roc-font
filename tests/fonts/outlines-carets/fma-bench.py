@@ -23,7 +23,7 @@ labels=['before','after'] if args.before_bundle else ['after']
 for label in labels:
  bundle=args.before_bundle if label=='before' else args.after_bundle
  with flight.flight(roc,bundle=bundle,work=work/(label+'-flight')) as dep:
-  p=subprocess.run([roc,'build','--opt=speed',str(query),f'--output={work/(label+"-timing")}',*dep],text=True,capture_output=True,cwd=ROOT);print(p.stdout,p.stderr);assert p.returncode in (0,2)
+  p=subprocess.run([roc,'build','--opt=speed',str(query),f'--output={work/(label+"-timing")}',*dep],text=True,capture_output=True,cwd=ROOT);print(p.stdout,p.stderr);assert p.returncode==0,p.stdout+p.stderr
 rows=[]
 # The pinned oracle Python environment supplies HarfBuzz. This script is
 # run there; all timing loops below are native C or native Roc binaries.
