@@ -6,9 +6,186 @@
   },
   "fonts": [
     {
+      "font": "cff-only-metric0.otf",
+      "sha256": "2772d6701633e4c8cbba3a5adcae3e7f8243901852dc771784ced8288210a69d",
+      "accepted": true,
+      "diagnostic": false,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "cff-only-metric4.otf",
+      "sha256": "c55d18b7163098ce439cbc93c1ec971e0e5b1d8d2883d3f647e90a0e91549b9c",
+      "accepted": true,
+      "diagnostic": false,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "cff-only-metric5.otf",
+      "sha256": "211852a74f92cb6eaca5f8790b4225a6e985807e985e7601484f4351d6a54117",
+      "accepted": true,
+      "diagnostic": false,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "cff-only-metric7.otf",
+      "sha256": "e4751adbf1679d1c22aa12a91bbbb72fbe67662711e2472bbf23182d8b879d7f",
+      "accepted": true,
+      "diagnostic": false,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "cff-only-metric8-maxp1-diagnostic.otf",
+      "sha256": "9fe90d434e7b579512c02a3e47875392c87be17c68296f90f6a92127930e8d71",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": "WARNING: fixing incorrect maxp version for CFF font\n"
+    },
+    {
+      "font": "cff-only-metric8.otf",
+      "sha256": "7392500d72ce11dbbf6c3c4be78928540bd56124ed21cfc614ddf1b8a97c3672",
+      "accepted": true,
+      "diagnostic": false,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "maxp-matrix-both-20480-32.otf",
+      "sha256": "12798882aa3a0460ef5ccbab9472c731d62c6c4bf649bc310e630221939f3797",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: wrong sfntVersion for glyph data\nERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-both-20480-6.otf",
+      "sha256": "e11b4b2e68088b39b62149a634d65f0466748015266577ba7eefc235aa49f474",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: wrong sfntVersion for glyph data\nERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-both-65536-32.otf",
+      "sha256": "16a112b97cc7c1008bf28b90b075d1ac485573fbfce54b002a434750498af42d",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": "WARNING: maxp: Bad maxZones: 0\nWARNING: glyf: Number of contour points exceeds maxp maxPoints, adjusting limit (glyph 0)\nWARNING: wrong sfntVersion for glyph data\nERROR: CFF : font contains both CFF and glyf/loca tables\nERROR: Table discarded\n"
+    },
+    {
+      "font": "maxp-matrix-both-65536-6.otf",
+      "sha256": "9d9a3999343715c267e793d0aba9ba92d3cfe11bed46a2812ef5386790bd6932",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: maxp: Failed to read version 1.0 fields, downgrading to version 0.5\nWARNING: wrong sfntVersion for glyph data\nERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-cff-20480-32.otf",
+      "sha256": "d4ad707a9a122e7f10355c6d9ed5401fcc5e2ea60baaebe766eec140a6e59ad0",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "maxp-matrix-cff-20480-6.otf",
+      "sha256": "7392500d72ce11dbbf6c3c4be78928540bd56124ed21cfc614ddf1b8a97c3672",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "font": "maxp-matrix-cff-65536-32.otf",
+      "sha256": "f4a9a8e2bd52ee2f5d879ecbe6b8c81a3ff7c613c69e7729b929b4ed01d26ef1",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": "WARNING: maxp: Bad maxZones: 0\nWARNING: fixing incorrect maxp version for CFF font\n"
+    },
+    {
+      "font": "maxp-matrix-cff-65536-6.otf",
+      "sha256": "af5f6477afe0b0adc2f10a5d379195bdd49d706f29a763c317aa582fb2156ecc",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": "WARNING: maxp: Failed to read version 1.0 fields, downgrading to version 0.5\n"
+    },
+    {
+      "font": "maxp-matrix-glyf-20480-32.otf",
+      "sha256": "416277abd32aff478ff6ce778257c57f5898d8c3c29bc9374b062bb721919f46",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "ERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-glyf-20480-6.otf",
+      "sha256": "880bf7d2f1a0104ea504e534c6713238acc876e932c45afbefff161baa532458",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "ERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-glyf-65536-32.otf",
+      "sha256": "9d57761965b052f02c5bfa21eff98aeee2fe3dac554ee8915f1a0957f08cd860",
+      "accepted": true,
+      "diagnostic": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": "WARNING: maxp: Bad maxZones: 0\nWARNING: glyf: Number of contour points exceeds maxp maxPoints, adjusting limit (glyph 0)\n"
+    },
+    {
+      "font": "maxp-matrix-glyf-65536-6.otf",
+      "sha256": "3cef2b752395e4a15127713142aae7a98287b17562e78370250d485cdf8bdc24",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: maxp: Failed to read version 1.0 fields, downgrading to version 0.5\nERROR: maxp: wrong maxp version for glyph data\n"
+    },
+    {
+      "font": "maxp-matrix-neither-20480-32.otf",
+      "sha256": "db18c01d5092ec314609c0447f79fc893b786d13e37861a586be54e904135679",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "ERROR: no supported glyph data table(s) present\n"
+    },
+    {
+      "font": "maxp-matrix-neither-20480-6.otf",
+      "sha256": "7cebabbc44db3e88fce66fe3c464462c9dc59e21614287f7b62490ba20b083c7",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "ERROR: no supported glyph data table(s) present\n"
+    },
+    {
+      "font": "maxp-matrix-neither-65536-32.otf",
+      "sha256": "305267cd0780a13d9e7a3644bede606e3517f6da1b018b51b2684f480c53080d",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: maxp: Bad maxZones: 0\nERROR: no supported glyph data table(s) present\n"
+    },
+    {
+      "font": "maxp-matrix-neither-65536-6.otf",
+      "sha256": "1cd3916b2592504328fe340566296aa84f849fe0df9581c0291f96687d14925f",
+      "accepted": false,
+      "diagnostic": true,
+      "stdout": "Failed to sanitize file!\n",
+      "stderr": "WARNING: maxp: Failed to read version 1.0 fields, downgrading to version 0.5\nERROR: no supported glyph data table(s) present\n"
+    },
+    {
       "font": "raw-bounds-lsb-100-metric0.ttf",
       "sha256": "2bed5e5d009aa918d60e441a18cb6f4503f3d9cba4732fca105600e2ca6b591d",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -16,6 +193,7 @@
       "font": "raw-bounds-lsb-100-metric1.ttf",
       "sha256": "3a2774b6aef658596c16db26c81fdcdefb6197fcea52823732c96b7affac83fe",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -23,6 +201,7 @@
       "font": "raw-bounds-lsb-100-metric10.ttf",
       "sha256": "532fe32e9c7fe63af50df6b5588db50d9f20cde1720422df46148b7f2bcc2174",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -30,6 +209,7 @@
       "font": "raw-bounds-lsb-100-metric2.ttf",
       "sha256": "255b3904cee986946ad84aeb94df0f2dd8ecfe13627a517ed41088917d3921c3",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -37,6 +217,7 @@
       "font": "raw-bounds-lsb-100-metric3.ttf",
       "sha256": "3f762e2418c750278922f8704163c23b10acf2cbb7f6ad0c22b7580307136204",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -44,6 +225,7 @@
       "font": "raw-bounds-lsb-100-metric4.ttf",
       "sha256": "3ad516173742bd64dbf220013f01f2b7c7e9f0d4c3ceac49817a2a91d522e657",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -51,6 +233,7 @@
       "font": "raw-bounds-lsb-100-metric5.ttf",
       "sha256": "bf1e4331b6719d368ab8c381c54bd4642852d5dfe61f75172b91ad058d5cfab1",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -58,6 +241,7 @@
       "font": "raw-bounds-lsb-100-metric6.ttf",
       "sha256": "cef2340288c1635ad7dae377d23d7daecb6a05ef99f6eb98ba924e829c57ab7a",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -65,6 +249,7 @@
       "font": "raw-bounds-lsb-100-metric7.ttf",
       "sha256": "a5a5fe3f5dfa9d03d5da68d4665b8837488b0f8a014f5e2a740e59c435fb903d",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -72,6 +257,7 @@
       "font": "raw-bounds-lsb-100-metric8.ttf",
       "sha256": "770c5bdfffdc342e59d2fc9abe0ebb92f16a0ed9c1b51559d0c6523afa68dcf8",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -79,6 +265,7 @@
       "font": "raw-bounds-lsb-100-metric9.ttf",
       "sha256": "6126499d483e4400639b7c40a98e99be587b7071476d7c17623966b255e0f2c7",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -86,6 +273,7 @@
       "font": "raw-bounds-lsb100-metric0.ttf",
       "sha256": "314363aba83c7bf91b1262ea1638ba6c8d51a2a377aed58b5e9215a92181aa05",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -93,6 +281,7 @@
       "font": "raw-bounds-lsb100-metric1.ttf",
       "sha256": "2dca25f568456a774cb465ee29cabb4db3c7c1354ac4fc9ec5bb108f20480fd1",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -100,6 +289,7 @@
       "font": "raw-bounds-lsb100-metric10.ttf",
       "sha256": "259508c9374c925f6048db3b574e6eab60ba0de618a37c0f1f15db0be9e2bb3e",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -107,6 +297,7 @@
       "font": "raw-bounds-lsb100-metric2.ttf",
       "sha256": "1bfc18ac5afc9097561e75cf6c0a65cbe9f9a2ad90f4b3fdf3354e8f1f1bff32",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -114,6 +305,7 @@
       "font": "raw-bounds-lsb100-metric3.ttf",
       "sha256": "82a1299fb687a0950791dffc8a1344c2fa330167f31e7bab14b8b875bc0d3601",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -121,6 +313,7 @@
       "font": "raw-bounds-lsb100-metric4.ttf",
       "sha256": "4d12197586e8597e6d35c0fd12525173a6f1b92f21a81414adde67557f8291f7",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -128,6 +321,7 @@
       "font": "raw-bounds-lsb100-metric5.ttf",
       "sha256": "71eb6bc986d0b0d56f90f0a748df78e5508f52cd39df2e04d08b325d3a040da6",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -135,6 +329,7 @@
       "font": "raw-bounds-lsb100-metric6.ttf",
       "sha256": "46c002e96c4797cf3b6a244cecf872000fc2a9028c0ebb600a456a9890dcbd42",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -142,6 +337,7 @@
       "font": "raw-bounds-lsb100-metric7.ttf",
       "sha256": "01fa827ddbd5bfa34f050846b5f29e50d10e40c72086dc68925974d24c6623e9",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -149,6 +345,7 @@
       "font": "raw-bounds-lsb100-metric8.ttf",
       "sha256": "80e88b1acf4b09b6c5d9fee1090beb6cc317e6fc31e8fafca20b2a0a051694bf",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -156,6 +353,7 @@
       "font": "raw-bounds-lsb100-metric9.ttf",
       "sha256": "ecbb85340cacb1658ad04ded5b59ca26521ef26cddc67d3cb2160c53d3d726a9",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     },
@@ -163,6 +361,7 @@
       "font": "variable-default.ttf",
       "sha256": "bfd717abbdd037a26c267f45838a167ad74a15ee85756b596aa6a19e7d3eb185",
       "accepted": true,
+      "diagnostic": false,
       "stdout": "File sanitized successfully!\n",
       "stderr": ""
     }

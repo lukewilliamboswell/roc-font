@@ -15,6 +15,8 @@ metrics=[0,302,600,0,0,300,600,300,602,0,0]
 raw=json.loads((HERE/'raw-records.json').read_text())['records']
 bits_to_float=lambda b:struct.unpack('>f',struct.pack('>I',b))[0]
 for record in raw:
+    if not record['id'].startswith('raw-bounds-'):
+        assert not record['result']['face_accepted'];continue
     metric=int(record['id'].split('-metric')[1].split('-')[0]);result=record['result']
     assert result['face_accepted'] and result['segment']
     assert bits_to_float(result['slots'][1]['position_bits'][1])==metrics[metric]
@@ -26,10 +28,21 @@ for value,want in [(0,602),(0.5,702),(1,802)]:
     assert graphite['ot_glyph2_advance']==ot['ot_glyph2_advance']==want
     assert graphite['glyphs'][1]['advance']==[602,0] and graphite['glyphs'][1]['offset']==[0,602]
     assert ot['glyphs'][1]['advance']==[want,0] and ot['glyphs'][1]['offset']==[0,0]
-ots=json.loads((HERE/'ots.json').read_text());assert len(ots['fonts'])==23
-for record in ots['fonts']:assert record['accepted'] and record['sha256']==sha((HERE/record['font']).read_bytes())
+ots=json.loads((HERE/'ots.json').read_text());assert len(ots['fonts'])==45
+for record in ots['fonts']:
+    assert (record['accepted']or record['diagnostic']) and record['sha256']==sha((HERE/record['font']).read_bytes())
+for metric in [0,4,5,7,8]:
+    prefix=f'cff-only-metric{metric}';assert not hb[prefix+'-graphite2']['success']
+    assert hb[prefix+'-auto']==hb[prefix+'-ot'] and not hb[prefix+'-auto']['graphite_face_available']
+for outline in ['cff','glyf','both','neither']:
+    for version in [0x5000,0x10000]:
+        for length in [6,32]:
+            prefix=f'maxp-matrix-{outline}-{version}-{length}';available=version==0x10000 and length==32
+            assert hb[prefix+'-auto']['graphite_face_available']==available
+            assert hb[prefix+'-auto']==hb[prefix+('-graphite2'if available else'-ot')]
+assert json.loads((HERE/'hb-oracle.json').read_text())['shaper_priority']==['graphite2','ot','fallback']
 proof=json.loads((HERE/'oracle-proof.json').read_text())
 assert proof['raw_records_sha256']==sha((HERE/'raw-records.json').read_bytes())
 assert proof['hb_records_sha256']==sha((HERE/'hb-records.json').read_bytes())
 assert proof['tracing_result_digest']==sha(canonical([r['result']for r in raw]))
-print('44 raw/28 true HB keys;23 OTS fonts; raw bounds and3-location OT/Graphite distinctions PASS')
+print('56 raw/94 true HB keys;45 OTS hashes; raw bounds, variation and default maxp selection PASS')

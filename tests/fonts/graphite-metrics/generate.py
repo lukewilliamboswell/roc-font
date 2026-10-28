@@ -1,5 +1,5 @@
 """Original UPL raw-bounds and variable/default Graphite controls."""
-import argparse,io,json,sys
+import argparse,io,json,sys,struct
 from pathlib import Path
 from fontTools.ttLib import TTFont,newTable
 from fontTools.ttLib.tables.DefaultTable import DefaultTable
@@ -41,6 +41,37 @@ def main():
     name='variable-default';emit(HERE/(name+'.ttf'),make(name,8,0,True))
     for value in [0,0.5,1]:
         for engine in ['graphite2','ot']:hb.append({'id':f'variable-{value}-{engine}','font':name+'.ttf','text':'ab','script':'Latn','direction':'ltr','engine':engine,'variations':[{'tag':'wght','value':value}]})
+    for metric in [0,4,5,7,8]:
+        name=f'cff-only-metric{metric}'
+        f=TTFont(HERE.parent/'cff/lines-16-cff1.otf',recalcTimestamp=False)
+        donor=TTFont(io.BytesIO(make(name,metric,100)),recalcTimestamp=False)
+        for tag in ['Silf','Glat','Gloc','Feat','Sill']:
+            if tag in donor:
+                table=DefaultTable(tag);table.data=donor.getTableData(tag);f[tag]=table
+        for table in f['cmap'].tables:
+            if table.isUnicode():table.cmap={97:'space',98:'A'}
+        out=io.BytesIO();f.save(out);emit(HERE/(name+'.otf'),out.getvalue())
+        variants=[(name,out.getvalue(),False)]
+        if metric==8:
+            table=DefaultTable('maxp');table.data=donor.getTableData('maxp');f['maxp']=table;f.recalcBBoxes=False
+            out=io.BytesIO();f.save(out);diagnostic=name+'-maxp1-diagnostic';emit(HERE/(diagnostic+'.otf'),out.getvalue());variants.append((diagnostic,out.getvalue(),True))
+        for label,data,diagnostic in variants:
+            case={'id':label,'font':label+'.otf','text':'ab','script':'Latn','direction':'ltr','diagnostic_maxp1':diagnostic}
+            for mode in [0,6]:raw.append({**case,'id':label+'-mode'+str(mode),'face_options':mode})
+            for engine in ['graphite2','ot','auto']:hb.append({**case,'id':label+'-'+engine,'engine':engine})
+    for outline in ['cff','glyf','both','neither']:
+        for version in [0x5000,0x10000]:
+            for length in [6,32]:
+                f=TTFont(HERE/('raw-bounds-lsb100-metric8.ttf'if outline=='glyf'else'cff-only-metric8.otf'),recalcTimestamp=False);f.recalcBBoxes=False
+                if outline=='both':
+                    donor=TTFont(HERE/'raw-bounds-lsb100-metric8.ttf',recalcTimestamp=False)
+                    for tag in ['glyf','loca']:
+                        table=DefaultTable(tag);table.data=donor.getTableData(tag);f[tag]=table
+                    f['head'].indexToLocFormat=donor['head'].indexToLocFormat
+                if outline=='neither':del f['CFF ']
+                table=DefaultTable('maxp');table.data=struct.pack('>IH',version,3)+b'\0'*(length-6);f['maxp']=table
+                name=f'maxp-matrix-{outline}-{version}-{length}';out=io.BytesIO();f.save(out);emit(HERE/(name+'.otf'),out.getvalue())
+                for engine in ['graphite2','ot','auto']:hb.append({'id':name+'-'+engine,'font':name+'.otf','text':'ab','script':'Latn','direction':'ltr','engine':engine,'diagnostic_maxp_matrix':True,'outline':outline,'maxp_version':version,'maxp_length':length})
     for file,cases in [('raw-cases.jsonc',raw),('hb-cases.jsonc',hb)]:emit(HERE/file,(json.dumps({'schema':1,'cases':cases},indent=2)+'\n').encode())
-    print('23 original fonts,44 raw cases,28 HB cases', 'reproduced'if args.check else'generated')
+    print('45 original fonts,56 raw cases,94 HB cases', 'reproduced'if args.check else'generated')
 if __name__=='__main__':main()
