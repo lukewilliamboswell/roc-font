@@ -33,6 +33,13 @@ The subset retains the glyph closure for 😀, 👩‍💻 and ❤️, including
 The public behavior test shapes each sequence, queries its paint DAG, and
 resolves every glyph-clipping leaf to a nonempty public outline. This
 proves the font boundary needed by a renderer, without implementing one.
+The native example also runs against the unmodified 4,991,984-byte source
+font: 😀 maps to glyph1875 (18 paint nodes,9 outline leaves,144 path commands),
+👩‍💻 to glyph1285 (33 nodes,17 leaves,290 commands), and ❤️ to glyph3721
+(10 nodes,5 leaves,106 commands). The subset has the same outline-leaf and
+path-command counts; its ZWJ DAG has31 nodes because fontTools shares some
+identical paints. Semantic oracle comparison intentionally allows that
+physical DAG sharing difference. The unmodified source also passes OTS9.3.
 
 `cases.jsonc` is the independent test input. `oracle.py` records fontTools
 4.61.1 parsed tables and independently evaluates variation fields in their
