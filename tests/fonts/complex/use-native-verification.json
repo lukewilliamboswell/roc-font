@@ -1,0 +1,25 @@
+{
+  "public_contract_tests": 8,
+  "public_contract_result": "pass",
+  "native_fuzz": {
+    "runs": 1000,
+    "seed": 264,
+    "elapsed_seconds": 18,
+    "max_input_size": 4096,
+    "result": "pass",
+    "scaling_and_leak_assertions": "pass",
+    "bundle": "FWqQNAGXTRKYGMMXZivuZ2EJgFXPz7P4MvCzDNdHJg6a.tar.zst",
+    "binary_sha256": "1dddb3e0564fb50fdc01b7666ce68bf1089f9a4d1823b71215d86360eb131cab"
+  },
+  "native_example": {
+    "caller_font_scripts": [
+      "Deva",
+      "Khmr",
+      "Nkoo"
+    ],
+    "result": "pass",
+    "binary_sha256": "cfbe28d5ccb7640810205a2064dc20a94dd0a89ee6b37f9e289709fe2ee568db"
+  },
+  "coverage": "Nine real OFL font families across Tibetan,Sinhala,NKo,Mongolian,Adlam. No vertical layout claim.",
+  "native_oracles": "Shared native driver independently passed194Tibetan+400Sinhala+788joining records before the semantically exact Mongolian FVS action-copy followup; shared final gate includes the followup."
+}

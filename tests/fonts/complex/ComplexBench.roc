@@ -2,7 +2,7 @@ import font.Font
 
 ## Shared pure work for native timing and allocation diagnostics.
 ComplexBench :: {}.{
-	Prepared : { font : Font, plan : Font.ShapePlan, text : Str }
+	Prepared : { font : Font, plan : Font.ShapePlan, text : Str, script : Str }
 	prepare : List(U8) -> Try(Prepared, Str)
 	prepare = |bytes| {
 		{ before: header, after: font_bytes } = bytes.split_first('\n') ?? { before: [], after: [] }
@@ -12,18 +12,26 @@ ComplexBench :: {}.{
 			Err(problems) => crash Str.inspect(problems)
 		}
 		khmer = Font.glyph(font, 0x1780).is_ok()
-		script = if khmer {
+		tibetan = Font.glyph(font, 0x0F40).is_ok()
+		script = if tibetan {
+			"Tibt"
+		} else if khmer {
 			"Khmr"
 		} else {
 			"Deva"
 		}
-		piece = if khmer {
+		piece = if tibetan {
+			"བོད་སྐད་ཀྵཱི་"
+		} else if khmer {
 			"ខ្មែរ ក្រុម ក្រិ "
 		} else {
 			"र्कि क्षिं हिन्दी "
 		}
-		Ok({ font, plan: Font.plan(font, Font.ShapeOptions.{ script }), text: Str.join_with(List.repeat(piece, copies), "") })
+		Ok({ font, script, plan: Font.plan(font, Font.ShapeOptions.{ script }), text: Str.join_with(List.repeat(piece, copies), "") })
 	}
+	input_checksum : Prepared -> U64
+	input_checksum = |prepared| prepared.text.to_utf8().fold(5381.U64, |sum, byte| sum.shl_wrap(5).plus_wrap(sum).plus_wrap(byte.to_u64()))
+
 	run : Prepared -> Try(U64, U64)
 	run = |prepared| {
 		glyph_run = Font.shape_planned(prepared.font, prepared.plan, prepared.text)

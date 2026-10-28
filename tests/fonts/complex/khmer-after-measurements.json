@@ -1,0 +1,60 @@
+{
+  "label": "khmer-after",
+  "measurement_git": "2edc2d619d4ff4e466633e197542b2019cfcc2aa",
+  "source_git": "2edc2d619d4ff4e466633e197542b2019cfcc2aa",
+  "bundle": "FWqQNAGXTRKYGMMXZivuZ2EJgFXPz7P4MvCzDNdHJg6a.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "1e61d1989e790049dacfaea81aa20aa083a3b483f625b9744bb413815aeb34b4",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 720,
+      "scalar_count": 272,
+      "input_checksum": 1804818657542573045,
+      "allocations": 334,
+      "leaked": 0,
+      "roc_seconds": 0.0011701136015625,
+      "hb_seconds": 3.4140625e-05,
+      "roc_to_hb_ratio": 34.27335034324943
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 2880,
+      "scalar_count": 1088,
+      "input_checksum": 12081711299797987525,
+      "allocations": 1246,
+      "leaked": 0,
+      "roc_seconds": 0.0047325462265625,
+      "hb_seconds": 0.0001322421875,
+      "roc_to_hb_ratio": 35.7869626632008
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 11520,
+      "scalar_count": 4352,
+      "input_checksum": 15264604693972943877,
+      "allocations": 4894,
+      "leaked": 0,
+      "roc_seconds": 0.01946218521875,
+      "hb_seconds": 0.000553734375,
+      "roc_to_hb_ratio": 35.14715014532013
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Before model activation generic shaping differs from HB; ratios compare cost on identical inputs. After-model correctness is established separately by the cached oracle matrix.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.",
+    "Native driver asserts selected script, exact UTF8 byte length and DJB2 input checksum against the C comparator input before accepting each measurement."
+  ],
+  "consumer_source_sha256": {
+    "ComplexBench.roc": "d1c3b2efea3943388ea7029e6daebe33afa17eb8acd348ae70c8fdccaf6f7dc9",
+    "bench.roc": "f134cff3b84fd0b719b1e6de30e206e7efb5537a13e04171aba08612d06bf158",
+    "alloc.roc": "1eb1f81486c66f8a0c9504d86bea896d8ce34b8c2b6e11fab67b4fc09a098914",
+    "bench.c": "690131e5626de3ecd11cbbada3a86e1982d07915300b94932086a50b8cf52943"
+  },
+  "binary_sha256": {
+    "bench": "190ab9f971c644af976bf606d8ddd377336b7caa27491d3441eb5a8f7af6ee17",
+    "alloc": "82365134d15b7ed6193b8d16cb9f693b51c4af21b66819116515e21a187a6785"
+  }
+}

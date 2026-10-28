@@ -43,7 +43,7 @@ main! = |args| {
 				}
 			}
 			elapsed = start.elapsed!().to_nanos()
-			Stdout.line!("{\"iterations\":${iterations.to_str()},\"elapsed_ns\":${elapsed.to_str()},\"successes\":${$successes.to_str()},\"checksum\":${$checksum.to_str()}}")?
+			Stdout.line!("{\"script\":\"${prepared.script}\",\"utf8_bytes\":${prepared.text.to_utf8().len().to_str()},\"input_checksum\":${ComplexBench.input_checksum(prepared).to_str()},\"iterations\":${iterations.to_str()},\"elapsed_ns\":${elapsed.to_str()},\"successes\":${$successes.to_str()},\"checksum\":${$checksum.to_str()}}")?
 			Ok({})
 		}
 	}
