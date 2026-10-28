@@ -30,6 +30,10 @@ def program(action,positioning=False):
  return u32(0x30000)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
 programs={
  'replace':(bytes([0x1c,0,0x19,0x31]),False),
+ 'copy-after-change':(bytes([0x1c,0,0x1e,0,0x19,0x31]),False),
+ 'metric-after-change':(bytes([0x1c,0,0x2a,8,0,0,0x23,0,0x19,0x31]),False),
+ 'trunc8':(bytes([4,0,255,0x0d,0x23,0,0x32]),True),
+ 'trunc16':(bytes([5,0,0,255,255,0x0e,0x23,0,0x32]),True),
  'version':(bytes([0x37,0x23,0,0x32]),True),
  'set-advance':(bytes([1,17,0x23,0,0x32]),True),
  'version-shift':(bytes([0x37,0x23,20,0x32]),True),

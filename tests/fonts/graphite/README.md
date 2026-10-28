@@ -47,3 +47,16 @@ Real compiler output can disagree with OTS's interpretation of advisory Silf
 header offsets. These files are retained unmodified and validated using their
 actual checked spans; Graphite2 accepts them. The original small fixtures above
 also satisfy OTS's stricter header interpretation.
+
+`semantics-cases.jsonc` and `semantics-records.json` pin sixteen successful
+controls for rule-input snapshots and integer conversions. Replacing A with B
+and then copying input offset 0 restores A. Reading glyph metrics at input
+offset 0 after that replacement still reads A's original advance. Trunc8 keeps
+the low unsigned byte; Trunc16 sign-extends the low short in the pinned engine.
+These programs are original and all four additional fonts retain every
+Graphite table under OTS9.3.
+
+```
+python tests/fonts/graphite/record_abort.py --cases semantics-cases.jsonc --output semantics-records.json
+python tests/fonts/graphite/record_abort.py --cases semantics-cases.jsonc --output semantics-records.json --check
+```

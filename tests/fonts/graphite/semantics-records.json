@@ -1,0 +1,482 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1
+  },
+  "records": [
+    {
+      "id": "copy-after-change-a",
+      "font_sha256": "e958c8577c2fc998d8685a564e58d12a620f58468285e66574d6aea6488f593b",
+      "key": "702d1b65c063d40b428934d664a15e82e606e9136248214c250daba2b7569d84",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 601.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "copy-after-change-b",
+      "font_sha256": "e958c8577c2fc998d8685a564e58d12a620f58468285e66574d6aea6488f593b",
+      "key": "c33f4419903495f410153465c8f2dafcc69445a180da03869e13b258d927f7c5",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "copy-after-change-ab",
+      "font_sha256": "e958c8577c2fc998d8685a564e58d12a620f58468285e66574d6aea6488f593b",
+      "key": "4c2debd4e025d14cd87b58eb797f1be66dd6e7febb5d13d73d036d90c956219a",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 601.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "copy-after-change-ba",
+      "font_sha256": "e958c8577c2fc998d8685a564e58d12a620f58468285e66574d6aea6488f593b",
+      "key": "1b0de813df4a46a6836144df75cdef10a226f2ea123d1f538af16c649881fef0",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "metric-after-change-a",
+      "font_sha256": "c1861ef06fe34754373187bf6acd96acaf89dce0162c251f65055c4cb0f3b228",
+      "key": "98e546fe7c8567cc0e7d36e4c5b9382c47370e5a623058287232e5c1193963f1",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 601.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "metric-after-change-b",
+      "font_sha256": "c1861ef06fe34754373187bf6acd96acaf89dce0162c251f65055c4cb0f3b228",
+      "key": "3947bb40f566879f46bf500dde19f33932f13868981d4fd61ff29d3679215115",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "metric-after-change-ab",
+      "font_sha256": "c1861ef06fe34754373187bf6acd96acaf89dce0162c251f65055c4cb0f3b228",
+      "key": "77bf0455df4bc64c4c52e632dfcf3833d18a6203fb467f5f6a0a9df5177eee60",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 601.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "metric-after-change-ba",
+      "font_sha256": "c1861ef06fe34754373187bf6acd96acaf89dce0162c251f65055c4cb0f3b228",
+      "key": "5f45937b906f33a2f858441fe21b7f8d4defeb045e995b2867645f8846bf4525",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc8-a",
+      "font_sha256": "521873fba5c567f599c72b86070e06476ce0d5ef7a01352637f3c3538d53d447",
+      "key": "5d9c48086c4588c9369fb714d592e7b9750f45170282126ce28f2d22e71fd664",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 255.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 255.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc8-b",
+      "font_sha256": "521873fba5c567f599c72b86070e06476ce0d5ef7a01352637f3c3538d53d447",
+      "key": "8a619b2d80ca895eb8fb9bb47d6e5c8790604b56f0f7bf41bd0c9f1eb5afa69c",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc8-ab",
+      "font_sha256": "521873fba5c567f599c72b86070e06476ce0d5ef7a01352637f3c3538d53d447",
+      "key": "fdfb2521d0c080d11edae896d172af5439dfbe9597efb0f871f38dd37cfe9724",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 255.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 255.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 857.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc8-ba",
+      "font_sha256": "521873fba5c567f599c72b86070e06476ce0d5ef7a01352637f3c3538d53d447",
+      "key": "d4274114b60f9a9156db26723de10ce2f7a5304213ff9bec86f701fe01975de8",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 255.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 857.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc16-a",
+      "font_sha256": "6e8e477ac5313557566872ee90b4bdc769445c354f28f57baeeafb23a6a05959",
+      "key": "d6367a975dd02881a5424ee7bf7147392209ad068b2900cf718fd2529be777dd",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": -1.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": -1.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc16-b",
+      "font_sha256": "6e8e477ac5313557566872ee90b4bdc769445c354f28f57baeeafb23a6a05959",
+      "key": "e34e1563f9e11e410ae45621cc53220312f4eb029139c4c5009c82d802922af7",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc16-ab",
+      "font_sha256": "6e8e477ac5313557566872ee90b4bdc769445c354f28f57baeeafb23a6a05959",
+      "key": "b7c478d15215332b01d8a0fc80c16a1897c59bfd0c83521e6bfb23e20cc0e8a4",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": -1.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": -1.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 601.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "trunc16-ba",
+      "font_sha256": "6e8e477ac5313557566872ee90b4bdc769445c354f28f57baeeafb23a6a05959",
+      "key": "4713acae15c65dd771817b38aca10e1a028906b0a03eb0afd136bb4566a0c379",
+      "result": {
+        "face_accepted": true,
+        "features": [],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": -1.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 601.0,
+          "y": 0.0
+        }
+      }
+    }
+  ]
+}

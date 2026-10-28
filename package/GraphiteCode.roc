@@ -173,6 +173,45 @@ GraphiteCode :: {}.{
 		Ok({ instructions: $ops, max_stack: $maximum })
 	}
 
+	# In an action INSERT shifts the immutable input cursor back; NEXT
+	# shifts it forward. References must name an actual matched input slot,
+	# including when a newly inserted output slot is current.
+	check_references : List(U8), Program, U64, U64 -> Try({}, [Bad(U64)])
+	check_references = |bytes, program, pre_context, length| {
+		if pre_context >= length and !program.instructions.is_empty() {
+			return Err(Bad((program.instructions.first() ?? GraphiteCode.no_instruction).at))
+		}
+		var $cursor = pre_context.to_i64_wrap()
+		for instruction in program.instructions {
+			op = instruction.opcode
+			if op == 0x1F {
+				$cursor = $cursor - 1
+			}
+			else if op == 0x19 or op == 0x1B {
+				$cursor = $cursor + 1
+			}
+			else if op == 0x1D or op == 0x1E or op == 0x38 {
+				position = $cursor + instruction.a.to_i64()
+				if position < 0 or position >= length.to_i64_wrap() {
+					return Err(Bad(instruction.at))
+				}
+			} else if (op >= 0x28 and op <= 0x2E) or op == 0x3C or op == 0x3D or op == 0x42 {
+				position = $cursor + instruction.b.to_i64()
+				if position < 0 or position >= length.to_i64_wrap() {
+					return Err(Bad(instruction.at))
+				}
+			} else if op == 0x21 {
+				for i in 0..<instruction.a.to_u64_wrap() {
+					position = $cursor + GraphiteCode.i8(bytes, instruction.at + 2 + i).to_i64()
+					if position < 0 or position >= length.to_i64_wrap() {
+						return Err(Bad(instruction.at))
+					}
+				}
+			}
+		}
+		Ok({})
+	}
+
 	no_instruction : Instruction
 	no_instruction = { opcode: 0, a: 0, b: 0, c: 0, at: 0, end: 0, target: 0 }
 
@@ -248,3 +287,14 @@ expect GraphiteCode.read([5, 0, 0], 0, 3, environment).is_err()
 expect GraphiteCode.read([0x39, 0x32], 0, 2, environment).is_err()
 expect GraphiteCode.read([0x22, 0, 2, 1, 1, 0x30], 0, 6, { ..environment, constraint: True }).is_ok()
 expect GraphiteCode.read([0x22, 0, 1, 1, 1, 0x30], 0, 6, { ..environment, constraint: True }).is_err()
+
+expect {
+	# The inserted output precedes input slot zero. Offset one names the
+	# original input; offset zero names no input and must fail at reading.
+	good = [0x1F.U8, 0x1E, 1, 0x19, 0x32]
+	bad = [0x1F.U8, 0x1E, 0, 0x19, 0x32]
+	env = { classes: 0, attributes: 0, features: 0, users: 0, constraint: False }
+	a = GraphiteCode.read(good, 0, good.len(), env) ?? crash "original stack-valid fixture"
+	b = GraphiteCode.read(bad, 0, bad.len(), env) ?? crash "original stack-valid fixture"
+	GraphiteCode.check_references(good, a, 0, 1).is_ok() and GraphiteCode.check_references(bad, b, 0, 1).is_err()
+}

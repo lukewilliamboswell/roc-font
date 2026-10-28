@@ -171,6 +171,7 @@ GraphiteSilf := {
 				$instructions = $instructions.concat(condition.instructions)
 				action = GraphitePass.code(data, $endings, pass, rule, False)
 				body = GraphiteCode.read(data, action.start, action.end, env)?
+				_ = GraphiteCode.check_references(data, body, Bytes.u8(data, pass.pre_contexts + rule), Bytes.u16(data, pass.sort_keys + 2 * rule))?
 				$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + body.instructions.len(), max_stack: body.max_stack })
 				$instructions = $instructions.concat(body.instructions)
 			}

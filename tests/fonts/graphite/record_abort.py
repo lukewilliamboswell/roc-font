@@ -5,14 +5,14 @@ only documented ABI calls enter the separately installed reference library.
 from pathlib import Path
 import argparse,ctypes as C,hashlib,json,struct
 HERE=Path(__file__).resolve().parent
-parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));parser.add_argument('--cases',default='abort-cases.jsonc');parser.add_argument('--output',default='abort-records.json');args=parser.parse_args()
 def digest(data):return hashlib.sha256(data).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
-cases=json.loads((HERE/'abort-cases.jsonc').read_text())['cases']
+cases=json.loads((HERE/args.cases).read_text())['cases']
 pin=json.loads((HERE/'oracle.json').read_text()) if (HERE/'oracle.json').exists() else None
 if args.check:
  assert pin is not None
- records={r['id']:r for r in json.loads((HERE/'abort-records.json').read_text())['records']}
+ records={r['id']:r for r in json.loads((HERE/args.output).read_text())['records']}
  for case in cases:
   sha=digest((HERE/case['font']).read_bytes());key=digest(canonical({'case':case,'font':sha,'oracle':pin}))
   assert records[case['id']]['key']==key,case['id']
@@ -53,5 +53,5 @@ for case in cases:
   finally:drop_values(values);drop_face(face)
  records.append({'id':case['id'],'font_sha256':digest(path.read_bytes()),'key':digest(canonical({'case':case,'font':digest(path.read_bytes()),'oracle':pin})),'result':result})
 (HERE/'oracle.json').write_text(json.dumps(pin,indent=2)+'\n')
-(HERE/'abort-records.json').write_text(json.dumps({'oracle':pin,'records':records},indent=2)+'\n')
+(HERE/args.output).write_text(json.dumps({'oracle':pin,'records':records},indent=2)+'\n')
 print(f'{len(records)} Graphite2 abort/control records recorded')
