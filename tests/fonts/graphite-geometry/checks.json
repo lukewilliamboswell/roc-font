@@ -10,11 +10,48 @@
     "accepted_containers": 755,
     "stripped_glat2_controls": 7
   },
-  "geometry_source_closure_expects": 79,
-  "native_public_replay": "pending integration",
-  "fuzz": "pending",
+  "geometry_source_closure_expects": 85,
+  "native_public_replay": {
+    "status": "failing; stage remains provisional",
+    "historical_evidence": "native-wave1.json",
+    "next_snapshot": "952d71b shared optimized build, replay pending"
+  },
+  "fuzz": {
+    "outcome": "passed",
+    "configuration": {
+      "runs": "1000",
+      "max_input_size": "1048576",
+      "memory_limit_mb": "2048",
+      "timeout_seconds": "10",
+      "seed": "1",
+      "leak_detection": true
+    },
+    "provenance": {
+      "source_revision": "fc5bfe73b8c56745cbe05ff206e744ef426840c1+dirty",
+      "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+      "platform_release": "0.4.3",
+      "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+    },
+    "executable": {
+      "name": "font-graphite-geometry",
+      "sha256": "d7e315c0d875aeedeaa6759a37cde07bd195820d38100beb89d2d76ba50c16ce"
+    },
+    "libfuzzer": {
+      "coverage_kind": "sanitizer_edge_feedback",
+      "executed_units": 2061,
+      "average_exec_per_sec": 85,
+      "new_units_added": 0,
+      "slowest_unit_time_sec": 0,
+      "peak_rss_mb": 37,
+      "coverage_edges": 12894,
+      "coverage_features": 34936
+    },
+    "duration_ms": 24019,
+    "report_sha256": "0e62150d0b25531ca39d9168c66899b897bdabf354f9fa25cf240ad48b4d42a4",
+    "snapshot_note": "Integrator reported served immutable bundle84Ky; before insertion-boundary and inherited-advance corrections. Final-stage rerun remains required."
+  },
   "benchmark": "pending",
-  "collision_source_closure_expects": 117,
+  "collision_source_closure_expects": 151,
   "geometry_cases": 446,
   "collision_cases": 288,
   "box_dependency_cases": 21,
@@ -23,5 +60,16 @@
     "different_results": 0,
     "oracle": "collision-traces.json:oracle"
   },
-  "collision_stage": "in progress; completed components are not an integrated-stage claim"
+  "collision_stage": "Concrete original implementation; strict integrated numerical agreement and final performance still pending",
+  "source_geometry_revision": "5c31125",
+  "public_oracle_cases": 1060,
+  "audit_cases": {
+    "kerning": 68,
+    "sequencing": 67,
+    "retry": 66,
+    "association": 9,
+    "broad": 84,
+    "child_advance": 21,
+    "glat_flags": 4
+  }
 }
