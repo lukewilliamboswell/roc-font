@@ -1,0 +1,656 @@
+{
+  "schema": 1,
+  "about": "Original OTS-valid GPOS7/8 matching controls; mark inputs use manual ZWJ, automatic dist inputs and all backtrack/lookahead ignore it. GPOS always skips ZWNJ and hidden CGJ.",
+  "cases": [
+    {
+      "id": "input-manual-0-0",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-0-1",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-1-0",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-1-1",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-2-0",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-2-1",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-3-0",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-3-1",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-4-0",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-manual-4-1",
+      "font": "../fonts/positioning/context-controls/input-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-0-0",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-0-1",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-1-0",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-1-1",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-2-0",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-2-1",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-3-0",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-3-1",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-4-0",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-auto-4-1",
+      "font": "../fonts/positioning/context-controls/input-auto.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-0-0",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-0-1",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-1-0",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-1-1",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-2-0",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-2-1",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-3-0",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-3-1",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-4-0",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "input-context-4-1",
+      "font": "../fonts/positioning/context-controls/input-context.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-0-0",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-0-1",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-1-0",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-1-1",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-2-0",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-2-1",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-3-0",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-3-1",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-4-0",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lookahead-manual-4-1",
+      "font": "../fonts/positioning/context-controls/lookahead-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-0-0",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-0-1",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-1-0",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-1-1",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-2-0",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-2-1",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a‌b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-3-0",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-3-1",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a͏b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-4-0",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "backtrack-manual-4-1",
+      "font": "../fonts/positioning/context-controls/backtrack-manual.ttf",
+      "text": "a͏‍b",
+      "options": {
+        "script": "Latn",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
