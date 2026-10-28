@@ -959,8 +959,8 @@ Shaper :: {}.{
 		if n == 0 {
 			return { run: Shaper.empty_run, items: [], stopped: 0 }
 		}
-		limit = (p.growth * n).max(16384)
-		budget = (p.operations * n).max(16384)
+		limit = (p.growth * n).max(65536)
+		budget = (p.operations * n).max(65536)
 		gsub = Face.gsub(face)
 		{ chars: prepared, found } = ShaperNormalize.prepare(scalars, p.global_mask)
 		clustered =
@@ -1034,7 +1034,7 @@ Shaper :: {}.{
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
 	## and `hb_ot_substitute_post`).
 	position : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool -> Placed
-	position = |face, location, p, substituted, backward, space_fallback, ignorables| Shaper.position_checked(face, location, p, substituted, backward, space_fallback, ignorables, (p.operations * substituted.len()).max(16384)).placed
+	position = |face, location, p, substituted, backward, space_fallback, ignorables| Shaper.position_checked(face, location, p, substituted, backward, space_fallback, ignorables, (p.operations * substituted.len()).max(65536)).placed
 
 	position_checked : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool, U64 -> { placed : Placed, stopped : U64 }
 	position_checked = |face, location, p, substituted, backward, space_fallback, ignorables, remaining_budget| {
