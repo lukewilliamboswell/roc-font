@@ -6,8 +6,8 @@ opened or used to construct the programs or equations. The generator uses only
 the parent directory's original `generate.program` and `collision_generate.make`
 APIs plus original fontTools patches of documented tables. See LICENSE.
 
-`generate.py --check` reproduces all68 font files and the JSONC case data with
-fontTools4.61.1. `check.py` checks cached keys and font hashes with the Python
+`generate.py --check` reproduces all 68 font files and the JSONC case data with
+fontTools 4.61.1. `check.py` checks cached keys and font hashes with the Python
 standard library alone. The parent extractors reproduce the references:
 
 ```
@@ -20,7 +20,7 @@ Run those commands in the parent directory, using the oracle Python environment.
 same-version Release AppleClang17 build with tracing enabled. Each cache records
 its library hash and extractor provenance. Every reference face/segment was
 accepted, without a program abort. The release and tracing libraries give
-bit-identical public results on all68 cases (`oracle-proof.json`). Native Roc
+bit-identical public results on all 68 cases (`oracle-proof.json`). Native Roc
 agreement is a separate gate;
 recording a reference result does not claim that the package reproduces it.
 
@@ -60,8 +60,8 @@ Every extreme-coordinate operation association remains subject to differential
 proof; the cached C-API position/advance bits, rather than rounded trace decimals,
 are the exact reference for floating results.
 
-`stillBad` is **not directional** in these controls: forcing RTL needed210 up to500
-or LTR needed−210 down to−500 still reports true. Equal requested/result moves
+`stillBad` is **not directional** in these controls: forcing RTL needed 210 up to500
+or LTR needed −210 down to−500 still reports true. Equal requested/result moves
 report false; non-equal clamps tested here report true. This does not assert an
 unmeasured epsilon threshold.
 

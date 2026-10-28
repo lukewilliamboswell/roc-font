@@ -1,14 +1,14 @@
 # Original Graphite sequencing witnesses
 
-These67 UPL font programs isolate collision sequencing using documented table
+These 67 UPL font programs isolate collision sequencing using documented table
 formats, the public Graphite2 1.3.14 C ABI, and public `gr_start_logging` JSON.
 No Graphite2 implementation source was opened or used. The generator reuses the
 parent directory's original program/font builders and original fontTools patches.
-The author-facing starting point is SIL's [GDL manual, section6.8.1.1](https://static-scripts.sil.org/cms/sites/projects/download/gdldocumentation/GDLdocumentation.pdf).
+The author-facing starting point is SIL's [GDL manual, section 6.8.1.1](https://static-scripts.sil.org/cms/sites/projects/download/gdldocumentation/GDLdocumentation.pdf).
 The equations below describe measured reference behavior, including quirks;
 they are not presented as requirements stated by that manual.
 
-Reproduce bytes/JSONC with fontTools4.61.1: `python generate.py --check`.
+Reproduce bytes/JSONC with fontTools 4.61.1: `python generate.py --check`.
 Check both caches without any oracle installed: `python check.py`.
 From the parent geometry directory, record or check using:
 
@@ -18,7 +18,7 @@ python record_traces.py --cases sequencing-audit/cases.jsonc --output sequencing
 ```
 
 Both extractors support `--check`. The reference build/library hashes are in
-each cache. All67 reference faces and segments were accepted, without an abort.
+each cache. All 67 reference faces and segments were accepted, without an abort.
 Release and tracing-build public results are bit-identical (`oracle-proof.json`).
 Native Roc agreement is a separate gate and is not claimed by recording oracles.
 
@@ -28,19 +28,19 @@ Native Roc agreement is a separate gate and is not claimed by recording oracles.
 Sequencing is inactive in the otherwise matching `separate-trees` control.
 `siblings` proves it also applies to two children sharing another parent.
 The target's sequence class must be nonzero. Its proximity class selects the
-neighbor class; proximity0 falls back to its own class. Class0 does not become1,
-and an explicit proximity match does not enable a class0 target. Unsigned65535
+neighbor class; proximity 0 falls back to its own class. Class 0 does not become1,
+and an explicit proximity match does not enable a class 0 target. Unsigned 65535
 works, including Glat signed−1 encodings. The target owns order selection; the
 neighbor owns above/below/alignment parameters. The neighbor's own order is
 irrelevant to these controls. Independent target/neighbor collision margins do
 not change the sequencing-region coordinates or coefficients here; they still
 affect ordinary ink collision costs.
 
-For a preceding neighbor, raw1 enables the diagonal regions, raw4 the upper
-forbidden region and raw8 the lower one. With a following neighbor, raw2 enables
+For a preceding neighbor, raw 1 enables the diagonal regions, raw 4 the upper
+forbidden region and raw 8 the lower one. With a following neighbor, raw 2 enables
 the *identical* canonical diagonal equations without mirroring coordinates;
-raw4/raw8 exchange the vertical regions. A two-pass program establishes the tree
-without collisions, then runs flags33: the relationship flips despite unchanged
+raw 4/raw 8 exchange the vertical regions. A two-pass program establishes the tree
+without collisions, then runs flags 33: the relationship flips despite unchanged
 text and attachments. It therefore follows reversed pass traversal. Font LTR/RTL
 alone does not change it. Exact-order controls0/3/5/6/9/10/12/15 add no sequencing
 regions here, despite the manual describing an order bitmap.
@@ -121,9 +121,9 @@ a conventional 2D quadratic rotation gives different results.
 | `w*(x²+y²)` | `(w,0,wFy²)` | `(w,0,wFx²)` | `(w/4,0,wD²/4)` | `(w/4,0,wS²/4)` |
 
 In particular, orthogonal square constants omit the linear cross term. First
-pass above-offset0 gives the Y constant8670000 rather than1470000. In the
-repeated pass, own offset(−220,−220) makes the radial X constant640000, proving
-that the fixed coordinate includes bbox center300 plus offset−220, not either
+pass above-offset 0 gives the Y constant 8670000 rather than1470000. In the
+repeated pass, own offset(−220,−220) makes the radial X constant 640000, proving
+that the fixed coordinate includes bbox center300 plus offset −220, not either
 one alone. The fractional-output case returns Y bits for−33.33333206176758.
 The README records the experimentally established algebra; it does not prove
 every reassociation at extreme binary32 magnitudes.
