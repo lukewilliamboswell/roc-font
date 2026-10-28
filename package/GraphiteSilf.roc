@@ -167,6 +167,8 @@ GraphiteSilf := {
 			pass = { ..prepared.pass, constraint_ends: $endings.len(), programs: $programs.len() }
 			$endings = $endings.concat(prepared.endings)
 			decoded = GraphiteCode.read(data, pass.pass_constraint, pass.pass_constraint_end, { ..pass_env, constraint: True })?
+			# Pass conditions have one current slot, independently of rule contexts.
+			_ = GraphiteCode.check_references(data, decoded, 0, 1)?
 			$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + decoded.instructions.len(), max_stack: decoded.max_stack, protected_start: $protected.len(), protected_end: $protected.len() + decoded.protected_inputs.len(), copies: decoded.copies })
 			$protected = $protected.concat(decoded.protected_inputs)
 			$instructions = $instructions.concat(decoded.instructions)

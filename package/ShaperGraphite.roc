@@ -4,6 +4,7 @@ import GraphiteAttributes
 import GraphiteSilf
 import GraphiteFeatures
 import GraphiteSlots
+import GraphiteDirection
 import GraphiteMachine
 import GraphiteRules
 import GraphiteMetrics
@@ -88,6 +89,7 @@ ShaperGraphite := {
 			$stopped = $stopped.bitwise_or(changed.stopped)
 			$mirrored = True
 		}
+		var $reversed = False
 		var $prepared_collision = sub.flags.bitwise_and(32) == 0
 		for index in sub.pass_start..<sub.pass_end {
 			if $stopped != 0 {
@@ -111,16 +113,29 @@ ShaperGraphite := {
 				pass = face.graphite.program.passes.get(index) ?? crash "selected prepared pass span"
 				native_rtl = sub.direction.bitwise_and(1) == 0
 				before_bidi = sub.bidi != 255 and index < sub.pass_start + sub.bidi
-				reverse = (!before_bidi and plan.rtl != native_rtl) != (pass.flags.bitwise_and(32) != 0)
-				changed = GraphiteRules.apply({ ..context, reverse }, pass, $state, { operations: budget - $operations, glyphs: limit }, metric)
-				$state = changed.state
-				$operations = $operations + changed.operations
-				$stopped = $stopped.bitwise_or(changed.stopped)
-				if changed.aborted {
+				reverse = !before_bidi and ((plan.rtl != native_rtl) != (pass.flags.bitwise_and(32) != 0))
+				if reverse != $reversed {
+					changed_direction = GraphiteDirection.reverse($state, face.graphite.attributes, sub.direction_attribute, budget - $operations)
+					$state = changed_direction.state
+					$operations = $operations + changed_direction.operations
+					$stopped = $stopped.bitwise_or(changed_direction.stopped)
+					if changed_direction.stopped == 0 {
+						$reversed = reverse
+					}
+				}
+				if $stopped != 0 {
+					break
+				}
+				actual_rtl = plan.rtl != $reversed
+				{ state, operations, stopped, aborted, enabled } = GraphiteRules.apply({ ..context, rtl: actual_rtl, reverse: False }, pass, $state, { operations: budget - $operations, glyphs: limit }, metric)
+				$state = state
+				$operations = $operations + operations
+				$stopped = $stopped.bitwise_or(stopped)
+				if aborted {
 					return { run: GraphiteRun.empty.run, origins: [], stopped: $stopped, operations: $operations, abort: ProgramAbort }
 				}
-				if $stopped == 0 and pass.flags.bitwise_and(31) != 0 {
-					fixed = collisions($state, collision_context, pass.flags, pass.collision_threshold, budget - $operations, metric)
+				if $stopped == 0 and enabled and pass.flags.bitwise_and(31) != 0 {
+					fixed = collisions($state, { ..collision_context, rtl: actual_rtl }, pass.flags, pass.collision_threshold, budget - $operations, metric)
 					$state = fixed.state
 					$operations = $operations + fixed.operations
 					$stopped = $stopped.bitwise_or(fixed.stopped)
@@ -146,10 +161,17 @@ ShaperGraphite := {
 		if associated.aborted {
 			return { run: GraphiteRun.empty.run, origins: [], stopped: $stopped, operations: $operations, abort: ProgramAbort }
 		}
-		placed = GraphitePosition.position_for_font($state, plan.rtl, sub.direction.bitwise_and(1) == 0, budget - $operations)
+		placed = GraphitePosition.position_for_font($state, plan.rtl != $reversed, sub.direction.bitwise_and(1) == 0, budget - $operations)
 		$operations = $operations + placed.operations
 		$stopped = $stopped.bitwise_or(placed.stopped)
-		finished = GraphiteRun.finish(placed.state, scalars, plan.rtl, trace, |glyph| GraphiteMachine.real(context, glyph).to_u32_wrap())
+		var $final_state = placed.state
+		if $reversed {
+			restored = GraphiteDirection.reverse($final_state, face.graphite.attributes, sub.direction_attribute, budget - $operations)
+			$final_state = restored.state
+			$operations = $operations + restored.operations
+			$stopped = $stopped.bitwise_or(restored.stopped)
+		}
+		finished = GraphiteRun.finish($final_state, scalars, plan.rtl, trace, |glyph| GraphiteMachine.real(context, glyph).to_u32_wrap())
 		{ run: finished.run, origins: finished.origins, stopped: $stopped, operations: $operations, abort: if (finished.valid) NoAbort else ProgramAbort }
 	}
 

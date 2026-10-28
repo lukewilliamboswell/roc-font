@@ -56,6 +56,10 @@ TableGraphite := {
 					$problems = $problems.append({ table, offset, reason: Malformed })
 					GraphiteAttributes.none
 				}
+				Err(Bads(found)) => {
+					$problems = $problems.concat(found.map(|problem| { table: problem.table, offset: problem.offset, reason: Malformed }))
+					GraphiteAttributes.none
+				}
 				Err(OverLimit(_)) => {
 					$problems = $problems.append({ table: "Glat", offset: 0, reason: TooMuchWork })
 					GraphiteAttributes.none
@@ -108,7 +112,7 @@ TableGraphite := {
 		}
 		version = Bytes.u32(bytes, 0)
 		flags = Bytes.u16(bytes, 4)
-		if (version != 0x00010000 and version != 0x00010001) or flags.bitwise_and(0xFFFC) != 0 {
+		if version != 0x00010000 and version != 0x00010001 {
 			return Err(Bad(0))
 		}
 		width = if (flags.bitwise_and(1) == 0) 2 else 4
@@ -155,7 +159,7 @@ expect {
 expect {
 	# Collision flags require Glat3. This cross-table dependency is read
 	# eagerly; older glyph-attribute tables remain valid for ordinary passes.
-	match TableGraphite.read({ silf: inline_silf.set(84, 1) ?? [], gloc: inline_gloc, glat: inline_glat, feat: Present(inline_feat), sill: Absent, glyph_count: 3 }, 4096) {
+	match TableGraphite.read({ silf: inline_collision_silf, gloc: inline_gloc, glat: inline_glat, feat: Present(inline_feat), sill: Absent, glyph_count: 3 }, 4096) {
 		Err(problems) => problems == [{ table: "Glat", offset: 0, reason: Malformed }]
 		Ok(_) => False
 	}
@@ -167,3 +171,8 @@ expect {
 		Ok(_) => False
 	}
 }
+
+# Original proper Silf5 collision-pass header; long class offsets.
+inline_collision_silf = [0.U8, 5, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 16, 0, 3, 0, 0, 0, 42, 0, 50, 0, 2, 0, 0, 0, 0, 1, 0, 1, 1, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 12, 0, 0, 0, 14, 0, 2, 1, 10, 2, 0, 0, 1, 0, 24, 0, 0, 0, 157, 0, 0, 0, 157, 0, 0, 0, 157, 0, 0, 0, 0, 0, 3, 0, 2, 0, 1, 0, 2, 0, 2, 0, 12, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 2, 0, 28, 0, 25, 49]
+
+expect TableGraphite.gloc_count([0.U8, 1, 0, 0, 128, 0, 0, 1, 0, 4, 0, 8, 0, 12, 0, 16]) == Ok(3)

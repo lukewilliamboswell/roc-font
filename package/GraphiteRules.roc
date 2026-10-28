@@ -11,7 +11,8 @@ import GraphiteSlots
 ## Original finite-state rule scheduler from the Graphite table format.
 ## Candidates sort by descending documented rule length, then source index.
 GraphiteRules :: {}.{
-	Result : { state : GraphiteSlots, operations : U64, stopped : U64, aborted : Bool }
+	# The pass condition gates both font rules and collision positioning.
+	Result : { state : GraphiteSlots, operations : U64, stopped : U64, aborted : Bool, enabled : Bool }
 
 	apply : GraphiteMachine.Context, GraphitePass.Pass, GraphiteSlots, GraphiteMachine.Limits, (U64, U64, I32 -> I32) -> Result
 	apply = |ctx, pass, state, limits, metric| {
@@ -24,7 +25,7 @@ GraphiteRules :: {}.{
 		bytes = ctx.table.program.data
 		while $cursor != 0 {
 			if $operations >= limits.operations {
-				return { state: $state, operations: $operations, stopped: 2, aborted: False }
+				return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 			}
 			$operations = $operations + 1
 			var $begin = $cursor
@@ -51,13 +52,20 @@ GraphiteRules :: {}.{
 				$first = False
 				program = ctx.table.program.programs.get(pass.programs) ?? crash "prepared pass constraint"
 				if program.start != program.end {
-					condition = GraphiteMachine.run(ctx, program, $state, input, { ..limits, operations: limits.operations - $operations }, metric)
+					# A pass condition refers to the first current slot even
+					# when this pass has no rules or rule input context.
+					condition_input = if input.ids.is_empty() {
+						{ ids: [$cursor], slots: [GraphiteSlots.get($state, $cursor)], users: [], base: 0, length: 1, start: 0, current: 0 }
+					} else {
+						input
+					}
+					condition = GraphiteMachine.run(ctx, program, $state, condition_input, { ..limits, operations: limits.operations - $operations }, metric)
 					$operations = $operations + condition.operations
 					if condition.aborted or condition.stopped != 0 {
-						return { state: condition.state, operations: $operations, stopped: condition.stopped, aborted: condition.aborted }
+						return { state: condition.state, operations: $operations, stopped: condition.stopped, aborted: condition.aborted, enabled: True }
 					}
 					if condition.value == 0 {
-						return { state: $state, operations: $operations, stopped: 0, aborted: False }
+						return { state: $state, operations: $operations, stopped: 0, aborted: False, enabled: False }
 					}
 				}
 			}
@@ -66,7 +74,7 @@ GraphiteRules :: {}.{
 				var $row = Bytes.u16(bytes, pass.starts + 2 * (pass.max_pre - $pre))
 				for s in input.slots {
 					if $operations >= limits.operations {
-						return { state: $state, operations: $operations, stopped: 2, aborted: False }
+						return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 					}
 					$operations = $operations + 1
 					column = match GraphitePass.column(bytes, pass, s.glyph) {
@@ -80,7 +88,7 @@ GraphiteRules :: {}.{
 					rules = GraphitePass.rules(bytes, pass, $row)
 					for index in rules.start..<rules.end {
 						if $operations >= limits.operations {
-							return { state: $state, operations: $operations, stopped: 2, aborted: False }
+							return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 						}
 						$operations = $operations + 1
 						rule = Bytes.u16(bytes, pass.rule_map + 2 * index)
@@ -106,7 +114,7 @@ GraphiteRules :: {}.{
 							checked = GraphiteMachine.run(ctx, condition, $state, { ..rule_input, current: i.to_i64_wrap() }, { ..limits, operations: limits.operations - $operations }, metric)
 							$operations = $operations + checked.operations
 							if checked.aborted or checked.stopped != 0 {
-								return { state: checked.state, operations: $operations, stopped: checked.stopped, aborted: checked.aborted }
+								return { state: checked.state, operations: $operations, stopped: checked.stopped, aborted: checked.aborted, enabled: True }
 							}
 							if checked.value == 0 {
 								$matches = False
@@ -120,7 +128,7 @@ GraphiteRules :: {}.{
 						$operations = $operations + changed.operations
 						$state = changed.state
 						if changed.aborted or changed.stopped != 0 {
-							return { state: $state, operations: $operations, stopped: changed.stopped, aborted: changed.aborted }
+							return { state: $state, operations: $operations, stopped: changed.stopped, aborted: changed.aborted, enabled: True }
 						}
 						var $next = changed.cursor
 						var $move = changed.value.to_i64()
@@ -129,7 +137,7 @@ GraphiteRules :: {}.{
 						}
 						while $move > 0 and $next != 0 {
 							if $operations >= limits.operations {
-								return { state: $state, operations: $operations, stopped: 2, aborted: False }
+								return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 							}
 							$operations = $operations + 1
 							$next = GraphiteMachine.forward($state, $next, ctx.reverse)
@@ -137,7 +145,7 @@ GraphiteRules :: {}.{
 						}
 						while $move < 0 {
 							if $operations >= limits.operations {
-								return { state: $state, operations: $operations, stopped: 2, aborted: False }
+								return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 							}
 							$operations = $operations + 1
 							$next = if ($next == 0) GraphiteMachine.initial($state, !ctx.reverse) else GraphiteMachine.backward($state, $next, ctx.reverse)
@@ -166,7 +174,7 @@ GraphiteRules :: {}.{
 								order = GraphiteRules.ahead($state, $highwater, $next, ctx.reverse, limits.operations - $operations)
 								$operations = $operations + order.operations
 								if order.stopped {
-									return { state: $state, operations: $operations, stopped: 2, aborted: False }
+									return { state: $state, operations: $operations, stopped: 2, aborted: False, enabled: True }
 								}
 								$advanced = order.ahead
 							}
@@ -197,7 +205,7 @@ GraphiteRules :: {}.{
 				}
 			}
 		}
-		{ state: $state, operations: $operations, stopped: 0, aborted: False }
+		{ state: $state, operations: $operations, stopped: 0, aborted: False, enabled: True }
 	}
 
 	# A returned cursor can lie beyond the checked rule window. Stable IDs

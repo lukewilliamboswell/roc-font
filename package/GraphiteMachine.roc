@@ -149,11 +149,20 @@ GraphiteMachine :: {}.{
 				}
 				source = GraphiteSlots.get($state, $cursor)
 				insertion = if (ctx.reverse) (if ($cursor == 0) $state.first else GraphiteSlots.get($state, $cursor).next) else $cursor
-				inserted = GraphiteSlots.insert($state, insertion, { ..GraphiteSlots.no_slot, before: source.before, after: source.before, original: source.original, direction: if (ctx.rtl) 1 else 0, feature: source.feature, trace: 2 })
+				segment_direction = match input.slots.first() {
+					Ok(slot) => slot.direction
+					Err(_) => if (ctx.rtl) 1 else 0
+				}
+				inserted = GraphiteSlots.insert($state, insertion, { ..GraphiteSlots.no_slot, before: source.before, after: source.before, original: source.original, direction: segment_direction, feature: source.feature, trace: 2 })
 				$state = inserted.state
 				$cursor = inserted.id
 				$input = $input - 1
 			} else if op == 0x20 {
+				# NEXT may legally reach beyond a matched rule's input. DELETE
+				# then depends on whether the text supplies a current slot.
+				if !GraphiteSlots.valid($state, $cursor) {
+					return { state: $state, input: $input, cursor: $cursor, value: 0, operations: $operations, stopped: 0, aborted: True }
+				}
 				s = GraphiteSlots.get($state, $cursor)
 				$state = GraphiteSlots.delete($state, $cursor)
 				$cursor = if (ctx.reverse) s.next else s.previous
@@ -398,7 +407,9 @@ GraphiteMachine :: {}.{
 
 # Tiny original rule inputs; font-level agreement is pinned separately through
 # Graphite2 records. These expose immutable snapshots and partial-work state.
-machine_test = |code, budget, growth| {
+machine_test = |code, budget, growth| machine_test_rtl(code, budget, growth, False)
+
+machine_test_rtl = |code, budget, growth, rtl| {
 	bytes = [0.U8, 2].concat(code)
 	decoded = GraphiteCode.read(bytes, 2, bytes.len(), { classes: 1, attributes: 1, features: 0, users: 3, levels: 0, positioning: False, constraint: False }) ?? crash "original valid opcode fixture"
 	sub = { pass_start: 0, pass_end: 0, class_start: 0, class_end: 1, pseudo_start: 0, pseudo_end: 0, substitution: 0, positioning: 0, justification: 0, bidi: 255, flags: 0, direction: 1, pseudo_attribute: 0, break_attribute: 0, direction_attribute: 0, mirror_attribute: 0, skip_attribute: 0, collision_attribute: 0, user_count: 3, justification_start: 0, justification_count: 0, components: 0, line_break: 0, extra_ascent: 0, extra_descent: 0 }
@@ -407,7 +418,7 @@ machine_test = |code, budget, growth| {
 	a = GraphiteSlots.append(GraphiteSlots.make(3, 3), { ..GraphiteSlots.no_slot, glyph: 1, advance_x: TableVar.f32_from_int(601) })
 	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, glyph: 2, before: 1, after: 1, advance_x: TableVar.f32_from_int(602) })
 	input = { ids: [a.id, b.id], slots: [GraphiteSlots.get(b.state, a.id), GraphiteSlots.get(b.state, b.id)], users: b.state.users, base: 0, length: 2, start: 0, current: 0 }
-	GraphiteMachine.run({ table, sub, defaults: [], rtl: False, reverse: False }, { start: 0, end: decoded.instructions.len(), max_stack: decoded.max_stack, protected_start: 0, protected_end: decoded.protected_inputs.len(), copies: decoded.copies }, b.state, input, { operations: budget, glyphs: growth }, |glyph, metric, _| if (metric == 8) 600 + glyph.to_i32_wrap() else 0)
+	GraphiteMachine.run({ table, sub, defaults: [], rtl, reverse: False }, { start: 0, end: decoded.instructions.len(), max_stack: decoded.max_stack, protected_start: 0, protected_end: decoded.protected_inputs.len(), copies: decoded.copies }, b.state, input, { operations: budget, glyphs: growth }, |glyph, metric, _| if (metric == 8) 600 + glyph.to_i32_wrap() else 0)
 }
 
 expect {
@@ -466,4 +477,23 @@ expect {
 	a = machine_test([1, 0, 1, 11, 1, 22, 0x0F, 0x23, 0, 0x32], 1000, 10)
 	b = machine_test([1, 1, 1, 11, 1, 22, 0x0F, 0x23, 0, 0x32], 1000, 10)
 	GraphiteSlots.integer(GraphiteSlots.get(a.state, 1).advance_x) == 22 and GraphiteSlots.integer(GraphiteSlots.get(b.state, 1).advance_x) == 11
+}
+
+# An opposite-direction pass must not overwrite the readonly segment Dir16
+# when INSERT creates a slot. The immutable input carries that segment bit.
+expect {
+	result = machine_test_rtl([0x1F, 0x1C, 0, 0x19, 0x31], 100, 10, True)
+	!result.aborted and result.stopped == 0 and GraphiteSlots.get(result.state, result.state.first).direction == 0
+}
+
+expect {
+	stopped = machine_test([0x20, 0x31], 0, 10)
+	applied = machine_test([0x20, 0x31], 1, 10)
+	stopped.stopped == 2 and stopped.operations == 0 and stopped.state.active == 2 and !GraphiteSlots.get(stopped.state, 1).deleted and applied.stopped == 2 and applied.operations == 1 and applied.state.active == 1 and GraphiteSlots.get(applied.state, 1).deleted
+}
+
+expect {
+	missing = machine_test([0x19, 0x19, 0x20, 0x32], 100, 10)
+	supplied = machine_test([0x19, 0x20, 0x32], 100, 10)
+	missing.aborted and missing.stopped == 0 and missing.state.active == 2 and !supplied.aborted and supplied.stopped == 0 and supplied.state.active == 1
 }

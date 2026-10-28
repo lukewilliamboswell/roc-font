@@ -102,17 +102,24 @@ GraphiteSlots := {
 		{ id, state: { nodes: $nodes, users: $users, user_count, justification_levels, feature_changes, first: if (previous == 0) id else first, last: if (before == 0) id else last, active: active + 1, positioned: False, advance_x, advance_y } }
 	}
 
+	# DELETE unlinks a childless attachment only when it heads its parent's
+	# child chain. Later deleted siblings remain linked and still contribute
+	# to geometry. Its own parent and sibling fields remain observable.
+	# Deleting a nonleaf retains it; later child deletions do not cascade.
 	delete : GraphiteSlots, U64 -> GraphiteSlots
 	delete = |state, id| {
-		if !GraphiteSlots.valid(state, id) {
+		if !GraphiteSlots.valid(state, id) or GraphiteSlots.get(state, id).deleted {
 			return state
 		}
 		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = state
 		slot = nodes.get(id) ?? GraphiteSlots.no_slot
-		if slot.deleted {
-			return { nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: False, advance_x, advance_y }
-		}
 		var $nodes = nodes
+		if slot.parent != 0 and slot.child == 0 {
+			parent = $nodes.get(slot.parent) ?? crash "attachment parent is a stable slot"
+			if parent.child == id {
+				$nodes = $nodes.set(slot.parent, { ..parent, child: slot.sibling, last_child: if (parent.last_child == id) 0 else parent.last_child }) ?? []
+			}
+		}
 		if slot.previous != 0 {
 			old = $nodes.get(slot.previous) ?? GraphiteSlots.no_slot
 			$nodes = $nodes.set(slot.previous, { ..old, next: slot.next }) ?? []
@@ -254,4 +261,52 @@ expect {
 	copied = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, feature: a_cell.id })
 	changed = GraphiteSlots.set_feature(copied.state, a.id, 0, 1)
 	GraphiteSlots.feature(changed, [0], a_cell.id, 0, 10).value == 1 and GraphiteSlots.feature(changed, [0], GraphiteSlots.get(changed, copied.id).feature, 0, 10).value == 1 and GraphiteSlots.feature(changed, [0], b_cell.id, 0, 10).value == 0
+}
+
+# Original flat attachment fixtures: topology bookkeeping and atomic resource
+# exhaustion are internal contracts; public fonts pin the observable geometry.
+delete_tree = |nested| {
+	var $state = GraphiteSlots.make(0, 4)
+	for glyph in [1.U64, 2, 3, 4] {
+		$state = GraphiteSlots.append($state, { ..GraphiteSlots.no_slot, glyph }).state
+	}
+	if nested {
+		$state = GraphiteSlots.set($state, 1, { ..GraphiteSlots.get($state, 1), child: 2, last_child: 2 })
+		$state = GraphiteSlots.set($state, 2, { ..GraphiteSlots.get($state, 2), parent: 1, child: 3, last_child: 3 })
+		$state = GraphiteSlots.set($state, 3, { ..GraphiteSlots.get($state, 3), parent: 2 })
+	} else {
+		$state = GraphiteSlots.set($state, 1, { ..GraphiteSlots.get($state, 1), child: 2, last_child: 4 })
+		for id in 2..<5 {
+			$state = GraphiteSlots.set($state, id, { ..GraphiteSlots.get($state, id), parent: 1, sibling: if (id == 4) 0 else id + 1 })
+		}
+	}
+	$state
+}
+
+expect {
+	original = delete_tree(False)
+	middle = GraphiteSlots.delete(original, 3)
+	tail = GraphiteSlots.delete(original, 4)
+	GraphiteSlots.get(middle, 1).child == 2 and GraphiteSlots.get(middle, 1).last_child == 4 and GraphiteSlots.get(middle, 2).sibling == 3 and GraphiteSlots.get(middle, 3).parent == 1 and GraphiteSlots.get(middle, 3).sibling == 4 and GraphiteSlots.get(middle, 3).deleted and GraphiteSlots.get(tail, 3).sibling == 4 and GraphiteSlots.get(tail, 4).deleted and GraphiteSlots.get(tail, 1).last_child == 4 and middle.active == 3
+}
+
+expect {
+	original = delete_tree(False)
+	first = GraphiteSlots.delete(original, 2)
+	GraphiteSlots.get(first, 1).child == 3 and GraphiteSlots.get(first, 1).last_child == 4 and GraphiteSlots.get(first, 2).parent == 1 and GraphiteSlots.get(first, 2).sibling == 3
+}
+
+expect {
+	original = delete_tree(True)
+	parent_first = GraphiteSlots.delete(GraphiteSlots.delete(original, 2), 3)
+	child_first = GraphiteSlots.delete(GraphiteSlots.delete(original, 3), 2)
+	GraphiteSlots.get(parent_first, 1).child == 2 and GraphiteSlots.get(parent_first, 2).child == 0 and GraphiteSlots.get(parent_first, 2).deleted and GraphiteSlots.get(parent_first, 2).parent == 1 and GraphiteSlots.get(child_first, 1).child == 0 and GraphiteSlots.get(child_first, 1).last_child == 0 and GraphiteSlots.get(child_first, 2).parent == 1 and GraphiteSlots.get(child_first, 3).parent == 2
+}
+
+expect {
+	original = delete_tree(False)
+	deleted = GraphiteSlots.delete(original, 3)
+	again = GraphiteSlots.delete(deleted, 3)
+	invalid = GraphiteSlots.delete(original, 99)
+	again.nodes == deleted.nodes and again.active == deleted.active and invalid.nodes == original.nodes and invalid.active == original.active
 }
