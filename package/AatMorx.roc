@@ -721,77 +721,140 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 				if added > limit or $buf.out.len() + $buf.info.len() - $buf.idx > limit - added {
 					return AatMorx.finish($buf, $operations, 1)
 				}
-				# A fixed-state after-current DontAdvance loop cannot reach
-				# another input glyph. Rewinding its growing suffix by concat
-				# on every iteration is quadratic. Materialize the identical
-				# bounded partial run once, preserving all transition charges.
-				if current_count != 0 and marked_count == 0 and e.next == $state and e.flags.bitwise_and(0xC800) == 0x4000 and $buf.idx < $buf.info.len() and $buf.idx <= $buf.out.len() {
-					return AatMorx.insert_fixed_loop($buf, glyphs, e.a, current_count, budget, limit, $operations - 1)
-				}
-				$operations = $operations + added
-				mark_location = $buf.out.len()
-				if marked_count != 0 {
-					end = $buf.out.len()
-					$buf = LayoutGsub.move_to($buf, $mark)
-					$buf = AatMorx.insert_at($buf, glyphs, e.b, marked_count, e.flags.bitwise_and(0x0400) != 0)
-					$buf = LayoutGsub.move_to($buf, end + marked_count)
-					end_index = ($buf.idx + 1).min($buf.info.len())
-					$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, $mark, end_index)
-				}
-				if e.flags.bitwise_and(0x8000) != 0 {
-					$mark = mark_location
-				}
-				if current_count != 0 {
-					end = $buf.out.len()
-					$buf = AatMorx.insert_at($buf, glyphs, e.a, current_count, e.flags.bitwise_and(0x0800) != 0)
-					$buf = LayoutGsub.move_to($buf, if (e.flags.bitwise_and(0x4000) != 0) end else end + current_count)
-				}
-				$state = e.next
-				if $buf.idx == $buf.info.len() {
-					break
-				}
-				if e.flags.bitwise_and(0x4000) == 0 {
-					$buf = LayoutGsub.next_glyph($buf)
+				# Defer a run which keeps this current glyph in place. The
+				# flat reversed pending list avoids copying the increasing
+				# unread suffix on every DontAdvance insertion.
+				if current_count != 0 and marked_count == 0 and e.flags.bitwise_and(0x4800) == 0x4000 and $buf.idx < $buf.info.len() {
+					{ buf: next_buf, state: next_state, mark: next_mark, operations: next_operations, stopped } = AatMorx.insert_deferred(machine, glyphs, $buf, $state, $mark, class_id, budget, limit, $operations - 1)
+					if stopped != 0 {
+						return AatMorx.finish(next_buf, next_operations, stopped)
+					}
+					$buf = next_buf
+					$state = next_state
+					$mark = next_mark
+					$operations = next_operations
+				} else {
+					$operations = $operations + added
+					mark_location = $buf.out.len()
+					if marked_count != 0 {
+						end = $buf.out.len()
+						$buf = LayoutGsub.move_to($buf, $mark)
+						$buf = AatMorx.insert_at($buf, glyphs, e.b, marked_count, e.flags.bitwise_and(0x0400) != 0)
+						$buf = LayoutGsub.move_to($buf, end + marked_count)
+						end_index = ($buf.idx + 1).min($buf.info.len())
+						$buf = LayoutGsub.unsafe_to_break_from_outbuffer($buf, $mark, end_index)
+					}
+					if e.flags.bitwise_and(0x8000) != 0 {
+						$mark = mark_location
+					}
+					if current_count != 0 {
+						end = $buf.out.len()
+						$buf = AatMorx.insert_at($buf, glyphs, e.a, current_count, e.flags.bitwise_and(0x0800) != 0)
+						$buf = LayoutGsub.move_to($buf, if (e.flags.bitwise_and(0x4000) != 0) end else end + current_count)
+					}
+					$state = e.next
+					if $buf.idx == $buf.info.len() {
+						break
+					}
+					if e.flags.bitwise_and(0x4000) == 0 {
+						$buf = LayoutGsub.next_glyph($buf)
+					}
 				}
 			}
 		}
 		AatMorx.finish($buf, $operations, 0)
 	}
 
-	# Called only after the current iteration's budget/growth preflight.
-	# Input and output cursors do not advance in this fixed-state loop;
-	# subsequent unsafe flags are idempotent (their index gate only closes).
-	insert_fixed_loop : LayoutGsub.Buf, List(U32), U64, U64, U64, U64, U64 -> Applied
-	insert_fixed_loop = |buf, glyphs, start, count, budget, limit, before_operations| {
-		{ info, out, idx, output: _, serial: _, random: _, ops: _, stopped: _, aliased: _ } = buf
-		current_length = out.len() + info.len() - idx
-		per_iteration = count + 1
-		repeats = ((budget - before_operations) // per_iteration).min((limit - current_length) // count)
-		length = current_length + repeats * count
-		source = info.get(idx) ?? crash "preflighted AAT insertion cursor"
-		var $items = List.with_capacity(length)
-		for item in out {
-			$items = $items.append(item)
+	DeferredInsertion : { buf : LayoutGsub.Buf, state : U64, mark : U64, operations : U64, stopped : U64 }
+
+	# Preserve the original output/input flagging gate using the cursor
+	# position the pending insertions would have produced. Only these two
+	# scalar items participate in unsafe_to_break_from_outbuffer here.
+	flag_deferred_current : LayoutGsub.Buf, U64 -> LayoutGsub.Buf
+	flag_deferred_current = |buf, virtual_idx| {
+		if buf.out.is_empty() {
+			return buf
 		}
-		$items = $items.append(source)
-		# Identical blocks are inserted immediately after the same current
-		# glyph, so reversing block order leaves their glyph order unchanged.
-		for _ in 0..<repeats {
-			for i in start..<(start + count) {
-				glyph = glyphs.get(i) ?? crash "validated AAT insertion span"
-				$items = $items.append(LayoutGsub.with_origin(AatMorx.replace(source, glyph.to_u64()), LayoutGsub.origin_inserted, 0, 0))
-			}
+		start = buf.out.len() - 1
+		end = virtual_idx + 1
+		if end < start or end - start > 255 {
+			return buf
+		}
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
+		current = info.get(idx) ?? crash "existing deferred insertion cursor"
+		previous = out.last() ?? crash "nonempty deferred insertion output"
+		cluster = current.cluster.min(previous.cluster)
+		new_info = if (current.cluster != cluster and current.mask.bitwise_and(LayoutGsub.unsafe) == 0) info.set(idx, { ..current, mask: current.mask.bitwise_or(LayoutGsub.unsafe) }) ?? [] else info
+		new_out = if (previous.cluster != cluster and previous.mask.bitwise_and(LayoutGsub.unsafe) == 0) out.set(start, { ..previous, mask: previous.mask.bitwise_or(LayoutGsub.unsafe) }) ?? [] else out
+		{ info: new_info, out: new_out, idx, output, serial, random, ops, stopped, aliased }
+	}
+
+	# Reify precisely the same consumed prefix and cursor as repeated
+	# move_to: idx decreases by pending.len(), saturating at zero.
+	flush_deferred : LayoutGsub.Buf, List(LayoutGsub.Item) -> LayoutGsub.Buf
+	flush_deferred = |buf, pending| {
+		if pending.is_empty() {
+			return buf
+		}
+		{ info, out, idx, output, serial, random, ops, stopped, aliased } = buf
+		new_idx = idx - pending.len().min(idx)
+		length = new_idx + info.len() - idx + pending.len()
+		var $info = List.with_capacity(length)
+		for i in 0..<new_idx {
+			$info = $info.append(info.get(i) ?? crash "checked consumed insertion prefix")
+		}
+		$info = $info.append(info.get(idx) ?? crash "existing insertion current")
+		for i in 0..<pending.len() {
+			$info = $info.append(pending.get(pending.len() - 1 - i) ?? crash "checked pending insertion")
 		}
 		for i in (idx + 1)..<info.len() {
-			$items = $items.append(info.get(i) ?? crash "checked AAT unread suffix")
+			$info = $info.append(info.get(i) ?? crash "checked insertion suffix")
 		}
-		completed_operations = before_operations + repeats * per_iteration
-		if completed_operations == budget {
-			return { items: $items, operations: completed_operations, stopped: 2 }
+		{ info: $info, out, idx: new_idx, output, serial, random, ops, stopped, aliased }
+	}
+
+	insert_deferred : AatState, List(U32), LayoutGsub.Buf, U64, U64, U64, U64, U64, U64 -> DeferredInsertion
+	insert_deferred = |machine, glyphs, initial, initial_state, initial_mark, class_id, budget, limit, before_operations| {
+		var $buf = initial
+		var $state = initial_state
+		var $mark = initial_mark
+		var $operations = before_operations
+		var $stopped = 0
+		var $pending = []
+		current_length = initial.out.len() + initial.info.len() - initial.idx
+		while $operations < budget {
+			e = AatState.entry(machine, $state, class_id)
+			marked_count = if (e.b == 65535) 0 else e.flags.bitwise_and(31)
+			count = if (e.a == 65535) 0 else e.flags.shr_zf_wrap(5).bitwise_and(31)
+			if marked_count != 0 or e.flags.bitwise_and(0x4000) == 0 or (count != 0 and e.flags.bitwise_and(0x0800) != 0) {
+				break
+			}
+			$operations = $operations + 1
+			if !AatMorx.safe_to_break(machine, 5, $state, class_id, e) {
+				virtual_idx = $buf.idx - $pending.len().min($buf.idx)
+				$buf = AatMorx.flag_deferred_current($buf, virtual_idx)
+			}
+			if count > budget - $operations {
+				$stopped = 2
+				break
+			}
+			if count > limit or current_length + $pending.len() > limit - count {
+				$stopped = 1
+				break
+			}
+			$operations = $operations + count
+			if e.flags.bitwise_and(0x8000) != 0 {
+				$mark = $buf.out.len()
+			}
+			source = $buf.info.get($buf.idx) ?? crash "existing deferred insertion source"
+			for offset in 0..<count {
+				glyph = glyphs.get(e.a + count - 1 - offset) ?? crash "validated insertion span"
+				$pending = $pending.append(LayoutGsub.with_origin(AatMorx.replace(source, glyph.to_u64()), LayoutGsub.origin_inserted, 0, 0))
+			}
+			$state = e.next
 		}
-		# The next transition is charged before its insertion preflight.
-		operations = completed_operations + 1
-		{ items: $items, operations, stopped: if (count > budget - operations) 2 else 1 }
+		stopped = if ($operations == budget and $stopped == 0) 2 else $stopped
+		{ buf: AatMorx.flush_deferred($buf, $pending), state: $state, mark: $mark, operations: $operations, stopped }
 	}
 
 	insert_at : LayoutGsub.Buf, List(U32), U64, U64, Bool -> LayoutGsub.Buf
@@ -953,7 +1016,7 @@ aat_insert_reference = |machine, glyphs, items, budget, limit, ctx| {
 aat_insertion_loop_bytes : List(U8)
 aat_insertion_loop_bytes = [0, 0, 0, 5, 0, 0, 0, 20, 0, 0, 0, 34, 0, 0, 0, 66, 0, 0, 0, 98, 0, 8, 0, 2, 0, 4, 0, 4, 0, 4, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 1, 64, 32, 0, 0, 255, 255, 0, 0, 64, 32, 0, 1, 255, 255, 0, 1, 64, 32, 0, 2, 255, 255, 0, 3, 0, 4, 0, 5]
 
-## fuzz regression: a fixed DontAdvance insertion loop must retain exactly
+## fuzz regression: a DontAdvance insertion run must retain exactly
 ## the iterative partial result and work/growth boundary without quadratic
 ## copying of its increasing unread suffix.
 expect {
@@ -981,6 +1044,48 @@ expect {
 						}
 					}
 				}
+			}
+		}
+	}
+	$same
+}
+
+# Exercise the actual two-state fixture through the deferred helper itself;
+# the earlier fixed-state-only shortcut did not apply to this cycle.
+expect {
+	insertion = match AatMorx.read_body(aat_insertion_loop_bytes, 7, 5) {
+		Ok(Insertion(value)) => value
+		_ => crash "valid insertion regression"
+	}
+	buf = AatMorx.buffer([{ ..LayoutGsub.no_item, glyph: 2 }])
+	actual = AatMorx.insert_deferred(insertion.machine, insertion.glyphs, buf, 0, 0, 4, 128, 1024, 0)
+	actual.stopped == 2 and actual.operations == 128 and actual.state == 0 and actual.buf.idx == 0 and actual.buf.info.len() == 65 and (actual.buf.info.get(1) ?? LayoutGsub.no_item).glyph == 4 and (actual.buf.info.last() ?? LayoutGsub.no_item).glyph == 3
+}
+
+# Deferred runs must also resume the general machine unchanged before
+# advancing, before-current and marked-insertion transitions.
+expect {
+	var $same = True
+	for flags in [0.U64, 0x4820, 0x0401] {
+		var $bytes = aat_insertion_loop_bytes
+		$bytes = $bytes.set(76, 0xC0) ?? []
+		$bytes = $bytes.set(84, flags.shr_zf_wrap(8).to_u8_wrap()) ?? []
+		$bytes = $bytes.set(85, flags.to_u8_wrap()) ?? []
+		if flags == 0x0401 {
+			$bytes = $bytes.set(88, 0) ?? []
+			$bytes = $bytes.set(89, 0) ?? []
+		}
+		insertion = match AatMorx.read_body($bytes, 7, 5) {
+			Ok(Insertion(value)) => value
+			_ => crash "valid insertion continuation"
+		}
+		for prefix in [0.U64, 1, 4] {
+			items = List.repeat({ ..LayoutGsub.no_item, glyph: 6, cluster: 2 }, prefix).concat([{ ..LayoutGsub.no_item, glyph: 2, cluster: 1 }, { ..LayoutGsub.no_item, glyph: 6, cluster: 3 }])
+			context = { ranges: [], start: 0, count: 0, fallback: 1, subflags: 1 }
+			for budget in [128.U64, 256, 512] {
+				actual = AatMorx.insert(insertion.machine, insertion.glyphs, items, budget, 1024, context)
+				original = aat_insert_reference(insertion.machine, insertion.glyphs, items, budget, 1024, context)
+				$same = $same and actual == original
 			}
 		}
 	}
