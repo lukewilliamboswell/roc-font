@@ -193,7 +193,7 @@ GraphitePosition :: {}.{
 				if root.child != 0 {
 					root_at = root.user_start + user_count
 					root_kern = ($users.get(root_at + 3) ?? 0).bitwise_and(16) != 0
-					root_collision = ($users.get(root_at + 31) ?? 0) != 0 and (rtl or !root_kern)
+					root_collision = ($users.get(root_at + 31) ?? 0) != 0 and (native_rtl or !root_kern)
 					root_offset_x = if (root_collision) ($users.get(root_at + 8) ?? 0).to_u32_wrap() else 0
 					$pending = $pending.append({ id: root.child, x: root_x, y: root.shift_y, parent_x: TableVar.f32_add(root_x, root_offset_x) })
 					$cluster_y = 0
@@ -229,7 +229,7 @@ GraphitePosition :: {}.{
 						if child.child != 0 {
 							at = child.user_start + user_count
 							kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
-							enabled = ($users.get(at + 31) ?? 0) != 0 and (rtl or !kern)
+							enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
 							ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
 							$pending = $pending.append({ id: child.child, x, y, parent_x: TableVar.f32_add(advance_x, ox) })
 						}
@@ -243,11 +243,11 @@ GraphitePosition :: {}.{
 				for member in $members {
 					slot = $nodes.get(member) ?? GraphiteSlots.no_slot
 					at = slot.user_start + user_count
-					# LTR collision kerning stores its adjustment in the raw
+					# Native LTR collision kerning stores its adjustment in the raw
 					# offset and advance, but suppresses the entire own physical
 					# offset point. RTL kerning keeps the ordinary offset point.
 					kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
-					enabled = ($users.get(at + 31) ?? 0) != 0 and (rtl or !kern)
+					enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
 					ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
 					oy = if (enabled) ($users.get(at + 9) ?? 0).to_u32_wrap() else 0
 					# Advances/rebasing above use authored geometry. Physical
@@ -566,4 +566,15 @@ expect {
 	linked = GraphitePosition.attach(b.state, 1, 2, 100)
 	positioned = GraphitePosition.position_for_font(linked.state, False, True, 100)
 	positioned.state.advance_x == n(701) and GraphiteSlots.get(positioned.state, 1).position_x == 0 and GraphiteSlots.get(positioned.state, 2).position_x == n(20)
+}
+
+expect {
+	# Native RTL collision kerning retains its own physical offset even
+	# when an opposite-script adapter requests an effective LTR segment.
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 2), { ..GraphiteSlots.no_slot, advance_x: n(100) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(811) })
+	state = GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(b.state, 2, 31, 1), 2, 3, 17), 2, 8, n(210).to_i32_wrap())
+	result = GraphitePosition.position_for_font(state, False, True, 100)
+	result.state.advance_x == n(911) and GraphiteSlots.get(result.state, 2).position_x == n(310)
 }

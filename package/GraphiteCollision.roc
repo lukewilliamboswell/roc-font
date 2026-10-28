@@ -306,7 +306,7 @@ GraphiteCollision :: {}.{
 		if rounds == 0 {
 			return { state: initial, operations: 0, stopped: 0 }
 		}
-		reverse = pass_flags.bitwise_and(32) != 0
+		reverse = (context.rtl != (context.sub.direction.bitwise_and(1) == 0)) != (pass_flags.bitwise_and(32) != 0)
 		grouped = GraphiteCollision.groups(initial, reverse, budget)
 		if grouped.stopped != 0 {
 			return { state: initial, operations: grouped.operations, stopped: grouped.stopped }
@@ -814,7 +814,7 @@ GraphiteCollision :: {}.{
 								$external = True
 								world = GraphiteCollision.translate_box(box, neighbor.position_x, neighbor.position_y)
 								for target in cluster.boxes {
-									pair = GraphiteCollision.kern_gap(target, world, m, cache_min_y, context.rtl, budget - $operations)
+									pair = GraphiteCollision.kern_gap(target, world, m, cache_min_y, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
 									$operations = $operations + pair.operations
 									if pair.stopped != 0 {
 										return { work: $work, operations: $operations, stopped: pair.stopped, movement: 0 }
@@ -834,7 +834,7 @@ GraphiteCollision :: {}.{
 		if !$external {
 			return { work: $work, operations: $operations, stopped: 0, movement: 0 }
 		}
-		needed = if (context.rtl) $gap.bitwise_xor(0x80000000) else $gap
+		needed = if (context.sub.direction.bitwise_and(1) == 0) $gap.bitwise_xor(0x80000000) else $gap
 		previous = GraphiteSlots.get_extra($work.state, id, 8).to_u32_wrap()
 		low = TableVar.f32_sub(TableVar.f32_from_int(GraphiteSlots.get_extra($work.state, id, 4).to_i64()), previous)
 		high = TableVar.f32_sub(TableVar.f32_from_int(GraphiteSlots.get_extra($work.state, id, 6).to_i64()), previous)
@@ -854,7 +854,7 @@ GraphiteCollision :: {}.{
 		if pass_flags.bitwise_and(8) == 0 {
 			return { state: initial, operations: 0, stopped: 0 }
 		}
-		reverse = pass_flags.bitwise_and(32) != 0
+		reverse = (context.rtl != (context.sub.direction.bitwise_and(1) == 0)) != (pass_flags.bitwise_and(32) != 0)
 		grouped = GraphiteCollision.groups(initial, reverse, budget)
 		if grouped.stopped != 0 {
 			return { state: initial, operations: grouped.operations, stopped: grouped.stopped }
