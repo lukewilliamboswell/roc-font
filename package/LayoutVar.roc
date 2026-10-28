@@ -672,6 +672,68 @@ LayoutVar := {
 		}
 	}
 
+	## The signed 32-bit position domain used by HarfBuzz. Widened Roc
+	## intermediates must saturate at each operation, before cancellation.
+	position_clamp : I64 -> I64
+	position_clamp = |v| v.max(-2147483648).min(2147483647)
+
+	position_add : I64, I64 -> I64
+	position_add = |a, b| {
+		# These comparisons also avoid overflowing I64 for arbitrary inputs.
+		if b > 0 and a > 2147483647 - b {
+			2147483647
+		} else if b < 0 and a < -2147483648 - b {
+			-2147483648
+		} else {
+			LayoutVar.position_clamp(a + b)
+		}
+	}
+
+	position_sub : I64, I64 -> I64
+	position_sub = |a, b| {
+		if b > 0 and a < -2147483648 + b {
+			-2147483648
+		} else if b < 0 and a > 2147483647 + b {
+			2147483647
+		} else {
+			LayoutVar.position_clamp(a - b)
+		}
+	}
+
+	position_neg : I64 -> I64
+	position_neg = |v| LayoutVar.position_sub(0, v)
+
+	## Apply a horizontal value record to absolute glyph positions. Stored
+	## values precede their devices, with saturation between the two phases
+	## (ValueFormat.apply_value). The y advance is ignored horizontally.
+	## `value` remains the raw font-fact query and deliberately adds no clamp.
+	apply_value : LayoutVar, Location, List(U8), U64, U64, U64, Value -> Value
+	apply_value = |lv, loc, data, base, at, format, position| {
+		field = |bit| at + 2 * LayoutVar.bits(format, bit - 1)
+		var $out = position
+		if format.bitwise_and(1) != 0 {
+			$out = { ..$out, x_placement: LayoutVar.position_add($out.x_placement, TableVar.i16(data, field(1))) }
+		}
+		if format.bitwise_and(2) != 0 {
+			$out = { ..$out, y_placement: LayoutVar.position_add($out.y_placement, TableVar.i16(data, field(2))) }
+		}
+		if format.bitwise_and(4) != 0 {
+			$out = { ..$out, x_advance: LayoutVar.position_add($out.x_advance, TableVar.i16(data, field(4))) }
+		}
+		if loc.active {
+			if format.bitwise_and(0x10) != 0 {
+				$out = { ..$out, x_placement: LayoutVar.position_add($out.x_placement, LayoutVar.device_delta(lv, loc, data, base, field(0x10))) }
+			}
+			if format.bitwise_and(0x20) != 0 {
+				$out = { ..$out, y_placement: LayoutVar.position_add($out.y_placement, LayoutVar.device_delta(lv, loc, data, base, field(0x20))) }
+			}
+			if format.bitwise_and(0x40) != 0 {
+				$out = { ..$out, x_advance: LayoutVar.position_add($out.x_advance, LayoutVar.device_delta(lv, loc, data, base, field(0x40))) }
+			}
+		}
+		$out
+	}
+
 	# The delta of the checked device whose offset (from `base`) is at
 	# `field`: a `VariationIndex` table's, or none.
 	device_delta : LayoutVar, Location, List(U8), U64, U64 -> I64
@@ -2047,6 +2109,23 @@ device_store =
 		Ok(lv) => lv
 		Err(_) => LayoutVar.none(1)
 	}
+
+## fuzz regression: signed position arithmetic clamps every intermediate,
+## including extreme well-typed I64 helper arguments without overflowing.
+expect LayoutVar.position_add(2147483647, 1) == 2147483647 and LayoutVar.position_add(-2147483648, -1) == -2147483648 and LayoutVar.position_sub(-2147483648, 1) == -2147483648 and LayoutVar.position_neg(-2147483648) == 2147483647
+expect LayoutVar.position_add(9223372036854775807, 9223372036854775807) == 2147483647 and LayoutVar.position_add(-9223372036854775808, -9223372036854775808) == -2147483648 and LayoutVar.position_add(-9223372036854775808, 9223372036854775807) == -1
+expect LayoutVar.position_sub(-9223372036854775808, -9223372036854775808) == 0 and LayoutVar.position_sub(9223372036854775807, -9223372036854775808) == 2147483647 and LayoutVar.position_sub(-9223372036854775808, 9223372036854775807) == -2147483648
+
+## fuzz regression: adding stored +20 at MAX-10 saturates before device
+## -75 applies. Combining the record first would incorrectly retain ten.
+expect {
+	data = i16(20).concat(u16(4)).concat(u16(0)).concat(u16(0)).concat(u16(0x8000))
+	position = { x_placement: 9, y_placement: -3, x_advance: 2147483637, y_advance: 123 }
+	loc = LayoutVar.location(device_store, [16384])
+	LayoutVar.apply_value(device_store, loc, data, 0, 0, 0x44, position) == { ..position, x_advance: 2147483572 }
+		and LayoutVar.apply_value(device_store, LayoutVar.default_location, data, 0, 0, 0x44, position) == { ..position, x_advance: 2147483647 }
+		and LayoutVar.apply_value(device_store, loc, data, 0, 0, 0x88, position) == position
+}
 
 expect LayoutVar.check_gpos(device_store, gpos_devices([{ offset: 8, device: u16(0).concat(u16(0)).concat(u16(0x8000)) }]), 3) == Ok(1)
 expect LayoutVar.check_gpos(device_store, gpos_devices([{ offset: 8, device: u16(0xFFFF).concat(u16(0xFFFF)).concat(u16(0x8000)) }]), 3) == Ok(1)
