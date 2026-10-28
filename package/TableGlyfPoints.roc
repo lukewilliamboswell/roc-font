@@ -350,63 +350,60 @@ TableGlyfPoints := {
 	check_work : TableGlyfPoints, List(U64) -> Try({}, List(Problem))
 	check_work = |t, tuples| {
 		count = t.kinds.len()
-		var $points = List.with_capacity(count)
-		var $visits = List.with_capacity(count)
-		var $depth = List.with_capacity(count)
-		var $work = List.with_capacity(count)
+		limit = (1.U128).shl_wrap(100)
+		# One flat scalar-record scratch list: no inner reference counts,
+		# and no extra allocation for the numerical proof.
+		var $scratch = List.with_capacity(count)
 		for g in 0..<count {
 			kind = t.kinds.get(g) ?? 0
 			n = t.counts.get(g) ?? 0
 			own = if (kind == 1) n else 0
-			tuple_work = (tuples.get(g) ?? 0) * (n + 4)
-			$points = $points.append(own)
-			$visits = $visits.append(1)
-			$depth = $depth.append(0)
-			$work = $work.append(16 + own + tuple_work)
+			tuple_count = tuples.get(g) ?? 0
+			$scratch = $scratch.append({ points: own, visits: 1, depth: 0, work: 16 + own + tuple_count * (n + 4), bound: own.to_u128() * 32768 + 65536 + tuple_count.to_u128() * 8589934592 })
 		}
+		empty = { points: 0, visits: 0, depth: 0, work: 0, bound: 0.U128 }
 		var $problems = []
 		for g in t.order {
 			var $at = (t.starts.get(g) ?? 0) + 10
-			var $sum_points = 0
-			var $sum_visits = 1
-			var $max_depth = 0
-			var $sum_work = $work.get(g) ?? 0
+			initial = $scratch.get(g) ?? empty
+			var $summary = { ..initial, points: 0, visits: 1, depth: 0 }
+			variation = (tuples.get(g) ?? 0).to_u128() * 8589934592
 			for _k in 0..<(t.counts.get(g) ?? 0) {
 				c = TableGlyfPoints.component_link(t.glyf, $at)
-				child_points = $points.get(c.glyph) ?? 0
-				if c.anchored and (c.p1 >= $sum_points or c.p2 >= child_points) {
+				child = $scratch.get(c.glyph) ?? empty
+				if c.anchored and (c.p1 >= $summary.points or c.p2 >= child.points) {
 					$problems = $problems.append({ table: "glyf", offset: $at + 4, reason: AnchorPoint })
 				}
-				$sum_points = TableGlyfPoints.sat($sum_points + child_points)
-				$sum_visits = TableGlyfPoints.sat($sum_visits + ($visits.get(c.glyph) ?? 0))
-				$max_depth = $max_depth.max(($depth.get(c.glyph) ?? 0) + 1)
-				$sum_work = TableGlyfPoints.sat($sum_work + ($work.get(c.glyph) ?? 0) + child_points + 4)
+				$summary = {
+					points: TableGlyfPoints.sat($summary.points + child.points),
+					visits: TableGlyfPoints.sat($summary.visits + child.visits),
+					depth: $summary.depth.max(child.depth + 1),
+					work: TableGlyfPoints.sat($summary.work + child.work + child.points + 4),
+					bound: TableGlyfPoints.component_bound(t, $at, c.anchored, $summary.bound, child.bound, variation),
+				}
 				$at = c.next
 			}
-			# `order` holds glyph indices below the glyph count.
-			$points = $points.set(g, $sum_points) ?? []
-			$visits = $visits.set(g, $sum_visits) ?? []
-			$depth = $depth.set(g, $max_depth) ?? []
-			$work = $work.set(g, $sum_work) ?? []
+			# Topological glyph indices are validated and below count.
+			$scratch = $scratch.set(g, $summary) ?? []
 			at = t.starts.get(g) ?? 0
-			if $max_depth > TableGlyfPoints.depth_limit {
+			if $summary.depth > TableGlyfPoints.depth_limit {
 				$problems = $problems.append({ table: "glyf", offset: at, reason: TooDeep })
-			} else if $sum_visits > TableGlyfPoints.visit_limit {
+			} else if $summary.visits > TableGlyfPoints.visit_limit {
 				$problems = $problems.append({ table: "glyf", offset: at, reason: TooManyComponents })
-			} else if $sum_points > TableGlyfPoints.point_limit {
+			} else if $summary.points > TableGlyfPoints.point_limit {
 				$problems = $problems.append({ table: "glyf", offset: at, reason: TooManyPoints })
+			}
+			if $summary.bound > limit {
+				$problems = $problems.append({ table: "glyf", offset: at, reason: CoordinateRange })
 			}
 		}
 		for g in 0..<count {
-			if ($work.get(g) ?? 0) + ($points.get(g) ?? 0) + 4 > TableGlyfPoints.work_limit {
+			value = $scratch.get(g) ?? empty
+			if value.work + value.points + 4 > TableGlyfPoints.work_limit {
 				$problems = $problems.append({ table: "glyf", offset: t.starts.get(g) ?? 0, reason: TooMuchWork })
 			}
 		}
-		if $problems.is_empty() {
-			TableGlyfPoints.check_coordinates(t, tuples)
-		} else {
-			Err($problems)
-		}
+		if ($problems.is_empty()) Ok({}) else Err($problems)
 	}
 
 	## Bound every possible varied coordinate before evaluating any query.
@@ -424,59 +421,34 @@ TableGlyfPoints := {
 	## norm, both possible offset orders, anchor translation, and phantom
 	## inheritance. A relative 2^-20 plus32 slack exceeds the accumulated
 	## roundoff of the two products, sum and translations at each frame.
-	check_coordinates : TableGlyfPoints, List(U64) -> Try({}, List(Problem))
-	check_coordinates = |t, tuples| {
+	component_bound : TableGlyfPoints, U64, Bool, U128, U128, U128 -> U128
+	component_bound = |t, at, anchored, parent, child, variation| {
 		limit = (1.U128).shl_wrap(100)
-		count = TableGlyfPoints.glyph_total(t)
-		var $bounds = List.with_capacity(count)
-		for g in 0..<count {
-			variation = (tuples.get(g) ?? 0).to_u128() * 8589934592
-			base = if (TableGlyfPoints.kind(t, g) == 1) TableGlyfPoints.point_count(t, g).to_u128() * 32768 + 65536 else 65536
-			$bounds = $bounds.append(base + variation)
+		# The sentinel limit+1 is used only by the proof. Reject before
+		# arithmetic on a previously over-limit child or parent.
+		if child > limit or parent > limit {
+			return limit + 1
 		}
-		var $problems = []
-		for g in t.order {
-			variation = (tuples.get(g) ?? 0).to_u128() * 8589934592
-			var $bound = 65536 + variation
-			var $at = TableGlyfPoints.first_component(t, g)
-			for _ in 0..<TableGlyfPoints.point_count(t, g) {
-				c = TableGlyfPoints.component_link(t.glyf, $at)
-				child = $bounds.get(c.glyph) ?? 0
-				# An earlier failed child has the sentinel limit+1. Stop this
-				# proof before multiplying it, and propagate the rejection.
-				if child > limit or $bound > limit {
-					$bound = limit + 1
-					break
-				}
-				flags = TableVar.u16(t.glyf, $at)
-				matrix_at = $at + 4 + (if (flags.bitwise_and(1) != 0) 4 else 2)
-				magnitude = |at| {
-					v = TableVar.i16(t.glyf, at)
-					(if (v < 0) 0 - v else v).to_u128_wrap()
-				}
-				norm = if flags.bitwise_and(0x80) != 0 {
-					(magnitude(matrix_at) + magnitude(matrix_at + 4)).max(magnitude(matrix_at + 2) + magnitude(matrix_at + 6))
-				} else if flags.bitwise_and(0x40) != 0 {
-					magnitude(matrix_at).max(magnitude(matrix_at + 2))
-				} else if flags.bitwise_and(8) != 0 {
-					magnitude(matrix_at)
-				} else {
-					16384
-				}
-				offset = 32768 + variation
-				transformed = ((child + offset) * norm + 16383) // 16384 + offset
-				anchored = if (c.anchored) $bound + 2 * transformed else transformed
-				with_rounding = anchored + anchored // 1048576 + 32
-				$bound = $bound.max(with_rounding)
-				$at = c.next
-			}
-			if $bound > limit {
-				$problems = $problems.append({ table: "glyf", offset: t.starts.get(g) ?? 0, reason: CoordinateRange })
-			}
-			# Topological glyph ids are validated and below count.
-			$bounds = $bounds.set(g, $bound.min(limit + 1)) ?? []
+		flags = TableVar.u16(t.glyf, at)
+		matrix_at = at + 4 + (if (flags.bitwise_and(1) != 0) 4 else 2)
+		magnitude = |field| {
+			v = TableVar.i16(t.glyf, field)
+			(if (v < 0) 0 - v else v).to_u128_wrap()
 		}
-		if ($problems.is_empty()) Ok({}) else Err($problems)
+		norm = if flags.bitwise_and(0x80) != 0 {
+			(magnitude(matrix_at) + magnitude(matrix_at + 4)).max(magnitude(matrix_at + 2) + magnitude(matrix_at + 6))
+		} else if flags.bitwise_and(0x40) != 0 {
+			magnitude(matrix_at).max(magnitude(matrix_at + 2))
+		} else if flags.bitwise_and(8) != 0 {
+			magnitude(matrix_at)
+		} else {
+			16384
+		}
+		offset = 32768 + variation
+		transformed = ((child + offset) * norm + 16383) // 16384 + offset
+		translated = if (anchored) parent + 2 * transformed else transformed
+		with_rounding = translated + translated // 1048576 + 32
+		parent.max(with_rounding).min(limit + 1)
 	}
 
 	# ------------------------------------------------------------ queries
@@ -728,11 +700,11 @@ numeric_envelope_fixture = |extreme| {
 
 ## fuzz regression: a one-child matrix chain can overflow binary32 even
 ## though its depth, point count and total work are within their budgets.
-expect match TableGlyfPoints.check_coordinates(numeric_envelope_fixture(True), []) {
+expect match TableGlyfPoints.check_work(numeric_envelope_fixture(True), []) {
 	Err(problems) => problems.any(|problem| problem.reason == CoordinateRange)
 	Ok(_) => False
 }
-expect match TableGlyfPoints.check_coordinates(numeric_envelope_fixture(False), []) {
+expect match TableGlyfPoints.check_work(numeric_envelope_fixture(False), []) {
 	Ok(_) => True
 	Err(_) => False
 }
