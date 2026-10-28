@@ -300,7 +300,12 @@ ShaperNormalize :: {}.{
 	## cannot draw gets glyph 0, marked `missing`. `space_fallback` says
 	## whether any space was drawn that way.
 	normalize : Context, List(Char) -> { chars : List(Char), space_fallback : Bool }
-	normalize = |ctx, chars| {
+	normalize = |ctx, chars| ShaperNormalize.normalize_with_marks(ctx, chars, |marks| marks)
+
+	## Script-specific mark ordering runs after canonical ordering and before
+	## recomposition. The ordinary normalization path supplies the identity.
+	normalize_with_marks : Context, List(Char), (List(Char) -> List(Char)) -> { chars : List(Char), space_fallback : Bool }
+	normalize_with_marks = |ctx, chars, order_marks| {
 		count = chars.len()
 		if count == 0 {
 			return { chars, space_fallback: False }
@@ -355,7 +360,7 @@ ShaperNormalize :: {}.{
 		}
 		# Second round: reorder marks by combining class.
 		reordered = ShaperNormalize.reorder(ctx, $out)
-		unhidden = ShaperNormalize.unhide_joiners(reordered)
+		unhidden = ShaperNormalize.unhide_joiners(order_marks(reordered))
 		# Third round: recompose.
 		{ chars: ShaperNormalize.recompose(ctx, unhidden), space_fallback: $space }
 	}
