@@ -39,5 +39,5 @@ for font in ['modern.ttf','legacy.ttf','no-circle.ttf']:
   for direction in ['ltr','rtl']:add(f'{stem}-{i}-{direction}',font,text,direction=direction)
  for feature in ['rphf','pref','blwf','pstf','pres','abvs','blws','psts']:
   add(f'{stem}-disable-{feature}',font,'ကေ',direction='ltr',features=[f'{feature}=0'])
-(HERE/'cases.jsonc').write_text(json.dumps(dict(schema=1,about='Myanmar modern mym2 shaping in two unmodified real families: kinzi, stacks, medials, vowels, variation selectors, broken clusters, language features, joins, directions, long syllables and unsafe flags.',cases=cases),ensure_ascii=False,indent=2)+'\n')
+(HERE/'myanmar.jsonc').write_text(json.dumps(dict(schema=1,about='Myanmar modern mym2 shaping in two unmodified real families: kinzi, stacks, medials, vowels, variation selectors, broken clusters, language features, joins, directions, long syllables and unsafe flags.',cases=cases),ensure_ascii=False,indent=2)+'\n')
 print(len(cases),'Myanmar cases')

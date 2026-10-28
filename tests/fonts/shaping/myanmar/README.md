@@ -13,7 +13,7 @@ substitution chain, exercise GDEF-early zero-width marks without GPOS, and
 prove that a missing dotted-circle glyph does not substitute glyph zero.
 
 `generate_cases.py` authors the finite JSONC input matrix in
-adjacent `cases.jsonc`. It covers two real font families and the three
+adjacent `myanmar.jsonc`. It covers two real font families and the three
 original fonts, both directions, kinzi, stacks, medials, below-vowel mark
 classes, repeated pre-vowels and variation selectors, broken clusters,
 explicit/missing dotted circles, joiners, language selection and disabled
