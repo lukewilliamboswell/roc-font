@@ -153,7 +153,7 @@ ShaperNormalize :: {}.{
 			for i in $start..<$end {
 				c = $chars.get(i) ?? ShaperNormalize.no_char
 				# `i < $end <= n`.
-				$chars = $chars.set(i, { ..c, cluster }) ?? []
+				$chars = $chars.set(i, { ..c, cluster, mask: if (c.cluster == cluster) c.mask else c.mask.bitwise_and(0x7FFFFFFFFFFFFFFF) }) ?? []
 			}
 			$chars
 		}
