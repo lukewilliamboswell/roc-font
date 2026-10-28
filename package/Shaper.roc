@@ -164,6 +164,9 @@ Shaper :: {}.{
 	hangul_rtl_keys : List(U64)
 	hangul_rtl_keys = LayoutCommon.feature_keys(Shaper.hangul_rtl_merged.map(|f| f.tag))
 
+	indic_scripts : List(U64)
+	indic_scripts = ["Deva", "Beng", "Gujr", "Guru", "Knda", "Mlym", "Orya", "Taml", "Telu"].map(Shaper.tag)
+
 	indic_requests : [Ltr, Rtl] -> List(Request)
 	indic_requests = |direction| Shaper.default_requests(direction).map(|r| { ..r, stage: ShaperIndic.stage(r.tag) }).concat(ShaperIndic.features.map(|f| { tag: f.tag, max: f.default, default: if (f.global) f.default else 0, global: f.global, fallback: False, manual: f.manual_zwj, random: False, stage: f.stage })).append({ ..Shaper.request("liga", 0, True), stage: 14 })
 	indic_ltr_merged : List(Request)
@@ -282,7 +285,7 @@ Shaper :: {}.{
 		gpos_common = LayoutKerning.common_of(kerning)
 		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
 		chosen_script = LayoutCommon.select_script_tag(gsub_common, script_tags)
-		indic = ShaperTags.script_of(options.script) == Shaper.tag("Deva") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
+		indic = Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
 		khmer = ShaperTags.script_of(options.script) == Shaper.tag("Khmr")
 		hangul = ShaperTags.script_of(options.script) == Shaper.tag("Hang")
 		arabic = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Arab")
