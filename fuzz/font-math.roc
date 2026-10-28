@@ -85,6 +85,10 @@ test! = |bytes| {
 					crash "precise/default MATH location is nondeterministic"
 				}
 			}
+			precise_settings = Font.Variation.{ axes: [{ tag: "wght", value: 1 }, { tag: "AX02", value: 1 }, { tag: "AX03", value: 256 }] }
+			if query(Font.at(font, precise_settings), 1) != query(Font.at(again, precise_settings), 1) {
+				crash "sub2.30 scalar MATH query changed across reads"
+			}
 		}
 		Err(_) => {}
 	}
