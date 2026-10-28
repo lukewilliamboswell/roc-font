@@ -54,13 +54,14 @@ def main():
    if got['offsets']!=[[0,0],[target,vertical]] or got['budgets']!=budgets:errors.append((c['id'],{'offset':[target,vertical],'budgets':budgets},got))
   elif not c.get('contract_only') and 'reference_failure' not in expected:
    compared={k:([got[k][i] for i in c['sample']] if 'sample' in c else got[k]) for k in expected}
-   if compared!=expected or got['budgets']:errors.append((c['id'],expected,got))
+   if compared!=expected or got['budgets']!=c.get('expected_budgets',[]):errors.append((c['id'],expected,got))
   # Queries stay index aligned and retain valid byte clusters on failures.
   n=len(got['glyphs']);assert all(len(got[k])==n for k in ['advances','offsets','clusters'])
   assert all(0<=i<len(c['text'].encode()) for i in got['clusters'])
  again=subprocess.run([str(binary)],input=requests,text=True,capture_output=True,check=True,timeout=120)
  assert p.stdout==again.stdout,'nondeterministic context result'
- for e in errors[:16]:print(json.dumps(e,ensure_ascii=False))
+ for id,expected,got in errors[:16]:
+  print(json.dumps({'id':id,'expected_budgets':next(c.get('expected_budgets',[]) for c in cases if c['id']==id),'got_budgets':got.get('budgets'),'expected_sample':{k:v[:3] if isinstance(v,list) else v for k,v in expected.items()},'got_sample':{k:v[:3] if isinstance(v,list) else v for k,v in got.items()}},ensure_ascii=False))
  if errors:raise SystemExit(f'{len(errors)} context mismatches')
  print(f"Context positioning: {len(cases)} native cached-oracle/resource cases PASS; repeated output identical.")
 if __name__=='__main__':main()

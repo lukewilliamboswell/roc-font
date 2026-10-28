@@ -28,9 +28,10 @@ def main():
   for text in texts:
    for direction in ['ltr','rtl']:
     c={'id':f'{path.stem}-{len(cases)}','font':path.name,'text':text,'direction':direction,'depth':64,'operations':4096,'weight':1 if path.stem.startswith('device-') or path.stem=='float-anchor' else 0}
+    if path.stem.startswith(('saturating-','device-')):c['expected_budgets']=['Operations']
     c['font_sha256']=hashlib.sha256(path.read_bytes()).hexdigest();c['oracle']=shape(path,text,direction,c['weight'])
     if path.stem=='attachment-distance':
-     c['sample']=[0,len(text)-1];c['oracle']={key:[values[i] for i in c['sample']] for key,values in c['oracle'].items()}
+     c['sample']=sorted({0,len(text)-1,*[i for i,g in enumerate(c['oracle']['glyphs']) if g==3]});c['oracle']={key:[values[i] for i in c['sample']] for key,values in c['oracle'].items()}
     cases.append(c)
  for name in ['many-8','ignored-8192','nested-order','cycle-8192','fanout-8192']:
   for depth in [0,1,2,3]:

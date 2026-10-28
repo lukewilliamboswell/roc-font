@@ -1,14 +1,197 @@
 {
- "about":"Context record count, ignored sequence indices, depth zero, cyclic nesting, valid huge fanout and skip-mark matching.",
- "seeds":[
-  {"why":"cyclic context depth zero","parts":[{"hex":"00"}]},
-  {"why":"finite fanout depth zero","parts":[{"hex":"01"}]},
-  {"why":"ignored records do not consume budget or depth","parts":[{"hex":"02"}]},
-  {"why":"matched position index skips marks","parts":[{"hex":"03"}]},
-  {"why":"cyclic context depth three","parts":[{"hex":"0c"}]},
-  {"why":"finite fanout operations floor","parts":[{"hex":"09"}]},
-  {"why":"cyclic context full depth","parts":[{"hex":"10"}]},
-  {"why":"valid huge record list bytes","parts":[{"file":"tests/fonts/positioning/context-budget/many-8192.ttf"}]},
-  {"why":"recursive huge fanout font bytes","parts":[{"file":"tests/fonts/positioning/context-budget/fanout-8192.ttf"}]}
- ]
+  "about": "Context records, operation ordering, device corrections, mixed-sign attachment summaries and signed parent bounds. Distance mutation uses reduced user growth/operation factors to retain bounded narrow fuzz work.",
+  "seeds": [
+    {
+      "why": "cyclic context depth zero",
+      "parts": [
+        {
+          "hex": "00"
+        }
+      ]
+    },
+    {
+      "why": "finite fanout depth zero",
+      "parts": [
+        {
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "why": "ignored records without depth",
+      "parts": [
+        {
+          "hex": "02"
+        }
+      ]
+    },
+    {
+      "why": "matching skips ignored marks",
+      "parts": [
+        {
+          "hex": "03"
+        }
+      ]
+    },
+    {
+      "why": "cyclic depth three",
+      "parts": [
+        {
+          "hex": "21"
+        }
+      ]
+    },
+    {
+      "why": "finite fanout operations floor",
+      "parts": [
+        {
+          "hex": "17"
+        }
+      ]
+    },
+    {
+      "why": "cyclic maximum default depth",
+      "parts": [
+        {
+          "hex": "2c"
+        }
+      ]
+    },
+    {
+      "why": "advance saturation and cancellation",
+      "parts": [
+        {
+          "hex": "04"
+        }
+      ]
+    },
+    {
+      "why": "placement saturation and cancellation",
+      "parts": [
+        {
+          "hex": "05"
+        }
+      ]
+    },
+    {
+      "why": "stored then device advance correction",
+      "parts": [
+        {
+          "hex": "06 ff"
+        }
+      ]
+    },
+    {
+      "why": "stored then device placement correction",
+      "parts": [
+        {
+          "hex": "07 ff"
+        }
+      ]
+    },
+    {
+      "why": "large float32 anchor correction",
+      "parts": [
+        {
+          "hex": "08 ff"
+        }
+      ]
+    },
+    {
+      "why": "mixed-sign attachment scaling8/64/256",
+      "parts": [
+        {
+          "hex": "09"
+        }
+      ]
+    },
+    {
+      "why": "parent distance32767",
+      "parts": [
+        {
+          "hex": "0a 00"
+        }
+      ]
+    },
+    {
+      "why": "parent distance32768",
+      "parts": [
+        {
+          "hex": "0a 01"
+        }
+      ]
+    },
+    {
+      "why": "parent distance32769",
+      "parts": [
+        {
+          "hex": "0a 02"
+        }
+      ]
+    },
+    {
+      "why": "intermediate variable coordinate",
+      "parts": [
+        {
+          "hex": "06 80"
+        }
+      ]
+    },
+    {
+      "why": "valid many-8192 font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/many-8192.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid fanout-8192 font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/fanout-8192.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid saturating-advance font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/saturating-advance.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid device-placement font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/device-placement.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid float-anchor font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/float-anchor.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid attachment-mixed-advances font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/attachment-mixed-advances.ttf"
+        }
+      ]
+    },
+    {
+      "why": "valid attachment-distance font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/attachment-distance.ttf"
+        }
+      ]
+    }
+  ]
 }

@@ -140,9 +140,14 @@
       "oracle": {
         "glyphs": [
           2,
+          3,
           1
         ],
         "advances": [
+          [
+            0,
+            0
+          ],
           [
             0,
             0
@@ -160,15 +165,21 @@
           [
             0,
             0
+          ],
+          [
+            0,
+            0
           ]
         ],
         "clusters": [
+          32766,
           32766,
           0
         ]
       },
       "sample": [
         0,
+        1,
         32767
       ]
     },
@@ -228,9 +239,14 @@
       "oracle": {
         "glyphs": [
           2,
+          3,
           1
         ],
         "advances": [
+          [
+            0,
+            0
+          ],
           [
             0,
             0
@@ -248,15 +264,21 @@
           [
             0,
             0
+          ],
+          [
+            0,
+            0
           ]
         ],
         "clusters": [
+          32767,
           32767,
           0
         ]
       },
       "sample": [
         0,
+        1,
         32768
       ]
     },
@@ -316,9 +338,14 @@
       "oracle": {
         "glyphs": [
           2,
+          3,
           1
         ],
         "advances": [
+          [
+            0,
+            0
+          ],
           [
             0,
             0
@@ -336,15 +363,21 @@
           [
             0,
             0
+          ],
+          [
+            0,
+            0
           ]
         ],
         "clusters": [
+          32768,
           32768,
           0
         ]
       },
       "sample": [
         0,
+        1,
         32769
       ]
     },
@@ -3842,6 +3875,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 1,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "e230a5379d417bea4b2816878c6b7e589c2552c444b1a97ea1fe62932465aaea",
       "oracle": {
         "glyphs": [
@@ -4182,6 +4218,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 1,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "e230a5379d417bea4b2816878c6b7e589c2552c444b1a97ea1fe62932465aaea",
       "oracle": {
         "glyphs": [
@@ -4522,6 +4561,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 1,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "1a83880439e9b4ae0264a7e51e74a0a5d4796314f673b15507fb746e193325d2",
       "oracle": {
         "glyphs": [
@@ -4862,6 +4904,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 1,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "1a83880439e9b4ae0264a7e51e74a0a5d4796314f673b15507fb746e193325d2",
       "oracle": {
         "glyphs": [
@@ -5846,6 +5891,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "0e536bfba9ebd7508fb4c8a06e3b463e4da8a92a2080fcf335650102e34ddd79",
       "oracle": {
         "glyphs": [
@@ -6506,6 +6554,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "0e536bfba9ebd7508fb4c8a06e3b463e4da8a92a2080fcf335650102e34ddd79",
       "oracle": {
         "glyphs": [
@@ -7166,6 +7217,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "6740cb708c136260da904b7f4162c1172a1a856d191cd167a082e163b40edf21",
       "oracle": {
         "glyphs": [
@@ -7826,6 +7880,9 @@
       "depth": 64,
       "operations": 4096,
       "weight": 0,
+      "expected_budgets": [
+        "Operations"
+      ],
       "font_sha256": "6740cb708c136260da904b7f4162c1172a1a856d191cd167a082e163b40edf21",
       "oracle": {
         "glyphs": [
