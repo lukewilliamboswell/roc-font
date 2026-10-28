@@ -2,10 +2,6 @@
   "about": "Cases where roc-font deliberately or knowingly differs from its recorded oracle result. scripts/conformance.py fails on any unlisted difference and on any listed case that now agrees; it never edits this file. Keep entries sorted by id; every entry needs a reason a reader can act on.",
   "entries": [
     {
-      "id": "corpus-fonts/fonttools-avar2-coords",
-      "reason": "avar version 2 is out of scope for 0.1.0: roc-font drops the font's variation space (`Font.axes` is empty, so the driver answers `coords:`), where HarfBuzz applies avar2 and reports the normalised coordinates."
-    },
-    {
       "id": "corpus-fonts/fonttools-bogus-post-read",
       "reason": "OTS rejects the font because it has no `OS/2` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `OS/2`, `name` or `post` as OTS does (architecture \u00a74.4) but does not require them to be present, so callers can read metrics-only and synthetic fonts; accepting the font is a deliberate divergence."
     },
@@ -14,8 +10,8 @@
       "reason": "The subset's glyf sets the reserved cubic flag bit (0x80) on a point; OTS 9.3.0 rejects the font (\"Bad glyph flag\") and roc-font follows OTS (architecture \u00a74.4), while HarfBuzz reads it and reports coordinates."
     },
     {
-      "id": "corpus-fonts/jellee-kern-pairs",
-      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset. OTS drops every `kern` table but version 0, so a browser never applies this one; roc-font drops it as OTS does (architecture \u00a74.4, `corpus-fonts/jellee-kern-read` agrees), so the pairs are not kerned. Deliberate: browser parity over HarfBuzz parity for legacy tables."
+      "id": "corpus-fonts/jellee-kern-read",
+      "reason": "The original font has valid Apple kern version1.0 formats0/2. roc-font now prepares and applies them, agreeing with the cached HarfBuzz shaping cases and the dedicated AAT positioning matrix. The pinned OTS9.3 read oracle discards kern as an unsupported version; its raw read:drop=kern result is retained. Accepting this supported table is a deliberate reader-policy divergence, not a repaired font."
     },
     {
       "id": "hb-curated/in-house/ih-rand-3",
