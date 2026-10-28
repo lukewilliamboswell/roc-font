@@ -27,7 +27,8 @@ def source(name):
 
 
 def header():
-    return '\n'.join('# '+line if line else '#' for line in (SRC/'COPYING').read_text().splitlines())+'\n\n'
+    text=(SRC/'COPYING').read_text()+'\n'+(HERE/'UNICODE-LICENSE.txt').read_text()
+    return '\n'.join('# '+line if line else '#' for line in text.splitlines())+'\n\n'
 
 
 def main():
