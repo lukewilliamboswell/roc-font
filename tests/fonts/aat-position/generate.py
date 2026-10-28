@@ -73,20 +73,22 @@ def matrix6(long=False,coverage=0,tuples=0):
  fields=u32(1 if long else 0)+u16(2,2)+u32(left_at,right_at,array,vector)
  return sub(6,fields+left+right+payload,coverage,tuples)
 
-def machine(kind=1,action_type=2,coverage=0,tuples=0,legacy=False,apple=False,action_index=2,reset=False,epsilon=False):
+def machine(kind=1,action_type=2,coverage=0,tuples=0,legacy=False,apple=False,action_index=2,reset=False,epsilon=False,chain=False,cycle=False):
  columns=8;header=8 if apple else 6 if legacy else 12
  classes=u16(1,4)+bytes([4,5,6,7])if legacy else lookup([4,5,6,7])
  machine_header=10 if legacy else 20
  class_at=machine_header;state_at=class_at+len(classes);rowbytes=columns if legacy else columns*2;entry_at=state_at+3*rowbytes
  rows=[[0]*columns for _ in range(3)];rows[0][4]=1;rows[1][4]=1;rows[2][5]=2
  if reset:rows[2][6]=3
+ if chain:rows[2][4]=2
  action_at=entry_at+(4 if reset else 3)*(4 if legacy else 6)
  if kind==4:
-  entries=[(0,0,65535),(2,0x8000,65535),(0,0,0)]
+  entries=[(0,0,65535),(2,0x8000,65535),((2 if chain else 0),(0x8000 if chain else 0),0)]
   action=u16(2,0)if action_type==0 else u16(1,0)if action_type==1 else i16(400,600,50,100)
   field=(action_type<<30)|action_at
  else:
   entries=[(0,0,65535),(2,0x8000,65535),(0,0x8000|(0x4000 if epsilon else 0),action_index)]
+  if cycle:entries[2]=(2,0xc000,action_index)
   if reset:entries.append((0,0x2000,65535))
   action=i16(111)+i16(-20,*([500]*(max(1,tuples)-1)))+i16(-39,*([800]*(max(1,tuples)-1)))
   field=action_at
@@ -151,3 +153,16 @@ def scaling_fonts():
   power=count.bit_length()-1;search=u32(count,(1<<power)*6,power,count*6-(1<<power)*6)
   rows=b''.join(u16(i,count)+i16(-51)for i in range(1,count+1));raw(f,'kerx',table([sub(0,search+rows)]));f.save(HERE/f'kerx0-size-{count}.ttf')
 if __name__=='__main__':selection_fixtures();variable_points();scaling_fonts()
+
+if __name__=='__main__':
+ save('kerx4-chain',table([machine(4,chain=True)]))
+ save('kerx1-cycle',table([machine(cycle=True)]))
+
+def wide_points():
+ from fontTools.ttLib import newTable
+ from fontTools.ttLib.tables.TupleVariation import TupleVariation
+ for sign,delta in [('positive',2147483647),('negative',-2147483648)]:
+  for count in [1,2]:
+   f=TTFont(HERE/'kerx4-point.ttf',recalcTimestamp=False);FontBuilder(font=f).setupFvar([('wght',0,0,1,'Weight')],[])
+   g=newTable('gvar');g.version=1;g.reserved=0;g.variations={'a':[TupleVariation({'wght':(0,1,1)},[None,None,(delta,0),None,None,None,None,None])for _ in range(count)]};f['gvar']=g;f.save(HERE/f'kerx4-point-wide-{sign}-{count}.ttf')
+if __name__=='__main__':wide_points()

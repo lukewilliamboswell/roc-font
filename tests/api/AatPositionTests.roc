@@ -15,6 +15,10 @@ import "../fonts/aat-position/kerx-empty.ttf" as empty_file : List(U8)
 import "../fonts/aat-position/apple-kern2.ttf" as apple_file : List(U8)
 import "../fonts/aat-position/apple-variation-skipped.ttf" as skipped_file : List(U8)
 
+import "../fonts/aat-position/kerx1-cycle.ttf" as cycle_file : List(U8)
+import "../fonts/aat-position/kerx4-point-wide-positive-1.ttf" as wide_one : List(U8)
+import "../fonts/aat-position/kerx4-point-wide-positive-2.ttf" as wide_two : List(U8)
+
 ## AAT positioning through the public bundle. Full numeric coverage and
 ## actual reference provenance live in aat-position/cases.jsonc.
 AatPositionTests :: {}.{}
@@ -110,4 +114,27 @@ expect {
 		Ok(f) => Font.shape(f, "ab", Font.ShapeOptions.{ script: "Latn" }).offsets == [{ x: 0, y: 0 }, { x: 0, y: 0 }]
 		Err(_) => False
 	}
+}
+
+# Numeric gvar materialization oracle: FreeType 2.13.2 ignores these
+# newer 32-bit packed runs, so these numbers explicitly use fontTools
+# direct coordinates, binary32 rounding and signed I32 wrap instead.
+expect {
+	f = Font.at(read(wide_one), Font.Variation.{ axes: [{ tag: "wght", value: 1 }] })
+	Font.shape(f, "ab", Font.ShapeOptions.{ script: "Latn" }).offsets == [{ x: 0, y: 0 }, { x: -2147483648, y: 700 }]
+}
+expect {
+	f = Font.at(read(wide_two), Font.Variation.{ axes: [{ tag: "wght", value: 1 }] })
+	Font.shape(f, "ab", Font.ShapeOptions.{ script: "Latn" }).offsets == [{ x: 0, y: 0 }, { x: -48, y: 700 }]
+}
+expect {
+	f = read(cycle_file)
+	match Font.shape_checked(f, Font.plan(f, Font.ShapeOptions.{ script: "Latn" }), "ab") {
+		Err(OverBudget(r)) => r.run.glyphs.len() == 2 and r.budgets.contains(Operations)
+		_ => False
+	}
+}
+expect {
+	run = Font.shape(read(state_file), "ab", Font.ShapeOptions.{ script: "Latn", features: [Font.Feature.{ tag: "kern", value: 0, start: 0, end: 1 }] })
+	run.advances == [{ x: 510, y: 0 }, { x: 500, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: -20, y: 0 }]
 }

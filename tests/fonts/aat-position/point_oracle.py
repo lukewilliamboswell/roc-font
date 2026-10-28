@@ -5,6 +5,9 @@ only the requested outline point comes from independent FreeType.
 """
 import ctypes as C
 import freetype
+import math,struct
+from fontTools.ttLib import TTFont
+from fontTools.pens.recordingPen import RecordingPointPen
 import uharfbuzz._harfbuzz as implementation
 lib=C.CDLL(implementation.__file__);ptr=C.c_void_p;uint=C.c_uint
 
@@ -35,7 +38,15 @@ callback_type=C.CFUNCTYPE(C.c_int,ptr,ptr,uint,uint,C.POINTER(C.c_int),C.POINTER
 class Variation(C.Structure):_fields_=[("tag",uint),("value",C.c_float)]
 set_variations=define("hb_font_set_variations",[ptr,C.POINTER(Variation),uint],None)
 
-def shape_points(path,text,direction,kern,weight=0):
+def materialized_points(path,glyph,weight):
+ f=TTFont(path);pen=RecordingPointPen();f.getGlyphSet(location={'wght':weight})[f.getGlyphName(glyph)].drawPoints(pen)
+ return [entry[1][0]for entry in pen.value if entry[0]=='addPoint']
+
+def f32(value):return struct.unpack('>f',struct.pack('>f',value))[0]
+def point_conversion(value):
+ rounded=math.floor(f32(f32(value)+.5));return ((rounded+2**31)%2**32)-2**31
+
+def shape_points(path,text,direction,kern,weight=0,source='freetype'):
  data=path.read_bytes();ft=freetype.Face(str(path));blob=blob_create(data,len(data),0,None,None);face=face_create(blob,0);base=font_create(face);set_ot(base)
  variation=Variation(int.from_bytes(b"wght","big"),weight);set_variations(base,C.byref(variation),1)
  try:ft.set_var_design_coords([weight])
@@ -43,10 +54,12 @@ def shape_points(path,text,direction,kern,weight=0):
  font=subfont_create(base)
  def point(_font,_data,glyph,index,x,y,_user):
   try:
-   ft.load_glyph(glyph,freetype.FT_LOAD_NO_SCALE|freetype.FT_LOAD_NO_HINTING|freetype.FT_LOAD_NO_BITMAP)
-   values=ft.glyph.outline.points
+   if source=='fonttools':values=materialized_points(path,glyph,weight)
+   else:
+    ft.load_glyph(glyph,freetype.FT_LOAD_NO_SCALE|freetype.FT_LOAD_NO_HINTING|freetype.FT_LOAD_NO_BITMAP)
+    values=ft.glyph.outline.points
    if index>=len(values):return 0
-   x[0],y[0]=values[index];return 1
+   x[0],y[0]=map(point_conversion,values[index])if source=='fonttools'else values[index];return 1
   except freetype.FT_Exception:return 0
  cb=callback_type(point);funcs=funcs_create();set_point(funcs,C.cast(cb,ptr),None,None);set_funcs(font,funcs,None,None)
  b=buf_create();raw=text.encode();add_text(b,raw,len(raw),0,len(raw));set_dir(b,{'ltr':4,'rtl':5,'ttb':6,'btt':7}[direction]);set_script(b,int.from_bytes(b'Latn','big'));set_language(b,language(b'en',-1))
