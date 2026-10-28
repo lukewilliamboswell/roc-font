@@ -27,6 +27,14 @@ GDEF classifications. The 58 cases filed under `macos` are therefore not
 all AAT gaps. No unclassified GPOS lookup defect was identified in this
 replay; this does not prove that every font or lookup combination agrees.
 
+The subsequent link:../tests/verification/expanded-font-conformance.json[expanded
+general replay] records 13,943 gating cases: 13,924 agreements, 17 declared
+differences and two unsupported cases, with no unexpected failure. The
+in-house corpus improves to 4,998 agreements, 74 differences, 43 unsupported
+and 59 unavailable-font skips. This intermediate replay includes the Apple
+script-policy regressions; the separate Graphite runtime matrices remain
+under integration and are not included in those agreement counts.
+
 == Model selection
 
 The caller supplies one script run, its script/language and direction.

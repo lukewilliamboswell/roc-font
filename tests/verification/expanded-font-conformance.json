@@ -1,0 +1,101 @@
+{
+  "scope": "Intermediate general native replay after font program/script-policy implementation; Graphite runtime matrices are separate and remain under integration.",
+  "compiler": "nightly-2026-10-27-de79a0f",
+  "bundle": "QkLAcJxN6K74EDEr6Tmp4rtxEKYTzhpjcnYYkbbo7V5.tar.zst",
+  "gating": {
+    "cases": 13943,
+    "agree": 13924,
+    "known": 17,
+    "unsupported": 2,
+    "unexpected": 0
+  },
+  "in_house": {
+    "cases": 5174,
+    "agree": 4998,
+    "differ": 74,
+    "unsupported": 43,
+    "skipped": 59
+  },
+  "changed_since_pre_policy_replay": [
+    {
+      "id": "harfbuzz/in-house/macos/c5b52821951c7",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c1eee9b5098d3",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/cdab94d58a2c9",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c060d488fa3ac",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c88aa5dae1d85",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c1adc0885a49e",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/cd64ac5df1bce",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c4fd675c36c3a",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c1adc0885a49e-2",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/cd64ac5df1bce-2",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c4fd675c36c3a-2",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c6f7c149f1422",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/cd64ac5df1bce-3",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c4fd675c36c3a-3",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c0dea21ccedfd",
+      "before": "differ",
+      "after": "agree"
+    },
+    {
+      "id": "harfbuzz/in-house/macos/c51a0a00eb75a",
+      "before": "differ",
+      "after": "agree"
+    }
+  ]
+}
