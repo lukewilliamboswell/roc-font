@@ -937,7 +937,15 @@ LayoutPosition := {
 	}
 
 	flag : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
-	flag = |items, start, end| LayoutGsub.flag_range(items, start, end.min(items.len()), LayoutGsub.min_cluster(items, start, end.min(items.len()), 0xFFFFFFFFFFFFFFFF))
+	flag = |items, start, end| {
+		# hb_buffer_t::_set_glyph_flags checks the raw span before clamping.
+		if end < start or end - start > 255 {
+			items
+		}
+		else {
+			LayoutGsub.flag_range(items, start, end.min(items.len()), LayoutGsub.min_cluster(items, start, end.min(items.len()), 0xFFFFFFFFFFFFFFFF))
+		}
+	}
 
 	covered : List(U8), U64, U64 -> Try(U64, [NotCovered])
 	covered = |data, at, glyph| {
