@@ -359,8 +359,9 @@ def step_conformance(ctx: Context) -> Result:
     statuses = [f"general font cases: {main.status}"]
     outputs = [main.output]
     passed = main.status == "PASS"
-    for feature in ("math", "outlines-carets", "cff", "variation-complete", "aat-position", "color-images", "color", "positioning/context-budget"):
-        code, output = run([sys.executable, f"tests/fonts/{feature}/verify.py"],
+    for feature in ("math", "outlines-carets", "cff", "variation-complete", "aat-position", "color-images", "color", "positioning/context-budget", "graphite"):
+        verifier = "verify_all.py" if feature == "graphite" else "verify.py"
+        code, output = run([sys.executable, f"tests/fonts/{feature}/{verifier}"],
                            env=child_env(ctx), cwd=ctx.consumer_root)
         passed = passed and code == 0
         statuses.append(f"{feature}: exit {code}")
