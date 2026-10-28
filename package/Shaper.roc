@@ -1240,8 +1240,8 @@ Shaper :: {}.{
 		for item in items {
 			origin = Face.vertical_origin(face, location, item.glyph)
 			$base = $base.append(-(Face.vertical_advance(face, location, item.glyph).to_i64()))
-			$major = $major.append(-(origin.y.to_i64()))
-			$cross = $cross.append(-(origin.x.to_i64()))
+			$major = $major.append((-(origin.y.to_i64())).to_i32_wrap().to_i64())
+			$cross = $cross.append((-(origin.x.to_i64())).to_i32_wrap().to_i64())
 		}
 		if space_fallback {
 			$base = Shaper.space_widths(face, items, $base, -(Face.units_per_em(face).to_i64()), |glyph| -(Face.vertical_advance(face, location, glyph).to_i64()))
