@@ -8,8 +8,10 @@ import font.Font
 
 # Original font facts used by a PDF embedding or subsetting consumer.
 # The caller keeps embedding policy and table rewriting outside roc-font.
-main! = |_args| {
-	face = Font.serif
+main! = |_args| inspect!(Font.serif)
+
+inspect! : Font => Try({}, _)
+inspect! = |face| {
 	Stdout.line!("Full name: ${Font.full_name(face) ?? "not supplied"}")?
 	Stdout.line!("PostScript name: ${Font.postscript_name(face) ?? "not supplied"}")?
 	match Font.embedding_flags(face) {

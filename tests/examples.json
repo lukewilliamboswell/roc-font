@@ -147,6 +147,45 @@
           "exit_code": 0
         }
       ]
+    },
+    {
+      "path": "examples/glyph-svg.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"52 -1490 1309 1490\"><path fill=\"currentColor\" transform=\"scale(1 -1)\" d=\"M 52 0 L 593 1490 L 813 1490 L 1361 0 L 1161 0 L 845 884 Q 816 966 777.5 1088.5 Q 739 1211 684 1401 L 720 1401 Q 666 1209 626.5 1084.5 Q 587 960 561 884 L 254 0 Z M 324 416 L 324 582 L 1089 582 L 1089 416 Z\"/></svg>\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/color-images.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "Bitmap strikes: 0\nGlyph 0: advance 1344 font units\n  No bitmap at strike 0\nGlyph 1777: advance 0 font units\n  No bitmap at strike 0\nGlyph 0: advance 1344 font units\n  No bitmap at strike 0\nGlyph 1777: advance 576 font units\n  No bitmap at strike 0\nGlyph 1868: advance 2094 font units\n  No bitmap at strike 0\nGlyph 1777: advance 0 font units\n  No bitmap at strike 0\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/arabic.roc",
+      "cases": [
+        {
+          "name": "usage",
+          "args": [],
+          "stdin": "",
+          "stdout": "Usage: arabic <Arabic font file>\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
     }
   ]
 }
