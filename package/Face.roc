@@ -1061,7 +1061,7 @@ Face := {
 				match face.hvar {
 					Present(hvar) if loc.varied => TableVar.advance(hvar, loc.hvar, id, base.to_i64()).to_i32_wrap()
 					_ if loc.varied => match face.outlines {
-						Present(o) => TableGvar.advance(o.points, o.gvar, loc.gvar, id).max(-2147483648).min(2147483647).to_i32_wrap()
+						Present(o) => TableGvar.advance(o.points, o.gvar, loc.gvar, id).to_i32_wrap()
 						Absent => base.to_i32()
 					}
 					_ => base.to_i32()
