@@ -158,7 +158,20 @@ GraphiteRules :: {}.{
 								$next_index = i + 1
 							}
 						}
-						if $next == 0 or $next_index > $high_index {
+						var $advanced = $next == 0
+						if $next != 0 {
+							if $next_index != 0 and $high_index != 0 {
+								$advanced = $next_index > $high_index
+							} else {
+								order = GraphiteRules.ahead($state, $highwater, $next, ctx.reverse, limits.operations - $operations)
+								$operations = $operations + order.operations
+								if order.stopped {
+									return { state: $state, operations: $operations, stopped: 2, aborted: False }
+								}
+								$advanced = order.ahead
+							}
+						}
+						if $advanced {
 							$loops = 0
 							$highwater = $next
 						} else {
@@ -186,6 +199,49 @@ GraphiteRules :: {}.{
 		}
 		{ state: $state, operations: $operations, stopped: 0, aborted: False }
 	}
+
+	# A returned cursor can lie beyond the checked rule window. Stable IDs
+	# are not output positions after insertion, so compare active order.
+	# Search both ways to keep ordinary short backtracking local; every
+	# visited link is charged, and retained deleted nodes keep their links.
+	ahead : GraphiteSlots, U64, U64, Bool, U64 -> { ahead : Bool, operations : U64, stopped : Bool }
+	ahead = |state, from, to, reverse, budget| {
+		if from == to {
+			return { ahead: False, operations: 0, stopped: False }
+		}
+		if to == 0 {
+			return { ahead: True, operations: 0, stopped: False }
+		}
+		var $forward = from
+		var $backward = from
+		var $operations = 0
+		var $walked = 0
+		while ($forward != 0 or $backward != 0) and $walked < state.nodes.len() {
+			$walked = $walked + 1
+			if $forward != 0 {
+				if $operations >= budget {
+					return { ahead: False, operations: $operations, stopped: True }
+				}
+				$operations = $operations + 1
+				$forward = GraphiteMachine.forward(state, $forward, reverse)
+				if $forward == to {
+					return { ahead: True, operations: $operations, stopped: False }
+				}
+			}
+			if $backward != 0 {
+				if $operations >= budget {
+					return { ahead: False, operations: $operations, stopped: True }
+				}
+				$operations = $operations + 1
+				$backward = GraphiteMachine.backward(state, $backward, reverse)
+				if $backward == to {
+					return { ahead: False, operations: $operations, stopped: False }
+				}
+			}
+		}
+		{ ahead: False, operations: $operations, stopped: False }
+	}
+
 }
 
 rules_silf = [0, 3, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 16, 0, 3, 0, 0, 0, 42, 0, 50, 0, 2, 0, 0, 0, 0, 1, 0, 1, 1, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 145, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 8, 0, 10, 0, 2, 0, 10, 1, 0, 0, 1, 0, 24, 0, 0, 0, 141, 0, 0, 0, 141, 0, 0, 0, 141, 0, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 6, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1, 0, 28, 0, 25, 49]
@@ -222,4 +278,15 @@ expect {
 expect {
 	a = rules_test([0x1F.U8, 0x1C, 0, 0x19, 0x32], [1, 2])
 	!a.aborted and a.stopped == 0 and a.state.active == 3 and GraphiteSlots.get(a.state, a.state.first).glyph == 2
+}
+
+## fuzz regression: successful rules returning just beyond their one-slot
+## window advance the high-water mark. They must not rewind after maxLoop.
+expect {
+	var $ok = True
+	for count in [16.U64, 64, 256] {
+		a = rules_test([1.U8, 1, 0x24, 0, 0x32], List.repeat(1, count))
+		$ok = $ok and !a.aborted and a.stopped == 0 and a.operations <= 32 * count and a.state.nodes.drop_first(1).all(|s| GraphiteSlots.integer(s.advance_x) == 602)
+	}
+	$ok
 }

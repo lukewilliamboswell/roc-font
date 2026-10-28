@@ -41,7 +41,7 @@ test! = |bytes| {
 	a = Fuzz.measure_allocs!(|{}| Font.shape_planned(font, plan, small))
 	b = Fuzz.measure_allocs!(|{}| Font.shape_planned(font, plan, large))
 	if b.allocations > 12 * a.allocations + 256 {
-		crash "Graphite allocations grew faster than the shaped input"
+		crash "Graphite allocations grew faster than input: small=${a.allocations.to_str()} large=${b.allocations.to_str()} smallGlyphs=${a.value.glyphs.len().to_str()} largeGlyphs=${b.value.glyphs.len().to_str()}"
 	}
 	check(font, plan, small)
 	check(font, plan, large)
