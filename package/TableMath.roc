@@ -20,8 +20,8 @@ TableMath := {
 	Axis : [Horizontal, Vertical]
 	Variant : { glyph : U32, advance : I32 }
 	Part : { glyph : U32, start_connector : I32, end_connector : I32, full_advance : I32, extender : Bool }
-	Assembly : { italic_correction : I32, parts : List(Part) }
-	KernTable : { heights : List(I32), values : List(I32) }
+	Assembly : { italic_correction : I64, parts : List(Part) }
+	KernTable : { heights : List(I64), values : List(I64) }
 
 	## Percentages are distinct named fields, never font-unit lengths.
 	Constants : {
@@ -29,57 +29,57 @@ TableMath := {
 		script_script_percent_scale_down : I16,
 		delimited_sub_formula_min_height : I32,
 		display_operator_min_height : I32,
-		math_leading : I32,
-		axis_height : I32,
-		accent_base_height : I32,
-		flattened_accent_base_height : I32,
-		subscript_shift_down : I32,
-		subscript_top_max : I32,
-		subscript_baseline_drop_min : I32,
-		superscript_shift_up : I32,
-		superscript_shift_up_cramped : I32,
-		superscript_bottom_min : I32,
-		superscript_baseline_drop_max : I32,
-		sub_superscript_gap_min : I32,
-		superscript_bottom_max_with_subscript : I32,
-		space_after_script : I32,
-		upper_limit_gap_min : I32,
-		upper_limit_baseline_rise_min : I32,
-		lower_limit_gap_min : I32,
-		lower_limit_baseline_drop_min : I32,
-		stack_top_shift_up : I32,
-		stack_top_display_style_shift_up : I32,
-		stack_bottom_shift_down : I32,
-		stack_bottom_display_style_shift_down : I32,
-		stack_gap_min : I32,
-		stack_display_style_gap_min : I32,
-		stretch_stack_top_shift_up : I32,
-		stretch_stack_bottom_shift_down : I32,
-		stretch_stack_gap_above_min : I32,
-		stretch_stack_gap_below_min : I32,
-		fraction_numerator_shift_up : I32,
-		fraction_numerator_display_style_shift_up : I32,
-		fraction_denominator_shift_down : I32,
-		fraction_denominator_display_style_shift_down : I32,
-		fraction_numerator_gap_min : I32,
-		fraction_num_display_style_gap_min : I32,
-		fraction_rule_thickness : I32,
-		fraction_denominator_gap_min : I32,
-		fraction_denom_display_style_gap_min : I32,
-		skewed_fraction_horizontal_gap : I32,
-		skewed_fraction_vertical_gap : I32,
-		overbar_vertical_gap : I32,
-		overbar_rule_thickness : I32,
-		overbar_extra_ascender : I32,
-		underbar_vertical_gap : I32,
-		underbar_rule_thickness : I32,
-		underbar_extra_descender : I32,
-		radical_vertical_gap : I32,
-		radical_display_style_vertical_gap : I32,
-		radical_rule_thickness : I32,
-		radical_extra_ascender : I32,
-		radical_kern_before_degree : I32,
-		radical_kern_after_degree : I32,
+		math_leading : I64,
+		axis_height : I64,
+		accent_base_height : I64,
+		flattened_accent_base_height : I64,
+		subscript_shift_down : I64,
+		subscript_top_max : I64,
+		subscript_baseline_drop_min : I64,
+		superscript_shift_up : I64,
+		superscript_shift_up_cramped : I64,
+		superscript_bottom_min : I64,
+		superscript_baseline_drop_max : I64,
+		sub_superscript_gap_min : I64,
+		superscript_bottom_max_with_subscript : I64,
+		space_after_script : I64,
+		upper_limit_gap_min : I64,
+		upper_limit_baseline_rise_min : I64,
+		lower_limit_gap_min : I64,
+		lower_limit_baseline_drop_min : I64,
+		stack_top_shift_up : I64,
+		stack_top_display_style_shift_up : I64,
+		stack_bottom_shift_down : I64,
+		stack_bottom_display_style_shift_down : I64,
+		stack_gap_min : I64,
+		stack_display_style_gap_min : I64,
+		stretch_stack_top_shift_up : I64,
+		stretch_stack_bottom_shift_down : I64,
+		stretch_stack_gap_above_min : I64,
+		stretch_stack_gap_below_min : I64,
+		fraction_numerator_shift_up : I64,
+		fraction_numerator_display_style_shift_up : I64,
+		fraction_denominator_shift_down : I64,
+		fraction_denominator_display_style_shift_down : I64,
+		fraction_numerator_gap_min : I64,
+		fraction_num_display_style_gap_min : I64,
+		fraction_rule_thickness : I64,
+		fraction_denominator_gap_min : I64,
+		fraction_denom_display_style_gap_min : I64,
+		skewed_fraction_horizontal_gap : I64,
+		skewed_fraction_vertical_gap : I64,
+		overbar_vertical_gap : I64,
+		overbar_rule_thickness : I64,
+		overbar_extra_ascender : I64,
+		underbar_vertical_gap : I64,
+		underbar_rule_thickness : I64,
+		underbar_extra_descender : I64,
+		radical_vertical_gap : I64,
+		radical_display_style_vertical_gap : I64,
+		radical_rule_thickness : I64,
+		radical_extra_ascender : I64,
+		radical_kern_before_degree : I64,
+		radical_kern_after_degree : I64,
 		radical_degree_bottom_raise_percent : I16,
 	}
 
@@ -159,11 +159,14 @@ TableMath := {
 		})
 	}
 
-	value : TableMath, U64, U64 -> I32
+	value : TableMath, U64, U64 -> I64
 	value = |math, base, at| {
 		v = Bytes.i16(math.bytes, at) + LayoutVar.device_delta(math.lv, math.loc, math.bytes, base, at + 2)
-		# HarfBuzz saturates a MathValueRecord plus its device delta to I32.
-		v.max(-2147483648).min(2147483647).to_i32_wrap()
+		# A valid store has at most32767regions, each scalar at most1,
+		# each long-word delta an I32. Even allowing binary32 accumulation
+		# error, the rounded delta is below2^47 in magnitude. Adding an
+		# I16 base therefore fits I64 without clamping valid font facts.
+		v
 	}
 
 	info_child : TableMath, U64 -> U64
@@ -175,7 +178,7 @@ TableMath := {
 		if (offset == 0) 0 else math.glyph_info + offset
 	}
 
-	glyph_value : TableMath, U32, U64 -> [Present(I32), Absent]
+	glyph_value : TableMath, U32, U64 -> [Present(I64), Absent]
 	glyph_value = |math, glyph, field| {
 		at = TableMath.info_child(math, field)
 		if at == 0 or glyph.to_u64() >= math.glyph_count {
@@ -187,10 +190,10 @@ TableMath := {
 		}
 	}
 
-	italic_correction : TableMath, U32 -> [Present(I32), Absent]
+	italic_correction : TableMath, U32 -> [Present(I64), Absent]
 	italic_correction = |math, glyph| TableMath.glyph_value(math, glyph, 0)
 
-	top_accent_attachment : TableMath, U32 -> [Present(I32), Absent]
+	top_accent_attachment : TableMath, U32 -> [Present(I64), Absent]
 	top_accent_attachment = |math, glyph| TableMath.glyph_value(math, glyph, 2)
 
 	extended_shape : TableMath, U32 -> Bool
@@ -229,7 +232,7 @@ TableMath := {
 	}
 
 	## Equality at a threshold selects the following range, as HarfBuzz does.
-	kern : TableMath, U32, Corner, I32 -> I32
+	kern : TableMath, U32, Corner, I64 -> I64
 	kern = |math, glyph, corner, height| {
 		at = TableMath.kern_at(math, glyph, corner)
 		if at == 0 {
