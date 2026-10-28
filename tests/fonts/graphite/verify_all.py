@@ -13,7 +13,7 @@ sys.path.insert(0,str(ROOT/'scripts'));import flight
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--preload-divergences',type=Path,help='Explicit default-mode geometry policy; independent face0 stays strict');p.add_argument('--bundle',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--large-root',type=Path,default=HERE.parent/'graphite-large');p.add_argument('--metrics-root',type=Path,default=HERE.parent/'graphite-metrics');p.add_argument('--geometry-root',type=Path,default=HERE.parent/'graphite-geometry');p.add_argument('--output',type=Path);p.add_argument('--work',type=Path,default=ROOT/'.roc-font-tmp/graphite-all');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--preload-divergences',type=Path,help='Explicit default-mode geometry policy; independent face0 stays strict');p.add_argument('--known-limitations',type=Path,help='Explicit strict per-ID implementation-limit registry, separate from normative policy');p.add_argument('--bundle',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--large-root',type=Path,default=HERE.parent/'graphite-large');p.add_argument('--metrics-root',type=Path,default=HERE.parent/'graphite-metrics');p.add_argument('--geometry-root',type=Path,default=HERE.parent/'graphite-geometry');p.add_argument('--output',type=Path);p.add_argument('--work',type=Path,default=ROOT/'.roc-font-tmp/graphite-all');a=p.parse_args()
  work=a.work.resolve();work.mkdir(parents=True,exist_ok=True);roc=os.environ.get('ROC','roc');binary=a.binary.resolve() if a.binary else work/'query';provenance={'reused_binary':bool(a.binary)}
  if not a.binary:
   binary.unlink(missing_ok=True)
@@ -45,8 +45,13 @@ def main():
   if name=='geometry-default' and a.preload_divergences:command+=['--divergences',str(a.preload_divergences.resolve())]
   if name=='geometry-face0':command+=['--records',str(geometry/'face0-records.json'),'--oracle',str(geometry/'face0-oracle.json')]
   commands.append((name,command))
+ limit_sets=set()
+ if a.known_limitations:
+  limit_sets=set(json.loads(a.known_limitations.read_text())['sets'])
+  if not limit_sets<=set(name for name,_ in commands):raise SystemExit('known-limit registry names a matrix this orchestrator does not run')
  reports=[];failed=False
  for name,command in commands:
+  if name in limit_sets:command+=['--known-limitations',str(a.known_limitations.resolve()),'--limitation-set',name]
   report=work/f'{name}.json';report.unlink(missing_ok=True);command+=['--output',str(report)]
   with (work/f'{name}.log').open('w') as log:
    result=subprocess.run(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)

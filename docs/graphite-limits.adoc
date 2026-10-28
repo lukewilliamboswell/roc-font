@@ -1,0 +1,88 @@
+= Experimental Graphite shaping
+
+The Graphite backend executes font programs in pure Roc. It remains
+experimental: cached reference tests cover real SIL families and original
+programs, but some accepted programs produce different positioning or exhaust
+the default work budget. Selecting Graphite does not promise complete
+Graphite2 compatibility.
+
+== Recorded implementation limits
+
+The following observations are retained as regression coverage. They are not
+reference agreement and are not deliberate interpretations of the font format.
+The reference records remain unchanged.
+
+[cols="2,1,1,1",options="header"]
+|===
+|Matrix |Cases |Reference agreement |Known implementation limits
+|Real-family shaping |1069 |1024 |45
+|Nonspacing directional programs |1984 |1440 |544
+|Focused nonspacing geometry |56 |34 |22
+|Position-query visitation |72 |36 |36
+|Native Arabic nonspacing programs |8 |4 |4
+|===
+
+The 45 real-family differences are Awami runs: 37 complete with different
+advances or offsets, and eight stop with the default `Operations` work-budget
+diagnostic. Increasing a caller's budget can permit more work; it does not
+resolve the completed positioning differences. The other 606 observations
+concern font-defined nonspacing classes and directional placement. Glyph
+identities, clusters and flags agree in these recorded cases; advances and
+sometimes offsets differ. These programs are not classified as invalid fonts.
+
+The separately tested geometry matrices have 1549 cases each. The default
+reference mode uses 425 individually pinned preload-policy declarations; the
+independent face-mode-zero matrix is strict. The 16 feature-alias declarations
+are another separate format-policy interpretation. Neither policy is an
+implementation-limit allowance.
+
+Exploratory CURRENT-cursor, final-span and transient-position-cache audits are
+archival evidence, not claims that their programs are supported. No unfinished
+runtime model from those audits is part of this verified snapshot.
+
+== Caller choices
+
+`Font.shaping_engine(plan)` reports the primary selected program.
+`ShapeOptions.{ use_font_programs: False }` requests the OpenType path when a
+caller needs to avoid font programs. An execution abort returns the reference
+empty result and `ProgramAborted` from checked calls; it does not silently
+switch engines.
+
+Graphite feature choices are global numeric feature values. Graphite uses
+its default font metrics rather than a `Font.at` variation location, and its
+range adapter shapes the selected text without surrounding context. TTB and
+BTT requests retain the reference Graphite adapter's horizontal positions;
+this backend does not transpose them into vertical metrics.
+
+Performance also remains limited. A paired ordinary Padauk measurement at
+4096 scalars was about 58 times the pinned HarfBuzz comparator, despite linear
+allocation-call growth. Geometry optimizations have measured benefits on
+specific inputs, not a general speed guarantee. Requested allocation bytes
+and peak live allocation bytes were unavailable in these retained consumer
+measurements; process RSS is a different quantity.
+
+== Explicit regression policy
+
+Standalone verifiers are strict by default. Integration may explicitly supply
+`tests/fonts/graphite/known-limitations.json`:
+
+[source,shell]
+----
+python3 tests/fonts/graphite/verify_all.py --binary QUERY \
+  --known-limitations tests/fonts/graphite/known-limitations.json
+----
+
+For one matrix, `verify.py` additionally requires `--limitation-set shape`
+(or another named set). The registry pins every case ID, reference key, full
+observed native-result hash and budget diagnostics. Full observations are
+stored in `known-observations.json`. The native result includes its primary
+engine and all output columns.
+
+Only the exact recorded observation is accepted as a known implementation
+limit. New mismatches, changed results, changed budgets, stale reference keys
+and cases that now agree all fail the gate. Improvements therefore require an
+explicit registry update too. Reports count these observations separately from
+reference agreement and normative declarations. `record_limitations.py
+--check` validates all 651 entries without installing a reference engine;
+recording a replacement requires preserved strict native logs and build
+provenance, rather than an opted-in passing report.

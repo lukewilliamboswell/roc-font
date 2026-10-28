@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "source_snapshot": "dde4ce391f30de0a4e82a1f2c0b9319cf1fe9a11",
+  "binary_sha256": "1488f9241af95e5345a575e26b5fad5749e6220b35d21e930898eb2da3cf19ab",
+  "full_report_sha256": "03041c09bd8a19f23f81ed2697f294f09513f842fb92e9041562c45783e0d5c7",
+  "policy_sha256": "02f1596a780100da70012fd7226ad6867b5768f5a904d446d528081e1d6f2f5b",
+  "passed": true,
+  "matrices": [
+    {
+      "matrix": "shape",
+      "exit_code": 0,
+      "cases": 1069,
+      "agree": 1024,
+      "normative": 0,
+      "known_limitations": 45,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "feature",
+      "exit_code": 0,
+      "cases": 120,
+      "agree": 104,
+      "normative": 16,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "direction",
+      "exit_code": 0,
+      "cases": 24,
+      "agree": 24,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "association",
+      "exit_code": 0,
+      "cases": 110,
+      "agree": 110,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "progress",
+      "exit_code": 0,
+      "cases": 24,
+      "agree": 24,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "width",
+      "exit_code": 0,
+      "cases": 152,
+      "agree": 152,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "phase",
+      "exit_code": 0,
+      "cases": 144,
+      "agree": 144,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "nsm",
+      "exit_code": 0,
+      "cases": 1984,
+      "agree": 1440,
+      "normative": 0,
+      "known_limitations": 544,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "pass-conditions",
+      "exit_code": 0,
+      "cases": 384,
+      "agree": 384,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "delete-leaf",
+      "exit_code": 0,
+      "cases": 100,
+      "agree": 100,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "nsm-geometry",
+      "exit_code": 0,
+      "cases": 56,
+      "agree": 34,
+      "normative": 0,
+      "known_limitations": 22,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "nsm-position-visit",
+      "exit_code": 0,
+      "cases": 72,
+      "agree": 36,
+      "normative": 0,
+      "known_limitations": 36,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "nsm-native-arabic",
+      "exit_code": 0,
+      "cases": 8,
+      "agree": 4,
+      "normative": 0,
+      "known_limitations": 4,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "metrics",
+      "exit_code": 0,
+      "cases": 38,
+      "agree": 38,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "large-conversion",
+      "exit_code": 0,
+      "cases": 5,
+      "agree": 5,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    },
+    {
+      "matrix": "geometry-default",
+      "exit_code": 0,
+      "cases": 1549,
+      "agree": 1549,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 425,
+      "failures": 0
+    },
+    {
+      "matrix": "geometry-face0",
+      "exit_code": 0,
+      "cases": 1549,
+      "agree": 1549,
+      "normative": 0,
+      "known_limitations": 0,
+      "declared_preload_cases": 0,
+      "failures": 0
+    }
+  ],
+  "cli_checks": [
+    {
+      "mode": "strict",
+      "exit_code": 1,
+      "cases": 1,
+      "agree": 0,
+      "known_limitations": 0,
+      "failures": [
+        "awami/text-17/ltr/clusters-0"
+      ]
+    },
+    {
+      "mode": "explicit-known",
+      "exit_code": 0,
+      "cases": 1,
+      "agree": 0,
+      "known_limitations": 1,
+      "failures": []
+    }
+  ],
+  "unit_tests": 7,
+  "registry_entries_checked": 651,
+  "note": "Existing explicit-dev native binary reused; no new runtime build. Known observations are not reference agreement."
+}
