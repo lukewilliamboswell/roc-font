@@ -1,0 +1,7091 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 1
+  },
+  "records": [
+    {
+      "id": "collision-retry-audit-bad-rounds-1-ltr",
+      "font_sha256": "463c8a9e4b7892c8cc7003262b54aee8d231396b7b089e5a26c52bfcc2a54323",
+      "key": "019496c92403281afa8e57f4aec094e17cff4c96fb384caf79f6f365d8dd04ef",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              97,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              97,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-2-ltr",
+      "font_sha256": "0a511c0bc1c097933c2ec1cfb877e783d27e3e061523ffc140402eeb7e84320b",
+      "key": "9b659ff8d01e2a51528194a5a248ee5aaa0ea27e049f1fb395d6f7f3cf411fa7",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-3-ltr",
+      "font_sha256": "c8b428cd4dc85360ba35dc8fdbcee4e0fc3bdd5cf46e8f3eddcd2e2a73716804",
+      "key": "7bec1f415d7aa6cf52fed0ead20f24b2052b10b6fc23cc9914856704327fa883",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-7-ltr",
+      "font_sha256": "d7b5d2f0be98357932b1563bac78e21c6a4265226f403d3a7f44d20ece4ff04f",
+      "key": "c9365907c576c61d21cb84a7c33c02e0bf0dcb20cf1eeb855ba7bdd68b417dd0",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-0-ltr",
+      "font_sha256": "a7217cba76737970c8a192545d6b43b2d5580fcdd5579caa974b945c9dd66939",
+      "key": "4cdb0b519d4567a3d3b5f1c145c0d97f26fcd2e8d978398aa70deac27f054484",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-199-ltr",
+      "font_sha256": "2fe1e487e07dc032f2623617c9d39f562f04ee4f8af36c00b9b46280a8a9be84",
+      "key": "72fec03517e9175829ac7b85a3009522d1d05fcc028d31471ac004ed28c9a45f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-200-ltr",
+      "font_sha256": "c8549df6395388ce2db005a4b38cb2b322ce98bba88060f48b6ec97d62c60f0f",
+      "key": "71a893c9ed5e892ef4a3b7540980377456ac83f8f497d30a53dede5f1b8bc217",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-201-ltr",
+      "font_sha256": "663f8675756e1b584b7331a656e2cb603f3b405e74c11731da15ab4d61fb0fa7",
+      "key": "180dc186b4dfedd54a6f1345260ac4f2a0ba81d1acded088ad7a7ca92f9ba2da",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-255-ltr",
+      "font_sha256": "a44b7308f31b1e71b488b821c6225412173093d4e5c2cbcbb2b0f4bd5e27306a",
+      "key": "7ee7c67a02e3bfe60b170ae39443f3fd832e0c574be4ddb2265029f376fdf4d3",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-290-0-ltr",
+      "font_sha256": "8015726d1519adc3cac39d6b0e5445f453694db3527ed16d932df776afddf41e",
+      "key": "eccf378f018909868a184ceba6384cab4c7377fc635304f1798dcfda5d2f4fa6",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133576192,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              10,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147076608,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-290-10-ltr",
+      "font_sha256": "04146d7976a2c08e5b40ae2e3b7e9a9f957e043519c352e7c75aa3a314a1f3ce",
+      "key": "dea780850f51b2c57fcc5296cc0f627a737ab71114ff1b1757d0807c16d05c0f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133576192,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              10,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147076608,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-291-0-ltr",
+      "font_sha256": "f1fe2c7771ac9a24992a6b9885d3dbcceca088f8d04a4448280c8a52fdb26920",
+      "key": "aace170f51e7dd1ebcf192d286fdbd3a06921a5d930eff4f3268dd057b2ac048",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133608960,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              9,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147092992,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-291-10-ltr",
+      "font_sha256": "8b66b70b395ceb1011c5ce6b2ea5ad7a3067bc78e344682d79b6ade5497c39f7",
+      "key": "7278dd0d649b72badecd7cbf04ea1f5719f01b987cdd65fcfcf08f6ac220e232",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133608960,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              9,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147092992,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-unit-threshold-0-ltr",
+      "font_sha256": "e82953f174c5cebb0351fc845ed597a077955c1d491dd37155c58e08472fee57",
+      "key": "ac25cebe42007c6133803a6b8bf8fed30ea361ee3e7ebe2f0e40fcfbacbdda8f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133871104,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              1,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147224064,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-unit-threshold-1-ltr",
+      "font_sha256": "395896317c3375cef8812d25083e51b5fe62b4305245a5748c1068af8ddeef39",
+      "key": "a478725fd4355044eafbd38c1f54d12b74214e70696ad609c65dc979556f8628",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1133871104,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              1,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147224064,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-2-ltr",
+      "font_sha256": "9902494a2d55eaea19a5c267f29e038d190d22c6189a4a7a3131dbcf7368b88e",
+      "key": "36be3e58808607385cb7392dfeb994e24c5d8a425a7929fb623efec1538e0d79",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              3281387520,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -500,
+              -100,
+              500,
+              100,
+              -350,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              0,
+              -100,
+              400,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143980032,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-3-ltr",
+      "font_sha256": "f05812380e041899af2fb28fd5f81def66abdd8e1f22012a0d1df104e7b61191",
+      "key": "93b3ce3a5fc4596a32ae8d0e42329211f8a97c079061896fc329de191867497f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              97,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              3281387520,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -500,
+              -100,
+              500,
+              100,
+              -350,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              0,
+              -100,
+              400,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143980032,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-4-ltr",
+      "font_sha256": "37b5c6a5d9e1da7e3ba6b4909b50d28635896e4544f2e1729372f4bcf73d4dd7",
+      "key": "ab84727ffe7617bbce547da96d0d788d21d70155b2d37a70fee58a629bd81410",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              3281387520,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -500,
+              -100,
+              500,
+              100,
+              -350,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              0,
+              -100,
+              400,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143980032,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-7-ltr",
+      "font_sha256": "e39b41785eb34097cad8caf562b4944c6ff5ee28f709003f979978e8c5e38e70",
+      "key": "51bc333954a385a81bcf3cf3f225d52a4f3f1ab43c79b7eb02dedab50daa3773",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              3281387520,
+              0
+            ],
+            "advance_bits": [
+              1112014848,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -500,
+              -100,
+              500,
+              100,
+              -350,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              0,
+              -100,
+              400,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143980032,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-scaled-relay-175-ltr",
+      "font_sha256": "555f716ec8ffa11c401b8f987ebb07d34899e8cdd8215d1684b4f94fbc62e09d",
+      "key": "371a9f6b7b8bd51c7768024218a878b0e99fae2eab4084e1ee84cffeef719503",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1103626240,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -50,
+              -100,
+              50,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              3272998912,
+              0
+            ],
+            "advance_bits": [
+              1103626240,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -250,
+              -100,
+              250,
+              100,
+              -175,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1125515264,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              0,
+              -100,
+              200,
+              100,
+              100,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143160832,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-scaled-relay-176-ltr",
+      "font_sha256": "3c92c90a843f72dc0db10069808430756833c0993576b609d3ca94de7bf59ea2",
+      "key": "1727a7f95dcc3802275b1f1898c1de548c34fd6abea947c8f36e3df538dcb257",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1103626240,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -50,
+              -100,
+              50,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1128792064,
+              0
+            ],
+            "advance_bits": [
+              1103626240,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -250,
+              -100,
+              250,
+              100,
+              175,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1125515264,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              0,
+              -100,
+              200,
+              100,
+              100,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143160832,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-euclidean-threshold-70-ltr",
+      "font_sha256": "b4c3475f4a4633498ed5621ad6fa86de9edfa3b07e02c872661bf2a8ca41c736",
+      "key": "e8d31c111f2b65e0e6946791ba14f42351c2d0fa178ba31df76426fa2d98fe4a",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1111963447,
+              1111963447
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              49,
+              49,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1142325248,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-euclidean-threshold-71-ltr",
+      "font_sha256": "4e349b1146a59c5bd291aebcdaa43fe3ed9934c2cfa4ee4d09dbc2b2a210c20f",
+      "key": "d63e5c262d0006bd2a6d0ea0a610e4f660ba18000507f700fabf3fffbfadd3ae",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1111963447,
+              1111963447
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              49,
+              49,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1142325248,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-0-ltr",
+      "font_sha256": "3511f54943b696546e25f0e3ccb5a19436216b7331593d798c3341f0ea99f488",
+      "key": "e900cc909ce6c22ff9b47d57bee622f5554d399c1c8f68302a9109633d95b235",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              101,
+              -100,
+              201,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-1-ltr",
+      "font_sha256": "1839c98f4e0764eb12f05ab54ffeae305c6cc3bf6ae402df0b8e2b3e8ab2888a",
+      "key": "ed70cc00fda4dc90d0152486bab8818e6c58669a960910db883bb8e64e9f4db3",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1128857600,
+              1120534528
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -100,
+              201,
+              100,
+              101,
+              101,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-17-ltr",
+      "font_sha256": "7b9998be58db4b5d5bbc0bbff6a625c81acf52328931bbfcf84ca1e459c5efe6",
+      "key": "8a24448a9370030c8abb06da35c02227ec16bb38b0e3ba59efea8fc8845fef50",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              17,
+              101,
+              -100,
+              201,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-0-ltr",
+      "font_sha256": "d1fb789fa43ba5d5c5f0348a5ba9b14aeccb854011098aa31a0f7a179d162863",
+      "key": "df04f02c890a2aec3ecb8afae3674ac75ecf1615e40ea6eb1b1174bfa31a48f1",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              1,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              1,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-1-ltr",
+      "font_sha256": "fc43c34dfc9249b4048a8f36b38c7d4765b91c22e4452a4d65d5c4bd68735700",
+      "key": "efd6bba5a3284f1d15c2ca8d51ab7585b1b4fd1339c3d282f452a45a5d967509",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-2-ltr",
+      "font_sha256": "2df66aba381363032813de79dd1933fc7007d1cbf9c45536f76b9540efdb9d7d",
+      "key": "f9a475a530fc2d7d62e39eaa84e19920045dd26d010ebafbf7c74aab567bc2fd",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-0-ltr",
+      "font_sha256": "ce41fd34fed3a4b314147baffd73d9b70f53f519c7af440ee28fb754434ae3dd",
+      "key": "a36963fbbfba82af1c305578aab7e067f23d86b6732324d32a6537432a04504a",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              33,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              33,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-1-ltr",
+      "font_sha256": "90b9066a04663836ee3f2a6d663bd25371bccc885e8ece8d99a7e3c742f016f5",
+      "key": "d9318002b2e7e4c71166673e2ddfcdf8b5875270e9ca6a8586e07a3c804eb78e",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-2-ltr",
+      "font_sha256": "4cfc43fb72abde31cd5595e0d19f98106c9dfdae8be9333d7ad2562c4bf2b209",
+      "key": "32a6efb3d2f11d56613daca234796f4f2bdc76bfbfd4fc9d49045e323e15fb32",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-0-ltr",
+      "font_sha256": "3bd5ff6f0030baaa96a94fe59a53689538d65dfb391b3ac1defb09401cbb58ba",
+      "key": "4e9e19b4219a3805bcdb17423395714a6853ec5ca5d7b8dce1fcd341292a467d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-1-ltr",
+      "font_sha256": "42b920416b61943d3f55c02df43d6fa8d813692ad765b3c4a069f5871c0a3c63",
+      "key": "de07a065d6eed39b3b669ed4d82c1f9ee0b0699b198d33a6dd2deb2804173ba9",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-2-ltr",
+      "font_sha256": "8095efa659845854b7fce58338ae71bbcd844f2dab0211f07601449d0a223226",
+      "key": "73da521ff1070fadee3e77772ea5b351461ee9c9fd74a2030f402d83e9b0b6e6",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-0-ltr",
+      "font_sha256": "985d70ccc124a14c68120877409d66c89272a1a5c98ab0780aedd63de4d26c14",
+      "key": "99680f182f0e44328a8a253621b54fc6e9c69880cb7e0b8ede59c19df7b3ff9b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              97,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              97,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-1-ltr",
+      "font_sha256": "8a4efeb0d5c776ab685b81bbe82dbab60bd3f16a1cf50838d66298a3ad8f256c",
+      "key": "325bb21f6077e6eab81c5d654d6daace8e8feb6e66916f28187e64bc736241af",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-2-ltr",
+      "font_sha256": "2e6a05efd2b8abeb65f9be2ae1e2eadc4387350bb20717aca892236dbd2373d3",
+      "key": "c9387279494f0f817257b894d5ca0848a644853f4af46ebe625d6292ab00646e",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-0-ltr",
+      "font_sha256": "8cfa9add6f846e03fe701545fc583d64cff9b583595a4cdacbfe770c31da104b",
+      "key": "6db36b45e19ff6a0101f3707b587b4f81115439db8877c7321136e2812cb3567",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              257,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              257,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-1-ltr",
+      "font_sha256": "57ed433d9dfb51acc476cfd59b4dfeaef9ccbc2707b4ac91786084584e759778",
+      "key": "9cb5244d512593330b440c4dc160b505a99c729a9478faee681796f76772b98b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-2-ltr",
+      "font_sha256": "7bfc33d9e6bfff41bae4469dbfabde1701a47ce6a8a842891a2b5ca9ed315d3d",
+      "key": "6019a5eb653edfa45e430784d5990eb90fb438f619d85e1705a63ef1f2025e65",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-0-ltr",
+      "font_sha256": "6a77d2ddc028e57993ff7f52084e512f9598f9daffe8248a02f4de7ea1ff2cf8",
+      "key": "264fd622666436d305b710ea1f7883d025d9a5539530c3230310e66bd0c5a00b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-1-ltr",
+      "font_sha256": "3ea56c338ff5e46184ed48514b8054f47dace56276beb55d8355ea554d79181b",
+      "key": "84e541ce4b1e3cc7706c172e7ab4ad045a85df3e51177782860a2dd6861633af",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-2-ltr",
+      "font_sha256": "f5c24beaee19ad55d6f7c6ef9fa74abbf7085da467161bf7d97cf4d7557003de",
+      "key": "8761afb37ec49140a3c6def9ecf3869d300130f0652e87a993e689803f65d907",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-0-ltr",
+      "font_sha256": "35c4b0d7234ff8bfd6cc5f8c9c195f0b29a6125ffe134c7501292cec88cf7e84",
+      "key": "ef36a21771f02ea25a41ee04e058e803aa0b5bf97e5bfcec755257a51aa7de40",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-1-ltr",
+      "font_sha256": "e7fb578ccba24d9aaa020d7b695419e96fb1d23a47f548aee61f5118e188c61b",
+      "key": "5cf2810599dc2bf44479a5044d437b6663b118a24a6ba515f2f2ee25f4c78886",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-2-ltr",
+      "font_sha256": "bf03f9ddcfd1b9ea530a297e8e0b5674a9df5112bc61fdfe88a888804d2104a8",
+      "key": "5b0a3da6f77de49f23eb63d639ab8fb3972ecf08ff4999c495f774c1a4b89b11",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-locked-threshold-255-ltr",
+      "font_sha256": "5c753115f8b51d2227fe173c50dfc8b74c6538748c4749d4b92cce206eaf2154",
+      "key": "cb50b9ca8fd71760dfa5ed88e7f5152d2bebf0006c99905aad4cb2c88076a7d8",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              321,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-margin-touch-ltr",
+      "font_sha256": "79e6016b1dd372e6afbc7df73138c3db53f0bd3365707ee3f57794ca666e86c9",
+      "key": "6fcf5e3900a8d207c5e9f44c1e2550a9098087847cf6df4344c1df75ed67d2bc",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-one-pass-3-ltr",
+      "font_sha256": "24012547b2721b51dcefa96fb50257c20390e154ccbdc1531eef23d7247451e4",
+      "key": "2b4ed57b954fdf5775e6c3555371b62f3d1ad4aeba1fbe4457f1be562c10960f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134330998,
+              3240277984
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              213,
+              -10,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-one-pass-7-ltr",
+      "font_sha256": "3eb1df2a99222b04a2f27b7620983d4371a525c8f2d67bc82b37b2a1ef14e3c5",
+      "key": "b175e1eec5fddff546e57d5e5dd0927efdf357c164c0dd84a27f8707f8a644cc",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134330998,
+              3240277984
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              213,
+              -10,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-1-ltr",
+      "font_sha256": "9ac8cf7e75a076775c9e9af48bf9d97153edbc56ba101b16360c94a86dccb170",
+      "key": "0dfdbd87f4e020a9503f52f05778ee8a0f7ac800618ea8f8d799c441f2c25b64",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134346684,
+              3231510912
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              213,
+              -4,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-10-ltr",
+      "font_sha256": "e1496890534907f47e112a78f6740f85a0efe7538e873ad6deec87b0b1418216",
+      "key": "4b89142fb98e9beebef8e1203a8e636df3e2dbeccf5970e53f68cf76dc173d7f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134330998,
+              3240277984
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              213,
+              -10,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-20-ltr",
+      "font_sha256": "46db7e790c4df3ee8772bb17234c193013fc2f80bf789e8328eddf317cce9f4b",
+      "key": "8e84c4a146a8054a17bbf94b33ecd6d3f450089f689122da53048ebc1d65553b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134397648,
+              3242410768
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              215,
+              -12,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-prior-pass-0-ltr",
+      "font_sha256": "e37bdf0070eea9d6b976cca5ca82a4669de38a4d3152fee2bb006fe589eedfb4",
+      "key": "04d9e08f234bcc197a432756d14e73c8083cc29b4af0616ae40e3b42feb7b698",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1134330999,
+              3240277976
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              213,
+              -10,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-prior-pass-100-ltr",
+      "font_sha256": "0791e7b5d849b0c0d2224865397de254769ff2173687cbc7fed2d5dedea0aab2",
+      "key": "3dc482153eab8e004a41ffbdc88692574022e0b6c83c2cb82ab71d2249370cb1",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1137429564,
+              1106246640
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              307,
+              29,
+              50,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-prior-far-frozen-ltr",
+      "font_sha256": "9fe19dad77c25d6f645c97cca75ea078d4d656f0158130653d38920d0aab8301",
+      "key": "622051cb1199725880272297ad65c382a34176ef4b73f6fcbd67c04b1455df9d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              3304718336,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-far-frozen-ltr",
+      "font_sha256": "6f4b2ab8e70b2c403ca2b8ef98774022266ff9c7333d850adc3b529a754f6b66",
+      "key": "77bb895ab194e69c240338018f347363480fc6e10387f4fbb77f9e7c834b2856",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1143930880,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1143930880,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1148846080,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1152344064,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-400-ltr",
+      "font_sha256": "15a897d355c8f59d369a591baf623e66096c47c0b9b0d896d2c26b2963d8faf0",
+      "key": "96d390f967c02280e1560ce3f5bf0ec4861d054ac7e4bf3e998ed03f29de2654",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1137180672,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1137180672,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1148878848,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-700-ltr",
+      "font_sha256": "866f42791c09ea9e3c38fdfe306acc5b962a6682231a370e9375d731a2011eb8",
+      "key": "c7d01d66cd9401d37828065361acd38743aa29bccfdf6d6395da2f4cf9cf4817",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1143930880,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1143930880,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151516672,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-2000-ltr",
+      "font_sha256": "f2eced1b9c88909bfa3bc25e92f9cbc08cae0ce31046218379fdc1ae27f2dcbd",
+      "key": "b341eecc262e2efa86a824ee6a25040adbdd03926cc9c5f4c260cdab7c675353",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1157234688,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1157234688,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1159897088,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-bad-ltr",
+      "font_sha256": "b02066c7a2c91d798f1fd87777ebf6484bbf5cdccaaf2d20c75c9792e11c6a47",
+      "key": "2aba8eec375747f1333da5c25d49b800f0c99028543fe100c67cf4732906b8c7",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              361,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1128792064,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              357,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147273216,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-mixed-ltr",
+      "font_sha256": "d1a343319459982d560a090bb0d305a98fdea1a4a30413403ba0f7921fed9349",
+      "key": "46fcf5469ea92b000caf21538dd0886978633b7cee052e9915cbced89e69199c",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              361,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              69,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              -200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147273216,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-ungrouped-ltr",
+      "font_sha256": "498b26e9910764b07a4c507ae9582946dca1b3676514cd3056b53c5a548756df",
+      "key": "32dfaedb2a07cb910da6b86648c6532d01506247407b8c9f339127bc11f6422c",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1128792064,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1133903872,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1147273216,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-reversed-pass-ltr",
+      "font_sha256": "2bf52f6d39b4f24abeb76c7c1abda7e90b98f1244704885401a6e2bd7e107633",
+      "key": "3dc83444db31a0b0271cec2b8df93cc76f68868e791547fe0c7674acd3a73603",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143963648,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-retry-audit-reversed-pass-rtl",
+      "font_sha256": "d2e95016d00746edc8cdb8b1c1a35c432c9c01155261a42287028435b1c35d29",
+      "key": "a02a1548d740e023c038e510f2d858d4a2065a2c456984c9932f0c93676827aa",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1120403456,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              1
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              353,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1143947264,
+          0
+        ]
+      }
+    }
+  ]
+}

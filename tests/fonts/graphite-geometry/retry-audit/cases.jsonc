@@ -1,0 +1,3764 @@
+{
+  "schema": 1,
+  "about": "Original UPL collision retry/threshold/flag and prior-pass float witnesses.",
+  "cases": [
+    {
+      "id": "collision-retry-audit-bad-rounds-1-ltr",
+      "font": "retry-audit/collision-retry-audit-bad-rounds-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "limit": 100,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-2-ltr",
+      "font": "retry-audit/collision-retry-audit-bad-rounds-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "limit": 100,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-3-ltr",
+      "font": "retry-audit/collision-retry-audit-bad-rounds-3-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "limit": 100,
+        "pass_flags": 3
+      }
+    },
+    {
+      "id": "collision-retry-audit-bad-rounds-7-ltr",
+      "font": "retry-audit/collision-retry-audit-bad-rounds-7-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "limit": 100,
+        "pass_flags": 7
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-0-ltr",
+      "font": "retry-audit/collision-retry-audit-wide-threshold-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "threshold": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-199-ltr",
+      "font": "retry-audit/collision-retry-audit-wide-threshold-199-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "threshold": 199
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-200-ltr",
+      "font": "retry-audit/collision-retry-audit-wide-threshold-200-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "threshold": 200
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-201-ltr",
+      "font": "retry-audit/collision-retry-audit-wide-threshold-201-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "threshold": 201
+      }
+    },
+    {
+      "id": "collision-retry-audit-wide-threshold-255-ltr",
+      "font": "retry-audit/collision-retry-audit-wide-threshold-255-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "threshold": 255
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-290-0-ltr",
+      "font": "retry-audit/collision-retry-audit-default-threshold-290-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        34,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          34,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 290,
+        "threshold": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-290-10-ltr",
+      "font": "retry-audit/collision-retry-audit-default-threshold-290-10-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        34,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          34,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 290,
+        "threshold": 10
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-291-0-ltr",
+      "font": "retry-audit/collision-retry-audit-default-threshold-291-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        35,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          35,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 291,
+        "threshold": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-default-threshold-291-10-ltr",
+      "font": "retry-audit/collision-retry-audit-default-threshold-291-10-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        35,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          35,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 291,
+        "threshold": 10
+      }
+    },
+    {
+      "id": "collision-retry-audit-unit-threshold-0-ltr",
+      "font": "retry-audit/collision-retry-audit-unit-threshold-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        43,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          43,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 299,
+        "threshold": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-unit-threshold-1-ltr",
+      "font": "retry-audit/collision-retry-audit-unit-threshold-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        43,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          43,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 299,
+        "threshold": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-2-ltr",
+      "font": "retry-audit/collision-retry-audit-relay-rounds-2-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        50,
+        35,
+        0,
+        25,
+        3,
+        0,
+        50,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          50,
+          35,
+          0,
+          25,
+          3,
+          0,
+          50,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ],
+          "2": [
+            -500,
+            -100,
+            500,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            400,
+            100
+          ]
+        },
+        "distance": 50,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-3-ltr",
+      "font": "retry-audit/collision-retry-audit-relay-rounds-3-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        50,
+        35,
+        0,
+        25,
+        3,
+        0,
+        50,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          50,
+          35,
+          0,
+          25,
+          3,
+          0,
+          50,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ],
+          "2": [
+            -500,
+            -100,
+            500,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            400,
+            100
+          ]
+        },
+        "distance": 50,
+        "pass_flags": 3
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-4-ltr",
+      "font": "retry-audit/collision-retry-audit-relay-rounds-4-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        50,
+        35,
+        0,
+        25,
+        3,
+        0,
+        50,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          50,
+          35,
+          0,
+          25,
+          3,
+          0,
+          50,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ],
+          "2": [
+            -500,
+            -100,
+            500,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            400,
+            100
+          ]
+        },
+        "distance": 50,
+        "pass_flags": 4
+      }
+    },
+    {
+      "id": "collision-retry-audit-relay-rounds-7-ltr",
+      "font": "retry-audit/collision-retry-audit-relay-rounds-7-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        50,
+        35,
+        0,
+        25,
+        3,
+        0,
+        50,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          50,
+          35,
+          0,
+          25,
+          3,
+          0,
+          50,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ],
+          "2": [
+            -500,
+            -100,
+            500,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            400,
+            100
+          ]
+        },
+        "distance": 50,
+        "pass_flags": 7
+      }
+    },
+    {
+      "id": "collision-retry-audit-scaled-relay-175-ltr",
+      "font": "retry-audit/collision-retry-audit-scaled-relay-175-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        25,
+        35,
+        0,
+        25,
+        3,
+        0,
+        25,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          25,
+          35,
+          0,
+          25,
+          3,
+          0,
+          25,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_width": 150,
+        "distance": 25,
+        "threshold": 175,
+        "glyph_limits": {
+          "1": [
+            -50,
+            -100,
+            50,
+            100
+          ],
+          "2": [
+            -250,
+            -100,
+            250,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            200,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-scaled-relay-176-ltr",
+      "font": "retry-audit/collision-retry-audit-scaled-relay-176-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        25,
+        35,
+        0,
+        25,
+        3,
+        0,
+        25,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          25,
+          35,
+          0,
+          25,
+          3,
+          0,
+          25,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1
+        ],
+        "glyph_width": 150,
+        "distance": 25,
+        "threshold": 176,
+        "glyph_limits": {
+          "1": [
+            -50,
+            -100,
+            50,
+            100
+          ],
+          "2": [
+            -250,
+            -100,
+            250,
+            100
+          ],
+          "3": [
+            0,
+            -100,
+            200,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-euclidean-threshold-70-ltr",
+      "font": "retry-audit/collision-retry-audit-euclidean-threshold-70-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 0,
+        "threshold": 70,
+        "diagonal": [
+          0,
+          127,
+          0,
+          255
+        ],
+        "boxes": {
+          "1": [
+            0,
+            0,
+            100,
+            100
+          ],
+          "2": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-euclidean-threshold-71-ltr",
+      "font": "retry-audit/collision-retry-audit-euclidean-threshold-71-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "distance": 0,
+        "threshold": 71,
+        "diagonal": [
+          0,
+          127,
+          0,
+          255
+        ],
+        "boxes": {
+          "1": [
+            0,
+            0,
+            100,
+            100
+          ],
+          "2": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-0-ltr",
+      "font": "retry-audit/collision-retry-audit-neighbor-filter-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_b": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ],
+          "2": [
+            101,
+            -100,
+            201,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-1-ltr",
+      "font": "retry-audit/collision-retry-audit-neighbor-filter-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_b": 1,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ],
+          "2": [
+            101,
+            -100,
+            201,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-neighbor-filter-17-ltr",
+      "font": "retry-audit/collision-retry-audit-neighbor-filter-17-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_b": 17,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ],
+          "2": [
+            101,
+            -100,
+            201,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-1-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 1,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-1-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 1,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-1-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-1-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 1,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-33-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 33,
+        "flags_b": 33,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-33-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 33,
+        "flags_b": 33,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-33-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-33-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 33,
+        "flags_b": 33,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-65-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 65,
+        "flags_b": 65,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-65-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 65,
+        "flags_b": 65,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-65-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-65-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 65,
+        "flags_b": 65,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-97-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 97,
+        "flags_b": 97,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-97-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 97,
+        "flags_b": 97,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-97-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-97-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 97,
+        "flags_b": 97,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-257-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 257,
+        "flags_b": 257,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-257-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 257,
+        "flags_b": 257,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-257-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-257-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 257,
+        "flags_b": 257,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-321-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 321,
+        "flags_b": 321,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-321-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 321,
+        "flags_b": 321,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-321-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-321-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 321,
+        "flags_b": 321,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-0-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-353-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 353,
+        "flags_b": 353,
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-1-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-353-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 353,
+        "flags_b": 353,
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-authored-flags-353-2-ltr",
+      "font": "retry-audit/collision-retry-audit-authored-flags-353-2-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 353,
+        "flags_b": 353,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-locked-threshold-255-ltr",
+      "font": "retry-audit/collision-retry-audit-locked-threshold-255-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 257,
+        "flags_b": 257,
+        "threshold": 255,
+        "pass_flags": 2
+      }
+    },
+    {
+      "id": "collision-retry-audit-margin-touch-ltr",
+      "font": "retry-audit/collision-retry-audit-margin-touch-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_a": 50
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-one-pass-3-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-one-pass-3-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "pass_flags": 3
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-one-pass-7-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-one-pass-7-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "pass_flags": 7
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-1-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-threshold-1-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "threshold": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-10-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-threshold-10-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "threshold": 10
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-threshold-20-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-threshold-20-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "threshold": 20
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-prior-pass-0-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-prior-pass-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "prior": true,
+        "obstacle_shift": 0
+      }
+    },
+    {
+      "id": "collision-retry-audit-fractional-prior-pass-100-ltr",
+      "font": "retry-audit/collision-retry-audit-fractional-prior-pass-100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          100,
+          35,
+          20,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20
+        ]
+      ],
+      "collision": {
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "margin_b": 50,
+        "prior": true,
+        "obstacle_shift": 100
+      }
+    },
+    {
+      "id": "collision-retry-audit-prior-far-frozen-ltr",
+      "font": "retry-audit/collision-retry-audit-prior-far-frozen-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          248,
+          48,
+          35,
+          20,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20
+        ]
+      ],
+      "collision": {
+        "flags_a": 0,
+        "flags_b": 1,
+        "prior": true,
+        "obstacle_shift": -2000
+      }
+    },
+    {
+      "id": "collision-retry-audit-far-frozen-ltr",
+      "font": "retry-audit/collision-retry-audit-far-frozen-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        2,
+        188,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          2,
+          188,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          0,
+          1,
+          1
+        ],
+        "glyph_limits": {
+          "2": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        },
+        "far_frozen": true
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-400-ltr",
+      "font": "retry-audit/collision-retry-audit-search-window-400-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        144,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          144,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 400,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-700-ltr",
+      "font": "retry-audit/collision-retry-audit-search-window-700-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        2,
+        188,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          2,
+          188,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 700,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-search-window-2000-ltr",
+      "font": "retry-audit/collision-retry-audit-search-window-2000-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        7,
+        208,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          7,
+          208,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 2000,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        },
+        "pass_flags": 1
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-bad-ltr",
+      "font": "retry-audit/collision-retry-audit-groups-bad-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          9,
+          5,
+          1
+        ],
+        "limit": 100,
+        "pass_flags": 3
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-mixed-ltr",
+      "font": "retry-audit/collision-retry-audit-groups-mixed-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          9,
+          5,
+          1
+        ],
+        "limit": 100,
+        "pass_flags": 3,
+        "glyph_limits": {
+          "3": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ],
+          "4": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-retry-audit-groups-ungrouped-ltr",
+      "font": "retry-audit/collision-retry-audit-groups-ungrouped-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "limit": 100,
+        "pass_flags": 3
+      }
+    },
+    {
+      "id": "collision-retry-audit-reversed-pass-ltr",
+      "font": "retry-audit/collision-retry-audit-reversed-pass-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        []
+      ],
+      "collision": {
+        "limit": 100,
+        "reverse": true
+      }
+    },
+    {
+      "id": "collision-retry-audit-reversed-pass-rtl",
+      "font": "retry-audit/collision-retry-audit-reversed-pass-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        []
+      ],
+      "collision": {
+        "limit": 100,
+        "reverse": true
+      }
+    }
+  ]
+}
