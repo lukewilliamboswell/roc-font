@@ -54,8 +54,10 @@ bundle.
 | `tests/fonts/vertical/` | renamed pinned Noto Sans/Serif Japanese subsets and original vertical table fixtures | SIL OFL 1.1 in adjacent `*-OFL.txt`; original fixtures under `LICENSE` |
 | `tests/fonts/variation-complete/` | pinned Inter and Amstelvar fonts/subsets, an unmodified duplicate-axis HarfBuzz fixture and original variation/metric fixtures | adjacent OFL texts; duplicate-axis font under `APACHE-2.0.txt` with `DUPLICATE-AXES-NOTICE.txt`; originals under `SYNTHETIC-LICENSE.txt` |
 | `tests/fonts/aat/` | unmodified Noto Sans Tamil MN from the pinned HarfBuzz corpus, plus original Apple programs | SIL OFL 1.1 in `NotoSansTamilMN-OFL.txt`; original fixtures under `LICENSE` |
+| `tests/fonts/aat-mort/` | renamed Inter font body with original legacy Apple programs, plus original generated fixtures | SIL OFL 1.1 in `body-sans-OFL.txt`; original fixtures under `LICENSE` |
 | `tests/fonts/aat-position/` | unmodified Jellee Roman plus original Apple positioning programs | SIL OFL 1.1 in `Jellee-OFL.txt`; original fixtures under `SYNTHETIC-LICENSE.txt` |
 | `tests/fonts/graphite/` | unmodified SIL Charis, Padauk, Scheherazade and Awami fonts, plus original Graphite programs | complete adjacent `*.LICENSE.txt` for each SIL font; original fixtures under `LICENSE` |
+| `tests/fonts/graphite-geometry/`, `tests/fonts/graphite-metrics/` | original Graphite geometry, metric and variation controls; real-font probes reference the unmodified SIL fonts above | original fixtures under adjacent `LICENSE` files; SIL font licences remain with their original files |
 | `tests/fonts/shaping/thai/`, `tests/fonts/shaping/lao/`, `tests/fonts/shaping/hangul/` | unmodified pinned Noto Thai/Lao and Nanum Hangul families; upstream pins in each `sources.json` | SIL OFL 1.1, adjacent `*-OFL.txt` files |
 | `tests/fonts/shaping/thai-legacy/`, `tests/fonts/shaping/hangul-fixtures/` | original generated fixtures | the repository's licence; adjacent `LICENSE` |
 | `tests/fonts/shaping/arabic-extra/` | unmodified pinned Noto Sans Syriac, Eastern/Western and Noto Nastaliq Urdu; adjacent `sources.json` records origins | SIL OFL 1.1, adjacent `*-OFL.txt` files |
