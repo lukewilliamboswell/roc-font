@@ -1,0 +1,121 @@
+{
+  "scope": "All15 independently referenced Graphite feature cases on consolidated core; central total93 featurecases. General64 and existing78 separately pass on this nightly.",
+  "report": {
+    "metadata": {
+      "bundle": "9frC2NfB4afc7ovGUXstMtGpQdQFCRCUYutnNQULQCAG.tar.zst",
+      "source_sentinel": true,
+      "roc": "Roc compiler version nightly-2026-10-28-bad769b",
+      "reused_binaries": false,
+      "requested_bytes": null,
+      "peak_live_bytes": null
+    },
+    "cases": {
+      "graphite/attachment/8": {
+        "allocations": 82,
+        "leaked": 0,
+        "checksum": "14525329208503566346",
+        "font_sha256": "de1011441ac7535cf270615bf7852797096d762071763c5d3d7a1d0b7f65aa6b",
+        "case_sha256": "c739101a7e5b0802d2dc2bead0b52d197fe672a49b75c6f0af25585b206a9f52"
+      },
+      "graphite/attachment/32": {
+        "allocations": 251,
+        "leaked": 0,
+        "checksum": "11277038690814771066",
+        "font_sha256": "de1011441ac7535cf270615bf7852797096d762071763c5d3d7a1d0b7f65aa6b",
+        "case_sha256": "e0d97837730601144ee4c4d864d7ca7b93255a2d2ef0b79ca5d84d9c97038658"
+      },
+      "graphite/attachment/128": {
+        "allocations": 926,
+        "leaked": 0,
+        "checksum": "13111414603472431802",
+        "font_sha256": "de1011441ac7535cf270615bf7852797096d762071763c5d3d7a1d0b7f65aa6b",
+        "case_sha256": "3adcf356e9f460c2069ed9b3890a2f0be62cf0190b3c15e0e8355bb1cd8f3a20"
+      },
+      "graphite/kerning-parts/4": {
+        "allocations": 70,
+        "leaked": 0,
+        "checksum": "8016509685935121140",
+        "font_sha256": "3cf2c15fd234084ee6e1462e41f9ae1ffb77fb66c04196fa525e4cc4153a2ede",
+        "case_sha256": "26dbc47bede510290306f8cb2e028395fb953ad145320625536e228fd809b4b0"
+      },
+      "graphite/kerning-parts/8": {
+        "allocations": 107,
+        "leaked": 0,
+        "checksum": "7065728181293340348",
+        "font_sha256": "3cf2c15fd234084ee6e1462e41f9ae1ffb77fb66c04196fa525e4cc4153a2ede",
+        "case_sha256": "9198c82358b850106b9688b5704d4cc9c81955a344297d83fb6f91ccc945dd77"
+      },
+      "graphite/kerning-parts/16": {
+        "allocations": 179,
+        "leaked": 0,
+        "checksum": "9117213081122116492",
+        "font_sha256": "3cf2c15fd234084ee6e1462e41f9ae1ffb77fb66c04196fa525e4cc4153a2ede",
+        "case_sha256": "341445578cc79d21e29ef22175b2d946d5563b2136891d6cdb1702218552480c"
+      },
+      "graphite/shifting-parts/4": {
+        "allocations": 150,
+        "leaked": 0,
+        "checksum": "8693018508798741868",
+        "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+        "case_sha256": "98db0437f0d3cbd9643d484cc8c3146d214b2ab5fd9ccf1196a0b53304cf5de4"
+      },
+      "graphite/shifting-parts/8": {
+        "allocations": 279,
+        "leaked": 0,
+        "checksum": "12645660546436526332",
+        "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+        "case_sha256": "56420202aded288fa6e99db3c29425518ad516f9227a7e0f06a5100a6de02ea2"
+      },
+      "graphite/shifting-parts/16": {
+        "allocations": 535,
+        "leaked": 0,
+        "checksum": "128593753864890188",
+        "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+        "case_sha256": "2c8fdd50f5369df83de494360b25078c494c19f73716b6eb5562effda494c854"
+      },
+      "graphite/sequence-members/16": {
+        "allocations": 387,
+        "leaked": 0,
+        "checksum": "4733405774577831116",
+        "font_sha256": "5e03e35671dccfb60c4f92d958ebbe6fddade97cc9d78108bdc81b1d4b0c6873",
+        "case_sha256": "0e5fc955d699f167b4196aeeaf2a6bb4f230ed92a036fde0d7a2c2a1c0dda6e4"
+      },
+      "graphite/sequence-members/64": {
+        "allocations": 1493,
+        "leaked": 0,
+        "checksum": "6639840138428045996",
+        "font_sha256": "5e03e35671dccfb60c4f92d958ebbe6fddade97cc9d78108bdc81b1d4b0c6873",
+        "case_sha256": "e392cc94c57e3cd3fe030eeaafd01244abbaea09ba0dd406484b23d8da21f53c"
+      },
+      "graphite/sequence-members/256": {
+        "allocations": 5913,
+        "leaked": 0,
+        "checksum": "3970979776383301676",
+        "font_sha256": "5e03e35671dccfb60c4f92d958ebbe6fddade97cc9d78108bdc81b1d4b0c6873",
+        "case_sha256": "d935f2920ca2feaf10a638c44f76d19f19cf86118d2d55d151fd00ac566276f2"
+      },
+      "graphite/prefix-changing/4": {
+        "allocations": 104,
+        "leaked": 0,
+        "checksum": "5007165539358496624",
+        "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+        "case_sha256": "88718df345b30038774d5d6ba2ee730858de0bb2cad7d1027a30063de95b6112"
+      },
+      "graphite/prefix-changing/8": {
+        "allocations": 176,
+        "leaked": 0,
+        "checksum": "151265287089899292",
+        "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+        "case_sha256": "6dbf2f27e4e2a68966526e40ba65eb98ba1cb405c739b51922ec6e14a03a5724"
+      },
+      "graphite/prefix-changing/16": {
+        "allocations": 321,
+        "leaked": 0,
+        "checksum": "10520850321509213724",
+        "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+        "case_sha256": "5de7ee51a704f71c4770ab66f611e776ecd6502bbba99baa13742a4ec45e724c"
+      }
+    },
+    "failures": []
+  }
+}

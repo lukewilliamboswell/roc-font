@@ -31,15 +31,20 @@ with three short batches; use it to see that everything builds and runs, not
 to quote numbers. The full run uses seven batches of about 200 ms.
 
 `feature_allocations.py` additionally builds the CFF, vertical, variation
-and modern/legacy Apple and Graphite-reader allocation consumers against
-the same served bundle in a
-source-sentinel mirror. It measures at least three sizes of each narrow
+and modern/legacy Apple and Graphite reading/shaping allocation consumers
+against the same served bundle in a source-sentinel mirror. It measures at
+least three sizes of each narrow
 feature and checks `feature_cases` in the same baseline file. Both an
 increase and a decrease require an explicit update with `--update`;
 `scripts/bench.py --update-baseline` preserves these independent records.
 The full `all_tests.py` bench step runs both ratchets; CI's smoke mode
 builds and briefly exercises the consumers without changing baselines.
 Elapsed-time comparisons remain in the adjacent feature benchmark records.
+The fifteen Graphite shaping cases cover attachment, kerning parts, shifting
+parts, sequence membership and changing prefixes. Their font hashes and
+ordered output checksums must match the independent cached references before
+an allocation baseline can be updated. These checks do not count the separately
+documented unfinished Graphite cases as numerical agreements.
 Requested bytes and peak live bytes are unavailable in roc-fuzz 0.4.3;
 allocation calls, leaks and fuzz RSS are reported separately.
 

@@ -25,10 +25,23 @@ SOURCES = {
     'aat-morx': 'bench/aat-morx/alloc.roc',
     'aat-mort': 'tests/fonts/aat-mort/alloc.roc',
     'graphite-read': 'tests/fonts/graphite/read_alloc.roc',
+    'graphite-shape': 'tests/fonts/graphite/shape_alloc.roc',
 }
+
+def graphite_cases():
+    directory = ROOT / 'tests/fonts/graphite-geometry/benchmark'
+    reference = json.loads((directory / 'allocation-baseline.json').read_text())
+    for case in reference['cases']:
+        path = str((directory / case['font']).resolve().relative_to(ROOT))
+        for row in case['rows']:
+            key = f'graphite/{case["id"]}/{row["copies"]}'
+            header = f'{case["script"]}\t{case["direction"]}\t{row["copies"]}\t{case["text"]}\n'.encode()
+            yield key, path, header, {**row, 'font_sha256': case['font_sha256']}
 
 def cases():
     """The exact inputs used by the independently referenced benchmarks."""
+    for key, path, header, _ in graphite_cases():
+        yield 'graphite-shape', key, path, header
     for size in [16, 64, 192]:
         for mode, operation in enumerate(['read', 'shape']):
             yield 'aat-mort', f'aat-mort/{operation}/{size}', f'tests/fonts/aat-mort/scaling-{size}.ttf', bytes([mode, size // 256, size % 256])
@@ -71,6 +84,7 @@ def main():
     expected = baseline.setdefault('feature_cases', {})
     actual = {}
     failures = []
+    graphite_reference = {key: row for key, _, _, row in graphite_cases()}
     mirror = ROOT if (ROOT / 'package/main.roc').read_text() == flight.SENTINEL else flight.make_mirror(WORK / 'mirror')
     with flight.flight(roc, work=WORK / 'flight') as dep:
         metadata = {'bundle': dep[-1].rsplit('/', 1)[-1], 'source_sentinel': True,
@@ -112,7 +126,11 @@ def main():
                        'checksum': diagnostic[3], 'font_sha256': hashlib.sha256(font).hexdigest(),
                        'case_sha256': hashlib.sha256(data).hexdigest()}
                 actual[key] = row
-                if row['leaked']:
+                if group == 'graphite-shape' and row['font_sha256'] != graphite_reference[key]['font_sha256']:
+                    failures.append(f'{key}: input font differs from the independently referenced fixture')
+                elif group == 'graphite-shape' and row['checksum'] != str(graphite_reference[key]['output_checksum']):
+                    failures.append(f'{key}: output differs from the cached independent reference checksum')
+                elif row['leaked']:
                     failures.append(f'{key}: leaked {row["leaked"]} allocations')
                 elif args.update:
                     if expected.get(key) != row:
