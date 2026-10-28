@@ -992,7 +992,10 @@ Face := {
 			Extents(box) => match face.v_bearings.get(id) {
 				Ok(bearing) if face.has_glyf => box.y_max.to_i64() + bearing.to_i64()
 				_ => {
-					remaining = Face.vertical_advance(face, loc, id).to_i64() - (box.y_max.to_i64() - box.y_min.to_i64())
+					# With no applicable top bearing, the reference centers in
+					# the horizontal font extents, independently of vmtx.
+					metrics = Face.metrics(face, loc)
+					remaining = metrics.ascent.to_i64() + metrics.descent.to_i64() - (box.y_max.to_i64() - box.y_min.to_i64())
 					# Arithmetic shift gives floor division for a negative odd gap.
 					box.y_max.to_i64() + remaining.shr_wrap(1)
 				}
