@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "about": "MATH queries: all 56 constants, every glyph, all four kern corners at each threshold and its neighbours, both construction directions. Glyph absence and past-font calls are covered by MathTests.roc.",
+  "cases": [
+    {"id": "noto", "font": "NotoSansMath-Regular.ttf", "weight": 400},
+    {"id": "synthetic", "font": "math.ttf", "weight": 400},
+    {"id": "empty", "font": "math-empty.ttf", "weight": 400},
+    {"id": "variable-default", "font": "math-variable.ttf", "weight": 400},
+    {"id": "variable-half", "font": "math-variable.ttf", "weight": 650},
+    {"id": "variable-max", "font": "math-variable.ttf", "weight": 900}
+  ]
+}
