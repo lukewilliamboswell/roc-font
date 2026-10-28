@@ -173,6 +173,7 @@ BENCH_APPS = (
     "bench/roc/font.roc", "bench/roc/alloc.roc",
     "bench/roc/myanmar.roc", "bench/roc/myanmar-alloc.roc",
     "bench/arabic/bench.roc", "bench/arabic/alloc.roc",
+    "bench/vertical/bench.roc", "bench/vertical/alloc.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 

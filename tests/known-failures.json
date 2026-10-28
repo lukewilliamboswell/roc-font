@@ -7,63 +7,71 @@
     },
     {
       "id": "corpus-fonts/fonttools-bogus-post-read",
-      "reason": "OTS rejects the font because it has no `OS/2` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `OS/2`, `name` or `post` as OTS does (architecture §4.4) but does not require them to be present, so callers can read metrics-only and synthetic fonts; accepting the font is a deliberate divergence."
+      "reason": "OTS rejects the font because it has no `OS/2` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `OS/2`, `name` or `post` as OTS does (architecture \u00a74.4) but does not require them to be present, so callers can read metrics-only and synthetic fonts; accepting the font is a deliberate divergence."
     },
     {
       "id": "corpus-fonts/fonttools-noto-vf-subset-coords-bold",
-      "reason": "The subset's glyf sets the reserved cubic flag bit (0x80) on a point; OTS 9.3.0 rejects the font (\"Bad glyph flag\") and roc-font follows OTS (architecture §4.4), while HarfBuzz reads it and reports coordinates."
+      "reason": "The subset's glyf sets the reserved cubic flag bit (0x80) on a point; OTS 9.3.0 rejects the font (\"Bad glyph flag\") and roc-font follows OTS (architecture \u00a74.4), while HarfBuzz reads it and reports coordinates."
     },
     {
       "id": "corpus-fonts/jellee-kern-pairs",
-      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset. OTS drops every `kern` table but version 0, so a browser never applies this one; roc-font drops it as OTS does (architecture §4.4, `corpus-fonts/jellee-kern-read` agrees), so the pairs are not kerned. Deliberate: browser parity over HarfBuzz parity for legacy tables."
+      "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset. OTS drops every `kern` table but version 0, so a browser never applies this one; roc-font drops it as OTS does (architecture \u00a74.4, `corpus-fonts/jellee-kern-read` agrees), so the pairs are not kerned. Deliberate: browser parity over HarfBuzz parity for legacy tables."
     },
     {
       "id": "hb-curated/in-house/ih-rand-3",
-      "reason": "OTS 9.3.0 rejects the font: its `GSUB` has a `DFLT` script without a default language system (ots/src/layout.cc lines 98-102), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz shapes it anyway."
+      "reason": "OTS 9.3.0 rejects the font: its `GSUB` has a `DFLT` script without a default language system (ots/src/layout.cc lines 98-102), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz shapes it anyway."
     },
     {
       "id": "hb-curated/in-house/ih-spaces-1",
-      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture §4.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
+      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture \u00a74.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
     },
     {
       "id": "hb-curated/in-house/ih-spaces-3",
-      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture §4.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
+      "reason": "The font has a zero-length `glyf` table, for which OTS (and so every browser) rejects it; lenient reading accepts exactly what OTS accepts (architecture \u00a74.4), so roc-font rejects the font where HarfBuzz shapes with it. Deliberate."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-10",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-2",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-3",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-6",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-7",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-cmap-3-8",
-      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz decodes the Macintosh map."
+      "reason": "OTS 9.3.0 rejects the font: its only character map is a Macintosh (1, 0) format 0 subtable, and OTS refuses a font without a Unicode or Windows map it passes on (ots/src/cmap.cc lines 859-863), so a browser cannot draw it. roc-font refuses it as OTS does (architecture \u00a74.4), where HarfBuzz decodes the Macintosh map."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-kern-1-2",
-      "reason": "TestKERNOne.otf is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture §4.4) where HarfBuzz applies it. Deliberate."
+      "reason": "TestKERNOne.otf is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture \u00a74.4) where HarfBuzz applies it. Deliberate."
     },
     {
       "id": "hb-curated/text-rendering-tests/trt-kern-2-2",
-      "reason": "The font is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture §4.4) where HarfBuzz applies it. Deliberate."
+      "reason": "The font is a CFF font with a `kern` table. OTS drops `kern` from fonts without `glyf` (its serializer: \"this table is not for CFF fonts\"), so browsers never kern it; roc-font drops it as OTS does (architecture \u00a74.4) where HarfBuzz applies it. Deliberate."
     },
     {
       "id": "reading/inter-metrics-subset",
-      "reason": "OTS rejects the metrics-only subset because it has no `name` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `name` as OTS does (architecture §4.4) but does not require one, so accepting the font is a deliberate divergence."
+      "reason": "OTS rejects the metrics-only subset because it has no `name` table: OTS requires `OS/2`, `name` and `post` to be present. roc-font rejects a broken `name` as OTS does (architecture \u00a74.4) but does not require one, so accepting the font is a deliberate divergence."
+    },
+    {
+      "id": "vorg-policy-cases/ttf-ignore-btt",
+      "reason": "OpenType VORG specifies CFF/CFF2 origins and is ignored for TrueType outlines. HarfBuzz 14.6.0 applies VORG to TrueType too; roc-font follows the format scope. Dedicated public regressions pin the ignored result; see tests/fonts/vertical/README.md."
+    },
+    {
+      "id": "vorg-policy-cases/ttf-ignore-ttb",
+      "reason": "OpenType VORG specifies CFF/CFF2 origins and is ignored for TrueType outlines. HarfBuzz 14.6.0 applies VORG to TrueType too; roc-font follows the format scope. Dedicated public regressions pin the ignored result; see tests/fonts/vertical/README.md."
     }
   ]
 }
