@@ -1,3 +1,5 @@
+import "../../tests/fonts/math/math-precise-variable.ttf" as precise_file : List(U8)
+import "../../tests/fonts/math/math-constant-variable.ttf" as constant_file : List(U8)
 import font.Font
 import build.FontBuild
 import "../../tests/fonts/math/math.ttf" as math_file : List(U8)
@@ -261,4 +263,27 @@ expect {
 				Absent => False
 			}
 		)
+}
+
+# Three axes yield a2^-34 scalar whose32long-word columns still add4
+# font units. A2.30positioncache would lose that legitimate correction.
+expect {
+	font = Font.at(read(precise_file), Font.Variation.{ axes: [{ tag: "wght", value: 1 }, { tag: "AX02", value: 1 }, { tag: "AX03", value: 256 }] })
+	(
+		match Font.math_constants(font) {
+			Present(c) => c.axis_height == 254
+			Absent => False
+		}
+	) and Font.math_italic_correction(font, 1) == Present(8) and Font.math_top_accent_attachment(font, 1) == Present(244)
+}
+# Peak-zero regions contribute at the design default as the format defines;
+# an inactive shaping-location shortcut must not hide those MATH deltas.
+expect {
+	font = Font.at(read(constant_file), Font.Variation.{ weight: Weight(0) })
+	(
+		match Font.math_constants(font) {
+			Present(c) => c.axis_height == 68719476986
+			Absent => False
+		}
+	) and Font.math_italic_correction(font, 1) == Present(-68719476724)
 }

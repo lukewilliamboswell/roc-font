@@ -4,6 +4,8 @@ app [target] {
 	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
 }
 
+import "../tests/fonts/math/math-precise-variable.ttf" as precise_file : List(U8)
+import "../tests/fonts/math/math-constant-variable.ttf" as constant_file : List(U8)
 import fuzz.Fuzz
 import font.Font
 import build.FontBuild
@@ -44,10 +46,12 @@ test! = |bytes| {
 	Fuzz.expect_no_leaks!(|{}| query(large, 1))
 	candidate = if bytes.take_first(4) == [0, 1, 0, 0] or bytes.take_first(4) == "OTTO".to_utf8() or bytes.take_first(4) == "ttcf".to_utf8() {
 		bytes
-	} else match choice % 4 {
+	} else match choice % 6 {
 		0 => FontBuild.mutate(noto_file, bytes.drop_first(1))
 		1 => FontBuild.mutate(variable_file, bytes.drop_first(1))
-		2 => FontBuild.mutate(large_bytes, bytes.drop_first(1))
+		2 => FontBuild.mutate(precise_file, bytes.drop_first(1))
+		3 => FontBuild.mutate(constant_file, bytes.drop_first(1))
+		4 => FontBuild.mutate(large_bytes, bytes.drop_first(1))
 		_ => bytes
 	}
 	match Font.from_bytes(candidate, Font.ReadOptions.{}) {
@@ -71,6 +75,14 @@ test! = |bytes| {
 						Present(assembly) if assembly.parts.len() > 65535 => crash "MATH assembly escaped its checked count"
 						_ => {}
 					}
+				}
+			}
+			for value in [0.Dec, 1, 256, 16384] {
+				settings = Font.Variation.{ axes: [{ tag: "wght", value }, { tag: "AX02", value }, { tag: "AX03", value }] }
+				a = Font.at(font, settings)
+				b = Font.at(again, settings)
+				if query(a, 1) != query(b, 1) {
+					crash "precise/default MATH location is nondeterministic"
 				}
 			}
 		}

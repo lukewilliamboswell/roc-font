@@ -43,6 +43,24 @@
       "font": "math-large-variable.ttf",
       "weight": 900,
       "wide": true
+    },
+    {
+      "id": "precise-variable-tiny",
+      "font": "math-precise-variable.ttf",
+      "weight": 1,
+      "wide": true,
+      "axes": {
+        "wght": 1,
+        "AX02": 1,
+        "AX03": 256
+      },
+      "request": "tiny"
+    },
+    {
+      "id": "constant-variable-default",
+      "font": "math-constant-variable.ttf",
+      "weight": 0,
+      "wide": true
     }
   ]
 }

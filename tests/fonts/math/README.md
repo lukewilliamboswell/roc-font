@@ -72,3 +72,13 @@ region scalar lies in [0,1]. Even allowing binary32 accumulation error,
 the rounded sum is below2^48 in magnitude, leaving room in I64 for the
 base value without overflow or saturation. Repeated region indices do not
 change that per-row count bound.
+
+Two additional original variable fixtures cover scalar precision and the
+meaning of the design default. `math-precise-variable.ttf` has three axes
+whose normalized coordinates [1,1,256] produce scalar 2^-34. Thirty-two
+signed-32-bit columns still add four font units, which a 2.30 shaping cache
+would lose. `math-constant-variable.ttf` has peak-zero regions and contributes
+even at normalized coordinates [0,0,0]. Both pass OTS9.3. Their independently
+computed fontTools/binary32 facts use the wide oracle path, because pinned
+HarfBuzz14.6 does not evaluate raw MATH VariationIndex devices. MATH uses
+precise binary32 scalars at every location, including the design default.

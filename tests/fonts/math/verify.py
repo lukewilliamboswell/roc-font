@@ -31,7 +31,7 @@ def main():
         work=Path(directory);binary=work/'math-queries'
         with flight.flight(roc,work=work) as dep:
             subprocess.run([roc,'build','--opt=speed',str(HERE/'query.roc'),f'--output={binary}',*dep],cwd=ROOT,check=True)
-        requests=''.join(f"{c['id']}\t{HERE/c['font']}\t{c['weight']}\n" for c in cases)
+        requests=''.join(f"{c['id']}\t{HERE/c['font']}\t{c.get('request',c['weight'])}\n" for c in cases)
         result=subprocess.run([str(binary)],input=requests,text=True,capture_output=True,cwd=ROOT,timeout=120,check=True)
         expected=[f"{c['id']}\t{fact}" for c in cases for fact in indexed[c['id']]['facts']]
         actual=result.stdout.splitlines()

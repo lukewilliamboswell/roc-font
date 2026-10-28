@@ -100,3 +100,20 @@ def make(name, varied=False, empty=False, large=False):
 
 if __name__=='__main__':
     make('math.ttf');make('math-variable.ttf',varied=True);make('math-empty.ttf',empty=True);make('math-large-variable.ttf',varied=True,large=True)
+
+
+def precise(name,constant=False):
+    source=HERE/'math-large-variable.ttf'
+    from fontTools.ttLib import TTFont
+    font=TTFont(source,recalcTimestamp=False)
+    tags=['wght','AX02','AX03'];font['fvar'].axes=[]
+    for tag in tags:
+        a=Axis();a.axisTag=tag;a.minValue=0;a.defaultValue=0;a.maxValue=16384;a.flags=0;a.axisNameID=256;font['fvar'].axes.append(a)
+    region={tag:(0,0,0) if constant else (0,1,1) for tag in tags}
+    rows=[[2147483647]*32,[-2147483648]*32,[2147483647]*32,[0]*32,[2147483647]*32,[-2147483648]*32]
+    font['GDEF'].table.VarStore=buildVarStore(buildVarRegionList([region],tags),[buildVarData([0]*32,rows,optimize=False)])
+    font.save(HERE/name,reorderTables=True)
+
+if __name__=='__main__':
+    precise('math-precise-variable.ttf')
+    precise('math-constant-variable.ttf',constant=True)

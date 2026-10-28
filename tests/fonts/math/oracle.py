@@ -37,13 +37,13 @@ def facts(case):
     wide=case.get('wide',False)
     path=HERE/case['font']; data=path.read_bytes(); ft=TTFont(path)
     face=hb.Face(data); font=hb.Font(face); font.scale=(face.upem,face.upem)
-    font.set_variations({'wght':case['weight']})
+    font.set_variations(case.get('axes',{'wght':case['weight']}))
     table=ft['MATH'].table
     info=table.MathGlyphInfo; variants=table.MathVariants
     order=ft.getGlyphOrder(); ids=ft.getReverseGlyphMap()
     if 'fvar' in ft:
         axes=ft['fvar'].axes
-        norm=normalizeLocation({'wght':case['weight']},{a.axisTag:(a.minValue,a.defaultValue,a.maxValue) for a in axes})
+        norm=normalizeLocation(case.get('axes',{'wght':case['weight']}),{a.axisTag:(a.minValue,a.defaultValue,a.maxValue) for a in axes})
         instancer=VarStoreInstancer(ft['GDEF'].table.VarStore, axes, norm)
     else:
         norm={};instancer=None
@@ -51,7 +51,7 @@ def facts(case):
     def value(r):
         if r is None:return 0
         result=r.Value;d=r.DeviceTable
-        if d is not None and d.DeltaFormat==0x8000 and any(norm.values()):
+        if d is not None and d.DeltaFormat==0x8000 and instancer is not None:
             delta=instancer[(d.StartSize<<16)|d.EndSize]
             if wide:
                 # The wide fixture uses32identicalexactbinaryweights; its
@@ -68,7 +68,7 @@ def facts(case):
     # For varied cases independently evaluate each value with fontTools,
     # materialize the resulting MATH table, and use HarfBuzz to cross-check
     # every static query. This is explicitly different oracle provenance.
-    varied = instancer is not None and any(norm.values())
+    varied = instancer is not None
     if varied and not wide:
         def materialize(obj):
             if isinstance(obj, list):
@@ -147,7 +147,7 @@ def facts(case):
             if not wide:assert italic==expected_italic
             italic=expected_italic
             if assembly is not None:out.append(f'assembly|{g}|{axis}|{italic}|'+','.join(':'.join(map(str,p)) for p in actual))
-    return {'id':case['id'],'font_sha256':hashlib.sha256(data).hexdigest(),'harfbuzz':hb.version_string(),'fonttools':fontTools.__version__,'oracle':'fonttools-varstore-f32-wide' if wide else 'fonttools-varstore-and-harfbuzz-materialized' if varied else 'harfbuzz-and-fonttools','divergence':'Valid math distances exceedI32; HarfBuzz14.6 ignoresMATHvariation devices. fontTools independently evaluates32identicalbinaryweightedlongwordcolumns and the result is roundedtobinary32; font facts retainI64values.' if wide else 'HarfBuzz 14.6 ignores raw MATH VariationIndex devices; variable values are independently materialized using fontTools before HarfBuzz queries.' if varied else None,'facts':out}
+    return {'id':case['id'],'font_sha256':hashlib.sha256(data).hexdigest(),'harfbuzz':hb.version_string(),'fonttools':fontTools.__version__,'oracle':'fonttools-varstore-f32-wide' if wide else 'fonttools-varstore-and-harfbuzz-materialized' if varied else 'harfbuzz-and-fonttools','divergence':'Valid variable math distances may exceedI32; HarfBuzz14.6 ignoresMATHvariation devices. fontTools independently evaluates32identicalbinaryweightedlongwordcolumns and the result is roundedtobinary32; font facts retainI64values.' if wide else 'HarfBuzz 14.6 ignores raw MATH VariationIndex devices; variable values are independently materialized using fontTools before HarfBuzz queries.' if varied else None,'facts':out}
 
 
 if __name__=='__main__':

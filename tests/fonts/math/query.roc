@@ -25,7 +25,11 @@ main! = |_args| {
 						Err(problems) => crash Str.inspect(problems)
 					}
 					weight = U16.from_str(weight_text) ?? 400
-					font = Font.at(read, Font.Variation.{ weight: Weight(weight) })
+					font = if weight_text == "tiny" {
+						Font.at(read, Font.Variation.{ axes: [{ tag: "wght", value: 1 }, { tag: "AX02", value: 1 }, { tag: "AX03", value: 256 }] })
+					} else {
+						Font.at(read, Font.Variation.{ weight: Weight(weight) })
+					}
 					for fact in facts(font) {
 						Stdout.line!("${tag}\t${fact}")?
 					}
