@@ -69,7 +69,12 @@ The script shapers (`ShaperArabic`, `ShaperThai`, `ShaperHangul`,
 are adapted from HarfBuzz 14.6.0. Each adapted module carries HarfBuzz's
 complete Old MIT copyright and permission notice. Original pinned upstream
 generators and state machines are under `tools/ucd/complex-src/`, beside
-their `COPYING` notice. These data and algorithm notices reach the package as source comments; the test fonts
+their `COPYING` notice. Invalid-vowel rules in
+`package/ShaperIndicVowelData.roc` also derive from Microsoft's MIT-licensed
+`ms-use/IndicShapingInvalidCluster.txt`, pinned in `complex-pins.json`.
+The complete Microsoft notice is in `tools/ucd/complex-src/ms-use/COPYING`
+and is embedded in the generated module alongside the Unicode and HarfBuzz
+notices. These data and algorithm notices reach the package as source comments; the test fonts
 listed above do not.
 
 ## Downloaded on demand, never committed
