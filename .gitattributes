@@ -1,0 +1,7 @@
+# Preserve pinned upstream source/data and original licence text byte for byte.
+# Their hashes are verified by preparation/generation checks; upstream
+# trailing whitespace must not be rewritten to satisfy an authored-code check.
+tools/ucd/complex-src/** -whitespace
+tools/ucd/arabic-src/** -whitespace
+tests/fonts/**/OFL.txt -whitespace
+tests/fonts/**/*-OFL.txt -whitespace
