@@ -324,10 +324,10 @@ LayoutGsub := {
 
 	## Which substitution produced a glyph, for `Font.shape_traced`. Kept
 	## in bits no other part of an item uses: the kind in props bits 41-43,
-	## the plan step that made the substitution in props bits 44-60, and a
+	## the plan step that made the substitution in props bits 44-63, and a
 	## ligature's component count in mask bits 32-38. A plan has fewer
-	## than 2^17 steps (two stages of at most 65535 lookups, the format's
-	## count), and a ligature at most `max_context` (64) components.
+	## than 2^20 steps (at most sixteen stages of 65535 lookups,
+	## the format's count), and a ligature at most `max_context` (64) components.
 	## Writing the bits costs no allocation, so untraced shaping pays
 	## nothing measurable for them.
 	##
@@ -358,7 +358,7 @@ LayoutGsub := {
 	origin_kind = |item| item.props.shr_zf_wrap(41).bitwise_and(0x7)
 
 	origin_step : Item -> U64
-	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0x1FFFF)
+	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0xFFFFF)
 
 	origin_components : Item -> U64
 	origin_components = |item| item.mask.shr_zf_wrap(32).bitwise_and(0x7F)
@@ -366,7 +366,7 @@ LayoutGsub := {
 	## An item with its origin set.
 	with_origin : Item, U64, U64, U64 -> Item
 	with_origin = |item, kind, step, components| {
-		props = item.props.bitwise_and(0xE00001FFFFFFFFFF).bitwise_or(kind.bitwise_and(0x7).shl_wrap(41)).bitwise_or(step.bitwise_and(0x1FFFF).shl_wrap(44))
+		props = item.props.bitwise_and(0x000001FFFFFFFFFF).bitwise_or(kind.bitwise_and(0x7).shl_wrap(41)).bitwise_or(step.bitwise_and(0xFFFFF).shl_wrap(44))
 		mask = item.mask.bitwise_and(0xFFFFFF80FFFFFFFF).bitwise_or(components.bitwise_and(0x7F).shl_wrap(32))
 		{ ..item, props, mask }
 	}
@@ -3419,4 +3419,21 @@ expect {
 	item = { glyph: 7, cluster: 9, mask: 0x8002000000000001, props: 0xAB123456007A4321 }
 	cleared = LayoutGsub.clear_substitution_flags([item])
 	cleared == [{ ..item, props: 0xAB123456000A4321 }]
+}
+
+# Sixteen stages may contain 16*65535 steps when the read limit permits
+# all OpenType lookups. A sparse final lookup keeps its exact origin even
+# above the former17-bit bound, without consuming a nested-call budget.
+expect {
+	match LayoutGsub.read(liga_gsub(0)) {
+		Ok(shape) => {
+			last = 16 * 65535 - 1
+			item = { glyph: 10, cluster: 9, mask: 1, props: 0 }
+			initial = { ..LayoutGsub.begin([item]), step_offset: last }
+			step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+			resumed = LayoutGsub.resume(shape, [{ step, per_syllable: False }], initial, { limit: 64, budget: 0, depth: 8 })
+			resumed.items.len() == 1 and resumed.items.all(|made| made.glyph == 103 and LayoutGsub.origin_step(made) == last and made.cluster == 9) and resumed.operations == 0 and resumed.stopped == 0
+		}
+		Err(_) => False
+	}
 }
