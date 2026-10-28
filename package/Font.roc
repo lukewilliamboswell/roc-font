@@ -13,8 +13,9 @@ import "fonts/Merriweather-OFL.txt" as merriweather_licence : Str
 import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
 
 ## A font read from TrueType or OpenType bytes, ready to measure and shape
-## text. Read it once with `from_bytes`; every query and every shaping call
-## on it then succeeds.
+## text. Read it once with `from_bytes`; queries and shaping reuse its
+## checked font facts. Checked shaping reports exhausted work budgets or
+## a font program that aborts for the supplied text.
 ##
 ## Everything is in font units: integers in the font's own grid of
 ## `units_per_em` units to the em. Divide by `units_per_em` and multiply by
