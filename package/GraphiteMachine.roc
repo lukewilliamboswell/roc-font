@@ -374,11 +374,13 @@ GraphiteMachine :: {}.{
 		if stride > budget {
 			return { state, operations: 0, stopped: 2, aborted: False }
 		}
-		attached = GraphitePosition.copy_attachment_from(state, id, source_id, source.parent, budget - stride)
-		if attached.aborted or attached.stopped != 0 {
-			return attached
+		{ state: attached_state, operations: attached_operations, stopped, aborted } = GraphitePosition.copy_attachment_from(state, id, source_id, source.parent, budget - stride)
+		if aborted or stopped != 0 {
+			return { state: attached_state, operations: attached_operations, stopped, aborted }
 		}
-		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = attached.state
+		# Consume the returned state before updating its flat pools; later
+		# scalar accesses then do not depend on retaining the result record.
+		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = attached_state
 		current = nodes.get(id) ?? crash "checked destination ID"
 		var $users = users
 		for i in 0..<stride {
@@ -389,7 +391,7 @@ GraphiteMachine :: {}.{
 			$users = $users.set(current.user_start + i, value) ?? []
 		}
 		updated = { ..source, previous: current.previous, next: current.next, parent: current.parent, child: current.child, last_child: current.last_child, sibling: current.sibling, user_start: current.user_start, deleted: False, trace: if (current.trace == 2) 2 else 1 }
-		{ state: { nodes: nodes.set(id, updated) ?? [], users: $users, user_count, justification_levels, feature_changes, first, last, active, positioned: False, advance_x, advance_y }, operations: attached.operations + stride, stopped: 0, aborted: False }
+		{ state: { nodes: nodes.set(id, updated) ?? [], users: $users, user_count, justification_levels, feature_changes, first, last, active, positioned: False, advance_x, advance_y }, operations: attached_operations + stride, stopped: 0, aborted: False }
 	}
 
 }
