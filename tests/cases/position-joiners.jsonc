@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "about": "GPOS mark feature manual-ZWJ policy, automatic ZWNJ and hidden CGJ matching in valid original positioning fonts.",
+  "cases": [
+    {
+      "id": "mark-base-0",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "a‍́",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-1",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "a‌́",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-2",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "a͏́",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-3",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "á",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-0",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fi‍́",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-1",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fi‌́",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-0",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "á‍̀",
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-1",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "á‌̀",
+      "expected": "oracle"
+    }
+  ]
+}

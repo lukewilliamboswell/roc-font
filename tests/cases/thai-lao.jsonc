@@ -1,0 +1,1958 @@
+{
+  "schema": 1,
+  "about": "Sara Am decomposition, mark reordering and cluster levels in two unmodified real font families per script.",
+  "cases": [
+    {
+      "id": "notosansthai-regular-0-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-0-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-1-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-1-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-2-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ด๋ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-2-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ด๋ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-3-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-3-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-4-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กิํ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-4-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กิํ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-5-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-5-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-6-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-6-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-7-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-7-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-8-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-8-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-9-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ภาษาไทย",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-9-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ภาษาไทย",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-10-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "น้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-10-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "น้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-11-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ก‍ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-11-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ก‍ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-12-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-12-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-13-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-13-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-14-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กฺุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-14-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กฺุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-15-graphemes",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กำำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansthai-regular-15-characters",
+      "font": "../fonts/shaping/thai/NotoSansThai-Regular.ttf",
+      "text": "กำำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-0-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-0-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-1-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-1-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-2-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ด๋ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-2-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ด๋ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-3-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-3-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-4-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กิํ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-4-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กิํ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-5-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-5-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-6-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-6-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-7-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-7-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-8-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-8-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-9-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ภาษาไทย",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-9-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ภาษาไทย",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-10-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "น้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-10-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "น้ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-11-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ก‍ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-11-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ก‍ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-12-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-12-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-13-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-13-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "่ำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-14-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กฺุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-14-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กฺุ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-15-graphemes",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กำำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoserifthai-regular-15-characters",
+      "font": "../fonts/shaping/thai/NotoSerifThai-Regular.ttf",
+      "text": "กำำ",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-0-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-0-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-1-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-1-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-2-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ດ໋ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-2-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ດ໋ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-3-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກິ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-3-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກິ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-4-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກິໍ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-4-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກິໍ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-5-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ພາສາລາວ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-5-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ພາສາລາວ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-6-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ນ້ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-6-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ນ້ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-7-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກ‍ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-7-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກ‍ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-8-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-8-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-9-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-9-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-10-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກົ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-10-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກົ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-11-graphemes",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກຳຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosanslao-regular-11-characters",
+      "font": "../fonts/shaping/lao/NotoSansLao-Regular.ttf",
+      "text": "ກຳຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-0-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-0-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-1-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-1-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-2-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ດ໋ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-2-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ດ໋ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-3-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກິ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-3-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກິ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-4-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກິໍ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-4-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກິໍ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-5-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ພາສາລາວ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-5-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ພາສາລາວ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-6-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ນ້ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-6-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ນ້ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-7-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກ‍ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-7-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກ‍ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-8-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-8-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-9-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-9-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-10-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກົ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-10-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກົ່ຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-11-graphemes",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກຳຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notoseriflao-regular-11-characters",
+      "font": "../fonts/shaping/lao/NotoSerifLao-Regular.ttf",
+      "text": "ກຳຳ",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-0-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-0-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-1-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-1-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-2-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-2-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-3-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-3-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-4-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-4-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-5-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-5-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-6-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-6-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-7-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-7-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-8-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-8-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-9-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-9-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-10-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-10-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-11-0",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-windows-11-1",
+      "font": "../fonts/shaping/thai-legacy/windows.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-0-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-0-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-1-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-1-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-2-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-2-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-3-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-3-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-4-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-4-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-5-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-5-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-6-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-6-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-7-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-7-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-8-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-8-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-9-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-9-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-10-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-10-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-11-0",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-macintosh-11-1",
+      "font": "../fonts/shaping/thai-legacy/macintosh.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-0-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-0-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-1-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-1-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ป่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-2-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-2-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-3-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-3-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-4-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-4-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ญุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-5-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-5-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ฎุ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-6-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-6-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "กำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-7-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-7-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก้ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-8-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-8-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "กิ่ำ",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-9-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-9-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "่",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-10-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-10-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ก่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-11-0",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 0
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "legacy-none-11-1",
+      "font": "../fonts/shaping/thai-legacy/none.ttf",
+      "text": "ปิ่้๊๋์",
+      "options": {
+        "script": "Thai",
+        "cluster_level": 1
+      },
+      "expected": "oracle"
+    }
+  ]
+}

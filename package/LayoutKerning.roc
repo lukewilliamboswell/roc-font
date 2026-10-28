@@ -132,10 +132,15 @@ LayoutKerning := {
 	## and application path. Returned advances are deltas, as in `position`.
 	position_full : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
 	position_full = |kerning, plan, legacy, items, glyph_count, base, backward, limits| {
+		LayoutKerning.position_full_with_joiners(kerning, plan, [], legacy, items, glyph_count, base, backward, limits)
+	}
+
+	position_full_with_joiners : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full_with_joiners = |kerning, plan, auto_zwj, legacy, items, glyph_count, base, backward, limits| {
 		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
 			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0 }
 		} else {
-			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, items, base, backward, limits)
+			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, items, base, backward, limits)
 			positions = { items: placed_items, ax, dx, dy }
 			# Legacy kerning follows GPOS when the selected language has no
 			# kern feature. It does not create attachment chains.

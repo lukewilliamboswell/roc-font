@@ -5,6 +5,7 @@ import LayoutGdef
 import LayoutGsub
 import LayoutKerning
 import LayoutVar
+import ShaperThai
 import ShaperArabic
 import ShaperNormalize
 import ShaperTags
@@ -52,6 +53,7 @@ Shaper :: {}.{
 		native : [Ltr, Rtl, Either],
 		gsub : List(LayoutGsub.Step),
 		gpos : List({ index : U64, mask : U64 }),
+		gpos_auto_zwj : List(Bool),
 		kern : [Kern(U64), NoKern],
 		global_mask : U64,
 		ranges : List({ mask : U64, value : U64, start : U64, end : U64 }),
@@ -61,6 +63,8 @@ Shaper :: {}.{
 		rtlm_mask : U64,
 		hebrew : Bool,
 		arabic : Bool,
+		thai : Bool,
+		thai_legacy : Bool,
 		arabic_masks : ShaperArabic.Masks,
 		characters : Bool,
 		has_gpos_mark : Bool,
@@ -324,12 +328,14 @@ Shaper :: {}.{
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
 		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
-		gpos =
+		gpos_steps =
 			if apply_gpos {
-				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied, arabic).map(|s| { index: s.index, mask: s.mask })
+				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied, arabic)
 			} else {
 				[]
 			}
+		gpos = gpos_steps.map(|s| { index: s.index, mask: s.mask })
+		gpos_auto_zwj = gpos_steps.map(|s| s.auto_zwj)
 		kern_mask = mask_of(Shaper.kern_tag)
 		has_gpos_kern = match mapped.find_first(|m| m.tag == Shaper.kern_tag) {
 			Ok(m) => m.gpos != LayoutCommon.no_feature
@@ -355,6 +361,7 @@ Shaper :: {}.{
 			native,
 			gsub,
 			gpos,
+			gpos_auto_zwj,
 			kern,
 			global_mask: $global_mask,
 			ranges: $ranges,
@@ -364,6 +371,8 @@ Shaper :: {}.{
 			rtlm_mask: one_mask_of(Shaper.rtlm_tag),
 			hebrew,
 			arabic,
+			thai: ShaperTags.script_of(options.script) == Shaper.tag("Thai") or ShaperTags.script_of(options.script) == Shaper.tag("Laoo"),
+			thai_legacy: ShaperTags.script_of(options.script) == Shaper.tag("Thai") and LayoutCommon.select_script_tag(gsub_common, script_tags) != Shaper.tag("thai"),
 			arabic_masks: if (arabic) { isol: one_mask_of(Shaper.tag("isol")), fina: one_mask_of(Shaper.tag("fina")), fin2: one_mask_of(Shaper.tag("fin2")), fin3: one_mask_of(Shaper.tag("fin3")), medi: one_mask_of(Shaper.tag("medi")), med2: one_mask_of(Shaper.tag("med2")), init: one_mask_of(Shaper.tag("init")) } else ShaperArabic.no_masks,
 			characters: clusters == Characters,
 			has_gpos_mark: one_mask_of(Shaper.mark_tag) != 0,
@@ -737,8 +746,10 @@ Shaper :: {}.{
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else mirrored
+		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
-		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, mirrored, ShaperArabic.reorder) else ShaperNormalize.normalize(ctx, mirrored)
+		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else ShaperNormalize.normalize(ctx, legacy)
 		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else normalized
 		masked = Shaper.setup_masks(p, joined, found.fraction_slash, !backward)
 		gdef = Face.gdef(face)
@@ -787,7 +798,7 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		full = LayoutKerning.position_full(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
+		full = LayoutKerning.position_full_with_joiners(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
 		positioned = full.positions
 		var $items = positioned.items
 		var $ax = List.with_capacity(count)
@@ -817,7 +828,7 @@ Shaper :: {}.{
 				}
 			}
 		}
-		if p.fallback_marks {
+		if p.fallback_marks and !p.thai {
 			{ items: fallback_items, ax: fallback_ax, dx: fallback_dx, dy: fallback_dy } = Shaper.position_marks(face, location, { items: $items, ax: $ax, dx: $dx, dy: $dy }, backward, p.backward, upem, adjust)
 			$items = fallback_items
 			$ax = fallback_ax

@@ -1,3 +1,4 @@
+import ShaperUnicode
 import Bytes
 import LayoutGdef
 import LayoutGsub
@@ -411,21 +412,31 @@ LayoutPosition := {
 		$needed
 	}
 
-	Ctx : { lv : LayoutVar, loc : LayoutVar.Location, gdef : LayoutGdef, backward : Bool, previous : List(U64), limits : Limits }
-	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(LayoutGsub.Item), List(I64), Bool, Limits -> State
-	position = |p, lv, loc, gdef, plan, items, base, backward, limits| {
+	Ctx : { lv : LayoutVar, loc : LayoutVar.Location, gdef : LayoutGdef, backward : Bool, previous : List(U64), auto_zwj : Bool, limits : Limits }
+	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), List(LayoutGsub.Item), List(I64), Bool, Limits -> State
+	position = |p, lv, loc, gdef, plan, auto_zwj, items, base, backward, limits| {
 		count = items.len()
 		var $previous = List.with_capacity(count)
+		var $manual_previous = List.with_capacity(count)
+		var $manual_last = 0
 		var $last = 0
 		for i in 0..<count {
 			$previous = $previous.append($last)
+			$manual_previous = $manual_previous.append($manual_last)
+			item = items.get(i) ?? LayoutGsub.no_item
+			if !LayoutGsub.is_mark_item(item) and !LayoutPosition.skip_ignorable(item, False) {
+				$manual_last = i + 1
+			}
 			if !LayoutGsub.is_mark_item(items.get(i) ?? LayoutGsub.no_item) and !LayoutGsub.is_default_ignorable(items.get(i) ?? LayoutGsub.no_item) {
 				$last = i + 1
 			}
 		}
-		ctx = { lv, loc, gdef, backward, previous: $previous, limits }
+
 		var $s = { items, ax: base, dx: List.repeat(0, count), dy: List.repeat(0, count), parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
-		for step in plan {
+		for step_index in 0..<plan.len() {
+			step = plan.get(step_index) ?? { index: 0, mask: 0 }
+			automatic = auto_zwj.get(step_index) ?? True
+			ctx = { lv, loc, gdef, backward, previous: if (automatic) $previous else $manual_previous, auto_zwj: automatic, limits }
 			var $i = 0
 			while $i < count {
 				{ state: after, next, applied: _, calls } = LayoutPosition.once(p, ctx, step.index, step.mask, $i, 0, $s)
@@ -489,14 +500,17 @@ LayoutPosition := {
 	sees : LayoutGdef, LayoutGsub.Item, U64 -> Bool
 	sees = |gdef, item, props| props == 0 or LayoutGdef.check_glyph_property(gdef, item.glyph, LayoutGsub.gprops(item), props)
 
-	## Positioning automatically skips joiners. Input masks stop a search;
+	skip_ignorable : LayoutGsub.Item, Bool -> Bool
+	skip_ignorable = |item, automatic| LayoutGsub.is_default_ignorable(item) and (automatic or !ShaperUnicode.is_zwj(item.props))
+
+	## Positioning always skips ZWNJ; feature policy controls ZWJ. Input masks stop a search;
 	## backtracking for attachment uses the lookup's filtering rules only.
-	next : List(LayoutGsub.Item), U64, U64, U64, LayoutGdef -> Try(U64, [NoGlyph])
-	next = |items, i, mask, props, gdef| {
+	next : List(LayoutGsub.Item), U64, U64, U64, LayoutGdef, Bool -> Try(U64, [NoGlyph])
+	next = |items, i, mask, props, gdef, automatic| {
 		var $j = i + 1
 		while $j < items.len() {
 			item = items.get($j) ?? LayoutGsub.no_item
-			if !LayoutPosition.sees(gdef, item, props) or LayoutGsub.is_default_ignorable(item) {
+			if !LayoutPosition.sees(gdef, item, props) or LayoutPosition.skip_ignorable(item, automatic) {
 				$j = $j + 1
 			}
 			else if LayoutGsub.applies(item.mask, mask) {
@@ -573,7 +587,7 @@ LayoutPosition := {
 	pair = |p, ctx, at, coverage, props, mask, i, state| {
 		data = p.data
 
-		j = LayoutPosition.next(state.items, i, mask, props, ctx.gdef) ?? return { state, next: i + 1, applied: False, calls: [] }
+		j = LayoutPosition.next(state.items, i, mask, props, ctx.gdef, ctx.auto_zwj) ?? return { state, next: i + 1, applied: False, calls: [] }
 		second = state.items.get(j) ?? LayoutGsub.no_item
 		vf1 = Bytes.u16(data, at + 4)
 		vf2 = Bytes.u16(data, at + 6)
@@ -647,7 +661,7 @@ LayoutPosition := {
 			while $search and $j > 0 {
 				$j = $j - 1
 				candidate = state.items.get($j) ?? LayoutGsub.no_item
-				if LayoutPosition.sees(ctx.gdef, candidate, props.bitwise_and(0xFFFFFFFFFFFFFFF1)) and !LayoutGsub.is_default_ignorable(candidate) {
+				if LayoutPosition.sees(ctx.gdef, candidate, props.bitwise_and(0xFFFFFFFFFFFFFFF1)) and !LayoutPosition.skip_ignorable(candidate, ctx.auto_zwj) {
 					$search = False
 				}
 			}
@@ -739,7 +753,7 @@ LayoutPosition := {
 		while $searching and $previous > 0 {
 			$previous = $previous - 1
 			item = state.items.get($previous) ?? LayoutGsub.no_item
-			if LayoutPosition.sees(ctx.gdef, item, props) and !LayoutGsub.is_default_ignorable(item) {
+			if LayoutPosition.sees(ctx.gdef, item, props) and !LayoutPosition.skip_ignorable(item, ctx.auto_zwj) {
 				$found = LayoutGsub.applies(item.mask, mask)
 				$searching = False
 			}
