@@ -466,8 +466,9 @@ Shaper :: {}.{
 			} else {
 				[]
 			}
-		gpos = gpos_steps.map(|s| { index: s.index, mask: s.mask })
 		gpos_auto_zwj = if (gpos_steps.any(|s| !s.auto_zwj)) gpos_steps.map(|s| s.auto_zwj) else []
+		# Consume the temporary steps last so map can reuse their allocation.
+		gpos = gpos_steps.map(|s| { index: s.index, mask: s.mask })
 		kern_mask = mask_of(Shaper.kern_tag)
 		has_gpos_kern = match mapped.find_first(|m| m.tag == Shaper.kern_tag) {
 			Ok(m) => m.gpos != LayoutCommon.no_feature
