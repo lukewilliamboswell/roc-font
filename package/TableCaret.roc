@@ -14,7 +14,9 @@ TableCaret := {
 	values : List({ point : Bool, value : I64, outer : U64, inner : U64 }),
 }.{
 	none : TableCaret
-	none = { glyphs: [], starts: [0], values: [] }
+	# An absent feature allocates nothing. `starts` has a closing entry
+	# only when glyphs is nonempty; positions returns before indexing it.
+	none = { glyphs: [], starts: [], values: [] }
 
 	read : List(U8), U64, [Present(TableGlyfPoints), Absent], LayoutVar -> Try(TableCaret, [Bad(U64)])
 	read = |data, glyph_count, outline_points, variation_store| {
@@ -37,6 +39,9 @@ TableCaret := {
 			return Err(Bad(at))
 		}
 		glyphs = TableCaret.coverage(data, at + coverage_offset, glyph_count, count)?
+		if count == 0 {
+			return Ok(TableCaret.none)
+		}
 		var $starts = [0]
 		var $values = []
 		var $steps = 0.U64
