@@ -1,0 +1,13 @@
+{
+  "scope": "Compiler-only pre-integration check on unchanged6653e4a source. Later final integration checks are separate.",
+  "source": "6653e4a",
+  "compiler": "nightly-2026-10-28-bad769b",
+  "compiler_sha256": "2790bcad55b97b24216608ae9ca666cc0789b9302201108e5ac6caffbdee2a8a",
+  "source_check": "PASS",
+  "general_allocation_ratchet": {
+    "cases": 64,
+    "result": "PASS, no baseline count changes",
+    "report_sha256": "6de2834afaddbdd4a82b6ad7c5b32c20b1527db4765b77f429306176c0cc108a"
+  },
+  "private_compiler_cache": true
+}
