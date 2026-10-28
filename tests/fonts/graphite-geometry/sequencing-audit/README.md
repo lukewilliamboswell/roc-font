@@ -28,7 +28,7 @@ Native Roc agreement is a separate gate and is not claimed by recording oracles.
 Sequencing is inactive in the otherwise matching `separate-trees` control.
 `siblings` proves it also applies to two children sharing another parent.
 The target's sequence class must be nonzero. Its proximity class selects the
-neighbor class; proximity 0 falls back to its own class. Class 0 does not become1,
+neighbor class; proximity 0 falls back to its own class. Class 0 does not become 1,
 and an explicit proximity match does not enable a class 0 target. Unsigned 65535
 works, including Glat signed−1 encodings. The target owns order selection; the
 neighbor owns above/below/alignment parameters. The neighbor's own order is
@@ -36,14 +36,21 @@ irrelevant to these controls. Independent target/neighbor collision margins do
 not change the sequencing-region coordinates or coefficients here; they still
 affect ordinary ink collision costs.
 
-For a preceding neighbor, raw 1 enables the diagonal regions, raw 4 the upper
-forbidden region and raw 8 the lower one. With a following neighbor, raw 2 enables
-the *identical* canonical diagonal equations without mirroring coordinates;
-raw 4/raw 8 exchange the vertical regions. A two-pass program establishes the tree
-without collisions, then runs flags 33: the relationship flips despite unchanged
-text and attachments. It therefore follows reversed pass traversal. Font LTR/RTL
-alone does not change it. Exact-order controls0/3/5/6/9/10/12/15 add no sequencing
-regions here, despite the manual describing an order bitmap.
+Both exact orders 1 and 2 enable diagonal sequencing. For a preceding
+neighbor, raw 1 selects the canonical LEFTDOWN branch (tags −21..−25), while
+raw 2 selects the complementary RIGHTUP branch (tags −11..−15). For a following
+neighbor those choices exchange: raw 2 selects the identical canonical
+LEFTDOWN equations; raw 1 selects RIGHTUP. The earlier prose omitted this
+second branch; the unchanged `order-2-ltr/rtl` cached traces already contain it.
+Neither branch is inactive merely because the relation differs.
+
+Raw 4 enables the upper forbidden region and raw 8 the lower one for a
+preceding neighbor; their vertical roles exchange for a following neighbor.
+A two-pass program establishes the tree without collisions, then runs flags 33:
+the relationship flips despite unchanged text and attachments. It therefore
+follows reversed pass traversal. Font LTR/RTL alone does not change it.
+Exact-order controls 0/3/5/6/9/10/12/15 add no sequencing regions here, despite
+the manual describing an order bitmap.
 
 ## Canonical rectangles and costs
 
@@ -77,6 +84,28 @@ ordinary point-in-rectangle interpretation.
 | −23 | `[XL,B] × [C-H,YH]` | `belowWeight*(x²+y²)` |
 | −24 | `[XL,E] × [C,C+H]` | `valignWeight*(y-(C+H))²` |
 | −25 | `[XL,E] × [C-H,C]` | radial below penalty plus `valignWeight*(y-(C-H))²` |
+
+The complementary RIGHTUP branch uses the same A and C, with:
+
+```
+B=dx+NmaxX-TminX+neighbor.below.xlimit
+E=dx+NminX-Cx
+```
+
+| Tag | Rectangle | Penalty |
+| --- | --- | --- |
+| −11 | `[XL,A] × [C,YH]` | `aboveWeight*(x-A)^2` |
+| −12 | `[XL,B] × [YL,C]` | hard exclusion |
+| −13 | `[B,XH] × [YL,C-H]` | `belowWeight*(x²+y²)` |
+| −14 | `[E,XH] × [C,C+H]` | `valignWeight*(y-(C+H))²` |
+| −15 | `[E,XH] × [C-H,C]` | radial below penalty plus `valignWeight*(y-(C-H))²` |
+
+The positive sign of above.xoffset is unchanged: supplementary original public
+trace probes at −100/+100 give A=−20/180 with dx=80. Below.xlimit −100/+100
+gives B=280/480. The −13 upper Y endpoint is **C-H**, not a conventional
+mirrored C+H: a below.xlimit −2000 probe exposes its Y interval `[−1300,20]`
+with C=170 and H=150. Those supplementary read-only probes informed this prose
+correction; they do not replace or alter any of the 67 original cached answers.
 
 For upper/lower hard vertical regions define
 `L=dx+NminX-TmaxX-Cx`, `R=dx+NmaxX-TminX-Cx`.
