@@ -822,6 +822,9 @@ Font :: { face : Face }.{
 	## Either way, glyphs that draw several characters together (ligatures)
 	## share the first character's cluster. These are HarfBuzz's monotone
 	## cluster levels 0 and 1.
+	## Graphite uses the font program's character associations at both
+	## levels, following its reference adapter; it does not add the
+	## OpenType path's Unicode grapheme merging.
 	ClusterLevel : [Graphemes, Characters]
 
 	## A typographic feature, turned on (value 1, the default), off (0) or to
@@ -839,6 +842,8 @@ Font :: { face : Face }.{
 	## those a font offers, and a tag it does not offer changes nothing. A
 	## value above 1 chooses that alternate where the feature offers
 	## several (`salt` with value 2 is the second).
+	## Graphite interprets four-byte numeric feature ids globally; the
+	## reference adapter does not apply `start`/`end` feature ranges.
 	Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
 
 	## Bounds on shaping work, per input character, never below 65536 in
@@ -1103,6 +1108,9 @@ Font :: { face : Face }.{
 	## into the original paragraph. This does not split scripts or choose
 	## fallback fonts. For `cluster_ranges`, pass the selected text's end
 	## offset rather than the end of a longer paragraph.
+	## Graphite receives only the selected characters, following its
+	## reference adapter. Shape a complete run when its font program needs
+	## characters on both sides of a style boundary.
 	shape_range : Font, ShapePlan, Str, TextRange -> Run
 	shape_range = |font, shape_plan, text, range| match Font.shape_range_checked(font, shape_plan, text, range) {
 		Ok(run) => run
@@ -1113,6 +1121,7 @@ Font :: { face : Face }.{
 	## Shape a range with paragraph context and report exhausted work
 	## budgets as `shape_checked` does. Context is supplied per call and
 	## never becomes part of the reusable shaping plan.
+	## Graphite has the selected-only context behavior of `shape_range`.
 	## `ProgramAborted` has the same meaning as in `shape_checked`.
 	shape_range_checked : Font, ShapePlan, Str, TextRange -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) }), ProgramAborted({ run : Run })])
 	shape_range_checked = |font, shape_plan, text, range| {
