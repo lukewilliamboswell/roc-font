@@ -65,12 +65,14 @@ check : List(U8), Bool -> {}
 check = |bytes, strict| {
 	match (Font.from_bytes(bytes, Font.ReadOptions.{ strict }), Font.from_bytes(bytes, Font.ReadOptions.{ strict })) {
 		(Ok(a), Ok(b)) => {
+			varied_a = Font.at(a, Font.Variation.{ axes: [{ tag: "wght", value: 900 }] })
+			varied_b = Font.at(b, Font.Variation.{ axes: [{ tag: "wght", value: 900 }] })
 			for id in [0, 1, 2, 999].map(|n| n.to_u32()) {
-				if Font.vertical_advance(a, id) != Font.vertical_advance(b, id) or Font.vertical_origin(a, id) != Font.vertical_origin(b, id) {
+				if Font.vertical_advance(varied_a, id) != Font.vertical_advance(varied_b, id) or Font.vertical_origin(varied_a, id) != Font.vertical_origin(varied_b, id) {
 					crash "vertical queries are not deterministic"
 				}
 			}
-			run = Font.shape(a, "ab", Font.ShapeOptions.{ direction: BottomToTop })
+			run = Font.shape(varied_a, "ab", Font.ShapeOptions.{ direction: BottomToTop })
 			if run.glyphs.len() != run.advances.len() or run.glyphs.len() != run.offsets.len() or run.glyphs.len() != run.clusters.len() {
 				crash "vertical output lost alignment"
 			}
