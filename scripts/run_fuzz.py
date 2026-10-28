@@ -268,6 +268,21 @@ TARGETS: dict[str, TargetConfig] = {
         font_files=False,
         smoke_runs=1500,
     ),
+    "font-math": TargetConfig(
+        sources=(FUZZ_ROOT / "font-math.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-math.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=1048576,
+        timeout=10,
+        contract=(
+            "MATH constants, corrections, corner kerns and constructions: "
+            "total deterministic queries, variation locations, absent and "
+            "corrupted tables; generated 8/64/256 glyph coverage sizes with "
+            "linear reading and constant per-query allocations; no leaks"
+        ),
+        font_files=True,
+    ),
 }
 TARGET_ORDER = tuple(TARGETS)
 

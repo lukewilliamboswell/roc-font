@@ -108,6 +108,19 @@
           "exit_code": 1
         }
       ]
+    },
+    {
+      "path": "examples/math.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "Pass the path of an OpenType math font.\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
     }
   ]
 }

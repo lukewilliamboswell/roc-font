@@ -294,8 +294,8 @@ def step_test(ctx: Context) -> Result:
 
 
 SMOKE_FUZZ_RUNS = 200
-# The whole-pipeline targets; the narrow per-feature targets run locally.
-SMOKE_FUZZ_TARGETS = ["font-read", "font-shape"]
+# Whole-pipeline targets and the focused MATH property checks.
+SMOKE_FUZZ_TARGETS = ["font-read", "font-shape", "font-math"]
 
 
 def step_fuzz_smoke(ctx: Context) -> Result:
@@ -329,7 +329,12 @@ def step_examples(ctx: Context) -> Result:
 
 
 def step_conformance(ctx: Context) -> Result:
-    return optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
+    general = optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
+    code, output = run([sys.executable, "tests/fonts/math/verify.py"],
+                       env=child_env(ctx), cwd=ctx.consumer_root)
+    return Result("PASS" if general.status == "PASS" and code == 0 else "FAIL",
+                  f"general font cases: {general.status}; MATH checkpoints: exit {code}",
+                  general.output + "\n" + output)
 
 
 def step_bench(ctx: Context) -> Result:
