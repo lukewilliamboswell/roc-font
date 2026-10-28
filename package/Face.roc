@@ -97,6 +97,9 @@ Face := {
 	aat_features : AatFeatures,
 	aat_languages : AatLanguage,
 	graphite : TableGraphite,
+	# Graphite uses original glyf headers, before OpenType's hmtx-bearing
+	# shift. Prepared only for an available font program, shared by queries.
+	graphite_boxes : List(TableGlyf.Bounds),
 	kerx : TableAatKern,
 	aat_kern : TableAatKern,
 	anchors : TableAatAnchor,
@@ -161,6 +164,24 @@ Face := {
 		problems : List(Problem),
 		avar_problems : List(Problem),
 		fvar_axes : [Present(U64), Absent],
+	}
+
+	# Called only after all glyph headers and the index-aligned kinds/starts
+	# were checked by TableGlyfPoints.read. No decoding or font-sized work is
+	# repeated during shaping. Empty glyphs keep the ordinary no-box marker.
+	graphite_bounds : TableGlyfPoints, U64 -> List(TableGlyf.Bounds)
+	graphite_bounds = |points, glyphs| {
+		var $boxes = List.with_capacity(glyphs)
+		for glyph in 0..<glyphs {
+			box = if (points.kinds.get(glyph) ?? 0) == 0 {
+				TableGlyf.none
+			} else {
+				start = points.starts.get(glyph) ?? 0
+				{ x_min: Bytes.i16(points.glyf, start + 2).to_i32_wrap(), y_min: Bytes.i16(points.glyf, start + 4).to_i32_wrap(), x_max: Bytes.i16(points.glyf, start + 6).to_i32_wrap(), y_max: Bytes.i16(points.glyf, start + 8).to_i32_wrap() }
+			}
+			$boxes = $boxes.append(box)
+		}
+		$boxes
 	}
 
 	# Graphite tables form one program. A broken dependency drops that
@@ -664,6 +685,10 @@ Face := {
 								aat_features,
 								aat_languages,
 								graphite: graphite.value,
+								graphite_boxes: if (TableGraphite.available(graphite.value)) match points {
+									Read(Ok(p)) => Face.graphite_bounds(p, glyph_count)
+									_ => []
+								} else [],
 								kerx: kerx.value,
 								aat_kern: if (cff_only) TableAatKern.none else aat_kern.value,
 								anchors,
