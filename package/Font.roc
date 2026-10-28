@@ -947,6 +947,50 @@ Font :: { face : Face }.{
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
 
+	## A range of character start offsets in the original UTF-8 text.
+	## Characters whose first byte is in `start ..< end` are selected.
+	## Defaults select the whole text. Empty or reversed ranges select none;
+	## an offset inside a character selects by its start, without changing
+	## the caller's offsets or repairing the range.
+	TextRange := { start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
+
+	## Shape a selected part of a paragraph while retaining surrounding
+	## characters as context, for joining across font or style boundaries.
+	## Only selected characters produce glyphs; clusters remain byte offsets
+	## into the original paragraph. This does not split scripts or choose
+	## fallback fonts. For `cluster_ranges`, pass the selected text's end
+	## offset rather than the end of a longer paragraph.
+	shape_range : Font, ShapePlan, Str, TextRange -> Run
+	shape_range = |font, shape_plan, text, range| match Font.shape_range_checked(font, shape_plan, text, range) {
+		Ok(run) => run
+		Err(OverBudget({ run, budgets: _ })) => run
+	}
+
+	## Shape a range with paragraph context and report exhausted work
+	## budgets as `shape_checked` does. Context is supplied per call and
+	## never becomes part of the reusable shaping plan.
+	shape_range_checked : Font, ShapePlan, Str, TextRange -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
+	shape_range_checked = |font, shape_plan, text, range| {
+		var $before = []
+		var $selected = []
+		var $after = []
+		for character in Shaper.decode(text) {
+			if character.offset < range.start {
+				$before = $before.append(character.scalar)
+			} else if character.offset < range.end and range.end > range.start {
+				$selected = $selected.append(character)
+			} else {
+				$after = $after.append(character.scalar)
+			}
+		}
+		shaped = Shaper.shape_items_with_context(font.face, Face.current(font.face), shape_plan.plan, $selected, { before: $before, after: $after })
+		if shaped.stopped == 0 {
+			Ok(shaped.run)
+		} else {
+			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
+
 	## Shape text as `shape_planned` does, and also say which substitution
 	## produced each glyph (see `GlyphOrigin`) and whether shaping
 	## finished, as `shape_checked` says it: one call for a caller that
