@@ -1,0 +1,6578 @@
+{
+  "schema": 1,
+  "about": "Unmodified pinned Noto Syriac/Eastern/Western and Nastaliq fonts: joining groups, variable positioning, real stch, controls, long255flagspans and paragraphcontext.",
+  "cases": [
+    {
+      "id": "NotoNastaliqUrdu[wght]-0-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-0-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-0-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-0-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-1-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-1-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-1-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-1-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-2-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-2-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-2-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-2-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-3-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لاب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-3-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لاب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-3-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لاب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-3-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لاب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-4-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بلاب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-4-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بلاب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-4-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بلاب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-4-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بلاب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-5-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-5-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-5-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-5-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-6-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-6-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-6-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-6-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-7-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-7-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-7-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-7-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-8-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-8-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-8-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-8-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-9-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لّٰا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-9-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لّٰا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-9-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لّٰا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-9-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "لّٰا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-10-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-10-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-10-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-10-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-11-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-11-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-11-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-11-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-12-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب͏ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-12-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب͏ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-12-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب͏ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-12-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ب͏ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-13-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-13-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-13-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-13-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-14-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-14-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-14-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-14-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-15-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سَلَام",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-15-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سَلَام",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-15-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سَلَام",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-15-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سَلَام",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-16-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ڤڤڤ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-16-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ڤڤڤ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-16-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ڤڤڤ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-16-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ڤڤڤ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-17-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "کیک",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-17-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "کیک",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-17-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "کیک",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-17-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "کیک",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-18-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-18-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-18-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-18-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-19-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-19-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-19-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-19-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "َّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-20-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-20-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-20-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-20-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-21-rtl-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بَََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-21-rtl-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بَََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-21-ltr-0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بَََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-21-ltr-1",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "بَََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََََب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-init=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-medi=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-fina=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-fin2=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fin2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-fin3=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fin3=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-med2=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "med2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-stch=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-rlig=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-calt=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-init[2:4]=0",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب لاب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init[2:4]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight100-rtl",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight100-ltr",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight650-rtl",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight650-ltr",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight900-rtl",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-weight900-ltr",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "سلام",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-context2:4",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-context0:4",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=0:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoNastaliqUrdu[wght]-context2:6",
+      "font": "NotoNastaliqUrdu[wght].ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:6"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-0-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-0-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-0-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-0-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-1-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-1-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-1-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-1-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-2-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-2-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-2-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-2-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-3-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-3-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-3-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-3-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-4-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-4-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-4-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-4-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-5-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-5-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-5-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-5-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-6-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-6-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-6-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-6-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-7-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-7-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-7-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-7-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-8-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-8-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-8-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-8-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-9-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-9-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-9-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-9-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-10-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-10-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-10-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-10-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-11-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-11-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-11-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-11-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-12-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-12-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-12-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-12-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-13-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-13-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-13-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-13-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-14-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-14-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-14-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-14-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-15-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-15-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-15-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-15-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-16-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-16-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-16-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-16-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-17-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-17-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-17-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-17-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-18-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-18-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-18-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-18-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-19-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-19-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-19-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-19-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-20-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-20-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-20-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-20-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-21-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-21-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-21-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-21-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-22-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-22-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-22-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-22-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-23-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-23-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-23-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-23-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-24-rtl-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-24-rtl-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-24-ltr-0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-24-ltr-1",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-init=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-medi=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-fina=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-fin2=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-fin3=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin3=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-med2=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "med2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-stch=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-rlig=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-calt=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-init[2:4]=0",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init[2:4]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight100-rtl",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight100-ltr",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight650-rtl",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight650-ltr",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight900-rtl",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-weight900-ltr",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-context2:4",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-context0:4",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=0:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacEastern[wght]-context2:6",
+      "font": "NotoSansSyriacEastern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:6"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-0-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-0-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-0-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-0-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-1-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-1-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-1-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-1-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-2-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-2-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-2-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-2-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-3-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-3-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-3-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-3-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-4-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-4-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-4-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-4-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-5-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-5-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-5-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-5-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-6-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-6-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-6-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-6-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-7-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-7-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-7-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-7-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-8-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-8-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-8-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-8-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-9-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-9-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-9-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-9-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-10-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-10-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-10-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-10-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-11-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-11-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-11-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-11-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-12-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-12-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-12-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-12-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-13-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-13-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-13-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-13-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-14-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-14-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-14-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-14-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-15-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-15-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-15-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-15-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-16-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-16-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-16-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-16-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-17-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-17-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-17-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-17-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-18-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-18-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-18-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-18-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-19-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-19-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-19-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-19-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-20-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-20-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-20-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-20-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-21-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-21-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-21-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-21-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-22-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-22-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-22-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-22-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-23-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-23-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-23-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-23-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-24-rtl-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-24-rtl-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-24-ltr-0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-24-ltr-1",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-init=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-medi=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-fina=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-fin2=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-fin3=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin3=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-med2=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "med2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-stch=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-rlig=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-calt=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-init[2:4]=0",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init[2:4]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight100-rtl",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight100-ltr",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight650-rtl",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight650-ltr",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight900-rtl",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-weight900-ltr",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-context2:4",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-context0:4",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=0:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriacWestern[wght]-context2:6",
+      "font": "NotoSansSyriacWestern[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:6"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-0-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-0-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-0-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-0-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-1-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-1-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-1-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-1-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-2-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-2-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-2-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-2-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-3-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-3-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-3-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-3-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-4-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-4-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-4-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-4-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܪܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-5-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-5-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-5-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-5-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-6-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-6-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-6-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-6-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-7-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-7-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-7-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-7-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-8-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-8-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-8-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-8-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܕܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-9-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-9-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-9-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-9-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-10-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-10-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-10-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-10-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܫܠܡܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-11-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-11-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-11-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-11-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-12-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-12-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-12-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-12-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-13-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-13-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-13-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-13-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-14-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-14-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-14-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-14-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ͏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-15-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-15-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-15-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-15-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‍ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-16-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-16-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-16-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-16-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒ‌ܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-17-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-17-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-17-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-17-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-18-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-18-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-18-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-18-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-19-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-19-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-19-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-19-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐ ܒܓ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-20-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-20-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-20-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-20-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܒ܏ܓܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-21-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-21-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-21-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-21-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-22-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-22-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-22-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-22-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-23-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-23-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-23-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-23-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-24-rtl-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-24-rtl-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-24-ltr-0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-24-ltr-1",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܰܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags",
+          "--cluster-level=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-init=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-medi=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-fina=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-fin2=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-fin3=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "fin3=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-med2=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "med2=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-stch=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-rlig=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-calt=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-init[2:4]=0",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܒܐܒܕܐ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "init[2:4]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight100-rtl",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight100-ltr",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=100"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight650-rtl",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight650-ltr",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight900-rtl",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-weight900-ltr",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "܏ܡܠܟܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-context2:4",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-context0:4",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=0:4"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "NotoSansSyriac[wght]-context2:6",
+      "font": "NotoSansSyriac[wght].ttf",
+      "text": "ܒܐܒ",
+      "options": {
+        "script": "Syrc",
+        "hb_options": [
+          "--show-flags",
+          "--text-range=2:6"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

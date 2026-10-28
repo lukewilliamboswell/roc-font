@@ -1,0 +1,2654 @@
+{
+  "schema": 1,
+  "about": "Original Windows-1256 glyph-order fallback fonts plus failed heuristic and Unicode-fallback-precedence controls.",
+  "cases": [
+    {
+      "id": "win1256-0-rtl",
+      "font": "win1256.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-0-ltr",
+      "font": "win1256.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-1-rtl",
+      "font": "win1256.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-1-ltr",
+      "font": "win1256.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-2-rtl",
+      "font": "win1256.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-2-ltr",
+      "font": "win1256.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-3-rtl",
+      "font": "win1256.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-3-ltr",
+      "font": "win1256.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-4-rtl",
+      "font": "win1256.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-4-ltr",
+      "font": "win1256.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-5-rtl",
+      "font": "win1256.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-5-ltr",
+      "font": "win1256.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-6-rtl",
+      "font": "win1256.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-6-ltr",
+      "font": "win1256.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-7-rtl",
+      "font": "win1256.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-7-ltr",
+      "font": "win1256.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-8-rtl",
+      "font": "win1256.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-8-ltr",
+      "font": "win1256.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-9-rtl",
+      "font": "win1256.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-9-ltr",
+      "font": "win1256.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-10-rtl",
+      "font": "win1256.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-10-ltr",
+      "font": "win1256.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-11-rtl",
+      "font": "win1256.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-11-ltr",
+      "font": "win1256.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-12-rtl",
+      "font": "win1256.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-12-ltr",
+      "font": "win1256.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-13-rtl",
+      "font": "win1256.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-13-ltr",
+      "font": "win1256.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-14-rtl",
+      "font": "win1256.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-14-ltr",
+      "font": "win1256.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-15-rtl",
+      "font": "win1256.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-15-ltr",
+      "font": "win1256.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-16-rtl",
+      "font": "win1256.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-16-ltr",
+      "font": "win1256.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-17-rtl",
+      "font": "win1256.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-17-ltr",
+      "font": "win1256.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-18-rtl",
+      "font": "win1256.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-18-ltr",
+      "font": "win1256.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-19-rtl",
+      "font": "win1256.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-19-ltr",
+      "font": "win1256.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-20-rtl",
+      "font": "win1256.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-20-ltr",
+      "font": "win1256.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-21-rtl",
+      "font": "win1256.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-21-ltr",
+      "font": "win1256.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-rlig=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-init=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-medi=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-fina=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-isol=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "isol=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "win1256-init[0:2]=0",
+      "font": "win1256.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-0-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-0-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-1-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-1-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-2-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-2-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-3-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-3-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-4-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-4-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-5-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-5-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-6-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-6-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-7-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-7-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-8-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-8-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-9-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-9-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-10-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-10-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-11-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-11-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-12-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-12-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-13-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-13-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-14-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-14-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-15-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-15-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-16-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-16-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-17-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-17-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-18-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-18-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-19-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-19-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-20-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-20-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-21-rtl",
+      "font": "wrong-alef.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-21-ltr",
+      "font": "wrong-alef.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-rlig=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-init=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-medi=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-fina=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-isol=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "isol=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "wrong-alef-init[0:2]=0",
+      "font": "wrong-alef.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-0-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-0-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-1-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-1-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-2-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-2-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-3-rtl",
+      "font": "no-sukun.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-3-ltr",
+      "font": "no-sukun.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-4-rtl",
+      "font": "no-sukun.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-4-ltr",
+      "font": "no-sukun.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-5-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-5-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-6-rtl",
+      "font": "no-sukun.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-6-ltr",
+      "font": "no-sukun.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-7-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-7-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-8-rtl",
+      "font": "no-sukun.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-8-ltr",
+      "font": "no-sukun.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-9-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-9-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-10-rtl",
+      "font": "no-sukun.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-10-ltr",
+      "font": "no-sukun.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-11-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-11-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-12-rtl",
+      "font": "no-sukun.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-12-ltr",
+      "font": "no-sukun.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-13-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-13-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-14-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-14-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-15-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-15-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-16-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-16-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-17-rtl",
+      "font": "no-sukun.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-17-ltr",
+      "font": "no-sukun.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-18-rtl",
+      "font": "no-sukun.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-18-ltr",
+      "font": "no-sukun.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-19-rtl",
+      "font": "no-sukun.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-19-ltr",
+      "font": "no-sukun.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-20-rtl",
+      "font": "no-sukun.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-20-ltr",
+      "font": "no-sukun.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-21-rtl",
+      "font": "no-sukun.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-21-ltr",
+      "font": "no-sukun.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-rlig=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-init=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-medi=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-fina=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-isol=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "isol=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-sukun-init[0:2]=0",
+      "font": "no-sukun.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-0-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-0-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-1-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-1-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-2-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-2-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-3-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-3-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "تثجحخسشصضكلمناهوي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-4-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-4-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "لا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-5-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-5-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-6-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-6-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "لآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-7-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-7-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بلآ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-8-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-8-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "لأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-9-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-9-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بلأ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-10-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-10-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "لإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-11-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-11-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بلإ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-12-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-12-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "لَا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-13-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-13-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-14-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-14-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-15-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-15-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ل‍ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-16-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-16-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ل‌ا",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-17-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-17-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "شَّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-18-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-18-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "شُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-19-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-19-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "شِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-20-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-20-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "ىىيي",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-21-rtl",
+      "font": "prefer-unicode.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-21-ltr",
+      "font": "prefer-unicode.ttf",
+      "text": "بَّب",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-rlig=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-init=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-medi=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "medi=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-fina=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "fina=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-isol=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "isol=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "prefer-unicode-init[0:2]=0",
+      "font": "prefer-unicode.ttf",
+      "text": "بلا ببب",
+      "options": {
+        "script": "Arab",
+        "features": [
+          "init[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

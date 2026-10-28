@@ -1,0 +1,1968 @@
+{
+  "schema": 1,
+  "about": "Original valid five-tile stch fonts, exact spacing, zero widths,256glyphcap, controls, word boundaries and repeated markers.",
+  "cases": [
+    {
+      "id": "normal-0-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-0-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-0-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-0-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-1-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-1-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-1-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-1-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-2-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-2-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-2-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-2-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-3-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-3-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-3-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-3-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-4-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-4-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-4-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-4-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-5-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-5-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-5-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-5-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-6-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-6-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-6-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-6-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-7-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-7-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-7-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-7-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-8-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-8-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-8-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-8-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-9-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-9-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-9-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-9-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-10-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-10-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-10-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-10-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-11-Syrc-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-11-Syrc-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-11-Arab-rtl",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-11-Arab-ltr",
+      "font": "normal.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-stch=0",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "normal-stch[0:2]=0",
+      "font": "normal.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-0-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-0-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-0-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-0-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-1-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-1-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-1-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-1-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-2-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-2-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-2-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-2-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-3-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-3-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-3-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-3-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-4-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-4-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-4-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-4-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-5-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-5-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-5-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-5-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-6-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-6-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-6-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-6-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-7-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-7-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-7-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-7-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-8-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-8-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-8-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-8-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-9-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-9-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-9-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-9-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-10-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-10-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-10-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-10-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-11-Syrc-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-11-Syrc-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-11-Arab-rtl",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-11-Arab-ltr",
+      "font": "small.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-stch=0",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "small-stch[0:2]=0",
+      "font": "small.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-0-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-0-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-0-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-0-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-1-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-1-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-1-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-1-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-2-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-2-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-2-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-2-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-3-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-3-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-3-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-3-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܕܪ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-4-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-4-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-4-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-4-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܒܰܕ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-5-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-5-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-5-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-5-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ‍ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-6-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-6-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-6-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-6-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ‌ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-7-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-7-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-7-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-7-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐaܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-8-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-8-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-8-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-8-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-9-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-9-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-9-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-9-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐ܏ܒ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-10-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-10-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-10-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-10-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-11-Syrc-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-11-Syrc-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-11-Arab-rtl",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-11-Arab-ltr",
+      "font": "zero.ttf",
+      "text": "܏ܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐܐ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-stch=0",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-stch[0:2]=0",
+      "font": "zero.ttf",
+      "text": "܏ܐܒ",
+      "options": {
+        "script": "Syrc",
+        "features": [
+          "stch[0:2]=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
