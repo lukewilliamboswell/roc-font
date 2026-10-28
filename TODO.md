@@ -56,8 +56,9 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 Active implementation continues on `integration/font-foundations` after
 the verified foundation snapshot `39b66c3` was pushed to origin.
-Workers use isolated CFF, vertical and variation worktrees; the integrator
-owns `Face.roc`, `Font.roc`, AAT/Graphite and shared registries.
+Workers use isolated CFF/legacy Apple morphing, AAT positioning and
+Graphite worktrees; the integrator owns `Face.roc`, `Font.roc`, modern
+Apple morphing/tracking, and shared registries.
 Internal contracts agreed before consumer work:
 
 * CFF/CFF2 preparation and cubic path queries live in dedicated internal
@@ -72,21 +73,24 @@ Internal contracts agreed before consumer work:
   execution. Their coverage must be explicit and reference-tested; an
   absent engine is not represented as successful backend shaping.
 
-- [ ] CFF/CFF2 paths and extents, including CFF2 variation/blend
-  evaluation. These currently return `Unknown` where the TrueType outline
-  reader cannot supply them.
-- [ ] Vertical shaping and vertical metrics/origins, including `VVAR`.
-  Current horizontal direction choices do not implement a vertical run.
+- [ ] Finish integration checks for implemented CFF/CFF2 paths, control
+  extents and variation/blend evaluation. Dedicated native proof: 2,943
+  normative cases, 160 FreeType comparisons, and three explicitly cached
+  HarfBuzz default-location draw discrepancies; two 1,000-input fuzz runs.
+- [ ] Finish integration checks for implemented vertical shaping,
+  metrics/origins and `VVAR`: 1,098 cached cases, including two declared
+  VORG/TrueType policy differences; real Japanese and Mongolian fonts.
 - [ ] AAT and Graphite shaping for fonts whose substitutions and
-  positioning rely on those backends.
-- [ ] `avar` version 2: cross-axis coordinate remapping and variation-store
-  deltas, with the pinned fontTools/HarfBuzz cases as oracles.
-- [ ] Variable TrueType advances from `gvar` phantom points when `HVAR` is
-  absent, including composites; compare real locations against HarfBuzz
-  and FreeType.
-- [ ] Investigate duplicate-axis tags and their order/selection semantics
-  against OTS and HarfBuzz. Settle the reader/query policy before changing
-  handling; distinguish duplicate font records from repeated query tags.
+  positioning rely on those backends. Modern Apple morphing has 1,960
+  exact native cases and language selection another 240. AAT positioning
+  has 4,808 exact native cases. Legacy morphing and Graphite execution
+  remain active implementation work. Four real SIL families pass the
+  Graphite static reader; this does not establish runtime support.
+- [ ] Finish integration checks for implemented `avar` version 2,
+  `gvar` phantom advances (including composites and vertical metrics),
+  duplicate-tag setters and removal of the arbitrary 64-axis cap.
+  Dedicated proof: 139 HarfBuzz cases, 61 FreeType comparisons, 41 public
+  expects, 33 OTS-accepted positive fonts and a 1,000-input fuzz run.
 - [ ] Legacy `kern` offsets when an RTL script is explicitly forced LTR:
   advances can agree while glyph offsets differ. Preserve the explicit
   direction and font-specific oracle cases when resolving this gap.

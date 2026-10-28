@@ -25,6 +25,7 @@ main! = |_args| {
 					{ run, budgets } = match result {
 						Ok(completed) => { run: completed, budgets: [] }
 						Err(OverBudget(r)) => { run: r.run, budgets: r.budgets.map(|b| Str.inspect(b)) }
+						Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 					}
 					nums = |xs| "[${Str.join_with(xs.map(|n| n.to_str()), ",")}]"
 					points = |xs| "[${Str.join_with(xs.map(|p| "[${p.x.to_str()},${p.y.to_str()}]"), ",")}]"

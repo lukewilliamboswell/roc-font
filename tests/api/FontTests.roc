@@ -979,25 +979,26 @@ expect {
 expect kinds_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == ["BadTable(kern)"]
 expect kinds_of(basic_with("kern", FontBuild.patch(FontBuild.kern([]), 2, FontBuild.u16(3)))) == ["BadTable(kern)"]
 
-# What OTS (and so a browser) drops, with the font read without kerning:
-# a table with only a vertical subtable (nothing is kept), a subtable with
-# reserved coverage bits, and an empty pair list. A wrong binary search
-# field (`entrySelector`) rejects the font.
+# Reserved coverage bits are malformed. Valid vertical-only and empty
+# tables remain usable font data; neither changes a horizontal run.
+# A wrong binary search field (`entrySelector`) rejects the font.
 expect {
 	tables = [
-		FontBuild.kern([{ coverage: 0, pairs: [{ left: 1, right: 2, value: -50 }] }]),
 		FontBuild.kern([{ coverage: 0x11, pairs: [{ left: 1, right: 2, value: -50 }] }]),
-		FontBuild.kern([{ coverage: 1, pairs: [] }]),
 	]
 	tables.all(|kern| kinds_of(basic_with("kern", kern)) == ["BadTable(kern)"] and kerning_of(basic_with("kern", kern), [1, 2]) == [0, 0])
+}
+expect {
+	tables = [FontBuild.kern([{ coverage: 0, pairs: [{ left: 1, right: 2, value: -50 }] }]), FontBuild.kern([{ coverage: 1, pairs: [] }])]
+	tables.all(|kern| kinds_of(basic_with("kern", kern)).is_empty() and kerning_of(basic_with("kern", kern), [1, 2]) == [0, 0])
 }
 expect {
 	kern = FontBuild.patch(FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }, { left: 2, right: 3, value: -5 }] }]), 4 + 10, FontBuild.u16(0))
 	read_tables(basic_with("kern", kern)).is_err()
 }
 
-# A `kern` table in Apple's layout (version 1.0) is dropped, as OTS drops
-# every version but 0: the font reads, without that kerning.
+# Apple's version 1.0 kerning is supported directly, including fonts
+# whose tables OTS would drop. Cached Apple oracle cases cover this path.
 apple_kern : List({ coverage : U64, format : U64, pairs : List({ left : U64, right : U64, value : I64 }) }) -> List(U8)
 apple_kern = |subtables| {
 	body = subtables.join_map(
@@ -1013,7 +1014,7 @@ apple_kern = |subtables| {
 
 expect {
 	kern = apple_kern([{ coverage: 0, format: 0, pairs: [{ left: 1, right: 2, value: -50 }] }])
-	kinds_of(basic_with("kern", kern)) == ["BadTable(kern)"] and kerning_of(basic_with("kern", kern), [1, 2]) == [0, 0]
+	kinds_of(basic_with("kern", kern)).is_empty() and kerning_of(basic_with("kern", kern), [1, 2]) == [-25, -25]
 }
 
 # ------------------------------------------------------------ Inter

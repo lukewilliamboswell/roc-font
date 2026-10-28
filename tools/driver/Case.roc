@@ -596,7 +596,7 @@ expect {
 	parsed == Ok({ settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping })
 }
 
-expect Case.flags("direction=ttb") == Err("direction=ttb")
+expect Case.flags("direction=ttb") == Ok({ settings: plain, face: 0, location: Regular, shaping: { script: "", language: "", direction: TopToBottom, features: [], clusters: Graphemes } })
 expect Case.flags("cluster-level=2") == Err("cluster-level=2")
 expect Case.flags("script=") == Err("script=")
 expect Case.flags("feature=liga:1:0") == Err("feature=liga:1:0")

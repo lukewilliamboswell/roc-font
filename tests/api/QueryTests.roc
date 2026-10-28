@@ -159,13 +159,17 @@ expect
 
 # ------------------------------------------------------------ extents
 
-# A font whose outlines are not TrueType (here a `CFF ` table and no
-# `glyf`) cannot measure its glyphs: `Unknown`, unlike a glyph that draws
-# nothing. A glyph id past the font is `Empty`.
+# A malformed CFF table rejects the font during preparation, before any
+# query can run. Valid cubic outlines are covered by CffTests.
 expect
 	match Font.from_bytes(FontBuild.file(FontBuild.basic.append({ tag: "CFF ", data: [1, 0, 4, 4] })), Font.ReadOptions.{}) {
-		Ok(font) => [0, 1, 3].all(|g| Font.extents(font, g) == Unknown) and Font.extents(font, 4) == Empty and Font.extents(font, 0xFFFFFFFF) == Empty
-		Err(_) => False
+		Ok(_) => False
+		Err(problems) => problems.any(
+			|problem| match problem {
+				BadTable({ table, .. }) => table == "CFF "
+				_ => False
+			},
+		)
 	}
 
 # The built-in fonts have TrueType outlines: a space is `Empty`, never
