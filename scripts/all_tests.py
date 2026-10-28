@@ -169,7 +169,11 @@ def run_all(ctx: Context, commands: Sequence[Sequence[str]], cwd: Path = ROOT,
 API_TESTS = "tests/api/main.roc"
 # The consumers of the package, compiled against the served bundle.
 DRIVER = "tools/driver/main.roc"
-BENCH_APPS = ("bench/roc/font.roc", "bench/roc/alloc.roc")
+BENCH_APPS = (
+    "bench/roc/font.roc", "bench/roc/alloc.roc",
+    "bench/roc/myanmar.roc", "bench/roc/myanmar-alloc.roc",
+    "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
+)
 
 
 def consumer_test_modules() -> list[str]:
