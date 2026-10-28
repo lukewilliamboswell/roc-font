@@ -596,6 +596,12 @@ LayoutVar := {
 	default_location : Location
 	default_location = { active: False, scalars: [] }
 
+	## Whether an outer/inner pair names a prepared variation-store row,
+	## including the format's no-variation sentinel. Readers use this
+	## before retaining variation indices in other font tables.
+	valid_index : LayoutVar, U64, U64 -> Bool
+	valid_index = |lv, outer, inner| TableVar.valid_index(lv.store, outer, inner)
+
 	## The delta of a `VariationIndex` (outer and inner index) at a
 	## location, rounded half up as HarfBuzz rounds it: `em_scalef`
 	## multiplies the single-precision sum by `x_scale / upem`, which is
