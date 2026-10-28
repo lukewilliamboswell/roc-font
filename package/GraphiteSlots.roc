@@ -29,6 +29,7 @@ GraphiteSlots := {
 		after : I64,
 		original : I64,
 		deleted : Bool,
+		missing : Bool,
 		insert_before : Bool,
 		trace : U8,
 		advance_x : U32,
@@ -49,7 +50,7 @@ GraphiteSlots := {
 	FeatureChange : { previous : U64, feature : U64, value : U16 }
 
 	no_slot : Slot
-	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, break_weight: 0, direction: 0, bidi_level: 0 }
+	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, missing: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, break_weight: 0, direction: 0, bidi_level: 0 }
 
 	make : U64, U64 -> GraphiteSlots
 	make = |user_count, capacity| { nodes: List.with_capacity(capacity + 1).append(GraphiteSlots.no_slot), users: List.with_capacity(capacity * (user_count + 32)), user_count, feature_changes: [{ previous: 0, feature: 0, value: 0 }], first: 0, last: 0, active: 0, positioned: False, advance_x: 0, advance_y: 0 }
@@ -124,7 +125,7 @@ GraphiteSlots := {
 			return state
 		}
 		at = GraphiteSlots.get(state, id).user_start + index
-		{ ..state, users: state.users.set(at, value) ?? [] }
+		{ ..state, users: state.users.set(at, value.to_i16_wrap().to_i32()) ?? [] }
 	}
 
 	get_extra : GraphiteSlots, U64, U64 -> I32
