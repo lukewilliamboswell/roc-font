@@ -394,8 +394,11 @@ Shaper :: {}.{
 				if gsub_required_tag == f.tag {
 					$gsub_required_stage = f.stage
 				}
-				gsub_index = if (vertical and f.tag == Shaper.tag("vert")) Shaper.global_feature(gsub_common, f.tag) else gsub_found.get(k) ?? LayoutCommon.no_feature
-				gpos_index = gpos_found.get(k) ?? LayoutCommon.no_feature
+				selected_sub = gsub_found.get(k) ?? LayoutCommon.no_feature
+				selected_pos = gpos_found.get(k) ?? LayoutCommon.no_feature
+				global_search = vertical and f.tag == Shaper.tag("vert") and selected_sub == LayoutCommon.no_feature and selected_pos == LayoutCommon.no_feature
+				gsub_index = if (global_search) Shaper.global_feature(gsub_common, f.tag) else selected_sub
+				gpos_index = if (global_search) Shaper.global_feature(gpos_common, f.tag) else selected_pos
 				found = gsub_index != LayoutCommon.no_feature or gpos_index != LayoutCommon.no_feature
 				if found or f.fallback {
 					{ shift, mask } =
@@ -508,7 +511,7 @@ Shaper :: {}.{
 		{
 			backward: requested == Rtl,
 			vertical,
-			has_vert: mapped.any(|m| m.tag == Shaper.tag("vert") and m.gsub != LayoutCommon.no_feature and m.mask != 0),
+			has_vert: mapped.any(|m| m.tag == Shaper.tag("vert") and m.mask != 0),
 			script: ShaperTags.script_of(options.script),
 			native,
 			gsub,
