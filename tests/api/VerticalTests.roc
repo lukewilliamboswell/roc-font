@@ -5,6 +5,8 @@ import "../fonts/vertical/gpos.ttf" as positioning : List(U8)
 import "../fonts/vertical/variable.ttf" as variable : List(U8)
 import "../fonts/vertical/cff2-vvar.otf" as cff_variable : List(U8)
 import "../fonts/vertical/ttf-vorg.ttf" as ignored_vorg : List(U8)
+import "../fonts/vertical/lang-vert.ttf" as language_vert : List(U8)
+import "../fonts/vertical/gpos-selected-vert.ttf" as gpos_vert : List(U8)
 
 ## Vertical font facts and positioned runs through the served public package.
 VerticalTests :: {}.{}
@@ -75,4 +77,15 @@ expect {
 		Ok(result) => result.run.glyphs == [24, 23] and result.run.clusters == [1, 0] and result.origins == [Substituted({ feature: "vert" }), Substituted({ feature: "vert" })] and Font.shape_checked(font, plan, "ab") == Ok(result.run)
 		Err(_) => False
 	}
+}
+
+expect {
+	font = Font.from_bytes(language_vert, Font.ReadOptions.{}) ?? crash "valid duplicate vertical feature fixture"
+	Font.shape(font, "a", Font.ShapeOptions.{ script: "Hani", direction: TopToBottom }).glyphs == [24] and Font.shape(font, "a", Font.ShapeOptions.{ script: "Latn", direction: TopToBottom }).glyphs == [23]
+}
+
+expect {
+	font = Font.from_bytes(gpos_vert, Font.ReadOptions.{}) ?? crash "valid GPOS vertical feature fixture"
+	run = Font.shape(font, "a", Font.ShapeOptions.{ script: "Hani", direction: TopToBottom })
+	run.glyphs == [2] and run.offsets == [{ x: -289, y: -737 }] and run.advances == [{ x: 0, y: -1200 }] and Font.shape(font, "a（）", Font.ShapeOptions.{ script: "Hani", direction: TopToBottom }).glyphs == [2, 14, 15]
 }

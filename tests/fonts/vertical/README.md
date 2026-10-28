@@ -1,6 +1,6 @@
 The original UPL fixtures isolate vertical metrics, substitutions, positioning,
 origin fallback and VVAR advance/origin maps. Both static and variable CFF origins
-are exercised. All 11 bundled fonts pass OTS 9.3.0.
+are exercised. All 13 bundled fonts pass OTS 9.3.0.
 
 Two renamed static Japanese OFL subsets preserve real `vhea`/`vmtx`, `vert` and
 positioning data. `pins.json` records their upstream revision and source SHA256.
@@ -16,12 +16,13 @@ Cached HarfBuzz 14.6.0 matrices (including glyph flags):
 | real-cases |528| Two Japanese families, TTB/BTT and explicit feature toggles |
 | mongolian-cases |144| One Mongolian family, joining variants and controls |
 | cff-cases |60| CFF/CFF2 VORG, VVAR origin maps and missing-VORG centering |
+| vert-selection-cases |24| Selected-language preference and cross-table global fallback |
 | vorg-policy-cases |2| Deliberate TrueType VORG policy difference |
 
 The policy matrix follows the [OpenType VORG specification](https://learn.microsoft.com/en-us/typography/opentype/spec/vorg):
 TrueType fonts must ignore VORG. HarfBuzz 14.6 uses that table with either outline
 format. Those two differences need explicit known-case registration; they are
-separate from the 1072 ordinary reference cases.
+separate from the 1096 ordinary reference cases.
 
 Pinned HarfBuzz enables `vert` by default in vertical text and searches it across
 language systems. `vrt2` and `vkrn` are explicit feature requests; the fixtures

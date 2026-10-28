@@ -18,7 +18,7 @@ forms={0x2013:0xfe32,0x2014:0xfe31,0x2026:0xfe19,0x3001:0xfe11,0x3002:0xfe12,0xf
 cmap={32:'space',97:'a',98:'b',99:'c',0x301:'acute',0x200d:'zwj',0x200c:'zwnj',0x34f:'cgj'}
 cmap.update({cp:f'u{cp:04x}' for cp in list(forms)+list(forms.values())})
 names=['.notdef']+list(cmap.values())+['a.vert','b.vert','a.vrt2']
-for mode in ['metrics','fallback','gpos','global-vert','variable','ttf-vorg']:
+for mode in ['metrics','fallback','gpos','global-vert','variable','ttf-vorg','lang-vert','gpos-selected-vert']:
  fb=FontBuilder(1000,isTTF=True);fb.setupGlyphOrder(names);fb.setupCharacterMap(cmap)
  glyphs={}
  for name in names:
@@ -43,6 +43,10 @@ feature curs { pos cursive a.vert <anchor 20 650> <anchor 200 50>; pos cursive b
 feature calt { sub a.vert c by b.vert; } calt;
 '''
   addOpenTypeFeaturesFromString(fb.font,languages+fea)
+ if mode=='lang-vert':
+  addOpenTypeFeaturesFromString(fb.font,'languagesystem latn dflt; languagesystem hani dflt; feature vert { script latn; sub a by a.vert; script hani; sub a by b.vert; } vert;')
+ if mode=='gpos-selected-vert':
+  addOpenTypeFeaturesFromString(fb.font,'languagesystem latn dflt; languagesystem hani dflt; feature vert { script latn; sub a by a.vert; script hani; pos a <11 13 0 0>; } vert; feature locl { script hani; sub c by b; } locl;')
  if mode=='variable':
   axis=Axis();axis.axisTag='wght';axis.minValue=100;axis.defaultValue=400;axis.maxValue=900;axis.flags=0;axis.axisNameID=256
   fvar=newTable('fvar');fvar.axes=[axis];fvar.instances=[];fb.font['fvar']=fvar
@@ -68,3 +72,11 @@ for weight in [100,400,650,900]:
  for direction in ['ttb','btt']:
   cases.append({'id':f'variable-{weight}-{direction}','font':'variable.ttf','text':'abca','variations':{'wght':weight},'options':{'script':'Latn','direction':direction,'hb_options':['--show-flags']},'expected':'oracle'})
 emit('vertical-cases.jsonc',(json.dumps({'schema':1,'about':'Original vertical metrics, origins, VVAR, substitutions, placements, controls and feature ranges.','cases':cases},indent=2,ensure_ascii=False)+'\n').encode())
+
+selection=[]
+for mode in ['lang-vert','gpos-selected-vert']:
+ for script in ['Latn','Hani','Kana']:
+  for direction in ['ttb','btt']:
+   for i,text in enumerate(['a','a（）']):
+    selection.append({'id':f'{mode}-{script}-{direction}-{i}','font':mode+'.ttf','text':text,'options':{'script':script,'direction':direction,'hb_options':['--show-flags']},'expected':'oracle'})
+emit('vert-selection-cases.jsonc',(json.dumps({'schema':1,'about':'Selected language vert wins before global search; selected GPOS vert suppresses unrelated GSUB fallback.','cases':selection},indent=2,ensure_ascii=False)+'\n').encode())

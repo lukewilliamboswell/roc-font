@@ -19,13 +19,20 @@
     }
   },
   "public_bundled_expects": {
-    "passed": 11,
-    "bundle": "EohUtiz6VoHoLukQRBnEtvSw5Dzd6gYPDvUqjcx7Fvkw.tar.zst"
+    "passed": 13,
+    "bundle": "8CzWU3GraupihL3gbvxa3DN651KWw3TbarGiuUiDjaQU.tar.zst"
   },
-  "reader_checks": "All11 fonts OTS9.3.0 PASS;1074 records current; original generators deterministic check PASS; real prepare --check PASS",
+  "reader_checks": "All13 fonts OTS9.3.0 PASS;1098 records current; all3 deterministic generators --check PASS",
   "deliberate_differences": [
     "vorg-policy-cases/ttf-ignore-ttb",
     "vorg-policy-cases/ttf-ignore-btt"
   ],
-  "final_shared_native_replay": "Integrator will rerun all1072 ordinary records after empty glyph and CFF extents integration; no claim of native success for pending rows."
+  "final_shared_native_replay": "Integrator will rerun all1096 ordinary records after empty glyph/CFF integration and selected vertical feature fix; no native success claim for pending rows.",
+  "selected_vertical_features": {
+    "cached_cases": 24,
+    "before_fix_native_agree": 12,
+    "public_fixed_expects": 2,
+    "source_fix": "35a38a3",
+    "native_after_fix": "Integrator final shared replay"
+  }
 }

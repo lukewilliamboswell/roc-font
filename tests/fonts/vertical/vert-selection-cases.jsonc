@@ -1,0 +1,318 @@
+{
+  "schema": 1,
+  "about": "Selected language vert wins before global search; selected GPOS vert suppresses unrelated GSUB fallback.",
+  "cases": [
+    {
+      "id": "lang-vert-Latn-ttb-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Latn-ttb-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Latn-btt-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Latn-btt-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Hani-ttb-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Hani-ttb-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Hani-btt-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Hani-btt-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Kana-ttb-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Kana-ttb-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Kana-btt-0",
+      "font": "lang-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "lang-vert-Kana-btt-1",
+      "font": "lang-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Latn-ttb-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Latn-ttb-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Latn-btt-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Latn-btt-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Hani-ttb-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Hani-ttb-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Hani-btt-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Hani-btt-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Kana-ttb-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Kana-ttb-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Kana-btt-0",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "gpos-selected-vert-Kana-btt-1",
+      "font": "gpos-selected-vert.ttf",
+      "text": "a（）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
