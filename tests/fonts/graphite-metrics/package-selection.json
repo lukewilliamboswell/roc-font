@@ -1,0 +1,272 @@
+{
+  "schema": 1,
+  "full_cases_sha256": "7e6e17a8597d9a15e0c13f0ba7c38d8fc608ae15666f4fd51cc39af23ade9509",
+  "full_records_sha256": "cb277024f24df1740fa6178876d161e0043e4e1a7cf94ff1d84f798e10e7f67e",
+  "full_oracle_sha256": "0f7b8357abd85cff74e9526935f20735e6fc645d9cd8cf80dc56e55be7e00176",
+  "package_ids": [
+    "raw-bounds-lsb-100-metric0",
+    "raw-bounds-lsb-100-metric1",
+    "raw-bounds-lsb-100-metric2",
+    "raw-bounds-lsb-100-metric3",
+    "raw-bounds-lsb-100-metric4",
+    "raw-bounds-lsb-100-metric5",
+    "raw-bounds-lsb-100-metric6",
+    "raw-bounds-lsb-100-metric7",
+    "raw-bounds-lsb-100-metric8",
+    "raw-bounds-lsb-100-metric9",
+    "raw-bounds-lsb-100-metric10",
+    "raw-bounds-lsb100-metric0",
+    "raw-bounds-lsb100-metric1",
+    "raw-bounds-lsb100-metric2",
+    "raw-bounds-lsb100-metric3",
+    "raw-bounds-lsb100-metric4",
+    "raw-bounds-lsb100-metric5",
+    "raw-bounds-lsb100-metric6",
+    "raw-bounds-lsb100-metric7",
+    "raw-bounds-lsb100-metric8",
+    "raw-bounds-lsb100-metric9",
+    "raw-bounds-lsb100-metric10",
+    "variable-0-graphite2",
+    "variable-0-ot",
+    "variable-0.5-graphite2",
+    "variable-0.5-ot",
+    "variable-1-graphite2",
+    "variable-1-ot",
+    "cff-only-metric0-ot",
+    "cff-only-metric0-auto",
+    "cff-only-metric4-ot",
+    "cff-only-metric4-auto",
+    "cff-only-metric5-ot",
+    "cff-only-metric5-auto",
+    "cff-only-metric7-ot",
+    "cff-only-metric7-auto",
+    "cff-only-metric8-ot",
+    "cff-only-metric8-auto"
+  ],
+  "raw_only": [
+    {
+      "id": "cff-only-metric0-graphite2",
+      "reason": "Forced reference Graphite failure on an unavailable callback face. The public package selects the primary engine automatically or disables font programs; it cannot force an unavailable Graphite backend. The matching default and explicit OT cases are included."
+    },
+    {
+      "id": "cff-only-metric4-graphite2",
+      "reason": "Forced reference Graphite failure on an unavailable callback face. The public package selects the primary engine automatically or disables font programs; it cannot force an unavailable Graphite backend. The matching default and explicit OT cases are included."
+    },
+    {
+      "id": "cff-only-metric5-graphite2",
+      "reason": "Forced reference Graphite failure on an unavailable callback face. The public package selects the primary engine automatically or disables font programs; it cannot force an unavailable Graphite backend. The matching default and explicit OT cases are included."
+    },
+    {
+      "id": "cff-only-metric7-graphite2",
+      "reason": "Forced reference Graphite failure on an unavailable callback face. The public package selects the primary engine automatically or disables font programs; it cannot force an unavailable Graphite backend. The matching default and explicit OT cases are included."
+    },
+    {
+      "id": "cff-only-metric8-graphite2",
+      "reason": "Forced reference Graphite failure on an unavailable callback face. The public package selects the primary engine automatically or disables font programs; it cannot force an unavailable Graphite backend. The matching default and explicit OT cases are included."
+    },
+    {
+      "id": "cff-only-metric8-maxp1-diagnostic-graphite2",
+      "reason": "Explicit CFF maxp1 diagnostic; OTS corrects the incorrect CFF maxp version. Original unsanitized bytes isolate reference behavior but are excluded from normative package runs."
+    },
+    {
+      "id": "cff-only-metric8-maxp1-diagnostic-ot",
+      "reason": "Explicit CFF maxp1 diagnostic; OTS corrects the incorrect CFF maxp version. Original unsanitized bytes isolate reference behavior but are excluded from normative package runs."
+    },
+    {
+      "id": "cff-only-metric8-maxp1-diagnostic-auto",
+      "reason": "Explicit CFF maxp1 diagnostic; OTS corrects the incorrect CFF maxp version. Original unsanitized bytes isolate reference behavior but are excluded from normative package runs."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-20480-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-cff-65536-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-20480-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-glyf-65536-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-20480-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-both-65536-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-20480-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-6-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-6-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-6-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-32-graphite2",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-32-ot",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    },
+    {
+      "id": "maxp-matrix-neither-65536-32-auto",
+      "reason": "Explicit nonnormative maxp-version/length/outline factorial diagnostic; reference face/engine eligibility evidence, not a valid-font package run requirement."
+    }
+  ]
+}

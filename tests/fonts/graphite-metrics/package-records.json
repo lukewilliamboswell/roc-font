@@ -1,0 +1,1463 @@
+{
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "graphite2": "1.3.14",
+    "shaper_priority": [
+      "graphite2",
+      "ot",
+      "fallback"
+    ],
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 2,
+    "variations": "explicit hb_font_set_variations before shaping; captures OT glyph2 advance independently",
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "records": [
+    {
+      "id": "raw-bounds-lsb-100-metric0",
+      "key": "b24e521d84ecf403b66b59b6f4e2196977131c37a8fb848b604626134bbbd035",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric1",
+      "key": "c36089957a357f34f1df76565ec104b8460d54092c11a429011fe50528f6e82b",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              302
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric2",
+      "key": "634f9161200f46a2cd56813f5135e46e146890568b5ccd5ed2b05328b4b66171",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              600
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric3",
+      "key": "9309a49e43d1fb5d4aca7e4ff6553d2ed0d0b51779c3a86272c47483a0f4baca",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric4",
+      "key": "a9cb5697c7a543a54677bc8b3a2caa0f638093a4a0fe542964002f5fa67c914a",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric5",
+      "key": "fcb043c733d3d7ae9bf55ea79e08a421050c4e232e5fb78619fb0cdf7c1be910",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              300
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric6",
+      "key": "4725dfa3820ac9a78407c5ff2336d54df7868fc95433964c76f1509a2f6669fa",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              600
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric7",
+      "key": "27a12976efc82171c0c497e5265dd2e26289aa9708ebca1fddfad51d178c7d6c",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              300
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric8",
+      "key": "1ca9ca8a6507fc3d8f4f243b1d2a26988504e5096cb574e80a4dfa81c081941c",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              602
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric9",
+      "key": "bf0a832396c404db9a6de4f4ce993ce00684d21a86b77d7e54463dba6c6854e7",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb-100-metric10",
+      "key": "0dbc3eb584f8341cfbfe0134fe6e26f6d16cfddc6bb41ab8c2cdc82d812126a3",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric0",
+      "key": "98590ae17a1f8e2d24a8b8d071a5b0f6b27460efdd1d6e457447b58770fef7dd",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric1",
+      "key": "9fa203ff8049f8b8550977368eb696fe5ee4c20ee3ececd9d2c3b8fb0473efa4",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              302
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric2",
+      "key": "2e733372321d1ac9d67b35cbbef5368e47b18e0d86ad68a0d0d7e5e92d73c1d7",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              600
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric3",
+      "key": "3dbbb3d3200f22be480274c8d79986dcbb3f5b0f4f9bc72f8cce6c91943d8ad9",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric4",
+      "key": "5722b4a46c96b30109aec2f5633c158ee65479282733101ed55ede434edfd988",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric5",
+      "key": "28c6a558f76479383d3b7d350ee98d5aeb785a7746e433664e644b42fbd720af",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              300
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric6",
+      "key": "754c6d341478b5614b0a2a443144e4ce8f52ca17532dc114ce2408fcdb7c946d",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              600
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric7",
+      "key": "b403d85676734d90feb1ca1df9c5d4b8bfcbe2065aae44c42f4e562f2363d5a4",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              300
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric8",
+      "key": "b54a40b7f3b37f25a4ab7f42fa2129dfa1cc807f22cff01ad40a27974985e1d3",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              602
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric9",
+      "key": "7c664552fec172a925ffcbbe960ea3cfc9d5c981c90ab37a7638024d31b885e4",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "raw-bounds-lsb100-metric10",
+      "key": "0292a9cfa4a528f0239c2654a0bab6da38884e13e37c4a29fc56a616b1805f80",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-0-graphite2",
+      "key": "fc5f66d1c77952d92ab0ac27ac523777e311d07f6c76e0c6d3630ceb8d671c97",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              602
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-0-ot",
+      "key": "df185c58fe48a4c77c1861d34583d983463646a7c5fe2f143cddac3369bf4b43",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-0.5-graphite2",
+      "key": "d0fd0eb3b7a1f32ef485f65da2dabdf2d6ad823f50923bba2ce5481f9340d569",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              602
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 702,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-0.5-ot",
+      "key": "3df471d0e17cf0b276a2aa8f9d5da4e078c55165a913f6e028cc4497c13f0abc",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              702,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 702,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-1-graphite2",
+      "key": "a9ee519f8c34192c3275117cc99422ecb062aa548c006c2939113ae2578bd113",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              602
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 802,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "variable-1-ot",
+      "key": "453ee567f035cde93a33e800581beec5f75634d9cc38398025e86fe981fddded",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              802,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 802,
+        "graphite_face_available": true
+      }
+    },
+    {
+      "id": "cff-only-metric0-ot",
+      "key": "f35ce6a036f1c06b9a33e73a37ca4b42bc232d23b36b277a328b57da560007e9",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric0-auto",
+      "key": "c8aee2e3ed22b05bebbcb22d88802554d1261fb285876e1497cf64569932661c",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric4-ot",
+      "key": "5b4ac523ac87ba3aa9823e38f2463dd0a00ad1fc44de5e44cfd3a4aa97b9b148",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric4-auto",
+      "key": "7320a44fc6247e6a6dfde71d5f1b1678a5444beaffa30e6b05969450f54a9ba0",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric5-ot",
+      "key": "76e0a60d3d2b2826710e5cd8d88cf55d06a560222257a27fad7a03c4891bbd05",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric5-auto",
+      "key": "10570366727b08c27f475a11e6d5cd8dd3be90f560e02e8dedf3322bf94329be",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric7-ot",
+      "key": "5e0c6f1b39025535d388874465034d891cca8739cb76876bb81b7f69b5ff6759",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric7-auto",
+      "key": "4aa13a8ffdef31004c2fbc6d82af78aba1ecaeab95ab4c6010c8a0e8924e0d12",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric8-ot",
+      "key": "7d00f91ccd6a75ea158619c019135804d1c9a8d70a5d1b13b032f5d879c6f557",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    },
+    {
+      "id": "cff-only-metric8-auto",
+      "key": "d85d7b91f6482c07ba5e477ebf066d0a8a8f09a740ef95a0d73dba3e091862e8",
+      "result": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 600,
+        "graphite_face_available": false
+      }
+    }
+  ]
+}

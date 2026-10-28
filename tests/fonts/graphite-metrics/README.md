@@ -101,3 +101,26 @@ python3 tests/fonts/graphite-metrics/record_ots.py --check
 
 Native Roc replay and public regression registration are integration work;
 these reference caches alone do not claim that the runtime fix has passed.
+
+## Normative package gate versus raw diagnostics
+
+The complete 94-case HB reference matrix remains unchanged. The independent
+`package-cases.jsonc`/`package-records.json`/`package-oracle.json` gate includes
+exactly 38 cases: the original 28 raw-metric/variation controls and 10 ordinary,
+OTS-positive CFF controls (default and explicit OT). It excludes the unavailable
+forced-Graphite failures because the public API cannot force an unavailable
+backend, and excludes the nonnormative diagnostic headers/outline combinations.
+`package-selection.json` gives an explicit reason for EACH of the 56 raw-only
+case IDs and pins the complete reference sources; no result is silently skipped.
+The raw diagnostic observations remain available for eligibility investigation.
+
+`prepare_package.py --check` verifies the entire partition and immutable subset
+bytes offline. The standard public HB cache checker also works on the subset:
+
+```
+python3 tests/fonts/graphite-metrics/record_hb.py --check --cases package-cases.jsonc --output package-records.json --oracle package-oracle.json
+```
+
+A frozen native run using the original 28-case snapshot retains that exact
+snapshot. New package integration should select the explicit 38-case files,
+without broadening the successful-font gate to raw diagnostics.
