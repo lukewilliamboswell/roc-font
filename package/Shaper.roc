@@ -24,7 +24,6 @@ import TableCmap
 import TableAatKern
 import ShaperAatPosition
 import ShaperGraphite
-import TableGraphite
 import Bytes
 import AatTracking
 import AatLanguage
@@ -544,7 +543,7 @@ Shaper :: {}.{
 		}
 		{
 			tracking: if (options.use_font_programs) AatTracking.value(face.tracking, vertical, options.point_size) else 0,
-			graphite: if options.use_font_programs and TableGraphite.available(face.graphite) {
+			graphite: if options.use_font_programs and Face.graphite_available(face) {
 				# HB's Graphite adapter treats feature values as global. Numeric
 				# choices override matching four-byte tag choices explicitly.
 				tagged = options.features.keep_oks(

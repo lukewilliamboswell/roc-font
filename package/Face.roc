@@ -173,6 +173,20 @@ Face := {
 		$boxes
 	}
 
+	# Graphite2's face requires the complete TrueType maxp profile even when
+	# the sfnt also carries CFF. A valid CFF 0.5 profile still reads normally;
+	# it selects the OpenType/Apple path instead of an unavailable program.
+	graphite_available : Face -> Bool
+	graphite_available = |face| {
+		if !TableGraphite.available(face.graphite) {
+			return False
+		}
+		match Face.located_tag(face.metadata.bytes, face.metadata.tables, 0x6D617870, 32) {
+			Found(found) => Bytes.u32(found.data, 0) == 0x00010000
+			_ => False
+		}
+	}
+
 	# Graphite tables form one program. A broken dependency drops that
 	read_aat_kern : List(U8), List(Sfnt.Table), Str, U64 -> { value : TableAatKern, problems : List(Problem) }
 	read_aat_kern = |bytes, tables, tag, glyphs| {
