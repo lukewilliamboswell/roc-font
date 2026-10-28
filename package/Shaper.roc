@@ -21,6 +21,8 @@ import ShaperUnicode
 import Sorted
 import TablePost
 import TableCmap
+import TableAatKern
+import ShaperAatPosition
 import AatMorx
 import AatFeatureSelect
 
@@ -72,6 +74,8 @@ Shaper :: {}.{
 		gpos : List({ index : U64, mask : U64 }),
 		gpos_auto_zwj : List(Bool),
 		kern : [Kern(U64), NoKern],
+		aat_position : [NoAatPosition, Kerx, Legacy],
+		aat_kern_mask : U64,
 		global_mask : U64,
 		ranges : List({ mask : U64, value : U64, start : U64, end : U64 }),
 		frac_mask : U64,
@@ -483,7 +487,22 @@ Shaper :: {}.{
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
-		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
+		has_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
+		has_kerx = TableAatKern.has_data(face.kerx)
+		has_gsub = !aat and !gsub_common.data.is_empty()
+		prefer_kerx = has_kerx and !(has_gsub and has_gpos)
+		apply_gpos = has_gpos and !prefer_kerx
+		selected_kern_tag = if (vertical) Shaper.tag("vkrn") else Shaper.kern_tag
+		kern_mask = mask_of(selected_kern_tag)
+		has_gpos_kern = match mapped.find_first(|m| m.tag == selected_kern_tag) {
+			Ok(m) => m.gpos != LayoutCommon.no_feature
+			Err(_) => False
+		}
+		apply_kerx = prefer_kerx or (has_kerx and (!has_gpos_kern or !apply_gpos))
+		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
+		fallback_position = !aat_dumber and !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
+		apply_kern = !apply_kerx and fallback_position and (!has_gpos_kern or !apply_gpos) and TableAatKern.has_data(face.aat_kern)
+		kern = NoKern
 		gpos_steps =
 			if apply_gpos {
 				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied, arabic)
@@ -493,17 +512,6 @@ Shaper :: {}.{
 		gpos_auto_zwj = if (gpos_steps.any(|s| !s.auto_zwj)) gpos_steps.map(|s| s.auto_zwj) else []
 		# Consume the temporary steps last so map can reuse their allocation.
 		gpos = gpos_steps.map(|s| { index: s.index, mask: s.mask })
-		kern_mask = mask_of(Shaper.kern_tag)
-		has_gpos_kern = match mapped.find_first(|m| m.tag == Shaper.kern_tag) {
-			Ok(m) => m.gpos != LayoutCommon.no_feature
-			Err(_) => False
-		}
-		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
-		fallback_position = !aat_dumber and !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
-		# Legacy kern follows the shaper's fallback positioning policy;
-		# prepared GPOS lookups above remain independent of this fallback.
-		apply_kern = !vertical and fallback_position and (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
-		kern = if (apply_kern and kern_mask != 0) Kern(kern_mask) else NoKern
 		# Ranges, in the caller's order: a later one wins where they overlap.
 		var $ranges = []
 		for f in options.features {
@@ -534,11 +542,13 @@ Shaper :: {}.{
 			gsub_stage_count: stage_count,
 			staged,
 			model,
-			zero_marks: if (aat_dumber) Keep else if (myanmar or use_model) Early else if (indic or khmer or hangul) Keep else Late,
+			zero_marks: if (aat_dumber or apply_kerx or (apply_kern and TableAatKern.has_machine(face.aat_kern))) Keep else if (myanmar or use_model) Early else if (indic or khmer or hangul) Keep else Late,
 			fallback_position,
 			gpos,
 			gpos_auto_zwj,
 			kern,
+			aat_position: if (apply_kern) Legacy else if (apply_kerx and !apply_gpos) Kerx else NoAatPosition,
+			aat_kern_mask: kern_mask,
 			global_mask: $global_mask,
 			ranges: $ranges,
 			frac_mask: one_mask_of(Shaper.frac_tag),
@@ -559,7 +569,7 @@ Shaper :: {}.{
 			# HarfBuzz positions marks itself when nothing else does: no
 			# `GPOS` and no `kern` with cross-stream kerning (which
 			# roc-font does not read).
-			fallback_marks: !apply_gpos,
+			fallback_marks: !apply_gpos and !apply_kerx and (!apply_kern or !TableAatKern.has_cross_stream(face.aat_kern)),
 			growth: options.growth,
 			operations: options.operations,
 			mapped,
@@ -1301,10 +1311,11 @@ Shaper :: {}.{
 			}
 		}
 		full = LayoutKerning.position_vertical(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.zero_marks == Late, items, Face.glyph_count(face), $base, $major, $cross, backward, { budget, depth: Face.max_depth(face) })
-		{ items: positioned_items, ax, dx, dy } = full.positions
-		var $ax = ax
-		var $dx = dx
-		var $dy = dy
+		positioned = Shaper.aat_position(face, location, p, full.positions.items, { advances: full.positions.ax, major: full.positions.dx, cross: full.positions.dy }, backward, budget - full.operations)
+		positioned_items = positioned.items
+		var $ax = positioned.advances
+		var $dx = positioned.major
+		var $dy = positioned.cross
 		for i in 0..<count {
 			item = positioned_items.get(i) ?? LayoutGsub.no_item
 			if p.zero_marks == Late and LayoutGsub.is_mark_item(item) {
@@ -1320,7 +1331,7 @@ Shaper :: {}.{
 		}
 		fallback = if (p.fallback_marks and p.fallback_position) Shaper.position_marks_axis(face, location, { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }, backward, p.native == Rtl, Face.units_per_em(face).to_i64(), p.fallback_marks and !backward, True) else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
 		placed = if (backward) { items: Shaper.reversed(fallback.items), ax: Shaper.reversed(fallback.ax), dx: Shaper.reversed(fallback.dx), dy: Shaper.reversed(fallback.dy) } else fallback
-		{ placed: if (ignorables) Shaper.hide_ignorables(face, placed) else placed, stopped: full.stopped }
+		{ placed: if (ignorables) Shaper.hide_ignorables(face, placed) else placed, stopped: full.stopped.bitwise_or(positioned.stopped) }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
@@ -1353,14 +1364,15 @@ Shaper :: {}.{
 			}
 		}
 		full = LayoutKerning.position_full_with_policy(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.zero_marks == Late, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
-		positioned = full.positions
-		var $items = positioned.items
-		var $ax = List.with_capacity(count)
-		var $dx = positioned.dx
-		var $dy = positioned.dy
+		var $initial_ax = List.with_capacity(count)
 		for i in 0..<count {
-			$ax = $ax.append(($base.get(i) ?? 0) + (positioned.ax.get(i) ?? 0))
+			$initial_ax = $initial_ax.append(($base.get(i) ?? 0) + (full.positions.ax.get(i) ?? 0))
 		}
+		positioned = Shaper.aat_position(face, location, p, full.positions.items, { advances: $initial_ax, major: full.positions.dx, cross: full.positions.dy }, backward, remaining_budget - full.operations)
+		var $items = positioned.items
+		var $ax = positioned.advances
+		var $dx = positioned.major
+		var $dy = positioned.cross
 		if adjust_early {
 			for i in 0..<count {
 				if LayoutGsub.is_mark_item($items.get(i) ?? LayoutGsub.no_item) {
@@ -1400,8 +1412,19 @@ Shaper :: {}.{
 		finished = if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered
 		if p.arabic_stch {
 			stretched = ShaperArabicStretch.apply(face, location, finished, backward, growth_limit, remaining_budget - full.operations)
-			{ placed: stretched.placed, stopped: full.stopped.bitwise_or(stretched.stopped) }
-		} else { placed: finished, stopped: full.stopped }
+			{ placed: stretched.placed, stopped: full.stopped.bitwise_or(positioned.stopped).bitwise_or(stretched.stopped) }
+		} else { placed: finished, stopped: full.stopped.bitwise_or(positioned.stopped) }
+	}
+
+	# AAT consumes absolute positions in major/cross axes, before final
+	# buffer reversal. Legacy kerning follows GPOS; kerx replaces it.
+	aat_position : Face, Face.Location, Plan, List(LayoutGsub.Item), ShaperAatPosition.Initial, Bool, U64 -> ShaperAatPosition.Applied
+	aat_position = |face, location, p, items, initial, backward, budget| {
+		if p.aat_position == NoAatPosition {
+			return { items, advances: initial.advances, major: initial.major, cross: initial.cross, operations: 0, stopped: 0 }
+		}
+		table = if (p.aat_position == Kerx) face.kerx else face.aat_kern
+		ShaperAatPosition.apply(table, face.anchors, items, initial, { vertical: p.vertical, backward, kern_mask: p.aat_kern_mask, budget, point: |glyph, index| Face.contour_point(face, location, glyph, index) })
 	}
 
 	## The widths HarfBuzz gives spaces the font lacks, drawn with the space

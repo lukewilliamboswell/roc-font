@@ -34,6 +34,8 @@ import TableColorImages
 import TablePalette
 import TableColor
 import TableGraphite
+import TableAatKern
+import TableAatAnchor
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -90,6 +92,9 @@ Face := {
 	aat : [Present(AatMorx), Absent],
 	aat_features : AatFeatures,
 	graphite : TableGraphite,
+	kerx : TableAatKern,
+	aat_kern : TableAatKern,
+	anchors : TableAatAnchor,
 	gdef : LayoutGdef,
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
@@ -150,6 +155,19 @@ Face := {
 		problems : List(Problem),
 		avar_problems : List(Problem),
 		fvar_axes : [Present(U64), Absent],
+	}
+
+	# Graphite tables form one program. A broken dependency drops that
+	read_aat_kern : List(U8), List(Sfnt.Table), Str, U64 -> { value : TableAatKern, problems : List(Problem) }
+	read_aat_kern = |bytes, tables, tag, glyphs| {
+		match Sfnt.located(bytes, tables, tag, 0) {
+			Missing => { value: TableAatKern.none, problems: [] }
+			Bad(at) => { value: TableAatKern.none, problems: [Sfnt.bad(tag, at)] }
+			Found(found) => match (if (tag == "kerx") TableAatKern.read_kerx(found.data, glyphs) else TableAatKern.read_kern(found.data, glyphs)) {
+				Ok(value) => { value, problems: [] }
+				Err(problems) => { value: TableAatKern.none, problems: problems.map(|p| Sfnt.bad(tag, found.offset + p.offset)) }
+			}
+		}
 	}
 
 	# Graphite tables form one program. A broken dependency drops that
@@ -265,6 +283,23 @@ Face := {
 				$optional = Face.collect($optional, vorg)
 				graphite = Face.read_graphite(bytes, tables, glyph_count, options.max_bytes)
 				$optional = $optional.concat(graphite.problems)
+				kerx = Face.read_aat_kern(bytes, tables, "kerx", glyph_count)
+				aat_kern = Face.read_aat_kern(bytes, tables, "kern", glyph_count)
+				$optional = $optional.concat(kerx.problems)
+				anchors = match Sfnt.located(bytes, tables, "ankr", 12) {
+					Missing => TableAatAnchor.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("ankr", at))
+						TableAatAnchor.none
+					}
+					Found(found) => match TableAatAnchor.read(found.data, glyph_count) {
+						Ok(value) => value
+						Err(problems) => {
+							$optional = $optional.concat(problems.map(|p| Sfnt.bad("ankr", found.offset + p.offset)))
+							TableAatAnchor.none
+						}
+					}
+				}
 				aat = match Sfnt.located(bytes, tables, "morx", 8) {
 					Missing => Absent
 					Bad(at) => {
@@ -398,6 +433,7 @@ Face := {
 				cff_only = !tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x43464620 or t.tag == 0x43464632)
 				kern = match LayoutKerning.from_kern(bytes, tables) {
 					Ok(Present(_)) if cff_only => Err(Drop(Sfnt.bad("kern", Face.table_offset(tables, "kern"))))
+					Err(_) if TableAatKern.has_data(aat_kern.value) and !cff_only => Ok(Absent)
 					read => read
 				}
 				match kern {
@@ -565,6 +601,9 @@ Face := {
 								aat,
 								aat_features,
 								graphite: graphite.value,
+								kerx: kerx.value,
+								aat_kern: if (cff_only) TableAatKern.none else aat_kern.value,
+								anchors,
 								gdef,
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
@@ -1046,6 +1085,23 @@ Face := {
 
 	code_points : Face -> List(U32)
 	code_points = |face| TableCmap.code_points(face.cmap, face.glyph_count)
+
+	contour_point : Face, Location, U64, U64 -> [Present(TableAatAnchor.Point), Absent]
+	contour_point = |face, loc, id, index| match face.outlines {
+		Absent => Absent
+		Present(outline) => {
+			if id >= face.glyph_count {
+				return Absent
+			}
+			points = TableGvar.points(outline.points, outline.gvar, loc.gvar, id)
+			count = points.xs.len()
+			if count < 4 or index >= count - 4 {
+				return Absent
+			}
+			shift = points.xs.get(count - 4) ?? 0
+			Present({ x: TableVar.f32_round_half_up(TableVar.f32_sub(points.xs.get(index) ?? 0, shift)).to_i32_wrap(), y: TableVar.f32_round_half_up(points.ys.get(index) ?? 0).to_i32_wrap() })
+		}
+	}
 
 	## Outline programs are required when present, like TrueType glyf.
 	## Validate both independent CFF tables before choosing CFF2 over CFF1.
