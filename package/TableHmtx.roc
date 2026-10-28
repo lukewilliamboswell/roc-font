@@ -4,7 +4,8 @@ import Bytes
 ## Horizontal metrics (`hmtx`): each glyph's advance width.
 ##
 ## Internal. As the format defines, a glyph past the last long metric takes
-## the advance of the last one. Left side bearings are not kept.
+## the advance of the last one. The complete trailing side-bearing array
+## is checked, including in a font with no outlines.
 TableHmtx :: {}.{
 
 	## One advance per glyph, for `count_of_glyphs` glyphs (from `maxp`) of
@@ -12,7 +13,7 @@ TableHmtx :: {}.{
 	from_tables : List(U8), List(Sfnt.Table), U64, U64 -> Try(List(U16), [MissingTable(Str), BadTable({ table : Str, offset : U32 })])
 	from_tables = |bytes, tables, metric_count, count_of_glyphs| {
 		long = metric_count.min(count_of_glyphs)
-		hmtx = Sfnt.required(bytes, tables, "hmtx", 4 * long)?.data
+		hmtx = Sfnt.required(bytes, tables, "hmtx", 4 * long + 2 * (count_of_glyphs - long))?.data
 		var $advances = List.with_capacity(count_of_glyphs)
 		for g in 0..<count_of_glyphs {
 			at = 4 * g.min(long - 1)

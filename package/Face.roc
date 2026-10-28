@@ -18,6 +18,10 @@ import LayoutKerning
 import LayoutVar
 import LayoutCommon
 import Sorted
+import TableMetadata
+import TableCaret
+import TableOutline
+import TableMath
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -46,6 +50,9 @@ import Sorted
 ## fault). Strict reading rejects the font for any problem. Every problem
 ## is reported, required ones first.
 Face := {
+	metadata : TableMetadata,
+	carets : TableCaret,
+	math : TableMath,
 	units_per_em : U16,
 	glyph_count : U64,
 	advances : List(U16),
@@ -304,6 +311,40 @@ Face := {
 				}
 				# Variation problems drop every variation table as one unit.
 				keep_variations = $var_problems.is_empty()
+				math = match Sfnt.located(bytes, tables, "MATH", 0) {
+					Missing => TableMath.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("MATH", at))
+						TableMath.none
+					}
+					Found(found) => match TableMath.read(found.data, glyph_count, lv) {
+						Ok(value) => value
+						Err(offsets) => {
+							$optional = $optional.concat(offsets.map(|at| Sfnt.bad("MATH", found.offset + at)))
+							TableMath.none
+						}
+					}
+				}
+				# Static outlines are prepared too: path and point queries need
+				# them even when the font has no variation space.
+				static_outlines = match points {
+					Read(Ok(p)) => Present({ points: p, gvar: TableGvar.absent })
+					_ => Absent
+				}
+				outline_points = match static_outlines {
+					Present(o) => Present(o.points)
+					Absent => Absent
+				}
+				carets = match Sfnt.located(bytes, tables, "GDEF", 12) {
+					Found(found) => match TableCaret.read(found.data, glyph_count, outline_points, lv) {
+						Ok(value) => value
+						Err(Bad(at)) => {
+							$required = $required.append(Sfnt.bad("GDEF", found.offset + at))
+							TableCaret.none
+						}
+					}
+					_ => TableCaret.none
+				}
 				$optional = $optional.concat(variations.avar_problems).concat($var_problems)
 				$required = Face.unique($required)
 				$optional = Face.unique($optional).drop_if(|p| $required.contains(p))
@@ -319,6 +360,9 @@ Face := {
 								_ => LayoutGdef.none
 							}
 							Ok({
+								metadata: { bytes, tables, glyph_count, metric_count: hh.metric_count },
+								carets,
+								math,
 								units_per_em: h.units_per_em,
 								glyph_count,
 								advances: a,
@@ -335,7 +379,14 @@ Face := {
 								space: if (keep_variations) variations.space else Absent,
 								hvar: if (keep_variations) variations.hvar else Absent,
 								mvar: if (keep_variations) variations.mvar else Absent,
-								outlines: if (keep_variations) variations.outlines else Absent,
+								outlines: if keep_variations {
+									match variations.outlines {
+										Present(o) => Present(o)
+										Absent => static_outlines
+									}
+								} else {
+									static_outlines
+								},
 								layout_var: if (keep_variations) lv else no_lv,
 								gsub_variations: if (keep_variations) gsub_fv else LayoutVar.no_feature_variations,
 								gpos_variations: if (keep_variations) gpos_fv else LayoutVar.no_feature_variations,
@@ -653,7 +704,8 @@ Face := {
 	moved : Face, List({ tag : U32, value : Dec }) -> Face
 	moved = |face, given| {
 		loc = Face.location(face, given)
-		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, LayoutVar.location(face.layout_var, loc.coords)) }
+		layout_location = LayoutVar.location(face.layout_var, loc.coords)
+		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, layout_location) }
 	}
 
 	## The face moved to a `Font.Variation`'s location (see `settings`). A
@@ -861,6 +913,22 @@ Face := {
 
 	family_name : Face -> Try(Str, [Missing])
 	family_name = |face| TableName.family_name(face.name)
+
+	name : Face, U16 -> Try(Str, [Missing])
+	name = |face, id| TableName.string(face.name, id.to_u64())
+
+	outline : Face, U64 -> [Outline(List(TableOutline.Command)), Unknown]
+	outline = |face, id| match face.outlines {
+		Present(o) => Outline(TableOutline.commands(o.points, o.gvar, face.location.gvar, id))
+		Absent => if id >= face.glyph_count {
+			Outline([])
+		} else {
+			Unknown
+		}
+	}
+
+	ligature_carets : Face, U64 -> List([Position(F64), Unavailable])
+	ligature_carets = |face, id| TableCaret.positions(face.carets, id, face.layout_var, LayoutVar.location(face.layout_var, face.location.coords), face.outlines, face.location.gvar)
 
 	glyph_name : Face, U64 -> Try(Str, [Missing])
 	glyph_name = |face, id| if (id > 0xFFFFFFFF) Err(Missing) else TablePost.glyph_name(face.post, id.to_u32_wrap())

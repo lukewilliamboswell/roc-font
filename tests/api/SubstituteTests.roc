@@ -31,7 +31,7 @@ many_glyphs = [
 	{ tag: "head", data: FontBuild.head(1000, False) },
 	{ tag: "hhea", data: FontBuild.hhea(800, -200, 1) },
 	{ tag: "maxp", data: FontBuild.maxp(65535) },
-	{ tag: "hmtx", data: FontBuild.hmtx([500]) },
+	{ tag: "hmtx", data: FontBuild.hmtx([500]).concat(List.repeat(0, 2 * 65534)) },
 	{ tag: "cmap", data: FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x1FFFE, glyph: 1 }]) }]) },
 ]
 

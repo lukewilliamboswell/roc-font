@@ -497,7 +497,7 @@ expect {
 
 # One long metric covers every glyph.
 expect {
-	match read_tables(FontBuild.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontBuild.hhea(800, -200, 1) } else if (t.tag == "hmtx") { tag: t.tag, data: FontBuild.hmtx([432]) } else t)) {
+	match read_tables(FontBuild.basic.map(|t| if (t.tag == "hhea") { tag: t.tag, data: FontBuild.hhea(800, -200, 1) } else if (t.tag == "hmtx") { tag: t.tag, data: FontBuild.hmtx([432]).concat(List.repeat(0, 6)) } else t)) {
 		Ok(font) => [0, 1, 2, 3].map(|g| Font.advance(font, g)) == [432, 432, 432, 432]
 		Err(_) => False
 	}
@@ -929,7 +929,7 @@ expect {
 	# Every set offset points at the one set, after the coverage.
 	subtable = FontBuild.pack([U16(1), U16(10 + 2 * n), U16(4), U16(0), U16(n)].concat(List.repeat(U16(20 + 2 * n), n)).append(Raw(FontBuild.coverage2([{ first: 0, last: n - 1, index: 0 }]))).append(Raw(set)))
 	tables = FontBuild.basic
-		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontBuild.maxp(n) } else t)
+		.map(|t| if (t.tag == "maxp") { tag: t.tag, data: FontBuild.maxp(n) } else if (t.tag == "hmtx") { tag: t.tag, data: t.data.concat(List.repeat(0, 2 * (n - 4))) } else t)
 		.append({ tag: "GPOS", data: gpos([{ kind: 2, subtables: [subtable] }]) })
 	# Glyph g is drawn by U+10000 + g.
 	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 0x10001, last: 0x10000 + n - 1, glyph: 1 }]) }])

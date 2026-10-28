@@ -1,5 +1,8 @@
 import Face
 import Shaper
+import TableMetadata
+import TableOutline
+import TableMath
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
 import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
@@ -274,6 +277,179 @@ Font :: { face : Face }.{
 	features = |font| Face.feature_tags(font.face).map(Shaper.tag_text)
 
 	# ------------------------------------------------------------ variations
+	## Font-wide parameters for laying out mathematical expressions. All
+	## distances are in font units; the three fields ending in `percent`
+	## or `percent_scale_down` are percentages, not distances.
+	MathConstants : TableMath.Constants
+
+	## Which corner of a glyph a mathematical script is placed against.
+	MathCorner : TableMath.Corner
+
+	## The direction in which a mathematical symbol is stretched. This is
+	## independent of the direction of a shaped text run.
+	MathDirection : TableMath.Axis
+
+	## A prebuilt mathematical symbol and its size along the stretch axis.
+	MathVariant : TableMath.Variant
+
+	## One component of a stretchable symbol. Connector lengths and full
+	## advance are in font units. Extenders may be repeated by the caller's
+	## bounded equation layout algorithm.
+	MathPart : TableMath.Part
+
+	## A stretchable symbol's construction recipe, in table order, and its
+	## italic correction. Equation layout chooses repeats and overlaps.
+	MathAssembly : TableMath.Assembly
+
+	## Height thresholds and corner kern values, in font units. There is
+	## one more value than threshold; `math_kern` selects the value at a
+	## correction height without requiring callers to search this list.
+	MathKernTable : TableMath.KernTable
+
+	## Whether the font supplies mathematical typesetting data (`MATH`).
+	## A damaged optional MATH table is left out and reported by `dropped`
+	## in lenient reading, and rejects the font in strict reading.
+	has_math : Font -> Bool
+	has_math = |font| TableMath.has_data(font.face.math)
+
+	## Font parameters for equation layout at the selected variation
+	## location, or `Absent` without mathematical typesetting data.
+	## This supplies font facts; it does not lay out mathematical expressions.
+	math_constants : Font -> [Present(MathConstants), Absent]
+	math_constants = |font| TableMath.constants(font.face.math)
+
+	## The stored italic correction for a mathematical glyph, in font
+	## units, or `Absent` when no correction is stored. A layout engine
+	## commonly uses zero for absence; no fallback is invented here.
+	math_italic_correction : Font, U32 -> [Present(I32), Absent]
+	math_italic_correction = |font, id| TableMath.italic_correction(font.face.math, id)
+
+	## The stored horizontal position for centering an accent over a glyph,
+	## in font units, or `Absent`. A layout engine may fall back to half
+	## the advance; the query preserves absence for callers choosing policy.
+	math_top_accent_attachment : Font, U32 -> [Present(I32), Absent]
+	math_top_accent_attachment = |font, id| TableMath.top_accent_attachment(font.face.math, id)
+
+	## Whether the font marks a glyph as an extended mathematical shape.
+	math_extended_shape : Font, U32 -> Bool
+	math_extended_shape = |font, id| TableMath.extended_shape(font.face.math, id)
+
+	## Corner kerning at a correction height, in font units, at the selected
+	## variation location. Missing corner data gives the format's zero value.
+	## Mathematical kerning is distinct from ordinary text pair kerning.
+	math_kern : Font, U32, MathCorner, I32 -> I32
+	math_kern = |font, id, corner, height| TableMath.kern(font.face.math, id, corner, height)
+
+	## The stored corner-kerning thresholds and values at the selected
+	## location; absent data gives empty lists. Use `math_kern` to query a
+	## single correction height.
+	math_kern_table : Font, U32, MathCorner -> MathKernTable
+	math_kern_table = |font, id, corner| TableMath.kern_table(font.face.math, id, corner)
+
+	## Prebuilt sizes of a mathematical glyph in the font's table order.
+	## Missing constructions and glyphs past the font give an empty list.
+	math_variants : Font, U32, MathDirection -> List(MathVariant)
+	math_variants = |font, id, direction| TableMath.variants(font.face.math, id, direction)
+
+	## Component recipe for stretching a mathematical symbol, or `Absent`.
+	## The caller lays out these parts; no repeated output is allocated here.
+	math_assembly : Font, U32, MathDirection -> [Present(MathAssembly), Absent]
+	math_assembly = |font, id, direction| TableMath.assembly(font.face.math, id, direction)
+
+	## The font's minimum overlap between connectors of mathematical symbol
+	## parts, in font units; zero without mathematical typesetting data.
+	math_min_connector_overlap : Font -> I32
+	math_min_connector_overlap = |font| TableMath.min_connector_overlap(font.face.math)
+
+	## One point of a glyph path, in fractional font units. Composite
+	## transforms and variations are evaluated without hinting or rounding
+	## to pixels; their binary32 coordinates are widened exactly to F64.
+	OutlinePoint : TableOutline.Point
+
+	## A glyph path in drawing order. Quadratic curves are used by TrueType;
+	## cubic commands allow consumers to share a path vocabulary. A new
+	## contour starts with `MoveTo` and ends with `Close`.
+	OutlineCommand : TableOutline.Command
+
+	## The glyph's outline at the current variation location, for vector
+	## output or a caller's renderer. An empty glyph or an id past the font
+	## gives `Outline([])`. `Unknown` means the font uses outlines this
+	## reader cannot expose, such as CFF/CFF2 or bitmap-only glyphs.
+	outline : Font, U32 -> [Outline(List(OutlineCommand)), Unknown]
+	outline = |font, id| Face.outline(font.face, id.to_u64())
+
+	## One font-defined horizontal caret within a ligature, in font units,
+	## or `Unavailable` when it refers to an outline point this reader
+	## cannot expose. Coordinates retain fractional component transforms.
+	LigatureCaret : [Position(F64), Unavailable]
+
+	## Font-defined caret positions within a ligature, in table order,
+	## at the current variation location. Missing glyphs and glyphs without
+	## stored carets give `[]`; no equally spaced carets are invented.
+	## Pixel device adjustments add nothing at the font-unit boundary.
+	ligature_carets : Font, U32 -> List(LigatureCaret)
+	ligature_carets = |font, id| Face.ligature_carets(font.face, id.to_u64())
+
+	## Original bytes of a font table, selected by its four-byte tag (such
+	## as "head" or "glyf"), for embedding and subsetting tools. Missing
+	## tables and tags of any other byte length return `Absent`.
+	## These are the caller's original bytes, including optional tables
+	## reported by `dropped`; they are not a sanitized or rewritten font.
+	table_bytes : Font, Str -> [Present(List(U8)), Absent]
+	table_bytes = |font, tag| TableMetadata.table(font.face.metadata, tag)
+
+	## One original table directory entry. `tag` is its four bytes as an
+	## unsigned big-endian number. Offsets are from the start of the caller's
+	## file, including when reading a face of a collection.
+	TableEntry : { tag : U32, offset : U32, length : U32 }
+
+	## Original table directory entries in file order. Useful when copying
+	## font data into a document or writing a subset.
+	tables : Font -> List(TableEntry)
+	tables = |font| TableMetadata.directory(font.face.metadata)
+
+	## The font's full name (name ID 4), chosen in English when available
+	## using the same deterministic preference as `family_name`.
+	full_name : Font -> Try(Str, [Missing])
+	full_name = |font| Face.name(font.face, 4)
+
+	## The font's PostScript name (name ID 6), for identifying an embedded
+	## font in a document. `Missing` means no usable name was supplied.
+	postscript_name : Font -> Try(Str, [Missing])
+	postscript_name = |font| Face.name(font.face, 6)
+
+	## The legacy family name (name ID 1), without the typographic-family
+	## preference of `family_name`, for document formats that require it.
+	legacy_family_name : Font -> Try(Str, [Missing])
+	legacy_family_name = |font| Face.name(font.face, 1)
+
+	## The original OS/2 embedding flags (`fsType`), or `Absent` when that
+	## table is missing. These are facts for a document writer's embedding
+	## policy; roc-font does not decide whether a consumer may embed a font.
+	embedding_flags : Font -> [Present(U16), Absent]
+	embedding_flags = |font| TableMetadata.embedding_flags(font.face.metadata)
+
+	## A glyph's original left side bearing from `hmtx`, in font units,
+	## independent of the selected variation location. Glyphs past the font
+	## return `Absent`. After the long metrics the format stores one bearing
+	## per glyph, even though those glyphs share their last advance width.
+	stored_left_side_bearing : Font, U32 -> [Present(I32), Absent]
+	stored_left_side_bearing = |font, id| TableMetadata.left_side_bearing(font.face.metadata, id.to_u64())
+
+	## The font-wide box stored in `head`, in font units at the original
+	## design. This is a stored font descriptor, not the ink box at the
+	## location chosen with `at`; use `extents` for individual glyph ink.
+	stored_bounds : Font -> Extents
+	stored_bounds = |font| TableMetadata.bounds(font.face.metadata)
+
+	## The original horizontal-header line metrics (`hhea`), in font units.
+	## Descent retains the stored sign, normally negative. Unlike `metrics`,
+	## these values are not selected from OS/2 or varied with the font.
+	HeaderMetrics : { ascent : I32, descent : I32, line_gap : I32 }
+
+	## Stored horizontal-header metrics for document font descriptors.
+	stored_header_metrics : Font -> HeaderMetrics
+	stored_header_metrics = |font| { ascent: font.face.hhea.ascent, descent: font.face.hhea.descent, line_gap: font.face.hhea.line_gap }
 
 	## Where to measure a variable font: its weight, width and optical size,
 	## and any other axis by its tag.
