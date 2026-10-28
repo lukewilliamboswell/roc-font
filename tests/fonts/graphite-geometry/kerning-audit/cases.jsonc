@@ -1,0 +1,3970 @@
+{
+  "schema": 1,
+  "about": "Original UPL public-C-API kerning witnesses; no engine implementation source.",
+  "cases": [
+    {
+      "id": "collision-kern-audit-base-ltr",
+      "font": "kerning-audit/collision-kern-audit-base-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {}
+    },
+    {
+      "id": "collision-kern-audit-prior-x-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-x-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x"
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-y-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-y-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        3,
+        1,
+        244,
+        35,
+        21,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          3,
+          1,
+          244,
+          35,
+          21,
+          25
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "y"
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--100-100-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds--100-100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -100,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-50-100-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds-50-100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          50,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--100--50-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds--100--50-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -100,
+          -50
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-500-100-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds-500-100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          500,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--50--100-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds--50--100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -50,
+          -100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-500-1000-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds-500-1000-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          500,
+          1000
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--1000--500-ltr",
+      "font": "kerning-audit/collision-kern-audit-bounds--1000--500-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -1000,
+          -500
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds-0-100-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds-0-100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          0,
+          0,
+          35,
+          58,
+          3,
+          0,
+          100,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          0,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds--100-0-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds--100-0-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          255,
+          156,
+          35,
+          58,
+          3,
+          0,
+          0,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          -100,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds--10-10-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds--10-10-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          255,
+          246,
+          35,
+          58,
+          3,
+          0,
+          10,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          -10,
+          10
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds-100--100-ltr",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds-100--100-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          0,
+          100,
+          35,
+          58,
+          3,
+          255,
+          156,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          100,
+          -100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-target-disabled-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-target-disabled-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "target",
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-target-active-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-target-active-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "target",
+        "pass_flags": 9
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-neighbor-disabled-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-neighbor-disabled-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "neighbor",
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-neighbor-active-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-neighbor-active-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "neighbor",
+        "pass_flags": 9
+      }
+    },
+    {
+      "id": "collision-kern-audit-base-rtl",
+      "font": "kerning-audit/collision-kern-audit-base-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {}
+    },
+    {
+      "id": "collision-kern-audit-prior-x-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-x-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x"
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-y-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-y-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        1,
+        244,
+        35,
+        21,
+        25,
+        3,
+        0,
+        0,
+        35,
+        0
+      ],
+      "programs": [
+        [
+          3,
+          1,
+          244,
+          35,
+          21,
+          25,
+          3,
+          0,
+          0,
+          35,
+          0
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "y"
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--100-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds--100-100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -100,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-50-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds-50-100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          50,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--100--50-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds--100--50-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -100,
+          -50
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-500-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds-500-100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          500,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--50--100-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds--50--100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -50,
+          -100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds-500-1000-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds-500-1000-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          500,
+          1000
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-bounds--1000--500-rtl",
+      "font": "kerning-audit/collision-kern-audit-bounds--1000--500-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "bounds": [
+          -1000,
+          -500
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds-0-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds-0-100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          0,
+          0,
+          35,
+          58,
+          3,
+          0,
+          100,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          0,
+          100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds--100-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds--100-0-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          255,
+          156,
+          35,
+          58,
+          3,
+          0,
+          0,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          -100,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds--10-10-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds--10-10-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          255,
+          246,
+          35,
+          58,
+          3,
+          0,
+          10,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          -10,
+          10
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-prior-bounds-100--100-rtl",
+      "font": "kerning-audit/collision-kern-audit-prior-bounds-100--100-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          0,
+          17,
+          35,
+          57,
+          3,
+          0,
+          100,
+          35,
+          58,
+          3,
+          255,
+          156,
+          35,
+          60,
+          25,
+          3,
+          0,
+          0,
+          35,
+          57
+        ]
+      ],
+      "collision": {
+        "prior": "x",
+        "next_bounds": [
+          100,
+          -100
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-target-disabled-rtl",
+      "font": "kerning-audit/collision-kern-audit-blank-target-disabled-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "target",
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-target-active-rtl",
+      "font": "kerning-audit/collision-kern-audit-blank-target-active-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "target",
+        "pass_flags": 9
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-neighbor-disabled-rtl",
+      "font": "kerning-audit/collision-kern-audit-blank-neighbor-disabled-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "neighbor",
+        "pass_flags": 0
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-neighbor-active-rtl",
+      "font": "kerning-audit/collision-kern-audit-blank-neighbor-active-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "blank": "neighbor",
+        "pass_flags": 9
+      }
+    },
+    {
+      "id": "collision-kern-audit-float-margin-10-rtl",
+      "font": "kerning-audit/collision-kern-audit-float-margin-10-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "margin": 10,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            200,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-kern-audit-float-margin-50-rtl",
+      "font": "kerning-audit/collision-kern-audit-float-margin-50-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "margin": 50,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            200,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-kern-audit-float-margin-101-rtl",
+      "font": "kerning-audit/collision-kern-audit-float-margin-101-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "margin": 101,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            200,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "id": "collision-kern-audit-bins-height-1-rtl",
+      "font": "kerning-audit/collision-kern-audit-bins-height-1-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "height": 1
+      }
+    },
+    {
+      "id": "collision-kern-audit-bins-height-3-rtl",
+      "font": "kerning-audit/collision-kern-audit-bins-height-3-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "height": 3
+      }
+    },
+    {
+      "id": "collision-kern-audit-bins-height-9-rtl",
+      "font": "kerning-audit/collision-kern-audit-bins-height-9-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "height": 9
+      }
+    },
+    {
+      "id": "collision-kern-audit-bins-neighbor-y-600-rtl",
+      "font": "kerning-audit/collision-kern-audit-bins-neighbor-y-600-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        2,
+        88,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          2,
+          88,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "shift_y": 600
+      }
+    },
+    {
+      "id": "collision-kern-audit-bins-neighbor-y-609-rtl",
+      "font": "kerning-audit/collision-kern-audit-bins-neighbor-y-609-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        2,
+        97,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          2,
+          97,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "shift_y": 609
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-sum-min-ltr",
+      "font": "kerning-audit/collision-kern-audit-edge-sum-min-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          127,
+          255,
+          0,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-sum-min-rtl",
+      "font": "kerning-audit/collision-kern-audit-edge-sum-min-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          127,
+          255,
+          0,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-diff-min-ltr",
+      "font": "kerning-audit/collision-kern-audit-edge-diff-min-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          255,
+          127,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-diff-min-rtl",
+      "font": "kerning-audit/collision-kern-audit-edge-diff-min-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          255,
+          127,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-sum-max-ltr",
+      "font": "kerning-audit/collision-kern-audit-edge-sum-max-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          127,
+          0,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-sum-max-rtl",
+      "font": "kerning-audit/collision-kern-audit-edge-sum-max-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          127,
+          0,
+          255
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-diff-max-ltr",
+      "font": "kerning-audit/collision-kern-audit-edge-diff-max-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          255,
+          0,
+          127
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-edge-diff-max-rtl",
+      "font": "kerning-audit/collision-kern-audit-edge-diff-max-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "diagonal": [
+          0,
+          255,
+          0,
+          127
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-point-target-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-point-target-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        20,
+        3,
+        0,
+        100,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          20,
+          3,
+          0,
+          100,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "phase1": "target"
+      }
+    },
+    {
+      "id": "collision-kern-audit-blank-point-obstacle-ltr",
+      "font": "kerning-audit/collision-kern-audit-blank-point-obstacle-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        255,
+        156,
+        35,
+        20,
+        3,
+        255,
+        156,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          25,
+          3,
+          255,
+          156,
+          35,
+          20,
+          3,
+          255,
+          156,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "phase1": "obstacle"
+      }
+    },
+    {
+      "id": "collision-kern-audit-space-distance-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-space-distance-0-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          0,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          128,
+          0
+        ],
+        "distance": 0
+      }
+    },
+    {
+      "id": "collision-kern-audit-space-distance-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-space-distance-100-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          128,
+          0
+        ],
+        "distance": 100
+      }
+    },
+    {
+      "id": "collision-kern-audit-space-distance-1000-rtl",
+      "font": "kerning-audit/collision-kern-audit-space-distance-1000-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        3,
+        232,
+        35,
+        0,
+        25,
+        3,
+        3,
+        232,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          3,
+          232,
+          35,
+          0,
+          25,
+          3,
+          3,
+          232,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          128,
+          0
+        ],
+        "distance": 1000
+      }
+    },
+    {
+      "id": "collision-kern-audit-ignore-distance-100-rtl",
+      "font": "kerning-audit/collision-kern-audit-ignore-distance-100-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        25
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          25
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          2,
+          0
+        ],
+        "distance": 100
+      }
+    },
+    {
+      "id": "collision-kern-audit-child-forward-17-0-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-child-forward-17-0-0-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ],
+      "programs": [
+        [
+          1,
+          1,
+          38,
+          2,
+          3,
+          0,
+          100,
+          35,
+          3,
+          3,
+          0,
+          20,
+          35,
+          8,
+          3,
+          0,
+          200,
+          35,
+          4,
+          3,
+          0,
+          30,
+          35,
+          9
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          0,
+          0
+        ],
+        "attachment": "forward"
+      }
+    },
+    {
+      "id": "collision-kern-audit-child-forward-0-17-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-child-forward-0-17-0-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ],
+      "programs": [
+        [
+          1,
+          1,
+          38,
+          2,
+          3,
+          0,
+          100,
+          35,
+          3,
+          3,
+          0,
+          20,
+          35,
+          8,
+          3,
+          0,
+          200,
+          35,
+          4,
+          3,
+          0,
+          30,
+          35,
+          9
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          0,
+          17,
+          0
+        ],
+        "attachment": "forward"
+      }
+    },
+    {
+      "id": "collision-kern-audit-child-backward-17-0-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-child-backward-17-0-0-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        1,
+        255,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ],
+      "programs": [
+        [
+          25,
+          1,
+          255,
+          38,
+          2,
+          3,
+          0,
+          100,
+          35,
+          3,
+          3,
+          0,
+          20,
+          35,
+          8,
+          3,
+          0,
+          200,
+          35,
+          4,
+          3,
+          0,
+          30,
+          35,
+          9
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          17,
+          0,
+          0
+        ],
+        "attachment": "backward"
+      }
+    },
+    {
+      "id": "collision-kern-audit-child-backward-0-17-0-rtl",
+      "font": "kerning-audit/collision-kern-audit-child-backward-0-17-0-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        1,
+        255,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ],
+      "programs": [
+        [
+          25,
+          1,
+          255,
+          38,
+          2,
+          3,
+          0,
+          100,
+          35,
+          3,
+          3,
+          0,
+          20,
+          35,
+          8,
+          3,
+          0,
+          200,
+          35,
+          4,
+          3,
+          0,
+          30,
+          35,
+          9
+        ]
+      ],
+      "collision": {
+        "group_flags": [
+          0,
+          17,
+          0
+        ],
+        "attachment": "backward"
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-1--1-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-1--1-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        255,
+        255,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          255,
+          255,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          1,
+          -1
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-1-1-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-1-1-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        1,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          0,
+          1,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-1-32767-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-1-32767-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        127,
+        255,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68,
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "programs": [
+        [
+          3,
+          127,
+          255,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68,
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          1,
+          32767
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-2--1-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-2--1-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21,
+        3,
+        255,
+        255,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21,
+          3,
+          255,
+          255,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          2,
+          -1
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-2-1-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-2-1-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21,
+        3,
+        0,
+        1,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21,
+          3,
+          0,
+          1,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "collision-kern-audit-exclude-2-32767-rtl",
+      "font": "kerning-audit/collision-kern-audit-exclude-2-32767-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        100,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21,
+        3,
+        127,
+        255,
+        35,
+        66,
+        3,
+        0,
+        100,
+        35,
+        67,
+        3,
+        0,
+        0,
+        35,
+        68
+      ],
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21,
+          3,
+          127,
+          255,
+          35,
+          66,
+          3,
+          0,
+          100,
+          35,
+          67,
+          3,
+          0,
+          0,
+          35,
+          68
+        ]
+      ],
+      "collision": {
+        "dynamic_exclude": [
+          2,
+          32767
+        ]
+      }
+    }
+  ]
+}
