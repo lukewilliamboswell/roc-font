@@ -134,8 +134,8 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 					syllable_id = ShaperIndic.syllable(item.mask)
 					if syllable_id != $last and syllable_id.bitwise_and(15) == 1 {
 						$count = $count + 1
+						$last = syllable_id
 					}
-					$last = syllable_id
 				}
 				if $work.stopped != 0 or $count == 0 {
 					$work
@@ -154,11 +154,11 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 					for item in items {
 						syllable_id = ShaperIndic.syllable(item.mask)
 						if syllable_id != $last_id and syllable_id.bitwise_and(15) == 1 {
+							$last_id = syllable_id
 							mask = ShaperIndic.set_position(ShaperIndic.set_category(item.mask, 11), 0)
 							inserted = LayoutGsub.with_origin({ glyph: dot.glyph, cluster: item.cluster, mask, props: dot.props }, LayoutGsub.origin_inserted, 0, 0)
 							$out = $out.append(inserted)
 						}
-						$last_id = syllable_id
 						$out = $out.append(item)
 					}
 					{ items: $out, operations, stopped, budget }
@@ -225,4 +225,26 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 		}
 		{ items: $work.items, operations: $work.operations, stopped: $work.stopped }
 	}
+}
+
+# A raw syllable serial wraps after15. Upstream tracks the last broken
+# id on insertion only; the preallocation count must match that output.
+expect {
+	var $items = []
+	for i in 0..<16 {
+		serial = if i == 15 {
+			1
+		} else {
+			i + 1
+		}
+		kind = if i == 0 or i == 15 {
+			1.U64
+		} else {
+			0
+		}
+		$items = $items.append({ ..LayoutGsub.no_item, glyph: i + 1, cluster: i, mask: (serial * 16 + kind).shl_wrap(49) })
+	}
+	work = { items: $items, operations: 0, stopped: 0, budget: 100 }
+	result = ShaperKhmer.dotted_circles(work, Present({ glyph: 99, props: 0 }), 17)
+	result.stopped == 0 and result.items.len() == 17 and result.items.keep_if(|item| item.glyph == 99).len() == 1
 }

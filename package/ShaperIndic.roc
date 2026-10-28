@@ -422,8 +422,8 @@ ShaperIndic := {
 					syllable_id = ShaperIndic.syllable(item.mask)
 					if syllable_id != $last and syllable_id.bitwise_and(15) == 4 {
 						$count = $count + 1
+						$last = syllable_id
 					}
-					$last = syllable_id
 				}
 				if $work.stopped != 0 or $count == 0 {
 					$work
@@ -1147,4 +1147,26 @@ expect {
 	work = { items, operations: 0, stopped: 0, budget: 4 }
 	result = ShaperIndic.merge(work, 0, 3)
 	result.stopped == 2 and result.items.map(|item| item.cluster) == [30, 20, 10]
+}
+
+# A raw syllable serial wraps after15. Upstream tracks the last broken
+# id on insertion only; the preallocation count must match that output.
+expect {
+	var $items = []
+	for i in 0..<16 {
+		serial = if i == 15 {
+			1
+		} else {
+			i + 1
+		}
+		kind = if i == 0 or i == 15 {
+			4.U64
+		} else {
+			0
+		}
+		$items = $items.append({ ..LayoutGsub.no_item, glyph: i + 1, cluster: i, mask: (serial * 16 + kind).shl_wrap(49) })
+	}
+	work = { items: $items, operations: 0, stopped: 0, budget: 100 }
+	result = ShaperIndic.dotted_circles(work, Present({ glyph: 99, props: 0 }), 17)
+	result.stopped == 0 and result.items.len() == 17 and result.items.keep_if(|item| item.glyph == 99).len() == 1
 }
