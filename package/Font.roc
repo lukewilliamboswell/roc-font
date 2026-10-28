@@ -78,6 +78,14 @@ Font :: { face : Face }.{
 	##
 	## The defaults (256 MiB, 1024 faces, 16384 lookups, depth 64) admit
 	## every real font with room to spare.
+	##
+	## TrueType outlines also have fixed work and numerical bounds checked
+	## while reading. In particular, a conservative coordinate envelope for
+	## every composite, including possible variations, must not exceed
+	## 2^100 font units before the final phantom-point shift. This leaves
+	## room for every intermediate operation to stay finite; exposed path
+	## coordinates are bounded by 2^101. Exceeding this fixed envelope is
+	## reported as `BadTable` at the glyph's data, rather than clamped.
 	Limits := { max_bytes : U64 ?? 268_435_456, max_faces : U32 ?? 1024, max_lookups : U32 ?? 16_384, max_depth : U32 ?? 64 }
 
 	## Why bytes could not be read as a font, or what lenient reading left
