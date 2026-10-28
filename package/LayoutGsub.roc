@@ -138,7 +138,7 @@ LayoutGsub := {
 	## rules, `rand`, and the index in the plan of the step being applied
 	## (recorded in the origin of every glyph it substitutes, also through
 	## nested lookups).
-	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64, per_syllable : Bool }
+	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64, per_syllable : Bool, positioning : Bool }
 
 	## HarfBuzz's buffer while a lookup applies: the input `info` read from
 	## `idx`, and, when `output`, the output written so far. `serial`
@@ -409,7 +409,7 @@ LayoutGsub := {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
 			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
-				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index, per_syllable: False }
+				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index, per_syllable: False, positioning: False }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
 					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
@@ -474,7 +474,7 @@ LayoutGsub := {
 			step = entry.step
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
 			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
-				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_offset + step_index, per_syllable: entry.per_syllable }
+				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_offset + step_index, per_syllable: entry.per_syllable, positioning: False }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
 					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
@@ -1228,7 +1228,7 @@ LayoutGsub := {
 	skip_of = |shape, ctx, item, context|
 		if !LayoutGsub.check_glyph_property(shape, item, ctx.props) {
 			SkipYes
-		} else if LayoutGsub.is_default_ignorable(item) and ((context and ctx.auto_zwnj) or !ShaperUnicode.is_zwnj(item.props)) and (context or ctx.auto_zwj or !ShaperUnicode.is_zwj(item.props)) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 {
+		} else if LayoutGsub.is_default_ignorable(item) and (ctx.positioning or (context and ctx.auto_zwnj) or !ShaperUnicode.is_zwnj(item.props)) and (context or ctx.auto_zwj or !ShaperUnicode.is_zwj(item.props)) and (ctx.positioning or item.props.bitwise_and(ShaperUnicode.hidden) == 0) {
 			SkipMaybe
 		} else {
 			SkipNo
