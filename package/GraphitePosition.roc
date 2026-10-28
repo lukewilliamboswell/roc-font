@@ -190,12 +190,13 @@ GraphitePosition :: {}.{
 				$members = $members.clear().append(root_id)
 				$nodes = $nodes.set(root_id, { ..root, position_x: root_x, position_y: root.shift_y, sibling: 0 }) ?? []
 				$pending = $pending.clear()
+				root_at = root.user_start + user_count
+				root_kern = ($users.get(root_at + 3) ?? 0).bitwise_and(16) != 0
+				root_collision = ($users.get(root_at + 31) ?? 0) != 0 and (native_rtl or !root_kern)
+				root_offset_x = if (root_collision) ($users.get(root_at + 8) ?? 0).to_u32_wrap() else 0
+				root_physical_x = TableVar.f32_add(root_x, root_offset_x)
 				if root.child != 0 {
-					root_at = root.user_start + user_count
-					root_kern = ($users.get(root_at + 3) ?? 0).bitwise_and(16) != 0
-					root_collision = ($users.get(root_at + 31) ?? 0) != 0 and (native_rtl or !root_kern)
-					root_offset_x = if (root_collision) ($users.get(root_at + 8) ?? 0).to_u32_wrap() else 0
-					$pending = $pending.append({ id: root.child, x: root_x, y: root.shift_y, parent_x: TableVar.f32_add(root_x, root_offset_x) })
+					$pending = $pending.append({ id: root.child, x: root_x, y: root.shift_y, parent_x: root_physical_x })
 					$cluster_y = 0
 				}
 				var $visited = 0
@@ -220,18 +221,20 @@ GraphitePosition :: {}.{
 						$members = $members.append(frame.id)
 						# The right edge inherits parent collision motion but
 						# excludes this child's own collision correction. Left
-						# rebasing and level metrics retain authored geometry.
+						# rebasing compares physical child/root origins; level metrics
+						# retain their independently queried authored geometry.
 						advance_x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.parent_x), TableVar.f32_add(shift, child.justify_width))
 						if TableVar.f32_lt(0, child.advance_x) {
 							$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(advance_x, shift), child.advance_x))
 						}
-						$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
+						at = child.user_start + user_count
+						kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
+						enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
+						ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
+						physical_x = TableVar.f32_add(advance_x, ox)
+						$left = TableVar.f32_min($left, TableVar.f32_sub(physical_x, root_physical_x))
 						if child.child != 0 {
-							at = child.user_start + user_count
-							kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
-							enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
-							ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
-							$pending = $pending.append({ id: child.child, x, y, parent_x: TableVar.f32_add(advance_x, ox) })
+							$pending = $pending.append({ id: child.child, x, y, parent_x: physical_x })
 						}
 					}
 				}
@@ -577,4 +580,19 @@ expect {
 	state = GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(b.state, 2, 31, 1), 2, 3, 17), 2, 8, n(210).to_i32_wrap())
 	result = GraphitePosition.position_for_font(state, False, True, 100)
 	result.state.advance_x == n(911) and GraphiteSlots.get(result.state, 2).position_x == n(310)
+}
+
+expect {
+	# Cached sibling sequencing control: a child's own negative correction
+	# rebases the complete cluster. Ancestor motion is removed by measuring
+	# against the root's physical origin, not the uncorrected authored root.
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 3), { ..GraphiteSlots.no_slot, advance_x: n(601), attach_x: n(80) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602), attach_x: n(180) })
+	c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, advance_x: n(603) })
+	first = GraphitePosition.attach(c.state, 1, 3, 100)
+	second = GraphitePosition.attach(first.state, 2, 3, 100)
+	shifted = GraphiteSlots.set_extra(GraphiteSlots.set_extra(second.state, 2, 31, 1), 2, 8, n(-480).to_i32_wrap())
+	placed = GraphitePosition.position(shifted, False, 100)
+	placed.state.advance_x == n(1082) and GraphiteSlots.get(placed.state, 1).position_x == n(380) and GraphiteSlots.get(placed.state, 2).position_x == 0 and GraphiteSlots.get(placed.state, 3).position_x == n(300)
 }
