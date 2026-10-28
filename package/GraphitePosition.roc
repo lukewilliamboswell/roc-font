@@ -182,7 +182,11 @@ GraphitePosition :: {}.{
 				$nodes = $nodes.set(root_id, { ..root, position_x: root_x, position_y: root.shift_y, sibling: 0 }) ?? []
 				$pending = $pending.clear()
 				if root.child != 0 {
-					$pending = $pending.append({ id: root.child, x: root_x, y: root.shift_y })
+					root_at = root.user_start + user_count
+					root_kern = ($users.get(root_at + 3) ?? 0).bitwise_and(16) != 0
+					root_collision = ($users.get(root_at + 31) ?? 0) != 0 and (rtl or !root_kern)
+					root_offset_x = if (root_collision) ($users.get(root_at + 8) ?? 0).to_u32_wrap() else 0
+					$pending = $pending.append({ id: root.child, x: root_x, y: root.shift_y, parent_x: TableVar.f32_add(root_x, root_offset_x) })
 					$cluster_y = 0
 				}
 				var $visited = 0
@@ -193,7 +197,7 @@ GraphitePosition :: {}.{
 					}
 					$operations = $operations + 1
 					$visited = $visited + 1
-					frame = $pending.last() ?? { id: 0, x: 0, y: 0 }
+					frame = $pending.last() ?? { id: 0, x: 0, y: 0, parent_x: 0 }
 					$pending = $pending.drop_last(1)
 					child = $nodes.get(frame.id) ?? GraphiteSlots.no_slot
 					if child.sibling != 0 {
@@ -205,12 +209,20 @@ GraphitePosition :: {}.{
 						y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
 						$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
 						$members = $members.append(frame.id)
+						# The right edge inherits parent collision motion but
+						# excludes this child's own collision correction. Left
+						# rebasing and level metrics retain authored geometry.
+						advance_x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.parent_x), TableVar.f32_add(shift, child.justify_width))
 						if TableVar.f32_lt(0, child.advance_x) {
-							$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
+							$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(advance_x, shift), child.advance_x))
 						}
 						$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
 						if child.child != 0 {
-							$pending = $pending.append({ id: child.child, x, y })
+							at = child.user_start + user_count
+							kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
+							enabled = ($users.get(at + 31) ?? 0) != 0 and (rtl or !kern)
+							ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
+							$pending = $pending.append({ id: child.child, x, y, parent_x: TableVar.f32_add(advance_x, ox) })
 						}
 					}
 				}
@@ -469,7 +481,7 @@ expect {
 	a = GraphitePosition.attach(geometry_fixture, 1, 2, 100)
 	b = GraphiteSlots.set_extra(GraphiteSlots.set_extra(a.state, 2, 31, 1), 2, 8, TableVar.f32_from_int(-220).to_i32_wrap())
 	c = GraphitePosition.position(b, False, 100)
-	GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-140) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-220) and c.state.advance_x == TableVar.f32_from_int(1284)
+	GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-140) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-220) and c.state.advance_x == TableVar.f32_from_int(1205)
 }
 expect {
 	# Public C-API witness with 512 preceding 32768-unit glyphs. Rounding
@@ -519,4 +531,18 @@ expect {
 	input = GraphiteSlots.set(f.state, f.a, { ..slot, insert_before: False })
 	linked = GraphitePosition.attach(input, f.a, f.b, 100)
 	!GraphiteSlots.get(linked.state, f.a).insert_before
+}
+
+expect {
+	# Original attached-forward ink and sequencing controls: the parent
+	# correction moves the child right edge, reducing segment advance to
+	# 602. A nonzero-level glyph metric remains the authored composite681.
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 2), { ..GraphiteSlots.no_slot, advance_x: n(601), attach_x: n(100), with_x: n(20), attach_y: n(200), with_y: n(30) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602) })
+	linked = GraphitePosition.attach(b.state, 1, 2, 100)
+	enabled = GraphiteSlots.set_extra(GraphiteSlots.set_extra(linked.state, 2, 31, 1), 2, 8, n(-220).to_i32_wrap())
+	positioned = GraphitePosition.position(enabled, False, 100)
+	metric = GraphitePosition.metric(positioned.state, 2, 8, 1, False, 100, |_, _, _| 0)
+	positioned.state.advance_x == n(602) and GraphiteSlots.get(positioned.state, 1).position_x == n(-140) and metric.value == 681
 }
