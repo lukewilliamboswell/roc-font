@@ -305,7 +305,7 @@ ShaperNormalize :: {}.{
 	## Script-specific mark ordering runs after canonical ordering and before
 	## recomposition. The ordinary normalization path supplies the identity.
 	normalize_with_marks : Context, List(Char), (List(Char) -> List(Char)) -> { chars : List(Char), space_fallback : Bool }
-	normalize_with_marks = |ctx, chars, order_marks| ShaperNormalize.normalize_mode(ctx, chars, order_marks, False)
+	normalize_with_marks = |ctx, chars, order_marks| ShaperNormalize.normalize_mode(ctx, chars, order_marks, { short_simple: True, short_marks: False, compose: True, profile: Unicode })
 
 	## The reference's NONE normalization mode: nominal mappings short
 	## circuit decomposition even in a mark cluster, and there is no final
@@ -313,10 +313,18 @@ ShaperNormalize :: {}.{
 	## and the ordinary space/variation-selector fallbacks; marks still get
 	## canonical ordering. This preserves a script shaper's Hangul choices.
 	normalize_short_circuit : Context, List(Char) -> { chars : List(Char), space_fallback : Bool }
-	normalize_short_circuit = |ctx, chars| ShaperNormalize.normalize_mode(ctx, chars, |marks| marks, True)
+	normalize_short_circuit = |ctx, chars| ShaperNormalize.normalize_mode(ctx, chars, |marks| marks, { short_simple: True, short_marks: True, compose: False, profile: Unicode })
 
-	normalize_mode : Context, List(Char), (List(Char) -> List(Char)), Bool -> { chars : List(Char), space_fallback : Bool }
-	normalize_mode = |ctx, chars, order_marks, short_circuit| {
+	Profile : [Unicode, Indic, Khmer, Use]
+	Mode : { short_simple : Bool, short_marks : Bool, compose : Bool, profile : Profile }
+
+	## Fully decompose where the font permits, then compose diacritics. Script
+	## overrides follow the reference shaper; Unicode is used by Myanmar.
+	normalize_script : Context, List(Char), Profile -> { chars : List(Char), space_fallback : Bool }
+	normalize_script = |ctx, chars, profile| ShaperNormalize.normalize_mode(ctx, chars, |marks| marks, { short_simple: False, short_marks: False, compose: True, profile })
+
+	normalize_mode : Context, List(Char), (List(Char) -> List(Char)), Mode -> { chars : List(Char), space_fallback : Bool }
+	normalize_mode = |ctx, chars, order_marks, mode| {
 		count = chars.len()
 		if count == 0 {
 			return { chars, space_fallback: False }
@@ -337,7 +345,7 @@ ShaperNormalize :: {}.{
 				$end = $end - 1
 			}
 			while $idx < $end {
-				{ out, space } = ShaperNormalize.decompose_current(ctx, chars.get($idx) ?? ShaperNormalize.no_char, True, $out)
+				{ out, space } = ShaperNormalize.decompose_current_in(ctx, chars.get($idx) ?? ShaperNormalize.no_char, mode.short_simple, $out, mode.profile)
 				$out = out
 				$space = $space or space
 				$idx = $idx + 1
@@ -355,7 +363,7 @@ ShaperNormalize :: {}.{
 					$out = ShaperNormalize.variation_cluster(ctx, cluster, $out)
 				} else {
 					for c in cluster {
-						{ out, space } = ShaperNormalize.decompose_current(ctx, c, short_circuit, $out)
+						{ out, space } = ShaperNormalize.decompose_current_in(ctx, c, mode.short_marks, $out, mode.profile)
 						$out = out
 						$space = $space or space
 					}
@@ -373,18 +381,21 @@ ShaperNormalize :: {}.{
 		reordered = ShaperNormalize.reorder(ctx, $out)
 		unhidden = ShaperNormalize.unhide_joiners(order_marks(reordered))
 		# Third round: recompose.
-		{ chars: if (short_circuit) unhidden else ShaperNormalize.recompose(ctx, unhidden), space_fallback: $space }
+		{ chars: if (mode.compose) ShaperNormalize.recompose_in(ctx, unhidden, mode.profile) else unhidden, space_fallback: $space }
 	}
 
 	## HarfBuzz's `decompose_current_character`.
 	decompose_current : Context, Char, Bool, List(Char) -> { out : List(Char), space : Bool }
-	decompose_current = |ctx, c, shortest, out| {
+	decompose_current = |ctx, c, shortest, out| ShaperNormalize.decompose_current_in(ctx, c, shortest, out, Unicode)
+
+	decompose_current_in : Context, Char, Bool, List(Char), Profile -> { out : List(Char), space : Bool }
+	decompose_current_in = |ctx, c, shortest, out, profile| {
 		face = ctx.face
 		direct = ShaperNormalize.nominal(face, c.cp)
 		match (shortest, direct) {
 			(True, Ok(glyph)) => { out: out.append({ ..c, glyph }), space: False }
 			_ =>
-				match ShaperNormalize.decompose(ctx, c.cp, shortest, 4) {
+				match ShaperNormalize.decompose_in(ctx, c.cp, shortest, 4, profile) {
 					Ok(parts) => { out: out.concat(parts.map(|p| { ..c, cp: p.cp, glyph: p.glyph, props: ShaperUnicode.props(p.cp) })), space: False }
 					Err(_) =>
 						match direct {
@@ -410,9 +421,19 @@ ShaperNormalize :: {}.{
 	## first decomposition the font supports. Unicode decompositions are at
 	## most four steps deep; `depth` bounds the walk regardless.
 	decompose : Context, U64, Bool, U64 -> Try(List({ cp : U64, glyph : U64 }), [NoDecomposition])
-	decompose = |ctx, ab, shortest, depth| {
+	decompose = |ctx, ab, shortest, depth| ShaperNormalize.decompose_in(ctx, ab, shortest, depth, Unicode)
+
+	decomposition : U64, Profile -> [Two(U64, U64), One(U64), Unchanged]
+	decomposition = |cp, profile| match profile {
+		Indic if cp == 0x0931 or cp == 0x09DC or cp == 0x09DD or cp == 0x0B94 => Unchanged
+		Khmer if cp == 0x17BE or cp == 0x17BF or cp == 0x17C0 or cp == 0x17C4 or cp == 0x17C5 => Two(0x17C1, cp)
+		_ => ShaperUnicode.decompose(cp)
+	}
+
+	decompose_in : Context, U64, Bool, U64, Profile -> Try(List({ cp : U64, glyph : U64 }), [NoDecomposition])
+	decompose_in = |ctx, ab, shortest, depth, profile| {
 		face = ctx.face
-		split = if (depth == 0) Unchanged else ShaperUnicode.decompose(ab)
+		split = if (depth == 0) Unchanged else ShaperNormalize.decomposition(ab, profile)
 		{ a, b } = match split {
 			Two(x, y) => { a: x, b: y }
 			One(x) => { a: x, b: 0 }
@@ -427,7 +448,7 @@ ShaperNormalize :: {}.{
 			match (shortest, a_glyph) {
 				(True, Ok(g)) => Ok([{ cp: a, glyph: g }].concat(tail))
 				_ =>
-					match ShaperNormalize.decompose(ctx, a, shortest, depth - 1) {
+					match ShaperNormalize.decompose_in(ctx, a, shortest, depth - 1, profile) {
 						Ok(parts) => Ok(parts.concat(tail))
 						Err(_) =>
 							match a_glyph {
@@ -590,11 +611,21 @@ ShaperNormalize :: {}.{
 	## The composition of two characters for the shaper (HarfBuzz's
 	## `compose_unicode`, or `compose_hebrew` with presentation forms).
 	compose : Context, U64, U64 -> Try(U64, [NoComposition])
-	compose = |ctx, a, b|
+	compose = |ctx, a, b| ShaperNormalize.compose_in(ctx, a, b, Unicode)
+
+	compose_in : Context, U64, U64, Profile -> Try(U64, [NoComposition])
+	compose_in = |ctx, a, b, profile| {
+		if profile != Unicode and ShaperUnicode.is_mark(ShaperUnicode.props(a)) {
+			return Err(NoComposition)
+		}
+		if profile == Indic and a == 0x09AF and b == 0x09BC {
+			return Ok(0x09DF)
+		}
 		match ShaperUnicode.compose(a, b) {
 			Ok(ab) => Ok(ab)
 			Err(_) => if (ctx.hebrew_forms) ShaperNormalize.compose_hebrew(a, b) else Err(NoComposition)
 		}
+	}
 
 	dagesh_forms : List(U16)
 	dagesh_forms = [0xFB30, 0xFB31, 0xFB32, 0xFB33, 0xFB34, 0xFB35, 0xFB36, 0x0000, 0xFB38, 0xFB39, 0xFB3A, 0xFB3B, 0xFB3C, 0x0000, 0xFB3E, 0x0000, 0xFB40, 0xFB41, 0x0000, 0xFB43, 0xFB44, 0x0000, 0xFB46, 0xFB47, 0xFB48, 0xFB49, 0xFB4A]
@@ -644,7 +675,10 @@ ShaperNormalize :: {}.{
 	## nothing between them has an equal or higher class and the font maps
 	## the composite; the composite takes both clusters.
 	recompose : Context, List(Char) -> List(Char)
-	recompose = |ctx, chars| {
+	recompose = |ctx, chars| ShaperNormalize.recompose_in(ctx, chars, Unicode)
+
+	recompose_in : Context, List(Char), Profile -> List(Char)
+	recompose_in = |ctx, chars, profile| {
 		count = chars.len()
 		var $in = chars
 		var $out = List.with_capacity(count)
@@ -657,7 +691,7 @@ ShaperNormalize :: {}.{
 			starter_char = $out.get($starter) ?? ShaperNormalize.no_char
 			composed =
 				if ShaperUnicode.is_mark(cur.props) and ($starter + 1 == $out.len() or ShaperNormalize.class(previous) < ShaperNormalize.class(cur)) {
-					match ShaperNormalize.compose(ctx, starter_char.cp, cur.cp) {
+					match ShaperNormalize.compose_in(ctx, starter_char.cp, cur.cp, profile) {
 						Ok(ab) =>
 							match ShaperNormalize.nominal(ctx.face, ab) {
 								Ok(glyph) => Ok({ ab, glyph })
@@ -716,14 +750,14 @@ ShaperNormalize :: {}.{
 			while $k < $rest.len() and ($rest.get($k) ?? ShaperNormalize.no_char).cluster == last {
 				c = $rest.get($k) ?? ShaperNormalize.no_char
 				# `$k` is below the input's length.
-				$rest = $rest.set($k, { ..c, cluster }) ?? []
+				$rest = $rest.set($k, { ..c, cluster, mask: if (c.cluster == cluster) c.mask else c.mask.bitwise_and(0x7FFFFFFFFFFFFFFF) }) ?? []
 				$k = $k + 1
 			}
 			var $out = out
 			for i in $start..<end {
 				c = $out.get(i) ?? ShaperNormalize.no_char
 				# `i < end`, the output's length.
-				$out = $out.set(i, { ..c, cluster }) ?? []
+				$out = $out.set(i, { ..c, cluster, mask: if (c.cluster == cluster) c.mask else c.mask.bitwise_and(0x7FFFFFFFFFFFFFFF) }) ?? []
 			}
 			{ out: $out, rest: $rest }
 		}
