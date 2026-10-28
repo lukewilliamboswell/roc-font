@@ -1,0 +1,65 @@
+{
+  "label": "jp-after",
+  "measurement_git": "eda93c60cde747480f298b0880d97293e48a7fcf",
+  "source_git": "1f95c99779e08e523e9f46bc25119df4cffc6027",
+  "bundle": "EohUtiz6VoHoLukQRBnEtvSw5Dzd6gYPDvUqjcx7Fvkw.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "f637874ffcc46bbf909a50182f7551d888f7fa17def12e9ad7df1bcdf6aaec1a",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 576,
+      "scalar_count": 192,
+      "input_checksum": 6424218878657731797,
+      "output_checksum": 18446744073709163312,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 12,
+      "leaked": 0,
+      "roc_seconds": 0.0001578857421875,
+      "hb_seconds": 1.353125e-05,
+      "roc_to_hb_ratio": 11.668230369515012
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 2304,
+      "scalar_count": 768,
+      "input_checksum": 2969075939973084229,
+      "output_checksum": 18446744073708661952,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 12,
+      "leaked": 0,
+      "roc_seconds": 0.0005981630859375,
+      "hb_seconds": 4.95234375e-05,
+      "roc_to_hb_ratio": 12.07838381448178
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 9216,
+      "scalar_count": 3072,
+      "input_checksum": 14403757961819492869,
+      "output_checksum": 7058176,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 12,
+      "leaked": 0,
+      "roc_seconds": 0.00255943684375,
+      "hb_seconds": 0.0001584375,
+      "roc_to_hb_ratio": 16.154236489151874
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is checked separately through cached vertical oracle matrices; inputs, script and vertical direction are guarded in both native loops.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.",
+    "Immutable vertical bundle predates later shared CFF/gvar/AAT integrations; integrator repeats the combined correctness and default performance gates."
+  ],
+  "native_binaries": {
+    "bench": "f3de805498852120d0b55ee1345a3be95ba7e56a5ace769bfabf49ef02c76e8a",
+    "alloc": "5a3463b0f262719e87a369fe14c6a99c28f9778f4cbc8a43e945aa22f6628a54"
+  },
+  "runner_sha256": "9717e6da4b5ec19ad5a9ce2114773deab6c4af97e6a051d8b895e6b4ed68557a",
+  "machine": "macOS-26.3.1-arm64-arm-64bit-Mach-O"
+}

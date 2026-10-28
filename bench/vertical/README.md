@@ -22,3 +22,16 @@ Inter shape/kerning baseline. It was recorded before changing the hot path.
 It contains Roc timing only and makes no reference-speed comparison claim.
 The integrator owns the final ordinary allocation ratchet and matched reference
 timing gate alongside the other concurrent engines.
+
+Recorded vertical results use the same two immutable native binaries. Output
+checksums match a separate HarfBuzz shaping call at every measured size.
+
+| Work | Scalars | Allocations per call | Roc/HarfBuzz elapsed ratio |
+| --- | --- | --- | --- |
+| Japanese |192/768/3072|12/12/12|11.67/12.08/16.15|
+| Mark attachment |80/320/1280|21/21/21|8.06/9.88/9.66|
+| Mongolian |96/384/1536|19/19/19|45.52/45.58/50.04|
+
+These show bounded allocation cost and substantial remaining runtime work.
+They do not claim HarfBuzz performance parity. See the adjacent JSON records
+for exact source, bundle, runner and native binary identities.
