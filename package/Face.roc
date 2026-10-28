@@ -24,6 +24,7 @@ import TableOutline
 import TableVhea
 import TableVmtx
 import TableVorg
+import TableVvar
 import TableMath
 import TableColorImages
 import TablePalette
@@ -85,6 +86,7 @@ Face := {
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
 	hvar : [Present(TableVar.Hvar), Absent],
+	vvar : [Present(TableVvar), Absent],
 	mvar : [Present(TableVar.Mvar), Absent],
 	outlines : [Present({ points : TableGlyfPoints, gvar : TableGvar }), Absent],
 	layout_var : LayoutVar,
@@ -112,7 +114,7 @@ Face := {
 	## `HVAR` and `MVAR` stores there, whether any coordinate is not zero
 	## (at the default location every delta is zero), and the `gvar`
 	## location state. The `GDEF` store's state travels with the kerning.
-	Location : { coords : List(I16), hvar : List(U32), mvar : List(U32), varied : Bool, gvar : TableGvar.Location }
+	Location : { coords : List(I16), hvar : List(U32), vvar : List(U32), mvar : List(U32), varied : Bool, gvar : TableGvar.Location }
 
 	Metrics : {
 		ascent : I32,
@@ -125,7 +127,7 @@ Face := {
 	}
 
 	default_location : Location
-	default_location = { coords: [], hvar: [], mvar: [], varied: False, gvar: { coords: [], nonzero: False, shared: [] } }
+	default_location = { coords: [], hvar: [], vvar: [], mvar: [], varied: False, gvar: { coords: [], nonzero: False, shared: [] } }
 
 	## What reading found in the variation tables: the parts to use, the
 	## problems that drop them all (`problems`), and those that drop only
@@ -133,6 +135,7 @@ Face := {
 	Variations : {
 		space : [Present(TableVar), Absent],
 		hvar : [Present(TableVar.Hvar), Absent],
+		vvar : [Present(TableVvar), Absent],
 		mvar : [Present(TableVar.Mvar), Absent],
 		outlines : [Present({ points : TableGlyfPoints, gvar : TableGvar }), Absent],
 		problems : List(Problem),
@@ -448,6 +451,7 @@ Face := {
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
 								hvar: if (keep_variations) variations.hvar else Absent,
+								vvar: if (keep_variations) variations.vvar else Absent,
 								mvar: if (keep_variations) variations.mvar else Absent,
 								outlines: if keep_variations {
 									match variations.outlines {
@@ -618,7 +622,7 @@ Face := {
 	## here, or `Unread` when they were not.
 	read_variations : List(U8), List(Sfnt.Table), U64, Bool, U64, [Read(Try(TableGlyfPoints, List(TableGlyfPoints.Problem))), Unread] -> Variations
 	read_variations = |bytes, tables, glyph_count, long_offsets, metric_count, points_read| {
-		nothing = { space: Absent, hvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent }
+		nothing = { space: Absent, hvar: Absent, vvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent }
 		# Each problem in the file: its table's offset plus its own.
 		placed = |ps| ps.map(|p| Sfnt.bad(p.table, Face.table_offset(tables, p.table) + p.offset))
 		match Sfnt.located(bytes, tables, "fvar", 0) {
@@ -681,16 +685,13 @@ Face := {
 							_ => []
 						}
 						vvar = match Sfnt.located(bytes, tables, "VVAR", 0) {
-							Found(found) =>
-								match TableVar.check_vvar_ots(found.data, axes) {
-									Ok(_) => []
-									Err(at) => [Sfnt.bad("VVAR", found.offset + at)]
-								}
-							_ => []
+							Missing => Ok(Absent)
+							Bad(at) => Err([Sfnt.bad("VVAR", at)])
+							Found(found) => TableVvar.read(found.data, axes, glyph_count).map_ok(|value| Present(value)).map_err(placed)
 						}
-						problems = unusable.concat(vvar).concat(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), mvar), outlines))
+						problems = unusable.concat(Face.collect_all(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), vvar), mvar), outlines))
 						if problems.is_empty() {
-							{ space: Present(space), hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
+							{ space: Present(space), hvar: hvar ?? Absent, vvar: vvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
 						} else {
 							{ ..nothing, problems: problems, avar_problems, fvar_axes: Present(axes) }
 						}
@@ -814,7 +815,11 @@ Face := {
 			Present(o) if varied => TableGvar.location(o.gvar, coords)
 			_ => Face.default_location.gvar
 		}
-		{ coords, hvar, mvar, varied, gvar }
+		vvar = match face.vvar {
+			Present(v) if varied => TableVvar.scalars(v, coords)
+			_ => []
+		}
+		{ coords, hvar, vvar, mvar, varied, gvar }
 	}
 
 	## The face moved to a location: every query, and shaping (kerning and
@@ -947,7 +952,13 @@ Face := {
 			return 0
 		}
 		match face.v_advances.get(id) {
-			Ok(advance) => advance.to_i32()
+			Ok(advance) => match face.vvar {
+				# The metric accelerator defines a negative varied advance
+				# as zero (HarfBuzz hb-ot-hmtx-table.hh); I32 bounds keep the
+				# font-unit public position representation finite.
+				Present(v) if loc.varied => (advance.to_i64() + TableVvar.advance_delta(v, loc.vvar, id)).max(0).min(2147483647).to_i32_wrap()
+				_ => advance.to_i32()
+			}
 			Err(_) => {
 				m = Face.metrics(face, loc)
 				(m.ascent.to_i64() + m.descent.to_i64()).max(-2147483648).min(2147483647).to_i32_wrap()
@@ -965,7 +976,14 @@ Face := {
 		x = Face.advance(face, loc, id) // 2
 		if !face.has_glyf {
 			match face.vorg {
-				Present(v) => return { x, y: TableVorg.origin(v, id) }
+				Present(v) => {
+					base = TableVorg.origin(v, id).to_i64()
+					delta = match face.vvar {
+						Present(vv) if loc.varied => TableVvar.origin_delta(vv, loc.vvar, id)
+						_ => 0
+					}
+					return { x, y: (base + delta).max(-2147483648).min(2147483647).to_i32_wrap() }
+				}
 				Absent => {}
 			}
 		}
