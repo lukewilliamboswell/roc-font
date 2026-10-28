@@ -181,6 +181,7 @@ BENCH_APPS = (
     "tests/fonts/aat-mort/bench.roc", "tests/fonts/aat-mort/alloc.roc",
     "tests/fonts/graphite/read_alloc.roc",
     "tests/fonts/graphite/shape_alloc.roc", "tests/fonts/graphite/shape_bench.roc",
+    "tests/fonts/graphite/query.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 
@@ -359,9 +360,19 @@ def step_conformance(ctx: Context) -> Result:
     statuses = [f"general font cases: {main.status}"]
     outputs = [main.output]
     passed = main.status == "PASS"
+    for script, arguments in [("test_limitations.py", []), ("record_limitations.py", ["--check"])]:
+        code, output = run([sys.executable, f"tests/fonts/graphite/{script}", *arguments],
+                           env=child_env(ctx), cwd=ctx.consumer_root)
+        passed = passed and code == 0
+        statuses.append(f"Graphite {script}: exit {code}")
+        outputs.append(output)
     for feature in ("math", "outlines-carets", "cff", "variation-complete", "aat-position", "color-images", "color", "positioning/context-budget", "graphite"):
         verifier = "verify_all.py" if feature == "graphite" else "verify.py"
-        code, output = run([sys.executable, f"tests/fonts/{feature}/{verifier}"],
+        command = [sys.executable, f"tests/fonts/{feature}/{verifier}"]
+        if feature == "graphite":
+            command += ["--preload-divergences", "tests/fonts/graphite-geometry/preload-divergences.json",
+                        "--known-limitations", "tests/fonts/graphite/known-limitations.json"]
+        code, output = run(command,
                            env=child_env(ctx), cwd=ctx.consumer_root)
         passed = passed and code == 0
         statuses.append(f"{feature}: exit {code}")

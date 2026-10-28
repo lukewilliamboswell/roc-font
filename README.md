@@ -22,8 +22,9 @@ and raw tables, OpenType MATH facts, COLR/CPAL paint graphs, embedded SVG
 and bitmap glyph assets. Variable fonts are queried at the selected weight,
 width, optical size or custom axes, including cross-axis `avar` v2 maps
 and phantom-point metrics. Vertical runs expose both glyph advances and
-origins. Apple morphing, positioning and size-dependent tracking are under
-integration; Graphite execution remains in development.
+origins. Apple morphing, positioning and size-dependent tracking are implemented.
+Graphite execution is [experimental](docs/graphite-limits.adoc): advanced Awami Urdu runs and some
+nonspacing-mark/reverse-pass combinations still differ from the reference.
 
 Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Khmer, Myanmar, nine Indic scripts
 and the Universal Shaping Engine have dedicated shaping stages. Real-font

@@ -896,6 +896,9 @@ Font :: { face : Face }.{
 	## OpenType vertical metrics, set `use_font_programs` to False.
 	## Graphite programs also use stored default metrics, independently of
 	## the location selected by `at`, following that reference adapter.
+	## Graphite is experimental: some Awami Nastaliq Urdu runs and
+	## nonspacing marks in reverse font passes still differ from the
+	## reference. Validate those fonts and runs for your application's needs.
 	##
 	## `point_size` selects size-dependent Apple tracking, in typographic
 	## points. Zero and negative values use the reference default of 12.

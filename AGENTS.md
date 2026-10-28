@@ -171,7 +171,7 @@ with an explicit baseline update in the same change. Elapsed time is
 judged as a ratio against the reference implementations measured in the
 same run, never as an absolute number.
 
-Shaping budget factors follow pinned HarfBuzz 14.6's `hb-limits.hh`:
+OpenType shaping budget factors follow pinned HarfBuzz 14.6's `hb-limits.hh`:
 output at most `max(256 n, 65536)` glyphs and at most
 `max(4096 n, 65536)` lookup applications, so ordinary fonts complete.
 Roc charges the lookup and script work documented by `ShapeLimits`;
@@ -180,6 +180,14 @@ partial progress need not match between engines. Keep actual reference
 records, declare each such divergence, and test Roc's partial result and
 diagnostics against an independent work model. Complete runs still require
 reference agreement.
+
+Graphite uses these public factors as explicit Roc work bounds with its own
+accounting. HarfBuzz's Graphite adapter delegates to Graphite2 without charging
+the OpenType lookup budget, so equal factors do not promise equal progress.
+Keep default-budget stops visible and distinguish unfinished implementation
+coverage from exact reference agreement. Known experimental observations may
+be pinned individually only when the requested scope allows documented limits;
+new observations, changed outputs and stale entries must still fail the gate.
 
 ## Preserve totality, determinism and numerical safety
 

@@ -86,12 +86,16 @@ Internal contracts agreed before consumer work:
   morphing has 2,413 exact cases and positioning has 5,064 comparisons,
   including 16 independent fontTools contour controls. Dedicated native
   fuzz campaigns pass; the final shared-bundle workflow remains required.
-- [ ] Complete Graphite real-font runtime agreement, geometry/collision
-  behavior, public adapter conversion, native fuzz and scaling gates.
-  Static reading covers four real SIL families. Original VM controls
-  pass; the first complete public replay exposed real-font differences.
-  Preserve separate default-HarfBuzz preload6 and raw Graphite2 preload0
-  oracle records, plus the declared format-correct Glat3 flag divergence.
+- [ ] Complete experimental Graphite coverage: 45 main Awami cases
+  (37 geometry differences and eight default operation stops), 544 broad
+  nonspacing-mark/reverse-pass differences and overlapping focused
+  diagnostics remain individually pinned. User-approved integration ships
+  these as documented limits, not claims of reference agreement. The
+  verified geometry snapshot passes 1,549 cases in both reference modes
+  and 100 deletion cases; final shared checks remain required.
+- [ ] Improve Graphite CPU scaling. Paired native measurements retain a
+  Padauk positioning cost that grows disproportionately with input size.
+  Lookup allocation counts alone do not establish linear elapsed time.
 - [ ] Finish integration checks for implemented `avar` version 2,
   `gvar` phantom advances (including composites and vertical metrics),
   duplicate-tag setters and removal of the arbitrary 64-axis cap.

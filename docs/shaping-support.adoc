@@ -199,13 +199,21 @@ final shared integration gate.
   link:../tests/fonts/aat-mort/[legacy morphing] and
   link:../tests/fonts/aat-position/[positioning] matrices establish those
   cases, with malformed-font, native fuzz and scaling evidence.
-* Graphite preparation and execution remain under integration. Small
-  original VM controls pass the public native replay, while real-font
-  association and collision differences are still being resolved. Four
-  real SIL families passing preparation does not establish runtime parity.
+* Graphite execution is experimental. The verified integration snapshot
+  matches all 1,549 geometry cases in each reference mode and 100 deletion
+  cases. Its main matrix matches 1,024/1,069: 37 completed Awami geometry
+  differences and eight default operation-budget stops remain. Advanced
+  Awami Nastaliq Urdu layout is therefore a downstream blocker.
+  A broad mark/direction matrix matches 1,440/1,984, leaving 544 reverse-pass
+  geometry differences; focused diagnostics overlap this scope. The full
+  workflow tracks 651 individually pinned unfinished observations across
+  five matrices, separately from numerical agreements. New differences,
+  changed unfinished results and stale entries fail the check.
   The default HarfBuzz Graphite adapter and the independent Graphite2
   lazy-face API use different preload modes; their evidence is labelled
-  separately. Graphite's adapter uses horizontal advances even when the
+  separately. The default geometry gate has 425 individually keyed
+  whole-box preload differences, while the complete independent face0
+  gate uses no exceptions. Graphite's adapter uses horizontal advances even when the
   caller requests a vertical buffer direction. Set `use_font_programs`
   to false to select the OpenType path, including its vertical metrics.
   Graphite also uses stored default design metrics rather than the location
@@ -223,7 +231,10 @@ final shared integration gate.
   the font bytes; container unwrapping remains separate work.
 * After work-budget exhaustion, partial progress can differ from HarfBuzz's
   buffer-accounting progress. Explicit stopped-run cases are checked with
-  an independent model; completed runs require oracle agreement.
+  an independent model. Graphite has engine-specific Roc accounting; its
+  reference adapter does not charge the OpenType lookup budget. Completed
+  supported runs require oracle agreement; experimental Graphite limits
+  are recorded separately and do not count as agreements.
 * Legacy kerning follows the selected script's fallback policy. The
   link:../tests/fonts/shaping/kern-policy/kern-cases.jsonc[93-case matrix]
   covers suppression for scripts whose models disable it and retention
