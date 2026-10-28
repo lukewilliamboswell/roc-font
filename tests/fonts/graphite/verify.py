@@ -8,7 +8,7 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'));import flight
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--divergences',type=Path);p.add_argument('--engine-expectations',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--divergences',type=Path);p.add_argument('--engine-expectations',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--operations-factor',type=int,help='Explicit caller limit for a separately labelled diagnostic; default package limits remain unchanged');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
  subprocess.run([sys.executable,str(HERE/'record_shapes.py'),'--check','--cases',str(args.cases.resolve()),'--output',str(args.records.resolve()),'--oracle',str(args.oracle.resolve()),'--font-root',str(args.font_root.resolve())],check=True)
  cases=json.loads(args.cases.read_text())['cases'];records={r['id']:r for r in json.loads(args.records.read_text())['records']}
  selected=[c for c in cases if args.only in c['id']];assert selected,'empty Graphite replay selection'
@@ -17,10 +17,13 @@ def main():
   roc=os.environ.get('ROC','roc')
   with flight.flight(roc,bundle=args.bundle,work=work/'flight') as dep:
    mirror=flight.make_mirror(work/'mirror')
-   command=[roc,'build',*([] if args.dev else ['--opt=speed']),'tests/fonts/graphite/query.roc',f'--output={binary}',*dep]
+   command=[roc,'build',*(['--opt=dev'] if args.dev else ['--opt=speed']),'tests/fonts/graphite/query.roc',f'--output={binary}',*dep]
    built=subprocess.run(command,cwd=mirror,text=True,capture_output=True)
    if built.returncode:sys.stderr.write(built.stdout+built.stderr);return 1
    provenance={'bundle':dep[-1].split('/')[-1],'compiler_sha256':hashlib.sha256(Path(roc).read_bytes()).hexdigest(),'optimized':not args.dev}
+ if args.operations_factor is not None:
+  assert 0<=args.operations_factor<=2**32-1
+  provenance['diagnostic_operations_factor']=args.operations_factor
  provenance['binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
  grouped=collections.defaultdict(list)
  for case in selected:grouped[case['font']].append(case)
@@ -37,7 +40,7 @@ def main():
   if any('graphite_face_available' in records[c['id']]['result'] for c in items):
    probe='__availability_'+hashlib.sha256(font.encode()).hexdigest()[:16];assert probe not in records
    availability_probes[font]=probe;requests.append('\t'.join([probe,'Latn','','ltr','0','','auto','0','0','']))
-  run=subprocess.run([str(binary),str(args.font_root/font)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)
+  run=subprocess.run([str(binary),str(args.font_root/font),*([str(args.operations_factor)] if args.operations_factor is not None else [])],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)
   if run.returncode:reader_failures.append(font);print(font,run.stdout,run.stderr,file=sys.stderr);continue
   for line in run.stdout.splitlines():
    key,value=line.split('\t',1);assert key not in actual,key;actual[key]=json.loads(value)

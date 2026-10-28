@@ -1,0 +1,45 @@
+{
+  "format_source": "https://github.com/silnrsi/graphite/blob/1.3.14/doc/GTF.asc",
+  "section": "Octabox_metrics/Subbox_entry, ordered min/max pairs; equality allowed",
+  "cases": [
+    {
+      "font": "bounds-valid.ttf",
+      "sha256": "9494e7257505e4a26cc548c2717f68aea1533b84d79d77e7845a1e279b0ceed7",
+      "valid": true,
+      "glat_offsets": []
+    },
+    {
+      "font": "bounds-inverted-y.ttf",
+      "sha256": "af03f557a07e000e9bbea4299cdf2c593e8cbe9f863fe1e842f4638a26dc25ce",
+      "valid": false,
+      "glat_offsets": [
+        24
+      ]
+    },
+    {
+      "font": "bounds-inverted-many.ttf",
+      "sha256": "3680429dabe2d81199df8f91b98d0d389833104b6ac48e0bddfe929a1a131fa7",
+      "valid": false,
+      "glat_offsets": [
+        10,
+        12,
+        22,
+        24,
+        26,
+        28
+      ]
+    },
+    {
+      "font": "bounds-equal.ttf",
+      "sha256": "1045be2fdbcc9bb9eca522e6b15fc0f907f158c2c89fbaf71311f2637a4cb765",
+      "valid": true,
+      "glat_offsets": []
+    },
+    {
+      "font": "bounds-unknown-gloc-flags.ttf",
+      "sha256": "650e5711b024ac13deaadb8ad5d6387535a6439d3fefee2d8355bf9cc3f00d92",
+      "valid": true,
+      "glat_offsets": []
+    }
+  ]
+}

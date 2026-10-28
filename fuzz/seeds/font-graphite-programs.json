@@ -1,0 +1,1029 @@
+{
+  "about": "Mutate Silf header, classes, FSM and bytecode; strict-read each variant then execute every accepted program with bounded work. Four embedded original/real fonts. Added conditional-collision font on selector high bit 128; original 64 seed recipes keep their meaning. Bit32 on the new high-bit recipes selects the rule-free feature pass.",
+  "seeds": [
+    {
+      "why": "font/direction recipe0, mutationnone",
+      "parts": [
+        {
+          "hex": "00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe0, mutation00",
+      "parts": [
+        {
+          "hex": "0000"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe0, mutationff",
+      "parts": [
+        {
+          "hex": "00ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe0, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "000102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe1, mutationnone",
+      "parts": [
+        {
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe1, mutation00",
+      "parts": [
+        {
+          "hex": "0100"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe1, mutationff",
+      "parts": [
+        {
+          "hex": "01ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe1, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "010102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe2, mutationnone",
+      "parts": [
+        {
+          "hex": "02"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe2, mutation00",
+      "parts": [
+        {
+          "hex": "0200"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe2, mutationff",
+      "parts": [
+        {
+          "hex": "02ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe2, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "020102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe3, mutationnone",
+      "parts": [
+        {
+          "hex": "03"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe3, mutation00",
+      "parts": [
+        {
+          "hex": "0300"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe3, mutationff",
+      "parts": [
+        {
+          "hex": "03ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe3, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "030102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe4, mutationnone",
+      "parts": [
+        {
+          "hex": "04"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe4, mutation00",
+      "parts": [
+        {
+          "hex": "0400"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe4, mutationff",
+      "parts": [
+        {
+          "hex": "04ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe4, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "040102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe5, mutationnone",
+      "parts": [
+        {
+          "hex": "05"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe5, mutation00",
+      "parts": [
+        {
+          "hex": "0500"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe5, mutationff",
+      "parts": [
+        {
+          "hex": "05ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe5, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "050102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe6, mutationnone",
+      "parts": [
+        {
+          "hex": "06"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe6, mutation00",
+      "parts": [
+        {
+          "hex": "0600"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe6, mutationff",
+      "parts": [
+        {
+          "hex": "06ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe6, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "060102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe7, mutationnone",
+      "parts": [
+        {
+          "hex": "07"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe7, mutation00",
+      "parts": [
+        {
+          "hex": "0700"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe7, mutationff",
+      "parts": [
+        {
+          "hex": "07ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe7, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "070102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe8, mutationnone",
+      "parts": [
+        {
+          "hex": "08"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe8, mutation00",
+      "parts": [
+        {
+          "hex": "0800"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe8, mutationff",
+      "parts": [
+        {
+          "hex": "08ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe8, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "080102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe9, mutationnone",
+      "parts": [
+        {
+          "hex": "09"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe9, mutation00",
+      "parts": [
+        {
+          "hex": "0900"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe9, mutationff",
+      "parts": [
+        {
+          "hex": "09ff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe9, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "090102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe10, mutationnone",
+      "parts": [
+        {
+          "hex": "0a"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe10, mutation00",
+      "parts": [
+        {
+          "hex": "0a00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe10, mutationff",
+      "parts": [
+        {
+          "hex": "0aff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe10, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0a0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe11, mutationnone",
+      "parts": [
+        {
+          "hex": "0b"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe11, mutation00",
+      "parts": [
+        {
+          "hex": "0b00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe11, mutationff",
+      "parts": [
+        {
+          "hex": "0bff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe11, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0b0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe12, mutationnone",
+      "parts": [
+        {
+          "hex": "0c"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe12, mutation00",
+      "parts": [
+        {
+          "hex": "0c00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe12, mutationff",
+      "parts": [
+        {
+          "hex": "0cff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe12, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0c0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe13, mutationnone",
+      "parts": [
+        {
+          "hex": "0d"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe13, mutation00",
+      "parts": [
+        {
+          "hex": "0d00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe13, mutationff",
+      "parts": [
+        {
+          "hex": "0dff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe13, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0d0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe14, mutationnone",
+      "parts": [
+        {
+          "hex": "0e"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe14, mutation00",
+      "parts": [
+        {
+          "hex": "0e00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe14, mutationff",
+      "parts": [
+        {
+          "hex": "0eff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe14, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0e0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe15, mutationnone",
+      "parts": [
+        {
+          "hex": "0f"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe15, mutation00",
+      "parts": [
+        {
+          "hex": "0f00"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe15, mutationff",
+      "parts": [
+        {
+          "hex": "0fff"
+        }
+      ]
+    },
+    {
+      "why": "font/direction recipe15, mutation0102030405060708090a0b0c0d0e0f10",
+      "parts": [
+        {
+          "hex": "0f0102030405060708090a0b0c0d0e0f10"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "80"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8000"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8001ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "800001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "84"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8400"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8401ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "840001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "88"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8800"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8801ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "880001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8c"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8c00"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8c01ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "8c0001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c0"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c000"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c001ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c00001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c4"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c400"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c401ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c40001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c8"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c800"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c801ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "c80001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "cc"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "cc00"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "cc01ff"
+        }
+      ]
+    },
+    {
+      "why": "conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "cc0001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a0"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a000"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a001ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 128, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a00001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a4"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a400"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a401ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 132, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a40001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a8"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a800"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a801ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 136, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "a80001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ac"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ac00"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ac01ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 140, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ac0001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e0"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e000"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e001ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 192, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e00001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e4"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e400"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e401ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 196, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e40001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e8"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e800"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e801ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 200, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "e80001020304050607"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ec"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ec00"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ec01ff"
+        }
+      ]
+    },
+    {
+      "why": "rule-free conditional collision feature/direction recipe 204, header or bytecode mutation",
+      "parts": [
+        {
+          "hex": "ec0001020304050607"
+        }
+      ]
+    }
+  ]
+}

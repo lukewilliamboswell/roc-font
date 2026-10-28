@@ -1,0 +1,19 @@
+{
+  "cases": 8,
+  "agree": 4,
+  "normative": 0,
+  "failures": [
+    "arabic-32-0-identity/beh-fatha",
+    "arabic-32-0-y17/beh-fatha",
+    "arabic-32-20-identity/beh-fatha",
+    "arabic-32-20-y17/beh-fatha"
+  ],
+  "reader_failures": [],
+  "provenance": {
+    "binary_sha256": "5d7e1fe1af109cceac19b49022b65fb0f280ac8f7e912cc491594c9d89cc5953",
+    "optimization": "dev",
+    "source_sentinel": true,
+    "bundle": "FPqyKs7WeL6oEQDpd8fQqeTnE6yDVu26nMRurVxeaMXu.tar.zst",
+    "reference_exceptions": 0
+  }
+}

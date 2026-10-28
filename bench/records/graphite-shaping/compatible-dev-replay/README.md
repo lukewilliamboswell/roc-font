@@ -1,0 +1,3 @@
+This explicit `--opt=dev` native replay verifies the reader compatibility correction through the served bundle in a source-sentinel mirror. It is not an optimized performance result. The two public consumers passed 12 reader and 10 runtime expects.
+
+Both 1,282-case geometry matrices pass; default mode retains 425 independently pinned preload declarations, while face0 is strict. The complete main and NSM matrices remain failing gates (47 and 544 differences respectively). No new exception hides these differences. Main failures include eight Operations stops; completed output differences are evaluated separately. The source snapshot is an isolated combined integration, not the shared root branch.

@@ -1,0 +1,177 @@
+{
+  "font_sha256": "33bf40de2d446c893c8680fe2279a6121a54cf0f634964e8dd75f4a58239df5c",
+  "binary_sha256": "b90a94e6586907fcdb2472c38900f29860b3e91e2b9ca138d4c1d4cd95f09825",
+  "method": "Temporary Silf prefixes change numPasses/boundaries and relocate unchanged pseudo/class data; every retained pass payload is byte-identical. Existing public work-threshold binary measures each caller font. These diagnostics are not reference equivalence gates.",
+  "rows": [
+    {
+      "passes": 0,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        }
+      ]
+    },
+    {
+      "passes": 1,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 17,
+          "upper_operations_bound": 69632
+        }
+      ]
+    },
+    {
+      "passes": 2,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 26,
+          "upper_operations_bound": 106496
+        }
+      ]
+    },
+    {
+      "passes": 3,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 73,
+          "upper_operations_bound": 74752
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 73,
+          "upper_operations_bound": 299008
+        }
+      ]
+    },
+    {
+      "passes": 4,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 82,
+          "upper_operations_bound": 83968
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 82,
+          "upper_operations_bound": 335872
+        }
+      ]
+    },
+    {
+      "passes": 5,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 102,
+          "upper_operations_bound": 104448
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 102,
+          "upper_operations_bound": 417792
+        }
+      ]
+    },
+    {
+      "passes": 6,
+      "exit": 0,
+      "measurements": [
+        {
+          "copies": 16,
+          "scalars": 256,
+          "minimum_operations_factor": 0,
+          "upper_operations_bound": 65536
+        },
+        {
+          "copies": 64,
+          "scalars": 1024,
+          "minimum_operations_factor": 176,
+          "upper_operations_bound": 180224
+        },
+        {
+          "copies": 256,
+          "scalars": 4096,
+          "minimum_operations_factor": 380,
+          "upper_operations_bound": 1556480
+        }
+      ]
+    }
+  ],
+  "final_pass_rule10": "Original font disassembly: reads absolute PosX18 of previous/current inputs; prior actions change ShiftX/advances and invalidate the full-run position cache.",
+  "interpretation": "The sixth pass accounts for growing per-scalar work. Repeated full-run physical positioning at dirty absolute-position reads is a concrete optimization target, not yet a measured fix."
+}

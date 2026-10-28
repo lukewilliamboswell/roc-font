@@ -1,0 +1,38 @@
+{
+  "cases": 56,
+  "agree": 34,
+  "normative": 0,
+  "failures": [
+    "nsm-noop-32-601-0/ab",
+    "nsm-noop-32-601-0/aab",
+    "nsm-noop-32-601-0/abb",
+    "nsm-noop-32-601-0/ba",
+    "nsm-noop-32-601-0/bab",
+    "nsm-noop-32-601-20/ab",
+    "nsm-noop-32-601-20/aab",
+    "nsm-noop-32-601-20/abb",
+    "nsm-noop-32-601-20/ba",
+    "nsm-noop-32-601-20/bab",
+    "nsm-noop-32-601-20/bb",
+    "nsm-noop-32-601-602/ab",
+    "nsm-noop-32-601-602/aab",
+    "nsm-noop-32-601-602/abb",
+    "nsm-noop-32-601-602/ba",
+    "nsm-noop-32-601-602/bab",
+    "nsm-noop-32-601-602/bb",
+    "nsm-noop-32-0-20/ab",
+    "nsm-noop-32-0-20/abb",
+    "nsm-noop-32-0-20/ba",
+    "nsm-noop-32-0-20/bab",
+    "nsm-noop-32-0-20/bb"
+  ],
+  "reader_failures": [],
+  "provenance": {
+    "binary_sha256": "31038851e8addbd4ea471cc7bd35135e13f5d87f9f7be989fdcc2ae430cb1d6d",
+    "optimization": "dev",
+    "source_sentinel": true,
+    "bundle": "2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst",
+    "fixture_commit": "1e17868",
+    "reference_exceptions": 0
+  }
+}

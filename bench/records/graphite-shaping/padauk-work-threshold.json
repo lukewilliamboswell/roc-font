@@ -1,0 +1,27 @@
+{
+  "bundle": "6CFypnaSSLbciHdoi6QHwnjjFUuKvXeLz4Q5fBPzuNvn",
+  "compiler": "2026-10-27-de79a0f",
+  "binary_sha256": "b90a94e6586907fcdb2472c38900f29860b3e91e2b9ca138d4c1d4cd95f09825",
+  "rows": [
+    {
+      "copies": 16,
+      "scalars": 256,
+      "minimum_operations_factor": 0,
+      "upper_operations_bound": 65536
+    },
+    {
+      "copies": 64,
+      "scalars": 1024,
+      "minimum_operations_factor": 176,
+      "upper_operations_bound": 180224
+    },
+    {
+      "copies": 256,
+      "scalars": 4096,
+      "minimum_operations_factor": 380,
+      "upper_operations_bound": 1556480
+    }
+  ],
+  "method": "Binary search on public ShapeLimits.operations; minimum factor whose checked call completes. The fixed65536 operation floor applies. This counts package work, not a wall-clock estimate.",
+  "scope": "Before local deleted-marker gap optimization bcde005; counted Padauk work shows increasing cost per scalar."
+}

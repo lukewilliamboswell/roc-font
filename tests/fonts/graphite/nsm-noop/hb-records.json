@@ -1,0 +1,9 @@
+{
+"oracle":{"extractor": 1, "graphite2": "1.3.14", "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a", "harfbuzz": "14.6.0", "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2", "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0", "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"},
+"records":[
+{"id":"noop-0/graphite2","key":"1786d8b6096d16adc1e9eaf214dc1c89cb4182e8ac96c4fee32b26afd23ec2aa","result":{"success":true,"abort":"NoAbort","glyphs":[{"glyph":1,"cluster":0,"advance":[0,0],"offset":[0,0],"flags":0},{"glyph":2,"cluster":1,"advance":[601,0],"offset":[0,0],"flags":1}]}},
+{"id":"noop-0/ot","key":"8225677ab2563e0cdf52904c23f63f76c0851e764e7482e02575d9f291ad0b43","result":{"success":true,"abort":"NoAbort","glyphs":[{"glyph":1,"cluster":0,"advance":[601,0],"offset":[0,0],"flags":0},{"glyph":2,"cluster":1,"advance":[0,0],"offset":[0,0],"flags":0}]}},
+{"id":"noop-32/graphite2","key":"bd9a7d3d01d9787583e2fe2b533d808bd7b616693c0d4fbd5749e8d930506160","result":{"success":true,"abort":"NoAbort","glyphs":[{"glyph":1,"cluster":0,"advance":[0,0],"offset":[0,0],"flags":0},{"glyph":2,"cluster":1,"advance":[0,0],"offset":[0,0],"flags":1}]}},
+{"id":"noop-32/ot","key":"a13749d8e3b05b94f4d338500e9c92c2d21a32cc1a8bf38d76708ed69a3d51b4","result":{"success":true,"abort":"NoAbort","glyphs":[{"glyph":1,"cluster":0,"advance":[601,0],"offset":[0,0],"flags":0},{"glyph":2,"cluster":1,"advance":[0,0],"offset":[0,0],"flags":0}]}}
+]
+}

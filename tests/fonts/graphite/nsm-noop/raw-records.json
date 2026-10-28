@@ -1,0 +1,89 @@
+{
+  "engine": "Graphite2 1.3.14",
+  "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+  "api": "public gr_make_file_face/gr_make_seg and slot accessors",
+  "records": [
+    {
+      "font": "noop-0.ttf",
+      "facts": {
+        "sfnt_sha256": "a409bad3d5b7bfc15b357276074c18eafab262f993dae99a3e47138ee1823d6f",
+        "silf_version": 327680,
+        "pass_flags": 0,
+        "only_action_hex": "1b31",
+        "glyph1_advance": 601,
+        "glyph2_advance": 0,
+        "full_long_metric_count": 3
+      },
+      "face_mode": 6,
+      "segment_flags": 2,
+      "segment_advance_x": 601.0,
+      "slots": [
+        {
+          "glyph": 1,
+          "origin_x": 0.0,
+          "authored_advance_x": 601.0,
+          "slot_attr_advance_x": 601,
+          "has_parent": false,
+          "has_child": false,
+          "shift_x": 0,
+          "shift_y": 0,
+          "justify_width": 0,
+          "collision_flags": 0
+        },
+        {
+          "glyph": 2,
+          "origin_x": 0.0,
+          "authored_advance_x": 0.0,
+          "slot_attr_advance_x": 0,
+          "has_parent": false,
+          "has_child": false,
+          "shift_x": 0,
+          "shift_y": 0,
+          "justify_width": 0,
+          "collision_flags": 0
+        }
+      ]
+    },
+    {
+      "font": "noop-32.ttf",
+      "facts": {
+        "sfnt_sha256": "b18226d1db55f54b7fefb5a1e71bfab90396db707c001c97fcb1c68898dfd302",
+        "silf_version": 327680,
+        "pass_flags": 32,
+        "only_action_hex": "1b31",
+        "glyph1_advance": 601,
+        "glyph2_advance": 0,
+        "full_long_metric_count": 3
+      },
+      "face_mode": 6,
+      "segment_flags": 2,
+      "segment_advance_x": 0.0,
+      "slots": [
+        {
+          "glyph": 1,
+          "origin_x": 0.0,
+          "authored_advance_x": 601.0,
+          "slot_attr_advance_x": 601,
+          "has_parent": false,
+          "has_child": false,
+          "shift_x": 0,
+          "shift_y": 0,
+          "justify_width": 0,
+          "collision_flags": 0
+        },
+        {
+          "glyph": 2,
+          "origin_x": 0.0,
+          "authored_advance_x": 0.0,
+          "slot_attr_advance_x": 0,
+          "has_parent": false,
+          "has_child": false,
+          "shift_x": 0,
+          "shift_y": 0,
+          "justify_width": 0,
+          "collision_flags": 0
+        }
+      ]
+    }
+  ]
+}

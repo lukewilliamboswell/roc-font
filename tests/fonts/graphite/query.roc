@@ -13,6 +13,11 @@ import font.Font
 main! : List(OsStr) => Try({}, _)
 main! = |args| {
 	path = OsStr.display(args.first() ?? crash "Graphite query requires caller font path")
+	# Optional diagnostic only: callers can explicitly choose their work factor.
+	limits = match args.get(1) {
+		Ok(value) => Font.ShapeLimits.{ operations: U32.from_str(OsStr.display(value)) ?? crash "invalid operation factor" }
+		Err(_) => Font.ShapeLimits.{}
+	}
 	bytes = Path.read_bytes!(Path.utf8(path))?
 	font = Font.from_bytes(bytes, Font.ReadOptions.{}) ?? crash "Graphite caller font rejected"
 	for line in Str.from_utf8_lossy(Stdin.read_to_end!()?).split_on("\n") {
@@ -61,6 +66,7 @@ main! = |args| {
 							},
 							clusters: if (cluster_level == "1") Characters else Graphemes,
 							graphite_features: $features,
+							limits,
 							use_font_programs: engine != "ot",
 						},
 					)

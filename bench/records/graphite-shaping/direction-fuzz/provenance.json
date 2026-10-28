@@ -1,0 +1,26 @@
+{
+  "bundle": "2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst",
+  "bundle_sha256": "ae8af22ff45e0b93dc733768393c9137e2c704cda7aa36261f6be8cdc9077fcb",
+  "source_sentinel": true,
+  "source_sentinel_sha256": "1e64845afcf8278e0d264e3f8cb3ac1d54c3a9621ea757a914881806bebfff1b",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "optimization": "speed",
+  "fuzz_build": true,
+  "executable_sha256": "0a4f4a35ca202f8c84b6f117eadfc45bb9df27f40e273de09662d1d64aa2bb57",
+  "target_sha256": "6f2cf73784e1c4753d1b09315c756e7e2afda11c972b4d58f071b8ff6f97349c",
+  "seed_sha256": "95542ee00b166bbfe230114d157caa3c626f33a7efaf7b408922120cc0e44865",
+  "report_sha256": "0f4234cf63854e08195018246c826311a185bd414c4e8d5998e9162a0093c548",
+  "build_and_campaign_log_sha256": "b01ba3a3b1b8469ceb374c51c5832b14617b6fb4cb04a1e546a163b5e6934654",
+  "registration": {
+    "source": "fuzz/font-graphite-direction.roc",
+    "seeds": "fuzz/seeds/font-graphite-direction.json",
+    "dictionary": "fuzz/dictionaries/font.dict",
+    "max_input_size": 9,
+    "timeout": 10,
+    "font_files": false,
+    "smoke_runs": 1000
+  },
+  "seed": 266,
+  "seed_inputs": 256,
+  "reference_geometry_agreement_claimed": false
+}

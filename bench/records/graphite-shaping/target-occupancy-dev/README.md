@@ -1,0 +1,3 @@
+This explicit --opt=dev native replay adds the independently probed target upper-bin occupancy correction (33fc73d). The two previously failing real Awami text9 LTR cases now match exactly. The main matrix improves from 1,022 to 1,024 of 1,069; its remaining 45 cases still fail, including eight default Operations stops. No new failures appear.
+
+Both 1,310-case geometry modes pass, retaining 425 independently pinned default preload declarations and strict face0 comparison. Every previously passing feature/direction/association/progress/width/phase/metrics/large-conversion case still passes. The NSM matrix remains 1,440 of 1,984; its 544 geometry differences are unresolved and have no exception. This is conformance evidence, not an optimized timing claim.

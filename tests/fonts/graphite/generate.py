@@ -11,9 +11,9 @@ def u16(value):return struct.pack('>H',value)
 def u32(value):return struct.pack('>L',value)
 def raw(font,tag,data):
  table=DefaultTable(tag);table.data=data;font[tag]=table
-def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b'',j_levels=()):
+def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b'',j_levels=(),version=0x30000):
  # Original DFA for one exact glyph sequence and one output class [gid2].
- classes=u16(1)+u16(1)+u16(8)+u16(10)+u16(2)
+ classes=(u16(1)+u16(1)+u32(12)+u32(14)+u16(2)) if version>=0x40000 else (u16(1)+u16(1)+u16(8)+u16(10)+u16(2))
  levels=b''.join(bytes(level) for level in j_levels)
  pass_start=58+len(levels)+len(classes)
  glyphs=sorted(set(match));columns={g:i for i,g in enumerate(glyphs)}
@@ -36,7 +36,7 @@ def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b
       +u16(0)+bytes([0,1,1,0,0,0,0,0,0,0])+u16(0)
       +u32(pass_start)+u32(pass_start+len(pass_data))+u16(0)*4+classes+pass_data)
  assert len(sub)==pass_start+len(pass_data),(len(sub),pass_start,len(pass_data))
- return u32(0x30000)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
+ return u32(version)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
 programs={
  'increment-advance':(bytes([1,1,0x24,0,0x32]),True),
  'slot-direction':(bytes([0x28,16,0,0x23,0,0x32]),True),

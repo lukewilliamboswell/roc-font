@@ -6,7 +6,7 @@ no Graphite2 implementation code is linked into the Roc package.
 from pathlib import Path
 import argparse,ctypes as C,hashlib,json
 HERE=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--oracle',default='shape-oracle.json');p.add_argument('--cases',default='shape-cases.jsonc');p.add_argument('--output',default='shape-records.json');p.add_argument('--library',type=Path,default=Path('/private/tmp/libroc-font-hb14-graphite.dylib'));p.add_argument('--graphite-library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--oracle',default='shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--cases',default='shape-cases.jsonc');p.add_argument('--output',default='shape-records.json');p.add_argument('--library',type=Path,default=Path('/private/tmp/libroc-font-hb14-graphite.dylib'));p.add_argument('--graphite-library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
 def sha(data):return hashlib.sha256(data).hexdigest()
 def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()
 cases=json.loads((HERE/args.cases).read_text())['cases'];pin_path=HERE/args.oracle
@@ -14,7 +14,7 @@ if args.check:
  pin=json.loads(pin_path.read_text());records=json.loads((HERE/args.output).read_text())['records'];assert len(records)==len(cases)
  for case,record in zip(cases,records):
   assert record['id']==case['id']
-  key=sha(canonical({'case':case,'font':sha((HERE/case['font']).read_bytes()),'oracle':pin}))
+  key=sha(canonical({'case':case,'font':sha((args.font_root/case['font']).read_bytes()),'oracle':pin}))
   assert record['key']==key,case['id']
  print(f'{len(cases)} HB14.6/Graphite2 shape records current');raise SystemExit(0)
 hb=C.CDLL(str(args.library));ptr=C.c_void_p;uint=C.c_uint32
@@ -39,7 +39,7 @@ graphite=C.CDLL(str(args.graphite_library));gv=graphite.gr_engine_version;gv.arg
 pin={'harfbuzz':version,'graphite2':gversion,'harfbuzz_library_sha256':sha(args.library.read_bytes()),'graphite_library_sha256':sha(args.graphite_library.read_bytes()),'extractor':1,'harfbuzz_build':'clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2','harfbuzz_source':'https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0'}
 records=[]
 for case in cases:
- data=(HERE/case['font']).read_bytes();storage=C.create_string_buffer(data);bl=blob(storage,len(data),0,None,None);face=face_make(bl,0);font=font_make(face);font_funcs(font);font_scale(font,upem(face),upem(face));buf=make_buffer()
+ data=(args.font_root/case['font']).read_bytes();storage=C.create_string_buffer(data);bl=blob(storage,len(data),0,None,None);face=face_make(bl,0);font=font_make(face);font_funcs(font);font_scale(font,upem(face),upem(face));buf=make_buffer()
  try:
   content(buf,1);offset=0;start,end=case.get('range',[0,2**64-1])
   for char in case['text']:

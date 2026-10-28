@@ -1,0 +1,3 @@
+The independent original-font NSM geometry audit is now a separate verify_all matrix. Its 56 immutable true-HarfBuzz/Graphite2 cases replay through the existing served-bundle public query: 34 agree and 22 differ in geometry, with no reader, process or budget failures. Cache keys are checked by the standard offline extractor verifier. No reference exception or filter is applied.
+
+The positive-advance controls rule out a workaround specific to zero-width marks. The traversal/positioning contract remains unresolved; this report makes no claim of a reference bug. The full fixture facts and raw public-C-API witnesses live beside the cases, under tests/fonts/graphite/nsm-geometry-audit.

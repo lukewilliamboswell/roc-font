@@ -1,0 +1,141 @@
+{
+  "family": "caller",
+  "text_piece": "ab",
+  "font_sha256": "2dc1c198fc858f76f8a7f1ccc384eee7965a593dad13a514358f859019b72058",
+  "script": "Latn",
+  "direction": "ltr",
+  "bundle": "http://127.0.0.1:59527/6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst",
+  "compiler": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "binary_sha256": "d0353ff442ac2d10478be2a95477a2e49f3293b95c8d3573b3db807686b90355",
+  "allocation_binary_sha256": "e611a2bacc159e621cc1690285066f9a4396c9d937c9fb0bb89860aeb95fd964",
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "graphite2": "1.3.14",
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1,
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "rows": [
+    {
+      "copies": 8,
+      "scalars": 16,
+      "utf8_bytes": 16,
+      "input_checksum": 16659621471890172701,
+      "output_checksum": 18318155076270301823,
+      "allocations": 55,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 16062.5,
+          "hb_graphite_ns": 6437.5,
+          "ratio": 2.495145631067961
+        },
+        {
+          "roc_ns": 5992.1875,
+          "hb_graphite_ns": 2125.0,
+          "ratio": 2.8198529411764706
+        },
+        {
+          "roc_ns": 5929.6875,
+          "hb_graphite_ns": 2125.0,
+          "ratio": 2.7904411764705883
+        },
+        {
+          "roc_ns": 5960.9375,
+          "hb_graphite_ns": 2187.5,
+          "ratio": 2.725
+        },
+        {
+          "roc_ns": 5953.125,
+          "hb_graphite_ns": 2125.0,
+          "ratio": 2.801470588235294
+        }
+      ],
+      "median_ratio": 2.7904411764705883
+    },
+    {
+      "copies": 32,
+      "scalars": 64,
+      "utf8_bytes": 64,
+      "input_checksum": 11096966911890984293,
+      "output_checksum": 608143830860449471,
+      "allocations": 150,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 17085.9375,
+          "hb_graphite_ns": 4500.0,
+          "ratio": 3.796875
+        },
+        {
+          "roc_ns": 17239.625,
+          "hb_graphite_ns": 4062.5,
+          "ratio": 4.2436
+        },
+        {
+          "roc_ns": 17036.5,
+          "hb_graphite_ns": 4187.5,
+          "ratio": 4.068417910447761
+        },
+        {
+          "roc_ns": 16862.0,
+          "hb_graphite_ns": 4062.5,
+          "ratio": 4.150646153846154
+        },
+        {
+          "roc_ns": 16919.3125,
+          "hb_graphite_ns": 4000.0,
+          "ratio": 4.229828125
+        }
+      ],
+      "median_ratio": 4.150646153846154
+    },
+    {
+      "copies": 128,
+      "scalars": 256,
+      "utf8_bytes": 256,
+      "input_checksum": 12974440454661338757,
+      "output_checksum": 18141169948673813343,
+      "allocations": 534,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 60510.375,
+          "hb_graphite_ns": 14125.0,
+          "ratio": 4.2839203539823005
+        },
+        {
+          "roc_ns": 59236.9375,
+          "hb_graphite_ns": 12812.5,
+          "ratio": 4.623370731707317
+        },
+        {
+          "roc_ns": 59020.875,
+          "hb_graphite_ns": 13000.0,
+          "ratio": 4.540067307692308
+        },
+        {
+          "roc_ns": 59463.5625,
+          "hb_graphite_ns": 12937.5,
+          "ratio": 4.596217391304348
+        },
+        {
+          "roc_ns": 58908.8125,
+          "hb_graphite_ns": 13187.5,
+          "ratio": 4.467018957345972
+        }
+      ],
+      "median_ratio": 4.540067307692308
+    }
+  ],
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "notes": [
+    "Font read and plan excluded; five interleaved samples,16 executions each.",
+    "Actual Graphite backend asserted; identical byte input and ordered glyph/cluster/advance/offset/flag checksum asserted against HB14.6 Graphite adapter.",
+    "roc-fuzz0.4.3 does not expose requested or peak live bytes."
+  ]
+}

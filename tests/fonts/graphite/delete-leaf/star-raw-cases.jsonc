@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "id": "star-delete-a-ltr",
+      "font": "../graphite/delete-leaf/star-delete-a-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "kind": "star"
+      }
+    },
+    {
+      "id": "star-delete-a-rtl",
+      "font": "../graphite/delete-leaf/star-delete-a-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "kind": "star"
+      }
+    },
+    {
+      "id": "star-delete-d-ltr",
+      "font": "../graphite/delete-leaf/star-delete-d-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "kind": "star"
+      }
+    },
+    {
+      "id": "star-delete-d-rtl",
+      "font": "../graphite/delete-leaf/star-delete-d-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "kind": "star"
+      }
+    }
+  ]
+}

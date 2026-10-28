@@ -1,0 +1,122 @@
+{
+  "diagnostic_operations_factor": 32768,
+  "changes_package_defaults": false,
+  "optimization": "dev",
+  "source_sentinel": true,
+  "bundle": "GRGxmoVRX7TQHPRpjyDtP1fBnBo4PjaUfP2n3LU7cXSP.tar.zst",
+  "binary_sha256": "450555305df89e3f639363b3c25eed24c0070e240481b25469f3903606937585",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "cases": [
+    {
+      "id": "awami/text-19/ltr/clusters-0",
+      "expected_glyphs": 130,
+      "actual_glyphs": 130,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 62
+      },
+      "actual_sha256": "14e05bd0a6bb90040f7b76ab766f17abad118b5b3eca5c76ab52c3dc62cac940",
+      "expected_sha256": "b629c498ddc41147c1c9957d0e9c65d32fcc098f30d5ebfd8f6d7716a96dab73",
+      "raw_comparison_log_sha256": "ed40ad50b06ee4b5b3f4a4c626465fac4406384ab6798a83371609a2330bab2d"
+    },
+    {
+      "id": "awami/text-19/ltr/clusters-1",
+      "expected_glyphs": 130,
+      "actual_glyphs": 130,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 62
+      },
+      "actual_sha256": "14e05bd0a6bb90040f7b76ab766f17abad118b5b3eca5c76ab52c3dc62cac940",
+      "expected_sha256": "b629c498ddc41147c1c9957d0e9c65d32fcc098f30d5ebfd8f6d7716a96dab73",
+      "raw_comparison_log_sha256": "ed40ad50b06ee4b5b3f4a4c626465fac4406384ab6798a83371609a2330bab2d"
+    },
+    {
+      "id": "awami/text-19/rtl/clusters-0",
+      "expected_glyphs": 130,
+      "actual_glyphs": 130,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 62
+      },
+      "actual_sha256": "d13ee92146fb86a323b83f4fb4a2d49f82b44b3cb8cdb0b8a44369f1f622580b",
+      "expected_sha256": "14bca964066d527ae7a91c735201cc6cc47d18f0b4a5ee30f7a1a124030176b6",
+      "raw_comparison_log_sha256": "ed40ad50b06ee4b5b3f4a4c626465fac4406384ab6798a83371609a2330bab2d"
+    },
+    {
+      "id": "awami/text-19/rtl/clusters-1",
+      "expected_glyphs": 130,
+      "actual_glyphs": 130,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 62
+      },
+      "actual_sha256": "d13ee92146fb86a323b83f4fb4a2d49f82b44b3cb8cdb0b8a44369f1f622580b",
+      "expected_sha256": "14bca964066d527ae7a91c735201cc6cc47d18f0b4a5ee30f7a1a124030176b6",
+      "raw_comparison_log_sha256": "ed40ad50b06ee4b5b3f4a4c626465fac4406384ab6798a83371609a2330bab2d"
+    },
+    {
+      "id": "awami/text-20/ltr/clusters-0",
+      "expected_glyphs": 387,
+      "actual_glyphs": 387,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 351,
+        "advance": 2
+      },
+      "actual_sha256": "8a6b7879d9e6d0064c26164703707ce23c84c12d2e48f927d549a4ad04086944",
+      "expected_sha256": "5b4fbf5b36e05ce820a4171b8350399ab267bca5e44c5c1aa883e7a870824560",
+      "raw_comparison_log_sha256": "6361d54eae022d3e0cfaba6ea4261fb2ca4ba697c66818d0fbc28b11248e3d53"
+    },
+    {
+      "id": "awami/text-20/ltr/clusters-1",
+      "expected_glyphs": 387,
+      "actual_glyphs": 387,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 351,
+        "advance": 2
+      },
+      "actual_sha256": "8a6b7879d9e6d0064c26164703707ce23c84c12d2e48f927d549a4ad04086944",
+      "expected_sha256": "5b4fbf5b36e05ce820a4171b8350399ab267bca5e44c5c1aa883e7a870824560",
+      "raw_comparison_log_sha256": "6361d54eae022d3e0cfaba6ea4261fb2ca4ba697c66818d0fbc28b11248e3d53"
+    },
+    {
+      "id": "awami/text-20/rtl/clusters-0",
+      "expected_glyphs": 387,
+      "actual_glyphs": 387,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 350
+      },
+      "actual_sha256": "fe90d3ba0631cd9962e74be51d73815ad97f8116b715b1ec23c59e96b971f5d1",
+      "expected_sha256": "6a1185cc6af9afb2ef343bbf77e13498c8575cc3d0456508b9cc45f56ff70400",
+      "raw_comparison_log_sha256": "6361d54eae022d3e0cfaba6ea4261fb2ca4ba697c66818d0fbc28b11248e3d53"
+    },
+    {
+      "id": "awami/text-20/rtl/clusters-1",
+      "expected_glyphs": 387,
+      "actual_glyphs": 387,
+      "budgets": [],
+      "abort": "NoAbort",
+      "differing_rows_per_field": {
+        "offset": 350
+      },
+      "actual_sha256": "fe90d3ba0631cd9962e74be51d73815ad97f8116b715b1ec23c59e96b971f5d1",
+      "expected_sha256": "6a1185cc6af9afb2ef343bbf77e13498c8575cc3d0456508b9cc45f56ff70400",
+      "raw_comparison_log_sha256": "6361d54eae022d3e0cfaba6ea4261fb2ca4ba697c66818d0fbc28b11248e3d53"
+    }
+  ],
+  "final_default_preserving_consumer": {
+    "binary_sha256": "54f385bf3d48e6e01fa2807eff98405acc9beb478a6f810c88346f3f8ba8c016",
+    "default_width_cases_passed": 152,
+    "text19_diagnostic_cases_identical": 4
+  }
+}

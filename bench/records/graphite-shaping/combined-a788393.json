@@ -1,0 +1,183 @@
+{
+  "snapshot": "a788393",
+  "source_basis": "root6653e4a +math897e4db/0a6bf2d/0cd0087/7390694/c5c406e/4d3d291 +reader52b7e78 +direction8af9e79",
+  "provenance": {
+    "reused_binary": false,
+    "bundle": "FntTJT7xk17NDw7YtM4EF9hBsgU14eJwgJF6yvhbZrTw.tar.zst",
+    "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+    "optimized": true,
+    "source_sentinel": true,
+    "binary_sha256": "4ef3c1dea9db5eb8d07d3ea7e5981abb8e92bf7965ee43471f90a147be13795f"
+  },
+  "matrices": [
+    {
+      "matrix": "shape",
+      "exit_code": 1,
+      "cases": 1069,
+      "agree": 1017,
+      "normative": 0,
+      "failures": [
+        "awami/text-7/ltr/clusters-0",
+        "awami/text-7/ltr/clusters-1",
+        "awami/text-7/rtl/clusters-0",
+        "awami/text-7/rtl/clusters-1",
+        "awami/text-9/ltr/clusters-0",
+        "awami/text-9/ltr/clusters-1",
+        "awami/text-17/ltr/clusters-0",
+        "awami/text-17/ltr/clusters-1",
+        "awami/text-17/rtl/clusters-0",
+        "awami/text-17/rtl/clusters-1",
+        "awami/text-18/rtl/clusters-0",
+        "awami/text-18/rtl/clusters-1",
+        "awami/text-19/ltr/clusters-0",
+        "awami/text-19/ltr/clusters-1",
+        "awami/text-19/rtl/clusters-0",
+        "awami/text-19/rtl/clusters-1",
+        "awami/text-20/ltr/clusters-0",
+        "awami/text-20/ltr/clusters-1",
+        "awami/text-20/rtl/clusters-0",
+        "awami/text-20/rtl/clusters-1",
+        "awami/horizontal-program-in-ttb",
+        "awami/horizontal-program-in-btt",
+        "awami/range-1-18446744073709551615",
+        "awami/feature-1751476331-0",
+        "awami/feature-1751476331-1",
+        "awami/feature-1751475311-0",
+        "awami/feature-1751475311-1",
+        "awami/feature-1818324342-0",
+        "awami/feature-1818324342-1",
+        "awami/feature-1668692021-0",
+        "awami/feature-1668692021-1",
+        "awami/feature-1886744163-0",
+        "awami/feature-1886744163-1",
+        "awami/feature-1886744163-2",
+        "awami/feature-1668691768-1",
+        "awami/feature-1668691768-2",
+        "awami/feature-1751215482-0",
+        "awami/feature-1751215482-1",
+        "awami/feature-2003071856-0",
+        "awami/feature-2003071856-1",
+        "awami/feature-2003071856-2",
+        "awami/feature-2003071856-3",
+        "awami/feature-2003071856-4",
+        "awami/feature-1936224884-0",
+        "awami/feature-1936224884-1",
+        "awami/feature-1936224884-2",
+        "awami/feature-1936224884-3",
+        "awami/feature-1936618865-0",
+        "awami/feature-1936618865-1",
+        "awami/feature-1634165601-0",
+        "awami/feature-1634165601-1",
+        "awami/feature-1634165601-3"
+      ],
+      "reader_failures": []
+    },
+    {
+      "matrix": "feature",
+      "exit_code": 0,
+      "cases": 120,
+      "agree": 104,
+      "normative": 16,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "direction",
+      "exit_code": 0,
+      "cases": 24,
+      "agree": 24,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "association",
+      "exit_code": 0,
+      "cases": 110,
+      "agree": 110,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "progress",
+      "exit_code": 0,
+      "cases": 24,
+      "agree": 24,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "width",
+      "exit_code": 0,
+      "cases": 152,
+      "agree": 152,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "phase",
+      "exit_code": 0,
+      "cases": 144,
+      "agree": 144,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "metrics",
+      "exit_code": 0,
+      "cases": 38,
+      "agree": 38,
+      "normative": 0,
+      "failures": [],
+      "reader_failures": []
+    },
+    {
+      "matrix": "large-conversion",
+      "exit_code": 0,
+      "cases": 5,
+      "agree": 5,
+      "failures": []
+    },
+    {
+      "matrix": "geometry-default",
+      "exit_code": 0,
+      "cases": 1175,
+      "agree": 1175,
+      "raw_reference_agree": 750,
+      "failures": [],
+      "declared_preload_count": 425
+    },
+    {
+      "matrix": "geometry-face0",
+      "exit_code": 0,
+      "cases": 1175,
+      "agree": 1175,
+      "raw_reference_agree": 1175,
+      "failures": [],
+      "declared_preload_count": 0
+    }
+  ],
+  "source_checks": {
+    "format": true,
+    "check": true,
+    "expects": 717
+  },
+  "overall_passed": false,
+  "geometry_data_sha256": {
+    "public-cases.jsonc": "eb14f82058fbda4976ca1ed7bc1b7adb09d807e40737ee004dfe6378b773f0b3",
+    "public-records.json": "aeefb4bd9b8812b68e983bec92763b8d0b26eebbcf8ae7af80fea428d7725ad0",
+    "face0-records.json": "a7987526122ba7e102feabdc161b7be1926839265753b087e08d86a6e49cc17b",
+    "preload-divergences.json": "7f0d495523d7317aab9526678fb5d59da311883db31e085e1b792b6e177b321d"
+  },
+  "geometry_data_commit": "cef0f1a",
+  "public_checks": {
+    "served_bundle": "FntTJT7xk17NDw7YtM4EF9hBsgU14eJwgJF6yvhbZrTw.tar.zst",
+    "source_sentinel": true,
+    "behavior_expects": 10,
+    "reader_expects": 10
+  }
+}

@@ -1,0 +1,13 @@
+# Reverse-pass NSM geometry controls
+
+These eight original UPL fonts and 56 cases independently extend the adjacent no-op NSM witness. They are built from public GTF/OpCodes definitions, not Graphite2 implementation code. Every font has a proper Silf 5.0 table, all three long horizontal metrics, native RTL direction, direction attribute 1, glyph A direction 3 and glyph B direction 16. The only rule action is COPY_NEXT, RET_ZERO (`1b31`): no geometry, attachment, insertion or deletion writes. The two variants differ in the pass reverse-direction flag 0/32.
+
+Four metric pairs (A/B = 601/0, 601/20, 601/602, 0/20) and seven strings (`ab`, `aab`, `abb`, `ba`, `bab`, `bb`, `a`) expose a generic positioning difference, rather than an anomaly confined to a zero-advance mark. All 56 raw public Graphite2 1.3.14 cases use preload mode 6 and segment flags 2 (LTR, no bidi). True HarfBuzz 14.6 with Graphite2 records are cached independently for every case.
+
+For flag 0, raw segment advance equals the sum of authored glyph advances. For flag 32, `ab` has both origins zero and segment advance zero even when B advances 20 or 602. `aab` instead has positions A0/A0/B601 and segment advance 601+B; `abb` has all origins zero and segment advance A; `bab` has all origins zero and segment advance B. Single `a` retains advance A. Authored advances remain unchanged and all slots have no attachment parent or child. Root sibling links are retained in the raw cache and are not mistaken for attachments.
+
+These observations remain an unresolved reference/runtime traversal contract. There is no declared reference bug, deliberate divergence, filtering, tolerance or font-specific runtime rule. Every actual reference answer remains immutable gating data. The separate existing NSM matrix tests wider direction and pass combinations; this focused set isolates positive advances and repeated groups.
+
+`generate.py --check` reproduces fonts and both case files. `check.py` validates all keys without an oracle, checks the actual SFNT bytes for version, action block, pass flags, Glat directions and full hmtx facts, and verifies the stated raw observations. Raw C API records retain exact binary32 bits and parent/child/sibling facts. The HB records retain full glyphs, clusters, advances, offsets and flags; both reference libraries and versions are hash-pinned. Generation used fontTools 4.61.1.
+
+Run `python tests/fonts/graphite/nsm-geometry-audit/check.py` from the repository root. Refresh raw records with adjacent `record_raw.py`; refresh true HB records with adjacent `record_hb.py --cases cases.jsonc`. Neither extractor reads implementation internals.
