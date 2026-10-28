@@ -1,0 +1,2694 @@
+{
+  "schema": 1,
+  "about": "Exact64item foreach_syllable callback boundaries on65/127/257scalar inputs,rawDFAidsunchanged;2familieseachIndic/Khmer,directions,clusterlevels.",
+  "cases": [
+    {
+      "id": "complexdevasans-conjunct-65-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-65-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-65-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-65-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-65-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-65-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-65-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-65-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-65-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-65-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-65-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-65-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-65-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-65-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-65-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-65-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-127-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-127-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-127-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-127-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-127-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-127-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-127-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-127-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-127-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-127-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-127-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-127-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-127-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-127-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-127-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-127-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-257-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-257-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-257-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-conjunct-257-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-257-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-257-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-257-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-reph-257-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-257-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-257-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-257-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-pre-matras-257-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-257-ltr-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-257-ltr-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-257-rtl-0",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-broken-matras-257-rtl-1",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-65-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-65-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-65-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-65-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-65-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-65-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-65-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-65-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-65-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-65-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-65-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-65-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-65-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-65-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-65-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-65-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-127-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-127-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-127-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-127-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-127-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-127-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-127-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-127-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-127-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-127-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-127-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-127-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-127-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-127-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-127-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-127-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-257-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-257-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-257-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-conjunct-257-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-257-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-257-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-257-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-reph-257-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्क्कषि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-257-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-257-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-257-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-pre-matras-257-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-257-ltr-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-257-ltr-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-257-rtl-0",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-broken-matras-257-rtl-1",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििििि",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-65-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-65-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-65-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-65-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-65-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-65-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-65-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-65-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-65-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-65-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-65-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-65-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-65-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-65-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-65-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-65-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-127-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-127-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-127-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-127-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-127-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-127-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-127-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-127-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-127-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-127-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-127-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-127-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-127-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-127-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-127-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-127-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-257-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-257-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-257-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-257-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-257-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-257-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-257-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-coeng-ro-257-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-257-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-257-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-257-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-left-matra-257-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-257-ltr-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-257-ltr-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-257-rtl-0",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmersans-broken-modifiers-257-rtl-1",
+      "font": "ComplexKhmerSans.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-65-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-65-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-65-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-65-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-65-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-65-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-65-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-65-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-65-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-65-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-65-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-65-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-65-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-65-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-65-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-65-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-127-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-127-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-127-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-127-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-127-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-127-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-127-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-127-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-127-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-127-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-127-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-127-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-127-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-127-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-127-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-127-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-257-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-257-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-257-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-257-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្ក្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-257-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-257-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-257-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-coeng-ro-257-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ក្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ្រ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-257-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-257-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-257-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-left-matra-257-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "កំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំេ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-257-ltr-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-257-ltr-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-257-rtl-0",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexkhmerserif-broken-modifiers-257-rtl-1",
+      "font": "ComplexKhmerSerif.ttf",
+      "text": "ំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំំ",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

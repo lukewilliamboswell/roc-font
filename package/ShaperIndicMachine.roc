@@ -162,10 +162,6 @@ ShaperIndicMachine :: {}.{
 								item = $items.get(i) ?? LayoutGsub.no_item
 								$items = $items.set(i, { ..item, mask: item.mask.bitwise_and(0xFE01FFFFFFFFFFFF).bitwise_or(syllable) }) ?? []
 							}
-							if $te - $ts >= 2 and $te - $ts <= 255 {
-								cluster = LayoutGsub.end_cluster($items, $ts, $te, 0xFFFFFFFFFFFFFFFF)
-								$items = LayoutGsub.flag_range($items, $ts, $te, cluster)
-							}
 							$serial = if $serial == 15 {
 								1
 							} else {
@@ -179,6 +175,28 @@ ShaperIndicMachine :: {}.{
 					$p = $next
 				}
 			}
+		}
+		# HB foreach_syllable splits a raw DFA id into at most64 items.
+		# Keep DFA ids unchanged, but mark each bounded callback span.
+		var $start = 0
+		while $start < n and $stopped == 0 {
+			id = ($items.get($start) ?? LayoutGsub.no_item).mask.shr_zf_wrap(49).bitwise_and(255)
+			var $end = $start + 1
+			while $end < n and $end - $start < 64 and ($items.get($end) ?? LayoutGsub.no_item).mask.shr_zf_wrap(49).bitwise_and(255) == id {
+				$end = $end + 1
+			}
+			count = $end - $start
+			if count > budget - $ops {
+				$stopped = 2
+			}
+			else {
+				$ops = $ops + count
+				if count >= 2 {
+					cluster = LayoutGsub.end_cluster($items, $start, $end, 0xFFFFFFFFFFFFFFFF)
+					$items = LayoutGsub.flag_range($items, $start, $end, cluster)
+				}
+			}
+			$start = $end
 		}
 		{ items: $items, operations: $ops, stopped: $stopped }
 	}
@@ -200,3 +218,24 @@ expect {
 	result.stopped == 2 and result.operations == 0 and result.items.len() == 1
 }
 expect ShaperIndicMachine.run([], 0).stopped == 0
+
+expect {
+	var $items = List.with_capacity(130)
+	for i in 0..<130 {
+		$items = $items.append({
+			..LayoutGsub.no_item,
+			glyph: i,
+			cluster: i,
+			mask: (
+				if i % 2 == 0 {
+					1.U64
+				} else {
+					4.U64
+				}
+			).shl_wrap(39),
+		})
+	}
+	result = ShaperIndicMachine.run($items, 10000)
+	flags = result.items.map(|item| item.mask.bitwise_and(LayoutGsub.unsafe) != 0)
+	result.stopped == 0 and flags.get(0) == Ok(False) and flags.get(63) == Ok(True) and flags.get(64) == Ok(False) and flags.get(65) == Ok(True) and flags.get(128) == Ok(False) and flags.get(129) == Ok(True)
+}

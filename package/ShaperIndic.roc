@@ -284,34 +284,70 @@ ShaperIndic := {
 	}
 	move : Work, U64, U64 -> Work
 	move = |work, from, to| {
-		var $work = work
-		value = ShaperIndic.at($work.items, from)
-		var $i = from
-		while $i < to and $work.stopped == 0 {
-			item = ShaperIndic.at($work.items, $i + 1)
-			$work = ShaperIndic.put($work, $i, item)
-			$i = $i + 1
+		count = if from >= to {
+			from - to + 1
+		} else {
+			to - from + 1
 		}
-		while $i > to and $work.stopped == 0 {
-			item = ShaperIndic.at($work.items, $i - 1)
-			$work = ShaperIndic.put($work, $i, item)
-			$i = $i - 1
+		checked = ShaperIndic.charge(work, count)
+		if checked.stopped != 0 {
+			checked
 		}
-		ShaperIndic.put($work, to, value)
+		else {
+			{ items, operations, stopped, budget } = checked
+			value = ShaperIndic.at(items, from)
+			var $items = items
+			var $i = from
+			while $i < to {
+				item = ShaperIndic.at($items, $i + 1)
+				$items = $items.set($i, item) ?? []
+				$i = $i + 1
+			}
+			while $i > to {
+				item = ShaperIndic.at($items, $i - 1)
+				$items = $items.set($i, item) ?? []
+				$i = $i - 1
+			}
+			{ items: $items.set(to, value) ?? [], operations, stopped, budget }
+		}
 	}
 	reverse : Work, U64, U64 -> Work
 	reverse = |work, start, end| {
-		var $work = work
-		var $i = start
-		var $j = end
-		while $i < $j and $work.stopped == 0 {
-			$j = $j - 1
-			a = ShaperIndic.at($work.items, $i)
-			b = ShaperIndic.at($work.items, $j)
-			$work = ShaperIndic.put(ShaperIndic.put($work, $i, b), $j, a)
-			$i = $i + 1
+		checked = ShaperIndic.charge(work, (end - start) // 2 * 2)
+		if checked.stopped != 0 {
+			checked
 		}
-		$work
+		else {
+			{ items, operations, stopped, budget } = checked
+			var $items = items
+			var $i = start
+			var $j = end
+			while $i + 1 < $j {
+				$j = $j - 1
+				a = ShaperIndic.at($items, $i)
+				b = ShaperIndic.at($items, $j)
+				$items = $items.set($i, b) ?? []
+				$items = $items.set($j, a) ?? []
+				$i = $i + 1
+			}
+			{ items: $items, operations, stopped, budget }
+		}
+	}
+
+	replace_span : Work, U64, List(LayoutGsub.Item), U64 -> Work
+	replace_span = |work, start, replacement, count| {
+		checked = ShaperIndic.charge(work, count)
+		if checked.stopped != 0 {
+			checked
+		}
+		else {
+			{ items, operations, stopped, budget } = checked
+			var $items = items
+			for i in 0..<count {
+				$items = $items.set(start + i, ShaperIndic.at(replacement, i)) ?? []
+			}
+			{ items: $items, operations, stopped, budget }
+		}
 	}
 
 	# Input-only equivalent of HB merge_clusters, including equal-cluster
@@ -345,13 +381,19 @@ ShaperIndic := {
 					$start = $start - 1
 				}
 			}
-			var $j = $start
-			while $j < $end and $work.stopped == 0 {
-				item = ShaperIndic.at($work.items, $j)
-				$work = ShaperIndic.put($work, $j, LayoutGsub.set_cluster(item, $cluster))
-				$j = $j + 1
+			checked = ShaperIndic.charge($work, $end - $start)
+			if checked.stopped != 0 {
+				checked
 			}
-			$work
+			else {
+				{ items, operations, stopped, budget } = checked
+				var $items = items
+				for j in $start..<$end {
+					item = ShaperIndic.at($items, j)
+					$items = $items.set(j, LayoutGsub.set_cluster(item, $cluster)) ?? []
+				}
+				{ items: $items, operations, stopped, budget }
+			}
 		}
 	}
 
@@ -389,8 +431,12 @@ ShaperIndic := {
 				else if $work.items.len() > limit or $count > limit - $work.items.len() {
 					{ ..$work, stopped: 1 }
 				}
+				else if $work.items.len() + $count > $work.budget - $work.operations {
+					{ ..$work, stopped: 2 }
+				}
 				else {
-					{ items, operations, stopped, budget } = $work
+					{ items, operations: before_ops, stopped, budget } = $work
+					operations = before_ops + items.len() + $count
 					var $out = List.with_capacity(items.len() + $count)
 					var $i = 0
 					var $last_syllable = 0
@@ -411,7 +457,7 @@ ShaperIndic := {
 							$i = $i + 1
 						}
 					}
-					ShaperIndic.charge({ items: $out, operations, stopped, budget }, items.len() + $count)
+					{ items: $out, operations, stopped, budget }
 				}
 			}
 		}
@@ -637,9 +683,7 @@ ShaperIndic := {
 			$sorted = $sorted.set(bucket.cursor, { ..item, mask: ShaperIndic.set_syllable(item.mask, (i - start) % 256) }) ?? []
 			$buckets = $buckets.set(pos_value, { ..bucket, cursor: bucket.cursor + 1 }) ?? []
 		}
-		for i in start..<end {
-			$work = ShaperIndic.put($work, i, ShaperIndic.at($sorted, i - start))
-		}
+		$work = ShaperIndic.replace_span($work, start, $sorted, end - start)
 		var $first_matra = end
 		var $last_matra = end
 		$base = end
@@ -782,7 +826,7 @@ ShaperIndic := {
 		while $start < $work.items.len() and $work.stopped == 0 {
 			syllable_id = ShaperIndic.syllable(ShaperIndic.at($work.items, $start).mask)
 			var $end = $start + 1
-			while $end < $work.items.len() and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
+			while $end < $work.items.len() and $end - $start < 64 and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
 				$work = ShaperIndic.charge($work, 1)
 				$end = $end + 1
 			}
@@ -1067,7 +1111,7 @@ ShaperIndic := {
 		while $start < $work.items.len() and $work.stopped == 0 {
 			syllable_id = ShaperIndic.syllable(ShaperIndic.at($work.items, $start).mask)
 			var $end = $start + 1
-			while $end < $work.items.len() and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
+			while $end < $work.items.len() and $end - $start < 64 and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
 				$work = ShaperIndic.charge($work, 1)
 				$end = $end + 1
 			}
@@ -1083,3 +1127,24 @@ expect ShaperIndic.category(ShaperIndic.set_category(0xFFFFFFFFFFFFFFFF, 57)) ==
 expect ShaperIndic.position(ShaperIndic.set_position(0xFFFFFFFFFFFFFFFF, 14)) == 14
 expect ShaperIndic.syllable(ShaperIndic.set_syllable(0xFFFFFFFFFFFFFFFF, 0xF4)) == 0xF4
 expect ShaperIndic.category(ShaperIndic.set_syllable(ShaperIndic.set_category(0, 57), 0xF4)) == 57
+
+## regression: a spent budget must not stop halfway through a move
+## and duplicate one glyph while losing another.
+expect {
+	items = [1, 2, 3].map(|glyph| { ..LayoutGsub.no_item, glyph })
+	work = { items, operations: 0, stopped: 0, budget: 1 }
+	result = ShaperIndic.move(work, 0, 2)
+	result.stopped == 2 and result.items.map(|item| item.glyph) == [1, 2, 3]
+}
+expect {
+	items = [1, 2, 3].map(|glyph| { ..LayoutGsub.no_item, glyph })
+	work = { items, operations: 0, stopped: 0, budget: 2 }
+	result = ShaperIndic.reverse(work, 0, 3)
+	result.stopped == 0 and result.items.map(|item| item.glyph) == [3, 2, 1]
+}
+expect {
+	items = [30, 20, 10].map(|cluster| { ..LayoutGsub.no_item, cluster })
+	work = { items, operations: 0, stopped: 0, budget: 4 }
+	result = ShaperIndic.merge(work, 0, 3)
+	result.stopped == 2 and result.items.map(|item| item.cluster) == [30, 20, 10]
+}

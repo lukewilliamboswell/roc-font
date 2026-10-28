@@ -143,8 +143,12 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 				else if $work.items.len() > limit or $count > limit - $work.items.len() {
 					{ ..$work, stopped: 1 }
 				}
+				else if $work.items.len() + $count > $work.budget - $work.operations {
+					{ ..$work, stopped: 2 }
+				}
 				else {
-					{ items, operations, stopped, budget } = $work
+					{ items, operations: before_ops, stopped, budget } = $work
+					operations = before_ops + items.len() + $count
 					var $out = List.with_capacity(items.len() + $count)
 					var $last_id = 0
 					for item in items {
@@ -157,7 +161,7 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 						$last_id = syllable_id
 						$out = $out.append(item)
 					}
-					ShaperIndic.charge({ items: $out, operations, stopped, budget }, items.len() + $count)
+					{ items: $out, operations, stopped, budget }
 				}
 			}
 		}
@@ -210,7 +214,7 @@ ShaperKhmer := { masks : ShaperKhmer.Masks }.{
 		while $start < $work.items.len() and $work.stopped == 0 {
 			syllable_id = ShaperIndic.syllable(ShaperIndic.at($work.items, $start).mask)
 			var $end = $start + 1
-			while $end < $work.items.len() and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
+			while $end < $work.items.len() and $end - $start < 64 and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == syllable_id and $work.stopped == 0 {
 				$work = ShaperIndic.charge($work, 1)
 				$end = $end + 1
 			}

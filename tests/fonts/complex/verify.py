@@ -10,7 +10,7 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'))
 import flight,conformance
 from _common import parse_case_file,load_records
-parser=argparse.ArgumentParser();parser.add_argument('--model',choices=['indic','khmer','vowel'],default='indic');parser.add_argument('--binary',type=Path);args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--model',choices=['indic','khmer','vowel','long'],default='indic');parser.add_argument('--binary',type=Path);args=parser.parse_args()
 roc=os.environ.get('ROC','roc');work=ROOT/('.roc-font-tmp/'+args.model+'-replay');work.mkdir(parents=True,exist_ok=True)
 path=HERE/(args.model+'-cases.jsonc');cases,problems=parse_case_file(path);assert not problems,problems
 records={record['id']:record for record in map(json.loads,(HERE/(args.model+'-cases-records.jsonl')).read_text().splitlines())};locations=conformance.Locations()
