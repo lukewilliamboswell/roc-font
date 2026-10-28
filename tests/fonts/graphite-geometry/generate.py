@@ -44,6 +44,18 @@ def variants():
  yield 'copy-child',BASE+NEXT+bytes([0x1e,255]),False,False,2
  yield 'copy-unrelated-parent',BASE+NEXT+NEXT+bytes([0x1e,255]),False,False,3
  yield 'copy-unrelated-child',BASE+NEXT+NEXT+bytes([0x1e,254]),False,False,3
+ for name,action in [('child-copies-root',BASE+bytes([0x1e,2])),('parent-copies-root',BASE+NEXT+bytes([0x1e,1])),('child-copies-self',BASE+bytes([0x1e,0])),('parent-copies-self',BASE+NEXT+bytes([0x1e,0])),('siblings-copy',BASE+NEXT+NEXT+bytes([1,255,0x26,2,0x1e,254])),('chain-copies-root',BASE+NEXT+NEXT+bytes([1,254,0x26,2,0x1e,255]))]:
+  yield name,action,False,False,3
+ for name in ['positive','negative','disabled']:
+  yield 'collision-default-'+name,b'',True,False,2
+ for positioning in [False,True]:
+  for put in [False,True]:
+   label='collision-phase-'+('pos'if positioning else'sub')+('-put'if put else'')
+   yield label,(bytes([0x1c,0])if put else b'')+bytes([0x28,57,0,0x23,21]),positioning,False,2
+ for target in range(57,78):
+  for value in [-1,65536]:
+   action=bytes([5])+struct.pack('>i',value)+bytes([0x23,target,0x28,target,0,0x23,21])
+   yield f'collision-write-{target}-{value}',action,True,False,2
  yield 'copy-parent-control',bytes([0x1e,1]),False,False,2
  yield 'copy-child-control',NEXT+bytes([0x1e,255]),False,False,2
  for attr in [2,5,6,7,10,11,12,13]:
@@ -82,10 +94,18 @@ def font(label,action,positioning,precontext,count,rtl):
   pass_at=16+68
   ranges=count*6;pre_at=pass_at+24+16+ranges+6
   assert data[pre_at:pre_at+2]==b'\0\0'
-  data[pre_at:pre_at+2]=bytes([1,1]);data[pre_at+6]=1;data[42]=1
+  data[pre_at:pre_at+2]=bytes([1,1]);data[pre_at+6]=1;data[36]=1
+ collision=label.startswith('collision-')
+ collision_kind=label.rsplit('-',1)[0].split('collision-default-')[-1]
+ if collision:data[35]=0 if 'disabled'in label else 32;data[49]=1
  def raw(tag,value):t=DefaultTable(tag);t.data=value;fb.font[tag]=t
  raw('Silf',bytes(data));raw('Glat',u32(65536)+bytes([0,1,0,0])*len(names))
  raw('Gloc',u32(65536)+u16(0)+u16(1)+b''.join(u16(4+i*4)for i in range(len(names)+1)))
+ if collision:
+  values=[-1]*16 if collision_kind=='negative'else list(range(101,117))
+  entries=[bytes([1,16])+struct.pack('>16h',*([(glyph+1)*100+i+1 for i in range(16)]if 'phase'in label else values))for glyph in range(len(names))]
+  raw('Glat',u32(65536)+b''.join(entries))
+  raw('Gloc',u32(65536)+u16(0)+u16(17)+b''.join(u16(4+i*len(entries[0]))for i in range(len(names)+1)))
  fb.font['head'].created=fb.font['head'].modified=3406620153;fb.font.recalcTimestamp=False
  out=io.BytesIO();fb.font.save(out,reorderTables=True);return out.getvalue()
 

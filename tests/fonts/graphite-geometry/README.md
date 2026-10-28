@@ -1,4 +1,4 @@
-These 324 original UPL fonts exercise Graphite geometry through the documented
+These 434 original UPL fonts exercise Graphite geometry through the documented
 GTF tables and bytecode language. No Graphite2 implementation source is copied
 or translated. `generate.py` builds the bytes from scratch with fontTools
 4.61.1; the adjacent licence covers the fonts and generator.
@@ -15,9 +15,9 @@ reattachment, deleted stable input targets, live copying, three-slot trees,
 direction-dependent shifts, negative advances, justification widths,
 attachment-level narrowing, composite metrics 0–10 at five levels, no-op point
 attributes, and an action with one pre-context item. Every face is accepted by
-the reference and by OTS 9.3 with Silf/Glat/Gloc retained. Four reference cases
-abort at execution: copying directly between a parent and its attached child.
-Copying an unrelated parent or child succeeds and has distinct tree semantics.
+the reference and by OTS 9.3 with Silf/Glat/Gloc retained. Twelve reference cases
+abort at execution: overwriting an attached destination from another input slot.
+Copying an unrelated parent or child into an independent slot succeeds and has distinct tree semantics. Self-copy preserves live links.
 
 Self-attachment and attempted cycles are ignored, preserving the prior edge.
 A deleted input target remains a valid stable reference. Its attached active
@@ -44,3 +44,11 @@ The normative sources are the Graphite Binary Font Format and opcode documents
 shipped with Graphite2 1.3.14 (`doc/GTF.asc`, `doc/OpCodes.asc`), and the
 [SIL GDL reference](https://static-scripts.sil.org/cms/sites/projects/download/gdldocumentation/GDLdocumentation.pdf),
 sections 4.6 and 6.8. Only the public API is used to resolve reference behaviour.
+
+Collision controls also pin the initialization boundary. Collision state is
+absent during substitution and is initialized from the resulting glyphs just
+before positioning. A subsequent glyph replacement in a positioning pass
+retains that state. Coordinate fields use signed16 values; flags, classes and
+weights use unsigned16 values. Collision-shift fields 62/63 are read-only to
+bytecode, even though the collision solver stores fractional binary32 shifts.
+The matrix includes writes of −1 and 65536 to every collision attribute.
