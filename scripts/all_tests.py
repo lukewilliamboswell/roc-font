@@ -180,6 +180,7 @@ BENCH_APPS = (
     "tests/fonts/cff/bench.roc", "tests/fonts/cff/alloc.roc",
     "tests/fonts/aat-mort/bench.roc", "tests/fonts/aat-mort/alloc.roc",
     "tests/fonts/graphite/read_alloc.roc",
+    "tests/fonts/graphite/shape_alloc.roc", "tests/fonts/graphite/shape_bench.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 

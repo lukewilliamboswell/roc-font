@@ -476,8 +476,8 @@ and the byte offset in it. Independent problems are reported together
 Lenient reading (architecture §4.4) drops tables as units, never repairing
 one: a bad `fvar` or `avar` drops the whole variation space (`fvar`,
 `avar`, and with it every delta: the font reads as its default instance);
-a bad `HVAR` drops it (advances currently remain the stored `hmtx`
-values; `gvar` outline variation is independent); a bad `MVAR` drops it (metrics are
+a bad `HVAR` drops it (valid `gvar` phantom metrics become the fallback;
+without them advances remain the stored `hmtx` values); a bad `MVAR` drops it (metrics are
 the defaults); a bad `GDEF` store drops `GDEF`, as HarfBuzz treats a table
 that fails to sanitise. `Font.dropped` names each. Strict reading rejects
 the font.
