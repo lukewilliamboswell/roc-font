@@ -1,0 +1,1149 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "zero-Hebr-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hebr-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hebr-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hebr-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Arab-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Arab-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Arab-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Arab-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Syrc-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Syrc-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Syrc-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Syrc-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hang-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hang-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hang-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Hang-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Thai-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Thai-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Thai-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Thai-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Laoo-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Laoo-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Laoo-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Laoo-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Deva-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Deva-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Deva-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Deva-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Khmr-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Khmr-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Khmr-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Khmr-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Mymr-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Mymr-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Mymr-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Mymr-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Tibt-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Tibt-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Tibt-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Tibt-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Latn-ltr",
+      "font": "fallback-script-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Latn-rtl",
+      "font": "fallback-script-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Latn-ttb",
+      "font": "fallback-script-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-Latn-btt",
+      "font": "fallback-script-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hebr-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hebr-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hebr-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hebr-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "סְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Arab-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Arab-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Arab-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Arab-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Syrc-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Syrc-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Syrc-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Syrc-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hang-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hang-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hang-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Hang-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Thai-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Thai-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Thai-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Thai-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ก่",
+      "options": {
+        "script": "Thai",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Laoo-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Laoo-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Laoo-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Laoo-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ກ່",
+      "options": {
+        "script": "Laoo",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Deva-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Deva-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Deva-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Deva-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "क़",
+      "options": {
+        "script": "Deva",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Khmr-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Khmr-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Khmr-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Khmr-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ក៉",
+      "options": {
+        "script": "Khmr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Mymr-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Mymr-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Mymr-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Mymr-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "က့",
+      "options": {
+        "script": "Mymr",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Tibt-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Tibt-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Tibt-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Tibt-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "ཀཱ",
+      "options": {
+        "script": "Tibt",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Latn-ltr",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Latn-rtl",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Latn-ttb",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nonzero-Latn-btt",
+      "font": "fallback-nonzero-marks.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
