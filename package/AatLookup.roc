@@ -36,6 +36,12 @@ AatLookup := { ranges : List(Segment), values : List(U32) }.{
 	empty : AatLookup
 	empty = { ranges: [], values: [] }
 
+	segments : AatLookup -> List(Segment)
+	segments = |lookup| lookup.ranges
+
+	value_pool : AatLookup -> List(U32)
+	value_pool = |lookup| lookup.values
+
 	read : List(U8), U64, U64, U64 -> Try(AatLookup, [Bad(U64)])
 	read = |bytes, base, glyphs, width| {
 		if glyphs > 65536 or !Bytes.fits(base, 2, bytes.len()) or (width != 1 and width != 2 and width != 4) {
