@@ -808,7 +808,10 @@ Face := {
 	moved = |face, given| {
 		loc = Face.location(face, given)
 		layout_location = LayoutVar.location(face.layout_var, loc.coords)
-		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, LayoutVar.math_location(face.layout_var, loc.coords)), color: TableColor.at_location(face.color, loc.coords) }
+		# Ordinary variable fonts do not need a second, precise scalar pool
+		# for a mathematical table they do not contain.
+		math = if (TableMath.has_data(face.math)) TableMath.at_location(face.math, LayoutVar.math_location(face.layout_var, loc.coords)) else face.math
+		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math, color: TableColor.at_location(face.color, loc.coords) }
 	}
 
 	## The face moved to a `Font.Variation`'s location (see `settings`). A
