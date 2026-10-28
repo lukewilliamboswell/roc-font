@@ -1,0 +1,8683 @@
+{
+  "schema": 1,
+  "source_reference": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "api": "public C ABI and gr_start_logging JSON",
+    "library": "/private/tmp/graphite-geometry-reference/src/libgraphite2.dylib",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e"
+  },
+  "source_witnesses": 76,
+  "additional_broad_limit_controls": 8,
+  "recipes": [
+    {
+      "source_name": "witness-base-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-base-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-base-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-base-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-small-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 350,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          100,
+          200
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1148059648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1135542272,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1135542272,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-small-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 351,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          100,
+          200
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1148076032,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1135575040,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1135575040,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-small-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          100,
+          200
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-small-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          100,
+          200
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-small-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          100,
+          200
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-small-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          100,
+          200
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-small-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -200,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          100,
+          200
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1137246208,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3276275712,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-small-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -201,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          100,
+          200
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1137213440,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3276341248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3276341248,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-flat-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 1300,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          600,
+          100
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1156431872,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1151500288,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1151500288,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-flat-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 1301,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          600,
+          100
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1156440064,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1151508480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1151508480,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-flat-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          600,
+          100
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-flat-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          600,
+          100
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-flat-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          600,
+          100
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-flat-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          600,
+          100
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-flat-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -700,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          600,
+          100
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 3267624960,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3291414528,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3291414528,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-flat-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -701,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          600,
+          100
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 3267756032,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3291430912,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3291430912,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-offset-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 880,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152991232,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146880000,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146880000,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-offset-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 881,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152999424,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146896384,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146896384,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-offset-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -370,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1130889216,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3283681280,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3283681280,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-target-offset-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -371,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1130823680,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3283714048,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3283714048,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-offset-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 820,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          30,
+          40,
+          330,
+          640
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152499712,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1145896960,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1145896960,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-offset-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 821,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          30,
+          40,
+          330,
+          640
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152507904,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1145913344,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1145913344,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-offset-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -430,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          30,
+          40,
+          330,
+          640
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1126957056,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3285647360,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3285647360,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-neighbor-offset-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -431,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          30,
+          40,
+          330,
+          640
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1126891520,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3285680128,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3285680128,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-both-offset-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 930,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          -50,
+          -20,
+          250,
+          580
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1153400832,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1147699200,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1147699200,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-both-offset-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 931,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          -50,
+          -20,
+          250,
+          580
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1153409024,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1147715584,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1147715584,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-both-offset-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -320,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          -50,
+          -20,
+          250,
+          580
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1133314048,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3282042880,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3282042880,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-both-offset-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -321,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          30,
+          40,
+          330,
+          640
+        ],
+        "2": [
+          -50,
+          -20,
+          250,
+          580
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1133281280,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3282075648,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3282075648,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-positive-limits-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 900,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            20,
+            201,
+            300
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1153155072,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              1101004800
+            ],
+            "advance_bits": [
+              1147207680,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              101,
+              20,
+              201,
+              300,
+              0,
+              20,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1147207680,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-positive-limits-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 901,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            20,
+            201,
+            300
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1153163264,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1147224064,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              101,
+              20,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1147224064,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-positive-limits-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -550,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            20,
+            201,
+            300
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1112539136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              1101004800
+            ],
+            "advance_bits": [
+              3288956928,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              101,
+              20,
+              201,
+              300,
+              0,
+              20,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3288956928,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-positive-limits-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -551,
+        "shift_y": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            20,
+            201,
+            300
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1112276992,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3288973312,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              101,
+              20,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3288973312,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-1000-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "shift_y": -1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              3296329728
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-1000-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 1,
+        "shift_y": -1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142341632,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1065353216,
+              3296329728
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-1000-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "shift_y": -1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              3296329728
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-1000-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -1,
+        "shift_y": -1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142308864,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3212836864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3212836864,
+              3296329728
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-600-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": -600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              3289776128
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-600-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": -600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              3289776128
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-600-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": -600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              3289776128
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-600-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": -600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              3289776128
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-300-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": -300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              3281387520
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-300-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": -300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              3281387520
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-300-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": -300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              3281387520
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-300-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": -300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              3281387520
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-100-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": -100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              3267887104
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-100-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": -100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              3267887104
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-100-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": -100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              3267887104
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y-100-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": -100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              3267887104
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y100-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 850,
+        "shift_y": 100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1152745472,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146388480,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146388480,
+              1120403456
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y100-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 851,
+        "shift_y": 100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1152753664,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1146404864,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1146404864,
+              1120403456
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y100-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              1120403456
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y100-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 100,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              1120403456
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y300-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 100,
+        "shift_y": 300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              97,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1133903872
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y300-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 101,
+        "shift_y": 300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1143980032,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120534528,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120534528,
+              1133903872
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y300-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              1133903872
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y300-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 300,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              1133903872
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y600-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 100,
+        "shift_y": 600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y600-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 101,
+        "shift_y": 600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1143980032,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120534528,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120534528,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y600-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -400,
+        "shift_y": 600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1128923136,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284664320,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284664320,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y600-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -401,
+        "shift_y": 600,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1128857600,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3284697088,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3284697088,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y1000-pos-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 100,
+        "shift_y": 1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1148846080
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y1000-pos-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 101,
+        "shift_y": 1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1143980032,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120534528,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120534528,
+              1148846080
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y1000-neg-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -300,
+        "shift_y": 1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1133969408,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3281387520,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3281387520,
+              1148846080
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-y1000-neg-1",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -301,
+        "shift_y": 1000,
+        "glyph_limits": {
+          "1": [
+            -100,
+            -100,
+            100,
+            100
+          ]
+        }
+      },
+      "boxes": {
+        "1": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "2": [
+          0,
+          0,
+          300,
+          600
+        ]
+      },
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1133936640,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3281420288,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3281420288,
+              1148846080
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-nonmonotonic--200",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -200,
+        "glyph_limits": {
+          "1": [
+            -500,
+            -300,
+            -101,
+            -20
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1137246208,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3276275712,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              -300,
+              -101,
+              -20,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3276275712,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-nonmonotonic--199",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -199,
+        "glyph_limits": {
+          "1": [
+            -500,
+            -300,
+            -101,
+            -20
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1137278976,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              1101004800,
+              3248488448
+            ],
+            "advance_bits": [
+              3276210176,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              -300,
+              -101,
+              -20,
+              20,
+              -20,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3276210176,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-nonmonotonic--100",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": -100,
+        "glyph_limits": {
+          "1": [
+            -500,
+            -300,
+            -101,
+            -20
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1140523008,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3267887104,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              -300,
+              -101,
+              -20,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3267887104,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-nonmonotonic-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            -500,
+            -300,
+            -101,
+            -20
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              -300,
+              -101,
+              -20,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-prior-200",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": 200,
+        "second_bounds": [
+          -100,
+          -100,
+          100,
+          100
+        ]
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1145602048,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1128792064,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1133903872,
+              3267887104
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              100,
+              -100,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-prior-201",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": 201,
+        "second_bounds": [
+          -100,
+          -100,
+          100,
+          100
+        ]
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1145618432,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1128857600,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1137213440,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-prior--950",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": -950,
+        "second_bounds": [
+          -100,
+          -100,
+          100,
+          100
+        ]
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 3282960384,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3295510528,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3295510528,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "witness-prior--951",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": -951,
+        "second_bounds": [
+          -100,
+          -100,
+          100,
+          100
+        ]
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 3282993152,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              3295526912,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              3292250112,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -100,
+              -100,
+              100,
+              100,
+              200,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "limit-field-101-201",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            101,
+            -300,
+            201,
+            300
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              97,
+              101,
+              -300,
+              201,
+              300,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "limit-field--500--101",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            -500,
+            -300,
+            -101,
+            -20
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "missed",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              -300,
+              -101,
+              -20,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "limit-field--50-200",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            -50,
+            -30,
+            200,
+            70
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              97,
+              -50,
+              -30,
+              200,
+              70,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "limit-field--500-100",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            -500,
+            20,
+            100,
+            300
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              3281387520,
+              0
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -500,
+              20,
+              100,
+              300,
+              -300,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "limit-field--10-0",
+      "params": {
+        "pass_flags": 1,
+        "flags_a": 1,
+        "flags_b": 0,
+        "distance": 0,
+        "glyph_limits": {
+          "1": [
+            -10,
+            50,
+            0,
+            100
+          ]
+        }
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1142325248,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              1112014848,
+              1112014848
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              -10,
+              50,
+              0,
+              100,
+              50,
+              50,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "prior-y-limit--50",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": 100,
+        "second_bounds": [
+          -50,
+          -30,
+          200,
+          70
+        ],
+        "shift_y": 500
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              97,
+              -50,
+              -30,
+              200,
+              70,
+              0,
+              100,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "prior-y-limit-101",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": 100,
+        "second_bounds": [
+          101,
+          20,
+          201,
+          300
+        ],
+        "shift_y": 500
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              65,
+              101,
+              20,
+              201,
+              300,
+              0,
+              100,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source_name": "prior-y-limit--100",
+      "params": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "second_distance": 100,
+        "second_bounds": [
+          -100,
+          -100,
+          100,
+          100
+        ],
+        "shift_y": 500
+      },
+      "boxes": {},
+      "source_expected_mode": "full",
+      "source_api_bits": {
+        "advance_x_bits": 1143963648,
+        "slots": [
+          {
+            "glyph": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "collision_attributes": [
+              0,
+              -1000,
+              -1000,
+              1000,
+              1000,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "position_bits": [
+              1120403456,
+              1142292480
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "collision_attributes": [
+              97,
+              -100,
+              -100,
+              100,
+              100,
+              0,
+              100,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
