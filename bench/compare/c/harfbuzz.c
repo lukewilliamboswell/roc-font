@@ -82,6 +82,10 @@ static size_t decode_utf8(const unsigned char *s, size_t len, uint32_t *out) {
 }
 
 int main(int argc, char **argv) {
+    if (argc == 2 && strcmp(argv[1], "--version") == 0) {
+        puts(hb_version_string());
+        return 0;
+    }
     uint64_t iterations = argc > 1 ? strtoull(argv[argc - 1], NULL, 10) : 1;
     size_t len;
     unsigned char *input = read_all(stdin, &len);
