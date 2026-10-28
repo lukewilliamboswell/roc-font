@@ -873,7 +873,7 @@ LayoutPosition := {
 		var $chain = child
 		var $edges = []
 		var $walking = True
-		var $remaining = items.len()
+		var $remaining = items.len().min(65)
 		while $walking and $remaining > 0 {
 			$remaining = $remaining - 1
 			old_parent = $parents.get($chain) ?? 0
@@ -933,7 +933,7 @@ LayoutPosition := {
 	## Propagate the advance-direction offsets after all lookups and mark
 	## zeroing. Cross offsets of marks are captured when they attach, while
 	## cursive cross offsets follow their parent at the end. Prefix sums make
-	## distances constant time; iterative dependency traversal is linear.
+	## distances constant time; iterative traversal follows the reference nesting cap.
 	resolve : State, Bool -> State
 	resolve = |state, backward| {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
@@ -944,43 +944,45 @@ LayoutPosition := {
 			$sum = $sum + advance
 			$prefix = $prefix.append($sum)
 		}
-		var $done = List.repeat(False, count)
-		var $visiting = List.repeat(False, count)
+		var $parents = parents
 		var $dx = dx
 		var $dy = dy
 		var $path = List.with_capacity(count.min(64))
-		for i in 0..<count {
+		for index in 0..<count {
+			# HarfBuzz visits RTL buffers backwards. Each root gets64
+			# propagating frames; the65th call clears its edge and returns.
+			i = if (backward) count - 1 - index else index
 			$path = $path.clear()
 			var $at = i
-			var $walk = True
-			while $walk and !($done.get($at) ?? True) and !($visiting.get($at) ?? True) {
-				$visiting = $visiting.set($at, True) ?? []
-				$path = $path.append($at)
-				parent = parents.get($at) ?? 0
-				if parent == 0 or parent > count {
+			var $left = 64
+			var $walk = ($parents.get($at) ?? 0) != 0
+			while $walk {
+				parent = $parents.get($at) ?? 0
+				$parents = $parents.set($at, 0) ?? []
+				if parent == 0 or parent > count or $left == 0 {
 					$walk = False
 				} else {
+					$path = $path.append({ child: $at, parent: parent - 1 })
 					$at = parent - 1
+					$left = $left - 1
+					$walk = ($parents.get($at) ?? 0) != 0
 				}
 			}
 			while !$path.is_empty() {
-				j = $path.last() ?? 0
+				edge = $path.last() ?? { child: 0, parent: 0 }
 				$path = $path.drop_last(1)
-				parent = parents.get(j) ?? 0
-				if parent != 0 and parent <= count and ($done.get(parent - 1) ?? False) {
-					k = parent - 1
-					if (attachments.get(j) ?? 0) == 2 {
-						$dy = $dy.set(j, ($dy.get(j) ?? 0) + ($dy.get(k) ?? 0)) ?? []
-					}
-					if (attachments.get(j) ?? 0) == 1 {
-						distance = if (backward) ($prefix.get(j + 1) ?? 0) - ($prefix.get(k + 1) ?? 0) else ($prefix.get(k) ?? 0) - ($prefix.get(j) ?? 0)
-						$dx = $dx.set(j, ($dx.get(j) ?? 0) + ($dx.get(k) ?? 0) + distance) ?? []
-					}
+				j = edge.child
+				k = edge.parent
+				if (attachments.get(j) ?? 0) == 2 {
+					$dy = $dy.set(j, ($dy.get(j) ?? 0) + ($dy.get(k) ?? 0)) ?? []
 				}
-				$done = $done.set(j, True) ?? []
+				if (attachments.get(j) ?? 0) == 1 {
+					distance = if (backward) ($prefix.get(j + 1) ?? 0) - ($prefix.get(k + 1) ?? 0) else ($prefix.get(k) ?? 0) - ($prefix.get(j) ?? 0)
+					$dx = $dx.set(j, ($dx.get(j) ?? 0) + ($dx.get(k) ?? 0) + distance) ?? []
+				}
 			}
 		}
-		{ items, ax, dx: $dx, dy: $dy, parents, attachments, stopped, operations }
+		{ items, ax, dx: $dx, dy: $dy, parents: $parents, attachments, stopped, operations }
 	}
 
 	flag : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
@@ -1053,4 +1055,16 @@ LayoutPosition := {
 			0
 		}
 	}
+}
+
+# The65th nested propagation call detaches without inheriting offsets.
+# Both directions visit roots in their native order; RTL exposes the cap.
+expect {
+	[64.U64, 65, 66, 129].all(
+		|count| {
+			state = { items: List.repeat(LayoutGsub.no_item, count), ax: List.repeat(0.I64, count), dx: List.repeat(0.I64, count).set(0, 13) ?? [], dy: List.repeat(0.I64, count), parents: List.repeat(0.U64, count).map_with_index(|_x, i| i), attachments: List.repeat(1.U8, count), stopped: 0, operations: 0 }
+			placed = LayoutPosition.resolve(state, True)
+			(placed.dx.last() ?? 0) == (if (count <= 65) 13 else 0) and placed.parents.all(|p| p == 0)
+		},
+	)
 }
