@@ -348,3 +348,32 @@ TableCff := {
 		}
 	}
 }
+
+# Original small containers exercise preparation without importing test
+# builders or font files into the bundle.
+test_cff1 : List(U8)
+test_cff1 = [1, 0, 4, 4, 0, 1, 1, 1, 2, 65, 0, 1, 1, 1, 3, 160, 17, 0, 0, 0, 0, 0, 1, 1, 1, 8, 139, 139, 21, 239, 139, 5, 14]
+
+test_cff2 : List(U8)
+test_cff2 = [2, 0, 5, 0, 5, 153, 17, 166, 12, 36, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 7, 139, 139, 21, 239, 139, 5, 0, 0, 0, 1, 1, 1, 1]
+
+expect {
+	match TableCff.read(test_cff1, 1, 0, Cff1) {
+		Ok(prepared) => TableCff.commands(prepared, TableCff.location(prepared, []), 0) == [MoveTo({ x: 0, y: 0 }), LineTo({ x: 100, y: 0 }), Close] and TableCff.extents(prepared, [], 0) == Extents({ x_min: 0, y_min: 0, x_max: 100, y_max: 0 }) and TableCff.commands(prepared, [], 1).is_empty()
+		Err(_) => False
+	}
+}
+expect {
+	match TableCff.read(test_cff2, 1, 0, Cff2) {
+		Ok(prepared) => TableCff.commands(prepared, [], 0) == [MoveTo({ x: 0, y: 0 }), LineTo({ x: 100, y: 0 }), Close]
+		Err(_) => False
+	}
+}
+expect {
+	# Truncation is found during reading rather than query execution.
+	match TableCff.read(test_cff1.take_first(test_cff1.len() - 1), 1, 0, Cff1) {
+		Err(Bad(_)) => True
+		_ => False
+	}
+}
+expect TableCff.round_coordinate(-1.5) == -1 and TableCff.round_coordinate(1.5) == 2

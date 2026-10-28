@@ -119,7 +119,12 @@ TableCffDict :: {}.{
 	}
 
 	blendable : U64 -> Bool
-	blendable = |op| op == 6 or op == 7 or op == 10 or op == 11 or op == 268 or op == 269
+	# Adobe Source Serif4.005 uses blended BlueScale, accepted by OTS9.3,
+	# fontTools4.61.1 and HarfBuzz14.6 even though the current OpenType
+	# summary marks it nonblendable. Retain its finite checked operands;
+	# hint metadata does not influence these unhinted font-unit paths.
+	# Program selectors and offsets remain strictly nonblendable.
+	blendable = |op| op == 6 or op == 7 or op == 10 or op == 11 or op == 265 or op == 268 or op == 269
 
 	## DICT lookup follows decoding order; a later occurrence has the value
 	## the reference decoders retain. Every occurrence still has checked syntax.
@@ -185,4 +190,12 @@ expect {
 	store = { ..empty_store, axis_count: 1, region_count: 1, regions: [0, 16384, 16384], item_counts: [0], word_counts: [0], long_words: [False], index_starts: [0, 1], region_indexes: [0], row_starts: [0], row_sizes: [0] }
 	# A blended Subrs offset cannot change the executed program by location.
 	TableCffDict.read([139, 140, 140, 23, 19], { start: 0, end: 5 }, Private2, store) == Err(Bad(4))
+}
+expect {
+	# Permanent real-font regression: Source Serif4.005 blended BlueScale.
+	store = { ..empty_store, axis_count: 1, region_count: 1, regions: [0, 16384, 16384], item_counts: [0], word_counts: [0], long_words: [False], index_starts: [0, 1], region_indexes: [0], row_starts: [0], row_sizes: [0] }
+	match TableCffDict.read([139, 140, 140, 23, 12, 9], { start: 0, end: 6 }, Private2, store) {
+		Ok(parsed) => parsed.args.len() == 1 and (parsed.args.first() ?? TableCffBlend.arg(0)).variable
+		Err(_) => False
+	}
 }
