@@ -69,10 +69,10 @@ expect {
 	}
 }
 expect {
-	text = Str.join_with(List.repeat("क्", 1500), "")
+	text = Str.join_with(List.repeat("क्", 6000), "")
 	plan = Font.plan(sans, Font.ShapeOptions.{ script: "Deva", limits: Font.ShapeLimits.{ operations: 0 } })
 	match Font.shape_checked(sans, plan, text) {
 		Ok(_) => False
-		Err(OverBudget(result)) => !result.budgets.is_empty() and result.run.glyphs.len() <= 16384
+		Err(OverBudget(result)) => !result.budgets.is_empty() and result.run.glyphs.len() <= 65536
 	}
 }

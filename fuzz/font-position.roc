@@ -76,7 +76,7 @@ check = |font, text| {
 	if n != run.advances.len() or n != run.offsets.len() or n != run.clusters.len() or n != run.flags.len() {
 		crash "positioning lost index alignment"
 	}
-	if n > (64 * text.to_utf8().len()).max(16384) {
+	if n > (256 * text.to_utf8().len()).max(65536) {
 		crash "positioning exceeded glyph growth bound"
 	}
 	var $previous = 0.U64

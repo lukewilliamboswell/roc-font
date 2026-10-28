@@ -18,8 +18,8 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ##
 ## Shaping is deterministic; a run's lists are index-aligned; its clusters
 ## lie inside the text, in order for left-to-right text and in reverse for
-## right-to-left; it never has more than 64 glyphs per byte of text (or
-## 16384 in all), HarfBuzz's bound; only the unsafe-to-break flag is set;
+## right-to-left; it never has more than 256 glyphs per byte of text (or
+## 65536 in all), HarfBuzz's bound; only the unsafe-to-break flag is set;
 ## the same with features turned off over part of the text, and with
 ## script and language tags (real ones, and the text's first bytes as a
 ## language tag), deterministically; shaping with a
@@ -124,7 +124,7 @@ check_run! = |bytes, run, rtl| {
 	if run.advances.len() != n or run.offsets.len() != n or run.clusters.len() != n or run.flags.len() != n {
 		crash "a run's lists are not index-aligned"
 	}
-	if n > (64 * bytes).max(16384) {
+	if n > (256 * bytes).max(65536) {
 		crash "shaping grew ${bytes.to_str()} bytes of text to ${n.to_str()} glyphs"
 	}
 	if !run.clusters.all(|c| c.to_u64() < bytes) {

@@ -16,8 +16,8 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## glyphs the font has, the code point listing is ascending and agrees with
 ## lookups, advances are non-negative, boxes are ordered, and shaping keeps
 ## its lists index-aligned, its clusters inside the text and in order, and
-## its growth within HarfBuzz's bound (64 glyphs per character, at least
-## 16384). The feature listing is four-byte tags in increasing order
+## its growth within HarfBuzz's bound (256 glyphs per character, at least
+## 65536). The feature listing is four-byte tags in increasing order
 ## without repeats, a planned width is the sum of the planned run's
 ## advances, and each glyph's text range starts at its cluster and ends
 ## after it, inside the text.
@@ -195,7 +195,7 @@ check_run! = |text, run, rtl| {
 		crash "a run's lists are not index-aligned"
 	}
 	bytes = text.to_utf8().len()
-	if n > (64 * bytes).max(16384) {
+	if n > (256 * bytes).max(65536) {
 		crash "shaping grew ${bytes.to_str()} bytes of text to ${n.to_str()} glyphs"
 	}
 	if !run.clusters.all(|c| c.to_u64() < bytes) {

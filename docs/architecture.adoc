@@ -603,7 +603,7 @@ coordinates : Font -> List({ tag : Str, value : I16 })   # normalised, units of 
 Direction : [FromScript, LeftToRight, RightToLeft]
 ClusterLevel : [Graphemes, Characters]
 Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }  # UTF-8 byte range
-ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }   # per input scalar; floor 16384
+ShapeLimits := { growth : U32 ?? 256, operations : U32 ?? 4096 }   # per input scalar; floor 65536
 ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47; "" unknown
                   direction : Direction ?? FromScript, features : List(Feature) ?? [],
                   clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
@@ -775,8 +775,8 @@ them results disagree with Chrome. They are in scope for the default path:
 
 Shaping work is bounded by budgets in `ShapeLimits`, with defaults generous
 enough never to change a result on a legitimate font: output length at most
-`max(64 n, 16384)` glyphs and lookup applications at most
-`max(1024 n, 16384)`, following HarfBuzz, with nested lookup depth bounded
+`max(256 n, 65536)` glyphs and lookup applications at most
+`max(4096 n, 65536)`, following HarfBuzz, with nested lookup depth bounded
 by `Limits.max_depth` (default 64, walked with an explicit frame stack). Roc is efficient enough that a tight budget buys nothing but
 disagreement with the reference. The same operations account also covers
 bounded script preprocessing, classification probes, reordering and GPOS

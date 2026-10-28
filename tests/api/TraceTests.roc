@@ -159,7 +159,7 @@ growing = table([{ tag: "liga", lookups: [0] }], [{ kind: 2, subtables: [FontBui
 expect {
 	font = font_with(growing)
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
-	text = text_of(List.repeat(1, 300))
+	text = text_of(List.repeat(1, 700))
 	match Font.shape_checked(font, tight, text) {
 		Err(OverBudget({ run, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text)
 		Ok(_) => False
@@ -170,7 +170,7 @@ expect {
 expect {
 	font = font_with(growing)
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
-	text = text_of(List.repeat(1, 300))
+	text = text_of(List.repeat(1, 700))
 	match Font.shape_traced(font, tight, text) {
 		Err(OverBudget({ run, origins, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text) and origins.len() == run.glyphs.len()
 		Ok(_) => False
@@ -196,19 +196,19 @@ expect {
 	Font.shape_checked(font, plan, text) == Ok(Font.shape_planned(font, plan, text))
 }
 
-# A contextual rule calling a lookup 100 times per glyph: 300 glyphs take
-# 30000 calls, within the default budget (1024 per character) but past
-# the smallest (16384 in all).
+# A contextual rule calling a lookup 100 times per glyph: 1000 glyphs take
+# 100000 calls, within the default budget (4096 per character) but past
+# the smallest (65536 in all).
 calling : List(U8)
 calling = table([{ tag: "calt", lookups: [0] }], [{ kind: 5, subtables: [FontBuild.context3([[1]], List.repeat({ at: 0, lookup: 1 }, 100))] }, { kind: 1, subtables: [FontBuild.single1([1], 0)] }])
 
 expect {
 	font = font_with(calling)
-	text = text_of(List.repeat(1, 300))
+	text = text_of(List.repeat(1, 1000))
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ operations: 1 } })
 	roomy = Font.plan(font, Font.ShapeOptions.{})
 	over = match Font.shape_checked(font, tight, text) {
-		Err(OverBudget({ run, budgets })) => budgets == [Operations] and run.glyphs.len() == 300
+		Err(OverBudget({ run, budgets })) => budgets == [Operations] and run.glyphs.len() == 1000
 		Ok(_) => False
 	}
 	over and Font.shape_checked(font, roomy, text).is_ok()

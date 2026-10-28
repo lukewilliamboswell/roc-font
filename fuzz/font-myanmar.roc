@@ -103,7 +103,7 @@ check = |font, plan, text, backward, run| {
 			$scalar_count = $scalar_count + 1
 		}
 	}
-	if n > (64 * $scalar_count).max(16384) {
+	if n > (256 * $scalar_count).max(65536) {
 		crash "Myanmar shaping exceeded growth bound"
 	}
 	if run.glyphs.any(|g| g >= Font.glyph_count(font)) {

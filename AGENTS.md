@@ -164,8 +164,8 @@ with an explicit baseline update in the same change. Elapsed time is
 judged as a ratio against the reference implementations measured in the
 same run, never as an absolute number.
 
-Shaping budgets follow HarfBuzz's (output at most `max(64 n, 16384)`
-glyphs, at most `max(1024 n, 16384)` lookup applications) so that a budget
+Shaping budgets follow pinned HarfBuzz 14.6's `hb-limits.hh` (output at
+most `max(256 n, 65536)` glyphs, at most `max(4096 n, 65536)` lookup applications) so that a budget
 never changes a result on a legitimate font.
 
 ## Preserve totality, determinism and numerical safety

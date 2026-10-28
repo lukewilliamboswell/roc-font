@@ -143,22 +143,22 @@ expect shaped_items(all_active([{ kind: 2, subtables: [FontBuild.multiple([5], [
 # An empty sequence deletes the glyph.
 expect shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([5], [[]])] }]), [4, 5, 6]) == [4, 6]
 
-# A run grows as far as the substitutions take it, up to 64 glyphs per
-# input glyph or 16384 in all, whichever is more (HarfBuzz's bound); past
+# A run grows as far as the substitutions take it, up to 256 glyphs per
+# input glyph or 65536 in all, whichever is more (HarfBuzz's bound); past
 # that, substitutions that would grow it are not made.
 expect shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }]), List.repeat(1, 10)).len() == 1000
 expect {
-	result = shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }]), List.repeat(1, 300))
-	result.len() <= 64 * 300 and result.len() >= 300
+	result = shaped(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 300)])] }]), List.repeat(1, 300))
+	result.len() <= 256 * 300 and result.len() >= 300
 }
 
-# A smaller growth limit binds sooner, but never below 16384 glyphs.
+# A smaller growth limit binds sooner, but never below 65536 glyphs.
 expect {
 	match read(all_active([{ kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 100)])] }])) {
 		Ok(font) => {
 			options = Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } }
-			run = Font.shape(font, text_of(List.repeat(1, 300)), options)
-			run.glyphs.len() <= 16384 and run.glyphs.len() > 300
+			run = Font.shape(font, text_of(List.repeat(1, 700)), options)
+			run.glyphs.len() <= 65536 and run.glyphs.len() > 700
 		}
 		Err(_) => False
 	}
@@ -416,11 +416,11 @@ expect {
 }
 
 ## fuzz regression: a contextual rule that calls a multiple substitution
-## once per input glyph must not grow the run past its bound (here 16384
-## glyphs); each rule could otherwise grow its own window to that size.
+## once per input glyph must not grow the run past its bound; each rule
+## could otherwise grow its own window to that size.
 expect {
-	gsub = first_active([{ kind: 6, subtables: [FontBuild.chain3([], [[1]], [], [{ at: 0, lookup: 1 }])] }, { kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 60)])] }])
-	shaped(gsub, List.repeat(1, 20)).len() == 1200 and shaped(gsub, List.repeat(1, 400)).len() <= 64 * 400
+	gsub = first_active([{ kind: 6, subtables: [FontBuild.chain3([], [[1]], [], [{ at: 0, lookup: 1 }])] }, { kind: 2, subtables: [FontBuild.multiple([1], [List.repeat(2, 300)])] }])
+	shaped(gsub, List.repeat(1, 20)).len() == 6000 and shaped(gsub, List.repeat(1, 400)).len() <= 256 * 400
 }
 
 # Applying is deterministic.
@@ -481,7 +481,7 @@ expect {
 			Ok(font) => {
 				glyphs = run_of(font, [7, 1, 2, 3, 1, 2]).glyphs
 				gsub_only = Font.dropped(font).all(gsub_problem)
-				$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
+				$outcomes = $outcomes + (if (glyphs.len() <= 65536 and gsub_only) 1 else 1000000)
 			}
 			# A broken `GSUB` rejects the font, naming only `GSUB`.
 			Err(found) => {
@@ -500,7 +500,7 @@ expect {
 				Ok(font) => {
 					glyphs = run_of(font, [7, 1, 2, 3, 1, 2, 0, 9]).glyphs
 					gsub_only = Font.dropped(font).all(gsub_problem)
-					$outcomes = $outcomes + (if (glyphs.len() <= 16384 and gsub_only) 1 else 1000000)
+					$outcomes = $outcomes + (if (glyphs.len() <= 65536 and gsub_only) 1 else 1000000)
 				}
 				Err(found) => {
 					$outcomes = $outcomes + (if (!found.is_empty() and found.all(is_gsub)) 1 else 1000000)

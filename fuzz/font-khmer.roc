@@ -110,7 +110,7 @@ check_run! = |bytes, run, rtl| {
 	if run.advances.len() != n or run.offsets.len() != n or run.clusters.len() != n or run.flags.len() != n {
 		crash "Khmer lists are not aligned"
 	}
-	if n > (64 * bytes).max(16384) {
+	if n > (256 * bytes).max(65536) {
 		crash "Khmer output exceeds growth limit"
 	}
 	if !run.clusters.all(|cluster| cluster < bytes) {

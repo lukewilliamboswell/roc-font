@@ -75,8 +75,8 @@ Font :: { face : Face }.{
 	## - `max_lookups`: the most substitution or positioning lookups a table
 	##   may list; a table with more is left out and reported by `dropped`
 	##   (or, when strict, rejects the font).
-	## - `max_depth`: how deeply contextual substitutions may call further
-	##   substitutions while shaping.
+	## - `max_depth`: how deeply contextual substitution and positioning
+	##   lookups may call further lookups while shaping.
 	##
 	## The defaults (256 MiB, 1024 faces, 16384 lookups, depth 64) admit
 	## every real font with room to spare.
@@ -813,15 +813,15 @@ Font :: { face : Face }.{
 	## several (`salt` with value 2 is the second).
 	Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
 
-	## Bounds on shaping work, per input character, never below 16384 in
-	## all. `growth` bounds output glyphs (64 per character by default).
+	## Bounds on shaping work, per input character, never below 65536 in
+	## all. `growth` bounds output glyphs (256 per character by default).
 	## `operations` bounds contextual lookup calls, script preprocessing,
-	## reordering and feature probes, and contextual positioning (1024 per
+	## reordering and feature probes, and contextual positioning (4096 per
 	## character by default). The factors follow HarfBuzz's shaping budgets.
 	## Past a bound, the operation stops at a complete mutation boundary.
 	## Shaping returns the partial run, retaining the input text's glyphs;
 	## `shape_checked` also reports which bounds stopped work (see `Budget`).
-	ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }
+	ShapeLimits := { growth : U32 ?? 256, operations : U32 ?? 4096 }
 
 	## How to shape.
 	##

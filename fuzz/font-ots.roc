@@ -334,7 +334,7 @@ check_run! = |text, run, rtl| {
 		crash "a run's lists are not index-aligned"
 	}
 	bytes = text.to_utf8().len()
-	if n > (64 * bytes).max(16384) {
+	if n > (256 * bytes).max(65536) {
 		crash "shaping grew ${bytes.to_str()} bytes of text to ${n.to_str()} glyphs"
 	}
 	if !run.clusters.all(|c| c.to_u64() < bytes) {
