@@ -9,8 +9,6 @@ repositories are relative to `~/Documents/Github/`.
 
 ### Browser parity (§6)
 
-
-
 Exit: HarfBuzz agreement on the Latin, Greek and Cyrillic cases of the
 in-house and text-rendering-tests suites, except listed known failures;
 Chrome widths agree on package-mermaid's oracle texts.
@@ -54,74 +52,57 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ## After 0.1.0
 
-### Font foundation integration
+### Font and shaping gaps
 
-Implementation branch: `integration/font-foundations`. Feature workers use
-isolated worktrees; the integrator owns `Font.roc`, `Face.roc`, package and
-test manifests, oracle/benchmark/fuzz registration and final validation.
+- [ ] CFF/CFF2 paths and extents, including CFF2 variation/blend
+  evaluation. These currently return `Unknown` where the TrueType outline
+  reader cannot supply them.
+- [ ] Vertical shaping and vertical metrics/origins, including `VVAR`.
+  Current horizontal direction choices do not implement a vertical run.
+- [ ] AAT and Graphite shaping for fonts whose substitutions and
+  positioning rely on those backends.
+- [ ] `avar` version 2: cross-axis coordinate remapping and variation-store
+  deltas, with the pinned fontTools/HarfBuzz cases as oracles.
+- [ ] Variable TrueType advances from `gvar` phantom points when `HVAR` is
+  absent, including composites; compare real locations against HarfBuzz
+  and FreeType.
+- [ ] Investigate duplicate-axis tags and their order/selection semantics
+  against OTS and HarfBuzz. Settle the reader/query policy before changing
+  handling; distinguish duplicate font records from repeated query tags.
+- [ ] Legacy `kern` offsets when an RTL script is explicitly forced LTR:
+  advances can agree while glyph offsets differ. Preserve the explicit
+  direction and font-specific oracle cases when resolving this gap.
+- [ ] WOFF/WOFF2 unwrapping outside the core.
 
-- [ ] MATH: constants, glyph corrections/attachments, corner kerning,
-  extended shapes, variants and construction parts, with licensed real
-  fonts and recorded HarfBuzz/fontTools oracles.
-- [ ] Text correctness: all GPOS positioning types, including attachment
-  propagation and bounded contextual application; script-specific shaping
-  and surrounding context where needed for end-to-end multilingual cases.
-- [ ] Color glyph facts for emoji: palettes/layers, COLRv1 paints, embedded
-  SVG and bitmap formats, with an explicit supported-format matrix and
-  real-font public consumers.
-- [ ] Ligature caret queries, including point/variation forms and absence.
-- [ ] PDF font facts: raw tables, full/PostScript/legacy family names,
-  embedding flags, stored metrics and side bearings.
-- [ ] TrueType outline output at static and variable locations, including
-  composites and implied on-curve points, through a public path consumer.
-- [ ] For every feature: public bundle tests, cached reference agreement,
-  narrow fuzz/scaling targets, examples, generated API docs and clean
-  focused commits; run the full integration checks and allocation ratchet.
+### Evidence and performance
 
-Shared internal contracts before feature fan-out:
-
-- New standalone table readers import only package internals and take
-  checked table bytes plus the glyph count (and any necessary explicit
-  variation inputs). Their offsets in failures are relative to that table;
-  `Face` translates them to file offsets and aggregates problems.
-- `TableMath` owns math reading/query data. `TableOutline` owns path
-  conversion, reusing `TableGlyfPoints`/`TableGvar`; `TableCaret` owns GDEF
-  caret reading/query data. Feature agents do not edit `Face` or `Font`.
-- GPOS extends `LayoutKerning` with its existing `read_gpos`, `combine`
-  and `position` entry points where possible; any necessary signature
-  changes are sent to the integrator before consumers are changed.
-- Font units, explicit absence, deterministic table order, flat prepared
-  data and eager hostile-byte validation apply to every new query.
-- Feature agents own only their assigned modules, dedicated test files,
-  fixtures, examples and fuzz targets. Shared registry edits are integrated
-  centrally; no worker changes another worker's files.
-
-- Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
+- [ ] Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
   `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
   they now read as rejected by design; regenerate valid fonts with the
   same lookups.
-- Optional speed-up: U64 fast paths for TableVar's single-precision
-  multiply and add (85 % of gvar extents time).
-- Reading cost: about 150x HarfBuzz (geometric mean; HarfBuzz checks
-  lazily, roc-font validates everything up front as OTS does, every glyph
-  outline included). Profile the OTS checks and the outline walk; the
-  default fonts are prepared at compile time and unaffected.
+- [ ] Extend real-family/oracle evidence for the remaining USE scripts and
+  legacy Indic tags; implemented model selection is broader than the
+  dedicated tested-family matrices in `docs/shaping-support.adoc`.
+- [ ] Profile software single-precision arithmetic in variable outline
+  queries; evaluate U64 fast paths while preserving exact results.
+- [ ] Profile eager reading against OTS and HarfBuzz, separating validation
+  and outline preparation from reusable query cost. Default fonts are
+  prepared at compile time.
+- [ ] Reduce script-specific shaping cost and the fixed cost of short
+  runs, using the recorded three-size/reference comparisons and allocation
+  ratchets rather than transferring costs into repeated queries.
 
-1. roc-ray measurement and terrocotta's measurer.
-2. roc-pdf's strict checks (checksums, directory order, overlapping and
-   duplicate tables, composite cycles, `fsType`) in strict reading, and raw
-   table access for its subsetting, which stays in roc-pdf
-   (`roc-pdf-wt-roc-font-replace`, `development/roc-font-replacement.md`).
-   Also from that study: PostScript, full and ID-1 names; stored `head`
-   and `hhea` values and left side bearings; ligature origins with lookup
-   and input glyphs; a feature-free (kerning-only) shaping switch; a lower
-   per-call shaping floor (15-17 allocations however short the text).
-3. GPOS single, cursive, mark attachment, contextual positioning.
-4. Outlines as a listing; CFF and CFF2.
-5. Complex-script shapers (Arabic, Indic, USE, Hangul, Tibetan, Thai)
-   with a per-script support matrix; 109 in-house Tibetan cases need
-   `abvs`/`blws`, and Thai `sara-am` 52.
-6. WOFF/WOFF2 unwrapping outside the core.
+### Consumer follow-up
+
+- [ ] roc-ray measurement and terrocotta's measurer.
+- [ ] Re-run roc-pdf's embedding/subsetting pipeline on the current API.
+  Subsetting and document-specific validation/embedding policy stay in
+  roc-pdf (`roc-pdf-wt-roc-font-replace`,
+  `development/roc-font-replacement.md`); consume the names, raw tables,
+  stored metrics, side bearings and embedding flags now exposed here.
+- [ ] Confirm whether roc-pdf needs substitution provenance beyond the
+  existing feature/component counts, and whether consumers need a simpler
+  kerning-only shaping choice, before extending the public API.
 
 ## Open questions
 
