@@ -174,6 +174,11 @@ LayoutGsub := {
 	from_contexts : Built -> LayoutGsub
 	from_contexts = |built| { ..LayoutGsub.none, subtables: built.subtables, ranges: built.ranges, values: built.values, rules: built.rules }
 
+	## Internal synthesized Arabic fallback tables are assembled from
+	## checked cmap glyphs and pinned constant rules, with no font offsets.
+	from_synthesized : List(Lookup), Built, LayoutGdef -> LayoutGsub
+	from_synthesized = |lookups, built, gdef| { ..LayoutGsub.none, lookups, subtables: built.subtables, ranges: built.ranges, values: built.values, rules: built.rules, gdef }
+
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
 	unsafe = 0x8000000000000000
