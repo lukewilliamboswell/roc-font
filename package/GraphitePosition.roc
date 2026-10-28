@@ -92,7 +92,7 @@ GraphitePosition :: {}.{
 				x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
 				y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
 				$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
-				$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_shift))
+				$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
 				$min_x = TableVar.f32_min($min_x, TableVar.f32_add(x, TableVar.f32_from_int(base_metric(child.glyph, 4, 0).to_i64())))
 				$max_x = TableVar.f32_max($max_x, TableVar.f32_add(x, TableVar.f32_from_int(base_metric(child.glyph, 5, 0).to_i64())))
 				$min_y = TableVar.f32_min($min_y, TableVar.f32_add(y, TableVar.f32_from_int(base_metric(child.glyph, 3, 0).to_i64())))
@@ -187,7 +187,7 @@ GraphitePosition :: {}.{
 						$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
 						$members = $members.append(frame.id)
 						$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
-						$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_shift))
+						$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
 						if child.child != 0 {
 							$pending = $pending.append({ id: child.child, x, y })
 						}
@@ -403,4 +403,12 @@ expect {
 	c = GraphitePosition.copy_attachment_from(a.state, f.c, f.a, f.b, 100)
 	d = GraphitePosition.copy_attachment_from(a.state, f.b, f.b, 0, 100)
 	b.aborted and !c.aborted and !d.aborted and GraphiteSlots.get(c.state, f.c).parent == f.b and GraphiteSlots.get(c.state, f.a).sibling == f.c and GraphiteSlots.get(d.state, f.b).child == f.a
+}
+
+expect {
+	a = GraphitePosition.attach(geometry_fixture, 1, 2, 100)
+	root = GraphiteSlots.get(a.state, 2)
+	b = GraphiteSlots.set(a.state, 2, { ..root, justify_width: TableVar.f32_from_int(-300) })
+	c = GraphitePosition.position(b, False, 100)
+	c.state.advance_x == TableVar.f32_from_int(984) and GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-220) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-300)
 }
