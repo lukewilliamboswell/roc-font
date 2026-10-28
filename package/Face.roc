@@ -223,7 +223,13 @@ Face := {
 					if boxes.is_ok() {
 						match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
 							(Found(glyf), Found(loca), Found(hmtx)) => {
-								checked = TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count)
+								checked = match TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count) {
+									Ok(p) => match vertical.header {
+										Present(_) => TableGlyfPoints.with_vertical(p, { advances: vertical.advances, bearings: vertical.bearings })
+										Absent => Ok(p)
+									}
+									Err(problems) => Err(problems)
+								}
 								match checked {
 									Ok(_) => {}
 									Err(problems) => {
@@ -974,6 +980,13 @@ Face := {
 				# as zero (HarfBuzz hb-ot-hmtx-table.hh); I32 bounds keep the
 				# font-unit public position representation finite.
 				Present(v) if loc.varied => (advance.to_i64() + TableVvar.advance_delta(v, loc.vvar, id)).max(0).min(2147483647).to_i32_wrap()
+				_ if loc.varied => match face.outlines {
+					Present(o) => {
+						p = TableGvar.phantoms(o.points, o.gvar, loc.gvar, id)
+						TableVar.f32_round_half_up(TableVar.f32_sub(p.top, p.bottom)).max(0).min(2147483647).to_i32_wrap()
+					}
+					Absent => advance.to_i32()
+				}
 				_ => advance.to_i32()
 			}
 			Err(_) => {
@@ -991,6 +1004,15 @@ Face := {
 			return { x: 0, y: 0 }
 		}
 		x = Face.advance(face, loc, id) // 2
+		if face.has_glyf and loc.varied and !face.v_bearings.is_empty() {
+			match face.outlines {
+				Present(o) => {
+					p = TableGvar.phantoms(o.points, o.gvar, loc.gvar, id)
+					return { x, y: TableVar.f32_round_half_up(p.top).max(-2147483648).min(2147483647).to_i32_wrap() }
+				}
+				Absent => {}
+			}
+		}
 		if !face.has_glyf {
 			match face.vorg {
 				Present(v) => {
@@ -1038,6 +1060,10 @@ Face := {
 			Ok(base) =>
 				match face.hvar {
 					Present(hvar) if loc.varied => TableVar.advance(hvar, loc.hvar, id, base.to_i64()).to_i32_wrap()
+					_ if loc.varied => match face.outlines {
+						Present(o) => TableGvar.advance(o.points, o.gvar, loc.gvar, id).max(-2147483648).min(2147483647).to_i32_wrap()
+						Absent => base.to_i32()
+					}
 					_ => base.to_i32()
 				}
 		}

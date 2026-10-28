@@ -229,10 +229,10 @@ Font :: { face : Face }.{
 			Err(Missing) => Err(Missing)
 		}
 
-	## A glyph's advance width, at the font's location. Advance variation
-	## requires the font's horizontal metric variation table (`HVAR`).
-	## Without it, advances stay at their stored values while outlines can
-	## still vary. A glyph id past the font has an advance of 0.
+	## A glyph's advance width, at the font's location. Uses the font's
+	## horizontal metric variations (`HVAR`) when present; otherwise uses
+	## the TrueType phantom points moved by `gvar`. A glyph id past the
+	## font has an advance of 0.
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
