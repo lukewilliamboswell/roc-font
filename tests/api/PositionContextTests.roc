@@ -14,6 +14,9 @@ import "../fonts/positioning/context-budget/chain-2.ttf" as chain2 : List(U8)
 import "../fonts/positioning/context-budget/chain-3.ttf" as chain3 : List(U8)
 import "../fonts/positioning/context-budget/wide-16383.ttf" as invalid_file : List(U8)
 
+import "../fonts/positioning/context-budget/saturating-advance.ttf" as saturating_advance : List(U8)
+import "../fonts/positioning/context-budget/saturating-placement.ttf" as saturating_placement : List(U8)
+
 PositionContextTests :: {}.{}
 
 read = |bytes, depth| match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True, limits: Font.Limits.{ max_depth: depth } }) {
@@ -78,4 +81,18 @@ expect match Font.from_bytes(invalid_file, Font.ReadOptions.{}) {
 		},
 	)
 	Ok(_) => False
+}
+
+expect {
+	run = Font.shape(read(nested_file, 0), "", options)
+	run.glyphs.is_empty() and run.advances.is_empty() and run.offsets.is_empty() and run.clusters.is_empty()
+}
+
+expect {
+	run = Font.shape(read(saturating_advance, 64), Str.join_with(List.repeat("a", 64), ""), options)
+	run.advances.take_first(2) == [{ x: -268435457, y: 0 }, { x: 806354943, y: 0 }]
+}
+expect {
+	run = Font.shape(read(saturating_placement, 64), Str.join_with(List.repeat("a", 64), ""), options)
+	run.offsets.take_first(2) == [{ x: -268435457, y: 0 }, { x: 806354943, y: 0 }]
 }

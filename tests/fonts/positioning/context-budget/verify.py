@@ -8,6 +8,7 @@ from _common import load_jsonc
 
 def resource(case):
  """Literal DFS call interpreter; top-level application is not charged."""
+ if not case['text']:return None
  name=case['font'];limit=max(65536,case['operations']*len(case['text']))
  depth=case['depth'];calls=0;leaves=0;stopped=set();stack=[]
  if name.startswith('cycle-'):tree={0:[0]*8192}

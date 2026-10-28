@@ -1,0 +1,139 @@
+{
+  "version": "9.3.0",
+  "source_commit": "884861e0103b41d7e9845fdaf9fd1e3c12819103",
+  "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
+  "fonts": [
+    {
+      "font": "attach-shift.ttf",
+      "sha256": "f04b795972f6ab678271ad272622ebe11ba8a1e4b47853fd6d33be55f4bee827",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "chain-1.ttf",
+      "sha256": "b7395a6c03b76be36201ea41e3c6764b7f7ee681be6ea7a64de802bb14520dc5",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "chain-2.ttf",
+      "sha256": "1b51c1d9bcb2175970a56ad85d2b861534403a07120b5cba1fd554b69bc5a7fc",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "chain-3.ttf",
+      "sha256": "361847856415f0b8da3382ad577c47a444cd186e58385c33ed29ec28dc60892b",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "context-1.ttf",
+      "sha256": "04deed4706dec112e9e7b2d7c3bd4b5662e87f8f9707d90e7047a29fac4490ab",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "context-2.ttf",
+      "sha256": "5f6ea0df83c4f2bd62d9d73535d8a1119cae348175ea8a9790f13738c7f9d60d",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "context-3.ttf",
+      "sha256": "8be10ebe2849b53fa9be789c00875188cb24c7e4bb8f230b3fa7e1bad5533579",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "cycle-8192.ttf",
+      "sha256": "d6866781e0499b5c803d3d8b7ffdc62acfa4fd0e039595cbdf35416e617a2966",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "fanout-8192.ttf",
+      "sha256": "d1599f9d2442f727cf78684124d5a5c80e3916d3d9b47fbf2b0471930436579a",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "ignored-8192.ttf",
+      "sha256": "e3d022736d0832dc504f4eab87c9a2fc332b4df6cf496ce86f6a2e55b7647946",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "many-2048.ttf",
+      "sha256": "a57613c39f3208552c2e6eea1f7a7aa486ba032c4afc5f834bbe73869d446d33",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "many-256.ttf",
+      "sha256": "a23580bdd58b846bb728e06bf64cf4689e4ec219df18117d017dfa519a52099a",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "many-64.ttf",
+      "sha256": "cc18775ce483c2e54ef4fc75cb6e343090a484030366d782d91801679198d73c",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "many-8.ttf",
+      "sha256": "1b395859b76a322c88d46daeee29c39b0a323b90d060c2d200a9b1d2ceb0cc0a",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "many-8192.ttf",
+      "sha256": "f66b3b2e9a658baa32d3e1064b3c16dc600087bc8b626028c3801ccff5bf51e9",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "nested-order.ttf",
+      "sha256": "5dcd5909a10d0c34f92593b4fd5cae06162f54823858a26f5536b89087e0182c",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "saturating-advance.ttf",
+      "sha256": "0e536bfba9ebd7508fb4c8a06e3b463e4da8a92a2080fcf335650102e34ddd79",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "saturating-placement.ttf",
+      "sha256": "6740cb708c136260da904b7f4162c1172a1a856d191cd167a082e163b40edf21",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "shift-attach.ttf",
+      "sha256": "987b40bee91097dda2981ae0f669fbdcbfe4ae1d497a55e543ddd3e3d8460227",
+      "accepted": true,
+      "diagnostic": null
+    },
+    {
+      "font": "wide-16383.ttf",
+      "sha256": "b7ad7ba50d480e244a529318b3c9843aee5fb4f3f9c67d6eb60f2030a9ea5425",
+      "accepted": false,
+      "diagnostic": "ERROR: Layout: Bad end of lookup 65548 in context format 3\nERROR: GPOS: Failed to parse context format 3 subtable\nERROR: GPOS: Failed to parse lookup from extension lookup\nERROR: GPOS: Failed to parse subtable 0\nERROR: GPOS: Failed to parse lookup 0\nERROR: GPOS: Failed to parse lookup list table\nERROR: GPOS: Failed to parse table"
+    },
+    {
+      "font": "wide-16384.ttf",
+      "sha256": "b6820f6ae347453432a1e9c0d6f0c4d6be44694a55507163361d9f39c42d6f92",
+      "accepted": false,
+      "diagnostic": "ERROR: Layout: Bad end of lookup 65552 in context format 3\nERROR: GPOS: Failed to parse context format 3 subtable\nERROR: GPOS: Failed to parse lookup from extension lookup\nERROR: GPOS: Failed to parse subtable 0\nERROR: GPOS: Failed to parse lookup 0\nERROR: GPOS: Failed to parse lookup list table\nERROR: GPOS: Failed to parse table"
+    },
+    {
+      "font": "wide-16385.ttf",
+      "sha256": "db4c8dce7ca22edddaf05e1e94de105e7962e012e81ffd17d2c2d0d0eb18fd42",
+      "accepted": false,
+      "diagnostic": "ERROR: Layout: Bad end of lookup 65556 in context format 3\nERROR: GPOS: Failed to parse context format 3 subtable\nERROR: GPOS: Failed to parse lookup from extension lookup\nERROR: GPOS: Failed to parse subtable 0\nERROR: GPOS: Failed to parse lookup 0\nERROR: GPOS: Failed to parse lookup list table\nERROR: GPOS: Failed to parse table"
+    }
+  ]
+}

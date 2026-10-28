@@ -1,6 +1,6 @@
-"""Original GPOS context scheduling fixtures; fontTools4.61.1, UPL.
+"""Original GPOS context scheduling fixtures; fontTools 4.61.1, UPL.
 
-The ordinary256/2048/8192fonts reproduce the integrator's before samples
+The ordinary 256/2048/8192 fonts reproduce the integrator's before samples
 byte for byte. Resource fixtures are structurally valid, including cycles;
 they test bounded execution rather than pretending every reference shapes.
 """
@@ -87,6 +87,13 @@ def recursive(n,fanout=False):
  else:lookups=[lookup(7,context([record(0,0) for _ in range(n)])),leaf]
  save(f,f'{"fanout" if fanout else "cycle"}-{n}.ttf',lookups)
 
+def saturation(field):
+ f=base();gm=f.getReverseGlyphMap()
+ pos=lookup(1,buildSinglePosSubtable({'a':value(field,32767)},gm))
+ neg=lookup(1,buildSinglePosSubtable({'a':value(field,-32768)},gm))
+ lookups=[lookup(7,context([record(0,1) for _ in range(9)]+[record(0,2) for _ in range(9)])),lookup(7,context([record(0,3) for _ in range(8192)])),lookup(7,context([record(0,4) for _ in range(8192)])),pos,neg]
+ save(f,'saturating-'+('advance' if field=='XAdvance' else 'placement')+'.ttf',lookups)
+
 def wide(n):
  # Coverage overlaps the first ignored records, keeping Offset16 small
  # despite a >64KiB record list. The layout permits shared byte ranges.
@@ -110,4 +117,5 @@ if __name__=='__main__':
  order('shift-attach.ttf',[(1,2),(1,1)])
  order('attach-shift.ttf',[(1,1),(1,2)])
  recursive(8192);recursive(8192,fanout=True)
+ for field in ['XAdvance','XPlacement']:saturation(field)
  for n in [16385,16386,16387]:wide(n)
