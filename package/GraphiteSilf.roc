@@ -16,6 +16,7 @@ GraphiteSilf := {
 	constraint_endings : List(U64),
 	programs : List(Program),
 	instructions : List(GraphiteCode.Instruction),
+	protected_inputs : List(U64),
 }.{
 
 	Subtable : {
@@ -38,15 +39,17 @@ GraphiteSilf := {
 		skip_attribute : U64,
 		collision_attribute : U64,
 		user_count : U64,
+		justification_start : U64,
+		justification_count : U64,
 		components : U64,
 		line_break : U64,
 		extra_ascent : I64,
 		extra_descent : I64,
 	}
-	Program : { start : U64, end : U64, max_stack : U64 }
+	Program : { start : U64, end : U64, max_stack : U64, protected_start : U64, protected_end : U64, copies : Bool }
 
 	none : GraphiteSilf
-	none = { data: [], subtables: [], passes: [], classes: [], pseudo_chars: [], pseudo_glyphs: [], constraint_endings: [], programs: [], instructions: [] }
+	none = { data: [], subtables: [], passes: [], classes: [], pseudo_chars: [], pseudo_glyphs: [], constraint_endings: [], programs: [], instructions: [], protected_inputs: [] }
 
 	read : List(U8), U64, U64, U64, U64 -> Try(GraphiteSilf, [Bad(U64), OverLimit(Str)])
 	read = |raw, glyph_count, attribute_count, feature_count, max_bytes| {
@@ -85,7 +88,7 @@ GraphiteSilf := {
 
 	read_subtable : GraphiteSilf, U64, U64, U64, U64, U64, U64 -> Try(GraphiteSilf, [Bad(U64)])
 	read_subtable = |table, start, end, version, glyph_count, attribute_count, feature_count| {
-		{ data, subtables, passes: old_passes, classes: old_classes, pseudo_chars: old_chars, pseudo_glyphs: old_glyphs, constraint_endings: old_endings, programs: old_programs, instructions: old_instructions } = table
+		{ data, subtables, passes: old_passes, classes: old_classes, pseudo_chars: old_chars, pseudo_glyphs: old_glyphs, constraint_endings: old_endings, programs: old_programs, instructions: old_instructions, protected_inputs: old_protected } = table
 		prefix = if (version >= 0x00030000) 8 else 0
 		base = start + prefix
 		if !Bytes.fits(start, prefix + 20, end) {
@@ -148,10 +151,11 @@ GraphiteSilf := {
 		var $endings = old_endings
 		var $programs = old_programs
 		var $instructions = old_instructions
+		var $protected = old_protected
 		pass_start = $passes.len()
 		class_count = $classes.len() - class_start
 		user_count = Bytes.u8(data, meta + 2)
-		env = { classes: class_count, attributes: attribute_count, features: feature_count, users: user_count, constraint: False }
+		env = { classes: class_count, attributes: attribute_count, features: feature_count, users: user_count, levels, positioning: False, constraint: False }
 		for i in 0..<n {
 			at = start + Bytes.u32(data, pass_offsets + 4 * i)
 			limit = start + Bytes.u32(data, pass_offsets + 4 * (i + 1))
@@ -159,20 +163,24 @@ GraphiteSilf := {
 				return Err(Bad(pass_offsets + 4 * i))
 			}
 			prepared = GraphitePass.read(data, at, limit, start, version, if (glyph_count == 0) 0 else glyph_count - 1)?
+			pass_env = { ..env, positioning: i >= positioning }
 			pass = { ..prepared.pass, constraint_ends: $endings.len(), programs: $programs.len() }
 			$endings = $endings.concat(prepared.endings)
-			decoded = GraphiteCode.read(data, pass.pass_constraint, pass.pass_constraint_end, { ..env, constraint: True })?
-			$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + decoded.instructions.len(), max_stack: decoded.max_stack })
+			decoded = GraphiteCode.read(data, pass.pass_constraint, pass.pass_constraint_end, { ..pass_env, constraint: True })?
+			$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + decoded.instructions.len(), max_stack: decoded.max_stack, protected_start: $protected.len(), protected_end: $protected.len() + decoded.protected_inputs.len(), copies: decoded.copies })
+			$protected = $protected.concat(decoded.protected_inputs)
 			$instructions = $instructions.concat(decoded.instructions)
 			for rule in 0..<pass.rule_count {
 				constraint = GraphitePass.code(data, $endings, pass, rule, True)
-				condition = GraphiteCode.read(data, constraint.start, constraint.end, { ..env, constraint: True })?
-				$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + condition.instructions.len(), max_stack: condition.max_stack })
+				condition = GraphiteCode.read(data, constraint.start, constraint.end, { ..pass_env, constraint: True })?
+				$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + condition.instructions.len(), max_stack: condition.max_stack, protected_start: $protected.len(), protected_end: $protected.len() + condition.protected_inputs.len(), copies: condition.copies })
+				$protected = $protected.concat(condition.protected_inputs)
 				$instructions = $instructions.concat(condition.instructions)
 				action = GraphitePass.code(data, $endings, pass, rule, False)
-				body = GraphiteCode.read(data, action.start, action.end, env)?
+				body = GraphiteCode.read(data, action.start, action.end, pass_env)?
 				_ = GraphiteCode.check_references(data, body, Bytes.u8(data, pass.pre_contexts + rule), Bytes.u16(data, pass.sort_keys + 2 * rule))?
-				$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + body.instructions.len(), max_stack: body.max_stack })
+				$programs = $programs.append({ start: $instructions.len(), end: $instructions.len() + body.instructions.len(), max_stack: body.max_stack, protected_start: $protected.len(), protected_end: $protected.len() + body.protected_inputs.len(), copies: body.copies })
+				$protected = $protected.concat(body.protected_inputs)
 				$instructions = $instructions.concat(body.instructions)
 			}
 			$passes = $passes.append(pass)
@@ -184,8 +192,8 @@ GraphiteSilf := {
 			$pseudo_chars = $pseudo_chars.append(Bytes.u32(data, pseudo_map + i * 6).to_u32_wrap())
 			$pseudo_glyphs = $pseudo_glyphs.append(Bytes.u16(data, pseudo_map + i * 6 + 4).to_u16_wrap())
 		}
-		sub = { pass_start, pass_end: $passes.len(), class_start, class_end: $classes.len(), pseudo_start, pseudo_end: $pseudo_chars.len(), substitution, positioning, justification, bidi, flags: Bytes.u8(data, base + 11), direction: Bytes.u8(data, meta + 4), pseudo_attribute: Bytes.u8(data, base + 14), break_attribute: Bytes.u8(data, base + 15), direction_attribute: Bytes.u8(data, base + 16), mirror_attribute: Bytes.u8(data, base + 17), skip_attribute: Bytes.u8(data, base + 18), collision_attribute: Bytes.u8(data, meta + 5), user_count, components: Bytes.u8(data, meta + 3), line_break: Bytes.u16(data, line_break), extra_ascent: Bytes.i16(data, base + 2), extra_descent: Bytes.i16(data, base + 4) }
-		Ok({ data, subtables: subtables.append(sub), passes: $passes, classes: $classes, pseudo_chars: $pseudo_chars, pseudo_glyphs: $pseudo_glyphs, constraint_endings: $endings, programs: $programs, instructions: $instructions })
+		sub = { pass_start, pass_end: $passes.len(), class_start, class_end: $classes.len(), pseudo_start, pseudo_end: $pseudo_chars.len(), substitution, positioning, justification, bidi, flags: Bytes.u8(data, base + 11), direction: Bytes.u8(data, meta + 4), pseudo_attribute: Bytes.u8(data, base + 14), break_attribute: Bytes.u8(data, base + 15), direction_attribute: Bytes.u8(data, base + 16), mirror_attribute: Bytes.u8(data, base + 17), skip_attribute: Bytes.u8(data, base + 18), collision_attribute: Bytes.u8(data, meta + 5), user_count, justification_start: base + 20, justification_count: levels, components: Bytes.u8(data, meta + 3), line_break: Bytes.u16(data, line_break), extra_ascent: Bytes.i16(data, base + 2), extra_descent: Bytes.i16(data, base + 4) }
+		Ok({ data, subtables: subtables.append(sub), passes: $passes, classes: $classes, pseudo_chars: $pseudo_chars, pseudo_glyphs: $pseudo_glyphs, constraint_endings: $endings, programs: $programs, instructions: $instructions, protected_inputs: $protected })
 	}
 
 	pseudo : GraphiteSilf, Subtable, U32 -> [Found(U64), Missing]

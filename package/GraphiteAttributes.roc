@@ -12,10 +12,11 @@ GraphiteAttributes := {
 	box_starts : List(U64),
 	bytes : List(U8),
 	attribute_count : U64,
+	major : U64,
 }.{
 
 	none : GraphiteAttributes
-	none = { starts: [0], keys: [], values: [], box_starts: [], bytes: [], attribute_count: 0 }
+	none = { starts: [0], keys: [], values: [], box_starts: [], bytes: [], attribute_count: 0, major: 0 }
 
 	glyph_count : GraphiteAttributes -> U64
 	glyph_count = |table| table.starts.len() - 1
@@ -106,7 +107,7 @@ GraphiteAttributes := {
 			}
 		}
 		$starts = $starts.append($keys.len())
-		Ok({ starts: $starts, keys: $keys, values: $values, box_starts: $box_starts, bytes: if (boxes) data else [], attribute_count: attributes })
+		Ok({ starts: $starts, keys: $keys, values: $values, box_starts: $box_starts, bytes: if (boxes) data else [], attribute_count: attributes, major })
 	}
 
 	attributes_at : List(U8), U64, U64, Bool -> Try(U64, U64)

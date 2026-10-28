@@ -82,6 +82,9 @@ TableGraphite := {
 				GraphiteSilf.none
 			}
 		}
+		if attributes.major != 0 and attributes.major < 3 and program.passes.any(|pass| pass.flags.bitwise_and(31) != 0) {
+			$problems = $problems.append({ table: "Glat", offset: 0, reason: Malformed })
+		}
 		if $problems.is_empty() {
 			Ok({ attributes, features, program, glyph_count: count, real_glyph_count: tables.glyph_count })
 		} else Err($problems)
@@ -135,5 +138,14 @@ expect {
 	match TableGraphite.read({ silf: inline_silf, gloc: inline_gloc, glat: inline_glat, feat: Present(inline_feat), sill: Absent, glyph_count: 3 }, 4096) {
 		Ok(table) => TableGraphite.available(table) and table.glyph_count == 3 and table.program.passes.len() == 1 and table.program.instructions.len() == 3 and GraphiteFeatures.defaults(table.features, 0) == [0]
 		Err(_) => False
+	}
+}
+
+expect {
+	# Collision flags require Glat3. This cross-table dependency is read
+	# eagerly; older glyph-attribute tables remain valid for ordinary passes.
+	match TableGraphite.read({ silf: inline_silf.set(84, 1) ?? [], gloc: inline_gloc, glat: inline_glat, feat: Present(inline_feat), sill: Absent, glyph_count: 3 }, 4096) {
+		Err(problems) => problems == [{ table: "Glat", offset: 0, reason: Malformed }]
+		Ok(_) => False
 	}
 }

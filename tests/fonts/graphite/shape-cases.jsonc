@@ -1,6 +1,1350 @@
 {
   "cases": [
     {
+      "id": "live-copy/empty/ltr",
+      "font": "live-copy.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/empty/rtl",
+      "font": "live-copy.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/empty/ttb",
+      "font": "live-copy.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/empty/btt",
+      "font": "live-copy.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/a/ltr",
+      "font": "live-copy.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/a/rtl",
+      "font": "live-copy.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/a/ttb",
+      "font": "live-copy.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/a/btt",
+      "font": "live-copy.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/b/ltr",
+      "font": "live-copy.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/b/rtl",
+      "font": "live-copy.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/b/ttb",
+      "font": "live-copy.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/b/btt",
+      "font": "live-copy.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ab/ltr",
+      "font": "live-copy.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ab/rtl",
+      "font": "live-copy.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ab/ttb",
+      "font": "live-copy.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ab/btt",
+      "font": "live-copy.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ba/ltr",
+      "font": "live-copy.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ba/rtl",
+      "font": "live-copy.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ba/ttb",
+      "font": "live-copy.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/ba/btt",
+      "font": "live-copy.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/aaa/ltr",
+      "font": "live-copy.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/aaa/rtl",
+      "font": "live-copy.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/aaa/ttb",
+      "font": "live-copy.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "live-copy/aaa/btt",
+      "font": "live-copy.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/empty/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/empty/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/empty/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/empty/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/a/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/a/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/a/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/a/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/b/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/b/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/b/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/b/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ab/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ab/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ab/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ab/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ba/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ba/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ba/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/ba/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/aaa/ltr",
+      "font": "glyph-set-copy.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/aaa/rtl",
+      "font": "glyph-set-copy.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/aaa/ttb",
+      "font": "glyph-set-copy.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-set-copy/aaa/btt",
+      "font": "glyph-set-copy.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/empty/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/empty/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/empty/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/empty/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/a/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/a/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/a/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/a/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/b/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/b/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/b/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/b/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ab/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ab/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ab/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ab/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ba/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ba/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ba/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/ba/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/aaa/ltr",
+      "font": "set-glyph-copy.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/aaa/rtl",
+      "font": "set-glyph-copy.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/aaa/ttb",
+      "font": "set-glyph-copy.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-glyph-copy/aaa/btt",
+      "font": "set-glyph-copy.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/empty/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/empty/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/empty/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/empty/btt",
+      "font": "glyph-slot.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/a/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/a/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/a/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/a/btt",
+      "font": "glyph-slot.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/b/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/b/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/b/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/b/btt",
+      "font": "glyph-slot.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ab/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ab/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ab/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ab/btt",
+      "font": "glyph-slot.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ba/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ba/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ba/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/ba/btt",
+      "font": "glyph-slot.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/aaa/ltr",
+      "font": "glyph-slot.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/aaa/rtl",
+      "font": "glyph-slot.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/aaa/ttb",
+      "font": "glyph-slot.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "glyph-slot/aaa/btt",
+      "font": "glyph-slot.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/empty/ltr",
+      "font": "conditional-false.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/empty/rtl",
+      "font": "conditional-false.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/empty/ttb",
+      "font": "conditional-false.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/empty/btt",
+      "font": "conditional-false.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/a/ltr",
+      "font": "conditional-false.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/a/rtl",
+      "font": "conditional-false.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/a/ttb",
+      "font": "conditional-false.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/a/btt",
+      "font": "conditional-false.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/b/ltr",
+      "font": "conditional-false.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/b/rtl",
+      "font": "conditional-false.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/b/ttb",
+      "font": "conditional-false.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/b/btt",
+      "font": "conditional-false.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ab/ltr",
+      "font": "conditional-false.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ab/rtl",
+      "font": "conditional-false.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ab/ttb",
+      "font": "conditional-false.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ab/btt",
+      "font": "conditional-false.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ba/ltr",
+      "font": "conditional-false.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ba/rtl",
+      "font": "conditional-false.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ba/ttb",
+      "font": "conditional-false.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/ba/btt",
+      "font": "conditional-false.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/aaa/ltr",
+      "font": "conditional-false.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/aaa/rtl",
+      "font": "conditional-false.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/aaa/ttb",
+      "font": "conditional-false.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-false/aaa/btt",
+      "font": "conditional-false.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/empty/ltr",
+      "font": "conditional-true.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/empty/rtl",
+      "font": "conditional-true.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/empty/ttb",
+      "font": "conditional-true.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/empty/btt",
+      "font": "conditional-true.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/a/ltr",
+      "font": "conditional-true.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/a/rtl",
+      "font": "conditional-true.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/a/ttb",
+      "font": "conditional-true.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/a/btt",
+      "font": "conditional-true.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/b/ltr",
+      "font": "conditional-true.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/b/rtl",
+      "font": "conditional-true.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/b/ttb",
+      "font": "conditional-true.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/b/btt",
+      "font": "conditional-true.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ab/ltr",
+      "font": "conditional-true.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ab/rtl",
+      "font": "conditional-true.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ab/ttb",
+      "font": "conditional-true.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ab/btt",
+      "font": "conditional-true.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ba/ltr",
+      "font": "conditional-true.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ba/rtl",
+      "font": "conditional-true.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ba/ttb",
+      "font": "conditional-true.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/ba/btt",
+      "font": "conditional-true.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/aaa/ltr",
+      "font": "conditional-true.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/aaa/rtl",
+      "font": "conditional-true.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/aaa/ttb",
+      "font": "conditional-true.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "conditional-true/aaa/btt",
+      "font": "conditional-true.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/empty/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/empty/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/empty/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/empty/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/a/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/a/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/a/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/a/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/b/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/b/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/b/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/b/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ab/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ab/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ab/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ab/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ba/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ba/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ba/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/ba/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/aaa/ltr",
+      "font": "set-feature-negative.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/aaa/rtl",
+      "font": "set-feature-negative.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/aaa/ttb",
+      "font": "set-feature-negative.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-negative/aaa/btt",
+      "font": "set-feature-negative.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/empty/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/empty/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/empty/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/empty/btt",
+      "font": "set-feature-large.ttf",
+      "text": "",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/a/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "a",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/a/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "a",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/a/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "a",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/a/btt",
+      "font": "set-feature-large.ttf",
+      "text": "a",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/b/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "b",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/b/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "b",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/b/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "b",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/b/btt",
+      "font": "set-feature-large.ttf",
+      "text": "b",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ab/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ab/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ab/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "ab",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ab/btt",
+      "font": "set-feature-large.ttf",
+      "text": "ab",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ba/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "ba",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ba/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "ba",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ba/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "ba",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/ba/btt",
+      "font": "set-feature-large.ttf",
+      "text": "ba",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/aaa/ltr",
+      "font": "set-feature-large.ttf",
+      "text": "aaa",
+      "direction": "ltr",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/aaa/rtl",
+      "font": "set-feature-large.ttf",
+      "text": "aaa",
+      "direction": "rtl",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/aaa/ttb",
+      "font": "set-feature-large.ttf",
+      "text": "aaa",
+      "direction": "ttb",
+      "script": "Latn"
+    },
+    {
+      "id": "set-feature-large/aaa/btt",
+      "font": "set-feature-large.ttf",
+      "text": "aaa",
+      "direction": "btt",
+      "script": "Latn"
+    },
+    {
       "id": "stack-1023/empty/ltr",
       "font": "stack-1023.ttf",
       "text": "",
@@ -2195,7 +3539,7 @@
     {
       "id": "charis/text-1/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a",
+      "text": "([])",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2203,7 +3547,7 @@
     {
       "id": "charis/text-1/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a",
+      "text": "([])",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2211,7 +3555,7 @@
     {
       "id": "charis/text-1/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a",
+      "text": "([])",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2219,7 +3563,7 @@
     {
       "id": "charis/text-1/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a",
+      "text": "([])",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2227,7 +3571,7 @@
     {
       "id": "charis/text-2/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "office",
+      "text": "a",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2235,7 +3579,7 @@
     {
       "id": "charis/text-2/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "office",
+      "text": "a",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2243,7 +3587,7 @@
     {
       "id": "charis/text-2/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "office",
+      "text": "a",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2251,7 +3595,7 @@
     {
       "id": "charis/text-2/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "office",
+      "text": "a",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2259,7 +3603,7 @@
     {
       "id": "charis/text-3/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "fi ffi",
+      "text": "office",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2267,7 +3611,7 @@
     {
       "id": "charis/text-3/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "fi ffi",
+      "text": "office",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2275,7 +3619,7 @@
     {
       "id": "charis/text-3/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "fi ffi",
+      "text": "office",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2283,7 +3627,7 @@
     {
       "id": "charis/text-3/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "fi ffi",
+      "text": "office",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2291,7 +3635,7 @@
     {
       "id": "charis/text-4/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "á",
+      "text": "fi ffi",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2299,7 +3643,7 @@
     {
       "id": "charis/text-4/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "á",
+      "text": "fi ffi",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2307,7 +3651,7 @@
     {
       "id": "charis/text-4/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "á",
+      "text": "fi ffi",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2315,7 +3659,7 @@
     {
       "id": "charis/text-4/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "á",
+      "text": "fi ffi",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2323,7 +3667,7 @@
     {
       "id": "charis/text-5/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Ä́",
+      "text": "á",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2331,7 +3675,7 @@
     {
       "id": "charis/text-5/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Ä́",
+      "text": "á",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2339,7 +3683,7 @@
     {
       "id": "charis/text-5/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Ä́",
+      "text": "á",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2347,7 +3691,7 @@
     {
       "id": "charis/text-5/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Ä́",
+      "text": "á",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2355,7 +3699,7 @@
     {
       "id": "charis/text-6/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ạ́",
+      "text": "Ä́",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2363,7 +3707,7 @@
     {
       "id": "charis/text-6/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "ạ́",
+      "text": "Ä́",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2371,7 +3715,7 @@
     {
       "id": "charis/text-6/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ạ́",
+      "text": "Ä́",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2379,7 +3723,7 @@
     {
       "id": "charis/text-6/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "ạ́",
+      "text": "Ä́",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2387,7 +3731,7 @@
     {
       "id": "charis/text-7/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Tiếng Việt",
+      "text": "ạ́",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2395,7 +3739,7 @@
     {
       "id": "charis/text-7/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Tiếng Việt",
+      "text": "ạ́",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2403,7 +3747,7 @@
     {
       "id": "charis/text-7/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Tiếng Việt",
+      "text": "ạ́",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2411,7 +3755,7 @@
     {
       "id": "charis/text-7/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Tiếng Việt",
+      "text": "ạ́",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2419,7 +3763,7 @@
     {
       "id": "charis/text-8/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Ǽȅǖ",
+      "text": "Tiếng Việt",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2427,7 +3771,7 @@
     {
       "id": "charis/text-8/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Ǽȅǖ",
+      "text": "Tiếng Việt",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2435,7 +3779,7 @@
     {
       "id": "charis/text-8/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "Ǽȅǖ",
+      "text": "Tiếng Việt",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2443,7 +3787,7 @@
     {
       "id": "charis/text-8/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "Ǽȅǖ",
+      "text": "Tiếng Việt",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2451,7 +3795,7 @@
     {
       "id": "charis/text-9/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ἄ",
+      "text": "Ǽȅǖ",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2459,7 +3803,7 @@
     {
       "id": "charis/text-9/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "ἄ",
+      "text": "Ǽȅǖ",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2467,7 +3811,7 @@
     {
       "id": "charis/text-9/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ἄ",
+      "text": "Ǽȅǖ",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2475,7 +3819,7 @@
     {
       "id": "charis/text-9/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "ἄ",
+      "text": "Ǽȅǖ",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2483,7 +3827,7 @@
     {
       "id": "charis/text-10/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a‌b",
+      "text": "ἄ",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2491,7 +3835,7 @@
     {
       "id": "charis/text-10/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a‌b",
+      "text": "ἄ",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2499,7 +3843,7 @@
     {
       "id": "charis/text-10/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a‌b",
+      "text": "ἄ",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2507,7 +3851,7 @@
     {
       "id": "charis/text-10/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a‌b",
+      "text": "ἄ",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2515,7 +3859,7 @@
     {
       "id": "charis/text-11/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a‍b",
+      "text": "a‌b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2523,7 +3867,7 @@
     {
       "id": "charis/text-11/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a‍b",
+      "text": "a‌b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2531,7 +3875,7 @@
     {
       "id": "charis/text-11/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a‍b",
+      "text": "a‌b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2539,7 +3883,7 @@
     {
       "id": "charis/text-11/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a‍b",
+      "text": "a‌b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2547,7 +3891,7 @@
     {
       "id": "charis/text-12/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a͏b",
+      "text": "a‍b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2555,7 +3899,7 @@
     {
       "id": "charis/text-12/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a͏b",
+      "text": "a‍b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2563,7 +3907,7 @@
     {
       "id": "charis/text-12/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a͏b",
+      "text": "a‍b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2571,7 +3915,7 @@
     {
       "id": "charis/text-12/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a͏b",
+      "text": "a‍b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2579,7 +3923,7 @@
     {
       "id": "charis/text-13/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a⁠b",
+      "text": "a͏b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2587,7 +3931,7 @@
     {
       "id": "charis/text-13/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a⁠b",
+      "text": "a͏b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2595,7 +3939,7 @@
     {
       "id": "charis/text-13/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a⁠b",
+      "text": "a͏b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2603,7 +3947,7 @@
     {
       "id": "charis/text-13/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a⁠b",
+      "text": "a͏b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2611,7 +3955,7 @@
     {
       "id": "charis/text-14/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a b",
+      "text": "a⁠b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2619,7 +3963,7 @@
     {
       "id": "charis/text-14/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a b",
+      "text": "a⁠b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2627,7 +3971,7 @@
     {
       "id": "charis/text-14/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a b",
+      "text": "a⁠b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2635,7 +3979,7 @@
     {
       "id": "charis/text-14/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a b",
+      "text": "a⁠b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2643,7 +3987,7 @@
     {
       "id": "charis/text-15/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a️b",
+      "text": "a b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2651,7 +3995,7 @@
     {
       "id": "charis/text-15/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a️b",
+      "text": "a b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2659,7 +4003,7 @@
     {
       "id": "charis/text-15/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "a️b",
+      "text": "a b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2667,7 +4011,7 @@
     {
       "id": "charis/text-15/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "a️b",
+      "text": "a b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2675,7 +4019,7 @@
     {
       "id": "charis/text-16/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "😀",
+      "text": "a️b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2683,7 +4027,7 @@
     {
       "id": "charis/text-16/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "😀",
+      "text": "a️b",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2691,7 +4035,7 @@
     {
       "id": "charis/text-16/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "😀",
+      "text": "a️b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2699,7 +4043,7 @@
     {
       "id": "charis/text-16/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "😀",
+      "text": "a️b",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2707,7 +4051,7 @@
     {
       "id": "charis/text-17/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "text": "😀",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2715,7 +4059,7 @@
     {
       "id": "charis/text-17/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "text": "😀",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2723,7 +4067,7 @@
     {
       "id": "charis/text-17/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "text": "😀",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
@@ -2731,7 +4075,7 @@
     {
       "id": "charis/text-17/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "text": "😀",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 1
@@ -2739,7 +4083,7 @@
     {
       "id": "charis/text-18/ltr/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 0
@@ -2747,7 +4091,7 @@
     {
       "id": "charis/text-18/ltr/clusters-1",
       "font": "Charis5_eursub.ttf",
-      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "script": "Latn",
       "direction": "ltr",
       "cluster_level": 1
@@ -2755,13 +4099,45 @@
     {
       "id": "charis/text-18/rtl/clusters-0",
       "font": "Charis5_eursub.ttf",
-      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "script": "Latn",
       "direction": "rtl",
       "cluster_level": 0
     },
     {
       "id": "charis/text-18/rtl/clusters-1",
+      "font": "Charis5_eursub.ttf",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "script": "Latn",
+      "direction": "rtl",
+      "cluster_level": 1
+    },
+    {
+      "id": "charis/text-19/ltr/clusters-0",
+      "font": "Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "script": "Latn",
+      "direction": "ltr",
+      "cluster_level": 0
+    },
+    {
+      "id": "charis/text-19/ltr/clusters-1",
+      "font": "Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "script": "Latn",
+      "direction": "ltr",
+      "cluster_level": 1
+    },
+    {
+      "id": "charis/text-19/rtl/clusters-0",
+      "font": "Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "script": "Latn",
+      "direction": "rtl",
+      "cluster_level": 0
+    },
+    {
+      "id": "charis/text-19/rtl/clusters-1",
       "font": "Charis5_eursub.ttf",
       "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
       "script": "Latn",
@@ -3985,7 +5361,7 @@
     {
       "id": "padauk/text-1/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က",
+      "text": "([])",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -3993,7 +5369,7 @@
     {
       "id": "padauk/text-1/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က",
+      "text": "([])",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4001,7 +5377,7 @@
     {
       "id": "padauk/text-1/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က",
+      "text": "([])",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4009,7 +5385,7 @@
     {
       "id": "padauk/text-1/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က",
+      "text": "([])",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4017,7 +5393,7 @@
     {
       "id": "padauk/text-2/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က္က",
+      "text": "က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4025,7 +5401,7 @@
     {
       "id": "padauk/text-2/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က္က",
+      "text": "က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4033,7 +5409,7 @@
     {
       "id": "padauk/text-2/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က္က",
+      "text": "က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4041,7 +5417,7 @@
     {
       "id": "padauk/text-2/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က္က",
+      "text": "က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4049,7 +5425,7 @@
     {
       "id": "padauk/text-3/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "မြန်မာ",
+      "text": "က္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4057,7 +5433,7 @@
     {
       "id": "padauk/text-3/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "မြန်မာ",
+      "text": "က္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4065,7 +5441,7 @@
     {
       "id": "padauk/text-3/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "မြန်မာ",
+      "text": "က္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4073,7 +5449,7 @@
     {
       "id": "padauk/text-3/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "မြန်မာ",
+      "text": "က္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4081,7 +5457,7 @@
     {
       "id": "padauk/text-4/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "င်္က",
+      "text": "မြန်မာ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4089,7 +5465,7 @@
     {
       "id": "padauk/text-4/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "င်္က",
+      "text": "မြန်မာ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4097,7 +5473,7 @@
     {
       "id": "padauk/text-4/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "င်္က",
+      "text": "မြန်မာ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4105,7 +5481,7 @@
     {
       "id": "padauk/text-4/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "င်္က",
+      "text": "မြန်မာ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4113,7 +5489,7 @@
     {
       "id": "padauk/text-5/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေက",
+      "text": "င်္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4121,7 +5497,7 @@
     {
       "id": "padauk/text-5/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေက",
+      "text": "င်္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4129,7 +5505,7 @@
     {
       "id": "padauk/text-5/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေက",
+      "text": "င်္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4137,7 +5513,7 @@
     {
       "id": "padauk/text-5/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေက",
+      "text": "င်္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4145,7 +5521,7 @@
     {
       "id": "padauk/text-6/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကေ",
+      "text": "ေက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4153,7 +5529,7 @@
     {
       "id": "padauk/text-6/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကေ",
+      "text": "ေက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4161,7 +5537,7 @@
     {
       "id": "padauk/text-6/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကေ",
+      "text": "ေက",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4169,7 +5545,7 @@
     {
       "id": "padauk/text-6/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကေ",
+      "text": "ေက",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4177,7 +5553,7 @@
     {
       "id": "padauk/text-7/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကေေ",
+      "text": "ကေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4185,7 +5561,7 @@
     {
       "id": "padauk/text-7/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကေေ",
+      "text": "ကေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4193,7 +5569,7 @@
     {
       "id": "padauk/text-7/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကေေ",
+      "text": "ကေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4201,7 +5577,7 @@
     {
       "id": "padauk/text-7/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကေေ",
+      "text": "ကေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4209,7 +5585,7 @@
     {
       "id": "padauk/text-8/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က်္က",
+      "text": "ကေေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4217,7 +5593,7 @@
     {
       "id": "padauk/text-8/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က်္က",
+      "text": "ကေေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4225,7 +5601,7 @@
     {
       "id": "padauk/text-8/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က်္က",
+      "text": "ကေေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4233,7 +5609,7 @@
     {
       "id": "padauk/text-8/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က်္က",
+      "text": "ကေေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4241,7 +5617,7 @@
     {
       "id": "padauk/text-9/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကျွှ",
+      "text": "က်္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4249,7 +5625,7 @@
     {
       "id": "padauk/text-9/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကျွှ",
+      "text": "က်္က",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4257,7 +5633,7 @@
     {
       "id": "padauk/text-9/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကျွှ",
+      "text": "က်္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4265,7 +5641,7 @@
     {
       "id": "padauk/text-9/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကျွှ",
+      "text": "က်္က",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4273,7 +5649,7 @@
     {
       "id": "padauk/text-10/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေ",
+      "text": "ကျွှ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4281,7 +5657,7 @@
     {
       "id": "padauk/text-10/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေ",
+      "text": "ကျွှ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4289,7 +5665,7 @@
     {
       "id": "padauk/text-10/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေ",
+      "text": "ကျွှ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4297,7 +5673,7 @@
     {
       "id": "padauk/text-10/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေ",
+      "text": "ကျွှ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4305,7 +5681,7 @@
     {
       "id": "padauk/text-11/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ြ",
+      "text": "ေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4313,7 +5689,7 @@
     {
       "id": "padauk/text-11/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ြ",
+      "text": "ေ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4321,7 +5697,7 @@
     {
       "id": "padauk/text-11/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ြ",
+      "text": "ေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4329,7 +5705,7 @@
     {
       "id": "padauk/text-11/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ြ",
+      "text": "ေ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4337,7 +5713,7 @@
     {
       "id": "padauk/text-12/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "၁၂၃",
+      "text": "ြ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4345,7 +5721,7 @@
     {
       "id": "padauk/text-12/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "၁၂၃",
+      "text": "ြ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4353,7 +5729,7 @@
     {
       "id": "padauk/text-12/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "၁၂၃",
+      "text": "ြ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4361,7 +5737,7 @@
     {
       "id": "padauk/text-12/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "၁၂၃",
+      "text": "ြ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4369,7 +5745,7 @@
     {
       "id": "padauk/text-13/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က‌ခ",
+      "text": "၁၂၃",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4377,7 +5753,7 @@
     {
       "id": "padauk/text-13/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က‌ခ",
+      "text": "၁၂၃",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4385,7 +5761,7 @@
     {
       "id": "padauk/text-13/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က‌ခ",
+      "text": "၁၂၃",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4393,7 +5769,7 @@
     {
       "id": "padauk/text-13/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က‌ခ",
+      "text": "၁၂၃",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4401,7 +5777,7 @@
     {
       "id": "padauk/text-14/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က‍ခ",
+      "text": "က‌ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4409,7 +5785,7 @@
     {
       "id": "padauk/text-14/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က‍ခ",
+      "text": "က‌ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4417,7 +5793,7 @@
     {
       "id": "padauk/text-14/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က‍ခ",
+      "text": "က‌ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4425,7 +5801,7 @@
     {
       "id": "padauk/text-14/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က‍ခ",
+      "text": "က‌ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4433,7 +5809,7 @@
     {
       "id": "padauk/text-15/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က͏ခ",
+      "text": "က‍ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4441,7 +5817,7 @@
     {
       "id": "padauk/text-15/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က͏ခ",
+      "text": "က‍ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4449,7 +5825,7 @@
     {
       "id": "padauk/text-15/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "က͏ခ",
+      "text": "က‍ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4457,7 +5833,7 @@
     {
       "id": "padauk/text-15/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "က͏ခ",
+      "text": "က‍ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4465,7 +5841,7 @@
     {
       "id": "padauk/text-16/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
+      "text": "က͏ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4473,7 +5849,7 @@
     {
       "id": "padauk/text-16/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
+      "text": "က͏ခ",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4481,7 +5857,7 @@
     {
       "id": "padauk/text-16/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
+      "text": "က͏ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4489,7 +5865,7 @@
     {
       "id": "padauk/text-16/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
+      "text": "က͏ခ",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4497,7 +5873,7 @@
     {
       "id": "padauk/text-17/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
+      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4505,7 +5881,7 @@
     {
       "id": "padauk/text-17/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
+      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4513,7 +5889,7 @@
     {
       "id": "padauk/text-17/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
+      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
@@ -4521,7 +5897,7 @@
     {
       "id": "padauk/text-17/rtl/clusters-1",
       "font": "Padauk.ttf",
-      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
+      "text": "ကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကကက",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 1
@@ -4529,7 +5905,7 @@
     {
       "id": "padauk/text-18/ltr/clusters-0",
       "font": "Padauk.ttf",
-      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 0
@@ -4537,7 +5913,7 @@
     {
       "id": "padauk/text-18/ltr/clusters-1",
       "font": "Padauk.ttf",
-      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
       "script": "Mymr",
       "direction": "ltr",
       "cluster_level": 1
@@ -4545,13 +5921,45 @@
     {
       "id": "padauk/text-18/rtl/clusters-0",
       "font": "Padauk.ttf",
-      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
       "script": "Mymr",
       "direction": "rtl",
       "cluster_level": 0
     },
     {
       "id": "padauk/text-18/rtl/clusters-1",
+      "font": "Padauk.ttf",
+      "text": "ေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေေက",
+      "script": "Mymr",
+      "direction": "rtl",
+      "cluster_level": 1
+    },
+    {
+      "id": "padauk/text-19/ltr/clusters-0",
+      "font": "Padauk.ttf",
+      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "script": "Mymr",
+      "direction": "ltr",
+      "cluster_level": 0
+    },
+    {
+      "id": "padauk/text-19/ltr/clusters-1",
+      "font": "Padauk.ttf",
+      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "script": "Mymr",
+      "direction": "ltr",
+      "cluster_level": 1
+    },
+    {
+      "id": "padauk/text-19/rtl/clusters-0",
+      "font": "Padauk.ttf",
+      "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
+      "script": "Mymr",
+      "direction": "rtl",
+      "cluster_level": 0
+    },
+    {
+      "id": "padauk/text-19/rtl/clusters-1",
       "font": "Padauk.ttf",
       "text": "မြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာမြန်မာ",
       "script": "Mymr",
@@ -5002,7 +6410,7 @@
     {
       "id": "scheherazade/text-1/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5010,7 +6418,7 @@
     {
       "id": "scheherazade/text-1/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5018,7 +6426,7 @@
     {
       "id": "scheherazade/text-1/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5026,7 +6434,7 @@
     {
       "id": "scheherazade/text-1/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5034,7 +6442,7 @@
     {
       "id": "scheherazade/text-2/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5042,7 +6450,7 @@
     {
       "id": "scheherazade/text-2/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5050,7 +6458,7 @@
     {
       "id": "scheherazade/text-2/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5058,7 +6466,7 @@
     {
       "id": "scheherazade/text-2/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5066,7 +6474,7 @@
     {
       "id": "scheherazade/text-3/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5074,7 +6482,7 @@
     {
       "id": "scheherazade/text-3/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5082,7 +6490,7 @@
     {
       "id": "scheherazade/text-3/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5090,7 +6498,7 @@
     {
       "id": "scheherazade/text-3/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5098,7 +6506,7 @@
     {
       "id": "scheherazade/text-4/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5106,7 +6514,7 @@
     {
       "id": "scheherazade/text-4/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5114,7 +6522,7 @@
     {
       "id": "scheherazade/text-4/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5122,7 +6530,7 @@
     {
       "id": "scheherazade/text-4/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5130,7 +6538,7 @@
     {
       "id": "scheherazade/text-5/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5138,7 +6546,7 @@
     {
       "id": "scheherazade/text-5/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5146,7 +6554,7 @@
     {
       "id": "scheherazade/text-5/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5154,7 +6562,7 @@
     {
       "id": "scheherazade/text-5/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5162,7 +6570,7 @@
     {
       "id": "scheherazade/text-6/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5170,7 +6578,7 @@
     {
       "id": "scheherazade/text-6/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5178,7 +6586,7 @@
     {
       "id": "scheherazade/text-6/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5186,7 +6594,7 @@
     {
       "id": "scheherazade/text-6/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5194,7 +6602,7 @@
     {
       "id": "scheherazade/text-7/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5202,7 +6610,7 @@
     {
       "id": "scheherazade/text-7/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5210,7 +6618,7 @@
     {
       "id": "scheherazade/text-7/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5218,7 +6626,7 @@
     {
       "id": "scheherazade/text-7/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5226,7 +6634,7 @@
     {
       "id": "scheherazade/text-8/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5234,7 +6642,7 @@
     {
       "id": "scheherazade/text-8/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5242,7 +6650,7 @@
     {
       "id": "scheherazade/text-8/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5250,7 +6658,7 @@
     {
       "id": "scheherazade/text-8/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5258,7 +6666,7 @@
     {
       "id": "scheherazade/text-9/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5266,7 +6674,7 @@
     {
       "id": "scheherazade/text-9/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5274,7 +6682,7 @@
     {
       "id": "scheherazade/text-9/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5282,7 +6690,7 @@
     {
       "id": "scheherazade/text-9/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5290,7 +6698,7 @@
     {
       "id": "scheherazade/text-10/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5298,7 +6706,7 @@
     {
       "id": "scheherazade/text-10/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5306,7 +6714,7 @@
     {
       "id": "scheherazade/text-10/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5314,7 +6722,7 @@
     {
       "id": "scheherazade/text-10/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5322,7 +6730,7 @@
     {
       "id": "scheherazade/text-11/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5330,7 +6738,7 @@
     {
       "id": "scheherazade/text-11/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5338,7 +6746,7 @@
     {
       "id": "scheherazade/text-11/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5346,7 +6754,7 @@
     {
       "id": "scheherazade/text-11/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5354,7 +6762,7 @@
     {
       "id": "scheherazade/text-12/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5362,7 +6770,7 @@
     {
       "id": "scheherazade/text-12/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5370,7 +6778,7 @@
     {
       "id": "scheherazade/text-12/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5378,7 +6786,7 @@
     {
       "id": "scheherazade/text-12/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5386,7 +6794,7 @@
     {
       "id": "scheherazade/text-13/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5394,7 +6802,7 @@
     {
       "id": "scheherazade/text-13/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5402,7 +6810,7 @@
     {
       "id": "scheherazade/text-13/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5410,7 +6818,7 @@
     {
       "id": "scheherazade/text-13/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5418,7 +6826,7 @@
     {
       "id": "scheherazade/text-14/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5426,7 +6834,7 @@
     {
       "id": "scheherazade/text-14/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5434,7 +6842,7 @@
     {
       "id": "scheherazade/text-14/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5442,7 +6850,7 @@
     {
       "id": "scheherazade/text-14/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5450,7 +6858,7 @@
     {
       "id": "scheherazade/text-15/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5458,7 +6866,7 @@
     {
       "id": "scheherazade/text-15/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5466,7 +6874,7 @@
     {
       "id": "scheherazade/text-15/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5474,7 +6882,7 @@
     {
       "id": "scheherazade/text-15/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5482,7 +6890,7 @@
     {
       "id": "scheherazade/text-16/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5490,7 +6898,7 @@
     {
       "id": "scheherazade/text-16/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5498,7 +6906,7 @@
     {
       "id": "scheherazade/text-16/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5506,7 +6914,7 @@
     {
       "id": "scheherazade/text-16/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5514,7 +6922,7 @@
     {
       "id": "scheherazade/text-17/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5522,7 +6930,7 @@
     {
       "id": "scheherazade/text-17/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5530,7 +6938,7 @@
     {
       "id": "scheherazade/text-17/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5538,7 +6946,7 @@
     {
       "id": "scheherazade/text-17/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5546,7 +6954,7 @@
     {
       "id": "scheherazade/text-18/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5554,7 +6962,7 @@
     {
       "id": "scheherazade/text-18/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5562,7 +6970,7 @@
     {
       "id": "scheherazade/text-18/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -5570,7 +6978,7 @@
     {
       "id": "scheherazade/text-18/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -5578,7 +6986,7 @@
     {
       "id": "scheherazade/text-19/ltr/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -5586,7 +6994,7 @@
     {
       "id": "scheherazade/text-19/ltr/clusters-1",
       "font": "Scheherazadegr.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -5594,13 +7002,45 @@
     {
       "id": "scheherazade/text-19/rtl/clusters-0",
       "font": "Scheherazadegr.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
     },
     {
       "id": "scheherazade/text-19/rtl/clusters-1",
+      "font": "Scheherazadegr.ttf",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "script": "Arab",
+      "direction": "rtl",
+      "cluster_level": 1
+    },
+    {
+      "id": "scheherazade/text-20/ltr/clusters-0",
+      "font": "Scheherazadegr.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "ltr",
+      "cluster_level": 0
+    },
+    {
+      "id": "scheherazade/text-20/ltr/clusters-1",
+      "font": "Scheherazadegr.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "ltr",
+      "cluster_level": 1
+    },
+    {
+      "id": "scheherazade/text-20/rtl/clusters-0",
+      "font": "Scheherazadegr.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "rtl",
+      "cluster_level": 0
+    },
+    {
+      "id": "scheherazade/text-20/rtl/clusters-1",
       "font": "Scheherazadegr.ttf",
       "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
       "script": "Arab",
@@ -6507,7 +7947,7 @@
     {
       "id": "awami/text-1/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6515,7 +7955,7 @@
     {
       "id": "awami/text-1/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6523,7 +7963,7 @@
     {
       "id": "awami/text-1/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6531,7 +7971,7 @@
     {
       "id": "awami/text-1/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب",
+      "text": "([])",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6539,7 +7979,7 @@
     {
       "id": "awami/text-2/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6547,7 +7987,7 @@
     {
       "id": "awami/text-2/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6555,7 +7995,7 @@
     {
       "id": "awami/text-2/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6563,7 +8003,7 @@
     {
       "id": "awami/text-2/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "سلام",
+      "text": "ب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6571,7 +8011,7 @@
     {
       "id": "awami/text-3/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6579,7 +8019,7 @@
     {
       "id": "awami/text-3/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6587,7 +8027,7 @@
     {
       "id": "awami/text-3/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6595,7 +8035,7 @@
     {
       "id": "awami/text-3/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بب",
+      "text": "سلام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6603,7 +8043,7 @@
     {
       "id": "awami/text-4/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6611,7 +8051,7 @@
     {
       "id": "awami/text-4/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6619,7 +8059,7 @@
     {
       "id": "awami/text-4/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6627,7 +8067,7 @@
     {
       "id": "awami/text-4/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَت",
+      "text": "بب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6635,7 +8075,7 @@
     {
       "id": "awami/text-5/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6643,7 +8083,7 @@
     {
       "id": "awami/text-5/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6651,7 +8091,7 @@
     {
       "id": "awami/text-5/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6659,7 +8099,7 @@
     {
       "id": "awami/text-5/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اللَّه",
+      "text": "بَت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6667,7 +8107,7 @@
     {
       "id": "awami/text-6/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6675,7 +8115,7 @@
     {
       "id": "awami/text-6/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6683,7 +8123,7 @@
     {
       "id": "awami/text-6/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6691,7 +8131,7 @@
     {
       "id": "awami/text-6/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "الحمد لله",
+      "text": "اللَّه",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6699,7 +8139,7 @@
     {
       "id": "awami/text-7/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6707,7 +8147,7 @@
     {
       "id": "awami/text-7/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6715,7 +8155,7 @@
     {
       "id": "awami/text-7/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6723,7 +8163,7 @@
     {
       "id": "awami/text-7/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‍لام",
+      "text": "الحمد لله",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6731,7 +8171,7 @@
     {
       "id": "awami/text-8/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6739,7 +8179,7 @@
     {
       "id": "awami/text-8/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6747,7 +8187,7 @@
     {
       "id": "awami/text-8/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6755,7 +8195,7 @@
     {
       "id": "awami/text-8/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "س‌لام",
+      "text": "س‍لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6763,7 +8203,7 @@
     {
       "id": "awami/text-9/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6771,7 +8211,7 @@
     {
       "id": "awami/text-9/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6779,7 +8219,7 @@
     {
       "id": "awami/text-9/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6787,7 +8227,7 @@
     {
       "id": "awami/text-9/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ـ",
+      "text": "س‌لام",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6795,7 +8235,7 @@
     {
       "id": "awami/text-10/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6803,7 +8243,7 @@
     {
       "id": "awami/text-10/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6811,7 +8251,7 @@
     {
       "id": "awami/text-10/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6819,7 +8259,7 @@
     {
       "id": "awami/text-10/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ﷲ",
+      "text": "ـ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6827,7 +8267,7 @@
     {
       "id": "awami/text-11/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6835,7 +8275,7 @@
     {
       "id": "awami/text-11/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6843,7 +8283,7 @@
     {
       "id": "awami/text-11/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6851,7 +8291,7 @@
     {
       "id": "awami/text-11/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "اَّ",
+      "text": "ﷲ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6859,7 +8299,7 @@
     {
       "id": "awami/text-12/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6867,7 +8307,7 @@
     {
       "id": "awami/text-12/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6875,7 +8315,7 @@
     {
       "id": "awami/text-12/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6883,7 +8323,7 @@
     {
       "id": "awami/text-12/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب؜ت",
+      "text": "اَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6891,7 +8331,7 @@
     {
       "id": "awami/text-13/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6899,7 +8339,7 @@
     {
       "id": "awami/text-13/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6907,7 +8347,7 @@
     {
       "id": "awami/text-13/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6915,7 +8355,7 @@
     {
       "id": "awami/text-13/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ب͏ت",
+      "text": "ب؜ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6923,7 +8363,7 @@
     {
       "id": "awami/text-14/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6931,7 +8371,7 @@
     {
       "id": "awami/text-14/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6939,7 +8379,7 @@
     {
       "id": "awami/text-14/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6947,7 +8387,7 @@
     {
       "id": "awami/text-14/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ؐبَّ",
+      "text": "ب͏ت",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6955,7 +8395,7 @@
     {
       "id": "awami/text-15/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6963,7 +8403,7 @@
     {
       "id": "awami/text-15/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -6971,7 +8411,7 @@
     {
       "id": "awami/text-15/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -6979,7 +8419,7 @@
     {
       "id": "awami/text-15/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَجْدُ",
+      "text": "ؐبَّ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -6987,7 +8427,7 @@
     {
       "id": "awami/text-16/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -6995,7 +8435,7 @@
     {
       "id": "awami/text-16/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -7003,7 +8443,7 @@
     {
       "id": "awami/text-16/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -7011,7 +8451,7 @@
     {
       "id": "awami/text-16/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بسم الله الرحمن الرحيم",
+      "text": "بَجْدُ",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -7019,7 +8459,7 @@
     {
       "id": "awami/text-17/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -7027,7 +8467,7 @@
     {
       "id": "awami/text-17/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -7035,7 +8475,7 @@
     {
       "id": "awami/text-17/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -7043,7 +8483,7 @@
     {
       "id": "awami/text-17/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "نستعليق",
+      "text": "بسم الله الرحمن الرحيم",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -7051,7 +8491,7 @@
     {
       "id": "awami/text-18/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -7059,7 +8499,7 @@
     {
       "id": "awami/text-18/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -7067,7 +8507,7 @@
     {
       "id": "awami/text-18/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
@@ -7075,7 +8515,7 @@
     {
       "id": "awami/text-18/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "text": "نستعليق",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 1
@@ -7083,7 +8523,7 @@
     {
       "id": "awami/text-19/ltr/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 0
@@ -7091,7 +8531,7 @@
     {
       "id": "awami/text-19/ltr/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "ltr",
       "cluster_level": 1
@@ -7099,13 +8539,45 @@
     {
       "id": "awami/text-19/rtl/clusters-0",
       "font": "AwamiNastaliq-Regular.ttf",
-      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
       "script": "Arab",
       "direction": "rtl",
       "cluster_level": 0
     },
     {
       "id": "awami/text-19/rtl/clusters-1",
+      "font": "AwamiNastaliq-Regular.ttf",
+      "text": "ببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببببب",
+      "script": "Arab",
+      "direction": "rtl",
+      "cluster_level": 1
+    },
+    {
+      "id": "awami/text-20/ltr/clusters-0",
+      "font": "AwamiNastaliq-Regular.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "ltr",
+      "cluster_level": 0
+    },
+    {
+      "id": "awami/text-20/ltr/clusters-1",
+      "font": "AwamiNastaliq-Regular.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "ltr",
+      "cluster_level": 1
+    },
+    {
+      "id": "awami/text-20/rtl/clusters-0",
+      "font": "AwamiNastaliq-Regular.ttf",
+      "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+      "script": "Arab",
+      "direction": "rtl",
+      "cluster_level": 0
+    },
+    {
+      "id": "awami/text-20/rtl/clusters-1",
       "font": "AwamiNastaliq-Regular.ttf",
       "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
       "script": "Arab",

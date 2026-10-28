@@ -5,17 +5,17 @@ from fontTools.ttLib import TTFont
 HERE=Path(__file__).resolve().parent
 p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');args=p.parse_args();cases=[]
 def add(id,font,text,**options):cases.append({'id':id,'font':font,'text':text,**options})
-for name in ['stack-1023','stack-1024','stack-unbalanced','replace','version','set-advance','divide-zero','mutate-then-divide-zero','copy-after-change','metric-after-change','trunc8','trunc16']:
+for name in ['live-copy','glyph-set-copy','set-glyph-copy','glyph-slot','conditional-false','conditional-true','set-feature-negative','set-feature-large','stack-1023','stack-1024','stack-unbalanced','replace','version','set-advance','divide-zero','mutate-then-divide-zero','copy-after-change','metric-after-change','trunc8','trunc16']:
  for text in ['','a','b','ab','ba','aaa']:
   for direction in ['ltr','rtl','ttb','btt']:add(f'{name}/{text or "empty"}/{direction}',name+'.ttf',text,direction=direction,script='Latn')
 for value in [0,1,-1]:
  for text in ['a','b','ab','ba']:
   add(f'feature-abort/{value}/{text}','divide-feature.ttf',text,script='Latn',features=[{'id':100,'value':value}])
 families=[
- ('charis','Charis5_eursub.ttf','Latn',['a','office','fi ffi','a\u0301','A\u0308\u0301','a\u0323\u0301','Tiếng Việt','Ǽȅǖ','α\u0313\u0301','a\u200cb','a\u200db','a\u034fb','a\u2060b','a\u00a0b','a\ufe0fb','😀','a'*65,'a\u0301'*129],'office a\u0301'),
- ('padauk','Padauk.ttf','Mymr',['က','က္က','မြန်မာ','င်္က','ေက','ကေ','က\u1031\u1031','က\u103a\u1039က','က\u103b\u103d\u103e','ေ','ြ','၁၂၃','က\u200cခ','က\u200dခ','က\u034fခ','က'*65,'ေ'*65+'က','မြန်မာ'*52],'မြန်မာ'),
- ('scheherazade','Scheherazadegr.ttf','Arab',['ب','سلام','بب','بَت','اللَّه','الحمد لله','س\u200dلام','س\u200cلام','ـ','ﷲ','ا\u064e\u0651','ب\u061cت','ب\u034fت','\u0610ب\u0651\u064e','بَجْدُ','بسم الله الرحمن الرحيم','نستعليق','ب'*65,'ب\u064e'*129],'بسم الله الرحمن الرحيم'),
- ('awami','AwamiNastaliq-Regular.ttf','Arab',['ب','سلام','بب','بَت','اللَّه','الحمد لله','س\u200dلام','س\u200cلام','ـ','ﷲ','ا\u064e\u0651','ب\u061cت','ب\u034fت','\u0610ب\u0651\u064e','بَجْدُ','بسم الله الرحمن الرحيم','نستعليق','ب'*65,'ب\u064e'*129],'نستعليق بَجْدُ'),
+ ('charis','Charis5_eursub.ttf','Latn',['([])','a','office','fi ffi','a\u0301','A\u0308\u0301','a\u0323\u0301','Tiếng Việt','Ǽȅǖ','α\u0313\u0301','a\u200cb','a\u200db','a\u034fb','a\u2060b','a\u00a0b','a\ufe0fb','😀','a'*65,'a\u0301'*129],'office a\u0301'),
+ ('padauk','Padauk.ttf','Mymr',['([])','က','က္က','မြန်မာ','င်္က','ေက','ကေ','က\u1031\u1031','က\u103a\u1039က','က\u103b\u103d\u103e','ေ','ြ','၁၂၃','က\u200cခ','က\u200dခ','က\u034fခ','က'*65,'ေ'*65+'က','မြန်မာ'*52],'မြန်မာ'),
+ ('scheherazade','Scheherazadegr.ttf','Arab',['([])','ب','سلام','بب','بَت','اللَّه','الحمد لله','س\u200dلام','س\u200cلام','ـ','ﷲ','ا\u064e\u0651','ب\u061cت','ب\u034fت','\u0610ب\u0651\u064e','بَجْدُ','بسم الله الرحمن الرحيم','نستعليق','ب'*65,'ب\u064e'*129],'بسم الله الرحمن الرحيم'),
+ ('awami','AwamiNastaliq-Regular.ttf','Arab',['([])','ب','سلام','بب','بَت','اللَّه','الحمد لله','س\u200dلام','س\u200cلام','ـ','ﷲ','ا\u064e\u0651','ب\u061cت','ب\u034fت','\u0610ب\u0651\u064e','بَجْدُ','بسم الله الرحمن الرحيم','نستعليق','ب'*65,'ب\u064e'*129],'نستعليق بَجْدُ'),
 ]
 for family,name,script,texts,base in families:
  font=TTFont(HERE/name);assert not any(t in font for t in ['morx','mort','kerx','trak'])

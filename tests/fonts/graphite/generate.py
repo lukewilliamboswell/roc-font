@@ -11,10 +11,11 @@ def u16(value):return struct.pack('>H',value)
 def u32(value):return struct.pack('>L',value)
 def raw(font,tag,data):
  table=DefaultTable(tag);table.data=data;font[tag]=table
-def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b''):
+def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b'',j_levels=()):
  # Original DFA for one exact glyph sequence and one output class [gid2].
  classes=u16(1)+u16(1)+u16(8)+u16(10)+u16(2)
- pass_start=58+len(classes)
+ levels=b''.join(bytes(level) for level in j_levels)
+ pass_start=58+len(levels)+len(classes)
  glyphs=sorted(set(match));columns={g:i for i,g in enumerate(glyphs)}
  ranges=b''.join(u16(g)+u16(g)+u16(columns[g]) for g in glyphs)
  count=len(glyphs);power=1<<(count.bit_length()-1)
@@ -29,13 +30,22 @@ def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b
  pass_data=(bytes([0,10,len(match),0])+u16(1)+u16(24)+u32(code_at)
             +u32(code_at+len(pass_constraint))+u32(code_at+len(pass_constraint)+len(raw_constraint))
             +u32(0)+fsm+pass_constraint+raw_constraint+action)
- sub=(u32(0x30000)+u16(42)+u16(50)+u16(2)+u16(0)+u16(0)
-      +bytes([1,0,0 if positioning else 1,1,255,0,0,0,0,0,0,0,0,0])
+ sub=(u32(0x30000)+u16(42+len(levels))+u16(50+len(levels))+u16(2)+u16(0)+u16(0)
+      +bytes([1,0,0 if positioning else 1,1,255,0,0,0,0,0,0,0,0,len(j_levels)])
+      +levels
       +u16(0)+bytes([0,1,1,0,0,0,0,0,0,0])+u16(0)
       +u32(pass_start)+u32(pass_start+len(pass_data))+u16(0)*4+classes+pass_data)
  assert len(sub)==pass_start+len(pass_data),(len(sub),pass_start,len(pass_data))
  return u32(0x30000)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
 programs={
+ 'live-copy':(bytes([1,17,0x23,0,0x1e,0,0x19,0x31]),False),
+ 'glyph-set-copy':(bytes([0x1c,0,1,17,0x23,0,0x1e,0,0x19,0x31]),False),
+ 'set-glyph-copy':(bytes([1,17,0x23,0,0x1c,0,0x1e,0,0x19,0x31]),False),
+ 'glyph-slot':(bytes([0x1c,0,0x28,0,0,0x23,21,0x32]),False),
+ 'conditional-false':(bytes([1,0,1,11,1,22,15,0x23,0,0x32]),True),
+ 'conditional-true':(bytes([1,1,1,11,1,22,15,0x23,0,0x32]),True),
+ 'set-feature-negative':(bytes([1,255,0x42,0,0,0x2b,0,0,0x23,0,0x32]),False),
+ 'set-feature-large':(bytes([5,0,1,0,0,0x42,0,0,0x2b,0,0,0x23,0,0x32]),False),
  'stack-1023':(bytes([1,1])*1023+bytes([6])*1022+bytes([0x30]),False),
  'stack-1024':(bytes([1,1])*1024+bytes([6])*1023+bytes([0x30]),False),
  'stack-unbalanced':(bytes([1,1,0x32]),False),

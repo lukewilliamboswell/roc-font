@@ -1,4 +1,5 @@
 import Bytes
+import Sorted
 
 ## Original decoder for the documented Graphite stack language. Prepared
 ## instructions and associations are scalar records over shared table bytes.
@@ -6,9 +7,9 @@ import Bytes
 ## both paths must have compatible stack depths.
 GraphiteCode :: {}.{
 
-	Environment : { classes : U64, attributes : U64, features : U64, users : U64, constraint : Bool }
+	Environment : { classes : U64, attributes : U64, features : U64, users : U64, levels : U64, positioning : Bool, constraint : Bool }
 	Instruction : { opcode : U64, a : I32, b : I32, c : I32, at : U64, end : U64, target : U64 }
-	Program : { instructions : List(Instruction), max_stack : U64 }
+	Program : { instructions : List(Instruction), max_stack : U64, protected_inputs : List(U64), copies : Bool }
 
 	read : List(U8), U64, U64, Environment -> Try(Program, [Bad(U64)])
 	read = |bytes, start, end, env| {
@@ -22,7 +23,7 @@ GraphiteCode :: {}.{
 			if op > 0x42 or op == 0x1A or op == 0x2F or op == 0x39 or op == 0x3A {
 				return Err(Bad($at))
 			}
-			if env.constraint and GraphiteCode.mutates(op) {
+			if (env.constraint and GraphiteCode.mutates(op)) or (env.positioning and (op == 0x1F or op == 0x20)) {
 				return Err(Bad($at))
 			}
 			width = GraphiteCode.width(op)
@@ -113,12 +114,14 @@ GraphiteCode :: {}.{
 			if GraphiteCode.slot_attribute(op) and ($a < 0 or $a >= 78) {
 				return Err(Bad($at))
 			}
-			if ((op >= 0x33 and op <= 0x35) or op == 0x27) and $a == 55 and $b.to_u64_wrap() >= env.users {
-				return Err(Bad($at))
+			if (op >= 0x33 and op <= 0x35) or op == 0x27 or op == 0x2E {
+				index = if (op == 0x2E) $c.to_u64_wrap() else $b.to_u64_wrap()
+				count = if ($a == 55) env.users else if ($a == 15) 255 else if ($a >= 25 and $a <= 28) env.levels.max(1) else 1
+				if index >= count {
+					return Err(Bad($at))
+				}
 			}
-			if op == 0x2E and $a == 55 and $c.to_u64_wrap() >= env.users {
-				return Err(Bad($at))
-			}
+
 			$ops = $ops.append({ opcode: op, a: $a, b: $b, c: $c, at: $at, end: $next, target: $target })
 			$at = $next
 		}
@@ -167,7 +170,42 @@ GraphiteCode :: {}.{
 		if count != 0 and ($depths.get(count) ?? -1) >= 0 {
 			return Err(Bad(end))
 		}
-		Ok({ instructions: $ops, max_stack: $maximum })
+		Ok({ instructions: $ops, max_stack: $maximum, protected_inputs: GraphiteCode.protected_inputs($ops), copies: $ops.any(|instruction| instruction.opcode == 0x1E or instruction.opcode == 0x1B) })
+	}
+
+	# Glyph replacement protects an input slot for later glyph reads and
+	# PutCopy. Ordinary slot attributes remain live. Offsets are encoded
+	# with a fixed bias so a deterministic unsigned pool is searchable.
+	protected_inputs : List(Instruction) -> List(U64)
+	protected_inputs = |instructions| {
+		var $cursor = 0.I64
+		var $output = 0.I64
+		var $inserted = False
+		var $insertions = []
+		var $writes = []
+		for instruction in instructions {
+			op = instruction.opcode
+			if op == 0x19 or op == 0x1B {
+				if $inserted {
+					$insertions = $insertions.drop_last(1)
+				}
+				$cursor = $cursor + 1
+				$output = $cursor
+				$inserted = $insertions.last() == Ok($cursor)
+			} else if op == 0x1F {
+				$cursor = $cursor - 1
+				$inserted = True
+				$insertions = $insertions.append($cursor)
+			} else if op == 0x20 {
+				$output = $output - 1
+				$inserted = False
+			} else if op == 0x1C or op == 0x1D or op == 0x38 or op == 0x3B or (op == 0x1E and instruction.a != 0) {
+				if !$inserted {
+					$writes = $writes.append(($output + 4294967296).to_u64_wrap())
+				}
+			}
+		}
+		Sorted.unique($writes)
 	}
 
 	# In an action INSERT shifts the immutable input cursor back; NEXT
@@ -276,7 +314,7 @@ GraphiteCode :: {}.{
 		}
 }
 
-environment = { classes: 1, attributes: 1, features: 1, users: 0, constraint: False }
+environment = { classes: 1, attributes: 1, features: 1, users: 0, levels: 0, positioning: False, constraint: False }
 expect GraphiteCode.read([1, 5, 0x2B, 0, 0, 9, 0x23, 0, 0x32], 0, 9, environment).is_ok()
 expect GraphiteCode.read([6, 0x32], 0, 2, environment).is_err()
 expect GraphiteCode.read([0x3B, 0, 1, 0x32], 0, 4, environment).is_err()
@@ -290,10 +328,25 @@ expect {
 	# original input; offset zero names no input and must fail at reading.
 	good = [0x1F.U8, 0x1E, 1, 0x19, 0x32]
 	bad = [0x1F.U8, 0x1E, 0, 0x19, 0x32]
-	env = { classes: 0, attributes: 0, features: 0, users: 0, constraint: False }
+	env = { classes: 0, attributes: 0, features: 0, users: 0, levels: 0, positioning: False, constraint: False }
 	a = GraphiteCode.read(good, 0, good.len(), env) ?? crash "original stack-valid fixture"
 	b = GraphiteCode.read(bad, 0, bad.len(), env) ?? crash "original stack-valid fixture"
 	GraphiteCode.check_references(good, a, 0, 1).is_ok() and GraphiteCode.check_references(bad, b, 0, 1).is_err()
 }
 
-expect GraphiteCode.read([0x2A, 11, 0, 0, 0x30], 0, 5, { classes: 0, attributes: 0, features: 0, users: 0, constraint: True }).is_err()
+expect GraphiteCode.read([0x2A, 11, 0, 0, 0x30], 0, 5, { classes: 0, attributes: 0, features: 0, users: 0, levels: 0, positioning: False, constraint: True }).is_err()
+
+expect {
+	env = { classes: 0, attributes: 0, features: 0, users: 0, levels: 0, positioning: False, constraint: False }
+	GraphiteCode.read([1, 0, 0x27, 15, 9, 0x32], 0, 6, env).is_ok() and GraphiteCode.read([1, 0, 0x27, 15, 255, 0x32], 0, 6, env).is_err() and GraphiteCode.read([1, 0, 0x33, 25, 1, 0x32], 0, 6, env).is_err() and GraphiteCode.read([1, 0, 0x33, 25, 1, 0x32], 0, 6, { ..env, levels: 2 }).is_ok()
+}
+expect {
+	env = { classes: 0, attributes: 0, features: 0, users: 0, levels: 0, positioning: False, constraint: False }
+	GraphiteCode.read([0x20, 0x32], 0, 2, env).is_ok() and GraphiteCode.read([0x20, 0x32], 0, 2, { ..env, positioning: True }).is_err()
+}
+expect {
+	env = { classes: 1, attributes: 0, features: 0, users: 0, levels: 0, positioning: False, constraint: False }
+	a = GraphiteCode.read([1, 17, 0x23, 0, 0x1C, 0, 0x1E, 0, 0x32], 0, 9, env) ?? crash "original valid glyph protection witness"
+	b = GraphiteCode.read([1, 17, 0x23, 0, 0x1E, 0, 0x32], 0, 7, env) ?? crash "original valid live attribute witness"
+	a.copies and a.protected_inputs == [4294967296] and b.copies and b.protected_inputs.is_empty()
+}

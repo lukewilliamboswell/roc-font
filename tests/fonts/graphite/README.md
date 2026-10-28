@@ -83,3 +83,10 @@ The additional original stack fonts distinguish accepted programs that succeed
 with peak depth1023, abort on matching text at depth1024, and abort on return
 with an unconsumed stack value. Empty and nonmatching controls succeed. These
 are text-dependent program aborts, not malformed font tables or work budgets.
+
+The later live-attribute controls refine input protection: slot attributes stay
+live, while glyph-writing actions protect original input for later glyph reads
+and copies. `live-copy` keeps an authored advance17; `set-glyph-copy` restores
+original advance601. Conditional and SetFeat controls pin stack operand order
+and unsigned feature-value clipping before narrowing. All these original
+fonts retain their Graphite tables under OTS9.3.
