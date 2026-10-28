@@ -329,7 +329,14 @@ def step_examples(ctx: Context) -> Result:
 
 
 def step_conformance(ctx: Context) -> Result:
-    return optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
+    main = optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
+    # Feature-specific native drivers consume cached JSONC/JSONL data too.
+    # They inherit the same served bundle in the source-sentinel mirror.
+    code, output = run([sys.executable, "tests/fonts/math/verify.py"],
+                       env=child_env(ctx), cwd=ctx.consumer_root)
+    return Result("PASS" if main.status == "PASS" and code == 0 else "FAIL",
+                  f"general font cases: {main.status}; MATH facts: exit {code}",
+                  main.output + "\n" + output)
 
 
 def step_bench(ctx: Context) -> Result:
