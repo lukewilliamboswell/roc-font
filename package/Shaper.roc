@@ -23,6 +23,9 @@ import TablePost
 import TableCmap
 import TableAatKern
 import ShaperAatPosition
+import ShaperGraphite
+import TableGraphite
+import Bytes
 import AatTracking
 import AatLanguage
 import AatMorx
@@ -45,6 +48,8 @@ Shaper :: {}.{
 
 	Options : {
 		point_size : Dec,
+		use_font_programs : Bool,
+		graphite_features : List({ id : U32, value : I16 }),
 		script : Str,
 		language : Str,
 		direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop],
@@ -62,6 +67,7 @@ Shaper :: {}.{
 	## name the features of each step for traced shaping.
 	Plan : {
 		tracking : I64,
+		graphite : [Present(ShaperGraphite), Absent],
 		backward : Bool,
 		aat : Bool,
 		aat_features : AatMorx.Plan,
@@ -332,10 +338,10 @@ Shaper :: {}.{
 		gsub_common = LayoutGsub.common_of(gsub_table)
 		kerning = Face.kerning(face)
 		gpos_common = LayoutKerning.common_of(kerning)
-		aat = match face.aat {
+		aat = if (options.use_font_programs) match face.aat {
 			Present(_) => !vertical or gsub_common.data.is_empty()
 			Absent => False
-		}
+		} else False
 		hebrew = !aat and !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
 		chosen_script = LayoutCommon.select_script_tag(gsub_common, script_tags)
 		indic = !aat and Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
@@ -492,7 +498,7 @@ Shaper :: {}.{
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
 		has_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
-		has_kerx = TableAatKern.has_data(face.kerx)
+		has_kerx = options.use_font_programs and TableAatKern.has_data(face.kerx)
 		has_gsub = !aat and !gsub_common.data.is_empty()
 		prefer_kerx = has_kerx and !(has_gsub and has_gpos)
 		apply_gpos = has_gpos and !prefer_kerx
@@ -505,7 +511,7 @@ Shaper :: {}.{
 		apply_kerx = prefer_kerx or (has_kerx and (!has_gpos_kern or !apply_gpos))
 		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
 		fallback_position = !aat_dumber and !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
-		apply_kern = !apply_kerx and fallback_position and (!has_gpos_kern or !apply_gpos) and TableAatKern.has_data(face.aat_kern)
+		apply_kern = !apply_kerx and fallback_position and (!has_gpos_kern or !apply_gpos) and TableAatKern.has_data(face.aat_kern) and (options.use_font_programs or Bytes.u32(face.aat_kern.bytes, 0) != 0x00010000)
 		kern = NoKern
 		gpos_steps =
 			if apply_gpos {
@@ -530,7 +536,32 @@ Shaper :: {}.{
 			}
 		}
 		{
-			tracking: AatTracking.value(face.tracking, vertical, options.point_size),
+			tracking: if (options.use_font_programs) AatTracking.value(face.tracking, vertical, options.point_size) else 0,
+			graphite: if options.use_font_programs and TableGraphite.available(face.graphite) {
+				# HB's Graphite adapter treats feature values as global. Numeric
+				# choices override matching four-byte tag choices explicitly.
+				tagged = options.features.keep_oks(
+					|f| {
+						id = Shaper.feature_tag(f.tag)
+						if (id != 0) Ok({ id: id.to_u32_wrap(), value: f.value.to_i16_wrap() }) else Err({})
+					},
+				)
+				Present(
+					ShaperGraphite.make(
+						face.graphite,
+						{
+							language: options.language,
+							features: tagged.concat(options.graphite_features),
+							direction: if vertical {
+								if (requested == Rtl) Btt else Ttb
+							} else if (requested == Rtl) Rtl else Ltr,
+							native,
+							growth: options.growth,
+							operations: options.operations,
+						},
+					),
+				)
+			} else Absent,
 			backward: requested == Rtl,
 			aat,
 			aat_features: if aat {
@@ -1117,6 +1148,27 @@ Shaper :: {}.{
 	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Run
 	shape = |face, location, p, scalars| Shaper.shape_items(face, location, p, scalars).run
 
+	shape_traced : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> { shaped : Shaped, origins : List(Origin) }
+	shape_traced = |face, location, p, scalars| match p.graphite {
+		Present(program) => {
+			result = ShaperGraphite.shape(face, program, scalars, True)
+			{
+				shaped: { run: result.run, items: [], stopped: result.stopped, aborted: result.abort == ProgramAbort },
+				origins: result.origins.map(
+					|origin| match origin {
+						Nominal => Mapped
+						Substituted => Substituted({ feature: "" })
+						Inserted => Inserted({ feature: "" })
+					},
+				),
+			}
+		}
+		Absent => {
+			shaped = Shaper.shape_items(face, location, p, scalars)
+			{ shaped, origins: Shaper.origins(face, p, shaped.items) }
+		}
+	}
+
 	## Shape, keeping the finished items and the bounds that stopped
 	## substitution (see `Shaped`).
 	shape_items : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Shaped
@@ -1124,6 +1176,13 @@ Shaper :: {}.{
 
 	shape_items_with_context : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }), { before : List(U32), after : List(U32) } -> Shaped
 	shape_items_with_context = |face, location, p, scalars, context| {
+		match p.graphite {
+			Present(program) => {
+				result = ShaperGraphite.shape(face, program, scalars, False)
+				return { run: result.run, items: [], stopped: result.stopped, aborted: result.abort == ProgramAbort }
+			}
+			Absent => {}
+		}
 		n = scalars.len()
 		if n == 0 {
 			return { run: Shaper.empty_run, items: [], stopped: 0, aborted: False }

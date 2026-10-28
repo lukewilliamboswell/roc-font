@@ -878,11 +878,19 @@ Font :: { face : Face }.{
 	## stretching apply when selected by the font and script.
 	## Other scripts use the default shaping model, which applies the
 	## font's lookups without script-specific syllable reordering.
+	## `use_font_programs` selects prepared Graphite and Apple programs by
+	## default. False uses OpenType lookups and version-0 legacy kerning,
+	## excluding Graphite, Apple morphing/positioning and Apple tracking.
+	## `graphite_features` supplies global numeric font-program choices.
+	## The reference Graphite adapter retains horizontal advances for TTB
+	## and BTT requests; use `shaping_engine` to discover that path. For
+	## OpenType vertical metrics, set `use_font_programs` to False.
+	##
 	## `point_size` selects size-dependent Apple tracking, in typographic
 	## points. Zero and negative values use the reference default of 12.
 	## It does not scale the returned font-unit coordinates or choose a
 	## variation location; select an optical-size axis with `Font.at`.
-	ShapeOptions := { point_size : Dec ?? 0, script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+	ShapeOptions := { use_font_programs : Bool ?? True, graphite_features : List(GraphiteFeature) ?? [], point_size : Dec ?? 0, script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left
 	## to right, also for right-to-left text):
@@ -980,6 +988,22 @@ Font :: { face : Face }.{
 	## meaningless.
 	ShapePlan :: { plan : Shaper.Plan }
 
+	## A font-defined numeric Graphite feature and its global value.
+	## Graphite has no feature ranges in the reference adapter. Four-byte
+	## feature tags can also be supplied with `Feature`; numeric choices
+	## here override a matching tag choice. Defaults come from the font and
+	## selected language. Unsupported ids or values retain those defaults.
+	GraphiteFeature := { id : U32, value : I16 ?? 1 }
+
+	## Which primary rule system chooses and reorders this plan's glyphs.
+	## OpenType and Apple plans may combine positioning tables. Graphite
+	## produces its complete run without a later OpenType positioning pass.
+	shaping_engine : ShapePlan -> [OpenType, Apple, Graphite]
+	shaping_engine = |shape_plan| match shape_plan.plan.graphite {
+		Present(_) => Graphite
+		Absent => if (shape_plan.plan.aat) Apple else OpenType
+	}
+
 	## Work out a plan for shaping with these options, to shape or measure
 	## many strings the same way (`shape_planned`, `width_planned` and the
 	## others that take a plan) without working out the options each time.
@@ -992,7 +1016,7 @@ Font :: { face : Face }.{
 	plan = |font, options| {
 		limits = options.limits
 		chosen = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan_with_clusters(font.face, { point_size: options.point_size, script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
+		{ plan: Shaper.plan_with_clusters(font.face, { use_font_programs: options.use_font_programs, graphite_features: options.graphite_features.map(|f| { id: f.id, value: f.value }), point_size: options.point_size, script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
 	}
 
 	## Shape text: the glyphs that draw it, where, and which part of the
@@ -1122,8 +1146,7 @@ Font :: { face : Face }.{
 	## ```
 	shape_traced : Font, ShapePlan, Str -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) }), ProgramAborted({ run : Run, origins : List(GlyphOrigin) })])
 	shape_traced = |font, shape_plan, text| {
-		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
-		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
+		{ shaped, origins } = Shaper.shape_traced(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 		if shaped.aborted {
 			Err(ProgramAborted({ run: shaped.run, origins }))
 		} else if shaped.stopped == 0 {
