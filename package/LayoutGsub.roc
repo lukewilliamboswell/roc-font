@@ -132,7 +132,7 @@ LayoutGsub := {
 	## What applying a plan gives: the run, and which bounds stopped work
 	## (`stopped_growth`, `stopped_operations` and `stopped_depth` bits; 0
 	## when none did, so the run is complete).
-	Applied : { items : List(Item), stopped : U64 }
+	Applied : { items : List(Item), stopped : U64, operations : U64 }
 
 	## What a lookup is applied with: its mask and properties, the joiner
 	## rules, `rand`, and the index in the plan of the step being applied
@@ -436,7 +436,7 @@ LayoutGsub := {
 				$digest = LayoutGsub.run_digest($run)
 			}
 		}
-		{ items: $run, stopped: $stopped }
+		{ items: $run, stopped: $stopped, operations: $ops }
 	}
 
 	## The digest of every glyph of a run, in the form of a lookup's (see
