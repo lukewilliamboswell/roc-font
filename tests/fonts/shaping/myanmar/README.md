@@ -50,7 +50,7 @@ proves the Myanmar model activation. Moving the data does not change any
 font bytes, expected result or reference key.
 
 
-The staged matrix has674 exact records. All nine fixture fonts pass OTS9.3.
+The staged matrix has682 exact records. All nine fixture fonts pass OTS9.3.
 The four `sort-*.ttf` fonts first multiply one consonant into8,32,64 or256
 copies in `ccmp`, after syllable assignment, before visual reordering. They
 exercise metadata preservation across GSUB expansion and the64-glyph visit
@@ -66,3 +66,13 @@ using an explicit Myanmar plan and complete checksum agreement. It reports
 allocation calls, elapsed time and same-run reference ratios independently.
 Requested and peak live allocation bytes are not exposed by roc-fuzz0.4.3;
 those metrics are explicitly unavailable rather than approximated by RSS.
+
+
+Dotted-circle insertion deliberately follows HarfBuzz's remembered last
+inserted broken-syllable serial, including the serial-wrap case with14
+ordinary syllables between broken clusters. Both its counting and output
+passes use that same rule. Budgeted permutation replacement is reserved
+before changing glyph order, so exhaustion cannot duplicate or lose a glyph.
+The cached wrap cases and private exact-growth/budget regressions protect
+these behaviors. The benchmark records the native comparator's actual
+`--version` response and hashes both its binary and linked shared library.

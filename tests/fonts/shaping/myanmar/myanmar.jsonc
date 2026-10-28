@@ -3279,6 +3279,34 @@
       "expected": "oracle"
     },
     {
+      "id": "sans-text-117-ltr",
+      "font": "NotoSansMyanmar-Regular.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sans-text-117-rtl",
+      "font": "NotoSansMyanmar-Regular.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
       "id": "sans-disable-rphf-0",
       "font": "NotoSansMyanmar-Regular.ttf",
       "text": "င်္ကြွှေိံ",
@@ -7115,6 +7143,34 @@
       "expected": "oracle"
     },
     {
+      "id": "serif-text-117-ltr",
+      "font": "NotoSerifMyanmar-Regular.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "serif-text-117-rtl",
+      "font": "NotoSerifMyanmar-Regular.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
       "id": "serif-disable-rphf-0",
       "font": "NotoSerifMyanmar-Regular.ttf",
       "text": "င်္ကြွှေိံ",
@@ -9747,6 +9803,62 @@
           "--show-flags"
         ],
         "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "modern-broken-serial-wrap-ltr",
+      "font": "modern.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "modern-broken-serial-wrap-rtl",
+      "font": "modern.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-circle-broken-serial-wrap-ltr",
+      "font": "no-circle.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "no-circle-broken-serial-wrap-rtl",
+      "font": "no-circle.ttf",
+      "text": "ေaaaaaaaaaaaaaaေ",
+      "options": {
+        "script": "Mymr",
+        "language": "my",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "direction": "rtl"
       },
       "expected": "oracle"
     }

@@ -15,7 +15,9 @@ import bench,flight
 FONT=ROOT/'tests/fonts/shaping/myanmar'
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--roc',default=os.environ.get('ROC','roc'));p.add_argument('--harfbuzz',type=Path,required=True);p.add_argument('--binary',type=Path);p.add_argument('--alloc',type=Path);p.add_argument('--output',type=Path,required=True);args=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--roc',default=os.environ.get('ROC','roc'));p.add_argument('--harfbuzz',type=Path,required=True);p.add_argument('--harfbuzz-version',help='optional expected native reference version');p.add_argument('--harfbuzz-library',type=Path,required=True,help='the linked pinned HarfBuzz shared library');p.add_argument('--binary',type=Path);p.add_argument('--alloc',type=Path);p.add_argument('--output',type=Path,required=True);args=p.parse_args()
+ actual_version=subprocess.check_output([str(args.harfbuzz),'--version'],text=True,timeout=5).strip()
+ if args.harfbuzz_version:assert actual_version==args.harfbuzz_version,(actual_version,args.harfbuzz_version)
  with tempfile.TemporaryDirectory(prefix='myanmar-bench-') as directory:
   work=Path(directory);binary=args.binary or work/'myanmar';alloc=args.alloc or work/'myanmar-alloc'
   if args.binary is None or args.alloc is None:
@@ -38,6 +40,6 @@ def main():
     assert checksums['roc']==checksums['harfbuzz'],(family,count,checksums)
     row=dict(family=family,repetitions=count,text_bytes=len(text),font_sha256=hashlib.sha256(raw).hexdigest(),allocation=allocation,times_ns=times,checksums=checksums,roc_over_harfbuzz=times['roc']['median_ns']/times['harfbuzz']['median_ns']);results.append(row);print(json.dumps(row),flush=True)
   args.output.parent.mkdir(parents=True,exist_ok=True)
-  args.output.write_text(json.dumps(dict(cases=results,memory_bytes='requested/peak-live unavailable in roc-fuzz0.4.3',reference='nativeHarfBuzz14.6.0'),indent=2)+'\n')
+  args.output.write_text(json.dumps(dict(cases=results,memory_bytes='requested/peak-live unavailable in roc-fuzz0.4.3',reference=dict(version=actual_version,binary_sha256=hashlib.sha256(args.harfbuzz.read_bytes()).hexdigest(),library_sha256=hashlib.sha256(args.harfbuzz_library.read_bytes()).hexdigest())),indent=2)+'\n')
  return 0
 if __name__=='__main__':raise SystemExit(main())
