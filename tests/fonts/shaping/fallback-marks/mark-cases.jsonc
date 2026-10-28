@@ -1,0 +1,3254 @@
+{
+  "schema": 1,
+  "about": "Valid no-GSUB/GPOS fixture isolates modified combining-class aliases for Hebrew,ArabicandSyriacfallbackmarkplacement.",
+  "cases": [
+    {
+      "id": "Hebr-0-ltr-0",
+      "font": "marks.ttf",
+      "text": "שְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-0-ltr-1",
+      "font": "marks.ttf",
+      "text": "שְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-0-rtl-0",
+      "font": "marks.ttf",
+      "text": "שְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-0-rtl-1",
+      "font": "marks.ttf",
+      "text": "שְ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-1-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֱ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-1-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֱ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-1-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֱ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-1-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֱ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-2-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֲ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-2-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֲ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-2-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֲ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-2-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֲ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-3-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֳ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-3-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֳ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-3-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֳ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-3-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֳ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-4-ltr-0",
+      "font": "marks.ttf",
+      "text": "שִ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-4-ltr-1",
+      "font": "marks.ttf",
+      "text": "שִ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-4-rtl-0",
+      "font": "marks.ttf",
+      "text": "שִ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-4-rtl-1",
+      "font": "marks.ttf",
+      "text": "שִ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-5-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֵ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-5-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֵ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-5-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֵ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-5-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֵ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-6-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֶ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-6-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֶ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-6-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֶ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-6-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֶ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-7-ltr-0",
+      "font": "marks.ttf",
+      "text": "שַ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-7-ltr-1",
+      "font": "marks.ttf",
+      "text": "שַ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-7-rtl-0",
+      "font": "marks.ttf",
+      "text": "שַ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-7-rtl-1",
+      "font": "marks.ttf",
+      "text": "שַ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-8-ltr-0",
+      "font": "marks.ttf",
+      "text": "שָ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-8-ltr-1",
+      "font": "marks.ttf",
+      "text": "שָ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-8-rtl-0",
+      "font": "marks.ttf",
+      "text": "שָ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-8-rtl-1",
+      "font": "marks.ttf",
+      "text": "שָ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-9-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-9-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-9-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-9-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-10-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֺ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-10-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֺ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-10-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֺ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-10-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֺ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-11-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֻ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-11-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֻ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-11-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֻ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-11-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֻ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-12-ltr-0",
+      "font": "marks.ttf",
+      "text": "שּ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-12-ltr-1",
+      "font": "marks.ttf",
+      "text": "שּ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-12-rtl-0",
+      "font": "marks.ttf",
+      "text": "שּ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-12-rtl-1",
+      "font": "marks.ttf",
+      "text": "שּ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-13-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֽ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-13-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֽ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-13-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֽ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-13-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֽ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-14-ltr-0",
+      "font": "marks.ttf",
+      "text": "שֿ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-14-ltr-1",
+      "font": "marks.ttf",
+      "text": "שֿ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-14-rtl-0",
+      "font": "marks.ttf",
+      "text": "שֿ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-14-rtl-1",
+      "font": "marks.ttf",
+      "text": "שֿ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-15-ltr-0",
+      "font": "marks.ttf",
+      "text": "שׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-15-ltr-1",
+      "font": "marks.ttf",
+      "text": "שׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-15-rtl-0",
+      "font": "marks.ttf",
+      "text": "שׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-15-rtl-1",
+      "font": "marks.ttf",
+      "text": "שׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-16-ltr-0",
+      "font": "marks.ttf",
+      "text": "שׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-16-ltr-1",
+      "font": "marks.ttf",
+      "text": "שׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-16-rtl-0",
+      "font": "marks.ttf",
+      "text": "שׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-16-rtl-1",
+      "font": "marks.ttf",
+      "text": "שׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-17-ltr-0",
+      "font": "marks.ttf",
+      "text": "שׇ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-17-ltr-1",
+      "font": "marks.ttf",
+      "text": "שׇ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-17-rtl-0",
+      "font": "marks.ttf",
+      "text": "שׇ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-17-rtl-1",
+      "font": "marks.ttf",
+      "text": "שׇ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-18-ltr-0",
+      "font": "marks.ttf",
+      "text": "שִׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-18-ltr-1",
+      "font": "marks.ttf",
+      "text": "שִׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-18-rtl-0",
+      "font": "marks.ttf",
+      "text": "שִׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-18-rtl-1",
+      "font": "marks.ttf",
+      "text": "שִׁ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-19-ltr-0",
+      "font": "marks.ttf",
+      "text": "שְּׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-19-ltr-1",
+      "font": "marks.ttf",
+      "text": "שְּׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-19-rtl-0",
+      "font": "marks.ttf",
+      "text": "שְּׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-19-rtl-1",
+      "font": "marks.ttf",
+      "text": "שְּׂ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-20-ltr-0",
+      "font": "marks.ttf",
+      "text": "שָֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-20-ltr-1",
+      "font": "marks.ttf",
+      "text": "שָֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-20-rtl-0",
+      "font": "marks.ttf",
+      "text": "שָֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Hebr-20-rtl-1",
+      "font": "marks.ttf",
+      "text": "שָֹ",
+      "options": {
+        "script": "Hebr",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-0-ltr-0",
+      "font": "marks.ttf",
+      "text": "بً",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-0-ltr-1",
+      "font": "marks.ttf",
+      "text": "بً",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-0-rtl-0",
+      "font": "marks.ttf",
+      "text": "بً",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-0-rtl-1",
+      "font": "marks.ttf",
+      "text": "بً",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-1-ltr-0",
+      "font": "marks.ttf",
+      "text": "بٌ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-1-ltr-1",
+      "font": "marks.ttf",
+      "text": "بٌ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-1-rtl-0",
+      "font": "marks.ttf",
+      "text": "بٌ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-1-rtl-1",
+      "font": "marks.ttf",
+      "text": "بٌ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-2-ltr-0",
+      "font": "marks.ttf",
+      "text": "بٍ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-2-ltr-1",
+      "font": "marks.ttf",
+      "text": "بٍ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-2-rtl-0",
+      "font": "marks.ttf",
+      "text": "بٍ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-2-rtl-1",
+      "font": "marks.ttf",
+      "text": "بٍ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-3-ltr-0",
+      "font": "marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-3-ltr-1",
+      "font": "marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-3-rtl-0",
+      "font": "marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-3-rtl-1",
+      "font": "marks.ttf",
+      "text": "بَ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-4-ltr-0",
+      "font": "marks.ttf",
+      "text": "بُ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-4-ltr-1",
+      "font": "marks.ttf",
+      "text": "بُ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-4-rtl-0",
+      "font": "marks.ttf",
+      "text": "بُ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-4-rtl-1",
+      "font": "marks.ttf",
+      "text": "بُ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-5-ltr-0",
+      "font": "marks.ttf",
+      "text": "بِ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-5-ltr-1",
+      "font": "marks.ttf",
+      "text": "بِ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-5-rtl-0",
+      "font": "marks.ttf",
+      "text": "بِ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-5-rtl-1",
+      "font": "marks.ttf",
+      "text": "بِ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-6-ltr-0",
+      "font": "marks.ttf",
+      "text": "بّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-6-ltr-1",
+      "font": "marks.ttf",
+      "text": "بّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-6-rtl-0",
+      "font": "marks.ttf",
+      "text": "بّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-6-rtl-1",
+      "font": "marks.ttf",
+      "text": "بّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-7-ltr-0",
+      "font": "marks.ttf",
+      "text": "بْ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-7-ltr-1",
+      "font": "marks.ttf",
+      "text": "بْ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-7-rtl-0",
+      "font": "marks.ttf",
+      "text": "بْ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-7-rtl-1",
+      "font": "marks.ttf",
+      "text": "بْ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-8-ltr-0",
+      "font": "marks.ttf",
+      "text": "بُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-8-ltr-1",
+      "font": "marks.ttf",
+      "text": "بُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-8-rtl-0",
+      "font": "marks.ttf",
+      "text": "بُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-8-rtl-1",
+      "font": "marks.ttf",
+      "text": "بُّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-9-ltr-0",
+      "font": "marks.ttf",
+      "text": "بِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-9-ltr-1",
+      "font": "marks.ttf",
+      "text": "بِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-9-rtl-0",
+      "font": "marks.ttf",
+      "text": "بِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Arab-9-rtl-1",
+      "font": "marks.ttf",
+      "text": "بِّ",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-0-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-0-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-0-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-0-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܰ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-1-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܱ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-1-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܱ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-1-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܱ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-1-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܱ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-2-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܲ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-2-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܲ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-2-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܲ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-2-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܲ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-3-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܳ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-3-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܳ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-3-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܳ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-3-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܳ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-4-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܴ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-4-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܴ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-4-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܴ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-4-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܴ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-5-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܵ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-5-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܵ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-5-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܵ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-5-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܵ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-6-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܶ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-6-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܶ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-6-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܶ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-6-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܶ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-7-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܷ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-7-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܷ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-7-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܷ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-7-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܷ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-8-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܸ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-8-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܸ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-8-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܸ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-8-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܸ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-9-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܹ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-9-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܹ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-9-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܹ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-9-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܹ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-10-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܺ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-10-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܺ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-10-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܺ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-10-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܺ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-11-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܻ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-11-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܻ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-11-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܻ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-11-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܻ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-12-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܼ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-12-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܼ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-12-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܼ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-12-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܼ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-13-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܽ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-13-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܽ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-13-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܽ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-13-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܽ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-14-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܾ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-14-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܾ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-14-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܾ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-14-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܾ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-15-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒܿ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-15-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒܿ",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-15-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒܿ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-15-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒܿ",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-16-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݀",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-16-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݀",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-16-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݀",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-16-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݀",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-17-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݁",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-17-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݁",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-17-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݁",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-17-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݁",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-18-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݂",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-18-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݂",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-18-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݂",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-18-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݂",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-19-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݃",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-19-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݃",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-19-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݃",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-19-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݃",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-20-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݄",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-20-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݄",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-20-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݄",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-20-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݄",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-21-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݅",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-21-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݅",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-21-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݅",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-21-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݅",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-22-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݆",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-22-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݆",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-22-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݆",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-22-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݆",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-23-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݇",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-23-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݇",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-23-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݇",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-23-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݇",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-24-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݈",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-24-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݈",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-24-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݈",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-24-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݈",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-25-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݉",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-25-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݉",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-25-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݉",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-25-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݉",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-26-ltr-0",
+      "font": "marks.ttf",
+      "text": "ܒ݊",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-26-ltr-1",
+      "font": "marks.ttf",
+      "text": "ܒ݊",
+      "options": {
+        "script": "Syrc",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-26-rtl-0",
+      "font": "marks.ttf",
+      "text": "ܒ݊",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "Syrc-26-rtl-1",
+      "font": "marks.ttf",
+      "text": "ܒ݊",
+      "options": {
+        "script": "Syrc",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
