@@ -19,10 +19,10 @@ GraphiteCollision :: {}.{
 	Octabox : { x_min : U32, y_min : U32, x_max : U32, y_max : U32, sum_min : U32, sum_max : U32, diff_min : U32, diff_max : U32 }
 	Rect : { x_min : U32, y_min : U32, x_max : U32, y_max : U32 }
 	Projection : { low : U32, high : U32, gap : U32, inside : Bool }
-	ShiftResult : { x : U32, y : U32, feasible : Bool, active : Bool, operations : U64, stopped : U64 }
+	ShiftResult : { x : U32, y : U32, feasible : Bool, operations : U64, stopped : U64 }
 	Group : { first : U64, last : U64 }
 	Groups : { groups : List(Group), operations : U64, stopped : U64 }
-	ShiftInput : { target : [Present(Octabox), Absent], obstacles : List(Octabox), current_x : U32, current_y : U32, limits : Rect, margin : U32, weight : U32, operations : U64, stopped : U64 }
+	ShiftInput : { target : [Present(Octabox), Absent], obstacles : List(Octabox), active : Bool, current_x : U32, current_y : U32, limits : Rect, margin : U32, weight : U32, operations : U64, stopped : U64 }
 
 	# A collision pass retains its initial offset separately from the shift
 	# authored during that pass. Recovering one from the rounded sum changes
@@ -151,10 +151,12 @@ GraphiteCollision :: {}.{
 				match GraphiteCollision.load_box(context.table.attributes, neighbor.glyph, 0, base_metric) {
 					Absent => {}
 					Present(box) => {
-						before = if (reverse) (work.ranks.get($cursor) ?? 0) > rank else (work.ranks.get($cursor) ?? 0) < rank
-						regions = GraphiteCollision.sequence_regions(work.state, id, $cursor, target, box, TableVar.f32_sub(neighbor.position_x, origin_x), TableVar.f32_sub(neighbor.position_y, origin_y), input.limits, before)
-						for region in regions {
-							$regions = $regions.append(region)
+						if GraphiteCollision.broad_active(target, box, TableVar.f32_sub(slot.position_x, neighbor.position_x), TableVar.f32_sub(slot.position_y, neighbor.position_y), input.limits, offset.base_x, offset.base_y, input.margin) {
+							before = if (reverse) (work.ranks.get($cursor) ?? 0) > rank else (work.ranks.get($cursor) ?? 0) < rank
+							regions = GraphiteCollision.sequence_regions(work.state, id, $cursor, target, box, TableVar.f32_sub(neighbor.position_x, origin_x), TableVar.f32_sub(neighbor.position_y, origin_y), input.limits, before)
+							for region in regions {
+								$regions = $regions.append(region)
+							}
 						}
 					}
 				}
@@ -216,13 +218,13 @@ GraphiteCollision :: {}.{
 						if sequence.stopped != 0 {
 							return { work: $work, operations: $operations, stopped: sequence.stopped, movement: $movement }
 						}
-						frame = GraphiteCollision.sequence_frame(box, input.current_x, input.current_y)
-						solved = GraphiteCollision.solve_shift_regions(input.limits, input.current_x, input.current_y, input.obstacles, input.margin, input.weight, sequence.regions, frame, budget - $operations)
-						$operations = $operations + solved.operations
-						if solved.stopped != 0 {
-							return { work: $work, operations: $operations, stopped: solved.stopped, movement: $movement }
-						}
-						if solved.active {
+						if input.active or !sequence.regions.is_empty() {
+							frame = GraphiteCollision.sequence_frame(box, input.current_x, input.current_y)
+							solved = GraphiteCollision.solve_shift_regions(input.limits, input.current_x, input.current_y, input.obstacles, input.margin, input.weight, sequence.regions, frame, budget - $operations)
+							$operations = $operations + solved.operations
+							if solved.stopped != 0 {
+								return { work: $work, operations: $operations, stopped: solved.stopped, movement: $movement }
+							}
 							stored = GraphiteCollision.store_work_shift($work, $id, solved.x, solved.y, solved.feasible)
 							$work = stored.work
 							$movement = TableVar.f32_max($movement, stored.movement)
@@ -374,7 +376,7 @@ GraphiteCollision :: {}.{
 		current_x = GraphiteSlots.get_extra(state, id, 8).to_u32_wrap()
 		current_y = GraphiteSlots.get_extra(state, id, 9).to_u32_wrap()
 		number = |field| TableVar.f32_from_int(GraphiteSlots.get_extra(state, id, field).to_i64())
-		input = { target: GraphiteCollision.load_box(context.table.attributes, slot.glyph, 0, base_metric), obstacles: [], current_x, current_y, limits: { x_min: number(4), y_min: number(5), x_max: number(6), y_max: number(7) }, margin: number(10), weight: number(11), operations: 0, stopped: 0 }
+		input = { target: GraphiteCollision.load_box(context.table.attributes, slot.glyph, 0, base_metric), obstacles: [], active: False, current_x, current_y, limits: { x_min: number(4), y_min: number(5), x_max: number(6), y_max: number(7) }, margin: number(10), weight: number(11), operations: 0, stopped: 0 }
 		target = match input.target {
 			Absent => return input
 			Present(box) => box
@@ -382,12 +384,13 @@ GraphiteCollision :: {}.{
 		origin_x = TableVar.f32_sub(TableVar.f32_sub(slot.position_x, offset.delta_x), offset.base_x)
 		origin_y = TableVar.f32_sub(TableVar.f32_sub(slot.position_y, offset.delta_y), offset.base_y)
 		var $obstacles = []
+		var $active = False
 		var $operations = 0
 		var $walked = 0
 		var $neighbor_id = group.first
 		while $neighbor_id != 0 and $walked < state.active {
 			if $operations >= budget {
-				return { ..input, obstacles: $obstacles, operations: $operations, stopped: 2 }
+				return { ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 2 }
 			}
 			$operations = $operations + 1
 			$walked = $walked + 1
@@ -418,15 +421,20 @@ GraphiteCollision :: {}.{
 						first_part = if ($parts == 0) 0 else 1
 						for part in first_part..<($parts + 1) {
 							if $operations >= budget {
-								return { ..input, obstacles: $obstacles, operations: $operations, stopped: 2 }
+								return { ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 2 }
 							}
 							$operations = $operations + 1
 							match GraphiteCollision.load_box(context.table.attributes, glyph, part, base_metric) {
 								Absent => {}
 								Present(box) => {
-									dx = TableVar.f32_sub(origin_x, world_x)
-									dy = TableVar.f32_sub(origin_y, world_y)
-									$obstacles = $obstacles.append(GraphiteCollision.forbidden(target, box, dx, dy))
+									physical_dx = TableVar.f32_sub(slot.position_x, world_x)
+									physical_dy = TableVar.f32_sub(slot.position_y, world_y)
+									if GraphiteCollision.broad_active(target, box, physical_dx, physical_dy, input.limits, offset.base_x, offset.base_y, input.margin) {
+										$active = True
+										dx = TableVar.f32_sub(origin_x, world_x)
+										dy = TableVar.f32_sub(origin_y, world_y)
+										$obstacles = $obstacles.append(GraphiteCollision.forbidden(target, box, dx, dy))
+									}
 								}
 							}
 						}
@@ -438,7 +446,7 @@ GraphiteCollision :: {}.{
 			}
 			$neighbor_id = if (reverse) neighbor.previous else neighbor.next
 		}
-		{ ..input, obstacles: $obstacles, operations: $operations, stopped: 0 }
+		{ ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 0 }
 	}
 
 	# START records the start of a following group; END closes the current
@@ -481,6 +489,43 @@ GraphiteCollision :: {}.{
 		{ groups: $groups, operations: $operations, stopped: 0 }
 	}
 
+	# Candidate collection uses physical geometry, independently of the
+	# unshifted origin retained by the optimizer. This conservative window
+	# intentionally differs from the final movement slices. A full normal
+	# span extends its high end; orthogonal gaps are tested before solving.
+	broad_active : Octabox, Octabox, U32, U32, Rect, U32, U32, U32 -> Bool
+	broad_active = |target, neighbor, dx, dy, limits, base_x, base_y, margin| {
+		add = TableVar.f32_add
+		sub = TableVar.f32_sub
+		lt = TableVar.f32_lt
+		window = { x_min: limits.x_max.bitwise_xor(0x80000000), y_min: sub(limits.y_min, base_y), x_max: sub(limits.x_max, base_x), y_max: sub(limits.y_max, base_y) }
+		x_overlap = !lt(sub(neighbor.y_max, dy), sub(window.y_min, margin)) and !lt(add(window.y_max, margin), sub(neighbor.y_min, dy))
+		y_overlap = !lt(sub(neighbor.x_max, dx), sub(window.x_min, margin)) and !lt(add(window.x_max, margin), sub(neighbor.x_min, dx))
+		if !x_overlap and !y_overlap {
+			return False
+		}
+		box = GraphiteCollision.forbidden(target, neighbor, dx, dy)
+		for axis in 0..<4 {
+			if !((axis == 0 and !x_overlap) or (axis == 1 and !y_overlap)) {
+				p = GraphiteCollision.project(box, axis, 0, 0)
+				if !lt(margin, p.gap) {
+					range = match axis {
+						0 => { low: window.x_min, high: window.x_max, span: sub(target.x_max, target.x_min) }
+						1 => { low: window.y_min, high: window.y_max, span: sub(target.y_max, target.y_min) }
+						2 => { low: add(window.x_min, window.y_min), high: add(window.x_max, window.y_max), span: sub(target.sum_max, target.sum_min) }
+						_ => { low: sub(window.x_min, window.y_max), high: sub(window.x_max, window.y_min), span: sub(target.diff_max, target.diff_min) }
+					}
+					remaining = sub(margin, p.gap)
+					padding = if (axis < 2) remaining else TableVar.f32_mul(remaining, 0x3FB504F3)
+					if !lt(add(range.high, add(range.span, padding)), p.low) and !lt(add(p.high, padding), range.low) {
+						return True
+					}
+				}
+			}
+		}
+		False
+	}
+
 	# Solve a movable glyph's four directional slices. Obstacle octagons
 	# are already expressed as forbidden translations of this glyph, so
 	# this phase is independent of font parsing, slot order and VM actions.
@@ -493,17 +538,16 @@ GraphiteCollision :: {}.{
 	solve_shift_regions : Rect, U32, U32, List(Octabox), U32, U32, List(Region), SequenceFrame, U64 -> ShiftResult
 	solve_shift_regions = |limits, current_x, current_y, obstacles, margin, weight, regions, frame, budget| {
 		if !TableVar.f32_lt(limits.x_min, limits.x_max) or !TableVar.f32_lt(limits.y_min, limits.y_max) {
-			return { x: current_x, y: current_y, feasible: True, active: False, operations: 0, stopped: 0 }
+			return { x: current_x, y: current_y, feasible: True, operations: 0, stopped: 0 }
 		}
 		var $operations = 0
-		var $active = False
 		var $constraints = []
 		var $best = Absent
 		for axis in 0..<4 {
 			$constraints = $constraints.clear()
 			for obstacle in obstacles {
 				if $operations >= budget {
-					return { x: current_x, y: current_y, feasible: False, active: $active, operations: $operations, stopped: 2 }
+					return { x: current_x, y: current_y, feasible: False, operations: $operations, stopped: 2 }
 				}
 				$operations = $operations + 1
 				projection = GraphiteCollision.project(obstacle, axis, current_x, current_y)
@@ -511,7 +555,7 @@ GraphiteCollision :: {}.{
 			}
 			for region in regions {
 				if $operations >= budget {
-					return { x: current_x, y: current_y, feasible: False, active: $active, operations: $operations, stopped: 2 }
+					return { x: current_x, y: current_y, feasible: False, operations: $operations, stopped: 2 }
 				}
 				$operations = $operations + 1
 				match GraphiteCollision.sequence_projection(region, axis, frame) {
@@ -522,15 +566,10 @@ GraphiteCollision :: {}.{
 				}
 			}
 			bounds = GraphiteCollision.axis_limits(limits, axis, current_x, current_y)
-			for constraint in $constraints {
-				if TableVar.f32_lt(constraint.low, bounds.high) and TableVar.f32_lt(bounds.low, constraint.high) {
-					$active = True
-				}
-			}
 			solved = GraphiteCollision.solve_axis(bounds.low, bounds.high, bounds.constant, bounds.coefficient, $constraints, budget - $operations)
 			$operations = $operations + solved.operations
 			if solved.stopped != 0 {
-				return { x: current_x, y: current_y, feasible: False, active: $active, operations: $operations, stopped: solved.stopped }
+				return { x: current_x, y: current_y, feasible: False, operations: $operations, stopped: solved.stopped }
 			}
 			match solved.best {
 				Absent => {}
@@ -561,8 +600,8 @@ GraphiteCollision :: {}.{
 			}
 		}
 		match $best {
-			Absent => { x: current_x, y: current_y, feasible: False, active: $active, operations: $operations, stopped: 0 }
-			Present(best) => { x: best.x, y: best.y, feasible: True, active: $active, operations: $operations, stopped: 0 }
+			Absent => { x: current_x, y: current_y, feasible: False, operations: $operations, stopped: 0 }
+			Present(best) => { x: best.x, y: best.y, feasible: True, operations: $operations, stopped: 0 }
 		}
 	}
 
@@ -1584,4 +1623,27 @@ expect {
 	ink = GraphiteCollision.forbidden(collision_square, collision_square, n(-80), n(-170))
 	result = GraphiteCollision.solve_shift_regions(limits, 0, 0, [ink], 0, n(10), regions, frame, 10000)
 	regions.len() == 5 and result.feasible and result.x == n(380) and result.y == n(380)
+}
+
+expect {
+	# Independent original broad-window endpoints; clipping against the
+	# final movement slices would incorrectly call all these far hits misses.
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-100), y_min: n(-100), x_max: n(100), y_max: n(100) }
+	GraphiteCollision.broad_active(collision_square, collision_square, n(-850), 0, limits, 0, 0, 0) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-851), 0, limits, 0, 0, 0)
+}
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-500), y_min: n(-300), x_max: n(-101), y_max: n(-20) }
+	GraphiteCollision.broad_active(collision_square, collision_square, n(199), 0, limits, 0, 0, 0) and !GraphiteCollision.broad_active(collision_square, collision_square, n(200), 0, limits, 0, 0, 0) and !GraphiteCollision.broad_active(collision_square, collision_square, n(100), 0, limits, 0, 0, 0)
+}
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-100), y_min: n(-100), x_max: n(100), y_max: n(100) }
+	GraphiteCollision.broad_active(collision_square, collision_square, n(-750), 0, limits, n(200), 0, 0) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-751), 0, limits, n(200), 0, 0)
+}
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-100), y_min: n(-100), x_max: n(100), y_max: n(100) }
+	!GraphiteCollision.broad_active(collision_square, collision_square, n(-851), 0, limits, 0, 0, n(1)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-851), 0, limits, 0, 0, n(10)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-400), n(-150), limits, 0, 0, n(50)) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-400), n(-151), limits, 0, 0, n(50))
 }
