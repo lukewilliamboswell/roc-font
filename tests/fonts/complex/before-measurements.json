@@ -1,0 +1,51 @@
+{
+  "label": "before",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "e5e2b029f1eaf71b4d7b53a8e3962a5ad21930208e82875049a6bf0fc3358a05",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 768,
+      "scalar_count": 288,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 0.0011427213515625,
+      "hb_seconds": 0.00012015625,
+      "roc_to_hb_ratio": 9.510294733420027
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 3072,
+      "scalar_count": 1152,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 0.0076773746796875,
+      "hb_seconds": 0.0004524765625,
+      "roc_to_hb_ratio": 16.967452716818894
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 12288,
+      "scalar_count": 4608,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 0.030350845703125,
+      "hb_seconds": 0.0028185625,
+      "roc_to_hb_ratio": 10.768200351464621
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Before activates generic shaping only: output correctness differs from HB until model lands; ratios compare cost on identical inputs, not equivalent algorithms.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.",
+    "The immutable preactivation served bundle and binaries were built before subsequent orchestration cherry-picks; measurement reused those preserved binaries. Source revision is30135d4; measurement revision differs."
+  ],
+  "measurement_git": "bc9e8be8589d7d356959a82726748c68548f6c65",
+  "source_git": "30135d4",
+  "bundle": "6aGdMCh9Eof1pVsxLapHMDxMZyk3eiaAzh3YSac6GV6g.tar.zst",
+  "binary_sha256": {
+    "bench": "65f5e10c9c2d50ce9abbe2c94eac9afc41aa38ec8e187e9e1c30381dc10e5710",
+    "alloc": "1125f121f9f0bde2e4ad247eb98f7ee2d6a40454ee9ea9a1d32cb6fe63867743"
+  }
+}

@@ -7,13 +7,15 @@ from pathlib import Path
 import argparse,ctypes as C,hashlib,json,os,re,statistics,subprocess,sys
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'));import flight
-parser=argparse.ArgumentParser();parser.add_argument('--label',default='before');parser.add_argument('--output',type=Path);args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--label',default='before');parser.add_argument('--output',type=Path);parser.add_argument('--reuse',action='store_true');args=parser.parse_args()
 roc=os.environ.get('ROC','roc');work=ROOT/'.roc-font-tmp/complex-bench';work.mkdir(parents=True,exist_ok=True)
-with flight.flight(roc,work=work/(args.label+'-flight')) as dep:
- for name in ['bench','alloc']:
-  command=[roc,'build','--opt=speed',str(HERE/(name+'.roc')),f'--output={work/(args.label+"-"+name)}',*dep]
-  if name=='alloc':command.insert(2,'--fuzz')
-  p=subprocess.run(command,cwd=ROOT,capture_output=True,text=True);print(p.stdout,p.stderr);assert p.returncode==0
+if not args.reuse:
+ with flight.flight(roc,work=work/(args.label+'-flight')) as dep:
+  (work/(args.label+'-build.json')).write_text(json.dumps({'source_git':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'bundle':dep[-1].rsplit('/',1)[-1]}))
+  for name in ['bench','alloc']:
+   command=[roc,'build','--opt=speed',str(HERE/(name+'.roc')),f'--output={work/(args.label+"-"+name)}',*dep]
+   if name=='alloc':command.insert(2,'--fuzz')
+   p=subprocess.run(command,cwd=ROOT,capture_output=True,text=True);print(p.stdout,p.stderr);assert p.returncode==0
 import uharfbuzz as hb,uharfbuzz._harfbuzz as implementation
 lib=C.CDLL(implementation.__file__);ptr=C.c_void_p;uint=C.c_uint
 
@@ -40,5 +42,6 @@ for copies in [16,64,256]:
   result=json.loads(p.stdout);times.append(result['elapsed_ns']/repetitions/1e9)
   measure(*functions,font,buffer,text,len(text),repetitions,C.byref(elapsed));hb_times.append(elapsed.value/repetitions/1e9)
  row={'copies':copies,'utf8_bytes':len(text),'scalar_count':len(text.decode()),'allocations':int(match[1]),'leaked':int(match[2]),'roc_seconds':statistics.median(times),'hb_seconds':statistics.median(hb_times),'roc_to_hb_ratio':statistics.median(times)/statistics.median(hb_times)};rows.append(row);print(row,flush=True)
-output={'label':args.label,'git':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'roc':subprocess.check_output([roc,'version'],text=True).strip(),'hb':hb.version_string(),'font_sha256':hashlib.sha256(data).hexdigest(),'rows':rows,'notes':['Native loops, font reading/planning excluded;128 iterations and five samples per size.','Before activates generic shaping only: output correctness differs from HB until model lands; ratios compare cost on identical inputs, not equivalent algorithms.','roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.']}
+build_metadata=work/(args.label+'-build.json')
+output={'label':args.label,'measurement_git':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),**(json.loads(build_metadata.read_text()) if build_metadata.exists() else {'source_git':'unknown preserved binary'}),'roc':subprocess.check_output([roc,'version'],text=True).strip(),'hb':hb.version_string(),'font_sha256':hashlib.sha256(data).hexdigest(),'rows':rows,'notes':['Native loops, font reading/planning excluded;128 iterations and five samples per size.','Before activates generic shaping only: output correctness differs from HB until model lands; ratios compare cost on identical inputs, not equivalent algorithms.','roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.']}
 (args.output or HERE/(args.label+'-measurements.json')).write_text(json.dumps(output,indent=2)+'\n')
