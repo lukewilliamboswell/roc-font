@@ -1,5 +1,6 @@
 import Face
 import Shaper
+import TableMath
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
 import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
@@ -272,6 +273,149 @@ Font :: { face : Face }.{
 	## offer a feature for one script only.
 	features : Font -> List(Str)
 	features = |font| Face.feature_tags(font.face).map(Shaper.tag_text)
+
+	# ------------------------------------------------------------ mathematics
+	## Font-wide parameters for laying out mathematical expressions. Wide
+	## I64 distances preserve variation adjustments without saturation. All
+	## distances are in font units; the three fields ending in `percent`
+	## or `percent_scale_down` are percentages, not distances.
+	MathConstants : {
+		script_percent_scale_down : I16,
+		script_script_percent_scale_down : I16,
+		delimited_sub_formula_min_height : I32,
+		display_operator_min_height : I32,
+		math_leading : I64,
+		axis_height : I64,
+		accent_base_height : I64,
+		flattened_accent_base_height : I64,
+		subscript_shift_down : I64,
+		subscript_top_max : I64,
+		subscript_baseline_drop_min : I64,
+		superscript_shift_up : I64,
+		superscript_shift_up_cramped : I64,
+		superscript_bottom_min : I64,
+		superscript_baseline_drop_max : I64,
+		sub_superscript_gap_min : I64,
+		superscript_bottom_max_with_subscript : I64,
+		space_after_script : I64,
+		upper_limit_gap_min : I64,
+		upper_limit_baseline_rise_min : I64,
+		lower_limit_gap_min : I64,
+		lower_limit_baseline_drop_min : I64,
+		stack_top_shift_up : I64,
+		stack_top_display_style_shift_up : I64,
+		stack_bottom_shift_down : I64,
+		stack_bottom_display_style_shift_down : I64,
+		stack_gap_min : I64,
+		stack_display_style_gap_min : I64,
+		stretch_stack_top_shift_up : I64,
+		stretch_stack_bottom_shift_down : I64,
+		stretch_stack_gap_above_min : I64,
+		stretch_stack_gap_below_min : I64,
+		fraction_numerator_shift_up : I64,
+		fraction_numerator_display_style_shift_up : I64,
+		fraction_denominator_shift_down : I64,
+		fraction_denominator_display_style_shift_down : I64,
+		fraction_numerator_gap_min : I64,
+		fraction_num_display_style_gap_min : I64,
+		fraction_rule_thickness : I64,
+		fraction_denominator_gap_min : I64,
+		fraction_denom_display_style_gap_min : I64,
+		skewed_fraction_horizontal_gap : I64,
+		skewed_fraction_vertical_gap : I64,
+		overbar_vertical_gap : I64,
+		overbar_rule_thickness : I64,
+		overbar_extra_ascender : I64,
+		underbar_vertical_gap : I64,
+		underbar_rule_thickness : I64,
+		underbar_extra_descender : I64,
+		radical_vertical_gap : I64,
+		radical_display_style_vertical_gap : I64,
+		radical_rule_thickness : I64,
+		radical_extra_ascender : I64,
+		radical_kern_before_degree : I64,
+		radical_kern_after_degree : I64,
+		radical_degree_bottom_raise_percent : I16,
+	}
+
+	## Which corner of a glyph a mathematical script is placed against.
+	MathCorner : [TopRight, TopLeft, BottomRight, BottomLeft]
+
+	## The direction in which a mathematical symbol is stretched. This is
+	## independent of the direction of a shaped text run.
+	MathDirection : [Horizontal, Vertical]
+
+	## A prebuilt mathematical symbol and its size along the stretch axis.
+	MathVariant : { glyph : U32, advance : I32 }
+
+	## One component of a stretchable symbol. Connector lengths and full
+	## advance are in font units. Extenders may be repeated by the caller's
+	## bounded equation layout algorithm.
+	MathPart : { glyph : U32, start_connector : I32, end_connector : I32, full_advance : I32, extender : Bool }
+
+	## A stretchable symbol's construction recipe, in table order, and its
+	## italic correction. Equation layout chooses repeats and overlaps.
+	MathAssembly : { italic_correction : I64, parts : List(MathPart) }
+
+	## Height thresholds and corner kern values, in font units. There is
+	## one more value than threshold; `math_kern` selects the value at a
+	## correction height without requiring callers to search this list.
+	MathKernTable : { heights : List(I64), values : List(I64) }
+
+	## Whether the font supplies mathematical typesetting data (`MATH`).
+	## A damaged optional MATH table is left out and reported by `dropped`
+	## in lenient reading, and rejects the font in strict reading.
+	has_math : Font -> Bool
+	has_math = |font| TableMath.has_data(font.face.math)
+
+	## Font parameters for equation layout at the selected variation
+	## location, or `Absent` without mathematical typesetting data.
+	## This supplies font facts; it does not lay out mathematical expressions.
+	math_constants : Font -> [Present(MathConstants), Absent]
+	math_constants = |font| TableMath.constants(font.face.math)
+
+	## The stored italic correction for a mathematical glyph, in font
+	## units, or `Absent` when no correction is stored. A layout engine
+	## commonly uses zero for absence; no fallback is invented here.
+	math_italic_correction : Font, U32 -> [Present(I64), Absent]
+	math_italic_correction = |font, id| TableMath.italic_correction(font.face.math, id)
+
+	## The stored horizontal position for centering an accent over a glyph,
+	## in font units, or `Absent`. A layout engine may fall back to half
+	## the advance; the query preserves absence for callers choosing policy.
+	math_top_accent_attachment : Font, U32 -> [Present(I64), Absent]
+	math_top_accent_attachment = |font, id| TableMath.top_accent_attachment(font.face.math, id)
+
+	## Whether the font marks a glyph as an extended mathematical shape.
+	math_extended_shape : Font, U32 -> Bool
+	math_extended_shape = |font, id| TableMath.extended_shape(font.face.math, id)
+
+	## Corner kerning at a correction height, in font units, at the selected
+	## variation location. Missing corner data gives the format's zero value.
+	## Mathematical kerning is distinct from ordinary text pair kerning.
+	math_kern : Font, U32, MathCorner, I64 -> I64
+	math_kern = |font, id, corner, height| TableMath.kern(font.face.math, id, corner, height)
+
+	## The stored corner-kerning thresholds and values at the selected
+	## location; absent data gives empty lists. Use `math_kern` to query a
+	## single correction height.
+	math_kern_table : Font, U32, MathCorner -> MathKernTable
+	math_kern_table = |font, id, corner| TableMath.kern_table(font.face.math, id, corner)
+
+	## Prebuilt sizes of a mathematical glyph in the font's table order.
+	## Missing constructions and glyphs past the font give an empty list.
+	math_variants : Font, U32, MathDirection -> List(MathVariant)
+	math_variants = |font, id, direction| TableMath.variants(font.face.math, id, direction)
+
+	## Component recipe for stretching a mathematical symbol, or `Absent`.
+	## The caller lays out these parts; no repeated output is allocated here.
+	math_assembly : Font, U32, MathDirection -> [Present(MathAssembly), Absent]
+	math_assembly = |font, id, direction| TableMath.assembly(font.face.math, id, direction)
+
+	## The font's minimum overlap between connectors of mathematical symbol
+	## parts, in font units; zero without mathematical typesetting data.
+	math_min_connector_overlap : Font -> I32
+	math_min_connector_overlap = |font| TableMath.min_connector_overlap(font.face.math)
 
 	# ------------------------------------------------------------ variations
 

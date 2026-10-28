@@ -16,6 +16,7 @@ import LayoutGsub
 import LayoutGdef
 import LayoutKerning
 import LayoutVar
+import TableMath
 import LayoutCommon
 import Sorted
 
@@ -66,6 +67,7 @@ Face := {
 	mvar : [Present(TableVar.Mvar), Absent],
 	outlines : [Present({ points : TableGlyfPoints, gvar : TableGvar }), Absent],
 	layout_var : LayoutVar,
+	math : TableMath,
 	gsub_variations : LayoutVar.FeatureVariations,
 	gpos_variations : LayoutVar.FeatureVariations,
 	location : Location,
@@ -279,6 +281,20 @@ Face := {
 					}
 					Ok(_) => {}
 				}
+				math = match Face.located_tag(bytes, tables, 0x4D415448, 0) {
+					Missing => TableMath.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("MATH", at))
+						TableMath.none
+					}
+					Found(found) => match TableMath.read(found.data, glyph_count, lv) {
+						Ok(value) => value
+						Err(offsets) => {
+							$optional = $optional.concat(offsets.map(|at| Sfnt.bad("MATH", found.offset + at)))
+							TableMath.none
+						}
+					}
+				}
 				# `FeatureVariations` of the layout tables that are used.
 				gsub_fv = match (if (gsub.is_ok()) Face.read_feature_variations(bytes, tables, "GSUB", 0x47535542, axes, fvar_axes, lv) else Ok(LayoutVar.no_feature_variations)) {
 					Ok(fv) => fv
@@ -337,6 +353,7 @@ Face := {
 								mvar: if (keep_variations) variations.mvar else Absent,
 								outlines: if (keep_variations) variations.outlines else Absent,
 								layout_var: if (keep_variations) lv else no_lv,
+								math,
 								gsub_variations: if (keep_variations) gsub_fv else LayoutVar.no_feature_variations,
 								gpos_variations: if (keep_variations) gpos_fv else LayoutVar.no_feature_variations,
 								location: Face.default_location,
@@ -653,7 +670,9 @@ Face := {
 	moved : Face, List({ tag : U32, value : Dec }) -> Face
 	moved = |face, given| {
 		loc = Face.location(face, given)
-		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, LayoutVar.location(face.layout_var, loc.coords)) }
+		layout_location = LayoutVar.location(face.layout_var, loc.coords)
+		math = if (TableMath.has_data(face.math)) TableMath.at_location(face.math, LayoutVar.math_location(face.layout_var, loc.coords)) else face.math
+		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math }
 	}
 
 	## The face moved to a `Font.Variation`'s location (see `settings`). A
