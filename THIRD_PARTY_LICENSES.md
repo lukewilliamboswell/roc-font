@@ -50,6 +50,12 @@ bundle.
 | `tests/fonts/shaping/indic-wide/*.ttf` | renamed static Noto Sans/Serif subsets for eight Indic scripts, pinned and reproduced by adjacent `pins.json`/`prepare.py` | SIL OFL 1.1, adjacent `*-OFL.txt` files |
 | `tests/fonts/complex/ComplexDeva*.ttf`, `ComplexKhmer*.ttf` | renamed static Noto Sans/Serif Devanagari and Khmer subsets; pinned by `pins.json`/`khmer-pins.json` and reproduced by the adjacent preparation scripts | SIL OFL 1.1, adjacent `*-OFL.txt` files |
 | `tests/fonts/math/` | unmodified pinned Noto Sans Math and original mathematical table fixtures | SIL OFL 1.1 in `OFL.txt`; original fixtures under `SYNTHETIC-LICENSE.txt` |
+| `tests/fonts/cff/` | renamed pinned Adobe Source Sans, Source Serif and Source Han Sans subsets, plus original Type 2 programs; adjacent preparation scripts and pins reproduce them | SIL OFL 1.1 in adjacent font licences; original fixtures under the repository licence |
+| `tests/fonts/vertical/` | renamed pinned Noto Sans/Serif Japanese subsets and original vertical table fixtures | SIL OFL 1.1 in adjacent `*-OFL.txt`; original fixtures under `LICENSE` |
+| `tests/fonts/variation-complete/` | pinned Inter and Amstelvar fonts/subsets, an unmodified duplicate-axis HarfBuzz fixture and original variation/metric fixtures | adjacent OFL texts; duplicate-axis font under `APACHE-2.0.txt` with `DUPLICATE-AXES-NOTICE.txt`; originals under `SYNTHETIC-LICENSE.txt` |
+| `tests/fonts/aat/` | unmodified Noto Sans Tamil MN from the pinned HarfBuzz corpus, plus original Apple programs | SIL OFL 1.1 in `NotoSansTamilMN-OFL.txt`; original fixtures under `LICENSE` |
+| `tests/fonts/aat-position/` | unmodified Jellee Roman plus original Apple positioning programs | SIL OFL 1.1 in `Jellee-OFL.txt`; original fixtures under `SYNTHETIC-LICENSE.txt` |
+| `tests/fonts/graphite/` | unmodified SIL Charis, Padauk, Scheherazade and Awami fonts, plus original Graphite programs | complete adjacent `*.LICENSE.txt` for each SIL font; original fixtures under `LICENSE` |
 | `tests/fonts/shaping/thai/`, `tests/fonts/shaping/lao/`, `tests/fonts/shaping/hangul/` | unmodified pinned Noto Thai/Lao and Nanum Hangul families; upstream pins in each `sources.json` | SIL OFL 1.1, adjacent `*-OFL.txt` files |
 | `tests/fonts/shaping/thai-legacy/`, `tests/fonts/shaping/hangul-fixtures/` | original generated fixtures | the repository's licence; adjacent `LICENSE` |
 | `tests/fonts/shaping/arabic-extra/` | unmodified pinned Noto Sans Syriac, Eastern/Western and Noto Nastaliq Urdu; adjacent `sources.json` records origins | SIL OFL 1.1, adjacent `*-OFL.txt` files |
@@ -83,6 +89,14 @@ The complete Microsoft notice is in `tools/ucd/complex-src/ms-use/COPYING`
 and is embedded in the generated module alongside the Unicode and HarfBuzz
 notices. These data and algorithm notices reach the package as source comments; the test fonts
 listed above do not.
+
+The shared Apple lookup/state/morphing modules (`AatLookup`, `AatState`,
+`AatMorx`, `AatMort`) retain the complete HarfBuzz Old MIT notices in their
+source. The generated Apple feature map records its pinned source hashes
+and notice in `tools/aat/`. Graphite readers and execution are original
+implementations from the documented formats and independently recorded
+reference behavior; Graphite2 is used as a development oracle, not linked
+into the pure Roc package.
 
 ## Downloaded on demand, never committed
 

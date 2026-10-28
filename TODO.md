@@ -80,12 +80,18 @@ Internal contracts agreed before consumer work:
 - [ ] Finish integration checks for implemented vertical shaping,
   metrics/origins and `VVAR`: 1,098 cached cases, including two declared
   VORG/TrueType policy differences; real Japanese and Mongolian fonts.
-- [ ] AAT and Graphite shaping for fonts whose substitutions and
-  positioning rely on those backends. Modern Apple morphing has 1,960
-  exact native cases and language selection another 240. AAT positioning
-  has 4,808 exact native cases. Legacy morphing and Graphite execution
-  remain active implementation work. Four real SIL families pass the
-  Graphite static reader; this does not establish runtime support.
+- [ ] Finish shared integration checks for implemented AAT morphing,
+  positioning and tracking. Modern morphing/language/real-font/regression
+  matrices contain 3,096 exact native cases; tracking adds 1,600. Legacy
+  morphing has 2,413 exact cases and positioning has 5,064 comparisons,
+  including 16 independent fontTools contour controls. Dedicated native
+  fuzz campaigns pass; the final shared-bundle workflow remains required.
+- [ ] Complete Graphite real-font runtime agreement, geometry/collision
+  behavior, public adapter conversion, native fuzz and scaling gates.
+  Static reading covers four real SIL families. Original VM controls
+  pass; the first complete public replay exposed real-font differences.
+  Preserve separate default-HarfBuzz preload6 and raw Graphite2 preload0
+  oracle records, plus the declared format-correct Glat3 flag divergence.
 - [ ] Finish integration checks for implemented `avar` version 2,
   `gvar` phantom advances (including composites and vertical metrics),
   duplicate-tag setters and removal of the arbitrary 64-axis cap.

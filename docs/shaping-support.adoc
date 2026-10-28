@@ -9,9 +9,9 @@ flags through the native driver importing the served package bundle.
 Record counts describe the checked-in matrices, including any read cases;
 the conformance gate establishes agreement for the current package build.
 
-== Integration snapshot
+== Historical foundation snapshot
 
-The 2026-10-28 native replay on the integration bundle recorded 7,116
+The 2026-10-28 native replay on foundation commit `39b66c3` recorded 7,116
 gating cases: 7,098 agreements, 16 declared known differences and two
 unsupported cases, with no unexpected failure. The separately scored
 HarfBuzz in-house corpus recorded 4,935 agreements, 107 differences,
@@ -116,7 +116,8 @@ These extend the two Arabic families with Syriac and Nastaliq stress cases.
 |NKo (`Nkoo`, USE) |Noto Sans NKo, Noto Sans NKo Unjoined subsets
 |link:../tests/fonts/shaping/use-joining/joining-cases.jsonc[336 records].
 |Mongolian (`Mong`, USE) |Noto Sans Mongolian subset
-|Same joining matrix, 156 records. One family only; horizontal shaping only.
+|Same joining matrix, 156 horizontal records. One family only; the additional
+vertical matrix is described below.
 |Adlam (`Adlm`, USE) |Noto Sans Adlam, ADLaM Display subsets
 |Same joining matrix, 296 records.
 |===
@@ -169,20 +170,41 @@ uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
 
 == Practical boundaries
 
-* CFF/CFF2 fonts can supply shaping facts, but their paths/extents remain
-  explicitly unknown where the TrueType outline reader cannot expose them.
-  This blocks a consumer needing those paths, not ordinary glyph-id shaping.
-* Variable advances require `HVAR`. Fonts encoding advance changes only
-  in `gvar` phantom points currently retain their stored advances, which
-  blocks accurate variable-width layout for those fonts.
+The development branch extends the foundation snapshot above. Dedicated
+feature proofs are retained beside their fixtures; they do not replace the
+final shared integration gate.
+
+* CFF/CFF2 paths include cubic curves, subroutines, CID fonts and variable
+  blends. link:../tests/fonts/cff/README.md[The CFF proof] distinguishes
+  normative and FreeType comparisons from three HarfBuzz draw discrepancies.
+* Variable metrics include `gvar` phantom points when `HVAR`/`VVAR` are
+  absent; `avar` v2 cross-axis remapping is implemented. See
+  link:../tests/fonts/variation-complete/[the variation evidence].
+* Vertical shaping includes top-to-bottom and bottom-to-top runs,
+  substitutions, positioning, vertical metrics and origins. The
+  link:../tests/fonts/vertical/[vertical matrices] include Japanese and
+  Mongolian fonts and two declared VORG/TrueType policy differences.
+* Apple substitution programs include all five modern `morx` and legacy
+  `mort` program types. Apple positioning covers `kerx` formats 0/1/2/4/6,
+  legacy `kern` formats 0/1/2/3 and size-dependent tracking. Dedicated
+  link:../tests/fonts/aat/[modern morphing],
+  link:../tests/fonts/aat-mort/[legacy morphing] and
+  link:../tests/fonts/aat-position/[positioning] matrices establish those
+  cases, with malformed-font, native fuzz and scaling evidence.
+* Graphite preparation and execution remain under integration. Small
+  original VM controls pass the public native replay, while real-font
+  association and collision differences are still being resolved. Four
+  real SIL families passing preparation does not establish runtime parity.
+  The default HarfBuzz Graphite adapter and the independent Graphite2
+  lazy-face API use different preload modes; their evidence is labelled
+  separately. Graphite's adapter uses horizontal advances even when the
+  caller requests a vertical buffer direction. Set `use_font_programs`
+  to false to select the OpenType path, including its vertical metrics.
 * WOFF/WOFF2 data needs decompression before this sfnt reader can accept
   the font bytes; container unwrapping remains separate work.
 * After work-budget exhaustion, partial progress can differ from HarfBuzz's
   buffer-accounting progress. Explicit stopped-run cases are checked with
   an independent model; completed runs require oracle agreement.
-* Direction is horizontal LTR/RTL. Vertical shaping and Mongolian vertical
-  layout are not established by these matrices.
-* The shaping backend is OpenType; AAT and Graphite shaping are not implemented.
 * Legacy kerning follows the selected script's fallback policy. The
   link:../tests/fonts/shaping/kern-policy/kern-cases.jsonc[93-case matrix]
   covers suppression for scripts whose models disable it and retention

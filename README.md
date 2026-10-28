@@ -17,10 +17,13 @@ lines and choosing fallback fonts stay with your program.
 ## Status
 
 **Unreleased font foundation integration.** The development branch includes
-all GPOS positioning types, TrueType paths, ligature carets, PDF metadata
+all GPOS positioning types, TrueType and CFF/CFF2 paths, ligature carets, PDF metadata
 and raw tables, OpenType MATH facts, COLR/CPAL paint graphs, embedded SVG
 and bitmap glyph assets. Variable fonts are queried at the selected weight,
-width, optical size or custom axes.
+width, optical size or custom axes, including cross-axis `avar` v2 maps
+and phantom-point metrics. Vertical runs expose both glyph advances and
+origins. Apple morphing, positioning and size-dependent tracking are under
+integration; Graphite execution remains in development.
 
 Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Khmer, Myanmar, nine Indic scripts
 and the Universal Shaping Engine have dedicated shaping stages. Real-font

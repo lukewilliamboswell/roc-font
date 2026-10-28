@@ -213,8 +213,9 @@ A table is *required* (`head`, `hhea`, `maxp`, `hmtx`, `cmap`, plus `loca`
 and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
 `OS/2`, `name`, `post`, ...).
 
-* *Lenient* (the default) accepts exactly what browsers accept, which is
-  what OTS accepts: OTS 9.3.0 is the oracle for every reading case. The
+* *Lenient* (the default) validates font data before use. OTS 9.3.0 is a
+  reading oracle, alongside format specifications and independent readers;
+  successful preparation is not a certificate of browser acceptance. The
   font header, character map, glyph substitutions, PostScript and naming
   tables, and the glyph outlines' instruction lengths and flags are
   checked exactly as OTS checks them (`ots/src/head.cc`, `cmap.cc`,
@@ -236,10 +237,10 @@ and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
   reports what was dropped and why (`Font.dropped`). Deliberate
   divergences: roc-font does not require `OS/2`, `name`, `post` or
   outlines to be present, so metrics-only and synthetic fonts read; an
-  `avar` version 2, which OTS keeps, is dropped with the variations
-  because roc-font cannot apply it; and checking `GSUB` is bounded (64
-  steps per byte plus 2^20). Measured over the 1,278-font corpus, no
-  other font is read differently. Fonts whose test data OTS refuses (the
+  valid Apple tables and CFF calculator programs are supported even when
+  OTS discards or rejects them; and checking `GSUB` is bounded (64
+  steps per byte plus 2^20). Font-container acceptance by OTS does not
+  prove that it retained these optional tables. Fonts whose test data OTS refuses (the
   AOTS suite's format 4 `cmap` fields, for example) are therefore refused
   too, by design.
 * *Strict* (`ReadOptions.{ strict: True }`, wanted by roc-pdf) rejects
@@ -456,11 +457,12 @@ bold = Font.at(Font.serif, Font.Variation.{ weight: Bold })
 * `at` costs little and can run at compile time, so named instances of the
   defaults (`Font.serif` at Bold, say) cost nothing at run time.
 
-Scope for the first release: phase 1 (avar, item variation store, HVAR,
-MVAR) and phase 2 (GDEF store, GPOS deltas, FeatureVariations) for
-advances, metrics and kerning; phase 3 (gvar applied to glyf points) for
-glyph extents away from the default instance. Details, per-font
-requirements and evidence are in `docs/variable-fonts.adoc`.
+Implemented variation preparation covers `avar` versions 1/2, item
+variation stores, `HVAR`, `VVAR`, `MVAR`, GDEF/GPOS deltas and
+FeatureVariations. `gvar` supplies varied TrueType geometry and phantom
+metrics when the matching metric table is absent; CFF2 supplies blended
+cubic paths. Details, per-font requirements and reference evidence are in
+`docs/variable-fonts.adoc` and `tests/fonts/variation-complete/`.
 
 *Arithmetic.* Results are bit-identical with HarfBuzz, because browsers
 draw with HarfBuzz and consumers compare against them. HarfBuzz computes
@@ -473,10 +475,10 @@ So roc-font performs HarfBuzz's operations, in HarfBuzz's order, on
 single-precision bit patterns held in `U32`: integer code, deterministic,
 with no NaN or infinity reachable. Measured: 14.9 million advances across
 the three defaults at grid and random fractional locations, 0
-differences. Phase 3 needs the same for HarfBuzz's double-precision `gvar`
-scalars. fontTools' instancer takes advances from `gvar` phantom points
-and differs from HarfBuzz on a few glyphs, so it is an oracle only for
-extents.
+differences in that historical metric-table experiment. `gvar` uses the
+reference's double-precision scalar path. Independent FreeType and
+fontTools records distinguish outline and phantom-point expectations
+from HarfBuzz metric-table behavior.
 
 *Details of the API.* `Font.at` returns a `Font`, so every query keeps its
 signature; it computes only the location state (0.6–3.7 µs), and the
@@ -600,13 +602,16 @@ instances : Font -> List({ name : Str, axes : List({ tag : Str, value : Dec }) }
 coordinates : Font -> List({ tag : Str, value : I16 })   # normalised, units of 1/16384, after avar
 
 # Shaping (§5.2-5.5, §6)
-Direction : [FromScript, LeftToRight, RightToLeft]
+Direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop]
 ClusterLevel : [Graphemes, Characters]
 Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }  # UTF-8 byte range
 ShapeLimits := { growth : U32 ?? 256, operations : U32 ?? 4096 }   # per input scalar; floor 65536
 ShapeOptions := { script : Str ?? "", language : Str ?? "",  # ISO 15924, BCP 47; "" unknown
                   direction : Direction ?? FromScript, features : List(Feature) ?? [],
-                  clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+                  clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{},
+                  point_size : Dec ?? 0, use_font_programs : Bool ?? True,
+                  graphite_features : List(GraphiteFeature) ?? [] }
+GraphiteFeature := { id : U32, value : I16 ?? 1 }
 Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }),
         clusters : List(U64), flags : List(U8) }   # clusters: UTF-8 byte offsets; flags: bit 0 unsafe to break, bit 1 missing character
 ShapePlan                                        # opaque, reusable for one Font and options
@@ -653,7 +658,7 @@ glyph record, so untraced shaping allocates nothing more.
 `extents` tells three cases apart: a box (`Extents`, named so callers
 can keep one), `Empty` (the glyph draws nothing, its outline has no
 contours, or its id is past the font) and `Unknown` (the font has no
-`glyf` outlines: CFF, CFF2 or an image-only font), so
+supported outlines, such as an image-only or metrics-only font), so
 a caller knows when to fall back on metrics and advances. `features`
 lists what a `Feature` can change, font-wide; it is a `List` because it
 is small and wanted whole. Run flags stay one `U8` column, as computed,
@@ -697,11 +702,11 @@ zero normalized coordinates. Cached fontTools instancing records cover
 these facts because the pinned HarfBuzz MATH queries ignore variation
 indices. The oracle provenance names that limitation (§7.1).
 
-*Outlines and editing carets.* `outline` returns TrueType move, line,
-quadratic and close commands, including composites, implied points and
+*Outlines and editing carets.* `outline` returns move, line,
+quadratic, cubic and close commands, including TrueType composites, implied points and
 variable locations. Coordinates are finite `F64` values; fractional
-transforms and implied midpoints are retained. CFF/CFF2 paths remain
-`Unknown`. Preparation checks a conservative coordinate bound before
+transforms and implied midpoints are retained. Checked CFF/CFF2 programs
+produce cubic paths, including CFF2 variation blends. Preparation checks a conservative coordinate bound before
 queries, including every composite and accepted variation. A font outside
 that resource envelope is rejected rather than allowed to overflow later.
 `ligature_carets` returns each GDEF caret in font order, retaining an
@@ -773,8 +778,9 @@ bound:
   §6.2.
 . *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
   and mark filtering sets from `GDEF`.
-. *Position*: take advances from `hmtx` (and later `HVAR`); apply GPOS
-  lookups, or the `kern` table when the font has no GPOS kerning.
+. *Position*: take horizontal or vertical advances at the selected
+  variation location; apply GPOS or the selected Apple positioning
+  provider, with legacy kerning following the script model's policy.
 . *Finish*: merge clusters at the configured level, compute unsafe-to-break
   flags, reverse for right-to-left output order.
 
@@ -782,6 +788,14 @@ Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Indic, Khmer, Myanmar and Universal
 Shaping Engine models plug script-specific preparation, feature stages and
 reordering into this pipeline. The font's selected script table participates
 in model selection, following the pinned reference.
+
+Prepared Apple morphing programs replace OpenType substitution when selected.
+Graphite programs own substitution and positioning as a complete pipeline;
+OpenType GPOS is not applied afterward. `shaping_engine` reports the primary
+substitution engine, since OpenType and Apple positioning providers can mix.
+`use_font_programs: False` selects the OpenType route and disables Apple
+program tables. Graphite's public adapter follows its reference's horizontal
+advance convention for vertical buffer directions.
 <<shaping-models-and-evidence,The shaping support matrix>> distinguishes model
 selection from the scripts and font families covered by recorded oracles.
 
