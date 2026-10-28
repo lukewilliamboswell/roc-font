@@ -9,9 +9,21 @@ import "../fonts/aat/ligature-features.ttf" as feature_ligature : List(U8)
 import "../fonts/aat/language.ttf" as languages : List(U8)
 import "../fonts/aat/tracking-1-0.ttf" as tracking : List(U8)
 import "../fonts/aat/tracking-0-0.ttf" as old_tracking : List(U8)
+import "../fonts/aat/gdef-classes.ttf" as gdef_replacements : List(U8)
+import "../fonts/aat/eot-only.ttf" as inactive : List(U8)
 
 ## Apple font programs through the public served package.
 AatTests :: {}.{}
+
+expect {
+	font = Font.from_bytes(gdef_replacements, Font.ReadOptions.{ strict: True }) ?? crash "valid Apple replacement classes"
+	run = Font.shape(font, "ab", Font.ShapeOptions.{})
+	run.glyphs == [5, 6] and run.advances == [{ x: 0, y: 0 }, { x: 0, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: 0, y: 0 }]
+}
+expect {
+	font = Font.from_bytes(inactive, Font.ReadOptions.{ strict: True }) ?? crash "valid inactive Apple program"
+	Font.shape(font, "ab", Font.ShapeOptions.{}).glyphs == [1, 2]
+}
 
 expect {
 	font = Font.from_bytes(tracking, Font.ReadOptions.{ strict: True }) ?? crash "valid modern tracking fixture"

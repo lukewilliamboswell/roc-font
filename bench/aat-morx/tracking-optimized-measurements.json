@@ -1,0 +1,72 @@
+{
+  "label": "tracking-optimized",
+  "measurement_git": "96549a146180e5d339be3ec261b60550ef545597",
+  "source_git": "f1394419e9172e66c582d077fb6296e3d52d34ce",
+  "bundle": "5UjUbAMnmwjFj6h4rdd9xfL4Su4ciMgD1ooniY56t6BX.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "2175a9bf74e7d13e0f0962dd8939a7bd6e6e26b0645dca05e950a3895bfcbaa3",
+  "rows": [
+    {
+      "case_sha256": "654030be31e13dee5423cee8734fa4f3a9921e94cb456af5a43873e0a85a491e",
+      "copies": 16,
+      "utf8_bytes": 64,
+      "scalar_count": 48,
+      "input_checksum": 6929035098785437189,
+      "output_checksum": 10400,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 15,
+      "leaked": 0,
+      "roc_seconds": 1.2697265625e-05,
+      "hb_seconds": 6.1953125e-06,
+      "roc_to_hb_ratio": 2.049495586380832
+    },
+    {
+      "case_sha256": "0d6a8e4f1be2544831e92f1dd644cf4073f62ebdab4348ae5e0f2fc35204622a",
+      "copies": 64,
+      "utf8_bytes": 256,
+      "scalar_count": 192,
+      "input_checksum": 4998111604239702277,
+      "output_checksum": 60032,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 15,
+      "leaked": 0,
+      "roc_seconds": 3.19798125e-05,
+      "hb_seconds": 1.35e-05,
+      "roc_to_hb_ratio": 2.368875
+    },
+    {
+      "case_sha256": "920c7940100a1ea12b4b27a3483661bc4fd172a4fa14a6c05bf7582747f1b03c",
+      "copies": 256,
+      "utf8_bytes": 1024,
+      "scalar_count": 768,
+      "input_checksum": 3753062478533895429,
+      "output_checksum": 535040,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 15,
+      "leaked": 0,
+      "roc_seconds": 8.5041015625e-05,
+      "hb_seconds": 5.30625e-05,
+      "roc_to_hb_ratio": 1.6026575382803299
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is checked separately through cached Apple oracle matrices; inputs, script and horizontal direction are guarded in both native loops.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable."
+  ],
+  "source_files_in_bundle_sha256": {
+    "AatMorx.roc": "492e194881f0bb3bf40dd32190e99e867b89c0f6eb6a6dc0d2c3c64af9f93143",
+    "Shaper.roc": "f5ad27142f4c46dd766c153a17a9e0e03a475f426861fb18c8dc9e0bb5b15fb0",
+    "Face.roc": "d972989fcbc3bc796408188c6c973c339189b12ee89875df8d62d1fbef1926a9"
+  },
+  "native_binary_sha256": {
+    "bench": "0e5817251f86c90ffc0e959952da1a7d46d1be2da1ad9a9b058271688da76e9a",
+    "alloc": "9292bf12e3567fb29cc71fcb3b65337854a190157e8591ce9d5e94e1311dfdba"
+  },
+  "comparator_source_sha256": "af651dc508b5db942694fe70b1b6cebeeea446b881d9adb49e9d9c1a70b6265d",
+  "source_identity_note": "Immutable bundle and source member hashes identify the package; integration checkout had uncommitted work during measurement."
+}

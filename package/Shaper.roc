@@ -1207,7 +1207,10 @@ Shaper :: {}.{
 			Myanmar(model) => Shaper.apply_myanmar(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 			Use(model) => Shaper.apply_use(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 		}
-		positioned = Shaper.position_checked(face, location, p, if (p.aat and !p.fallback_marks) AatMorx.remove_deleted(applied.items) else applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
+		# Apple replacements acquire the new glyph's GDEF classes. Origin
+		# provenance lives above this property word and remains unchanged.
+		classified = if (p.aat and classes) applied.items.map(|item| LayoutGsub.with_gprops(item, LayoutGdef.glyph_props(gdef, item.glyph))) else applied.items
+		positioned = Shaper.position_checked(face, location, p, if (p.aat and !p.fallback_marks) AatMorx.remove_deleted(classified) else classified, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
 		placed = if (p.aat and p.fallback_marks) Shaper.remove_aat_deleted(positioned.placed) else positioned.placed
 		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped), aborted: False }
 	}
@@ -1308,7 +1311,7 @@ Shaper :: {}.{
 		if p.zero_marks == Early {
 			for i in 0..<count {
 				if LayoutGsub.is_mark_item(items.get(i) ?? LayoutGsub.no_item) {
-					if p.fallback_marks and !backward {
+					if p.fallback_marks and !backward and !p.aat {
 						$major = $major.set(i, LayoutVar.position_sub($major.get(i) ?? 0, $base.get(i) ?? 0)) ?? []
 					}
 					$base = $base.set(i, 0) ?? []
@@ -1324,7 +1327,7 @@ Shaper :: {}.{
 		for i in 0..<count {
 			item = positioned_items.get(i) ?? LayoutGsub.no_item
 			if p.zero_marks == Late and LayoutGsub.is_mark_item(item) {
-				if p.fallback_marks and !backward {
+				if p.fallback_marks and !backward and !p.aat {
 					$dx = $dx.set(i, LayoutVar.position_sub($dx.get(i) ?? 0, $ax.get(i) ?? 0)) ?? []
 				}
 				$ax = $ax.set(i, 0) ?? []
@@ -1334,7 +1337,7 @@ Shaper :: {}.{
 				$dx = $dx.set(i, 0) ?? []
 			}
 		}
-		fallback = if (p.fallback_marks and p.fallback_position) Shaper.position_marks_axis(face, location, { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }, backward, p.native == Rtl, Face.units_per_em(face).to_i64(), p.fallback_marks and !backward, True) else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
+		fallback = if (p.fallback_marks and p.fallback_position) Shaper.position_marks_axis(face, location, { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }, backward, p.native == Rtl, Face.units_per_em(face).to_i64(), p.fallback_marks and !backward and !p.aat, True) else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
 		placed = if (backward) { items: Shaper.reversed(fallback.items), ax: Shaper.reversed(fallback.ax), dx: Shaper.reversed(fallback.dx), dy: Shaper.reversed(fallback.dy) } else fallback
 		{ placed: if (ignorables) Shaper.hide_ignorables(face, placed) else placed, stopped: full.stopped.bitwise_or(positioned.stopped) }
 	}
@@ -1359,7 +1362,7 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		adjust_early = p.zero_marks == Early and p.fallback_marks and !backward
+		adjust_early = p.zero_marks == Early and p.fallback_marks and !backward and !p.aat
 		original = if (adjust_early) $base else []
 		if p.zero_marks == Early {
 			for i in 0..<count {
@@ -1387,7 +1390,7 @@ Shaper :: {}.{
 		}
 		# Marks take no advance (HarfBuzz zeroes them after `GPOS`); without
 		# `GPOS`, in forward text a mark keeps hanging over the glyph before.
-		adjust = p.fallback_marks and !backward
+		adjust = p.fallback_marks and !backward and !p.aat
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
 			if LayoutGsub.is_mark_item(item) and p.zero_marks == Late {

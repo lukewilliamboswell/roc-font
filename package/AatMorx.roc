@@ -809,15 +809,33 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		}
 		# Source indices define a permutation; capture the at-most-four
 		# boundary items before mutating the unique flat output list.
-		l = items.sublist({ start, len: left })
-		r = items.sublist({ start: end - right, len: right })
-		middle = items.sublist({ start: start + left, len: end - start - left - right })
-		ordered = (if (map.bitwise_and(15) == 3) AatMorx.reversed(r) else r).concat(middle).concat(if (map.shr_zf_wrap(4) == 3) AatMorx.reversed(l) else l)
-		cluster = items.sublist({ start, len: end.max(current_end) - start }).fold(0xFFFFFFFFFFFFFFFF.U64, |a, item| a.min(item.cluster))
+		l0 = items.get(start) ?? LayoutGsub.no_item
+		l1 = items.get(start + 1) ?? LayoutGsub.no_item
+		r0 = items.get(end - right) ?? LayoutGsub.no_item
+		r1 = items.get(end - right + 1) ?? LayoutGsub.no_item
+		middle_count = end - start - left - right
+		cluster = LayoutGsub.min_cluster(items, start, end.max(current_end), 0xFFFFFFFFFFFFFFFF)
 		var $items = items
-		for i in 0..<ordered.len() {
-			item = ordered.get(i) ?? LayoutGsub.no_item
-			$items = $items.set(start + i, LayoutGsub.set_cluster(item, cluster)) ?? []
+		if left != right {
+			# Move towards the free boundary, preserving overlapping source
+			# items: backwards for a right shift, forwards for a left shift.
+			for step in 0..<middle_count {
+				i = if (right > left) middle_count - step - 1 else step
+				item = $items.get(start + left + i) ?? LayoutGsub.no_item
+				$items = $items.set(start + right + i, item) ?? []
+			}
+		}
+		for i in 0..<right {
+			first = if (map.bitwise_and(15) == 3) i == 1 else i == 0
+			$items = $items.set(start + i, if (first) r0 else r1) ?? []
+		}
+		for i in 0..<left {
+			first = if (map.shr_zf_wrap(4) == 3) i == 1 else i == 0
+			$items = $items.set(end - left + i, if (first) l0 else l1) ?? []
+		}
+		for i in start..<end {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			$items = $items.set(i, LayoutGsub.set_cluster(item, cluster)) ?? []
 		}
 		AatMorx.unsafe_range($items, start, end.max(current_end))
 	}

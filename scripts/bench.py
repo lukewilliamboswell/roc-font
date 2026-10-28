@@ -809,6 +809,8 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         result["time_ratios"] = {**(ratio_meta or {}), "ratios": ratios}
     elif "time_ratios" in baseline:
         result["time_ratios"] = baseline["time_ratios"]
+    if "feature_cases" in baseline:
+        result["feature_cases"] = baseline["feature_cases"]
     return result
 
 

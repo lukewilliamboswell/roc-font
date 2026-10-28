@@ -1,0 +1,69 @@
+{
+  "label": "tamil-before",
+  "measurement_git": "f1394419e9172e66c582d077fb6296e3d52d34ce",
+  "source_git": "external immutable bundle",
+  "bundle": "L1fUGVJ98c9bvHHYB2Fn3PuLuEncmXZESCMyBM2KpGX.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "4f306d2c9aea996578b62e064739fd2fa96bfa11eeb16cb7b6d1bea8a2ca2d7b",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 448,
+      "scalar_count": 160,
+      "input_checksum": 15953693032803814613,
+      "output_checksum": 163840,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 135,
+      "leaked": 0,
+      "roc_seconds": 0.0001004046171875,
+      "hb_seconds": 1.72109375e-05,
+      "roc_to_hb_ratio": 5.83376804357694
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 1792,
+      "scalar_count": 640,
+      "input_checksum": 4215515757599388741,
+      "output_checksum": 1128448,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 388,
+      "leaked": 0,
+      "roc_seconds": 0.000380690109375,
+      "hb_seconds": 6.66796875e-05,
+      "roc_to_hb_ratio": 5.709236555360282
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 7168,
+      "scalar_count": 2560,
+      "input_checksum": 12443769928889635333,
+      "output_checksum": 12083200,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "allocations": 1363,
+      "leaked": 0,
+      "roc_seconds": 0.001508177078125,
+      "hb_seconds": 0.000267234375,
+      "roc_to_hb_ratio": 5.643649242822897
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is checked separately through cached Apple oracle matrices; inputs, script and horizontal direction are guarded in both native loops.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable."
+  ],
+  "source_files_in_bundle_sha256": {
+    "AatMorx.roc": "f4465d235931e7f2ccd8f37b9214b6bf1ad0e82b5976776e24a702d602c388dd",
+    "Shaper.roc": "d66f0895015b7dc08ca21674f51d21c97bfb3ffb021df0923d318b444a7c0ad1",
+    "Face.roc": "d972989fcbc3bc796408188c6c973c339189b12ee89875df8d62d1fbef1926a9"
+  },
+  "native_binary_sha256": {
+    "bench": "f74bc60dd28aba489bdd1c6414abf3d1de04c8c5650e88ec9216b4074c2d8030",
+    "alloc": "9b25fdef293d5c92cbc0c46259398e728734c183d886fe4eb6b3d4c98e3eefe9"
+  },
+  "comparator_source_sha256": "af651dc508b5db942694fe70b1b6cebeeea446b881d9adb49e9d9c1a70b6265d",
+  "source_identity_note": "Immutable bundle from commit1747518; same benchmark consumer and full checksum workload."
+}

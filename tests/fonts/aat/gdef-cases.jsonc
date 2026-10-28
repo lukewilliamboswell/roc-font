@@ -1,0 +1,317 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "0",
+      "font": "gdef-classes.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "1",
+      "font": "gdef-classes.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "2",
+      "font": "gdef-classes.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "3",
+      "font": "gdef-classes.ttf",
+      "text": "a",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "4",
+      "font": "gdef-classes.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "5",
+      "font": "gdef-classes.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "6",
+      "font": "gdef-classes.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "7",
+      "font": "gdef-classes.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "8",
+      "font": "gdef-classes.ttf",
+      "text": "áb",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "9",
+      "font": "gdef-classes.ttf",
+      "text": "áb",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "10",
+      "font": "gdef-classes.ttf",
+      "text": "áb",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "11",
+      "font": "gdef-classes.ttf",
+      "text": "áb",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "12",
+      "font": "gdef-classes.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "13",
+      "font": "gdef-classes.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "14",
+      "font": "gdef-classes.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "15",
+      "font": "gdef-classes.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "16",
+      "font": "gdef-classes.ttf",
+      "text": "aa",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "17",
+      "font": "gdef-classes.ttf",
+      "text": "aa",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "18",
+      "font": "gdef-classes.ttf",
+      "text": "aa",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "19",
+      "font": "gdef-classes.ttf",
+      "text": "aa",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "20",
+      "font": "gdef-classes.ttf",
+      "text": "a b",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "21",
+      "font": "gdef-classes.ttf",
+      "text": "a b",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "22",
+      "font": "gdef-classes.ttf",
+      "text": "a b",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "23",
+      "font": "gdef-classes.ttf",
+      "text": "a b",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

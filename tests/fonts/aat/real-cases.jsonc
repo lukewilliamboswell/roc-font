@@ -1,0 +1,2861 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "0",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "1",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "2",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "3",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "4",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "5",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "6",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "7",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "8",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "9",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "10",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "11",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "12",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "13",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "14",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "15",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "16",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "17",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "18",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "19",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "20",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "21",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "22",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "23",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "24",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "25",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "26",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "27",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "28",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "29",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "30",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "31",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "32",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "33",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "34",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "35",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "வணக்கம்",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "36",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "37",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "38",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "39",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "40",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "41",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "42",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "43",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "44",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "45",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "46",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "47",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கா",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "48",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "49",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "50",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "51",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "52",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "53",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "54",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "55",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "56",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "57",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "58",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "59",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "60",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "61",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "62",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "63",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "64",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "65",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "66",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "67",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "68",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "69",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "70",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "71",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "72",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "73",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "74",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "75",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "76",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "77",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "78",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "79",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "80",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "81",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "82",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "83",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கு",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "84",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "85",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "86",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "87",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "88",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "89",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "90",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "91",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "92",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "93",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "94",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "95",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கூ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "96",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "97",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "98",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "99",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "100",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "101",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "102",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "103",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "104",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "105",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "106",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "107",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கெ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "108",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "109",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "110",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "111",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "112",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "113",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "114",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "115",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "116",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "117",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "118",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "119",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கே",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "120",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "121",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "122",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "123",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "124",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "125",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "126",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "127",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "128",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "129",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "130",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "131",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கொ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "132",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "133",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "134",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "135",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "136",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "137",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "138",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "139",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "140",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "141",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "142",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "143",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கோ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "144",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "145",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "146",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "147",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "148",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "149",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "150",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "151",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "152",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "153",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "154",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "155",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "கௌ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "156",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "157",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "158",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "159",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "160",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "161",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "162",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "163",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "164",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "165",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "166",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "167",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க்ஷ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "168",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "169",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "170",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "171",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "172",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "173",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "174",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "175",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "176",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "177",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "178",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "179",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "ஸ்ரீ",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "180",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "181",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "182",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "183",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "184",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "185",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "186",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "187",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "188",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "189",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "190",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "191",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "தமிழ் மொழி",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "192",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "193",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "194",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "195",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "196",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "197",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "198",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "199",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "en",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "200",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ltr",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "201",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "rtl",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "202",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "203",
+      "font": "NotoSansTamilMN.ttf",
+      "text": "க́",
+      "options": {
+        "script": "Taml",
+        "language": "ta-IN",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

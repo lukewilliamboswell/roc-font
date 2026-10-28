@@ -175,6 +175,9 @@ BENCH_APPS = (
     "bench/arabic/bench.roc", "bench/arabic/alloc.roc",
     "bench/vertical/bench.roc", "bench/vertical/alloc.roc",
     "bench/variation-complete/bench.roc", "bench/variation-complete/alloc.roc",
+    "bench/aat-position/bench.roc", "bench/aat-position/alloc.roc",
+    "bench/aat-morx/bench.roc", "bench/aat-morx/alloc.roc",
+    "tests/fonts/cff/bench.roc", "tests/fonts/cff/alloc.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 
@@ -371,7 +374,11 @@ def step_bench(ctx: Context) -> Result:
         arguments = ["--quick", "--langs", "roc", "--only", "inter", "--no-allocations",
                      "--repetitions", "1", "--label", "smoke"]
         return optional_script(ctx, "bench.py", arguments, "benchmark smoke run, architecture §9")
-    return optional_script(ctx, "bench.py", ["--check", "--quick"], "allocation ratchet, architecture §9.2")
+    general = optional_script(ctx, "bench.py", ["--check", "--quick"], "allocation ratchet, architecture §9.2")
+    features = optional_script(ctx, "feature_allocations.py", [], "narrow feature allocation ratchet")
+    return Result("PASS" if general.status == features.status == "PASS" else "FAIL",
+                  f"general allocations: {general.status}; narrow features: {features.status}",
+                  general.output + "\n" + features.output)
 
 
 DOC_ITEM_RE = re.compile(r'class="sidebar-(?:value|type|type-name)" href="#([A-Za-z0-9_.]+)"')

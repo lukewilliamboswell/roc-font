@@ -110,6 +110,10 @@ DRIVER_PACKAGE = TMP_ROOT / "conformance" / "driver.package"
 EXTERNAL_CASES = (
     ROOT / "tests/fonts/aat/morx-cases.jsonc",
     ROOT / "tests/fonts/aat/language-cases.jsonc",
+    ROOT / "tests/fonts/aat/real-cases.jsonc",
+    ROOT / "tests/fonts/aat/gdef-cases.jsonc",
+    ROOT / "tests/fonts/aat/applicability-cases.jsonc",
+    ROOT / "tests/fonts/aat/rearrangement-cases.jsonc",
     ROOT / "tests/fonts/vertical/vert-selection-cases.jsonc",
     ROOT / "tests/fonts/vertical/vertical-cases.jsonc",
     ROOT / "tests/fonts/vertical/real-cases.jsonc",

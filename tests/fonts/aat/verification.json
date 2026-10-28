@@ -1,0 +1,31 @@
+{
+  "reference": {
+    "harfbuzz": "14.6.0",
+    "uharfbuzz": "0.56.3"
+  },
+  "native_optimized": true,
+  "bundle": "5UjUbAMnmwjFj6h4rdd9xfL4Su4ciMgD1ooniY56t6BX.tar.zst",
+  "matrices": {
+    "morx-cases": 1960,
+    "language-cases": 240,
+    "real-cases": 204,
+    "gdef-cases": 24,
+    "applicability-cases": 28,
+    "rearrangement-cases": 640
+  },
+  "agree": 3096,
+  "tracking": {
+    "agree": 1600,
+    "bundle": "6ksf7HGdDUzLrFAbZJhZD124CzpuNDFbKbtG5dwt9CRJ.tar.zst"
+  },
+  "limits": [
+    "One real modern-Apple family, Noto Sans Tamil MN, plus original synthetic fonts; no claim of all Apple fonts.",
+    "These dedicated proofs precede the final combined integration gate."
+  ],
+  "allocation_ratchet": {
+    "cases": 69,
+    "failures": 0,
+    "bundle": "71K7binW2cVszbhKcgLbG1z3RCBwccnaSs3gWdTq7vwj.tar.zst",
+    "report": "../../../bench/aat-morx/feature-allocation-ratchet.json"
+  }
+}
