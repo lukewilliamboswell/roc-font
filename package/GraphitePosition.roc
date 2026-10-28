@@ -218,7 +218,11 @@ GraphitePosition :: {}.{
 				for member in $members {
 					slot = $nodes.get(member) ?? GraphiteSlots.no_slot
 					at = slot.user_start + user_count
-					enabled = ($users.get(at + 31) ?? 0) != 0
+					# LTR collision kerning stores its adjustment in the raw
+					# offset and advance, but suppresses the entire own physical
+					# offset point. RTL kerning keeps the ordinary offset point.
+					kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
+					enabled = ($users.get(at + 31) ?? 0) != 0 and (rtl or !kern)
 					ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
 					oy = if (enabled) ($users.get(at + 9) ?? 0).to_u32_wrap() else 0
 					# Advances/rebasing above use authored geometry. Physical
@@ -475,4 +479,13 @@ expect {
 	d = GraphiteSlots.set_extra(GraphiteSlots.set_extra(c.state, b.id, 31, 1), b.id, 8, TableVar.f32_from_ratio(-3460, 11).to_i32_wrap())
 	e = GraphitePosition.position(d, False, 100)
 	GraphiteSlots.get(e.state, b.id).position_x == n(16776902) and GraphiteSlots.get(e.state, a.id).position_x == n(16776907)
+}
+
+expect {
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 2), { ..GraphiteSlots.no_slot, advance_x: n(-110), shift_y: n(500) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602) })
+	c = GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(b.state, a.id, 31, 1), a.id, 3, 17), a.id, 8, n(-210).to_i32_wrap()), a.id, 9, n(100).to_i32_wrap())
+	d = GraphitePosition.position(c, False, 100)
+	GraphiteSlots.get(d.state, a.id).position_x == 0 and GraphiteSlots.get(d.state, a.id).position_y == n(500) and GraphiteSlots.get(d.state, b.id).position_x == n(-110)
 }
