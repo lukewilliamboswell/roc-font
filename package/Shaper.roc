@@ -1116,7 +1116,7 @@ Shaper :: {}.{
 		}
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
-		mirrored = if (p.backward and !p.vertical) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		mirrored = if (p.vertical and !p.has_vert) Shaper.vertical_chars(face, ordered) else if (p.backward and !p.vertical) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
 		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		{ chars: vowels, operations: pre_operations, stopped: pre_stopped } = match p.model {
@@ -1172,6 +1172,54 @@ Shaper :: {}.{
 		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped) }
 	}
 
+	# Unicode presentation-form fallback used only without a vert feature.
+	vertical_form : U64 -> U64
+	vertical_form = |cp|
+		match cp {
+			0x2013 => 0xfe32
+			0x2014 => 0xfe31
+			0x2025 => 0xfe30
+			0x2026 => 0xfe19
+			0x3001 => 0xfe11
+			0x3002 => 0xfe12
+			0x3008 => 0xfe3f
+			0x3009 => 0xfe40
+			0x300a => 0xfe3d
+			0x300b => 0xfe3e
+			0x300c => 0xfe41
+			0x300d => 0xfe42
+			0x300e => 0xfe43
+			0x300f => 0xfe44
+			0x3010 => 0xfe3b
+			0x3011 => 0xfe3c
+			0x3014 => 0xfe39
+			0x3015 => 0xfe3a
+			0x3016 => 0xfe17
+			0x3017 => 0xfe18
+			0xfe4f => 0xfe34
+			0xff01 => 0xfe15
+			0xff08 => 0xfe35
+			0xff09 => 0xfe36
+			0xff0c => 0xfe10
+			0xff1a => 0xfe13
+			0xff1b => 0xfe14
+			0xff1f => 0xfe16
+			0xff3b => 0xfe47
+			0xff3d => 0xfe48
+			0xff3f => 0xfe33
+			0xff5b => 0xfe37
+			0xff5d => 0xfe38
+			_ => cp
+		}
+
+	vertical_chars : Face, List(ShaperNormalize.Char) -> List(ShaperNormalize.Char)
+	vertical_chars = |face, chars| chars.map(
+		|c| {
+			vertical_cp = Shaper.vertical_form(c.cp)
+			if (vertical_cp != c.cp and Face.glyph(face, vertical_cp.to_u32_wrap()).is_ok()) { ..c, cp: vertical_cp } else c
+		},
+	)
+
 	global_feature : LayoutCommon, U64 -> U64
 	global_feature = |common, wanted_tag| {
 		for index in 0..<common.feature_count {
@@ -1182,18 +1230,30 @@ Shaper :: {}.{
 		LayoutCommon.no_feature
 	}
 
-	position_vertical : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, U64 -> { placed : Placed, stopped : U64 }
-	position_vertical = |face, location, p, items, backward, ignorables, budget| {
+	position_vertical : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool, U64 -> { placed : Placed, stopped : U64 }
+	position_vertical = |face, location, p, items, backward, space_fallback, ignorables, budget| {
 		count = items.len()
 		var $base = List.with_capacity(count)
 		var $major = List.with_capacity(count)
 		var $cross = List.with_capacity(count)
 		for item in items {
 			origin = Face.vertical_origin(face, location, item.glyph)
-			zero = p.zero_marks == Early and LayoutGsub.is_mark_item(item)
-			$base = $base.append(if (zero) 0 else -(Face.vertical_advance(face, location, item.glyph).to_i64()))
+			$base = $base.append(-(Face.vertical_advance(face, location, item.glyph).to_i64()))
 			$major = $major.append(-(origin.y.to_i64()))
 			$cross = $cross.append(-(origin.x.to_i64()))
+		}
+		if space_fallback {
+			$base = Shaper.space_widths(face, items, $base, -(Face.units_per_em(face).to_i64()), |glyph| -(Face.vertical_advance(face, location, glyph).to_i64()))
+		}
+		if p.zero_marks == Early {
+			for i in 0..<count {
+				if LayoutGsub.is_mark_item(items.get(i) ?? LayoutGsub.no_item) {
+					if p.fallback_marks and !backward {
+						$major = $major.set(i, LayoutVar.position_sub($major.get(i) ?? 0, $base.get(i) ?? 0)) ?? []
+					}
+					$base = $base.set(i, 0) ?? []
+				}
+			}
 		}
 		full = LayoutKerning.position_vertical(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.zero_marks == Late, items, Face.glyph_count(face), $base, $major, $cross, backward, { budget, depth: Face.max_depth(face) })
 		{ items: positioned_items, ax, dx, dy } = full.positions
@@ -1214,7 +1274,8 @@ Shaper :: {}.{
 				$dy = $dy.set(i, 0) ?? []
 			}
 		}
-		placed = if (backward) { items: Shaper.reversed(positioned_items), ax: Shaper.reversed($ax), dx: Shaper.reversed($dx), dy: Shaper.reversed($dy) } else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
+		fallback = if (p.fallback_marks and p.fallback_position) Shaper.position_marks_axis(face, location, { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }, backward, p.native == Rtl, Face.units_per_em(face).to_i64(), p.fallback_marks and !backward, True) else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
+		placed = if (backward) { items: Shaper.reversed(fallback.items), ax: Shaper.reversed(fallback.ax), dx: Shaper.reversed(fallback.dx), dy: Shaper.reversed(fallback.dy) } else fallback
 		{ placed: if (ignorables) Shaper.hide_ignorables(face, placed) else placed, stopped: full.stopped }
 	}
 
@@ -1226,7 +1287,7 @@ Shaper :: {}.{
 	position_checked : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool, U64, U64 -> { placed : Placed, stopped : U64 }
 	position_checked = |face, location, p, substituted, backward, space_fallback, ignorables, remaining_budget, growth_limit| {
 		if p.vertical {
-			return Shaper.position_vertical(face, location, p, substituted, backward, ignorables, remaining_budget)
+			return Shaper.position_vertical(face, location, p, substituted, backward, space_fallback, ignorables, remaining_budget)
 		}
 		upem = Face.units_per_em(face).to_i64()
 		advance_of = |glyph| Face.advance(face, location, glyph).to_i64()
@@ -1349,7 +1410,10 @@ Shaper :: {}.{
 	## for fonts that do not position marks: each cluster's marks are placed
 	## around its base glyph's ink by their combining classes.
 	position_marks : Face, Face.Location, Placed, Bool, Bool, I64, Bool -> Placed
-	position_marks = |face, location, placed, backward, target_backward, upem, adjust| {
+	position_marks = |face, location, placed, backward, target_backward, upem, adjust| Shaper.position_marks_axis(face, location, placed, backward, target_backward, upem, adjust, False)
+
+	position_marks_axis : Face, Face.Location, Placed, Bool, Bool, I64, Bool, Bool -> Placed
+	position_marks_axis = |face, location, placed, backward, target_backward, upem, adjust, vertical| {
 		items = placed.items
 		count = items.len()
 		var $placed = placed
@@ -1357,15 +1421,18 @@ Shaper :: {}.{
 		for i in 1..<count {
 			item = items.get(i) ?? LayoutGsub.no_item
 			if !ShaperUnicode.is_mark(item.props) and item.props.bitwise_and(ShaperUnicode.hidden) == 0 and !LayoutGsub.is_default_ignorable(item) {
-				$placed = Shaper.position_cluster(face, location, $placed, $start, i, backward, target_backward, upem, adjust)
+				$placed = Shaper.position_cluster_axis(face, location, $placed, $start, i, backward, target_backward, upem, adjust, vertical)
 				$start = i
 			}
 		}
-		Shaper.position_cluster(face, location, $placed, $start, count, backward, target_backward, upem, adjust)
+		Shaper.position_cluster_axis(face, location, $placed, $start, count, backward, target_backward, upem, adjust, vertical)
 	}
 
 	position_cluster : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool -> Placed
-	position_cluster = |face, location, placed, start, end, backward, target_backward, upem, adjust|
+	position_cluster = |face, location, placed, start, end, backward, target_backward, upem, adjust| Shaper.position_cluster_axis(face, location, placed, start, end, backward, target_backward, upem, adjust, False)
+
+	position_cluster_axis : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool, Bool -> Placed
+	position_cluster_axis = |face, location, placed, start, end, backward, target_backward, upem, adjust, vertical|
 		if end - start < 2 {
 			placed
 		} else {
@@ -1388,7 +1455,7 @@ Shaper :: {}.{
 							$j = $j + 1
 						}
 					}
-					$placed = Shaper.position_around_base(face, location, $placed, $i, $j, backward, target_backward, upem, adjust)
+					$placed = Shaper.position_around_base_axis(face, location, $placed, $i, $j, backward, target_backward, upem, adjust, vertical)
 					$i = $j
 				}
 			}
@@ -1408,12 +1475,15 @@ Shaper :: {}.{
 
 	## HarfBuzz's `position_around_base`.
 	position_around_base : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool -> Placed
-	position_around_base = |face, location, placed, base, end, backward, target_backward, upem, adjust| {
+	position_around_base = |face, location, placed, base, end, backward, target_backward, upem, adjust| Shaper.position_around_base_axis(face, location, placed, base, end, backward, target_backward, upem, adjust, False)
+
+	position_around_base_axis : Face, Face.Location, Placed, U64, U64, Bool, Bool, I64, Bool, Bool -> Placed
+	position_around_base_axis = |face, location, placed, base, end, backward, target_backward, upem, adjust, vertical| {
 		{ items: items0, ax: ax0, dx: dx0, dy: dy0 } = placed
 		items = if (end - base <= 255) LayoutGsub.flag_range(items0, base, end, LayoutGsub.end_cluster(items0, base, end, 0xFFFFFFFFFFFFFFFF)) else items0
 		base_item = items.get(base) ?? LayoutGsub.no_item
 		raw = Shaper.extents_of(face, base_item.glyph)
-		base_extents = { ..raw, x_bearing: 0, width: Face.advance(face, location, base_item.glyph).to_i64(), y_bearing: raw.y_bearing + (dy0.get(base) ?? 0) }
+		base_extents = { ..raw, x_bearing: 0, width: Face.advance(face, location, base_item.glyph).to_i64(), y_bearing: raw.y_bearing + (if (vertical) dx0.get(base) ?? 0 else dy0.get(base) ?? 0) }
 		lig_id = LayoutGsub.lig_id(base_item)
 		num_components = LayoutGsub.num_comps(base_item).to_i64_wrap()
 		var $ax = ax0
@@ -1443,12 +1513,12 @@ Shaper :: {}.{
 					$last_class = this_class
 					$cluster = $component
 				}
-				{ extents, x, y } = Shaper.position_mark(face, $cluster, item.glyph, this_class, backward, upem)
+				{ extents, x, y } = Shaper.position_mark_axis(face, $cluster, item.glyph, this_class, backward, upem, vertical)
 				$cluster = extents
 				# `i < end <= count`.
 				$ax = $ax.set(i, 0) ?? []
-				$dx = $dx.set(i, x + $x_offset) ?? []
-				$dy = $dy.set(i, y) ?? []
+				$dx = $dx.set(i, if (vertical) y + $x_offset else x + $x_offset) ?? []
+				$dy = $dy.set(i, if (vertical) x else y) ?? []
 			} else {
 				$x_offset = if (!backward) $x_offset - ($ax.get(i) ?? 0) else $x_offset + ($ax.get(i) ?? 0)
 			}
@@ -1460,13 +1530,16 @@ Shaper :: {}.{
 	## HarfBuzz's `position_mark`: a mark's offset from the cluster's ink
 	## by its class, and the cluster's ink after stacking the mark.
 	position_mark : Face, Extents, U64, U64, Bool, I64 -> { extents : Extents, x : I64, y : I64 }
-	position_mark = |face, base_in, glyph, klass, backward, upem| {
+	position_mark = |face, base_in, glyph, klass, backward, upem| Shaper.position_mark_axis(face, base_in, glyph, klass, backward, upem, False)
+
+	position_mark_axis : Face, Extents, U64, U64, Bool, I64, Bool -> { extents : Extents, x : I64, y : I64 }
+	position_mark_axis = |face, base_in, glyph, klass, backward, upem, vertical| {
 		mark = Shaper.extents_of(face, glyph)
 		y_gap = upem // 16
 		x =
-			if (klass == 233 or klass == 234) and !backward {
+			if !vertical and (klass == 233 or klass == 234) and !backward {
 				base_in.x_bearing + base_in.width - mark.width // 2 - mark.x_bearing
-			} else if klass == 233 or klass == 234 {
+			} else if !vertical and (klass == 233 or klass == 234) {
 				base_in.x_bearing - mark.width // 2 - mark.x_bearing
 			} else if klass == 200 or klass == 218 or klass == 228 {
 				# Left aligned.
