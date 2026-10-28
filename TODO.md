@@ -54,6 +54,24 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ### Font and shaping gaps
 
+Active implementation continues on `integration/font-foundations` after
+the verified foundation snapshot `39b66c3` was pushed to origin.
+Workers use isolated CFF, vertical and variation worktrees; the integrator
+owns `Face.roc`, `Font.roc`, AAT/Graphite and shared registries.
+Internal contracts agreed before consumer work:
+
+* CFF/CFF2 preparation and cubic path queries live in dedicated internal
+  readers; the existing outline command type already includes cubic curves.
+* Vertical runs add top-to-bottom/bottom-to-top directions to the existing
+  two-dimensional run. Font queries expose positive vertical advances and
+  origins in font units. Absent metrics use specified reference fallbacks;
+  broken optional metrics are dropped and reported.
+* `TableVar` remains the coordinate-remapping boundary for `avar` v2.
+  `TableGvar.advance` supplies phantom-point advances when HVAR is absent.
+* AAT/Graphite use prepared, checked font programs and bounded pure Roc
+  execution. Their coverage must be explicit and reference-tested; an
+  absent engine is not represented as successful backend shaping.
+
 - [ ] CFF/CFF2 paths and extents, including CFF2 variation/blend
   evaluation. These currently return `Unknown` where the TrueType outline
   reader cannot supply them.
