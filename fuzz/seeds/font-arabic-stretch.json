@@ -1,0 +1,69 @@
+{
+  "about": "Original presentation forms and normal/small/zero stch tiles plus real Syriac and Nastaliq families; both directions and cluster levels.",
+  "seeds": [
+    {
+      "why": "presentation fallback",
+      "parts": [
+        {
+          "hex": "00 06 07 08 09 0a"
+        }
+      ]
+    },
+    {
+      "why": "five piece stretch",
+      "parts": [
+        {
+          "hex": "01 00 01 02 03"
+        }
+      ]
+    },
+    {
+      "why": "256 glyph repeat cap",
+      "parts": [
+        {
+          "hex": "02 00 00 00 00 00"
+        }
+      ]
+    },
+    {
+      "why": "zero repeat widths",
+      "parts": [
+        {
+          "hex": "03 00 01 02 03"
+        }
+      ]
+    },
+    {
+      "why": "real Syriac stch",
+      "parts": [
+        {
+          "hex": "04 00 01 04 03"
+        }
+      ]
+    },
+    {
+      "why": "real Nastaliq joining",
+      "parts": [
+        {
+          "hex": "05 06 07 08 09 0a"
+        }
+      ]
+    },
+    {
+      "why": "LTR character clusters with controls",
+      "parts": [
+        {
+          "hex": "1a 05 00 0b 01 0c 02 0d"
+        }
+      ]
+    },
+    {
+      "why": "Windows-1256 fallback",
+      "parts": [
+        {
+          "hex": "06 06 07 08 09 0a"
+        }
+      ]
+    }
+  ]
+}
