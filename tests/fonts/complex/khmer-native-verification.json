@@ -3,16 +3,17 @@
   "public_contract_result": "pass",
   "native_fuzz": {
     "runs": 1000,
-    "seed": 263,
-    "elapsed_seconds": 177,
+    "seed": 265,
+    "elapsed_seconds": 26,
+    "max_input_size": 4096,
     "result": "pass",
     "allocation_scaling_and_leak_assertions": "pass",
-    "bundle": "3Qs5ZpjxY9dbThcZhbJF8gBmyTgkt3ZvqGK3LMcBazbv.tar.zst",
-    "binary_sha256": "3bd2cf4b919d8b1714c060fbbff062c3403604c9c1be99b529c7e0d3a5f8028d"
+    "bundle": "FWqQNAGXTRKYGMMXZivuZ2EJgFXPz7P4MvCzDNdHJg6a.tar.zst",
+    "binary_sha256": "ee8ca4e853d12c977ccbc4c27bec6e1e0395e5c1b6a5ef4590507cef46d6a5f9"
   },
   "notes": [
     "Full280record matrix passed independently through the optimized generic driver.",
-    "This fuzz snapshot precedes the64item callback and serial-wrap followups; final shared consumer gate must cover those later commits.",
-    "Every native consumer compiled through a served public bundle; no internal source imports."
+    "Every native consumer compiled through a served public bundle; no internal source imports.",
+    "Final campaign includes the64item callback, serial-wrap and shared GSUB per-syllable context followups."
   ]
 }
