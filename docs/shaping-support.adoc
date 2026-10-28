@@ -9,6 +9,24 @@ flags through the native driver importing the served package bundle.
 Record counts describe the checked-in matrices, including any read cases;
 the conformance gate establishes agreement for the current package build.
 
+== Integration snapshot
+
+The 2026-10-28 native replay on the integration bundle recorded 7,116
+gating cases: 7,098 agreements, 16 declared known differences and two
+unsupported cases, with no unexpected failure. The separately scored
+HarfBuzz in-house corpus recorded 4,935 agreements, 107 differences,
+73 unsupported and 59 unavailable-font skips among 5,174 cases. This is
+evidence for those cases, not a percentage of HarfBuzz's feature surface.
+The AOTS and text-rendering-tests scored suites were not imported here.
+
+Of the 107 in-house differences, 37 reject the font at reading. The
+remaining 70 include unsupported AAT behavior, legacy kerning formats,
+`gvar`-only advance changes, duplicate variation-axis tags, legacy Zawgyi,
+and reference-specific handling of two Courier New fonts with problematic
+GDEF classifications. The 58 cases filed under `macos` are therefore not
+all AAT gaps. No unclassified GPOS lookup defect was identified in this
+replay; this does not prove that every font or lookup combination agrees.
+
 == Model selection
 
 The caller supplies one script run, its script/language and direction.
@@ -165,6 +183,11 @@ uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
 * Direction is horizontal LTR/RTL. Vertical shaping and Mongolian vertical
   layout are not established by these matrices.
 * The shaping backend is OpenType; AAT and Graphite shaping are not implemented.
+* Legacy kerning follows the selected script's fallback policy. The
+  link:../tests/fonts/shaping/kern-policy/kern-cases.jsonc[93-case matrix]
+  covers suppression for scripts whose models disable it and retention
+  for the default and Hangul models. Forced LTR runs of normally RTL
+  scripts still have an observed legacy-kerning offset-side discrepancy.
 * Bidi, script-run/grapheme segmentation, line breaking and font fallback
   selection belong to downstream packages. A mixed paragraph needs those
   steps before shaping its runs; these font-local models do not supply them.

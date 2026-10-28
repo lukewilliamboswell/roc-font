@@ -1,0 +1,467 @@
+{
+  "bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+  "command": "python3 scripts/all_tests.py",
+  "result": "pass",
+  "source_expects": 450,
+  "consumer_expects": 998,
+  "public_doc_items": 125,
+  "internal_doc_leaks": 0,
+  "bundle_files": 63,
+  "bundle_uncompressed_bytes": 7369237,
+  "bundle_compressed_bytes": 4225308,
+  "pinned_font_and_licence_files": 6,
+  "fuzz_targets": [
+    {
+      "target": "font-arabic",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 50720,
+      "units": 4000,
+      "coverage_edges": 3681,
+      "peak_rss_mb": 34,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "07d4ec9a5754f171c65641997501423d41b127ea8b93c2a1f2dc1a8f0df83293",
+      "report_sha256": "fae9e8cceb43e86c548b343c3387d541739f6e44b23a396477e372b890a0f2d8",
+      "log_sha256": "994fa58d3562d84799ac7e001006edf0181e1ab863fa3e190ce449a70a723f70"
+    },
+    {
+      "target": "font-arabic-stretch",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 127545,
+      "units": 4000,
+      "coverage_edges": 5077,
+      "peak_rss_mb": 43,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "abd068bf2c0220911ee452925934f6617b70385a1f949ce648162d9750305827",
+      "report_sha256": "8705e9a5f97308fdae904f07d6ffd7bc214bec43c3cb754c30aea7ca7dfa6ea3",
+      "log_sha256": "c988ebfcd4ac15b12a2257af7b14658bb9fb223807de0dde62bb71b7fa6c2010"
+    },
+    {
+      "target": "font-cmap",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 3093,
+      "units": 4000,
+      "coverage_edges": 1344,
+      "peak_rss_mb": 29,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "9260003ef4c6dd420c8f729b0d5de02c52011ae6eba1c13609be52a9ed79ffce",
+      "report_sha256": "aace8e82db9dd1d0f93ff9bc6e3590032b23117a16de88dbe45e430f369b8cd0",
+      "log_sha256": "ee6a330074030edc7fd30ee2469d82bfb485611a64462f4b76847925be3695e8"
+    },
+    {
+      "target": "font-color",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 13463,
+      "units": 4000,
+      "coverage_edges": 6260,
+      "peak_rss_mb": 69,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "1d09fdd9b24c456cbb3967ef4e982b9ec9331c6149ded0c2d12b29ed560e519f",
+      "report_sha256": "0b473b8aee91e72907276aa498c9b506d963196141677de405aa41c17fc6677b",
+      "log_sha256": "99a9eade1240578f3bf9b12e1631d6daa37afbe29604e0529aa5d73b9e7539f7"
+    },
+    {
+      "target": "font-color-images",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 6621,
+      "units": 4000,
+      "coverage_edges": 2343,
+      "peak_rss_mb": 33,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "8aef47477057b42158c2261d5ca18ba0c0f4af6366005c91e5585e4b923bf0ff",
+      "report_sha256": "4eebe7b03ecfbaeb124519588fdfc774f898bd7e5d74d990a98bfbc95157d049",
+      "log_sha256": "38f75a68bbb731bfbf172551c1ed0a600d01440e6e3da01995f46b0ae36706db"
+    },
+    {
+      "target": "font-coverage",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 6345,
+      "units": 4000,
+      "coverage_edges": 2224,
+      "peak_rss_mb": 33,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "b3079b5334f56c336dbafd89367dcb4d410433c34b88f20ad1ac64464ff71a56",
+      "report_sha256": "9b35dce831a44d030302c9c9fcfd24be2083edf61444739a003c7a1b35031c16",
+      "log_sha256": "fd52069c03bea61180208b5a51a13da7a412176d7a4d64db3e2dfa9802c6408d"
+    },
+    {
+      "target": "font-gpos",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 4542,
+      "units": 4000,
+      "coverage_edges": 2206,
+      "peak_rss_mb": 32,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "96956c1acc83d810d417d789cbf53fee3c0081d353429478559b800bc572e144",
+      "report_sha256": "729bd47e54f5b8fa20457a467fae3f8f5314d65dcdb3eaef01a47c293e621be9",
+      "log_sha256": "00010874db91330d654d3e8f892e08774880b1cd179f5732c464f180e665eaae"
+    },
+    {
+      "target": "font-gsub",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 7215,
+      "units": 4000,
+      "coverage_edges": 3096,
+      "peak_rss_mb": 35,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "c8879262c05e2d0592a1b6f720b28fd7d1e761ec1c728b5e13fe16ea4a511e81",
+      "report_sha256": "661b9c8f02304a8485cf53c5a15101037179c3d1a98a28e60269b4e1644b737c",
+      "log_sha256": "446d97736f7fa70945339d2b383ea537c83febfa4f6341ddf0245b52f76b00d6"
+    },
+    {
+      "target": "font-gvar",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 10554,
+      "units": 1500,
+      "coverage_edges": 3171,
+      "peak_rss_mb": 36,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "b70b23cd97b7c2751836c19a7da3bc47ec87a275709eb0193b2a226c3e1e06f4",
+      "report_sha256": "ea28d1786cbc66b7f83341b34e723167306786b5ea6fd00e5155fe9e1d45af06",
+      "log_sha256": "d1589f243e967cac01b1f9a0c63a502f71bbf03a56e160a070254eb10592f9b4"
+    },
+    {
+      "target": "font-hangul",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 26577,
+      "units": 4000,
+      "coverage_edges": 2533,
+      "peak_rss_mb": 37,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "5f24fe8ae0a2a346fd47ec1ba7755d47a34ef2c37d50a5bc82568f1d43bacb99",
+      "report_sha256": "e2657163b82a027c0b64a1a54b51d9a3e096565e2dd17d66c34057a1cd478ad8",
+      "log_sha256": "fd812a397ce5e95c22a64ca1cb5fb32fa8350c81a2fa8a73be6c474e404f8201"
+    },
+    {
+      "target": "font-indic",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 194260,
+      "units": 4000,
+      "coverage_edges": 3412,
+      "peak_rss_mb": 37,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "5d8105752dec96c203853490576cdbd060e964a052d65d1a6fbcb2be313387b5",
+      "report_sha256": "06e22cd8a8e39a5dd4790780708c240e6a80ec972f53941486ed947154d6a311",
+      "log_sha256": "805c4c8b18d8539c43b8fbe25e7ca19f339257877a27db7f0cc10a8a743386f7"
+    },
+    {
+      "target": "font-khmer",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 458794,
+      "units": 4000,
+      "coverage_edges": 2810,
+      "peak_rss_mb": 36,
+      "provenance": {
+        "source_revision": "fdaebf20cda160496ad142d59e5a22c09bcc101c",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "debe6f756152ef40d0b07dfcb090f1177eb4417e88c0c2793248edd90b407b23",
+      "report_sha256": "5bf76c65152e162649554e32fc2de8ff91a326bb41ade8e822132ec115a351ed",
+      "log_sha256": "40fcefaf4ceb8562e166ac504cb2f889c976d11d8619157ab6d2e3ff4b455100"
+    },
+    {
+      "target": "font-layout-var",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 13668,
+      "units": 1500,
+      "coverage_edges": 4295,
+      "peak_rss_mb": 36,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "5a53bb4c94ede4733a6cdd40984d10f8c7cf60f125a1ef1b548306c54e8f1a92",
+      "report_sha256": "3ea76d07728e2d79b926421c01fbaacb017df8cea5beb15d9140dbdd1e361af6",
+      "log_sha256": "2a6a635536632d488a407f281a0b768670cc094dd70ab4fb182d9f1f65b26c72"
+    },
+    {
+      "target": "font-math",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 9729,
+      "units": 4000,
+      "coverage_edges": 6219,
+      "peak_rss_mb": 73,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "b050e6075a0fc000b8821fafbb5cadb9cbd74be9bc430fc79ccf51fcb616d24a",
+      "report_sha256": "fec5ae10d063d578f8c5d2f1b328c38903e092cf86535454328bd87f82b73985",
+      "log_sha256": "3c08be4d7dc2f2f77e3053a8c02de8797daaa7c59f7771f1cd15ea4ce0dd82e6"
+    },
+    {
+      "target": "font-metadata",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 11726,
+      "units": 4000,
+      "coverage_edges": 3237,
+      "peak_rss_mb": 35,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "328100de93b42466a6092fa90ab180bca44a577609fb419e63a14f0e0627b507",
+      "report_sha256": "2c7f53c4885a7d6bb226175374939ebd5cc7f7affff130bef28bc4ec17ca000d",
+      "log_sha256": "d86794d93849bcb598c354feecc53f8923be0f7523d106c1e9fbe1dcb9701b9a"
+    },
+    {
+      "target": "font-myanmar",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 39627,
+      "units": 4000,
+      "coverage_edges": 4101,
+      "peak_rss_mb": 34,
+      "provenance": {
+        "source_revision": "1b73e46a7163c2a942214c2a16085a3a5112c100",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "49396310ec5792023ea693fbeddb6c287eb46dc2f2c10f5844a85b3a881308ae",
+      "report_sha256": "862682a2c3defde5951a2823e4c3a7ec888266e03deecd532a89c549ad4df814",
+      "log_sha256": "6aba4ce1bd22e1a249b1937683073180d01d9350bef0c205a803d5bb40fc30b2"
+    },
+    {
+      "target": "font-ots",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 3785,
+      "units": 1500,
+      "coverage_edges": 2944,
+      "peak_rss_mb": 30,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "db219b047543b1da4453fec223235071aefe8ea7b54418758d832b94735f3765",
+      "report_sha256": "616a3a11566bf0ee4cd713285cd0871b929ec71952d8eeb18f249744188fa085",
+      "log_sha256": "08ba8e98e0671f236e14a7891e2186881be202f9b49f64d82082c90e6349995f"
+    },
+    {
+      "target": "font-outlines",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 31086,
+      "units": 4000,
+      "coverage_edges": 3764,
+      "peak_rss_mb": 34,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "b3397325a50020bc1a9bc40e9a6a267c3495b17b0b87ac809a964634953c35fd",
+      "report_sha256": "08ecdbd33df4f8444b2360ff5de7d109e7a27f3b85fa3beffb574213afd758b6",
+      "log_sha256": "0cd73ff31a193cd9815ac469b173a22a8758d5c7c63459b84189685b926d0a2f"
+    },
+    {
+      "target": "font-position",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 5983,
+      "units": 4000,
+      "coverage_edges": 8404,
+      "peak_rss_mb": 41,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "e8a5f7a9c6ee4c9433d44570075d62eb133c5536d78ecb1abb5331680bf9e1ad",
+      "report_sha256": "b817cdec5f3c884c0bcb8a8e7354950be9367635a4a8c539df6e62d746dd3383",
+      "log_sha256": "96c1884dc9a66711e5efa1a1bbf7c8ee2d88af138461337fe71de793a448242a"
+    },
+    {
+      "target": "font-position-context",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 384454,
+      "units": 4000,
+      "coverage_edges": 7363,
+      "peak_rss_mb": 34,
+      "provenance": {
+        "source_revision": "1b73e46a7163c2a942214c2a16085a3a5112c100",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "035eb3418f892a513afc0ca9b9ac5ece8e97d517026c7a80dbdcbe7692bffaa2",
+      "report_sha256": "0d7c3f750cc5a49b68f66e02de5e8bf914698c3c31d7277dba8cee20e9c13b1a",
+      "log_sha256": "25a70f30e47dd16456216f1062bbcfbacd59d0bb059c0b58109318467224ef9e"
+    },
+    {
+      "target": "font-read",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 10033,
+      "units": 4000,
+      "coverage_edges": 8731,
+      "peak_rss_mb": 55,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "ed488df68b9cd3295556839ec83d74e0306efaf9dd85176eeab0a834bf2bd3e9",
+      "report_sha256": "805f57e78692ab95b6582f1393171b5bfddeb486f6c2dc7210f0b041cf911645",
+      "log_sha256": "710f654b8bacacef8d14eb221a2054146b3f5d7ed209c751d4bc4bc2547427f0"
+    },
+    {
+      "target": "font-shape",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 10945,
+      "units": 4000,
+      "coverage_edges": 8340,
+      "peak_rss_mb": 55,
+      "provenance": {
+        "source_revision": "e8b7e777c77e6289df1d1be3c9b7a7ab11a6967d",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "e419e04ddce8c61a4e79e4f8a359bc0d2d65494f0195684e8ee79fc886b238e3",
+      "report_sha256": "23b681c4711a6ca77bde94b0e0a2f67dd85230bf1b71f3ccfc4b61c67e63bb86",
+      "log_sha256": "961c1130023e9dc729667ef345cf58cfb54030778f1160e3073bf8aee626a892"
+    },
+    {
+      "target": "font-thai-lao",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 7506,
+      "units": 4000,
+      "coverage_edges": 3409,
+      "peak_rss_mb": 31,
+      "provenance": {
+        "source_revision": "7077a0bfd48cc4743041177667af995ec0e2fe94",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "0a927f5a3f2c722f3b7dc116ddcdbc560ab3af1c48164e5671f2c3c941666f1d",
+      "report_sha256": "c83c043ed937c2521b0be7e7e5904bbe10d213b84748debe2766776fe8a4b39b",
+      "log_sha256": "8fb2cd7703f0358ad5bac12204680e980e933099f86900c60b965b888548520d"
+    },
+    {
+      "target": "font-use",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 98548,
+      "units": 4000,
+      "coverage_edges": 3731,
+      "peak_rss_mb": 43,
+      "provenance": {
+        "source_revision": "7acc5ca4bcd7472688e7de2c6c6643c7128a27b0",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "37e099c45c73a94f942a4e86c82a523c551901be989dcbf40db86e02041ea3c2",
+      "report_sha256": "87e02b849bfcc1f7da9abb8511e52453bf3bdd0a6622e87ba43f3e2259f154d0",
+      "log_sha256": "07c99d919a359e7817906d3997feb0e80499bc1a24e4ee6de4149fe02e1bceb6"
+    },
+    {
+      "target": "font-var",
+      "outcome": "passed",
+      "finding_kind": null,
+      "duration_ms": 4795,
+      "units": 4000,
+      "coverage_edges": 2750,
+      "peak_rss_mb": 32,
+      "provenance": {
+        "source_revision": "41e3727801a933ac149fe2ce41b4c05dd32c22a7",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "497d3d93bbc42a71f75be69f30a559ea04e78f64d97f145158c325e1342c1e25",
+      "report_sha256": "693be7f4fed794cf33dd6a95894cf73c3e18c6b083067db293608766eeb3c1bd",
+      "log_sha256": "4d7b55c381b9271a12b0e0005682e295f15b0905a3c47c86c012a101e1d72605"
+    }
+  ],
+  "fuzz_inputs_total": 92500,
+  "workflow_log_sha256": "c28a5e61010da7367aa5352edc8abfd6afc3f9ca9a41d76c03f44eab7c32beed"
+}

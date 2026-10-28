@@ -8,6 +8,13 @@ Three parallel investigations covered mathematics, shaping, and downstream
 font access. Source and consumer inspection was read-only; no new native
 conformance or performance run was performed for this assessment.
 
+The subsequent `integration/font-foundations` implementation supplies the
+MATH font-data foundation, horizontal GPOS and script models, TrueType
+paths, ligature carets, PDF font facts and color-glyph access evaluated
+below. The effort and priority recommendations here describe the original
+assessment; link:shaping-support.adoc[current support and evidence] and
+`../TODO.md` describe the resulting implementation and remaining work.
+
 == Decision
 
 OpenType MATH is a strong opportunity to enable a new pure Roc capability:
