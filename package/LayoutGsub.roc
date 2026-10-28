@@ -1402,7 +1402,9 @@ LayoutGsub := {
 					} else {
 						$at = $at - 1
 						item = before.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						syllable = (buf.info.get(buf.idx) ?? LayoutGsub.no_item).mask.bitwise_and(0x1FE000000000000)
+						same_syllable = !ctx.per_syllable or syllable == 0 or item.mask.bitwise_and(0x1FE000000000000) == syllable
+						match LayoutGsub.step_item(shape, ctx, item, True, same_syllable and LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1444,7 +1446,9 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						syllable = (buf.info.get(buf.idx) ?? LayoutGsub.no_item).mask.bitwise_and(0x1FE000000000000)
+						same_syllable = !ctx.per_syllable or syllable == 0 or item.mask.bitwise_and(0x1FE000000000000) == syllable
+						match LayoutGsub.step_item(shape, ctx, item, True, same_syllable and LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -3436,4 +3440,15 @@ expect {
 		}
 		Err(_) => False
 	}
+}
+
+# ## fuzz regression: contextual PRES must not cross a reused syllable's
+# intervening boundary, including backtrack and lookahead matching.
+expect {
+	shape = LayoutGsub.from_synthesized([], { subtables: [], ranges: [], values: [10], rules: [], steps: 0 }, LayoutGdef.none)
+	items = [10.U64, 10, 10].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1 + (i + 1).shl_wrap(49), props: 0 })
+	buf = { info: items, out: [], idx: 1, output: False, serial: 0, random: 1, ops: 0, stopped: 0, aliased: False }
+	ctx = { mask: 1, props: 0, auto_zwnj: True, auto_zwj: True, random: False, step: 0, per_syllable: True, positioning: False }
+	seq = { kind: 0, classes: 0, classes_len: 0, at: 0, stride: 1 }
+	!LayoutGsub.match_backtrack(shape, ctx, buf, seq, 1).ok and !LayoutGsub.match_lookahead(shape, ctx, buf, seq, 1, 2).ok and LayoutGsub.match_backtrack(shape, { ..ctx, per_syllable: False }, buf, seq, 1).ok and LayoutGsub.match_lookahead(shape, { ..ctx, per_syllable: False }, buf, seq, 1, 2).ok
 }
