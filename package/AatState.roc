@@ -98,6 +98,12 @@ AatState := { classes : AatLookup, columns : U64, transitions : List(Entry) }.{
 	entries : AatState -> List(Entry)
 	entries = |machine| machine.transitions
 
+	class_lookup : AatState -> AatLookup
+	class_lookup = |machine| machine.classes
+
+	column_count : AatState -> U64
+	column_count = |machine| machine.columns
+
 	## Original byte-indexed state tables. Raw next states are byte
 	## offsets into the state array; preparation turns them into row ids.
 	read_legacy : List(U8), U64, U64, U64 -> Try(AatState, [Bad(U64)])
