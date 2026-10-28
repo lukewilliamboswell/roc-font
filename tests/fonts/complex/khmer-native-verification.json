@@ -1,0 +1,18 @@
+{
+  "public_contract_tests": 9,
+  "public_contract_result": "pass",
+  "native_fuzz": {
+    "runs": 1000,
+    "seed": 263,
+    "elapsed_seconds": 177,
+    "result": "pass",
+    "allocation_scaling_and_leak_assertions": "pass",
+    "bundle": "3Qs5ZpjxY9dbThcZhbJF8gBmyTgkt3ZvqGK3LMcBazbv.tar.zst",
+    "binary_sha256": "3bd2cf4b919d8b1714c060fbbff062c3403604c9c1be99b529c7e0d3a5f8028d"
+  },
+  "notes": [
+    "Full280record matrix passed independently through the optimized generic driver.",
+    "This fuzz snapshot precedes the64item callback and serial-wrap followups; final shared consumer gate must cover those later commits.",
+    "Every native consumer compiled through a served public bundle; no internal source imports."
+  ]
+}
