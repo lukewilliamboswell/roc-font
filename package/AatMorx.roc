@@ -39,7 +39,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	Chain : { flags : U64, feature_start : U64, feature_count : U64, sub_start : U64, sub_count : U64 }
 	Subtable : { coverage : U64, flags : U64, body : Body }
 	Body : [Rearrange(AatState), Contextual({ machine : AatState, lookups : List(AatLookup) }), Noncontextual(AatLookup), Insertion({ machine : AatState, glyphs : List(U32) }), Ligature(Ligatures)]
-	Ligatures : { machine : AatState, actions : List(U32), components : List(U16), glyphs : List(U16), glyph_count : U64 }
+	Ligatures : { machine : AatState, actions : List(U32), components : List(U16), glyphs : List(U16), glyph_count : U64, legacy : Bool, component_base : U64, glyph_base : U64 }
 	Requested : { type : U64, setting : U64, start : U64, end : U64, exclusive : Bool }
 	RangeFlags : { first : U64, last : U64, flags : U64 }
 	Plan : { spans : List({ start : U64, count : U64 }), ranges : List(RangeFlags) }
@@ -178,7 +178,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 			for i in 0..<((bytes.len() - glyph_at) // 2) {
 				$glyphs = $glyphs.append(Bytes.u16(bytes, glyph_at + i * 2).to_u16_wrap())
 			}
-			return Ok(Ligature({ machine, actions: $actions, components: $components, glyphs: $glyphs, glyph_count: glyphs }))
+			return Ok(Ligature({ machine, actions: $actions, components: $components, glyphs: $glyphs, glyph_count: glyphs, legacy: False, component_base: 0, glyph_base: 0 }))
 		}
 		if kind == 5 {
 			machine = AatState.read(bytes, 0, glyphs, 2)?
@@ -313,7 +313,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 						coverage = sub.coverage.shr_zf_wrap(24)
 						ctx = { ranges: selected.ranges, start: span.start, count: span.count, fallback: chain.flags, subflags: sub.flags }
 						possible = if (span.count > 1) True else AatMorx.enabled(ctx, 0)
-						if possible and (coverage.bitwise_and(0x20) != 0 or (coverage.bitwise_and(0x80) != 0) == vertical) {
+						if possible and (coverage.bitwise_and(0x20) != 0 or (coverage.bitwise_and(0x80) != 0) == vertical) and AatMorx.intersects(sub.body, $items) {
 							reverse = (coverage.bitwise_and(0x40) != 0) != (coverage.bitwise_and(0x10) == 0 and backward)
 							input = if (reverse) AatMorx.reversed($items) else $items
 							out = AatMorx.apply_body(sub.body, input, budget - $operations, limit, ctx)
@@ -328,6 +328,56 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 			}
 		}
 		{ items: $items, operations: $operations, stopped: 0 }
+	}
+
+	# Match the reference accelerator's initial-action glyph set. End of
+	# text alone does not start a program with no applicable input glyph.
+	intersects : Body, List(LayoutGsub.Item) -> Bool
+	intersects = |body, items| {
+		machine = match body {
+			Noncontextual(lookup) => return items.any(
+				|item| match AatLookup.get(lookup, item.glyph) {
+					Found(_) => True
+					Missing => False
+				},
+			)
+			Rearrange(state) => state
+			Contextual(value) => value.machine
+			Ligature(value) => value.machine
+			Insertion(value) => value.machine
+		}
+		lookup = AatState.class_lookup(machine)
+		columns = AatState.column_count(machine)
+		kind = match body {
+			Rearrange(_) => 0
+			Contextual(_) => 1
+			Ligature(_) => 2
+			Insertion(_) => 5
+			Noncontextual(_) => 4
+		}
+		for item in items {
+			found = if (item.glyph == 65535 and columns <= 512) Found(2.U32) else AatLookup.get(lookup, item.glyph)
+			match found {
+				Missing => {}
+				Found(class) => {
+					if columns > 512 {
+						return True
+					}
+					entry = AatState.entry(machine, 0, class.to_u64())
+					action = match kind {
+						0 => entry.flags.bitwise_and(15) != 0
+						1 => entry.a != 65535 or entry.b != 65535
+						2 => entry.flags.bitwise_and(0x2000) != 0
+						5 => entry.flags.bitwise_and(0x03FF) != 0 and (entry.a != 65535 or entry.b != 65535)
+						_ => False
+					}
+					if entry.next != 0 or entry.flags.bitwise_and(0x8000) != 0 or action {
+						return True
+					}
+				}
+			}
+		}
+		False
 	}
 
 	flags_for : AatMorx, Chain, List(Requested), List(U64), U64 -> U64
@@ -562,7 +612,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 						word = (table.actions.get($action) ?? 0).to_u64()
 						raw = word.bitwise_and(0x3FFFFFFF)
 						offset = if (raw.bitwise_and(0x20000000) != 0) raw.to_i64_wrap() - 1073741824 else raw.to_i64_wrap()
-						component_index = ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph.to_i64_wrap() + offset
+						component_index = ($buf.info.get($buf.idx) ?? LayoutGsub.no_item).glyph.to_i64_wrap() + offset - table.component_base.to_i64_wrap()
 						# A text-dependent action outside the available component
 						# domain aborts this action stream, as the reference VM does;
 						# no missing operand becomes component or glyph zero.
@@ -573,8 +623,16 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 							Ok(v) => v.to_u64()
 							Err(_) => break
 						}
-						$ligature = $ligature + component
+						$ligature = ($ligature + component).to_u32_wrap().to_u64()
 						if word.bitwise_and(0xC0000000) != 0 {
+							# Legacy programs accumulate a byte offset, and store
+							# its rebased index back into the same accumulator.
+							if table.legacy {
+								if $ligature < table.glyph_base {
+									break
+								}
+								$ligature = ($ligature - table.glyph_base) // 2
+							}
 							glyph = match table.glyphs.get($ligature) {
 								Ok(v) => v.to_u64()
 								Err(_) => break
