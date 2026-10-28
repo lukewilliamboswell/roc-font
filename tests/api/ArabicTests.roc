@@ -93,3 +93,16 @@ expect {
 		Err(_) => False
 	}
 }
+
+expect {
+	match Font.from_bytes(sans_file, Font.ReadOptions.{}) {
+		Ok(font) => {
+			plan = Font.plan(font, Font.ShapeOptions.{ script: "Arab" })
+			joined = Font.shape_planned(font, plan, "بب")
+			marked = Font.shape_planned(font, plan, "بَب")
+			medial = Font.shape_range(font, plan, "ببب", Font.TextRange.{ start: 2, end: 4 })
+			joined.flags.map(Font.is_unsafe_to_break) == [True, True, False, False] and marked.flags.map(Font.is_unsafe_to_break) == [True, True, False, False, False] and medial.flags.map(Font.is_unsafe_to_break) == [False, False]
+		}
+		Err(_) => False
+	}
+}

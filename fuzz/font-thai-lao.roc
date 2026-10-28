@@ -91,4 +91,4 @@ check = |font, plan, text, backward| {
 	{}
 }
 
-target = Fuzz.target_with!({ name: "font-arabic", generator: Fuzz.raw_bytes, test!, show: |bytes| Str.inspect(bytes.take_first(17)) })
+target = Fuzz.target_with!({ name: "font-thai-lao", generator: Fuzz.raw_bytes, test!, show: |bytes| Str.inspect(bytes.take_first(17)) })

@@ -1,0 +1,510 @@
+{
+  "schema": 1,
+  "about": "Exact reference unsafe-to-break flags for joining, transparent marks, controls and per-call paragraph ranges.",
+  "cases": [
+    {
+      "id": "notosansarabic-0-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-0-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-1-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-1-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-2-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-2-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-3-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-3-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-4-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بِبَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-4-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بِبَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-5-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَٔب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-5-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَٔب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-0",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:2",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-1",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-2",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-3",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-4",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notosansarabic-range-5",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-0-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-0-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-1-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-1-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-2-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-2-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ب‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-3-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-3-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-4-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بِبَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-4-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بِبَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-5-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَٔب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-5-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَٔب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-0",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:2",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-1",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-2",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-3",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-4",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "notonaskharabic-range-5",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:4",
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
