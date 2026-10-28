@@ -406,6 +406,37 @@ TableGlyfPoints := {
 
 	# ------------------------------------------------------------ queries
 
+	## Contour flags of a simple glyph, without decoding its coordinates.
+	## Validated flags expand to exactly `point_count` entries. Composite
+	## topology is assembled by `TableOutline` in component order.
+	topology : TableGlyfPoints, U64 -> List({ on_curve : Bool, end : Bool })
+	topology = |t, g| {
+		if TableGlyfPoints.kind(t, g) != 1 {
+			return []
+		}
+		start = t.starts.get(g) ?? 0
+		end = t.starts.get(g + 1) ?? 0
+		contours = TableVar.u16(t.glyf, start)
+		layout = TableGlyfPoints.simple_layout(t.glyf, start, end, contours) ?? { points: 0, flags_at: 0, xs_at: 0, ys_at: 0 }
+		var $out = List.with_capacity(layout.points)
+		var $at = layout.flags_at
+		while $out.len() < layout.points {
+			flag = TableVar.u8(t.glyf, $at)
+			repeat = if (flag.bitwise_and(8) != 0) TableVar.u8(t.glyf, $at + 1) else 0
+			for _ in 0..<(repeat + 1) {
+				$out = $out.append({ on_curve: flag.bitwise_and(1) != 0, end: False })
+			}
+			$at = $at + (if (flag.bitwise_and(8) != 0) 2 else 1)
+		}
+		for c in 0..<contours {
+			index = TableVar.u16(t.glyf, start + 10 + 2 * c)
+			# Reading proved the end index is below the point count.
+			value = $out.get(index) ?? { on_curve: False, end: False }
+			$out = $out.set(index, { ..value, end: True }) ?? []
+		}
+		$out
+	}
+
 	glyph_total : TableGlyfPoints -> U64
 	glyph_total = |t| t.kinds.len()
 
