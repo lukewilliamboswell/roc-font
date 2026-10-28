@@ -72,6 +72,10 @@ TableCaret := {
 						Present(points) => {
 							if !$counted_points {
 								$point_count = TableOutline.point_count(points, glyphs.get(i) ?? glyph_count)
+								$steps = $steps + $point_count
+								if $steps > limit {
+									return Err(Bad(value_at))
+								}
 								$counted_points = True
 							}
 							if value.to_u64_wrap() >= $point_count {
@@ -181,17 +185,28 @@ TableCaret := {
 		}
 		start = table.starts.get($low) ?? 0
 		end = table.starts.get($low + 1) ?? start
+		needs_points = table.values.sublist({ start, len: end - start }).any(|caret| caret.point)
+		# Evaluate each outline once, including aliased point carets.
+		placed = if needs_points {
+			match outlines {
+				Present(outline) => TableGvar.points(outline.points, outline.gvar, outline_location, glyph)
+				Absent => { xs: [], ys: [] }
+			}
+		} else {
+			{ xs: [], ys: [] }
+		}
+		point_count = if (placed.xs.len() >= 4) placed.xs.len() - 4 else 0
+		shift = placed.xs.get(point_count) ?? 0
 		var $out = List.with_capacity(end - start)
 		for i in start..<end {
 			caret = table.values.get(i) ?? { point: False, value: 0, outer: TableVar.no_variation, inner: TableVar.no_variation }
 			if caret.point {
+				index = caret.value.to_u64_wrap()
 				$out = $out.append(
-					match outlines {
-						Present(outline) => match TableOutline.point(outline.points, outline.gvar, outline_location, glyph, caret.value.to_u64_wrap()) {
-							Point(point) => Position(point.x)
-							Missing => Unavailable
-						}
-						Absent => Unavailable
+					if index < point_count {
+						Position(TableOutline.widen(TableVar.f32_sub(placed.xs.get(index) ?? 0, shift)))
+					} else {
+						Unavailable
 					},
 				)
 			} else {

@@ -46,6 +46,7 @@ TableGlyfPoints := {
 		TooManyComponents,
 		TooManyPoints,
 		TooMuchWork,
+		CoordinateRange,
 		AnchorPoint,
 		UnsupportedVersion,
 		AxisCountMismatch,
@@ -401,6 +402,80 @@ TableGlyfPoints := {
 				$problems = $problems.append({ table: "glyf", offset: t.starts.get(g) ?? 0, reason: TooMuchWork })
 			}
 		}
+		if $problems.is_empty() {
+			TableGlyfPoints.check_coordinates(t, tuples)
+		} else {
+			Err($problems)
+		}
+	}
+
+	## Bound every possible varied coordinate before evaluating any query.
+	## The resource limit is a conservative absolute envelope of 2^100 font
+	## units, before the final phantom shift (which can double it). This
+	## leaves 27 exponent bits below binary32 overflow. All proof arithmetic
+	## uses U128, and every operand is checked against the limit before the
+	## next component: its largest temporary is less than 2^118.
+	##
+	## A simple coordinate is a sum of at most point_count signed16 deltas.
+	## Each tuple contributes at most 2^31 as a signed32 delta. The 2^33
+	## allowance per tuple also covers IUP's subtraction/interpolation and
+	## binary32 rounding, including phantom points. Tuple scalars are in
+	## [0,1]. Composite bounds use the exact fixed2.14 maximum matrix row
+	## norm, both possible offset orders, anchor translation, and phantom
+	## inheritance. A relative 2^-20 plus32 slack exceeds the accumulated
+	## roundoff of the two products, sum and translations at each frame.
+	check_coordinates : TableGlyfPoints, List(U64) -> Try({}, List(Problem))
+	check_coordinates = |t, tuples| {
+		limit = (1.U128).shl_wrap(100)
+		count = TableGlyfPoints.glyph_total(t)
+		var $bounds = List.with_capacity(count)
+		for g in 0..<count {
+			variation = (tuples.get(g) ?? 0).to_u128() * 8589934592
+			base = if (TableGlyfPoints.kind(t, g) == 1) TableGlyfPoints.point_count(t, g).to_u128() * 32768 + 65536 else 65536
+			$bounds = $bounds.append(base + variation)
+		}
+		var $problems = []
+		for g in t.order {
+			variation = (tuples.get(g) ?? 0).to_u128() * 8589934592
+			var $bound = 65536 + variation
+			var $at = TableGlyfPoints.first_component(t, g)
+			for _ in 0..<TableGlyfPoints.point_count(t, g) {
+				c = TableGlyfPoints.component_link(t.glyf, $at)
+				child = $bounds.get(c.glyph) ?? 0
+				# An earlier failed child has the sentinel limit+1. Stop this
+				# proof before multiplying it, and propagate the rejection.
+				if child > limit or $bound > limit {
+					$bound = limit + 1
+					break
+				}
+				flags = TableVar.u16(t.glyf, $at)
+				matrix_at = $at + 4 + (if (flags.bitwise_and(1) != 0) 4 else 2)
+				magnitude = |at| {
+					v = TableVar.i16(t.glyf, at)
+					(if (v < 0) 0 - v else v).to_u128_wrap()
+				}
+				norm = if flags.bitwise_and(0x80) != 0 {
+					(magnitude(matrix_at) + magnitude(matrix_at + 4)).max(magnitude(matrix_at + 2) + magnitude(matrix_at + 6))
+				} else if flags.bitwise_and(0x40) != 0 {
+					magnitude(matrix_at).max(magnitude(matrix_at + 2))
+				} else if flags.bitwise_and(8) != 0 {
+					magnitude(matrix_at)
+				} else {
+					16384
+				}
+				offset = 32768 + variation
+				transformed = ((child + offset) * norm + 16383) // 16384 + offset
+				anchored = if (c.anchored) $bound + 2 * transformed else transformed
+				with_rounding = anchored + anchored // 1048576 + 32
+				$bound = $bound.max(with_rounding)
+				$at = c.next
+			}
+			if $bound > limit {
+				$problems = $problems.append({ table: "glyf", offset: t.starts.get(g) ?? 0, reason: CoordinateRange })
+			}
+			# Topological glyph ids are validated and below count.
+			$bounds = $bounds.set(g, $bound.min(limit + 1)) ?? []
+		}
 		if ($problems.is_empty()) Ok({}) else Err($problems)
 	}
 
@@ -627,4 +702,37 @@ TableGlyfPoints := {
 			height: y0.min(y1) - y0.max(y1),
 		}
 	}
+}
+
+# The envelope proof is observable only as BadTable publicly; check its
+# specific reason and the depth-independent identity case here.
+numeric_envelope_fixture : Bool -> TableGlyfPoints
+numeric_envelope_fixture = |extreme| {
+	u16 = |n| [n.shr_zf_wrap(8).to_u8_wrap(), n.to_u8_wrap()]
+	matrix = if extreme {
+		[0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF]
+	} else {
+		[0x4000, 0, 0, 0x4000]
+	}
+	var $glyf = []
+	var $starts = [0, 0, 0]
+	var $order = []
+	for g in 2..<65 {
+		$order = $order.append(g)
+		bytes = [0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x83].concat(u16(g - 1)).concat([0, 0, 0, 0]).concat(matrix.join_map(u16))
+		$glyf = $glyf.concat(bytes)
+		$starts = $starts.append($glyf.len())
+	}
+	{ glyf: $glyf, hmtx: [], long_metrics: 1, starts: $starts, kinds: [0, 1].concat(List.repeat(2, 63)), counts: [0, 4].concat(List.repeat(1, 63)), order: $order }
+}
+
+## fuzz regression: a one-child matrix chain can overflow binary32 even
+## though its depth, point count and total work are within their budgets.
+expect match TableGlyfPoints.check_coordinates(numeric_envelope_fixture(True), []) {
+	Err(problems) => problems.any(|problem| problem.reason == CoordinateRange)
+	Ok(_) => False
+}
+expect match TableGlyfPoints.check_coordinates(numeric_envelope_fixture(False), []) {
+	Ok(_) => True
+	Err(_) => False
 }

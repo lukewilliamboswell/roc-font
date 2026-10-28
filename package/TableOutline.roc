@@ -50,14 +50,15 @@ TableOutline :: {}.{
 	widen = |bits| {
 		var $value = TableVar.f32_sig(bits).to_u64_wrap().to_f64()
 		exponent = TableVar.f32_exp(bits)
-		if exponent < 0 {
-			for _ in 0..<(0 - exponent).to_u64_wrap() {
-				$value = $value / 2
+		var $remaining = (if (exponent < 0) 0 - exponent else exponent).to_u64_wrap()
+		var $factor = if (exponent < 0) 0.5 else 2.F64
+		# At most eight iterations; every multiplication is exact.
+		while $remaining != 0 {
+			if $remaining.bitwise_and(1) != 0 {
+				$value = $value * $factor
 			}
-		} else {
-			for _ in 0..<exponent.to_u64_wrap() {
-				$value = $value * 2
-			}
+			$remaining = $remaining.shr_zf_wrap(1)
+			$factor = $factor * $factor
 		}
 		if (TableVar.f32_negative(bits)) 0 - $value else $value
 	}
