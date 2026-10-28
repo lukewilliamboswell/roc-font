@@ -927,9 +927,9 @@ GraphiteCollision :: {}.{
 	kern_edge : Octabox, U32, U32, U32, Bool -> U32
 	kern_edge = |box, low_y, sample_y, margin, left| {
 		if left {
-			TableVar.f32_max(TableVar.f32_sub(box.x_min, margin), TableVar.f32_max(TableVar.f32_sub(box.sum_min, TableVar.f32_add(sample_y, margin)), TableVar.f32_add(box.diff_min, TableVar.f32_sub(low_y, margin))))
+			TableVar.f32_max(TableVar.f32_sub(box.x_min, margin), TableVar.f32_max(TableVar.f32_sub(TableVar.f32_sub(box.sum_min, sample_y), margin), TableVar.f32_add(box.diff_min, TableVar.f32_sub(low_y, margin))))
 		} else {
-			TableVar.f32_min(TableVar.f32_add(box.x_max, margin), TableVar.f32_min(TableVar.f32_sub(box.sum_max, TableVar.f32_sub(sample_y, margin)), TableVar.f32_add(box.diff_max, TableVar.f32_add(sample_y, margin))))
+			TableVar.f32_min(TableVar.f32_add(box.x_max, margin), TableVar.f32_min(TableVar.f32_add(TableVar.f32_sub(box.sum_max, sample_y), margin), TableVar.f32_add(TableVar.f32_add(box.diff_max, sample_y), margin)))
 		}
 	}
 
