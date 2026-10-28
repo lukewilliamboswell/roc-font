@@ -149,13 +149,14 @@ def child_env(ctx: Context) -> dict[str, str]:
 
 
 def run_all(ctx: Context, commands: Sequence[Sequence[str]], cwd: Path = ROOT,
-            accept: Callable[[str], bool] | None = None) -> Result:
+            accept: Callable[[str], bool] | None = None,
+            env: dict[str, str] | None = None) -> Result:
     """Run each command; one fails on a non-zero exit unless `accept`
     accepts its output."""
     outputs: list[str] = []
     failed: list[str] = []
     for command in commands:
-        code, output = run(command, cwd=cwd)
+        code, output = run(command, cwd=cwd, env=env)
         outputs.append(f"$ {' '.join(command)}\n{output.rstrip()}")
         if code != 0 and not (accept and accept(output)):
             failed.append(" ".join(command))
@@ -333,7 +334,8 @@ def step_unicode_data(ctx: Context) -> Result:
     # Generated shaping properties are pinned to the reference shaper's
     # Unicode version. Check generated source and its embedded licence.
     generators = sorted((ROOT / "tools" / "ucd").glob("generate*.py"))
-    return run_all(ctx, [[sys.executable, str(path), "--check"] for path in generators])
+    return run_all(ctx, [[sys.executable, str(path), "--check"] for path in generators],
+                   env=child_env(ctx))
 
 
 def step_conformance(ctx: Context) -> Result:

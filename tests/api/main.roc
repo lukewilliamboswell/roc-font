@@ -23,6 +23,7 @@ import CaretTests
 import PositionTests
 import ColorImageTests
 import ArabicTests
+import HangulTests
 import ThaiLaoTests
 import ContextTests
 
