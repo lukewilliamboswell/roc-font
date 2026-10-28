@@ -635,7 +635,31 @@ LayoutPosition := {
 		}
 		s1 = LayoutPosition.add_value(state, ctx, data, $base, $record, vf1, i)
 		s2 = LayoutPosition.add_value(s1, ctx, data, $base, $record + size1, vf2, j)
-		{ state: { ..s2, items: LayoutPosition.flag(s2.items, i, j + 1) }, next: if (vf2 != 0) j + 1 else j, applied: True, calls: [] }
+		worked = LayoutPosition.value_applies(data, $record, vf1, ctx.loc.active) or LayoutPosition.value_applies(data, $record + size1, vf2, ctx.loc.active)
+		flagged = if (worked) LayoutPosition.flag(s2.items, i, j + 1) else s2.items
+		# Any second value record consumes the second glyph, including an
+		# all-zero record: the following boundary is unsafe too (HB#3824).
+		flags = if (vf2 != 0) LayoutPosition.flag(flagged, i, j + 2) else flagged
+		{ state: { ..s2, items: flags }, next: if (vf2 != 0) j + 1 else j, applied: True, calls: [] }
+	}
+
+	## ValueFormat.apply_value reports nonzero stored horizontal fields,
+	## or a device reference when normalized coordinates are nonzero. A
+	## zero pair record still matches but must not mark a break unsafe.
+	value_applies : List(U8), U64, U64, Bool -> Bool
+	value_applies = |data, record, format, active| {
+		var $field = record
+		var $bit = 1.U64
+		while $bit <= 0x40 {
+			if format.bitwise_and($bit) != 0 {
+				if ($bit <= 4 or (active and $bit >= 0x10 and $bit <= 0x40)) and Bytes.u16(data, $field) != 0 {
+					return True
+				}
+				$field = $field + 2
+			}
+			$bit = $bit * 2
+		}
+		False
 	}
 
 	anchor : LayoutPosition, Ctx, U64 -> { x : I64, y : I64 }

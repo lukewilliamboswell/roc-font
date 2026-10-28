@@ -1,0 +1,270 @@
+{
+  "schema": 1,
+  "about": "General GPOS pair path safety flags for zero records, class-zero pairs, consumed second values and horizontal ignoring of vertical advances.",
+  "cases": [
+    {
+      "id": "zero-first-0",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "ab",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-first-1",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "abc",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-first-2",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "abcd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-first-3",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "cb",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-first-4",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "cd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-first-5",
+      "font": "../fonts/positioning/flags/zero-first.ttf",
+      "text": "ad",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-0",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "ab",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-1",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "abc",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-2",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "abcd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-3",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "cb",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-4",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "cd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-second-5",
+      "font": "../fonts/positioning/flags/zero-second.ttf",
+      "text": "ad",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-0",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "ab",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-1",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "abc",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-2",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "abcd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-3",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "cb",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-4",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "cd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "zero-class-5",
+      "font": "../fonts/positioning/flags/zero-class.ttf",
+      "text": "ad",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-0",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "ab",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-1",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "abc",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-2",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "abcd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-3",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "cb",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-4",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "cd",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "vertical-only-5",
+      "font": "../fonts/positioning/flags/vertical-only.ttf",
+      "text": "ad",
+      "options": {
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
