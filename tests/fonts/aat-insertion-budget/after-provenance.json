@@ -1,0 +1,21 @@
+{
+  "source": "f4b69e8 plus shared8a5cfda",
+  "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-28-bad769b/roc",
+  "compiler_sha256": "2790bcad55b97b24216608ae9ca666cc0789b9302201108e5ac6caffbdee2a8a",
+  "bundle": "Gcuk51Q29169n6CqFgiNiqN6aALA6B3hv3v3fPGrVLsy.tar.zst",
+  "bundle_sha256": "6eaa2879a26cffaea907bd8bf264c2de984c39f48a74749424a2623677582373",
+  "source_sentinel": true,
+  "aat_source_sha256": "cb472ee4e55353b9b6984dff9fddf33b4a1bf1f99b8dee78bf8a7455a03bb362",
+  "command": [
+    "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-28-bad769b/roc",
+    "build",
+    "--opt=speed",
+    "--fuzz",
+    "bench/roc/alloc.roc",
+    "--output=/private/tmp/aat-insertion-deferred-after/roc-alloc",
+    "--replace-dep",
+    "./package/main.roc",
+    "http://127.0.0.1:62599/Gcuk51Q29169n6CqFgiNiqN6aALA6B3hv3v3fPGrVLsy.tar.zst"
+  ],
+  "binary_sha256": "4c49977828abda575f189713e97b8235d1c933996ac553e97b8e9be4ac0a6f68"
+}

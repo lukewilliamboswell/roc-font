@@ -1,0 +1,39 @@
+{
+  "before_source": "6653e4a public Oct28 consumer; AAT path identical9fr",
+  "after_source": "f4b69e8 plus shared8a5cfda",
+  "before_binary_sha256": "238d0f3f8fc5c887cf1e49c8d85d3127a936f5c3303a9a012a85b67466b33c03",
+  "after_binary_sha256": "4c49977828abda575f189713e97b8235d1c933996ac553e97b8e9be4ac0a6f68",
+  "timing": "process wall time, includes startup/preparation; not a native-HB ratio",
+  "rows": [
+    {
+      "scalars": 1,
+      "before_seconds": 35.45261187502183,
+      "after_seconds": 0.015068290987983346,
+      "before_allocations": 32783,
+      "after_allocations": 34,
+      "leaked": 0,
+      "checksum": 20136577,
+      "exit_code": 77
+    },
+    {
+      "scalars": 4,
+      "before_seconds": 35.91859245800879,
+      "after_seconds": 0.013966541970148683,
+      "before_allocations": 32783,
+      "after_allocations": 34,
+      "leaked": 0,
+      "checksum": 20138506,
+      "exit_code": 77
+    },
+    {
+      "scalars": 16,
+      "before_seconds": 35.39094583399128,
+      "after_seconds": 0.013251292053610086,
+      "before_allocations": 32783,
+      "after_allocations": 34,
+      "leaked": 0,
+      "checksum": 20146312,
+      "exit_code": 77
+    }
+  ]
+}
