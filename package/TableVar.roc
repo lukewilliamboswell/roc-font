@@ -1096,6 +1096,59 @@ TableVar := {
 		}
 	}
 
+	## Single-rounding a*b+c on finite binary32 inputs, using the exact
+	## 48-bit product. Composite matrices in the pinned ARM64 HarfBuzz
+	## reference contract the first multiply with the addition. Emulating
+	## it explicitly keeps the result independent of the Roc host's FMA
+	## instructions and compiler flags. Other arithmetic remains unfused.
+	##
+	## Alignment needs at most124significant bits (48+76 or24+100), plus
+	## one carry, inside U128. At larger exponent gaps the smaller operand
+	## is below every rounding-decision bit; retain its nonzero sticky bit,
+	## including subtraction's borrow, before the single f32_pack rounding.
+	f32_fma : U32, U32, U32 -> U32
+	f32_fma = |a, b, c| {
+		product = TableVar.f32_sig(a) * TableVar.f32_sig(b)
+		addend = TableVar.f32_sig(c)
+		negative_product = TableVar.f32_negative(a) != TableVar.f32_negative(b)
+		negative_addend = TableVar.f32_negative(c)
+		if product == 0 and addend == 0 {
+			return if (negative_product and negative_addend) 0x80000000 else 0
+		}
+		if product == 0 {
+			return c
+		}
+		product_exponent = TableVar.f32_exp(a) + TableVar.f32_exp(b)
+		if addend == 0 {
+			return TableVar.f32_pack(negative_product, product, product_exponent)
+		}
+		addend_exponent = TableVar.f32_exp(c)
+		aligned = if product_exponent >= addend_exponent {
+			gap = product_exponent - addend_exponent
+			if gap <= 76 {
+				{ x: product.shl_wrap(gap.to_u8_wrap()), y: addend, exp: addend_exponent }
+			} else {
+				{ x: product.shl_wrap(76), y: 1, exp: product_exponent - 76 }
+			}
+		} else {
+			gap = addend_exponent - product_exponent
+			if gap <= 100 {
+				{ x: product, y: addend.shl_wrap(gap.to_u8_wrap()), exp: product_exponent }
+			} else {
+				{ x: 1, y: addend.shl_wrap(100), exp: addend_exponent - 100 }
+			}
+		}
+		if negative_product == negative_addend {
+			TableVar.f32_pack(negative_product, aligned.x + aligned.y, aligned.exp)
+		} else if aligned.x > aligned.y {
+			TableVar.f32_pack(negative_product, aligned.x - aligned.y, aligned.exp)
+		} else if aligned.y > aligned.x {
+			TableVar.f32_pack(negative_addend, aligned.y - aligned.x, aligned.exp)
+		} else {
+			0
+		}
+	}
+
 	## a / b for b not zero.
 	f32_div : U32, U32 -> U32
 	f32_div = |a, b| {
@@ -1605,3 +1658,33 @@ expect TableVar.f32_mul(3, TableVar.f32_half) == 2
 expect TableVar.f32_add(0x007FFFFF, 1) == 0x00800000
 expect TableVar.f32_sub(TableVar.f32_one, TableVar.f32_one) == 0
 expect TableVar.f32_floor(0xBF000000) == -1
+
+# A fused operation retains the product's low bits until the addition.
+# The rounded product alone would be1, losing the exact -2^-46 residual.
+expect TableVar.f32_fma(0x3F800001, 0x3F7FFFFE, 0xBF800000) == 0xA8800000
+# IEEE signs of zero, exact cancellation, underflow ties and subnormals.
+expect TableVar.f32_fma(0x80000000, 0x3F800000, 0x80000000) == 0x80000000
+expect TableVar.f32_fma(0x80000000, 0xBF800000, 0x80000000) == 0
+expect TableVar.f32_fma(0xBF800000, 0x3F800000, 0x3F800000) == 0
+expect TableVar.f32_fma(1, 0x3F000000, 0) == 0
+expect TableVar.f32_fma(1, 0x3F000000, 1) == 2
+expect TableVar.f32_fma(1, 0x3F000000, 0x80000001) == 0x80000000
+expect TableVar.f32_fma(0x00800000, 0x3F000000, 1) == 0x00400001
+# An unrounded product may exceed the binary32 range and still cancel
+# against a finite addend into a finite result.
+expect TableVar.f32_fma(0x7F7FFFFF, 0x40000000, 0xFF7FFFFF) == 0x7F7FFFFF
+# Very distant addends still break a halfway product's rounding tie.
+expect TableVar.f32_fma(0x3FC00000, 0x3F800001, 1) == 0x3FC00002
+expect TableVar.f32_fma(0x3FC00000, 0x3F800001, 0x80000001) == 0x3FC00001
+# The converse far-alignment branch retains the addend and product sign.
+expect TableVar.f32_fma(1, 1, 0x3F800000) == 0x3F800000
+expect TableVar.f32_fma(0x80000001, 1, 0xBF800000) == 0xBF800000
+
+## fuzz regression: fractional composite coordinates must match the
+## pinned reference's contracted matrix expression, not two rounded
+## products. Inputs are the actual varied/scaled box coordinates and
+## rounded y products in outline-040 (weight650,width87.5). Independent
+## native C/libm proofs are recorded beside the outline oracle fixtures.
+expect TableVar.f32_fma(0x47894B80, 0x3E999800, 0xC3D95B1C) == 0x46A159DC
+expect TableVar.f32_fma(0x47896DC0, 0x3E999800, 0xC3D95B1C) == 0x46A182F5
+expect TableVar.f32_sub(TableVar.f32_fma(0x47894900, 0x3F4CCC00, 0xC385B54A), TableVar.f32_from_int(-32)) == 0x475ABBBA

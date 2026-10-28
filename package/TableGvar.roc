@@ -814,8 +814,11 @@ TableGvar := {
 					# Scaled offsets translate before transforming.
 					x1 = if (c.scaled_offsets and !TableGvar.f32_zero(tx)) TableVar.f32_add(x0, tx) else x0
 					y1 = if (c.scaled_offsets and !TableGvar.f32_zero(ty)) TableVar.f32_add(y0, ty) else y0
-					x2 = if (c.identity) x1 else TableVar.f32_add(TableVar.f32_mul(x1, m0), TableVar.f32_mul(y1, m2))
-					y2 = if (c.identity) y1 else TableVar.f32_add(TableVar.f32_mul(x1, m1), TableVar.f32_mul(y1, m3))
+					# The pinned reference contracts the x product with the
+					# sum; the y product is rounded first. Software FMA makes
+					# that exact order deterministic on every Roc platform.
+					x2 = if (c.identity) x1 else TableVar.f32_fma(x1, m0, TableVar.f32_mul(y1, m2))
+					y2 = if (c.identity) y1 else TableVar.f32_fma(x1, m1, TableVar.f32_mul(y1, m3))
 					x3 = if (!c.scaled_offsets and !TableGvar.f32_zero(tx)) TableVar.f32_add(x2, tx) else x2
 					y3 = if (!c.scaled_offsets and !TableGvar.f32_zero(ty)) TableVar.f32_add(y2, ty) else y2
 					# i is below all_points' length.

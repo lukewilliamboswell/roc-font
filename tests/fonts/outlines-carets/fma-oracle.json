@@ -1,0 +1,174 @@
+{
+  "contract": "IEEE754 binary32 round-to-nearest ties-to-even, exact product plus addend then one rounding; finite inputs",
+  "outline_reference": "HarfBuzz14.6 ARM64 wheel, contour_point_t::transform contracts x*mX + round32(y*mY)",
+  "cases": [
+    {
+      "id": "single-rounding-residual",
+      "a": "3f800001",
+      "b": "3f7ffffe",
+      "c": "bf800000",
+      "result": "a8800000"
+    },
+    {
+      "id": "negative-zero-sum",
+      "a": "80000000",
+      "b": "3f800000",
+      "c": "80000000",
+      "result": "80000000"
+    },
+    {
+      "id": "opposite-zero-signs",
+      "a": "80000000",
+      "b": "bf800000",
+      "c": "80000000",
+      "result": "00000000"
+    },
+    {
+      "id": "exact-cancellation",
+      "a": "bf800000",
+      "b": "3f800000",
+      "c": "3f800000",
+      "result": "00000000"
+    },
+    {
+      "id": "underflow-tie-to-zero",
+      "a": "00000001",
+      "b": "3f000000",
+      "c": "00000000",
+      "result": "00000000"
+    },
+    {
+      "id": "subnormal-halfway-even",
+      "a": "00000001",
+      "b": "3f000000",
+      "c": "00000001",
+      "result": "00000002"
+    },
+    {
+      "id": "negative-underflow-zero",
+      "a": "00000001",
+      "b": "3f000000",
+      "c": "80000001",
+      "result": "80000000"
+    },
+    {
+      "id": "normal-to-subnormal",
+      "a": "00800000",
+      "b": "3f000000",
+      "c": "00000001",
+      "result": "00400001"
+    },
+    {
+      "id": "cancel-overflowing-product",
+      "a": "7f7fffff",
+      "b": "40000000",
+      "c": "ff7fffff",
+      "result": "7f7fffff"
+    },
+    {
+      "id": "far-addend-breaks-tie-up",
+      "a": "3fc00000",
+      "b": "3f800001",
+      "c": "00000001",
+      "result": "3fc00002"
+    },
+    {
+      "id": "far-addend-breaks-tie-down",
+      "a": "3fc00000",
+      "b": "3f800001",
+      "c": "80000001",
+      "result": "3fc00001"
+    },
+    {
+      "id": "far-product-positive",
+      "a": "00000001",
+      "b": "00000001",
+      "c": "3f800000",
+      "result": "3f800000"
+    },
+    {
+      "id": "far-product-negative",
+      "a": "80000001",
+      "b": "00000001",
+      "c": "bf800000",
+      "result": "bf800000"
+    },
+    {
+      "id": "outline040-point0-y",
+      "a": "47894b80",
+      "b": "3e999800",
+      "c": "c3d95b1c",
+      "result": "46a159dc"
+    },
+    {
+      "id": "outline040-point1-y",
+      "a": "47896dc0",
+      "b": "3e999800",
+      "c": "c3d95b1c",
+      "result": "46a182f5"
+    },
+    {
+      "id": "outline040-point3-x-before-phantom",
+      "a": "47894900",
+      "b": "3f4ccc00",
+      "c": "c385b54a",
+      "result": "475a9bba"
+    }
+  ],
+  "composite_regression": {
+    "font": "var-outlines.ttf",
+    "glyph": 4,
+    "weight": 650,
+    "width": 87.5,
+    "normalized": [
+      0.5,
+      -0.5
+    ],
+    "varied_box_points": [
+      [
+        70255,
+        -503
+      ],
+      [
+        70323.5,
+        -503
+      ],
+      [
+        70348.5,
+        1317
+      ],
+      [
+        70250,
+        1317
+      ]
+    ],
+    "scaled_offset": [
+      40,
+      20
+    ],
+    "matrix_fixed2dot14": [
+      13107,
+      4915,
+      -3277,
+      14746
+    ],
+    "parent_left_phantom": -32,
+    "exact_final_differences": [
+      {
+        "coordinate": "point0.y",
+        "unfused": "46a159dd",
+        "fused_reference": "46a159dc"
+      },
+      {
+        "coordinate": "point1.y",
+        "unfused": "46a182f6",
+        "fused_reference": "46a182f5"
+      },
+      {
+        "coordinate": "point3.x",
+        "unfused": "475abbb9",
+        "fused_reference": "475abbba"
+      }
+    ]
+  }
+}
