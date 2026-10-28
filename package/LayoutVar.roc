@@ -592,6 +592,11 @@ LayoutVar := {
 			LayoutVar.default_location
 		}
 
+	## MATH facts use the variation store at every location, including a
+	## default or zero-axis region, without a shaper-specific 2.30 cache.
+	math_location : LayoutVar, List(I16) -> Location
+	math_location = |lv, coords| if (lv.store.region_count == 0) LayoutVar.default_location else { active: True, scalars: TableVar.region_scalars_precise(lv.store, coords) }
+
 	## The default location: no device applies.
 	default_location : Location
 	default_location = { active: False, scalars: [] }

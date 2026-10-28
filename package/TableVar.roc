@@ -712,6 +712,37 @@ TableVar := {
 		$out
 	}
 
+	## Binary32 region scalars without the reference shaper's 2.30 cache
+	## quantization. Mathematical and color font queries preserve tiny
+	## values that still contribute to large or fractional font facts.
+	region_scalars_precise : Store, List(I16) -> List(U32)
+	region_scalars_precise = |store, coords| {
+		axes = store.axis_count
+		var $out = List.with_capacity(store.region_count)
+		for r in 0..<store.region_count {
+			var $v = TableVar.f32_one
+			var $a = 0
+			while $a < axes {
+				base = 3 * (r * axes + $a)
+				factor = TableVar.axis_scalar(
+					(coords.get($a) ?? 0).to_i64(),
+					(store.regions.get(base) ?? 0).to_i64(),
+					(store.regions.get(base + 1) ?? 0).to_i64(),
+					(store.regions.get(base + 2) ?? 0).to_i64(),
+				)
+				if factor == 0 {
+					$v = 0
+					$a = axes
+				} else {
+					$v = TableVar.f32_mul($v, factor)
+					$a = $a + 1
+				}
+			}
+			$out = $out.append($v)
+		}
+		$out
+	}
+
 	# One axis's contribution to a region's scalar. The order of the tests is
 	# the specification's, which gives malformed axes (start after peak, peak
 	# after end, or a range across zero) a scalar of 1. The interpolation is
@@ -1688,3 +1719,19 @@ expect TableVar.f32_fma(0x80000001, 1, 0xBF800000) == 0xBF800000
 expect TableVar.f32_fma(0x47894B80, 0x3E999800, 0xC3D95B1C) == 0x46A159DC
 expect TableVar.f32_fma(0x47896DC0, 0x3E999800, 0xC3D95B1C) == 0x46A182F5
 expect TableVar.f32_sub(TableVar.f32_fma(0x47894900, 0x3F4CCC00, 0xC385B54A), TableVar.f32_from_int(-32)) == 0x475ABBBA
+
+## Tiny scalars can still contribute whole font units to wide deltas.
+## Three independent axes give 2^-34; 32 signed-32-bit columns sum to 4.
+expect {
+	region = [(0, 16384, 16384), (0, 16384, 16384), (0, 16384, 16384)]
+	data = { indexes: List.repeat(0, 32), words: 32, long: True, rows: [List.repeat(2147483647, 32)] }
+	match TableVar.read_store(store_of(3, [region], [data]), "GDEF", 0, 3) {
+		Ok(store) => {
+			precise = TableVar.region_scalars_precise(store, [1, 1, 256])
+			cached = TableVar.region_scalars(store, [1, 1, 256])
+			TableVar.f32_round_half_up(TableVar.delta(store, precise, 0, 0)) == 4 and
+				TableVar.f32_round_half_up(TableVar.delta(store, cached, 0, 0)) == 0
+		}
+		Err(_) => False
+	}
+}

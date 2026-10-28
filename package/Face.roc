@@ -808,7 +808,7 @@ Face := {
 	moved = |face, given| {
 		loc = Face.location(face, given)
 		layout_location = LayoutVar.location(face.layout_var, loc.coords)
-		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, layout_location), color: TableColor.at_location(face.color, loc.coords) }
+		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, LayoutVar.math_location(face.layout_var, loc.coords)), color: TableColor.at_location(face.color, loc.coords) }
 	}
 
 	## The face moved to a `Font.Variation`'s location (see `settings`). A

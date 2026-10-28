@@ -404,7 +404,7 @@ TableMath := {
 			}
 		}
 		if $problems.is_empty() {
-			Ok({ bytes: data, constants_at: c, glyph_info: g, variants_at: v, glyph_count, lv, loc: LayoutVar.default_location })
+			Ok({ bytes: data, constants_at: c, glyph_info: g, variants_at: v, glyph_count, lv, loc: LayoutVar.math_location(lv, []) })
 		} else {
 			Err($problems)
 		}
