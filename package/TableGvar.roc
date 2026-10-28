@@ -1586,3 +1586,24 @@ expect {
 	d = TableGvar.phantom_values([3, 5, 6, 7, 8], 0, 4, [0, 2, 2, 3], 2, TableVar.f32_one)
 	[d.a, d.b, d.c, d.d] == [13, 8, 0, 0].map(TableVar.f32_from_int) and d.next == 5
 }
+
+# The metric stream projection agrees with the complete point decoder,
+# including composite metrics, over the existing independent HB fixture.
+expect {
+	match fixture({}) {
+		Ok(f) => [-16384.I16, -8192, 1, 8192, 16384].all(
+			|coordinate| {
+				loc = TableGvar.location(f.gvar, [coordinate, coordinate])
+				var $same = True
+				for glyph in 0..<glyph_count {
+					p = TableGvar.points(f.glyf, f.gvar, loc, glyph)
+					q = TableGvar.phantoms(f.glyf, f.gvar, loc, glyph)
+					n = p.xs.len()
+					$same = $same and TableVar.f32_eq(q.left, p.xs.get(n - 4) ?? 0) and TableVar.f32_eq(q.right, p.xs.get(n - 3) ?? 0)
+				}
+				$same
+			},
+		)
+		Err(_) => False
+	}
+}
