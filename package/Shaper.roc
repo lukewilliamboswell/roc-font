@@ -22,8 +22,8 @@ import Sorted
 import TablePost
 import TableCmap
 
-## Shaping with HarfBuzz 14.6.0's default, Hebrew and Arabic joining models:
-## choosing
+## Horizontal OpenType shaping with default, Hebrew, Arabic/Syriac,
+## Thai/Lao, Hangul, Indic, Khmer, Myanmar and USE models: choosing
 ## lookups for a script, language, direction and features (a plan, as
 ## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
 ## (Unicode properties, grapheme clusters, the script's own direction,
@@ -1028,6 +1028,11 @@ Shaper :: {}.{
 	## Combining classes HarfBuzz uses for positioning marks itself
 	## (`recategorize_combining_class`): Hebrew, Arabic, Syriac, Thai, Lao
 	## and Tibetan classes become the positional classes they draw at.
+	# hb-ot-shape-fallback.cc switches on modified CCC aliases, not on
+	# canonical CCC numbers. This constant pool also avoids per-mark work.
+	fallback_classes : List(U64)
+	fallback_classes = [0, 1, 2, 222, 4, 5, 6, 7, 8, 9, 232, 228, 12, 216, 228, 220, 220, 220, 220, 220, 220, 220, 220, 220, 220, 220, 230, 230, 230, 230, 220, 230, 230, 220, 230, 230, 230, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 232, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 220, 119, 120, 121, 230, 123, 124, 125, 126, 127, 128, 220, 130, 220, 230, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255]
+
 	recategorize : U64, U64 -> U64
 	recategorize = |u, klass_in|
 		if klass_in >= 200 {
@@ -1053,37 +1058,7 @@ Shaper :: {}.{
 				} else {
 					klass_in
 				}
-			if (klass >= 10 and klass <= 18) or klass == 20 or klass == 22 {
-				220
-			} else if klass == 23 {
-				216
-			} else if klass == 24 {
-				232
-			} else if klass == 25 or klass == 19 {
-				228
-			} else if klass == 26 {
-				230
-			} else if klass == 27 or klass == 28 or klass == 30 or klass == 31 or klass == 33 or klass == 34 or klass == 35 or klass == 36 {
-				230
-			} else if klass == 29 or klass == 32 {
-				220
-			} else if klass == 103 {
-				222
-			} else if klass == 107 {
-				232
-			} else if klass == 118 {
-				220
-			} else if klass == 122 {
-				230
-			} else if klass == 129 {
-				220
-			} else if klass == 130 {
-				230
-			} else if klass == 132 {
-				220
-			} else {
-				klass
-			}
+			Shaper.fallback_classes.get(klass) ?? klass
 		}
 
 	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Run
@@ -1799,3 +1774,9 @@ expect {
 		},
 	)
 }
+
+# Fallback placement consumes the same modified classes as normalization.
+expect Shaper.recategorize(0x064F, ShaperUnicode.modified_combining_class(0x064F)) == 230 and Shaper.recategorize(0x0650, ShaperUnicode.modified_combining_class(0x0650)) == 220
+expect Shaper.recategorize(0x05B4, ShaperUnicode.modified_combining_class(0x05B4)) == 220 and Shaper.recategorize(0x05BF, ShaperUnicode.modified_combining_class(0x05BF)) == 216
+expect Shaper.recategorize(0x05C1, ShaperUnicode.modified_combining_class(0x05C1)) == 232 and Shaper.recategorize(0x05C2, ShaperUnicode.modified_combining_class(0x05C2)) == 228
+expect Shaper.recategorize(0x0F72, ShaperUnicode.modified_combining_class(0x0F72)) == 230 and Shaper.recategorize(0x0F74, ShaperUnicode.modified_combining_class(0x0F74)) == 220
