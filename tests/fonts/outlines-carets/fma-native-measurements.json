@@ -1,0 +1,76 @@
+{
+  "roc": "2026-10-27-de79a0f",
+  "harfbuzz": "14.6.0",
+  "rows": [
+    {
+      "queries": 1000,
+      "hb_seconds": 0.000525,
+      "before_seconds_including_startup": 0.007955166976898909,
+      "before_to_hb_ratio": 15.15269900361697,
+      "after_seconds_including_startup": 0.008006707997992635,
+      "after_to_hb_ratio": 15.250872377128829
+    },
+    {
+      "queries": 4000,
+      "hb_seconds": 0.00201,
+      "before_seconds_including_startup": 0.022797749959863722,
+      "before_to_hb_ratio": 11.34216415913618,
+      "after_seconds_including_startup": 0.022822582977823913,
+      "after_to_hb_ratio": 11.354518894439757
+    },
+    {
+      "queries": 16000,
+      "hb_seconds": 0.008043,
+      "before_seconds_including_startup": 0.08248191594611853,
+      "before_to_hb_ratio": 10.255118232763712,
+      "after_seconds_including_startup": 0.08154250006191432,
+      "after_to_hb_ratio": 10.13831904288379
+    }
+  ],
+  "note": "Native optimized Roc timings include process startup,font reading,location preparation and stdout. HarfBuzz is a warmed native C inner loop from the pinned wheel. Ratios are therefore upper bounds on the prepared-query time ratio, not a strictly equivalent microbenchmark. Use increasing-size slope and largest size; do not infer general shaping speed.",
+  "allocations": {
+    "before": [
+      {
+        "queries": 1000,
+        "allocations": 73000,
+        "leaked": 0,
+        "checksum": 156262000
+      },
+      {
+        "queries": 4000,
+        "allocations": 292000,
+        "leaked": 0,
+        "checksum": 625048000
+      },
+      {
+        "queries": 16000,
+        "allocations": 1168000,
+        "leaked": 0,
+        "checksum": 2500192000
+      }
+    ],
+    "after": [
+      {
+        "queries": 1000,
+        "allocations": 73000,
+        "leaked": 0,
+        "checksum": 156262000
+      },
+      {
+        "queries": 4000,
+        "allocations": 292000,
+        "leaked": 0,
+        "checksum": 625048000
+      },
+      {
+        "queries": 16000,
+        "allocations": 1168000,
+        "leaked": 0,
+        "checksum": 2500192000
+      }
+    ]
+  },
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "allocation_note": "Allocation calls measured separately using optimized roc-fuzz0.4.3 binaries; requested and peak bytes unavailable in that platform release."
+}
