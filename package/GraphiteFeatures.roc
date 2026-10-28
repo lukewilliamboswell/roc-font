@@ -174,9 +174,37 @@ GraphiteFeatures := {
 				end = table.language_starts.get(i + 1) ?? 0
 				for j in start..<end {
 					setting = table.settings.get(j) ?? { feature: 0, value: 0 }
-					$values = GraphiteFeatures.set(table, $values, setting.feature, setting.value)
+					feature = table.features.get(setting.feature) ?? crash "checked language feature index"
+					$values = $values.set(feature.alias, setting.value) ?? []
 				}
 				break
+			}
+		}
+		for i in 0..<table.features.len() {
+			feature = table.features.get(i) ?? crash "aligned feature index"
+			if feature.alias != i {
+				$values = $values.set(i, $values.get(feature.alias) ?? 0) ?? []
+			}
+		}
+		$values
+	}
+
+	resolve : GraphiteFeatures, U32, List({ id : U32, value : I16 }) -> List(U16)
+	resolve = |table, language, settings| {
+		var $values = GraphiteFeatures.defaults(table, language)
+		for setting in settings {
+			index = GraphiteFeatures.find(table, setting.id)
+			match table.features.get(index) {
+				Ok(feature) if setting.value.to_u16_wrap() <= feature.maximum => {
+					$values = $values.set(feature.alias, setting.value.to_u16_wrap()) ?? []
+				}
+				_ => {}
+			}
+		}
+		for i in 0..<table.features.len() {
+			feature = table.features.get(i) ?? crash "aligned feature index"
+			if feature.alias != i {
+				$values = $values.set(i, $values.get(feature.alias) ?? 0) ?? []
 			}
 		}
 		$values
@@ -189,10 +217,10 @@ GraphiteFeatures := {
 			return values
 		}
 		var $values = values
-		for i in 0..<table.features.len() {
-			if (table.features.get(i) ?? found).alias == found.alias {
-				$values = $values.set(i, value) ?? []
-			}
+		var $i = found.alias
+		while $i < table.features.len() and (table.features.get($i) ?? found).alias == found.alias {
+			$values = $values.set($i, value) ?? []
+			$i = $i + 1
 		}
 		$values
 	}

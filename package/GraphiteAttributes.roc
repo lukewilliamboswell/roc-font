@@ -14,6 +14,12 @@ GraphiteAttributes := {
 	attribute_count : U64,
 }.{
 
+	none : GraphiteAttributes
+	none = { starts: [0], keys: [], values: [], box_starts: [], bytes: [], attribute_count: 0 }
+
+	glyph_count : GraphiteAttributes -> U64
+	glyph_count = |table| table.starts.len() - 1
+
 	read : List(U8), List(U8), U64, U64 -> Try(GraphiteAttributes, [Bad({ table : Str, offset : U64 }), OverLimit(Str)])
 	read = |gloc, glat, glyphs, max_output| {
 		bad = |table, offset| Err(Bad({ table, offset }))
