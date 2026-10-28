@@ -1,7 +1,7 @@
 # Graphite raw bounds and default variation metrics
 
 These original UPL fixtures isolate raw metrics, variation behavior and
-default engine eligibility. There are 45 fonts: 28 ordinary positive fixtures
+default engine eligibility. The main reference matrix has 45 fonts: 28 ordinary positive fixtures
 and 17 explicitly diagnostic header/outline combinations. No
 Graphite2 implementation sources were read or translated. Programs and tables
 use the public format; behavior comes from Graphite2 1.3.14's public C API and
@@ -124,3 +124,44 @@ python3 tests/fonts/graphite-metrics/record_hb.py --check --cases package-cases.
 A frozen native run using the original 28-case snapshot retains that exact
 snapshot. New package integration should select the explicit 38-case files,
 without broadening the successful-font gate to raw diagnostics.
+
+## Separate final-short-metric edge-case investigation
+
+`generate_cache.py` adds 29 separate fonts and 41 true-HB cases in
+`cache-cases.jsonc`/`cache-records.json`/`cache-oracle.json`. The full 94 reference
+and normative package 38 are unchanged. Four-glyph CFF/no-outline diagnostics
+compare one long hmtx metric plus three bearings with four full metrics, keeping
+every font-defined effective advance 600. Glyphs 0/1/2 all return 600. Only the
+last short-metric glyph 3 returns 0, and just one unused trailing table byte
+restores 600. Full long metrics return 600 for every glyph. This rules out a
+blanket missing-glyf or missing-whole-glyph-cache explanation.
+
+The same edge case occurs in ordinary OTS-accepted glyf fonts. Twenty-two
+positive fixtures query all 11 raw glyph metrics on glyph 3 with padding 0/1.
+Bbox metrics remain unchanged: xMin 0,xMax 300,yMin 0,yMax 600,width 300,height 600.
+Only advance metric 8 changes 0→600; right bearing metric 1 changes −300→300
+because it uses that advance. Metrics 9/10 remain 0. The font specification's
+last-long-advance fallback is 600 in both files. These are narrow reference
+quirk observations, not a request to replace the package's format-correct
+fallback with zero or a blanket geometry exception.
+
+`cache-raw-records.json` has 44 direct public Graphite2 C-API records for those
+last-glyph metric fixtures in modes 0/6; release and tracing builds agree on
+all 44 bits. Their VM queries use level 0. Other diagnostic combinations include
+nonnormative CFF/maxp or outline-free fonts; all are explicitly labeled in the
+case data. Across the complete 74-font directory, OTS accepts 61: the original
+28 ordinary positives and all 24 ordinary glyf cache controls pass, while the
+remaining outcomes/warnings belong to explicit diagnostics. Original unsanitized
+bytes are always used by every shaping oracle.
+
+Offline checks for this separately owned investigation:
+
+```
+python3 tests/fonts/graphite-metrics/check_cache.py
+python3 tests/fonts/graphite-metrics/record_hb.py --check --cases cache-cases.jsonc --output cache-records.json --oracle cache-oracle.json
+python3 tests/fonts/graphite-metrics/record_raw.py --check --cases cache-raw-cases.jsonc --output cache-raw-records.json
+```
+
+`generate_cache.py --check` reproduces these 29 fonts and both case lists with
+fontTools 4.61.1. The separate cache controls are not silently added to or
+filtered from the explicit normative 38 gate.

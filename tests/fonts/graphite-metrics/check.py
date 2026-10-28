@@ -28,7 +28,7 @@ for value,want in [(0,602),(0.5,702),(1,802)]:
     assert graphite['ot_glyph2_advance']==ot['ot_glyph2_advance']==want
     assert graphite['glyphs'][1]['advance']==[602,0] and graphite['glyphs'][1]['offset']==[0,602]
     assert ot['glyphs'][1]['advance']==[want,0] and ot['glyphs'][1]['offset']==[0,0]
-ots=json.loads((HERE/'ots.json').read_text());assert len(ots['fonts'])==45
+ots=json.loads((HERE/'ots.json').read_text());assert len(ots['fonts'])==74
 for record in ots['fonts']:
     assert (record['accepted']or record['diagnostic']) and record['sha256']==sha((HERE/record['font']).read_bytes())
 for metric in [0,4,5,7,8]:
@@ -45,4 +45,4 @@ proof=json.loads((HERE/'oracle-proof.json').read_text())
 assert proof['raw_records_sha256']==sha((HERE/'raw-records.json').read_bytes())
 assert proof['hb_records_sha256']==sha((HERE/'hb-records.json').read_bytes())
 assert proof['tracing_result_digest']==sha(canonical([r['result']for r in raw]))
-print('56 raw/94 true HB keys;45 OTS hashes; raw bounds, variation and default maxp selection PASS')
+print('56 raw/94 true HB keys;74 OTS hashes; raw bounds, variation and default maxp selection PASS')

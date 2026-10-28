@@ -14,7 +14,7 @@ rows=[]
 with tempfile.TemporaryDirectory()as tmp:
     for font in fonts:
         done=subprocess.run([str(args.ots),str(font),str(Path(tmp)/font.name)],capture_output=True,text=True)
-        rows.append({'font':font.name,'sha256':sha(font.read_bytes()),'accepted':done.returncode==0,'diagnostic':font.name.startswith('maxp-matrix-')or'-maxp1-diagnostic'in font.name,'stdout':done.stdout,'stderr':done.stderr})
+        rows.append({'font':font.name,'sha256':sha(font.read_bytes()),'accepted':done.returncode==0,'diagnostic':font.name.startswith(('maxp-matrix-','cache-'))or'-maxp1-diagnostic'in font.name,'stdout':done.stdout,'stderr':done.stderr})
 assert all(row['accepted']for row in rows if not row['diagnostic'])
 output.write_text(json.dumps({'oracle':{'version':'9.3.0','binary_sha256':sha(args.ots.read_bytes()),'source_commit':'884861e0103b41d7e9845fdaf9fd1e3c12819103'},'fonts':rows},indent=2)+'\n')
 print(sum(r['accepted']for r in rows),'/',len(rows),'OTS accepted; all nondiagnostic fonts accepted')
