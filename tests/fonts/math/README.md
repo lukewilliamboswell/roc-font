@@ -11,7 +11,7 @@ It has TrueType outlines, 5,015 glyphs, and a MATH 1.0 table. The table
 contains 215 vertical constructions (1,149 variants, 57 assemblies) and
 29 horizontal constructions (132 variants, 22 assemblies).
 
-All five fonts pass the pinned OTS 9.3.0 sanitizer.
+All seven fonts pass the pinned OTS 9.3.0 sanitizer.
 
 The four `math*.ttf` fixtures are original generated test data, under this
 repository's Universal Permissive License (`SYNTHETIC-LICENSE.txt`). Run
@@ -21,7 +21,7 @@ pixel device formats, zero-part assemblies, missing data and GDEF variation
 devices. The latter change constants, corrections, accent attachments,
 kern thresholds, kern values and assembly corrections.
 
-`cases.jsonc` defines eight native conformance cases. `oracle.py` records
+`cases.jsonc` defines ten native conformance cases (5,869 cached font-fact records). `oracle.py` records
 font facts using pinned uharfbuzz 0.56.3 (HarfBuzz 14.6.0) and independently
 checks them against fontTools 4.61.1. `verify.py` builds `query.roc` with the
 optimized native backend, against `scripts/flight.py`'s served bundle,
