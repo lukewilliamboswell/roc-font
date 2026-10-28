@@ -186,6 +186,19 @@
           "exit_code": 0
         }
       ]
+    },
+    {
+      "path": "examples/color.roc",
+      "cases": [
+        {
+          "name": "usage",
+          "args": [],
+          "stdin": "",
+          "stdout": "Pass the path of an OpenType color font.\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
     }
   ]
 }

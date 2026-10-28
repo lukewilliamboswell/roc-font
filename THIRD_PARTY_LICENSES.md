@@ -47,6 +47,7 @@ bundle.
 | `tests/fonts/shaping/thai/`, `tests/fonts/shaping/lao/`, `tests/fonts/shaping/hangul/` | unmodified pinned Noto Thai/Lao and Nanum Hangul families; upstream pins in each `sources.json` | SIL OFL 1.1, adjacent `*-OFL.txt` files |
 | `tests/fonts/shaping/thai-legacy/`, `tests/fonts/shaping/hangul-fixtures/` | original generated fixtures | the repository's licence; adjacent `LICENSE` |
 | `tests/fonts/shaping/arabic/` | unmodified Noto Sans Arabic and Noto Naskh Arabic, pinned in `sources.json` | SIL OFL 1.1, the two adjacent `*-OFL.txt` files |
+| `tests/fonts/color/` | renamed Noto COLRv1 emoji subset, pinned by `sources.json`; original all-format and variation fixtures | SIL OFL 1.1, `Noto-LICENSE.txt`; original fixtures under `SYNTHETIC-LICENSE.txt` |
 | `tests/fonts/color-images/emoji-subset.ttf` | renamed Noto Color Emoji subset, pinned and reproduced by `emoji-pin.json` and `generate.py` | SIL OFL 1.1, `NotoColorEmoji-LICENSE.txt` |
 | `tests/fonts/positioning/`, `tests/fonts/outlines-carets/`, other `tests/fonts/color-images/*.ttf` | original generated fixtures | the repository's licence; fixture directories identify their generators |
 
