@@ -41,6 +41,9 @@ ShaperGraphite := {
 
 	Result : { run : GraphiteRun.Run, origins : List(GraphiteRun.Origin), stopped : U64, operations : U64, abort : [NoAbort, ProgramAbort] }
 
+	shape : Face, ShaperGraphite, List({ scalar : U32, offset : U64 }), Bool -> Result
+	shape = |face, plan, scalars, trace| ShaperGraphite.execute(face, plan, scalars, trace, GraphiteCollision.collisions)
+
 	# The collision phase is an explicit pure dependency. The public
 	# dispatcher supplies the complete font-program collision executor;
 	# all phases share this call's remaining work budget.
