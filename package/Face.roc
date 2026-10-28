@@ -969,7 +969,7 @@ Face := {
 
 	## Positive vertical pen distance. Without vertical metrics, synthesize
 	## it from horizontal font extents, as the OpenType reference does.
-	vertical_advance : Face, Location, U64 -> I32
+	vertical_advance : Face, Location, U64 -> I64
 	vertical_advance = |face, loc, id| {
 		if id >= face.glyph_count {
 			return 0
@@ -979,19 +979,19 @@ Face := {
 				# The metric accelerator defines a negative varied advance
 				# as zero (HarfBuzz hb-ot-hmtx-table.hh); I32 bounds keep the
 				# font-unit public position representation finite.
-				Present(v) if loc.varied => (advance.to_i64() + TableVvar.advance_delta(v, loc.vvar, id)).max(0).min(2147483647).to_i32_wrap()
+				Present(v) if loc.varied => (advance.to_i64() + TableVvar.advance_delta(v, loc.vvar, id)).max(0).min(2147483648)
 				_ if loc.varied => match face.outlines {
 					Present(o) => {
 						p = TableGvar.phantoms(o.points, o.gvar, loc.gvar, id)
-						TableVar.f32_round_half_up(TableVar.f32_sub(p.top, p.bottom)).max(0).min(2147483647).to_i32_wrap()
+						TableVar.f32_round_half_up(TableVar.f32_sub(p.top, p.bottom)).max(0).min(2147483648)
 					}
-					Absent => advance.to_i32()
+					Absent => advance.to_i64()
 				}
-				_ => advance.to_i32()
+				_ => advance.to_i64()
 			}
 			Err(_) => {
 				m = Face.metrics(face, loc)
-				(m.ascent.to_i64() + m.descent.to_i64()).max(-2147483648).min(2147483647).to_i32_wrap()
+				(m.ascent.to_i64() + m.descent.to_i64())
 			}
 		}
 	}

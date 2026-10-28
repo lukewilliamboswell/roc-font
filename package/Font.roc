@@ -237,9 +237,10 @@ Font :: { face : Face }.{
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
 	## A glyph's vertical pen distance in font units, before choosing the
-	## run's direction. Uses vertical metrics when present; otherwise uses
+	## run's direction. The result can reach 2147483648, whose negative
+	## fits a run's signed 32-bit advance. Uses vertical metrics when present; otherwise uses
 	## the font's ascent plus descent. A glyph id past the font gives zero.
-	vertical_advance : Font, U32 -> I32
+	vertical_advance : Font, U32 -> I64
 	vertical_advance = |font, id| Face.vertical_advance(font.face, Face.current(font.face), id.to_u64())
 
 	## Where a glyph's vertical baseline meets its horizontal baseline,
