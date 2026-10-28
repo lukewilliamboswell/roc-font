@@ -140,7 +140,7 @@ def module(unicode_version: str, tables: dict[str, tuple[str, str, int]]) -> str
         "##",
         "## Internal data for `ShaperUnicode`. Each table is a string of",
         "## fixed-width records of upper-case hexadecimal digits sorted by their",
-        "## first field (`ShaperUnicodeTests` checks the order); the generator's",
+        "## first field (the expects in `ShaperUnicode` check the order); the generator's",
         "## docstring gives each record's layout.",
         "ShaperUnicodeData :: {}.{",
     ]

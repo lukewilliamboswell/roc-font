@@ -4,6 +4,7 @@
 Steps (select with --only, drop with --skip, list with --list):
 
     compiler          reports the compiler in use (`roc version`; debug builds warn)
+    unicode-data      pinned Unicode generators agree with committed source
     fmt               roc fmt --check on every directory holding .roc files
     check             roc check package/main.roc; then, against the served
                       bundle, the API test app, every fuzz target, the
@@ -328,6 +329,13 @@ def step_examples(ctx: Context) -> Result:
     return optional_script(ctx, "examples.py", ["check"], "the examples' recorded output")
 
 
+def step_unicode_data(ctx: Context) -> Result:
+    # Generated shaping properties are pinned to the reference shaper's
+    # Unicode version. Check generated source and its embedded licence.
+    generators = sorted((ROOT / "tools" / "ucd").glob("generate*.py"))
+    return run_all(ctx, [[sys.executable, str(path), "--check"] for path in generators])
+
+
 def step_conformance(ctx: Context) -> Result:
     main = optional_script(ctx, "conformance.py", [], "oracle conformance, architecture §7.1")
     # Feature-specific native drivers consume cached JSONC/JSONL data too.
@@ -499,6 +507,7 @@ CONSUMER_STEPS = ("check", "test", "fuzz-smoke", "examples", "conformance", "ben
 
 STEPS: dict[str, Callable[[Context], Result]] = {
     "compiler": step_compiler,
+    "unicode-data": step_unicode_data,
     "fmt": step_fmt,
     "check": step_check,
     "test": step_test,

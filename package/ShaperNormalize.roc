@@ -763,3 +763,22 @@ ShaperNormalize :: {}.{
 		}
 	}
 }
+
+## The Khmer self-tail split must terminate without decomposing its tail
+## again; the common decomposer recurses only into the first component.
+expect {
+	ShaperNormalize.decomposition(0x17BE, Khmer) == Two(0x17C1, 0x17BE) and
+		ShaperNormalize.decomposition(0x0931, Indic) == Unchanged and
+			ShaperNormalize.decomposition(0x0931, Unicode) == Two(0x0930, 0x093C)
+}
+
+## Cluster reassignment clears safety only on characters whose cluster
+## actually changes, preserving feature and model metadata in both buffers.
+expect {
+	a = { ..ShaperNormalize.no_char, cluster: 0, mask: 0x8000000000001234 }
+	b = { ..a, cluster: 3 }
+	merged = ShaperNormalize.merge_clusters([a, b], 0, 2)
+	output = ShaperNormalize.merge_out([a, b], 0, [b], 0)
+	merged == [a, { ..b, cluster: 0, mask: 0x1234 }] and
+		output.out == merged and output.rest == [{ ..b, cluster: 0, mask: 0x1234 }]
+}
