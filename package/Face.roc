@@ -26,6 +26,7 @@ import TableVmtx
 import TableVorg
 import TableVvar
 import AatMorx
+import TableCff
 import TableMath
 import TableColorImages
 import TablePalette
@@ -91,6 +92,7 @@ Face := {
 	vvar : [Present(TableVvar), Absent],
 	mvar : [Present(TableVar.Mvar), Absent],
 	outlines : [Present({ points : TableGlyfPoints, gvar : TableGvar }), Absent],
+	cff : [Present(TableCff), Absent],
 	layout_var : LayoutVar,
 	gsub_variations : LayoutVar.FeatureVariations,
 	gpos_variations : LayoutVar.FeatureVariations,
@@ -116,7 +118,7 @@ Face := {
 	## `HVAR` and `MVAR` stores there, whether any coordinate is not zero
 	## (at the default location every delta is zero), and the `gvar`
 	## location state. The `GDEF` store's state travels with the kerning.
-	Location : { coords : List(I16), hvar : List(U32), vvar : List(U32), mvar : List(U32), varied : Bool, gvar : TableGvar.Location }
+	Location : { coords : List(I16), hvar : List(U32), vvar : List(U32), mvar : List(U32), cff : TableCff.Location, varied : Bool, gvar : TableGvar.Location }
 
 	Metrics : {
 		ascent : I32,
@@ -129,7 +131,7 @@ Face := {
 	}
 
 	default_location : Location
-	default_location = { coords: [], hvar: [], vvar: [], mvar: [], varied: False, gvar: { coords: [], nonzero: False, shared: [] } }
+	default_location = { coords: [], hvar: [], vvar: [], mvar: [], cff: [], varied: False, gvar: { coords: [], nonzero: False, shared: [] } }
 
 	## What reading found in the variation tables: the parts to use, the
 	## problems that drop them all (`problems`), and those that drop only
@@ -413,6 +415,20 @@ Face := {
 				}
 				# Static outlines are prepared too: path and point queries need
 				# them even when the font has no variation space.
+				cff_read = Face.read_cff(
+					bytes,
+					tables,
+					glyph_count,
+					match fvar_axes {
+						Present(n) => n
+						Absent => 0
+					},
+				)
+				$required = $required.concat(cff_read.problems)
+				cff_default = match cff_read.prepared {
+					Present(prepared) => TableCff.location(prepared, [])
+					Absent => []
+				}
 				static_outlines = match points {
 					Read(Ok(p)) => Present({ points: p, gvar: TableGvar.absent })
 					_ => Absent
@@ -485,9 +501,10 @@ Face := {
 									static_outlines
 								},
 								layout_var: if (keep_variations) lv else no_lv,
+								cff: cff_read.prepared,
 								gsub_variations: if (keep_variations) gsub_fv else LayoutVar.no_feature_variations,
 								gpos_variations: if (keep_variations) gpos_fv else LayoutVar.no_feature_variations,
-								location: Face.default_location,
+								location: { ..Face.default_location, cff: cff_default },
 								max_depth: options.max_depth,
 								dropped: $optional,
 							})
@@ -814,7 +831,7 @@ Face := {
 	location : Face, List({ tag : U32, value : Dec }) -> Location
 	location = |face, given|
 		match face.space {
-			Absent => Face.default_location
+			Absent => face.location
 			Present(space) => Face.location_at(face, TableVar.coords_for(space, given))
 		}
 
@@ -838,7 +855,11 @@ Face := {
 			Present(v) if varied => TableVvar.scalars(v, coords)
 			_ => []
 		}
-		{ coords, hvar, vvar, mvar, varied, gvar }
+		cff = match face.cff {
+			Present(prepared) => TableCff.location(prepared, coords)
+			Absent => []
+		}
+		{ coords, hvar, vvar, mvar, cff, varied, gvar }
 	}
 
 	## The face moved to a location: every query, and shaping (kerning and
@@ -946,6 +967,34 @@ Face := {
 
 	code_points : Face -> List(U32)
 	code_points = |face| TableCmap.code_points(face.cmap, face.glyph_count)
+
+	## Outline programs are required when present, like TrueType glyf.
+	## Validate both independent CFF tables before choosing CFF2 over CFF1.
+	read_cff : List(U8), List(Sfnt.Table), U64, U64 -> { prepared : [Present(TableCff), Absent], problems : List(Problem) }
+	read_cff = |bytes, tables, glyphs, cff_axes| {
+		var $prepared = Absent
+		var $problems = []
+		for entry in [{ tag: "CFF ", version: Cff1 }, { tag: "CFF2", version: Cff2 }] {
+			match Sfnt.located(bytes, tables, entry.tag, 0) {
+				Missing => {}
+				Bad(at) => {
+					$problems = $problems.append(Sfnt.bad(entry.tag, at))
+				}
+				Found(found) => match TableCff.read(found.data, glyphs, cff_axes, entry.version) {
+					Ok(value) => {
+						$prepared = Present(value)
+					}
+					Err(Bad(problem)) => {
+						$problems = $problems.append(Sfnt.bad(entry.tag, found.offset + problem.offset))
+					}
+					Err(OverLimit(bound)) => {
+						$problems = $problems.append(OverLimit(bound))
+					}
+				}
+			}
+		}
+		{ prepared: $prepared, problems: $problems }
+	}
 
 	## Validate the optional vertical metric pair as one usable unit. A
 	## missing dependency is reported, never supplied by repairing bytes.
@@ -1086,7 +1135,10 @@ Face := {
 			_ =>
 				match face.boxes.get(id) {
 					Ok(b) if b.x_min <= b.x_max and b.y_min <= b.y_max => Extents({ x_min: b.x_min, y_min: b.y_min, x_max: b.x_max, y_max: b.y_max })
-					Ok(_) if !face.has_glyf => Unknown
+					Ok(_) if !face.has_glyf => match face.cff {
+						Present(prepared) => TableCff.extents(prepared, face.location.cff, id)
+						Absent => Unknown
+					}
 					_ => Empty
 				}
 		}
@@ -1172,7 +1224,10 @@ Face := {
 		Absent => if id >= face.glyph_count {
 			Outline([])
 		} else {
-			Unknown
+			match face.cff {
+				Present(prepared) => Outline(TableCff.commands(prepared, face.location.cff, id))
+				Absent => Unknown
+			}
 		}
 	}
 
