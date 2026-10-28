@@ -9,6 +9,23 @@ GraphitePosition :: {}.{
 	Copied : { state : GraphiteSlots, operations : U64, stopped : U64, aborted : Bool }
 	Frame : { id : U64, x : U32, y : U32 }
 
+	# Explicit ATT_TO initializes one horizontal endpoint when making a new
+	# edge. Input order comes from the VM's immutable rule window, including
+	# deleted targets and reversed passes. This is the endpoint advance,
+	# even when the two inputs are non-adjacent; it is not a summed distance.
+	# Copying an attachment instead uses the link-only .attach below.
+	attach_with_direction : GraphiteSlots, U64, U64, Bool, Bool, U64 -> Applied
+	attach_with_direction = |state, id, parent, parent_after, rtl, budget| {
+		previous = GraphiteSlots.get(state, id).parent
+		result = GraphitePosition.attach(state, id, parent, budget)
+		if result.stopped != 0 or previous == parent or GraphiteSlots.get(result.state, id).parent != parent {
+			return result
+		}
+		slot = GraphiteSlots.get(result.state, id)
+		updated = if (parent_after != rtl) { ..slot, with_x: slot.advance_x } else { ..slot, attach_x: GraphiteSlots.get(result.state, parent).advance_x }
+		{ state: GraphiteSlots.set(result.state, id, updated), operations: result.operations, stopped: result.stopped }
+	}
+
 	# PUT_COPY may populate an independent output slot from a live or
 	# protected input. It never copies the input's child/sibling links.
 	# Overwriting another slot already participating in an attachment is a
@@ -200,7 +217,21 @@ GraphitePosition :: {}.{
 				origin_x = TableVar.f32_sub($pen_x, $left)
 				for member in $members {
 					slot = $nodes.get(member) ?? GraphiteSlots.no_slot
-					$nodes = $nodes.set(member, { ..slot, position_x: TableVar.f32_add(slot.position_x, origin_x), position_y: TableVar.f32_add(slot.position_y, $pen_y) }) ?? []
+					at = slot.user_start + user_count
+					enabled = ($users.get(at + 31) ?? 0) != 0
+					ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
+					oy = if (enabled) ($users.get(at + 9) ?? 0).to_u32_wrap() else 0
+					# Advances/rebasing above use authored geometry. Physical
+					# origins are a second parent-first walk: a moved parent
+					# moves its descendants, with binary32 rounding at each edge.
+					point = if member == root_id {
+						{ x: TableVar.f32_add(origin_x, TableVar.f32_add(root_x, ox)), y: TableVar.f32_add($pen_y, TableVar.f32_add(root.shift_y, oy)) }
+					} else {
+						parent = $nodes.get(slot.parent) ?? GraphiteSlots.no_slot
+						shift = TableVar.f32_add(GraphitePosition.shift_x(slot, rtl), slot.justify_width)
+						{ x: TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(slot.attach_x, slot.with_x), parent.position_x), TableVar.f32_add(shift, ox)), y: TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(slot.attach_y, slot.with_y), parent.position_y), TableVar.f32_add(slot.shift_y, oy)) }
+					}
+					$nodes = $nodes.set(member, { ..slot, position_x: point.x, position_y: point.y }) ?? []
 				}
 				# Cache full-cluster advances without overwriting authored metrics.
 				$users = $users.set(root.user_start + user_count + 29, cluster_x.to_i32_wrap()) ?? []
@@ -411,4 +442,37 @@ expect {
 	b = GraphiteSlots.set(a.state, 2, { ..root, justify_width: TableVar.f32_from_int(-300) })
 	c = GraphitePosition.position(b, False, 100)
 	c.state.advance_x == TableVar.f32_from_int(984) and GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-220) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-300)
+}
+
+expect {
+	input = geometry_fixture
+	a = GraphitePosition.attach_with_direction(input, 1, 2, True, False, 100)
+	b = GraphitePosition.attach_with_direction(input, 1, 2, True, True, 100)
+	GraphiteSlots.get(a.state, 1).with_x == TableVar.f32_from_int(601) and GraphiteSlots.get(a.state, 1).attach_x == TableVar.f32_from_int(100) and GraphiteSlots.get(b.state, 1).attach_x == TableVar.f32_from_int(602) and GraphiteSlots.get(b.state, 1).with_x == TableVar.f32_from_int(20)
+}
+expect {
+	input = geometry_fixture
+	a = GraphitePosition.attach(input, 1, 2, 100)
+	b = GraphitePosition.attach_with_direction(a.state, 1, 2, True, False, 100)
+	GraphiteSlots.get(b.state, 1).with_x == TableVar.f32_from_int(20)
+}
+
+expect {
+	a = GraphitePosition.attach(geometry_fixture, 1, 2, 100)
+	b = GraphiteSlots.set_extra(GraphiteSlots.set_extra(a.state, 2, 31, 1), 2, 8, TableVar.f32_from_int(-220).to_i32_wrap())
+	c = GraphitePosition.position(b, False, 100)
+	GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-140) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-220) and c.state.advance_x == TableVar.f32_from_int(1284)
+}
+expect {
+	# Public C-API witness with512 preceding32768-unit glyphs. Rounding
+	# the parent's physical position before adding the attachment delta
+	# differs from adding a summed collision offset to the child's base.
+	n = TableVar.f32_from_int
+	p = GraphiteSlots.append(GraphiteSlots.make(0, 3), { ..GraphiteSlots.no_slot, advance_x: n(16777216) })
+	a = GraphiteSlots.append(p.state, { ..GraphiteSlots.no_slot, advance_x: n(601), attach_x: n(5), attach_y: n(170) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602), shift_x: n(1) })
+	c = GraphitePosition.attach(b.state, a.id, b.id, 100)
+	d = GraphiteSlots.set_extra(GraphiteSlots.set_extra(c.state, b.id, 31, 1), b.id, 8, TableVar.f32_from_ratio(-3460, 11).to_i32_wrap())
+	e = GraphitePosition.position(d, False, 100)
+	GraphiteSlots.get(e.state, b.id).position_x == n(16776902) and GraphiteSlots.get(e.state, a.id).position_x == n(16776907)
 }
