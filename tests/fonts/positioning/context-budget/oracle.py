@@ -21,11 +21,11 @@ def main():
   else:texts=['a']
   for text in texts:
    for direction in ['ltr','rtl']:
-    c={'id':f'{path.stem}-{len(cases)}','font':path.name,'text':text,'direction':direction,'depth':64,'operations':1024}
+    c={'id':f'{path.stem}-{len(cases)}','font':path.name,'text':text,'direction':direction,'depth':64,'operations':4096}
     c['font_sha256']=hashlib.sha256(path.read_bytes()).hexdigest();c['oracle']=shape(path,text,direction);cases.append(c)
  for name in ['many-8','ignored-8192','nested-order','cycle-8192','fanout-8192']:
   for depth in [0,1,2,3]:
-   cases.append({'id':f'{name}-depth{depth}','font':name+'.ttf','font_sha256':hashlib.sha256((HERE/(name+'.ttf')).read_bytes()).hexdigest(),'text':'a\u0301' if name=='nested-order' else 'a','direction':'ltr','depth':depth,'operations':1024,'contract_only':True})
+   cases.append({'id':f'{name}-depth{depth}','font':name+'.ttf','font_sha256':hashlib.sha256((HERE/(name+'.ttf')).read_bytes()).hexdigest(),'text':'a\u0301' if name=='nested-order' else 'a','direction':'ltr','depth':depth,'operations':4096,'contract_only':True})
  result={'harfbuzz':hb.version_string(),'uharfbuzz':hb.__version__,'fontTools':fontTools.__version__,'cases':cases}
  (HERE/'cases.jsonc').write_text('// Generated with oracle.py. Resource failures are not glyph oracles.\n'+json.dumps(result,ensure_ascii=False,indent=2)+'\n')
  print(len(cases),'cases;',sum('reference_failure' in c.get('oracle',{}) for c in cases),'honest reference failures')

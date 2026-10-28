@@ -19,7 +19,7 @@ main! = |_args| {
 						Ok(f) => f
 						Err(ps) => crash Str.inspect(ps)
 					}
-					plan = Font.plan(font, Font.ShapeOptions.{ script: "Latn", language: "en", direction: if (direction == "rtl") RightToLeft else LeftToRight, limits: Font.ShapeLimits.{ operations: U32.from_str(factor) ?? 1024 } })
+					plan = Font.plan(font, Font.ShapeOptions.{ script: "Latn", language: "en", direction: if (direction == "rtl") RightToLeft else LeftToRight, limits: Font.ShapeLimits.{ operations: U32.from_str(factor) ?? 4096 } })
 					result = Font.shape_checked(font, plan, text)
 					{ run, budgets } = match result {
 						Ok(completed) => { run: completed, budgets: [] }

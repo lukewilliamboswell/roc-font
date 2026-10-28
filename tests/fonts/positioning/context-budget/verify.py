@@ -8,7 +8,7 @@ from _common import load_jsonc
 
 def resource(case):
  """Literal DFS call interpreter; top-level application is not charged."""
- name=case['font'];limit=max(16384,case['operations']*len(case['text']))
+ name=case['font'];limit=max(65536,case['operations']*len(case['text']))
  depth=case['depth'];calls=0;leaves=0;stopped=set();stack=[]
  if name.startswith('cycle-'):tree={0:[0]*8192}
  elif name.startswith('fanout-'):tree={0:[1]*8192,1:[2]*8192}
@@ -44,6 +44,7 @@ def main():
  for c in cases:
   got=actual[c['id']];expected=c.get('oracle',{});model=resource(c)
   if model:
+   if not c.get('contract_only') and 'reference_failure' not in expected:assert expected['advances']==[[model['advance'],0]],(c['id'],expected,model)
    if got['advances']!=[[model['advance'],0]] or sorted(got['budgets'])!=model['budgets']:errors.append((c['id'],model,got))
   elif c.get('contract_only') and c['font']=='nested-order.ttf':
    target=0 if c['depth']==0 else 7 if c['depth']==1 else -396

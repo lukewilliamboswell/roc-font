@@ -45,7 +45,7 @@ expect match checked(cycle_file, 3, "a") {
 	_ => False
 }
 expect match checked(fanout_file, 2, "a") {
-	Err(OverBudget(r)) => r.budgets == [Operations] and r.run.advances == [{ x: 16892, y: 0 }]
+	Err(OverBudget(r)) => r.budgets == [Operations] and r.run.advances == [{ x: 66038, y: 0 }]
 	_ => False
 }
 expect {

@@ -81,7 +81,7 @@ check = |font, plan, text, run| {
 	if run.glyphs.any(|g| g >= Font.glyph_count(font)) or run.clusters.any(|i| i >= text.to_utf8().len()) {
 		crash "context positioning escaped input"
 	}
-	if n > 16384 {
+	if n > 65536 {
 		crash "GPOS grew output"
 	}
 	{}
