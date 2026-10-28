@@ -10,7 +10,7 @@ import font.Font
 ## ligature. A renderer adds each offset to its pen position before drawing
 ## the glyph, then moves the pen by the advance. Values are font units.
 main! = |_args| {
-	run = Font.shape(Font.serif, "x\u(0304)\u(0307) fi\u(0301)", Font.ShapeOptions.{})
+	run = Font.shape(Font.serif, "x\u(0304)\u(0307) fi\u(035C)", Font.ShapeOptions.{})
 	var $pen = 0.I64
 	for i in 0..<run.glyphs.len() {
 		offset = run.offsets.get(i) ?? { x: 0, y: 0 }
