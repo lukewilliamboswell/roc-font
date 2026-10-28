@@ -474,7 +474,10 @@ Shaper :: {}.{
 			Ok(m) => m.gpos != LayoutCommon.no_feature
 			Err(_) => False
 		}
-		apply_kern = (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
+		fallback_position = !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
+		# Legacy kern follows the shaper's fallback positioning policy;
+		# prepared GPOS lookups above remain independent of this fallback.
+		apply_kern = fallback_position and (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
 		kern = if (apply_kern and kern_mask != 0) Kern(kern_mask) else NoKern
 		# Ranges, in the caller's order: a later one wins where they overlap.
 		var $ranges = []
@@ -498,7 +501,7 @@ Shaper :: {}.{
 			staged,
 			model,
 			zero_marks: if (myanmar or use_model) Early else if (indic or khmer or hangul) Keep else Late,
-			fallback_position: !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo"),
+			fallback_position,
 			gpos,
 			gpos_auto_zwj,
 			kern,
