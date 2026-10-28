@@ -1,0 +1,6430 @@
+{
+  "schema": 1,
+  "about": "Exact Sinhala USE shaping in two renamed static real Noto families: split vowels, reph, conjuncts, controls, dotted circles, long64-bounded callbacks, feature choices and all pinned Sinhala invalid-vowel rules.",
+  "cases": [
+    {
+      "id": "sinh-sans-0-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-0-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-0-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-0-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-1-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-1-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-2-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-2-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-3-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d86\u0dba\u0dd4\u0db6\u0ddd\u0dc0\u0db1\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-3-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d86\u0dba\u0dd4\u0db6\u0ddd\u0dc0\u0db1\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-4-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-4-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-4-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-4-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-5-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-5-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-6-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0da5\u0dcf\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-6-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0da5\u0dcf\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-7-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-7-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-8-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-8-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-8-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-8-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-9-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-9-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-10-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-10-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-11-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-11-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-12-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-12-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-12-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-12-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-13-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd4",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-13-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd4",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-14-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd6",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-14-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd6",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-15-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-15-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-16-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-16-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-16-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-16-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-17-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-17-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-18-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-18-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-19-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-19-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-20-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-20-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-20-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-20-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-21-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-21-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-22-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-22-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-23-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8c",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-23-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8c",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-24-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-24-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-24-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-24-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-25-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8e",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-25-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8e",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-26-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8f",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-26-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8f",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-27-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d90",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-27-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d90",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-28-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-28-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-28-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-28-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-29-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d92",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-29-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d92",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-30-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d93",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-30-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d93",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-31-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d94",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-31-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d94",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-32-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-32-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-32-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-32-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-33-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d96",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-33-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d96",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-34-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0df2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-34-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0df2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-35-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0df3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-35-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0df3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-36-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-36-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-36-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-36-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-37-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-37-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u0d9b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-38-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db1\u0dca\u0daf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-38-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db1\u0dca\u0daf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-39-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db1\u0dca\u0daf\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-39-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0db1\u0dca\u0daf\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-40-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-40-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-40-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-40-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-41-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dbb\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-41-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dbb\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-42-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dbb\u0dca\u200d\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-42-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dbb\u0dca\u200d\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-43-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200d\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-43-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200d\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-44-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-44-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-44-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-44-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-45-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u200d\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-45-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u200d\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-46-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u200c\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-46-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u200c\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-47-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u034f\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-47-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u034f\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-48-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-48-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-48-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-48-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-49-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-49-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-50-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-50-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-51-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-51-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dd9\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-52-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-52-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-52-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-52-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-53-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-53-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u25cc\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-54-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe01",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-54-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe01",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-55-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-55-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-56-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-56-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-56-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-56-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-57-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-57-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-58-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-58-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-59-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-59-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-60-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-60-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-60-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-60-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-61-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "(\u0dc3\u0dd2\u0d82\u0dc4\u0dbd) 123",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-61-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "(\u0dc3\u0dd2\u0d82\u0dc4\u0dbd) 123",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-62-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-62-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-63-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-63-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-64-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-64-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-64-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-64-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-65-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8b\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-65-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8b\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-66-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-66-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8d\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-67-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8f\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-67-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d8f\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-68-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-68-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-68-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-68-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-69-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-69-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-70-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-70-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-71-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-71-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-72-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-72-ltr-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-72-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-72-rtl-c1",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-73-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-73-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d91\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-74-ltr-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d94\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-74-rtl-c0",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0d94\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-rphf",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "rphf=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-pref",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "pref=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-pres",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "pres=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-abvs",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "abvs=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-blws",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "blws=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-psts",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "psts=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-haln",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "haln=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-ccmp",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "ccmp=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-locl",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "locl=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-rlig",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-mark",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "mark=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-sans-disable-mkmk",
+      "font": "UseSinhSans.ttf",
+      "font_sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "mkmk=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-0-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-0-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-0-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-0-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-1-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-1-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-2-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-2-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-3-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d86\u0dba\u0dd4\u0db6\u0ddd\u0dc0\u0db1\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-3-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d86\u0dba\u0dd4\u0db6\u0ddd\u0dc0\u0db1\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-4-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-4-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-4-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-4-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dbb\u0dca\u0db8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-5-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-5-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-6-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0da5\u0dcf\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-6-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0da5\u0dcf\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-7-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-7-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-8-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-8-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-8-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-8-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-9-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-9-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-10-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-10-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-11-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-11-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-12-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-12-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-12-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-12-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-13-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd4",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-13-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd4",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-14-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd6",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-14-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd6",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-15-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-15-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-16-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-16-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-16-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-16-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-17-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-17-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-18-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-18-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-19-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-19-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-20-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-20-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-20-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-20-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-21-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-21-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-22-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-22-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-23-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8c",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-23-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8c",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-24-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-24-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-24-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-24-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-25-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8e",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-25-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8e",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-26-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8f",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-26-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8f",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-27-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d90",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-27-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d90",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-28-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-28-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-28-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-28-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-29-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d92",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-29-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d92",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-30-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d93",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-30-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d93",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-31-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d94",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-31-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d94",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-32-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-32-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-32-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-32-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d95",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-33-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d96",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-33-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d96",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-34-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0df2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-34-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0df2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-35-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0df3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-35-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0df3",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-36-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-36-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-36-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-36-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-37-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-37-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u0d9b",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-38-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db1\u0dca\u0daf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-38-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db1\u0dca\u0daf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-39-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db1\u0dca\u0daf\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-39-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0db1\u0dca\u0daf\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-40-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-40-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-40-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-40-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dad\u0dca\u200d\u0dbb",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-41-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dbb\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-41-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dbb\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-42-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dbb\u0dca\u200d\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-42-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dbb\u0dca\u200d\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-43-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200d\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-43-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200d\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-44-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-44-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-44-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-44-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dca\u200c\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-45-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u200d\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-45-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u200d\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-46-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u200c\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-46-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u200c\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-47-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u034f\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-47-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u034f\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-48-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-48-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-48-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-48-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-49-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-49-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd2",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-50-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-50-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-51-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-51-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dd9\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-52-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-52-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-52-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-52-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-53-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-53-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u25cc\u0dca\u0d9a",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-54-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe01",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-54-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe01",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-55-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-55-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-56-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-56-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-56-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-56-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-57-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-57-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-58-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-58-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-59-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-59-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d9a\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00\u0dd9\ufe00",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-60-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-60-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-60-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-60-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "abc \u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-61-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "(\u0dc3\u0dd2\u0d82\u0dc4\u0dbd) 123",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-61-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "(\u0dc3\u0dd2\u0d82\u0dc4\u0dbd) 123",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-62-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-62-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dcf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-63-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-63-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd0",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-64-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-64-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-64-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-64-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d85\u0dd1",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-65-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8b\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-65-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8b\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-66-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-66-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8d\u0dd8",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-67-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8f\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-67-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d8f\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-68-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-68-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-68-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-68-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dca",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-69-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-69-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dd9",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-70-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-70-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dda",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-71-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-71-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddc",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-72-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-72-ltr-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-72-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-72-rtl-c1",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0ddd",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-73-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-73-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d91\u0dde",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-74-ltr-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d94\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "ltr",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-74-rtl-c0",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0d94\u0ddf",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "direction": "rtl",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-rphf",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "rphf=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-pref",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "pref=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-pres",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "pres=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-abvs",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "abvs=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-blws",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "blws=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-psts",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "psts=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-haln",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "haln=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-ccmp",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "ccmp=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-locl",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "locl=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-rlig",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "rlig=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-mark",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "mark=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "sinh-serif-disable-mkmk",
+      "font": "UseSinhSerif.ttf",
+      "font_sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+      "text": "\u0dc1\u0dca\u200d\u0dbb\u0dd3 \u0dbd\u0d82\u0d9a\u0dcf\u0dc0 \u0db4\u0dca\u200d\u0dbb\u0dc1\u0dca\u0db1\u0dba",
+      "options": {
+        "script": "Sinh",
+        "language": "si",
+        "features": [
+          "mkmk=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "google_fonts_commit": "ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b",
+  "families": [
+    {
+      "script": "Sinh",
+      "block": 3456,
+      "style": "Sans",
+      "sources": [
+        {
+          "file": "NotoSansSinh.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanssinhala/NotoSansSinhala%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "9bd93e407a278075be403324063bc94a7e306c44de4df81214e932330c22eecf",
+          "size": 1181956
+        },
+        {
+          "file": "NotoSansSinh-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanssinhala/OFL.txt",
+          "sha256": "2d6f7c43bce61f4b1919379f901bc613484f5285f520b6d29bb7c1f31b17e841",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "UseSinhSans.ttf",
+        "sha256": "ce4250d11aa46b33881e9091eeb6ae6967f1e2ee538558930b9f74a3d81f85c8",
+        "size": 207068,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "latn",
+          "sinh"
+        ]
+      }
+    },
+    {
+      "script": "Sinh",
+      "block": 3456,
+      "style": "Serif",
+      "sources": [
+        {
+          "file": "NotoSerifSinh.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifsinhala/NotoSerifSinhala%5Bwdth%2Cwght%5D.ttf",
+          "sha256": "2b0df6b8bde56d3b934ba89fada82486b1ec50ee06842c81be36496f8c9b5ac9",
+          "size": 1026928
+        },
+        {
+          "file": "NotoSerifSinh-OFL.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifsinhala/OFL.txt",
+          "sha256": "2d6f7c43bce61f4b1919379f901bc613484f5285f520b6d29bb7c1f31b17e841",
+          "size": 4383
+        }
+      ],
+      "subset": {
+        "file": "UseSinhSerif.ttf",
+        "sha256": "76d39eaa3b9fca1c64cab4cee0eb986e00f9a0a5d9d1f679efc91f6b1f1efe9b",
+        "size": 208452,
+        "source_axes": {
+          "wght": 400,
+          "wdth": 100
+        },
+        "ot_scripts": [
+          "DFLT",
+          "latn",
+          "sinh"
+        ]
+      }
+    }
+  ]
+}
