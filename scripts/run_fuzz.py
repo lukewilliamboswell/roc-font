@@ -123,7 +123,7 @@ TARGETS: dict[str, TargetConfig] = {
         contract=(
             "reading is total and deterministic; a rejection names a problem; "
             "an accepted font has finite metrics and total queries; "
-            "substitution keeps clusters in range and grows at most 4n+32; "
+            "substitution keeps clusters in range and grows at most max(256n,65536); "
             "reading cost grows linearly (2 vs 16 copies) and leaks nothing"
         ),
     ),
@@ -136,7 +136,7 @@ TARGETS: dict[str, TargetConfig] = {
         timeout=10,
         contract=(
             "substitution is deterministic, keeps clusters in range and "
-            "grows at most 4n+32 (36 per character); kerning is one finite "
+            "grows at most max(256n,65536); kerning is one finite "
             "value per glyph; widths are deterministic and finite; shaping "
             "cost grows linearly (2 vs 16 copies) and leaks nothing"
         ),

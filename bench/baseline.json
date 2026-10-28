@@ -456,6 +456,27 @@
     "version": "Roc compiler version nightly-2026-10-27-de79a0f"
   },
   "feature_cases": {
+    "aat-insertion-budget/1": {
+      "allocations": 34,
+      "case_sha256": "6c1dc20e1ebb5a568eed2eaa639088a22ebabf77880d67acfe381c85835b7337",
+      "checksum": "20136577",
+      "font_sha256": "867a26871e368748a8a1203a2571c0d84c8bd51c8951f604033d3f7b1fa0b564",
+      "leaked": 0
+    },
+    "aat-insertion-budget/16": {
+      "allocations": 34,
+      "case_sha256": "4075f7cdaaf22fd0b4114433d6fabf8b508cf61e01743b9bea66d8ed44e41aaf",
+      "checksum": "20146312",
+      "font_sha256": "867a26871e368748a8a1203a2571c0d84c8bd51c8951f604033d3f7b1fa0b564",
+      "leaked": 0
+    },
+    "aat-insertion-budget/4": {
+      "allocations": 34,
+      "case_sha256": "4ffb99cb4ded9adcf33d7bbbee87cba765641643be8be91d250be26085b50e49",
+      "checksum": "20138506",
+      "font_sha256": "867a26871e368748a8a1203a2571c0d84c8bd51c8951f604033d3f7b1fa0b564",
+      "leaked": 0
+    },
     "aat-mort/read/16": {
       "allocations": 72,
       "case_sha256": "a33f3c91308bcb76e47e457a106e94eee57c49b7de43ec556b2770af3022c19f",

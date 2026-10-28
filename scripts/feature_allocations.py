@@ -23,10 +23,15 @@ SOURCES = {
     'vertical': 'bench/vertical/alloc.roc',
     'aat-position': 'bench/aat-position/alloc.roc',
     'aat-morx': 'bench/aat-morx/alloc.roc',
+    'aat-insertion-budget': 'bench/roc/alloc.roc',
     'aat-mort': 'tests/fonts/aat-mort/alloc.roc',
     'graphite-read': 'tests/fonts/graphite/read_alloc.roc',
     'graphite-shape': 'tests/fonts/graphite/shape_alloc.roc',
 }
+
+# Preserved partial-run checksums from the unchanged public native consumer.
+# Updating allocation counts must not change the insertion budget's result.
+INSERTION_BUDGET_CHECKSUMS = {1: '20136577', 4: '20138506', 16: '20146312'}
 
 def graphite_cases():
     directory = ROOT / 'tests/fonts/graphite-geometry/benchmark'
@@ -40,6 +45,10 @@ def graphite_cases():
 
 def cases():
     """The exact inputs used by the independently referenced benchmarks."""
+    insertion_font = 'tests/fonts/aat-insertion-budget/fuzz-timeout-867a2687.ttf'
+    for size in [1, 4, 16]:
+        header = f'shape\n{(ROOT / insertion_font).stat().st_size}\n'.encode()
+        yield 'aat-insertion-budget', f'aat-insertion-budget/{size}', insertion_font, header
     for key, path, header, _ in graphite_cases():
         yield 'graphite-shape', key, path, header
     for size in [16, 64, 192]:
@@ -112,6 +121,8 @@ def main():
                     continue
                 font = (ROOT / path).read_bytes()
                 data = header + font
+                if group == 'aat-insertion-budget':
+                    data += b'A' * int(key.rsplit('/', 1)[1])
                 file = WORK / (key.replace('/', '-') + '.input')
                 file.write_bytes(data)
                 done = subprocess.run([str(binary), 'replay', str(file)], capture_output=True, text=True, timeout=120)
@@ -130,6 +141,8 @@ def main():
                     failures.append(f'{key}: input font differs from the independently referenced fixture')
                 elif group == 'graphite-shape' and row['checksum'] != str(graphite_reference[key]['output_checksum']):
                     failures.append(f'{key}: output differs from the cached independent reference checksum')
+                elif group == 'aat-insertion-budget' and row['checksum'] != INSERTION_BUDGET_CHECKSUMS[int(key.rsplit('/', 1)[1])]:
+                    failures.append(f'{key}: output differs from the preserved pre-optimization partial run')
                 elif row['leaked']:
                     failures.append(f'{key}: leaked {row["leaked"]} allocations')
                 elif args.update:
