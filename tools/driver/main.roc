@@ -196,7 +196,7 @@ glyphs = |font, settings, shaping, scalars| {
 	for i in 0..<shaped.glyphs.len() {
 		advance = shaped.advances.get(i) ?? { x: 0, y: 0 }
 		offset = shaped.offsets.get(i) ?? { x: 0, y: 0 }
-		$out = $out.append({ glyph: (shaped.glyphs.get(i) ?? 0).to_u64(), cluster: (shaped.clusters.get(i) ?? 0).to_u64(), dx: offset.x.to_i64(), dy: offset.y.to_i64(), ax: advance.x.to_i64(), ay: advance.y.to_i64() })
+		$out = $out.append({ glyph: (shaped.glyphs.get(i) ?? 0).to_u64(), cluster: (shaped.clusters.get(i) ?? 0).to_u64(), dx: offset.x.to_i64(), dy: offset.y.to_i64(), ax: advance.x.to_i64(), ay: advance.y.to_i64(), flags: if (Font.is_unsafe_to_break(shaped.flags.get(i) ?? 0)) 1 else 0 })
 	}
 	$out
 }

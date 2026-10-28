@@ -29,7 +29,7 @@ Case :: {}.{
 
 	## The output settings of a shaping request. `font_size` is 0 when not
 	## given.
-	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64, text_range : [Whole, Range({ start : U64, end : U64 })] }
+	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64, text_range : [Whole, Range({ start : U64, end : U64 })], show_flags : Bool }
 
 	## Where to measure, mirroring `Font.Variation` (whose field types these
 	## are, structurally) and named instances.
@@ -65,7 +65,7 @@ Case :: {}.{
 	default_shaping = { script: "", language: "", direction: FromScript, features: [], clusters: Graphemes }
 
 	## One positioned output glyph, in font units.
-	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64 }
+	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64, flags : U8 }
 
 	## Parse one request line. A malformed line yields its tag (the text
 	## before the first tab, or the whole line) and what was wrong.
@@ -102,7 +102,7 @@ Case :: {}.{
 	## the other location flags.
 	flags : Str -> Try(Flags, Str)
 	flags = |field| {
-		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole }
+		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole, show_flags: False }
 		var $face = 0.U32
 		var $instance = 0.U32
 		var $has_instance = False
@@ -129,6 +129,8 @@ Case :: {}.{
 					$s = { ..$s, advances: False }
 				} else if flag == "utf8-clusters" {
 					$s = { ..$s, utf8: True }
+				} else if flag == "show-flags" {
+					$s = { ..$s, show_flags: True }
 				} else if flag.starts_with("text-range=") {
 					match flag.drop_prefix("text-range=").split_on(":") {
 						[start, end] => match (Case.decimal(start), Case.decimal(end)) {
@@ -465,7 +467,8 @@ Case :: {}.{
 				$x = $x + g.ax
 				$y = $y + g.ay
 			}
-			$parts = $parts.append("${g.glyph.to_str()}${cluster}${offset}${advance}")
+			flag_text = if (s.show_flags and g.flags != 0) "#${g.flags.to_str()}" else ""
+			$parts = $parts.append("${g.glyph.to_str()}${cluster}${offset}${advance}${flag_text}")
 		}
 		"[${Str.join_with($parts, "|")}]"
 	}
@@ -518,7 +521,7 @@ Case :: {}.{
 }
 
 plain : Case.Settings
-plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole }
+plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole, show_flags: False }
 
 expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
@@ -570,7 +573,7 @@ expect Case.extents([{ glyph: 0, box: Box({ x_min: 80, y_min: -104, x_max: 1120,
 expect Case.utf8_offsets([0x41, 0xE9, 0x20AC, 0x1F600]) == [0, 1, 3, 6, 10]
 
 expect {
-	Case.serialize(plain, [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0 }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7 }]) == "[2=0+1273|456=1@-5,10+1273,7]"
+	Case.serialize(plain, [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0, flags: 0 }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7, flags: 0 }]) == "[2=0+1273|456=1@-5,10+1273,7]"
 }
 
 expect Case.serialize(plain, []) == "[]"
@@ -579,10 +582,10 @@ expect {
 	# With no-clusters and no-advances (hb-shape --ned), offsets accumulate
 	# the advances, as hb_buffer_serialize does.
 	s = { ..plain, clusters: False, advances: False }
-	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0 }]) == "[1|2@100,0]"
+	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0, flags: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0, flags: 0 }]) == "[1|2@100,0]"
 }
 
-expect Case.width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
+expect Case.width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0, flags: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0, flags: 0 }]) == "width:70"
 expect Case.width([]) == "width:0"
 
 expect {
@@ -598,3 +601,5 @@ expect Case.flags("feature=liga:1:0") == Err("feature=liga:1:0")
 expect Case.flags("feature=:1:0:*") == Err("feature=:1:0:*")
 expect Case.flags("feature=liga:4294967296:0:*") == Err("feature=liga:4294967296:0:*")
 expect Case.flags("feature=liga:on:0:*") == Err("feature=liga:on:0:*")
+
+expect Case.serialize({ ..plain, show_flags: True }, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 500, ay: 0, flags: 1 }]) == "[1=0+500#1]"
