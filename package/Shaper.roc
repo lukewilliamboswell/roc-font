@@ -510,7 +510,10 @@ Shaper :: {}.{
 		}
 		apply_kerx = prefer_kerx or (has_kerx and (!has_gpos_kern or !apply_gpos))
 		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
-		fallback_position = !aat_dumber and !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
+		# The reference saves the original script's fallback policy before
+		# replacing its substitution model for Apple programs. In particular,
+		# Hebrew still positions marks when morx supplies no positioning.
+		fallback_position = !ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script) and !(Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3') and !(ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")) and !["Khmr", "Thai", "Laoo"].map(Shaper.tag).contains(ShaperTags.script_of(options.script))
 		apply_kern = !apply_kerx and fallback_position and (!has_gpos_kern or !apply_gpos) and TableAatKern.has_data(face.aat_kern) and (options.use_font_programs or Bytes.u32(face.aat_kern.bytes, 0) != 0x00010000)
 		kern = NoKern
 		gpos_steps =
