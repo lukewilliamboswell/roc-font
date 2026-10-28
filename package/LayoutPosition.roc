@@ -26,8 +26,32 @@ LayoutPosition := {
 	no_sub = { kind: 0, at: 0, context: 0, d0: 0, d1: 0, d2: 0 }
 	State : { items : List(LayoutGsub.Item), ax : List(I64), dx : List(I64), dy : List(I64), parents : List(U64), attachments : List(U8), stopped : U64, operations : U64 }
 	Limits : { budget : U64, depth : U64 }
-	Call : { index : U64, at : U64, depth : U64 }
-	Match : { state : State, next : U64, applied : Bool, calls : List(Call) }
+	ContextCalls : { records : U64, records_len : U64, next : U64, positions : List(U64), depth : U64 }
+	Frame : { records : U64, records_len : U64, next : U64, positions_start : U64, positions_len : U64, depth : U64 }
+	no_frame : Frame
+	no_frame = { records: 0, records_len: 0, next: 0, positions_start: 0, positions_len: 0, depth: 0 }
+	Match : { state : State, next : U64, applied : Bool, calls : [Calls(ContextCalls), NoCalls] }
+
+	## Record lists stay in the checked prepared pool. At most one frame
+	## and64 matched glyph positions per permitted nesting level are live.
+	push_context : ContextCalls, List(Frame), List(U64) -> { frames : List(Frame), positions : List(U64) }
+	push_context = |calls, frames, pool| {
+		{ records, records_len, next, positions, depth } = calls
+		start = pool.len()
+		frame = { records, records_len, next, positions_start: start, positions_len: positions.len(), depth }
+		{ frames: frames.append(frame), positions: pool.concat(positions) }
+	}
+
+	## OTS accepts sequence indices past a rule's matched input; those
+	## records are ignored, as by the reference. Scan lazily without calls.
+	next_record : List(U64), U64, U64, U64, U64 -> U64
+	next_record = |values, records, count, start, input_count| {
+		var $i = start
+		while $i < count and (values.get(records + 2 * $i) ?? input_count) >= input_count {
+			$i = $i + 1
+		}
+		$i
+	}
 
 	## Only fonts needing more than the existing pair engine use this value.
 	is_active : LayoutPosition -> Bool
@@ -436,6 +460,8 @@ LayoutPosition := {
 		}
 
 		var $s = { items, ax: base, dx: List.repeat(0, count), dy: List.repeat(0, count), parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
+		var $frames = []
+		var $positions = []
 		for step_index in 0..<plan.len() {
 			step = plan.get(step_index) ?? { index: 0, mask: 0 }
 			automatic = auto_zwj.get(step_index) ?? True
@@ -445,20 +471,39 @@ LayoutPosition := {
 				{ state: after, next, applied: _, calls } = LayoutPosition.once(p, ctx, step.index, step.mask, $i, 0, $s)
 				$s = after
 				$i = next.max($i + 1)
-				var $pending = calls
-				while !$pending.is_empty() {
-					if $s.operations >= limits.budget {
+				match calls {
+					Calls(found) => {
+						{ frames, positions } = LayoutPosition.push_context(found, $frames, $positions)
+						$frames = frames
+						$positions = positions
+					}
+					NoCalls => {}
+				}
+				while !$frames.is_empty() {
+					frame = $frames.last() ?? LayoutPosition.no_frame
+					r = LayoutPosition.next_record(p.contexts.values, frame.records, frame.records_len, frame.next, frame.positions_len)
+					if r == frame.records_len {
+						$frames = $frames.drop_last(1)
+						$positions = $positions.take_first(frame.positions_start)
+					} else if $s.operations >= limits.budget {
 						$s = { ..$s, stopped: $s.stopped.bitwise_or(LayoutGsub.stopped_operations) }
-						$pending = []
+						$frames = $frames.clear()
+						$positions = $positions.clear()
 					} else {
-						call = $pending.last() ?? { index: 0, at: 0, depth: 0 }
-						$pending = $pending.drop_last(1)
-						if call.depth > limits.depth {
-							$s = { ..$s, stopped: $s.stopped.bitwise_or(LayoutGsub.stopped_depth) }
-						} else {
-							{ state: nested_state, next: _, applied: _, calls: nested_calls } = LayoutPosition.once(p, ctx, call.index, step.mask, call.at, call.depth, $s)
-							$s = nested_state
-							$pending = $pending.concat(nested_calls)
+						seq = p.contexts.values.get(frame.records + 2 * r) ?? crash "a checked positioning record lost its sequence index"
+						index = p.contexts.values.get(frame.records + 2 * r + 1) ?? crash "a checked positioning record lost its lookup index"
+						at = $positions.get(frame.positions_start + seq) ?? crash "a matched positioning input lost its glyph position"
+						# The nonempty stack proves this index is in bounds.
+						$frames = $frames.set($frames.len() - 1, { ..frame, next: r + 1 }) ?? []
+						{ state: nested_state, next: _, applied: _, calls: nested_calls } = LayoutPosition.once(p, ctx, index, step.mask, at, frame.depth, $s)
+						$s = nested_state
+						match nested_calls {
+							Calls(found) => {
+								{ frames, positions } = LayoutPosition.push_context(found, $frames, $positions)
+								$frames = frames
+								$positions = positions
+							}
+							NoCalls => {}
 						}
 					}
 				}
@@ -483,11 +528,11 @@ LayoutPosition := {
 		item = state.items.get(i) ?? LayoutGsub.no_item
 		var $s = { ..state, operations: state.operations + (if (depth > 0) 1 else 0) }
 		if i >= $s.items.len() or !LayoutGsub.applies(item.mask, mask) or !LayoutPosition.sees(ctx.gdef, item, props) {
-			return { state: $s, next: i + 1, applied: False, calls: [] }
+			return { state: $s, next: i + 1, applied: False, calls: NoCalls }
 		}
 		var $next = i + 1
 		var $applied = False
-		var $calls = []
+		var $calls = NoCalls
 		var $k = lookup.start
 		while $k < lookup.end {
 			sub = p.subtables.get($k) ?? LayoutPosition.no_sub
@@ -536,37 +581,39 @@ LayoutPosition := {
 		if sub.kind == 7 or sub.kind == 8 {
 			matcher = LayoutGsub.with_gdef(p.contexts, ctx.gdef)
 			buf = { info: state.items, out: [], idx: i, output: False, serial: 0, random: 1, ops: 0, stopped: 0, aliased: False }
-			match_ctx = { mask, props, auto_zwnj: True, auto_zwj: True, random: False, step: 0, per_syllable: False }
+			match_ctx = { mask, props, auto_zwnj: True, auto_zwj: ctx.auto_zwj, random: False, step: 0, per_syllable: False }
 			matched = LayoutGsub.apply_context(matcher, matcher.subtables.get(sub.context) ?? LayoutGsub.no_sub, match_ctx, buf, { scratch: [], frames: [], positions: [] })
 			s = { ..state, items: matched.buf.info }
 			match matched.outcome {
 				Context(found) => {
-					var $calls = List.with_capacity(found.records_len)
-					var $r = found.records_len
-					while $r > 0 {
-						$r = $r - 1
-						seq = (matcher.values.get(found.records + 2 * $r) ?? 0)
-						if seq < found.count {
-							index = (matcher.values.get(found.records + 2 * $r + 1) ?? 0)
-							$calls = $calls.append({ index, at: matched.work.scratch.get(seq) ?? i, depth: depth + 1 })
-						}
+					first = LayoutPosition.next_record(matcher.values, found.records, found.records_len, 0, found.count)
+					if first == found.records_len {
+						{ state: s, next: found.end, applied: True, calls: NoCalls }
+					} else if s.operations >= ctx.limits.budget {
+						# Budget is checked before depth, matching pending-call order.
+						{ state: { ..s, stopped: s.stopped.bitwise_or(LayoutGsub.stopped_operations) }, next: found.end, applied: True, calls: NoCalls }
+					} else if depth >= ctx.limits.depth {
+						# Every child would be rejected for depth. Avoid materializing
+						# any of them, while retaining the successful context match.
+						{ state: { ..s, stopped: s.stopped.bitwise_or(LayoutGsub.stopped_depth) }, next: found.end, applied: True, calls: NoCalls }
+					} else {
+						{ state: s, next: found.end, applied: True, calls: Calls({ records: found.records, records_len: found.records_len, next: first, positions: matched.work.scratch, depth: depth + 1 }) }
 					}
-					{ state: s, next: found.end, applied: True, calls: $calls }
 				}
-				_ => { state: s, next: i + 1, applied: False, calls: [] }
+				_ => { state: s, next: i + 1, applied: False, calls: NoCalls }
 			}
 		} else {
 			match LayoutPosition.covered(data, at + Bytes.u16(data, at + 2), item.glyph) {
-				Err(_) => { state, next: i + 1, applied: False, calls: [] }
+				Err(_) => { state, next: i + 1, applied: False, calls: NoCalls }
 				Ok(coverage) => {
 					if sub.kind == 1 {
 						format = Bytes.u16(data, at)
 						vf = Bytes.u16(data, at + 4)
 						if format == 2 and coverage >= Bytes.u16(data, at + 6) {
-							return { state, next: i + 1, applied: False, calls: [] }
+							return { state, next: i + 1, applied: False, calls: NoCalls }
 						}
 						record = if (format == 1) at + 6 else at + 8 + coverage * LayoutVar.value_size(vf)
-						{ state: LayoutPosition.add_value(state, ctx, data, at, record, vf, i), next: i + 1, applied: True, calls: [] }
+						{ state: LayoutPosition.add_value(state, ctx, data, at, record, vf, i), next: i + 1, applied: True, calls: NoCalls }
 					} else if sub.kind == 2 {
 						LayoutPosition.pair(p, ctx, at, coverage, props, mask, i, state)
 					} else if sub.kind == 3 {
@@ -591,7 +638,7 @@ LayoutPosition := {
 	pair = |p, ctx, at, coverage, props, mask, i, state| {
 		data = p.data
 
-		j = LayoutPosition.next(state.items, i, mask, props, ctx.gdef, ctx.auto_zwj) ?? return { state, next: i + 1, applied: False, calls: [] }
+		j = LayoutPosition.next(state.items, i, mask, props, ctx.gdef, ctx.auto_zwj) ?? return { state, next: i + 1, applied: False, calls: NoCalls }
 		second = state.items.get(j) ?? LayoutGsub.no_item
 		vf1 = Bytes.u16(data, at + 4)
 		vf2 = Bytes.u16(data, at + 6)
@@ -601,7 +648,7 @@ LayoutPosition := {
 		var $record = 0
 		if Bytes.u16(data, at) == 1 {
 			if coverage >= Bytes.u16(data, at + 8) {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			set = at + Bytes.u16(data, at + 10 + 2 * coverage)
 			$base = set
@@ -622,7 +669,7 @@ LayoutPosition := {
 				}
 			}
 			if $record == 0 {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 		} else {
 			first = state.items.get(i) ?? LayoutGsub.no_item
@@ -630,7 +677,7 @@ LayoutPosition := {
 			col = LayoutPosition.class_of(data, at + Bytes.u16(data, at + 10), second.glyph)
 			width = Bytes.u16(data, at + 14)
 			if row >= Bytes.u16(data, at + 12) or col >= width {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			$record = at + 16 + (row * width + col) * (size1 + size2)
 		}
@@ -641,7 +688,7 @@ LayoutPosition := {
 		# Any second value record consumes the second glyph, including an
 		# all-zero record: the following boundary is unsafe too (HB#3824).
 		flags = if (vf2 != 0) LayoutPosition.flag(flagged, i, j + 2) else flagged
-		{ state: { ..s2, items: flags }, next: if (vf2 != 0) j + 1 else j, applied: True, calls: [] }
+		{ state: { ..s2, items: flags }, next: if (vf2 != 0) j + 1 else j, applied: True, calls: NoCalls }
 	}
 
 	## ValueFormat.apply_value reports nonzero stored horizontal fields,
@@ -679,7 +726,7 @@ LayoutPosition := {
 		at = sub.at
 		marks = at + Bytes.u16(data, at + 8)
 		if coverage >= Bytes.u16(data, marks) {
-			return { state, next: i + 1, applied: False, calls: [] }
+			return { state, next: i + 1, applied: False, calls: NoCalls }
 		}
 		mark_record = marks + 2 + 4 * coverage
 		klass = Bytes.u16(data, mark_record)
@@ -694,11 +741,11 @@ LayoutPosition := {
 				}
 			}
 			if $search {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			candidate = state.items.get($j) ?? LayoutGsub.no_item
 			if !LayoutGsub.is_mark_item(candidate) {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			current = state.items.get(i) ?? LayoutGsub.no_item
 			id1 = LayoutGsub.lig_id(current)
@@ -706,7 +753,7 @@ LayoutPosition := {
 			comp1 = LayoutGsub.lig_comp(current)
 			comp2 = LayoutGsub.lig_comp(candidate)
 			if !((id1 == id2 and (id1 == 0 or comp1 == comp2)) or (id1 != id2 and ((id1 > 0 and comp1 == 0) or (id2 > 0 and comp2 == 0)))) {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 		} else {
 			var $prev = ctx.previous.get(i) ?? 0
@@ -726,27 +773,27 @@ LayoutPosition := {
 				}
 			}
 			if !$found {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 		}
 		base_item = state.items.get($j) ?? LayoutGsub.no_item
-		base_cov = LayoutPosition.covered(data, at + Bytes.u16(data, at + 4), base_item.glyph) ?? return { state, next: i + 1, applied: False, calls: [] }
+		base_cov = LayoutPosition.covered(data, at + Bytes.u16(data, at + 4), base_item.glyph) ?? return { state, next: i + 1, applied: False, calls: NoCalls }
 		classes = Bytes.u16(data, at + 6)
 		bases = at + Bytes.u16(data, at + 10)
 		if base_cov >= Bytes.u16(data, bases) {
-			return { state, next: i + 1, applied: False, calls: [] }
+			return { state, next: i + 1, applied: False, calls: NoCalls }
 		}
 		var $matrix = bases
 		var $row = base_cov
 		if sub.kind == 5 {
 			o = Bytes.u16(data, bases + 2 + 2 * base_cov)
 			if o == 0 {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			$matrix = bases + o
 			components = Bytes.u16(data, $matrix)
 			if components == 0 {
-				return { state, next: i + 1, applied: False, calls: [] }
+				return { state, next: i + 1, applied: False, calls: NoCalls }
 			}
 			current = state.items.get(i) ?? LayoutGsub.no_item
 			comp = LayoutGsub.lig_comp(current)
@@ -754,7 +801,7 @@ LayoutPosition := {
 		}
 		o = Bytes.u16(data, $matrix + 2 + 2 * ($row * classes + klass))
 		if o == 0 {
-			return { state, next: i + 1, applied: False, calls: [] }
+			return { state, next: i + 1, applied: False, calls: NoCalls }
 		}
 		base_anchor = LayoutPosition.anchor(p, ctx, $matrix + o)
 		mark_anchor = LayoutPosition.anchor(p, ctx, marks + Bytes.u16(data, mark_record + 2))
@@ -762,18 +809,18 @@ LayoutPosition := {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
 		# Both indices are in the run and all arrays have its length.
 		s = { items: LayoutPosition.flag(items, $j, i + 1), ax, dx: dx.set(i, base_anchor.x - mark_anchor.x) ?? [], dy: dy.set(i, base_anchor.y - mark_anchor.y + base_cross) ?? [], parents: parents.set(i, $j + 1) ?? [], attachments: attachments.set(i, 1) ?? [], stopped, operations }
-		{ state: s, next: i + 1, applied: True, calls: [] }
+		{ state: s, next: i + 1, applied: True, calls: NoCalls }
 	}
 
 	cursive : LayoutPosition, Ctx, U64, U64, U64, U64, U64, State -> Match
 	cursive = |p, ctx, at, coverage, props, mask, cursor, state| {
 		data = p.data
 		if coverage >= Bytes.u16(data, at + 4) {
-			return { state, next: cursor + 1, applied: False, calls: [] }
+			return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		}
 		entry_offset = Bytes.u16(data, at + 6 + 4 * coverage)
 		if entry_offset == 0 {
-			return { state, next: cursor + 1, applied: False, calls: [] }
+			return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		}
 		var $previous = cursor
 		var $found = False
@@ -787,18 +834,18 @@ LayoutPosition := {
 			}
 		}
 		if !$found {
-			return { state, next: cursor + 1, applied: False, calls: [] }
+			return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		}
 		i = $previous
 		j = cursor
 		other = state.items.get(i) ?? LayoutGsub.no_item
-		cov = LayoutPosition.covered(data, at + Bytes.u16(data, at + 2), other.glyph) ?? return { state, next: cursor + 1, applied: False, calls: [] }
+		cov = LayoutPosition.covered(data, at + Bytes.u16(data, at + 2), other.glyph) ?? return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		if cov >= Bytes.u16(data, at + 4) {
-			return { state, next: cursor + 1, applied: False, calls: [] }
+			return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		}
 		exit_offset = Bytes.u16(data, at + 8 + 4 * cov)
 		if exit_offset == 0 {
-			return { state, next: cursor + 1, applied: False, calls: [] }
+			return { state, next: cursor + 1, applied: False, calls: NoCalls }
 		}
 		exit = LayoutPosition.anchor(p, ctx, at + exit_offset)
 		entry = LayoutPosition.anchor(p, ctx, at + entry_offset)
@@ -860,7 +907,7 @@ LayoutPosition := {
 			$dy = $dy.set(parent, 0) ?? []
 		}
 		s = { items: LayoutPosition.flag(items, i, j + 1), ax: $ax, dx: $dx, dy: $dy, parents: $parents, attachments: $attachments, stopped, operations }
-		{ state: s, next: j + 1, applied: True, calls: [] }
+		{ state: s, next: j + 1, applied: True, calls: NoCalls }
 	}
 
 	cross_offset : State, U64 -> I64
