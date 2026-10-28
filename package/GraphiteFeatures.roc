@@ -106,7 +106,7 @@ GraphiteFeatures := {
 			alias = version >= 0x00020001 and Bytes.u16(bytes, at + width - 4).bitwise_and(1) != 0
 			prior = if (alias) $features.last() ?? crash "alias has preceding feature" else { id: 0, default: 0, maximum: 0, alias: i, label: 0, start: span.start, end: span.end }
 			default = if (alias) prior.default else if (span.start == span.end) 0 else ($values.get(span.start) ?? 0).to_u16_wrap()
-			largest = if (alias) prior.maximum else GraphiteSettings.maximum(maximum, span.start, span.end)
+			largest = if (alias) prior.maximum else if (span.start == span.end) 65535 else GraphiteSettings.maximum(maximum, span.start, span.end)
 			$features = $features.append({ id: id.to_u32_wrap(), default, maximum: largest, alias: prior.alias, label: Bytes.u16(bytes, at + width - 2).to_u16_wrap(), start: if (alias) prior.start else span.start, end: if (alias) prior.end else span.end })
 		}
 		Ok({ ..GraphiteFeatures.none, features: $features, keys, values: $values, labels: $labels })
@@ -135,7 +135,7 @@ GraphiteFeatures := {
 			}
 			alias = version >= 0x00020001 and Bytes.u16(bytes, at + width - 4).bitwise_and(1) != 0
 			prior = if (alias) $features.last() ?? crash "alias has preceding feature" else { id: 0, default: 0, maximum: 0, alias: i, label: 0, start, end: $values.len() }
-			$features = $features.append({ id: id.to_u32_wrap(), default: if (alias) prior.default else if (n == 0) 0 else ($values.get(start) ?? 0).to_u16_wrap(), maximum: if (alias) prior.maximum else $maximum, alias: prior.alias, label: Bytes.u16(bytes, at + width - 2).to_u16_wrap(), start: prior.start, end: prior.end })
+			$features = $features.append({ id: id.to_u32_wrap(), default: if (alias) prior.default else if (n == 0) 0 else ($values.get(start) ?? 0).to_u16_wrap(), maximum: if (alias) prior.maximum else if (n == 0) 65535 else $maximum, alias: prior.alias, label: Bytes.u16(bytes, at + width - 2).to_u16_wrap(), start: prior.start, end: prior.end })
 		}
 		Ok({ ..GraphiteFeatures.none, features: $features, keys, values: $values, labels: $labels })
 	}
@@ -377,6 +377,12 @@ expect {
 	}
 }
 expect GraphiteFeatures.read(Present(feat.drop_last(1)), Absent).is_err()
+expect {
+	# No setting labels describes a continuous U16 feature domain.
+	continuous = feat.set(17, 0) ?? []
+	table = GraphiteFeatures.read_feat(continuous) ?? crash "original continuous feature"
+	(table.features.first() ?? crash "one feature").maximum == 65535 and table.values.is_empty()
+}
 expect GraphiteFeatures.read(Present(feat), Present(sill.set(31, 101) ?? [])).is_err()
 expect GraphiteFeatures.read(Present(feat), Present(sill.set(33, 2) ?? [])).is_err()
 

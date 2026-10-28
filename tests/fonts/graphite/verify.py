@@ -8,9 +8,9 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'));import flight
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
- subprocess.run([sys.executable,str(HERE/'record_shapes.py'),'--check'],check=True)
- cases=json.loads((HERE/'shape-cases.jsonc').read_text())['cases'];records={r['id']:r for r in json.loads((HERE/'shape-records.json').read_text())['records']}
+ p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
+ subprocess.run([sys.executable,str(HERE/'record_shapes.py'),'--check','--cases',str(args.cases.resolve()),'--output',str(args.records.resolve()),'--oracle',str(args.oracle.resolve()),'--font-root',str(args.font_root.resolve())],check=True)
+ cases=json.loads(args.cases.read_text())['cases'];records={r['id']:r for r in json.loads(args.records.read_text())['records']}
  selected=[c for c in cases if args.only in c['id']];assert selected,'empty Graphite replay selection'
  work=ROOT/'.roc-font-tmp/graphite-replay';work.mkdir(parents=True,exist_ok=True);binary=args.binary.resolve() if args.binary else work/'query';provenance={}
  if not args.binary:
@@ -32,7 +32,7 @@ def main():
    fields=[case['id'],case.get('script','Latn'),case.get('language',''),case.get('direction','ltr'),str(case.get('cluster_level',0)),settings,case.get('engine','graphite2'),str(start),str(end),case['text']]
    assert all('\t' not in f and '\n' not in f for f in fields)
    requests.append('\t'.join(fields))
-  run=subprocess.run([str(binary),str(HERE/font)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)
+  run=subprocess.run([str(binary),str(args.font_root/font)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)
   if run.returncode:reader_failures.append(font);print(font,run.stdout,run.stderr,file=sys.stderr);continue
   for line in run.stdout.splitlines():
    key,value=line.split('\t',1);assert key not in actual,key;actual[key]=json.loads(value)
