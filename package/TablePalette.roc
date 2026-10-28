@@ -43,6 +43,9 @@ TablePalette := {
 		if (id == 65535) Absent else Present(id.to_u16_wrap())
 	}
 
+	palette_name_id : TablePalette, U32 -> [Present(U16), Absent]
+	palette_name_id = |table, palette| if (palette.to_u64() >= table.count) Absent else TablePalette.name_id(table.bytes, table.labels_at, palette.to_u64())
+
 	entry_name_id : TablePalette, U32 -> [Present(U16), Absent]
 	entry_name_id = |table, entry| if (entry.to_u64() >= table.entries) Absent else TablePalette.name_id(table.bytes, table.entry_labels_at, entry.to_u64())
 
