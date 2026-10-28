@@ -70,6 +70,70 @@ GraphiteClasses :: {}.{
 		Ok($classes)
 	}
 
+	Lookup : { result : [Found(U64), Missing], operations : U64, stopped : U64 }
+
+	index_bounded : List(U8), Class, U64, U64 -> Lookup
+	index_bounded = |bytes, class, glyph, budget| {
+		var $operations = 0
+		if class.linear {
+			for i in 0..<class.count {
+				if $operations >= budget {
+					return { result: Missing, operations: $operations, stopped: 2 }
+				}
+				$operations = $operations + 1
+				if Bytes.u16(bytes, class.start + 2 * i) == glyph {
+					return { result: Found(i), operations: $operations, stopped: 0 }
+				}
+			}
+		} else {
+			var $lo = 0
+			var $hi = class.count
+			while $lo < $hi {
+				if $operations >= budget {
+					return { result: Missing, operations: $operations, stopped: 2 }
+				}
+				$operations = $operations + 1
+				mid = $lo + ($hi - $lo) // 2
+				at = class.start + mid * 4
+				there = Bytes.u16(bytes, at)
+				if there < glyph {
+					$lo = mid + 1
+				}
+				else if there > glyph {
+					$hi = mid
+				}
+				else {
+					return { result: Found(Bytes.u16(bytes, at + 2)), operations: $operations, stopped: 0 }
+				}
+			}
+		}
+		{ result: Missing, operations: $operations, stopped: 0 }
+	}
+
+	glyph_bounded : List(U8), Class, U64, U64 -> Lookup
+	glyph_bounded = |bytes, class, position, budget| {
+		if class.linear {
+			if position >= class.count {
+				return { result: Missing, operations: 0, stopped: 0 }
+			}
+			if budget == 0 {
+				return { result: Missing, operations: 0, stopped: 2 }
+			}
+			return { result: Found(Bytes.u16(bytes, class.start + 2 * position)), operations: 1, stopped: 0 }
+		}
+		var $operations = 0
+		for i in 0..<class.count {
+			if $operations >= budget {
+				return { result: Missing, operations: $operations, stopped: 2 }
+			}
+			$operations = $operations + 1
+			if Bytes.u16(bytes, class.start + 4 * i + 2) == position {
+				return { result: Found(Bytes.u16(bytes, class.start + 4 * i)), operations: $operations, stopped: 0 }
+			}
+		}
+		{ result: Missing, operations: $operations, stopped: 0 }
+	}
+
 	index : List(U8), Class, U64 -> [Found(U64), Missing]
 	index = |bytes, class, glyph| {
 		if class.linear {
@@ -128,3 +192,10 @@ expect {
 }
 expect GraphiteClasses.read(classes.drop_last(1), 0, classes.len() - 1, 0x00030000, 8).is_err()
 expect GraphiteClasses.read(classes.set(27, 3) ?? [], 0, classes.len(), 0x00030000, 8).is_err()
+
+expect {
+	table = GraphiteClasses.read(classes, 0, classes.len(), 0x00030000, 8) ?? crash "original checked classes"
+	linear = table.get(0) ?? crash "first class"
+	indexed = table.get(1) ?? crash "second class"
+	GraphiteClasses.index_bounded(classes, linear, 3, 1).stopped == 2 and GraphiteClasses.index_bounded(classes, linear, 3, 2).result == Found(1) and GraphiteClasses.glyph_bounded(classes, indexed, 0, 1).stopped == 2 and GraphiteClasses.glyph_bounded(classes, indexed, 0, 2).result == Found(7)
+}
