@@ -100,7 +100,7 @@ Shaper :: {}.{
 	## A shaped run with the finished items it was made from (in output
 	## order, for origins) and the bounds that stopped substitution
 	## (`LayoutGsub.Applied`; 0 when none did).
-	Shaped : { run : Run, items : List(LayoutGsub.Item), stopped : U64 }
+	Shaped : { run : Run, items : List(LayoutGsub.Item), stopped : U64, aborted : Bool }
 
 	## The end of a feature range that runs to the end of the text (every
 	## offset is below it): with start 0, a feature over the whole text.
@@ -1095,7 +1095,7 @@ Shaper :: {}.{
 	shape_items_with_context = |face, location, p, scalars, context| {
 		n = scalars.len()
 		if n == 0 {
-			return { run: Shaper.empty_run, items: [], stopped: 0 }
+			return { run: Shaper.empty_run, items: [], stopped: 0, aborted: False }
 		}
 		limit = (p.growth * n).max(65536)
 		budget = (p.operations * n).max(65536)
@@ -1173,7 +1173,7 @@ Shaper :: {}.{
 		}
 		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
 		placed = positioned.placed
-		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped) }
+		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped), aborted: False }
 	}
 
 	# Unicode presentation-form fallback used only without a vert feature.

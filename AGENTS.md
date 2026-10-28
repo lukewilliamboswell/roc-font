@@ -46,8 +46,15 @@ and plans live in `TODO.md`, not here.
 
 - Font bytes are untrusted input. Every offset, count and length is checked
   against the data before use, and before any allocation sized by it.
-- Reading is the only source of failure. A successfully read font proves
-  that every later query and every shaping call is total.
+- Reading is the only source of font rejection. A successfully read font
+  proves that every later query and shaping call is total. A font program
+  can have a text-dependent execution abort even after its bytes validate
+  (Graphite2's accepted feature-dependent division witness is recorded in
+  `tests/fonts/graphite/abort-cases.jsonc`). Return the reference language's
+  defined result and report `ProgramAborted` separately in checked shaping;
+  do not confuse it with a work budget or substitute another engine.
+  Validate static instructions, offsets and count-driven allocations when
+  reading; guard text-dependent operands against prepared domains.
 - Lenient reading (the default) drops a broken optional table and reports
   it on the successfully read font; strict reading rejects the font. A
   broken required table always rejects it. Dropping is not repair: a

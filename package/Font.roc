@@ -770,9 +770,10 @@ Font :: { face : Face }.{
 
 	## The designs a variable font names (such as `Bold` or `Condensed
 	## Light`), in the font's order, each with its value on every axis;
-	## empty for a static font. Move to one with
+	## empty for a static font. For fonts with distinct axis tags, move to one with
 	## `Font.at(font, Font.Variation.{ axes: instance.axes })`. The name is
-	## empty when the font does not store it.
+	## empty when the font does not store it. Distinct positional values for
+	## repeated axis tags cannot be selected by tag-based settings.
 	instances : Font -> List({ name : Str, axes : List({ tag : Str, value : Dec }) })
 	instances = |font| Face.instances(font.face)
 
@@ -992,6 +993,9 @@ Font :: { face : Face }.{
 	## ```
 	## run = Font.shape(font, "office -> home", Font.ShapeOptions.{})
 	## ```
+	##
+	## A font-program execution abort gives an empty run. `shape_checked`
+	## distinguishes that result from successful empty text and a work stop.
 	shape : Font, Str, ShapeOptions -> Run
 	shape = |font, text, options| Font.shape_planned(font, Font.plan(font, options), text)
 
@@ -1008,17 +1012,22 @@ Font :: { face : Face }.{
 	## `Limits.max_depth` when reading) to shape further. On a real font
 	## the defaults never bind, so this matters where fonts come from
 	## untrusted sources.
+	## A font program can also abort for a particular text or feature value;
+	## `ProgramAborted` then holds its empty run, separately from a budget.
 	##
 	## ```
 	## match Font.shape_checked(font, plan, text) {
 	##     Ok(run) => run
 	##     Err(OverBudget({ run, budgets })) => ...
+	##     Err(ProgramAborted({ run })) => ...
 	## }
 	## ```
-	shape_checked : Font, ShapePlan, Str -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
+	shape_checked : Font, ShapePlan, Str -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) }), ProgramAborted({ run : Run })])
 	shape_checked = |font, shape_plan, text| {
 		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
-		if shaped.stopped == 0 {
+		if shaped.aborted {
+			Err(ProgramAborted({ run: shaped.run }))
+		} else if shaped.stopped == 0 {
 			Ok(shaped.run)
 		} else {
 			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
@@ -1053,12 +1062,14 @@ Font :: { face : Face }.{
 	shape_range = |font, shape_plan, text, range| match Font.shape_range_checked(font, shape_plan, text, range) {
 		Ok(run) => run
 		Err(OverBudget({ run, budgets: _ })) => run
+		Err(ProgramAborted({ run })) => run
 	}
 
 	## Shape a range with paragraph context and report exhausted work
 	## budgets as `shape_checked` does. Context is supplied per call and
 	## never becomes part of the reusable shaping plan.
-	shape_range_checked : Font, ShapePlan, Str, TextRange -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) })])
+	## `ProgramAborted` has the same meaning as in `shape_checked`.
+	shape_range_checked : Font, ShapePlan, Str, TextRange -> Try(Run, [OverBudget({ run : Run, budgets : List(Budget) }), ProgramAborted({ run : Run })])
 	shape_range_checked = |font, shape_plan, text, range| {
 		var $before = []
 		var $selected = []
@@ -1073,7 +1084,9 @@ Font :: { face : Face }.{
 			}
 		}
 		shaped = Shaper.shape_items_with_context(font.face, Face.current(font.face), shape_plan.plan, $selected, { before: $before, after: $after })
-		if shaped.stopped == 0 {
+		if shaped.aborted {
+			Err(ProgramAborted({ run: shaped.run }))
+		} else if shaped.stopped == 0 {
 			Ok(shaped.run)
 		} else {
 			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
@@ -1094,13 +1107,16 @@ Font :: { face : Face }.{
 	## match Font.shape_traced(font, plan, "fi") {
 	##     Ok({ run, origins }) => origins # [Ligature({ feature: "liga", components: 2 })] in a font with an fi ligature
 	##     Err(OverBudget({ run, origins, budgets })) => ...
+	##     Err(ProgramAborted({ run, origins })) => ...
 	## }
 	## ```
-	shape_traced : Font, ShapePlan, Str -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
+	shape_traced : Font, ShapePlan, Str -> Try({ run : Run, origins : List(GlyphOrigin) }, [OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) }), ProgramAborted({ run : Run, origins : List(GlyphOrigin) })])
 	shape_traced = |font, shape_plan, text| {
 		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, Shaper.decode(text))
 		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
-		if shaped.stopped == 0 {
+		if shaped.aborted {
+			Err(ProgramAborted({ run: shaped.run, origins }))
+		} else if shaped.stopped == 0 {
 			Ok({ run: shaped.run, origins })
 		} else {
 			Err(OverBudget({ run: shaped.run, origins, budgets: Shaper.budgets(shaped.stopped) }))
