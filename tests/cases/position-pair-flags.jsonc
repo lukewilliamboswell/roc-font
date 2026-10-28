@@ -265,6 +265,102 @@
         ]
       },
       "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-general-400",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [],
+        "variations": [
+          "wght=400"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-general-650",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [],
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-general-900",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [],
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-pair-only-400",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [
+          "dist=0"
+        ],
+        "variations": [
+          "wght=400"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-pair-only-650",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [
+          "dist=0"
+        ],
+        "variations": [
+          "wght=650"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-cancellation-pair-only-900",
+      "font": "../fonts/positioning/flags/variable-cancellation.ttf",
+      "text": "ab",
+      "options": {
+        "features": [
+          "dist=0"
+        ],
+        "variations": [
+          "wght=900"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
     }
   ]
 }

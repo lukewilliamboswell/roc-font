@@ -10,6 +10,8 @@ import build.FontBuild
 import PositionBuild
 import "../tests/fonts/positioning/mark-mark.ttf" as real_seed : List(U8)
 
+import "../tests/fonts/positioning/flags/variable-cancellation.ttf" as cancellation : List(U8)
+
 ## One full GPOS family per input, optionally through an extension. Two
 ## generated sizes (2 and 16 copies of the isolated lookup) measure reading
 ## allocations and ensure unused lookups do not affect shaping allocations
@@ -52,6 +54,19 @@ test! = |bytes| {
 		Err(_) => {}
 	}
 	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(mutated, Font.ReadOptions.{}))
+	match Font.from_bytes(cancellation, Font.ReadOptions.{}) {
+		Ok(font) => {
+			coordinate = 100 + choice.to_u64().to_dec() * 4
+			varied = Font.at(font, Font.Variation.{ axes: [{ tag: "wght", value: coordinate }] })
+			general = Font.shape(varied, "ab", Font.ShapeOptions.{})
+			pair = Font.shape(varied, "ab", Font.ShapeOptions.{ features: [Font.Feature.{ tag: "dist", value: 0 }] })
+			if Str.inspect(general) != Str.inspect(pair) {
+				crash "pair positioning policies disagree after variable cancellation"
+			}
+		}
+		Err(_) => crash "variable pair flag fixture did not read"
+	}
+
 	Fuzz.keep
 }
 

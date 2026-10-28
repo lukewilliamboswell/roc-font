@@ -137,10 +137,15 @@ LayoutKerning := {
 
 	position_full_with_joiners : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
 	position_full_with_joiners = |kerning, plan, auto_zwj, legacy, items, glyph_count, base, backward, limits| {
+		LayoutKerning.position_full_with_policy(kerning, plan, auto_zwj, True, legacy, items, glyph_count, base, backward, limits)
+	}
+
+	position_full_with_policy : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), Bool, [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full_with_policy = |kerning, plan, auto_zwj, zero_late, legacy, items, glyph_count, base, backward, limits| {
 		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
 			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0 }
 		} else {
-			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, items, base, backward, limits)
+			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, zero_late, items, base, backward, limits)
 			positions = { items: placed_items, ax, dx, dy }
 			# Legacy kerning follows GPOS when the selected language has no
 			# kern feature. It does not create attachment chains.
@@ -441,7 +446,7 @@ LayoutKerning := {
 		varied = kerning.loc.active and format1.bitwise_or(format2).bitwise_and(0xF0) != 0
 		first = if (varied) LayoutKerning.varied_value(kerning, data, base, first_at, format1) else LayoutKerning.value(data, first_at, format1)
 		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.value(data, second_at, format2)
-		nonzero = first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
+		nonzero = if (varied) LayoutPosition.value_applies(data, first_at, format1, kerning.loc.active) or LayoutPosition.value_applies(data, second_at, format2, kerning.loc.active) else first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
 		{ first, second, skips: format2 != 0, nonzero }
 	}
 

@@ -416,8 +416,8 @@ LayoutPosition := {
 	}
 
 	Ctx : { lv : LayoutVar, loc : LayoutVar.Location, gdef : LayoutGdef, backward : Bool, previous : List(U64), auto_zwj : Bool, limits : Limits }
-	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), List(LayoutGsub.Item), List(I64), Bool, Limits -> State
-	position = |p, lv, loc, gdef, plan, auto_zwj, items, base, backward, limits| {
+	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), Bool, List(LayoutGsub.Item), List(I64), Bool, Limits -> State
+	position = |p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits| {
 		count = items.len()
 		var $previous = List.with_capacity(count)
 		var $manual_previous = List.with_capacity(count)
@@ -464,11 +464,12 @@ LayoutPosition := {
 				}
 			}
 		}
-		# HarfBuzz zeroes mark advances before propagating attachment offsets.
+		# Late zeroing precedes attachment propagation; NONE and EARLY keep
+		# advances supplied by GPOS. Default ignorables always lose advances.
 		{ items: final_items, ax, dx, dy, parents, attachments, stopped, operations } = $s
 		var $ax = ax
 		for i in 0..<count {
-			if LayoutGsub.is_mark_item(final_items.get(i) ?? LayoutGsub.no_item) or LayoutGsub.is_default_ignorable(final_items.get(i) ?? LayoutGsub.no_item) {
+			if (zero_late and LayoutGsub.is_mark_item(final_items.get(i) ?? LayoutGsub.no_item)) or LayoutGsub.is_default_ignorable(final_items.get(i) ?? LayoutGsub.no_item) {
 				$ax = $ax.set(i, 0) ?? []
 			}
 		}
