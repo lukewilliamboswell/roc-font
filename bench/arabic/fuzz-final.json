@@ -1,0 +1,62 @@
+{
+  "schema_version": "roc-fuzz-ci/v1",
+  "target": "font-arabic-stretch",
+  "started_at_unix_ms": 1793161023943,
+  "finished_at_unix_ms": 1793161067537,
+  "duration_ms": 43593,
+  "outcome": "passed",
+  "finding_kind": null,
+  "provenance": {
+    "source_revision": "f795f7f",
+    "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+    "platform_release": "0.4.3",
+    "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+  },
+  "configuration": {
+    "corpus": ".roc-font-tmp/fuzz-arabic-stretch/corpus",
+    "time_seconds": null,
+    "runs": "1500",
+    "max_input_size": "32",
+    "memory_limit_mb": "1024",
+    "timeout_seconds": "10",
+    "dictionary": null,
+    "seed": "271828",
+    "leak_detection": true,
+    "command": [
+      "/private/tmp/roc-font-scripts/.roc-font-tmp/font-arabic-stretch-final",
+      "run",
+      ".roc-font-tmp/fuzz-arabic-stretch/corpus",
+      "--runs=1500",
+      "--seed=271828",
+      "--max-input-size=32",
+      "--timeout=10",
+      "--memory-limit=1024",
+      "--artifact-dir=.roc-font-tmp/fuzz-arabic-stretch/final/failures",
+      "--print-final-stats"
+    ]
+  },
+  "executable": {
+    "name": "font-arabic-stretch-final",
+    "sha256": "d2a8f9ee1e1dd25c7f3a1792fba96ed75a87c703359ca2c097fced5a4fc0d33b"
+  },
+  "termination": {
+    "exit_code": 0,
+    "signal": null
+  },
+  "libfuzzer": {
+    "coverage_kind": "sanitizer_edge_feedback",
+    "executed_units": 1500,
+    "average_exec_per_sec": 34,
+    "new_units_added": 108,
+    "slowest_unit_time_sec": 0,
+    "peak_rss_mb": 40,
+    "coverage_edges": 4929,
+    "coverage_features": 10281
+  },
+  "failures": [],
+  "bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+  "bundle_archive_sha256": "9cba28d55e562862c111c00d59eaa50899b98c4ea736388ba57da71e30a39a1b",
+  "consumer_sha256": "cbb1eb663c0cbf9690197f8718893433b0e8254cb4dd3819905bb549fd20146e",
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

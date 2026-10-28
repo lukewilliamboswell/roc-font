@@ -1,0 +1,64 @@
+{
+  "label": "Arab-windows-final",
+  "source_revision": "f795f7f",
+  "bundle_archive_sha256": "9cba28d55e562862c111c00d59eaa50899b98c4ea736388ba57da71e30a39a1b",
+  "consumer_sha256": {
+    "ArabicBench.roc": "eb9201117a73ca48b4aed3c054485dfb39746a989392917b558bdd4262bb22c5",
+    "bench.roc": "695e261f8be2fef68d569618c7ade6e1c81e461940e392699d90298581c854c8",
+    "alloc.roc": "a3e8da6da22ec8258a063fd5bfaebf9ab7f0688e29065094093fbc30cc5d3777",
+    "bench.c": "a9ab3ae0916ffc400fc31e45b5c98544a38024177dfbe65bc3bcefe754559ab3"
+  },
+  "measurement_git": "53226a03eaf8670ec11c84a0082e17552bfdbdf5",
+  "source_git": "external immutable bundle",
+  "bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_file": "tests/fonts/shaping/arabic-fallback/win1256.ttf",
+  "font_sha256": "83bde816e492a8bbc9addca973657119a6f42e8ebc4164925b1f61d913f563b2",
+  "binary_sha256": {
+    "bench": "e4cf4e8ea9089691450ec564e6932e4579b0933f228d5910d0e3a8e18d102066",
+    "alloc": "88941f753b420e91910c7cb1c934f6688a4a97eb9b724d8c06b37bc06c037736"
+  },
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 224,
+      "scalar_count": 128,
+      "input_checksum": 8302097773020784837,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 2.494921875e-05,
+      "hb_seconds": 7.1484375e-06,
+      "roc_to_hb_ratio": 3.4901639344262296
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 896,
+      "scalar_count": 512,
+      "input_checksum": 15567067345841185797,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 6.70813828125e-05,
+      "hb_seconds": 2.38125e-05,
+      "roc_to_hb_ratio": 2.81706594488189
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 3584,
+      "scalar_count": 2048,
+      "input_checksum": 3994775076614000901,
+      "allocations": 23,
+      "leaked": 0,
+      "roc_seconds": 0.00026681184375,
+      "hb_seconds": 9.39609375e-05,
+      "roc_to_hb_ratio": 2.8396038912446993
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is established separately by cached full-position and flag oracle matrices; ratios compare native loops on identical text/font bytes.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable."
+  ],
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

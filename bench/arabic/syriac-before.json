@@ -1,0 +1,65 @@
+{
+  "label": "Syrc-before",
+  "measurement_git": "53226a03eaf8670ec11c84a0082e17552bfdbdf5",
+  "source_git": "external immutable bundle",
+  "bundle": "Hk1iAjSFeKxuZiobwcPeG124P8vBMeKcPtVKTCH7Ldxg.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_file": "tests/fonts/shaping/arabic-extra/NotoSansSyriac[wght].ttf",
+  "font_sha256": "775585cc3c12877115d588f70af3aa140c78cb440f9d42c98273bf05bed3f6b1",
+  "binary_sha256": {
+    "bench": "2927876114ed0ad03c62bdc3df2ea616b2ec0af29f95a9b62300ca554cd62334",
+    "alloc": "c051770f6c320e4abef1cbf5039ffc944385ae6bb4e11221df2daf7bfa8f3852"
+  },
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 176,
+      "scalar_count": 96,
+      "input_checksum": 11206449777786153157,
+      "allocations": 203,
+      "leaked": 0,
+      "roc_seconds": 0.00057529525,
+      "hb_seconds": 1.9203125e-05,
+      "roc_to_hb_ratio": 29.95841822620016
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 704,
+      "scalar_count": 384,
+      "input_checksum": 11025852615019357189,
+      "allocations": 731,
+      "leaked": 0,
+      "roc_seconds": 0.0021888284453125,
+      "hb_seconds": 6.9984375e-05,
+      "roc_to_hb_ratio": 31.275959031033707
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 2816,
+      "scalar_count": 1536,
+      "input_checksum": 9486437827368014085,
+      "allocations": 2843,
+      "leaked": 0,
+      "roc_seconds": 0.008815472984375,
+      "hb_seconds": 0.0002752890625,
+      "roc_to_hb_ratio": 32.02260527286659
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is established separately by cached full-position and flag oracle matrices; ratios compare native loops on identical text/font bytes.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable.",
+    "The immutable before bundle is an exact package/ export of commit7563e51, before Arabic fallback/Syriac activation. Its generic Syriac output does not agree with HB; this records old cost, not an equivalent-result speed comparison."
+  ],
+  "source_revision": "7563e51",
+  "bundle_archive_sha256": "621f980dc4c3fc14a27430cd5bf88fc577c473815a9acd9cfeb197eae9c6aadb",
+  "consumer_sha256": {
+    "ArabicBench.roc": "eb9201117a73ca48b4aed3c054485dfb39746a989392917b558bdd4262bb22c5",
+    "bench.roc": "695e261f8be2fef68d569618c7ade6e1c81e461940e392699d90298581c854c8",
+    "alloc.roc": "a3e8da6da22ec8258a063fd5bfaebf9ab7f0688e29065094093fbc30cc5d3777",
+    "bench.c": "a9ab3ae0916ffc400fc31e45b5c98544a38024177dfbe65bc3bcefe754559ab3"
+  },
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

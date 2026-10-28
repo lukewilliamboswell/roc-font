@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "source_revision": "7706a8a",
+  "bundle": "58eExAJ6rxqQMQYuGMDGGJ3J9CvdiVg1GMnsdMLPaZcq.tar.zst",
+  "driver_sha256": "fb92aafe6ca992c195706b5751b83958f3bea587c0de1b5b30cb705ab78da40d",
+  "reference": "uharfbuzz0.56.3 / HarfBuzz14.6.0",
+  "ots": "9.3.0",
+  "agree": 6525,
+  "cases": 6525,
+  "matrices": [
+    {
+      "matrix": "complex/indic-cases",
+      "agree": 220,
+      "cases": 220
+    },
+    {
+      "matrix": "complex/khmer-cases",
+      "agree": 280,
+      "cases": 280
+    },
+    {
+      "matrix": "indic-wide/cases",
+      "agree": 1044,
+      "cases": 1044
+    },
+    {
+      "matrix": "complex/vowel-cases",
+      "agree": 264,
+      "cases": 264
+    },
+    {
+      "matrix": "myanmar/myanmar",
+      "agree": 682,
+      "cases": 682
+    },
+    {
+      "matrix": "complex/long-cases",
+      "agree": 208,
+      "cases": 208
+    },
+    {
+      "matrix": "tibetan/tibetan-cases",
+      "agree": 194,
+      "cases": 194
+    },
+    {
+      "matrix": "use-sinhala/sinhala-cases",
+      "agree": 400,
+      "cases": 400
+    },
+    {
+      "matrix": "use-joining/joining-cases",
+      "agree": 788,
+      "cases": 788
+    },
+    {
+      "matrix": "arabic-fallback/fallback-cases",
+      "agree": 540,
+      "cases": 540
+    },
+    {
+      "matrix": "arabic-stretch/stretch-cases",
+      "agree": 150,
+      "cases": 150
+    },
+    {
+      "matrix": "arabic-extra/extra-cases",
+      "agree": 464,
+      "cases": 464
+    },
+    {
+      "matrix": "fallback-marks/mark-cases",
+      "agree": 232,
+      "cases": 232
+    },
+    {
+      "matrix": "arabic-fallback/windows-cases",
+      "agree": 200,
+      "cases": 200
+    },
+    {
+      "matrix": "attachment-caps/attachment-cases",
+      "agree": 108,
+      "cases": 108
+    },
+    {
+      "matrix": "thai-legacy/long-cases",
+      "agree": 48,
+      "cases": 48
+    },
+    {
+      "matrix": "cases/position-context-controls",
+      "agree": 50,
+      "cases": 50
+    },
+    {
+      "matrix": "cases/positioning",
+      "agree": 65,
+      "cases": 65
+    },
+    {
+      "matrix": "cases/positioning-real",
+      "agree": 18,
+      "cases": 18
+    },
+    {
+      "matrix": "cases/position-joiners",
+      "agree": 8,
+      "cases": 8
+    },
+    {
+      "matrix": "cases/position-pair-flags",
+      "agree": 30,
+      "cases": 30
+    },
+    {
+      "matrix": "cases/arabic",
+      "agree": 92,
+      "cases": 92
+    },
+    {
+      "matrix": "cases/arabic-flags",
+      "agree": 36,
+      "cases": 36
+    },
+    {
+      "matrix": "cases/thai-lao",
+      "agree": 184,
+      "cases": 184
+    },
+    {
+      "matrix": "cases/hangul",
+      "agree": 220,
+      "cases": 220
+    }
+  ],
+  "notes": [
+    "All requests answered by an optimized native driver importing a served roc bundle. Full glyph ids, advances, offsets, clusters and requested unsafe-break flags agree with cached records.",
+    "This worker snapshot precedes the integrated numerical-saturation refinements. Final timing/fuzz evidence separately identifies the exact integrated6AP9 bundle. The root aggregate gate replays cached records after those refinements."
+  ]
+}

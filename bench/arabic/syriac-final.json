@@ -1,0 +1,64 @@
+{
+  "label": "Syrc-final",
+  "measurement_git": "53226a03eaf8670ec11c84a0082e17552bfdbdf5",
+  "source_git": "external immutable bundle",
+  "bundle": "6AP9x3PjiA4uYweRzHq7C22rqmUkEUogRYE885FD4fQR.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_file": "tests/fonts/shaping/arabic-extra/NotoSansSyriac[wght].ttf",
+  "font_sha256": "775585cc3c12877115d588f70af3aa140c78cb440f9d42c98273bf05bed3f6b1",
+  "binary_sha256": {
+    "bench": "e4cf4e8ea9089691450ec564e6932e4579b0933f228d5910d0e3a8e18d102066",
+    "alloc": "88941f753b420e91910c7cb1c934f6688a4a97eb9b724d8c06b37bc06c037736"
+  },
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 176,
+      "scalar_count": 96,
+      "input_checksum": 11206449777786153157,
+      "allocations": 261,
+      "leaked": 0,
+      "roc_seconds": 0.00109285384375,
+      "hb_seconds": 2.09921875e-05,
+      "roc_to_hb_ratio": 52.060026795682916
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 704,
+      "scalar_count": 384,
+      "input_checksum": 11025852615019357189,
+      "allocations": 936,
+      "leaked": 0,
+      "roc_seconds": 0.004373720703125,
+      "hb_seconds": 7.8984375e-05,
+      "roc_to_hb_ratio": 55.374505440158266
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 2816,
+      "scalar_count": 1536,
+      "input_checksum": 9486437827368014085,
+      "allocations": 3627,
+      "leaked": 0,
+      "roc_seconds": 0.0189408291015625,
+      "hb_seconds": 0.0003804296875,
+      "roc_to_hb_ratio": 49.78798901324571
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Correctness is established separately by cached full-position and flag oracle matrices; ratios compare native loops on identical text/font bytes.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable."
+  ],
+  "source_revision": "f795f7f",
+  "bundle_archive_sha256": "9cba28d55e562862c111c00d59eaa50899b98c4ea736388ba57da71e30a39a1b",
+  "consumer_sha256": {
+    "ArabicBench.roc": "eb9201117a73ca48b4aed3c054485dfb39746a989392917b558bdd4262bb22c5",
+    "bench.roc": "695e261f8be2fef68d569618c7ade6e1c81e461940e392699d90298581c854c8",
+    "alloc.roc": "a3e8da6da22ec8258a063fd5bfaebf9ab7f0688e29065094093fbc30cc5d3777",
+    "bench.c": "a9ab3ae0916ffc400fc31e45b5c98544a38024177dfbe65bc3bcefe754559ab3"
+  },
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}
