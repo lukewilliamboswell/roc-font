@@ -115,17 +115,25 @@ ShaperMyanmar := {}.{
 			var $last = 0
 			for item in $work.items {
 				$work = ShaperIndic.charge($work, 1)
+				if $work.stopped != 0 {
+					return $work
+				}
 				id = ShaperIndic.syllable(item.mask)
 				if id != $last and id.bitwise_and(15) == 1 {
 					$count = $count + 1
+					$last = id
 				}
-				$last = id
 			}
 			if $work.stopped != 0 or $count == 0 {
 				return $work
 			}
 			if $work.items.len() > limit or $count > limit - $work.items.len() {
 				return { ..$work, stopped: 1 }
+			}
+
+			$work = ShaperIndic.charge($work, $work.items.len() + $count)
+			if $work.stopped != 0 {
+				return $work
 			}
 			{ items, operations, stopped, budget } = $work
 			var $out = List.with_capacity(items.len() + $count)
@@ -136,11 +144,11 @@ ShaperMyanmar := {}.{
 					mask = ShaperIndic.set_position(ShaperIndic.set_category(item.mask, 11), 0)
 					inserted = LayoutGsub.with_origin({ glyph: dot.glyph, cluster: item.cluster, mask, props: dot.props }, LayoutGsub.origin_inserted, 0, 0)
 					$out = $out.append(inserted)
+					$previous = id
 				}
-				$previous = id
 				$out = $out.append(item)
 			}
-			ShaperIndic.charge({ items: $out, operations, stopped, budget }, items.len() + $count)
+			{ items: $out, operations, stopped, budget }
 		}
 	}
 
@@ -202,10 +210,19 @@ ShaperMyanmar := {}.{
 			$work = ShaperIndic.charge($work, 1)
 			$sorted = $sorted.append(ShaperIndic.at($work.items, i))
 		}
-		for i in start..<end {
-			$work = ShaperIndic.put($work, i, ShaperIndic.at($sorted, i - start))
+
+		# Reserve the complete replacement before touching glyph order;
+		# an exhausted budget must never leave half a permutation.
+		$work = ShaperIndic.charge($work, n)
+		if $work.stopped != 0 {
+			return $work
 		}
-		$work
+		{ items, operations, stopped, budget } = $work
+		var $items = items
+		for i in start..<end {
+			$items = $items.set(i, ShaperIndic.at($sorted, i - start)) ?? []
+		}
+		{ items: $items, operations, stopped, budget }
 	}
 
 	reorder_syllable : ShaperIndic.Work, U64, U64 -> ShaperIndic.Work
@@ -382,4 +399,29 @@ expect {
 	items = [1.U64].concat(List.repeat(22, 256)).map_with_index(|category, i| { glyph: i + 1, cluster: i, mask: ShaperIndic.set_syllable(ShaperIndic.set_category(0, category), 16), props: 0 })
 	result = ShaperMyanmar.reorder(items, { dotted_circle: Absent, limit: 1000, budget: 100000 })
 	result.stopped == 0 and (result.items.get(63) ?? LayoutGsub.no_item).glyph == 1 and result.items.len() == 257
+}
+
+## fuzz regression: dotted insertion remembers the last inserted broken
+## serial, including across intervening ordinary syllables and serialwrap.
+## Its counting pass must use exactly the same rule as output/growth.
+expect {
+	first = { ..LayoutGsub.no_item, glyph: 1, mask: ShaperIndic.set_syllable(0, 17) }
+	middle = List.repeat(LayoutGsub.no_item, 14).map_with_index(|item, i| { ..item, glyph: 2, mask: ShaperIndic.set_syllable(0, (i + 2) * 16 + 2) })
+	items = [first].concat(middle).append(first)
+	result = ShaperMyanmar.dotted_circles({ items, operations: 0, stopped: 0, budget: 1000 }, Present({ glyph: 99, props: 0 }), 17)
+	result.stopped == 0 and result.items.len() == 17 and result.items.keep_if(|item| item.glyph == 99).len() == 1
+}
+
+## fuzz regression: budget exhaustion cannot leave a partly copied
+## permutation with a duplicated glyph and another original glyph lost.
+expect {
+	items = [{ ..LayoutGsub.no_item, glyph: 1, mask: ShaperIndic.set_position(0, 4) }, { ..LayoutGsub.no_item, glyph: 2, mask: ShaperIndic.set_position(0, 2) }]
+	var $valid = True
+	for budget in 0.U64..=40 {
+		result = ShaperMyanmar.sort({ items, operations: 0, stopped: 0, budget }, 0, 2)
+		if result.items.len() != 2 or !result.items.any(|item| item.glyph == 1) or !result.items.any(|item| item.glyph == 2) {
+			$valid = False
+		}
+	}
+	$valid
 }
