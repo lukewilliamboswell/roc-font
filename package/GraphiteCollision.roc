@@ -612,7 +612,7 @@ GraphiteCollision :: {}.{
 			[
 				{ bounds: if (left_down) { x_min: a, y_min: outer.y_min, x_max: outer.x_max, y_max: c } else { x_min: outer.x_min, y_min: c, x_max: a, y_max: outer.y_max }, penalty: SquareX({ weight: number(19), center: a }) },
 				{ bounds: if (left_down) { x_min: b, y_min: c, x_max: outer.x_max, y_max: outer.y_max } else { x_min: outer.x_min, y_min: outer.y_min, x_max: b, y_max: c }, penalty: Hard },
-				{ bounds: if (left_down) { x_min: outer.x_min, y_min: sub(c, h), x_max: b, y_max: outer.y_max } else { x_min: b, y_min: outer.y_min, x_max: outer.x_max, y_max: add(c, h) }, penalty: Radial(number(21)) },
+				{ bounds: if (left_down) { x_min: outer.x_min, y_min: sub(c, h), x_max: b, y_max: outer.y_max } else { x_min: b, y_min: outer.y_min, x_max: outer.x_max, y_max: sub(c, h) }, penalty: Radial(number(21)) },
 				{ bounds: { x_min: if (left_down) outer.x_min else e, y_min: c, x_max: if (left_down) e else outer.x_max, y_max: add(c, h) }, penalty: SquareY({ weight: number(23), center: add(c, h) }) },
 				{ bounds: { x_min: if (left_down) outer.x_min else e, y_min: sub(c, h), x_max: if (left_down) e else outer.x_max, y_max: c }, penalty: RadialY({ radial: number(21), weight: number(23), center: sub(c, h) }) },
 			]
