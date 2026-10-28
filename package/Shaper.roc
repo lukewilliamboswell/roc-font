@@ -5,6 +5,7 @@ import LayoutGdef
 import LayoutGsub
 import LayoutKerning
 import LayoutVar
+import ShaperHangul
 import ShaperThai
 import ShaperArabic
 import ShaperNormalize
@@ -26,7 +27,7 @@ import TableCmap
 ##
 ## Internal. Not done, each a documented difference from HarfBuzz: the
 ## shapers of other complex scripts (Indic, Khmer, Myanmar, the
-## Universal Shaping Engine, Thai, Hangul; their text shapes as the
+## Universal Shaping Engine; their text shapes as the
 ## default shaper shapes it), vertical text,
 ## Arabic presentation-form fallback/stretching and extra cluster levels. Features beyond the 27
 ## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
@@ -64,6 +65,8 @@ Shaper :: {}.{
 		hebrew : Bool,
 		arabic : Bool,
 		thai : Bool,
+		hangul : Bool,
+		hangul_masks : ShaperHangul.Masks,
 		thai_legacy : Bool,
 		arabic_masks : ShaperArabic.Masks,
 		characters : Bool,
@@ -141,6 +144,18 @@ Shaper :: {}.{
 		horizontal = ["calt", "clig", "curs", "dist"].map(|t| Shaper.request(t, 1, True)).append({ ..Shaper.request("kern", 1, True), fallback: True }).concat(["liga", "rclt"].map(|t| Shaper.request(t, 1, True)))
 		[{ ..Shaper.request("rvrn", 1, True), stage: 0 }].concat(direction_features).concat(fractions).concat(random).concat(markers).concat(common).concat(horizontal)
 	}
+
+	hangul_requests : [Ltr, Rtl] -> List(Request)
+	hangul_requests = |direction| Shaper.default_requests(direction).map(|r| if (r.tag == Shaper.tag("calt")) { ..r, global: False, default: 1 } else r).concat(["ljmo", "vjmo", "tjmo"].map(|name| Shaper.request(name, 1, False)))
+
+	hangul_ltr_merged : List(Request)
+	hangul_ltr_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.hangul_requests(Ltr)))
+	hangul_rtl_merged : List(Request)
+	hangul_rtl_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.hangul_requests(Rtl)))
+	hangul_ltr_keys : List(U64)
+	hangul_ltr_keys = LayoutCommon.feature_keys(Shaper.hangul_ltr_merged.map(|f| f.tag))
+	hangul_rtl_keys : List(U64)
+	hangul_rtl_keys = LayoutCommon.feature_keys(Shaper.hangul_rtl_merged.map(|f| f.tag))
 
 	ltr_requests : List(Request)
 	ltr_requests = Shaper.default_requests(Ltr)
@@ -228,18 +243,19 @@ Shaper :: {}.{
 				}
 		}
 		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
+		hangul = ShaperTags.script_of(options.script) == Shaper.tag("Hang")
 		arabic = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Arab")
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => if (arabic) Shaper.arabic_ltr_merged else Shaper.ltr_merged
-					Rtl => if (arabic) Shaper.arabic_rtl_merged else Shaper.rtl_merged
+					Ltr => if (arabic) Shaper.arabic_ltr_merged else if (hangul) Shaper.hangul_ltr_merged else Shaper.ltr_merged
+					Rtl => if (arabic) Shaper.arabic_rtl_merged else if (hangul) Shaper.hangul_rtl_merged else Shaper.rtl_merged
 				}
 			} else {
 				defaults = match requested {
-					Ltr => if (arabic) Shaper.arabic_requests(Ltr) else Shaper.ltr_requests
-					Rtl => if (arabic) Shaper.arabic_requests(Rtl) else Shaper.rtl_requests
+					Ltr => if (arabic) Shaper.arabic_requests(Ltr) else if (hangul) Shaper.hangul_requests(Ltr) else Shaper.ltr_requests
+					Rtl => if (arabic) Shaper.arabic_requests(Rtl) else if (hangul) Shaper.hangul_requests(Rtl) else Shaper.rtl_requests
 				}
 				var $requests = List.with_capacity(defaults.len() + options.features.len())
 				$requests = $requests.concat(defaults)
@@ -248,13 +264,17 @@ Shaper :: {}.{
 					v = f.value.to_u64()
 					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: if (arabic) ShaperArabic.stage(Shaper.feature_tag(f.tag)) else 1 })
 				}
+				# Hangul keeps calt in its own bit even after a global user setting.
+				if hangul {
+					$requests = $requests.append(Shaper.request("calt", 1, False))
+				}
 				Shaper.merge(Shaper.sort_by_tag($requests))
 			}
 		keys =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => if (arabic) Shaper.arabic_ltr_keys else Shaper.ltr_keys
-					Rtl => if (arabic) Shaper.arabic_rtl_keys else Shaper.rtl_keys
+					Ltr => if (arabic) Shaper.arabic_ltr_keys else if (hangul) Shaper.hangul_ltr_keys else Shaper.ltr_keys
+					Rtl => if (arabic) Shaper.arabic_rtl_keys else if (hangul) Shaper.hangul_rtl_keys else Shaper.rtl_keys
 				}
 			} else {
 				LayoutCommon.feature_keys(merged.map(|f| f.tag))
@@ -371,6 +391,8 @@ Shaper :: {}.{
 			rtlm_mask: one_mask_of(Shaper.rtlm_tag),
 			hebrew,
 			arabic,
+			hangul,
+			hangul_masks: if (hangul) { ljmo: one_mask_of(Shaper.tag("ljmo")), vjmo: one_mask_of(Shaper.tag("vjmo")), tjmo: one_mask_of(Shaper.tag("tjmo")), calt: one_mask_of(Shaper.tag("calt")) } else ShaperHangul.no_masks,
 			thai: ShaperTags.script_of(options.script) == Shaper.tag("Thai") or ShaperTags.script_of(options.script) == Shaper.tag("Laoo"),
 			thai_legacy: ShaperTags.script_of(options.script) == Shaper.tag("Thai") and LayoutCommon.select_script_tag(gsub_common, script_tags) != Shaper.tag("thai"),
 			arabic_masks: if (arabic) { isol: one_mask_of(Shaper.tag("isol")), fina: one_mask_of(Shaper.tag("fina")), fin2: one_mask_of(Shaper.tag("fin2")), fin3: one_mask_of(Shaper.tag("fin3")), medi: one_mask_of(Shaper.tag("medi")), med2: one_mask_of(Shaper.tag("med2")), init: one_mask_of(Shaper.tag("init")) } else ShaperArabic.no_masks,
@@ -746,11 +768,11 @@ Shaper :: {}.{
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
-		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else mirrored
+		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
-		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else ShaperNormalize.normalize(ctx, legacy)
-		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else normalized
+		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else if (p.hangul) ShaperNormalize.normalize_short_circuit(ctx, legacy) else ShaperNormalize.normalize(ctx, legacy)
+		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else if (p.hangul) ShaperHangul.setup(normalized, p.hangul_masks) else normalized
 		masked = Shaper.setup_masks(p, joined, found.fraction_slash, !backward)
 		gdef = Face.gdef(face)
 		classes = LayoutGdef.has_glyph_classes(gdef)
@@ -812,7 +834,7 @@ Shaper :: {}.{
 		adjust = p.fallback_marks and !backward
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
-			if LayoutGsub.is_mark_item(item) {
+			if LayoutGsub.is_mark_item(item) and !p.hangul {
 				if adjust {
 					# `i < count`, the lists' length.
 					$dx = $dx.set(i, ($dx.get(i) ?? 0) - ($ax.get(i) ?? 0)) ?? []

@@ -1,0 +1,2894 @@
+{
+  "schema": 1,
+  "about": "Modern and old Jamo, precomposed syllables, tone marks and malformed sequences in two unmodified Korean font families.",
+  "cases": [
+    {
+      "id": "nanumgothic-0-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-0-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-1-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-1-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-2-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "한글",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-2-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "한글",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-3-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-3-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-4-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-4-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-5-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-5-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-6-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-6-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-7-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-7-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-8-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᅟᅠ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-8-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᅟᅠ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-9-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-9-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-10-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᄀ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-10-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᄀ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-11-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-11-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-12-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-12-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-13-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-13-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-14-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-14-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-15-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-15-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-16-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "〯〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-16-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "〯〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-17-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "A〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-17-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "A〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-18-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-18-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "각〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-19-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가͏ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-19-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가͏ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-20-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᄀ‍ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-20-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "ᄀ‍ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-21-0",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가‌ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanumgothic-21-1",
+      "font": "../fonts/shaping/hangul/NanumGothic-Regular.ttf",
+      "text": "가‌ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-0-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-0-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-1-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-1-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-2-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "한글",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-2-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "한글",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-3-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-3-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-4-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-4-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-5-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-5-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-6-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-6-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-7-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-7-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-8-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᅟᅠ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-8-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᅟᅠ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-9-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-9-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-10-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᄀ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-10-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᄀ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-11-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-11-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-12-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-12-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-13-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-13-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-14-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-14-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-15-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-15-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-16-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "〯〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-16-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "〯〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-17-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "A〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-17-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "A〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-18-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-18-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "각〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-19-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가͏ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-19-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가͏ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-20-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᄀ‍ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-20-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "ᄀ‍ᅡ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-21-0",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가‌ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "nanummyeongjo-21-1",
+      "font": "../fonts/shaping/hangul/NanumMyeongjo-Regular.ttf",
+      "text": "가‌ᆨ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-0-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-0-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-1-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-1-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-2-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-2-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-3-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-3-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-4-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-4-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-5-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-5-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-6-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-6-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-7-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-7-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-8-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-8-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-9-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-9-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-10-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-10-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-11-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-11-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-0-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-0-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-1-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-1-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-2-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-2-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-3-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-3-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-4-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-4-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-5-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-5-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-6-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-6-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-7-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-7-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-8-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-8-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-9-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-9-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-10-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-10-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-11-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-11-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-0-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-0-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-1-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-1-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-2-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-2-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-3-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-3-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-4-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-4-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-5-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-5-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-6-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-6-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-7-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-7-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-8-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-8-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-9-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-9-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-10-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-10-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-11-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-jamo-11-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-jamo.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-0-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-0-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-1-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-1-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-2-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-2-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-3-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-3-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-4-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-4-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-5-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-5-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-6-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-6-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-7-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-7-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-8-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-8-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-9-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-9-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-10-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-10-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-11-0",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-zero-tone-11-1",
+      "font": "../fonts/shaping/hangul-fixtures/zero-tone.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-0-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-0-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-1-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-1-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-2-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-2-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-3-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-3-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가ퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-4-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-4-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "각",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-5-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-5-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "ꥠힰퟋ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-6-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-6-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-7-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-7-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-8-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-8-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "〮",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-9-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-9-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "〮〯",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-10-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-10-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "a가",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-11-0",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 0,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-no-circle-11-1",
+      "font": "../fonts/shaping/hangul-fixtures/no-circle.ttf",
+      "text": "가ᇿ",
+      "options": {
+        "script": "Hang",
+        "cluster_level": 1,
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-0",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-1",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-2",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-3",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-4",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=0",
+          "vjmo=0",
+          "tjmo=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-all-features-5",
+      "font": "../fonts/shaping/hangul-fixtures/all.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt[1:3]=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-0",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-1",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-2",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-3",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-4",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "ljmo=0",
+          "vjmo=0",
+          "tjmo=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "fixture-decomposed-features-5",
+      "font": "../fonts/shaping/hangul-fixtures/decomposed.ttf",
+      "text": "a각",
+      "options": {
+        "script": "Hang",
+        "features": [
+          "calt[1:3]=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
