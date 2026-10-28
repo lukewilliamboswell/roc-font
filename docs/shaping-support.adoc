@@ -214,6 +214,11 @@ final shared integration gate.
   treats them independently. The exact
   link:../tests/fonts/graphite/feature-divergences.json[16 alias differences]
   retain both raw reference answers and table-derived expectations.
+  Stored advances follow the font's final-short-metric fallback even at
+  the exact end of `hmtx`. Graphite2 1.3.14 instead returns zero for that
+  last advance without an unused padding byte; the
+  link:../tests/fonts/graphite-metrics/cache-proof.json[isolated cache proof]
+  and public padding/no-padding tests preserve this narrow difference.
 * WOFF/WOFF2 data needs decompression before this sfnt reader can accept
   the font bytes; container unwrapping remains separate work.
 * After work-budget exhaustion, partial progress can differ from HarfBuzz's
