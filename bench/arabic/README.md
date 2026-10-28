@@ -1,8 +1,8 @@
 Native Arabic fallback and Syriac stretch evidence. The consumers import a
 served package bundle and measure shaping after font reading and planning.
 The runner checks script, RTL direction, UTF8 length and an input checksum
-for every timing sample. The native C loop calls pinned HarfBuzz14.6.0 from
-the oracle wheel; timing uses128 iterations and five samples per size.
+for every timing sample. The native C loop calls pinned HarfBuzz 14.6.0 from
+the oracle wheel; timing uses 128 iterations and five samples per size.
 
 | Scenario | Input scalars | Allocation calls | Roc / HB elapsed ratio |
 | --- | --- | --- | --- |
@@ -22,13 +22,13 @@ Each JSON records the exact font, bundle/archive and optimized binary hashes,
 compiler and reference versions, and same-run elapsed ratios. The final
 bundle is the integrated `f795f7f` snapshot, including positioning numerical
 safety corrections. `syriac-before.json` uses an immutable `package/` export
-of commit`7563e51`. All measured operations released their allocations.
-Requested bytes and peak live bytes are unavailable in roc-fuzz0.4.3;
+of commit `7563e51`. All measured operations released their allocations.
+Requested bytes and peak live bytes are unavailable in roc-fuzz 0.4.3;
 JSON fields explicitly leave them unknown. Fuzz peak RSS is separate.
 
-`oracle-verification.json` records6,525 exact native cached comparisons in
+`oracle-verification.json` records 6,525 exact native cached comparisons in
 the script worker snapshot. The root aggregate gate covers the later
-integrated numerical corrections. `fuzz-final.json` records1,500 native
+integrated numerical corrections. `fuzz-final.json` records 1,500 native
 runs on the final integrated bundle with seven fonts, stage-entry witnesses,
 determinism, growth, cluster/index alignment, tracing and leak checks.
 
@@ -41,5 +41,5 @@ Run a fresh final measurement from a checkout with the pinned oracle Python:
 `--bundle <hash>.tar.zst` selects an immutable before/after snapshot.
 `--reuse --binary-label Syrc-final` reuses both native consumers for a second
 font/script workload; the input guards still apply. The benchmark apps for
-bundle-consumer registration are`bench/arabic/bench.roc` and
+bundle-consumer registration are `bench/arabic/bench.roc` and
 `bench/arabic/alloc.roc`; `ArabicBench.roc` is their shared pure helper.

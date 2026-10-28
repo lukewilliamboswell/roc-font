@@ -627,5 +627,8 @@
     "Plans in fonts with manual-ZWJ mark lookups retain one additional policy list, adding one call per separately prepared plan; planned shaping costs are unchanged.",
     "bench/records/compiler-flags/oct27-main.json independently confirms all64 available untouched-main cases have identical dev/speed allocation counts.",
     "roc-fuzz0.4.3 exposes allocation calls and leaks, not requested or peak live allocator bytes."
-  ]
+  ],
+  "binary_sha256": "1647130b12ffd99e434ac255d6eb6e55cf73a71e5889bc9b156cb510633a68e8",
+  "bundle": "537owDtzfKcHPCnrBCeuzTCb528mzsFtKfJ1Wx2gpKkj.tar.zst",
+  "case_manifest_sha256": "4765459ef4947bf93b6488b1e79bcec8f6b8ef1c92cbba3bea1c08dc7a70e6d4"
 }
