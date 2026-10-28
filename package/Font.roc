@@ -88,6 +88,10 @@ Font :: { face : Face }.{
 	## room for every intermediate operation to stay finite; exposed path
 	## coordinates are bounded by 2^101. Exceeding this fixed envelope is
 	## reported as `BadTable` at the glyph's data, rather than clamped.
+	## CFF/CFF2 programs have bounded stacks, subroutine calls and work,
+	## and a conservative all-location coordinate envelope of 2^30-1 font
+	## units. A program beyond that envelope reports `OverLimit` while
+	## reading; its geometry is never clipped to fit.
 	Limits := { max_bytes : U64 ?? 268_435_456, max_faces : U32 ?? 1024, max_lookups : U32 ?? 16_384, max_depth : U32 ?? 64 }
 
 	## Why bytes could not be read as a font, or what lenient reading left
@@ -263,8 +267,8 @@ Font :: { face : Face }.{
 	##   design the box is measured on the outline moved there.
 	## - `Empty`: the glyph draws nothing (such as a space, or a glyph whose
 	##   outline has no contours), or the glyph id is past the font.
-	## - `Unknown`: the font's outlines are in a form roc-font does not
-	##   read (CFF or CFF2 outlines, or bitmaps only), so the glyph may draw
+	## - `Unknown`: the font has no readable vector outline (for example,
+	##   it supplies only bitmap glyphs), so the glyph may draw
 	##   something whose box cannot be measured. Fall back on the font's
 	##   `metrics` and the glyph's `advance`.
 	extents : Font, U32 -> [Extents(Extents), Empty, Unknown]
@@ -629,9 +633,11 @@ Font :: { face : Face }.{
 	OutlineCommand : [MoveTo(OutlinePoint), LineTo(OutlinePoint), QuadraticTo({ control : OutlinePoint, end : OutlinePoint }), CubicTo({ control1 : OutlinePoint, control2 : OutlinePoint, end : OutlinePoint }), Close]
 
 	## The glyph's outline at the current variation location, for vector
-	## output or a caller's renderer. An empty glyph or an id past the font
-	## gives `Outline([])`. `Unknown` means the font uses outlines this
-	## reader cannot expose, such as CFF/CFF2 or bitmap-only glyphs.
+	## output or a caller's renderer. TrueType paths use quadratic curves;
+	## CFF/CFF2 paths use cubic curves. Both retain F64 coordinates in font
+	## units. An empty glyph or an id past the font gives `Outline([])`.
+	## `Unknown` means no vector outline is available, as in bitmap-only
+	## fonts. Hinting and pixel rounding belong to the caller's renderer.
 	outline : Font, U32 -> [Outline(List(OutlineCommand)), Unknown]
 	outline = |font, id| Face.outline(font.face, id.to_u64())
 
