@@ -7,7 +7,7 @@ noncontextual substitution and insertion. Additional fonts exercise signed
 contextual offsets, zero-as-missing substitutions, and multiple ligature stores
 whose accumulated byte offsets become array indices after each store.
 
-The initial native gate passes2128/2128 cached HarfBuzz14.6 records exactly,
+The native gate passes2368/2368 cached HarfBuzz14.6 records exactly,
 including glyphs, advances, offsets, clusters and unsafe flags. Cases cover
 horizontal/vertical directions, logical/visual/reverse order, features and
 overlapping feature ranges, explicit scripts, end-of-text, missing glyphs,
@@ -23,6 +23,31 @@ record keys and hashes. Recording uses HarfBuzz14.6.0/uharfbuzz0.56.3.
 OTS9.3 accepts the surrounding SFNT fonts but **drops** `mort`; this is not an
 independent validator for these legacy programs. HarfBuzz's legacy interpreter
 and Apple's format definition are the actual program/behavior oracles.
+
+Another36/36 exact cases use a renamed OFL Inter4.1 body with an original
+format4 program (`prepare-real.py`, `real-pins.json`, `body-sans-OFL.txt`). This
+exercises real outlines, cmap and GDEF/GPOS data; Inter itself does not ship
+legacy morphing. No native legacy-producer font is claimed by this fixture set.
+The original fonts and byte recipes use this directory's UPL licence.
+
+`scaling-cases.jsonc` adds9/9 exact cases for16/64/192-state machines with
+overlapping signed-offset substitutions and a constant257glyph font body.
+The highest reachable state is exposed immediately, avoiding repeated reference
+sanitizer sweeps. A chain discovering one row at a time exhausted HarfBuzz's
+sanitizer budget at192states, causing HarfBuzz to drop the optional program;
+it was not used as an agreement/performance fixture. The library accepts such
+bounded programs; reference sanitizer rejection is distinct from bad font data.
+
+`build-consumers.py` builds the public tests, optimized fuzz target and narrow
+benchmarks against a loopback-served bundle in a source-sentinel checkout.
+`bench.c` links pinned HarfBuzz14.6; `bench.py` checks complete output checksums
+before timing. `native-measurements.json` records three increasing sizes:
+read allocation calls72/124/255, query calls15/14/14 (unchanged from the
+pre-feature query baseline), and2.72–2.92 times HarfBuzz in this synthetic
+paired4000-query workload. Startup, reading and planning are included. The
+pre-feature binary ignores `mort`, so its timing is not equivalent work.
+roc-fuzz0.4.3 exposes allocation calls, not requested bytes or peak live bytes;
+those measurements remain unavailable. These are not general shaping ratios.
 
 Preparation converts old byte-indexed states and header coverage into the
 existing bounded Apple runtime. Signed contextual offsets share one immutable

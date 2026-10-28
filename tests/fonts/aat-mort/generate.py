@@ -68,7 +68,7 @@ def mort(body, kind, coverage, features=False):
     chain = u32(1, 12 + len(feature_data) + len(sub)) + u16(3 if features else 0, 1) + feature_data + sub
     return u32(0x00010000, 1) + chain
 
-def make_font(label, data, *, first=1, glyph_count=9, morx=None):
+def make_font(label, data, *, first=1, glyph_count=9, morx=None, advance=None):
     names = [".notdef"] + [f"g{i}" for i in range(1, glyph_count)]
     fb = FontBuilder(1000, isTTF=True)
     fb.setupGlyphOrder(names)
@@ -80,7 +80,7 @@ def make_font(label, data, *, first=1, glyph_count=9, morx=None):
             pen.moveTo((0,0)); pen.lineTo((50,0)); pen.lineTo((50,300)); pen.lineTo((0,300)); pen.closePath()
         glyphs[name] = pen.glyph()
     fb.setupGlyf(glyphs)
-    fb.setupHorizontalMetrics({name:(100 + i * 10,0) for i,name in enumerate(names)})
+    fb.setupHorizontalMetrics({name:(100 + i * 10 if advance is None else advance,0) for i,name in enumerate(names)})
     fb.setupHorizontalHeader(ascent=800,descent=-200)
     fb.setupNameTable({"familyName":"Original Mort " + label,"styleName":"Regular","psName":"OriginalMort-" + label})
     fb.setupOS2(sTypoAscender=800,sTypoDescender=-200,usWinAscent=800,usWinDescent=200)
@@ -99,6 +99,21 @@ def make_font(label, data, *, first=1, glyph_count=9, morx=None):
     output = io.BytesIO(); fb.font.save(output,reorderTables=True)
     return output.getvalue()
 
+def narrow(states):
+    state_at = 16
+    entry_at = state_at + states * 6
+    pool_at = entry_at + (states + 1) * 8
+    body = u16(6,10,state_at,entry_at,pool_at,1,2) + bytes([4,5])
+    body += b"".join(bytes([0,0,0,0,i+1,0]) for i in range(states))
+    body += u16(state_at,0,0,0)
+    # Expose the highest reachable row immediately: HarfBuzz's bounded
+    # sanitizer need not repeatedly rescan one newly discovered row at a time.
+    next_state = lambda i: states-1 if i == 0 else (1 if i == states-1 else (0 if i == states-2 else i+1))
+    value = lambda i: 2 if i == 0 else (3 if i == states-1 else 2+(i+1)%2)
+    body += b"".join(u16(state_at + next_state(i)*6,0,0,pool_at//2-1+i) for i in range(states))
+    body += u16(*(value(i) for i in range(states)))
+    return mort(body,1,0x3000)
+
 def generate():
     fonts = []
     for kind, code in [("direct",4),("rearrange",0),("context",1),("ligature",2),("insertion",5)]:
@@ -110,10 +125,34 @@ def generate():
     for label, body, first, count, code in [
         ("context-zero",state("context",zero=True),1,9,1),
         ("context-negative",state("context",first=49),49,64,1),
+        ("context-minus-one",state("context",first=30),30,40,1),
         ("ligature-multistore",state("ligature",multi_store=True),1,9,2),
     ]:
         emit(label + ".ttf",make_font(label,mort(body,code,0x3000),first=first,glyph_count=count))
         fonts.append(label)
+    old = mort(lookup(1,[5,6,0]),4,0x3000)
+    new_body = lookup(1,[6,5,0])
+    new_sub = u32(12 + len(new_body),0x30000004,1) + new_body
+    modern = u32(0x20000,1,1,16 + len(new_sub),0,1) + new_sub
+    for label, legacy, extended in [
+        ("priority-morx",old,modern),
+        ("priority-empty-morx",old,u32(0x20000,0)),
+        ("broken-mort-with-morx",b"\0",modern),
+        ("broken-morx-with-mort",old,b"\0"),
+    ]:
+        emit(label + ".ttf",make_font(label,legacy,morx=extended))
+        fonts.append(label)
+    emit("bad-mort-and-morx.ttf",make_font("bad-mort-and-morx",b"\0",morx=b"\0"))
+    emit("bad-chain.ttf",make_font("bad-chain",u32(0x10000,1,1,1000) + u16(0,1)))
+    scaling = []
+    for states in (16,64,192):
+        name = f"scaling-{states}.ttf"
+        emit(name,make_font(f"scaling-{states}",narrow(states),glyph_count=257,advance=600))
+        for index,text in enumerate(["A"*states,"A"*(2*states),"B"+"A"*states+"C"]):
+            # The original SFNT maps lowercase input to glyphs1..3.
+            scaling.append({"id":f"mort-scaling-{states}-{index}","font":name,"text":text.lower(),
+                "options":{"script":"Latn","direction":"ltr","hb_options":["--show-flags"]},"expected":"oracle"})
+    emit("scaling-cases.jsonc",(json.dumps({"schema":1,"about":"Fixed257glyph bodies; only16/64/192legacy states and overlapping substitution offsets grow.","cases":scaling},indent=2)+"\n").encode())
     cases = []
     for font in fonts:
         for text in ["","a","b","ab","aab","aba","ba","abc","aa","a\u0301b","a b"]:

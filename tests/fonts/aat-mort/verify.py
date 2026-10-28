@@ -12,8 +12,9 @@ path=HERE/(args.cases+'.jsonc');cases,problems=parse_case_file(path);assert not 
 records={record['id']:record for record in map(json.loads,(HERE/(args.cases+'-records.jsonl')).read_text().splitlines())};locations=conformance.Locations()
 with (contextlib.nullcontext([]) if args.binary else flight.flight(roc,work=work/'flight')) as dep:
  if not args.binary:
-  command=[roc,'build','--opt=speed',str(ROOT/'tools/driver/main.roc'),f'--output={work/"query"}',*dep]
-  built=subprocess.run(command,cwd=ROOT,capture_output=True,text=True);print(built.stdout,built.stderr);assert built.returncode==0
+  mirror=flight.make_mirror(work/'mirror')
+  command=[roc,'build','--opt=speed',str(mirror/'tools/driver/main.roc'),f'--output={work/"query"}',*dep]
+  built=subprocess.run(command,cwd=mirror,capture_output=True,text=True);print(built.stdout,built.stderr);assert built.returncode==0
  results,why,timing=conformance.run_driver([str(args.binary.resolve() if args.binary else work/'query')],cases,True,locations,{})
 failures=[];hashes={}
 for case in cases:

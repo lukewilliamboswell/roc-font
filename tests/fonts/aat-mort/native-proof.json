@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "roc": "nightly-2026-10-27-de79a0f",
+  "bundle": "FEUxig9CoQGvktAY22mRYFEMzH7a3Agf9UwNzd8afKvp.tar.zst",
+  "driver_sha256": "2d9326aad58e788bfd35cfd40e4895bd6e1f73499aa7c77866a93a6656459561",
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "uharfbuzz": "0.56.3"
+  },
+  "replays": [
+    {
+      "cases": "mort-cases",
+      "result": "2368/2368 cached records agree; {'requests': 2368, 'answered': 2368, 'seconds': 0.03969574999064207}"
+    },
+    {
+      "cases": "body-cases",
+      "result": "36/36 cached records agree; {'requests': 36, 'answered': 36, 'seconds': 0.003865709062665701}"
+    },
+    {
+      "cases": "scaling-cases",
+      "result": "9/9 cached records agree; {'requests': 9, 'answered': 9, 'seconds': 0.004181165946647525}"
+    }
+  ],
+  "source_expects": 222,
+  "source_sentinel_public_expects": 14,
+  "fuzz": {
+    "runs": 1000,
+    "seed": 27200,
+    "max_len": 2048,
+    "binary_sha256": "b067b990bb9d222cb80e1c75897520bd2b05436773341adacfaec58845454590",
+    "result": "PASS",
+    "real_body_seed": "body-sans.ttf; seven original program fonts plus one real-body font",
+    "campaign_log_sha256": "791463c98162e2c19ffdfdb85a756a7c2cd830e6037a6e5d2fe45fc9d7f1127c"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "harfbuzz": "14.6.0",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "iterations": 4000,
+  "repeats": 5,
+  "timing_flags": [
+    "--opt=speed"
+  ],
+  "allocation_flags": [
+    "--fuzz",
+    "--opt=speed"
+  ],
+  "baseline_revision": "0d9ec2e plus shared legacy-runtime contracts; before Face imports AatMort",
+  "before_bundle": "8s2Bg79vpb84kLjmz2vRRRU4ZEAgEsD1r1EUFZrfXo88.tar.zst",
+  "after_bundle": "FEUxig9CoQGvktAY22mRYFEMzH7a3Agf9UwNzd8afKvp.tar.zst",
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "limits": "roc-fuzz0.4.3 exposes allocation calls only. Timings include startup, read, plan and stdout; repeated queries amortize them. Baseline ignores mort and is not equivalent work. No general shaping-performance claim.",
+  "binaries": {
+    "before-timing": "925de7146976a464606ad3894a2092c638a395f325be11f523c96caf8f37631d",
+    "after-timing": "3d14ad5d4e838c22b15122258a8bd6abb5568dcc80fbd727d2eb7ec289be4e2f",
+    "before-alloc": "9a909c5ca238f5e8334662cdff1fd53ab48ae4a481f811adcabe6afabadbfd1a",
+    "after-alloc": "f978ab9028579109482b53ae0100dfdc5453724b55d8e7272b5df613ffc86402",
+    "harfbuzz": "1c4adc1d1f25842ef109d2cbc1a25bb68a8b7dccdf698baea242f3ee65bf7399"
+  },
+  "rows": [
+    {
+      "states": 16,
+      "text_bytes": 16,
+      "font_glyphs": 257,
+      "font_sha256": "c6b8f71d24973f088de2e8a57fc8d0fe263ff76a94f64f1bc2e7108b52983b1b",
+      "before_read_allocations": 39,
+      "before_read_checksum": 257,
+      "after_read_allocations": 72,
+      "after_read_checksum": 257,
+      "before_shape_allocations": 15,
+      "before_shape_checksum": 9736,
+      "after_shape_allocations": 15,
+      "after_shape_checksum": 9775,
+      "before_seconds_samples": [
+        0.011971291969530284,
+        0.011345000006258488,
+        0.011877291020937264,
+        0.011547875008545816,
+        0.011449124896898866
+      ],
+      "before_seconds_median": 0.011547875008545816,
+      "after_seconds_samples": [
+        0.014273000066168606,
+        0.013408832950517535,
+        0.013503708061762154,
+        0.013538208906538785,
+        0.013485000003129244
+      ],
+      "after_seconds_median": 0.013503708061762154,
+      "harfbuzz_seconds_samples": [
+        0.00691662507597357,
+        0.0046047919895499945,
+        0.004867500043474138,
+        0.00462174997664988,
+        0.004630459006875753
+      ],
+      "harfbuzz_seconds_median": 0.004630459006875753,
+      "after_to_hb_ratio": 2.9162785032132974
+    },
+    {
+      "states": 64,
+      "text_bytes": 64,
+      "font_glyphs": 257,
+      "font_sha256": "b7623f98d76b8002a23e51b9a12ce75152e60b4ebe0e83c2a328bde02ab51a12",
+      "before_read_allocations": 39,
+      "before_read_checksum": 257,
+      "after_read_allocations": 124,
+      "after_read_checksum": 257,
+      "before_shape_allocations": 14,
+      "before_shape_checksum": 40480,
+      "after_shape_allocations": 14,
+      "after_shape_checksum": 40639,
+      "before_seconds_samples": [
+        0.02042279194574803,
+        0.020396374980919063,
+        0.020412542042322457,
+        0.02065795799717307,
+        0.02140758407767862
+      ],
+      "before_seconds_median": 0.02042279194574803,
+      "after_seconds_samples": [
+        0.027502499986439943,
+        0.02760324999690056,
+        0.027618416002951562,
+        0.02749387500807643,
+        0.028568999958224595
+      ],
+      "after_seconds_median": 0.02760324999690056,
+      "harfbuzz_seconds_samples": [
+        0.009670375031419098,
+        0.009887250023894012,
+        0.009698000038042665,
+        0.009949374943971634,
+        0.010126624954864383
+      ],
+      "harfbuzz_seconds_median": 0.009887250023894012,
+      "after_to_hb_ratio": 2.791802566961814
+    },
+    {
+      "states": 192,
+      "text_bytes": 192,
+      "font_glyphs": 257,
+      "font_sha256": "8a62a289a22ec12cdbada9fa55a5592c22091802274e7a138e55f393e41983a4",
+      "before_read_allocations": 39,
+      "before_read_checksum": 257,
+      "after_read_allocations": 255,
+      "after_read_checksum": 257,
+      "before_shape_allocations": 14,
+      "before_shape_checksum": 133728,
+      "after_shape_allocations": 14,
+      "after_shape_checksum": 134207,
+      "before_seconds_samples": [
+        0.043860499979928136,
+        0.04392216692212969,
+        0.043274874915368855,
+        0.04276658303570002,
+        0.043060541967861354
+      ],
+      "before_seconds_median": 0.043274874915368855,
+      "after_seconds_samples": [
+        0.06663199991453439,
+        0.06346108403522521,
+        0.06310879194643348,
+        0.06321599998045713,
+        0.06404691701754928
+      ],
+      "after_seconds_median": 0.06346108403522521,
+      "harfbuzz_seconds_samples": [
+        0.02341491705738008,
+        0.023204708006232977,
+        0.02359224995598197,
+        0.023027125047519803,
+        0.02329745900351554
+      ],
+      "harfbuzz_seconds_median": 0.02329745900351554,
+      "after_to_hb_ratio": 2.7239487373129
+    }
+  ]
+}
