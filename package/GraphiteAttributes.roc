@@ -60,16 +60,16 @@ GraphiteAttributes := {
 		# First validate all encoded runs and counts. No output allocation
 		# uses an unchecked glyph/attribute count or decompressed offset.
 		var $count = 0
-		var $problems = []
+		var $problems = NoProblems
 		for g in 0..<glyphs {
 			start = offset(g)
 			end = offset(g + 1)
 			if start < header or end < start or end > data.len() {
-				$problems = $problems.append({ table: "Gloc", offset: 8 + g * width })
+				$problems = GraphiteAttributes.add_problem($problems, { table: "Gloc", offset: 8 + g * width })
 			} else {
 				match GraphiteAttributes.attributes_at(data, start, end, boxes) {
 					Err(bad_at) => {
-						$problems = $problems.append({ table: "Glat", offset: bad_at })
+						$problems = GraphiteAttributes.add_problem($problems, { table: "Glat", offset: bad_at })
 					}
 					Ok(at) => {
 						if boxes {
@@ -80,13 +80,13 @@ GraphiteAttributes := {
 						while $at < end {
 							unit = if (major == 1) 1 else 2
 							if !Bytes.fits($at, unit * 2, end) {
-								$problems = $problems.append({ table: "Glat", offset: $at })
+								$problems = GraphiteAttributes.add_problem($problems, { table: "Glat", offset: $at })
 								break
 							}
 							first = if (unit == 1) Bytes.u8(data, $at) else Bytes.u16(data, $at)
 							n = if (unit == 1) Bytes.u8(data, $at + 1) else Bytes.u16(data, $at + 2)
 							if first < $previous or first + n > attributes or !Bytes.fits($at + unit * 2, n * 2, end) {
-								$problems = $problems.append({ table: "Glat", offset: $at })
+								$problems = GraphiteAttributes.add_problem($problems, { table: "Glat", offset: $at })
 								break
 							}
 							$previous = first + n
@@ -97,11 +97,10 @@ GraphiteAttributes := {
 				}
 			}
 		}
-		if $problems.len() == 1 {
-			return Err(Bad($problems.first() ?? crash "one read problem"))
-		}
-		if !$problems.is_empty() {
-			return Err(Bads($problems))
+		match $problems {
+			NoProblems => {}
+			OneProblem(problem) => return Err(Bad(problem))
+			ManyProblems(problems) => return Err(Bads(problems))
 		}
 		var $starts = List.with_capacity(glyphs + 1)
 		var $keys = List.with_capacity($count)
@@ -151,16 +150,26 @@ GraphiteAttributes := {
 		Ok(start + 6 + $count * 8)
 	}
 
+	# Keep one problem scalar: the public single-error result needs no list.
+	Problems : [NoProblems, OneProblem(Problem), ManyProblems(List(Problem))]
+
+	add_problem : Problems, Problem -> Problems
+	add_problem = |problems, problem| match problems {
+		NoProblems => OneProblem(problem)
+		OneProblem(first) => ManyProblems([first, problem])
+		ManyProblems(found) => ManyProblems(found.append(problem))
+	}
+
 	# GTF Octabox_metrics and Subbox_entry define ordered min/max pairs.
 	# Equal endpoints describe degenerate boxes and remain valid. Span
 	# validation has already proved every field before this pass.
-	octabox_problems : List(U8), U64, U64, List(Problem) -> List(Problem)
+	octabox_problems : List(U8), U64, U64, Problems -> Problems
 	octabox_problems = |bytes, start, end, problems| {
 		var $problems = problems
 		for pair in 0..<2.U64 {
 			at = start + 2 + 2 * pair
 			if Bytes.u8(bytes, at) > Bytes.u8(bytes, at + 1) {
-				$problems = $problems.append({ table: "Glat", offset: at })
+				$problems = GraphiteAttributes.add_problem($problems, { table: "Glat", offset: at })
 			}
 		}
 		var $part = start + 6
@@ -168,7 +177,7 @@ GraphiteAttributes := {
 			for pair in 0..<4.U64 {
 				at = $part + 2 * pair
 				if Bytes.u8(bytes, at) > Bytes.u8(bytes, at + 1) {
-					$problems = $problems.append({ table: "Glat", offset: at })
+					$problems = GraphiteAttributes.add_problem($problems, { table: "Glat", offset: at })
 				}
 			}
 			$part = $part + 8
