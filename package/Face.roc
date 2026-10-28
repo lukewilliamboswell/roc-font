@@ -321,7 +321,7 @@ Face := {
 				keep_variations = $var_problems.is_empty()
 				images = Face.read_image_tables(bytes, tables, glyph_count)
 				$optional = $optional.concat(images.problems)
-				palettes = match Sfnt.located(bytes, tables, "CPAL", 0) {
+				palettes = match Face.located_tag(bytes, tables, 0x4350414C, 0) {
 					Missing => TablePalette.none
 					Bad(at) => {
 						$optional = $optional.append(Sfnt.bad("CPAL", at))
@@ -335,7 +335,7 @@ Face := {
 						}
 					}
 				}
-				color = match Sfnt.located(bytes, tables, "COLR", 0) {
+				color = match Face.located_tag(bytes, tables, 0x434F4C52, 0) {
 					Missing => TableColor.none
 					Bad(at) => {
 						$optional = $optional.append(Sfnt.bad("COLR", at))
@@ -361,7 +361,7 @@ Face := {
 						}
 					}
 				}
-				math = match Sfnt.located(bytes, tables, "MATH", 0) {
+				math = match Face.located_tag(bytes, tables, 0x4D415448, 0) {
 					Missing => TableMath.none
 					Bad(at) => {
 						$optional = $optional.append(Sfnt.bad("MATH", at))
@@ -466,7 +466,7 @@ Face := {
 	## container structure; consumers decode image/XML payloads themselves.
 	read_image_tables : List(U8), List(Sfnt.Table), U64 -> { svg : TableColorImages, sbix : TableColorImages, cbdt : TableColorImages, problems : List(Problem) }
 	read_image_tables = |bytes, tables, glyph_count| {
-		one = |tag, reader| match Sfnt.located(bytes, tables, tag, 0) {
+		one = |tag, number, reader| match Face.located_tag(bytes, tables, number, 0) {
 			Missing => { value: TableColorImages.none, problems: [] }
 			Bad(at) => { value: TableColorImages.none, problems: [Sfnt.bad(tag, at)] }
 			Found(found) => match reader(found.data, glyph_count) {
@@ -474,10 +474,10 @@ Face := {
 				Err(Bad(problem)) => { value: TableColorImages.none, problems: [Sfnt.bad(problem.table, found.offset + problem.offset)] }
 			}
 		}
-		svg = one("SVG ", TableColorImages.read_svg)
-		sbix = one("sbix", TableColorImages.read_sbix)
-		cblc = Sfnt.located(bytes, tables, "CBLC", 0)
-		cbdt = Sfnt.located(bytes, tables, "CBDT", 0)
+		svg = one("SVG ", 0x53564720, TableColorImages.read_svg)
+		sbix = one("sbix", 0x73626978, TableColorImages.read_sbix)
+		cblc = Face.located_tag(bytes, tables, 0x43424C43, 0)
+		cbdt = Face.located_tag(bytes, tables, 0x43424454, 0)
 		bitmap = match (cblc, cbdt) {
 			(Missing, Missing) => { value: TableColorImages.none, problems: [] }
 			(Found(locations), Found(data)) => match TableColorImages.read_cbdt(locations.data, data.data, glyph_count) {

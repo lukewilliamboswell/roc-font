@@ -329,7 +329,10 @@ LayoutPosition := {
 		}
 		var $deltas = []
 		if format == 3 {
-			for field in [at + 6, at + 8] {
+			# Both device fields are in the checked ten-byte anchor. Iterate
+			# their positions without allocating a temporary list per anchor.
+			for i in 0..<2 {
+				field = at + 6 + 2 * i
 				$deltas = $deltas.concat(LayoutPosition.check_device(data, at, field, lv)?)
 			}
 		}
