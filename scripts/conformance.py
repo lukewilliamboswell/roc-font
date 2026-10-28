@@ -112,6 +112,11 @@ EXTERNAL_CASES = (
     ROOT / "tests/fonts/complex/khmer-cases.jsonc",
     ROOT / "tests/fonts/complex/vowel-cases.jsonc",
     ROOT / "tests/fonts/shaping/indic-wide/cases.jsonc",
+    ROOT / "tests/fonts/complex/long-cases.jsonc",
+    ROOT / "tests/fonts/shaping/myanmar/myanmar.jsonc",
+    ROOT / "tests/fonts/shaping/tibetan/tibetan-cases.jsonc",
+    ROOT / "tests/fonts/shaping/use-sinhala/sinhala-cases.jsonc",
+    ROOT / "tests/fonts/shaping/use-joining/joining-cases.jsonc",
 )
 SCORES = ROOT / "tests" / "scores.json"
 SCORES_ABOUT = (

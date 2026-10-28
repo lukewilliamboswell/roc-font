@@ -23,6 +23,9 @@ import CaretTests
 import PositionFlagTests
 import KhmerTests
 import IndicTests
+import MyanmarTests
+import UseTests
+import PositionContextTests
 import PositionTests
 import ColorTests
 import ColorImageTests
