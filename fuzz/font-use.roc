@@ -195,7 +195,7 @@ check_run! = |font, text, run, rtl| {
 	if run.advances.len() != n or run.offsets.len() != n or run.clusters.len() != n or run.flags.len() != n {
 		crash "USE output is not index aligned"
 	}
-	if n > (64 * scalar_count).max(16384) {
+	if n > (256 * scalar_count).max(65536) {
 		crash "USE growth exceeds the scalar budget"
 	}
 	if !run.glyphs.all(|glyph| glyph < Font.glyph_count(font)) {
