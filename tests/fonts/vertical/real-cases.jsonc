@@ -1,0 +1,8058 @@
+{
+  "schema": 1,
+  "about": "Two renamed static OFL JP families; vertical punctuation, marks, controls, directions and explicit features.",
+  "cases": [
+    {
+      "id": "VerticalSansJP-Hani-ttb-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-ttb-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Hani-btt-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-ttb-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Kana-btt-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-ttb-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-0-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-0-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-0-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-0-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-1-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-1-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-1-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-1-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-2-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-2-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-2-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-2-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-3-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-3-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-3-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-3-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-4-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-4-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-4-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-4-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-5-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-5-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-5-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-5-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-6-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-6-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-6-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-6-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-7-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-7-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-7-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-7-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-8-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-8-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-8-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-8-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-9-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-9-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-9-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-9-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-10-default",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-10-vert=0",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-10-vrt2=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSansJP-Latn-btt-10-vkrn=1",
+      "font": "VerticalSansJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-ttb-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Hani-btt-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Hani",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-ttb-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Kana-btt-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Kana",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-ttb-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-0-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-0-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-0-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-0-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-1-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-1-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-1-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-1-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "「東京」（大阪）",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-2-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-2-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-2-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-2-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "縦書き、句読点。",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-3-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-3-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-3-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-3-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "カタカナ・ひらがな",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-4-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-4-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-4-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-4-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ー…—（）［］｛｝",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-5-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-5-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-5-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-5-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ABC abc 123",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-6-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-6-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-6-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-6-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "ÁB",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-7-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-7-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-7-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-7-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‍本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-8-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-8-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-8-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-8-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日‌本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-9-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-9-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-9-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-9-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日͏本",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-10-default",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-10-vert=0",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vert=0"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-10-vrt2=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vrt2=1"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "VerticalSerifJP-Latn-btt-10-vkrn=1",
+      "font": "VerticalSerifJP.ttf",
+      "text": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ],
+        "features": [
+          "vkrn=1"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

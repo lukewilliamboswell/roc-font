@@ -1,0 +1,2262 @@
+{
+  "schema": 1,
+  "about": "One pinned OFL Mongolian family, existing USE joining subset; vertical directions, variants, controls and features.",
+  "cases": [
+    {
+      "id": "ttb-0-0",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-0-1",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-0-2",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-0-3",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-0-4",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-0-5",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-6",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-7",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-8",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-9",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-10",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-1-11",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-12",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-13",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-14",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-15",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-16",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-2-17",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-18",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-19",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-20",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-21",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-22",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-3-23",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-24",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-25",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-26",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-27",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-28",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-4-29",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-30",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-31",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-32",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-33",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-34",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-5-35",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-36",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-37",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-38",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-39",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-40",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-6-41",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-42",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-43",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-44",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-45",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-46",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-7-47",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-48",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-49",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-50",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-51",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-52",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-8-53",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-54",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-55",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-56",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-57",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-58",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-9-59",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-60",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-61",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-62",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-63",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-64",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-10-65",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-66",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-67",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-68",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-69",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-70",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttb-11-71",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "ttb",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-72",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-73",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-74",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-75",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-76",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-0-77",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-78",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-79",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-80",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-81",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-82",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-1-83",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠋ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-84",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-85",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-86",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-87",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-88",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-2-89",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-90",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-91",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-92",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-93",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-94",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-3-95",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-96",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-97",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-98",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-99",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-100",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-4-101",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-102",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-103",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-104",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-105",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-106",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-5-107",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ᠎ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-108",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-109",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-110",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-111",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-112",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-6-113",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-114",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-115",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-116",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-117",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-118",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-7-119",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‍ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-120",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-121",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-122",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-123",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-124",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-8-125",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ‌ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-126",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-127",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-128",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-129",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-130",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-9-131",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠ͏ᠠ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-132",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-133",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-134",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-135",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-136",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-10-137",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠠᠡᠢᠣᠤᠥᠦᠧ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-138",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-139",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vert=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-140",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vrt2=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-141",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "vkrn=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-142",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "isol=1"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "btt-11-143",
+      "font": "../shaping/use-joining/UseMongolianSans.ttf",
+      "text": "ᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯᠮᠣᠩᠭᠣᠯ",
+      "options": {
+        "script": "Mong",
+        "direction": "btt",
+        "features": [
+          "init=0"
+        ],
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}

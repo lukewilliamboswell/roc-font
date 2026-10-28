@@ -1,0 +1,31 @@
+{
+  "native_source": "6bc5e40 plus root Face f8a8c19 before subsequent empty-fallback82e69ed",
+  "native_bundle": "8ib5MC9isFYkTmPyasuxX9zXa3zjTyhehjK9F7SveNq3.tar.zst",
+  "native_binary_sha256": "a3f6aad9ecd08e1b495be9d3dbda90399efd49d421bdbc25dcfbe7a1760e0e24",
+  "native_cached": {
+    "vertical-cases": {
+      "agree": 334,
+      "pending_empty_glyph_fix": 6
+    },
+    "real-cases": {
+      "agree": 528
+    },
+    "mongolian-cases": {
+      "agree": 144
+    },
+    "cff-cases": {
+      "agree": 52,
+      "pending_CFF_extents_integration": 8
+    }
+  },
+  "public_bundled_expects": {
+    "passed": 11,
+    "bundle": "EohUtiz6VoHoLukQRBnEtvSw5Dzd6gYPDvUqjcx7Fvkw.tar.zst"
+  },
+  "reader_checks": "All11 fonts OTS9.3.0 PASS;1074 records current; original generators deterministic check PASS; real prepare --check PASS",
+  "deliberate_differences": [
+    "vorg-policy-cases/ttf-ignore-ttb",
+    "vorg-policy-cases/ttf-ignore-btt"
+  ],
+  "final_shared_native_replay": "Integrator will rerun all1072 ordinary records after empty glyph and CFF extents integration; no claim of native success for pending rows."
+}

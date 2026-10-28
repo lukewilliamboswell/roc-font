@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "about": "Normative OpenType policy: VORG must be ignored for TrueType outlines; HB14.6 deliberately accepts this cross-format table.",
+  "cases": [
+    {
+      "id": "ttf-ignore-ttb",
+      "font": "ttf-vorg.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "ttb",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "ttf-ignore-btt",
+      "font": "ttf-vorg.ttf",
+      "text": "ab",
+      "options": {
+        "script": "Latn",
+        "direction": "btt",
+        "hb_options": [
+          "--show-flags"
+        ]
+      },
+      "expected": "oracle"
+    }
+  ]
+}
