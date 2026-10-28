@@ -23,6 +23,7 @@ import CaretTests
 import PositionFlagTests
 import KhmerTests
 import IndicTests
+import KernPolicyTests
 import MyanmarTests
 import UseTests
 import PositionContextTests
