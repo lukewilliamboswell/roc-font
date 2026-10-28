@@ -108,6 +108,8 @@ DRIVER_PACKAGE = TMP_ROOT / "conformance" / "driver.package"
 # Proven external matrices share this optimized driver, avoiding one
 # identical native build per script while retaining exact comparisons.
 EXTERNAL_CASES = (
+    ROOT / "tests/fonts/aat/morx-cases.jsonc",
+    ROOT / "tests/fonts/aat/language-cases.jsonc",
     ROOT / "tests/fonts/vertical/vert-selection-cases.jsonc",
     ROOT / "tests/fonts/vertical/vertical-cases.jsonc",
     ROOT / "tests/fonts/vertical/real-cases.jsonc",

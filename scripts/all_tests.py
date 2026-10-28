@@ -174,6 +174,7 @@ BENCH_APPS = (
     "bench/roc/myanmar.roc", "bench/roc/myanmar-alloc.roc",
     "bench/arabic/bench.roc", "bench/arabic/alloc.roc",
     "bench/vertical/bench.roc", "bench/vertical/alloc.roc",
+    "bench/variation-complete/bench.roc", "bench/variation-complete/alloc.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 
@@ -339,7 +340,7 @@ def step_examples(ctx: Context) -> Result:
 def step_unicode_data(ctx: Context) -> Result:
     # Generated shaping properties are pinned to the reference shaper's
     # Unicode version. Check generated source and its embedded licence.
-    generators = sorted((ROOT / "tools" / "ucd").glob("generate*.py"))
+    generators = sorted((ROOT / "tools" / "ucd").glob("generate*.py")) + sorted((ROOT / "tools" / "aat").glob("generate*.py"))
     return run_all(ctx, [[sys.executable, str(path), "--check"] for path in generators],
                    env=child_env(ctx))
 
@@ -351,12 +352,17 @@ def step_conformance(ctx: Context) -> Result:
     statuses = [f"general font cases: {main.status}"]
     outputs = [main.output]
     passed = main.status == "PASS"
-    for feature in ("math", "outlines-carets", "color-images", "color", "positioning/context-budget"):
+    for feature in ("math", "outlines-carets", "cff", "variation-complete", "aat-position", "color-images", "color", "positioning/context-budget"):
         code, output = run([sys.executable, f"tests/fonts/{feature}/verify.py"],
                            env=child_env(ctx), cwd=ctx.consumer_root)
         passed = passed and code == 0
         statuses.append(f"{feature}: exit {code}")
         outputs.append(output)
+    code, output = run([sys.executable, "tests/fonts/aat/verify_tracking.py"],
+                       env=child_env(ctx), cwd=ctx.consumer_root)
+    passed = passed and code == 0
+    statuses.append(f"Apple tracking: exit {code}")
+    outputs.append(output)
     return Result("PASS" if passed else "FAIL", "; ".join(statuses), "\n".join(outputs))
 
 
