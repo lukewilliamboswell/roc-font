@@ -13,7 +13,7 @@
 ## `no-positions`, `no-advances`, `utf8-clusters` and `font-size=<n>`, and
 ## (protocol 2) `face=<n>`, `instance=<n>`, `weight=<w>`, `width=<w>`,
 ## `optical-size=<s>` and repeatable `axis=<tag>:<decimal>`, and (protocol
-## 3) the shaping options `direction=ltr|rtl`, `script=<ISO 15924>`,
+## 3) the shaping options `direction=ltr|rtl|ttb|btt`, `script=<ISO 15924>`,
 ## `language=<BCP 47>`, `cluster-level=0|1` and repeatable
 ## `feature=<tag>:<value>:<start>:<end>` (`end` is `*` for the end of the
 ## text). Shaping results are printed in hb-shape's text notation with
@@ -49,7 +49,7 @@ Case :: {}.{
 	Shaping : {
 		script : Str,
 		language : Str,
-		direction : [FromScript, LeftToRight, RightToLeft],
+		direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop],
 		features : List({ tag : Str, value : U32, start : U64, end : U64 }),
 		clusters : [Graphemes, Characters],
 	}
@@ -222,6 +222,8 @@ Case :: {}.{
 			match flag.drop_prefix("direction=") {
 				"ltr" => Ok({ ..shaping, direction: LeftToRight })
 				"rtl" => Ok({ ..shaping, direction: RightToLeft })
+				"ttb" => Ok({ ..shaping, direction: TopToBottom })
+				"btt" => Ok({ ..shaping, direction: BottomToTop })
 				_ => Err({})
 			}
 		} else if flag.starts_with("script=") {

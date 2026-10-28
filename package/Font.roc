@@ -790,8 +790,10 @@ Font :: { face : Face }.{
 
 	## Which way text runs. `FromScript` (the default) takes the script's
 	## own direction (right to left for Arabic and Hebrew, for example; left
-	## to right for an empty script).
-	Direction : [FromScript, LeftToRight, RightToLeft]
+	## to right for an empty script). `TopToBottom` and `BottomToTop` select
+	## vertical glyph forms, metrics and positioning. Vertical advances use
+	## negative y font units; bottom-to-top reverses the glyph order.
+	Direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop]
 
 	## How characters group into clusters, the parts of the text a run's
 	## glyphs say they draw.

@@ -910,7 +910,7 @@ def has_glyph_names(expected: str) -> bool:
 # utf8-clusters and font-size=<n>, and from protocol 2 face=<n>,
 # instance=<n>, weight=<name or n>, width=<name or percent>,
 # optical-size=<FontDefault or px> and axis=<tag>:<value> (repeatable, in
-# order; later wins), and from protocol 3 direction=<ltr|rtl>,
+# order; later wins), and from protocol 3 direction=<ltr|rtl|ttb|btt>,
 # script=<code>, language=<tag>, cluster-level=<0|1> and
 # feature=<tag>:<value>:<start>:<end or *> (repeatable, in the order the
 # oracle passes features to HarfBuzz). The driver answers `<tag> TAB <result>` per request,
@@ -1030,12 +1030,12 @@ def driver_shaping_flags(case: Case, guess: dict | None) -> tuple[list[str] | No
     direction = s.get("direction")
     script = s.get("script")
     if guess and is_imported(case):
-        if direction is None and guess.get("direction") in ("ltr", "rtl"):
+        if direction is None and guess.get("direction") in ("ltr", "rtl", "ttb", "btt"):
             direction = guess["direction"]
         if script is None and guess.get("script") not in (None, "", "None"):
             script = guess["script"]
     if direction is not None:
-        if direction not in ("ltr", "rtl"):
+        if direction not in ("ltr", "rtl", "ttb", "btt"):
             return None, f"--direction={direction}"
         flags.append(f"direction={direction}")
     if script is not None:
