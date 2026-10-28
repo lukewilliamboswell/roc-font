@@ -45,28 +45,17 @@ import TableAatAnchor
 ## `Font` uses, checked once, the queries on it, and the location state
 ## (`moved`) that variable queries read.
 ##
-## Internal. Reading composes the table readers (`from_tables` of each
-## `Table*` and `Layout*` module) and applies the reading mode. Lenient
-## reading accepts what OTS 9.3.0 accepts, so a font reads exactly when a
-## browser would draw it:
+## Internal. Reading composes the table readers and applies strict or
+## lenient policy. Required metrics and TrueType/CFF outlines must validate;
+## optional program and variation dependencies are prepared or dropped as
+## documented by their readers. Independent problems are aggregated.
 ##
-## - a broken `head`, `hhea`, `maxp`, `hmtx`, `cmap`, `loca`, `glyf`,
-##   `OS/2`, `post`, `name`, `GSUB`, `GPOS` or `GDEF`, or a structurally
-##   broken `kern`, rejects the font;
-## - a `kern` table OTS drops (another version, pairs out of order, ...) is
-##   dropped;
-## - a bad `avar` is dropped alone, as OTS drops it, and the axes are
-##   normalised without it;
-## - any other problem in the variation data (`fvar`, `HVAR`, `MVAR`,
-##   `gvar` and the outline points it moves, the `GDEF` item variation
-##   store, `GPOS` device indices, `FeatureVariations` conditions) drops
-##   the variations as one unit, as OTS drops them: the font reads as its
-##   default instance. Variation data OTS keeps but roc-font cannot apply
-##   (an `avar` version 2) is dropped the same way.
-##
-## A layout table over `max_lookups` is dropped (a roc-font limit, not a
-## fault). Strict reading rejects the font for any problem. Every problem
-## is reported, required ones first.
+## OTS is an independent validation oracle, rather than an exact acceptance
+## policy: valid Apple programs, Graphite tables and CFF operators may be
+## usable here even when that sanitizer does not implement them. A dropped
+## table is never repaired. Strict reading rejects every reported problem.
+## Preparation proves later font queries total; Graphite execution also
+## reports text-dependent program aborts through the checked shaping API.
 Face := {
 	metadata : TableMetadata,
 	carets : TableCaret,

@@ -208,6 +208,12 @@ final shared integration gate.
   separately. Graphite's adapter uses horizontal advances even when the
   caller requests a vertical buffer direction. Set `use_font_programs`
   to false to select the OpenType path, including its vertical metrics.
+  Graphite also uses stored default design metrics rather than the location
+  selected by `Font.at`, following the reference adapter. Feat 2.1 aliases
+  share the preceding feature's settings/value here; Graphite2 1.3.14
+  treats them independently. The exact
+  link:../tests/fonts/graphite/feature-divergences.json[16 alias differences]
+  retain both raw reference answers and table-derived expectations.
 * WOFF/WOFF2 data needs decompression before this sfnt reader can accept
   the font bytes; container unwrapping remains separate work.
 * After work-budget exhaustion, partial progress can differ from HarfBuzz's

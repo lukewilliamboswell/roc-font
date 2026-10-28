@@ -751,9 +751,12 @@ Font :: { face : Face }.{
 	## its range in the axis's own units.
 	Axis : { tag : Str, min : Dec, default : Dec, max : Dec }
 
-	## The font at another point of its variation space. Every query and
-	## shaping call on the result measures there: advances, metrics, glyph
-	## boxes and kerning vary. Cheap: the font's tables are shared.
+	## The font at another point of its variation space. Queries and
+	## OpenType/Apple shaping measure there: advances, metrics, glyph boxes
+	## and kerning vary. Graphite programs use the font's stored default
+	## metrics, following the reference adapter; set `use_font_programs`
+	## to False when shaping must use the OpenType variation location.
+	## Cheap: the font's tables are shared.
 	##
 	## ```
 	## bold = Font.at(font, Font.Variation.{ weight: Bold })
@@ -885,6 +888,8 @@ Font :: { face : Face }.{
 	## The reference Graphite adapter retains horizontal advances for TTB
 	## and BTT requests; use `shaping_engine` to discover that path. For
 	## OpenType vertical metrics, set `use_font_programs` to False.
+	## Graphite programs also use stored default metrics, independently of
+	## the location selected by `at`, following that reference adapter.
 	##
 	## `point_size` selects size-dependent Apple tracking, in typographic
 	## points. Zero and negative values use the reference default of 12.
