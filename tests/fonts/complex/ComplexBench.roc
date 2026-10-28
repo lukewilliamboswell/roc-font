@@ -11,7 +11,18 @@ ComplexBench :: {}.{
 			Ok(value) => value
 			Err(problems) => crash Str.inspect(problems)
 		}
-		Ok({ font, plan: Font.plan(font, Font.ShapeOptions.{ script: "Deva", language: "hi" }), text: Str.join_with(List.repeat("र्कि क्षिं हिन्दी ", copies), "") })
+		khmer = Font.glyph(font, 0x1780).is_ok()
+		script = if khmer {
+			"Khmr"
+		} else {
+			"Deva"
+		}
+		piece = if khmer {
+			"ខ្មែរ ក្រុម ក្រិ "
+		} else {
+			"र्कि क्षिं हिन्दी "
+		}
+		Ok({ font, plan: Font.plan(font, Font.ShapeOptions.{ script }), text: Str.join_with(List.repeat(piece, copies), "") })
 	}
 	run : Prepared -> Try(U64, U64)
 	run = |prepared| {

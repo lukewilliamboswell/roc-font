@@ -1,0 +1,51 @@
+{
+  "google_fonts_commit": "ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b",
+  "sources": [
+    {
+      "file": "NotoSansKhmer.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanskhmer/NotoSansKhmer%5Bwdth%2Cwght%5D.ttf",
+      "sha256": "f37a8431a0c5d5ed2f81a767417546aca576a81fb7eff9c924d46aecf828f2ca",
+      "size": 359788
+    },
+    {
+      "file": "NotoSansKhmer-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosanskhmer/OFL.txt",
+      "sha256": "be0407f060aea48787ff9e75d8d3aedef70aef113b3ce9aca26fdaacd10b1870",
+      "size": 4381
+    },
+    {
+      "file": "NotoSerifKhmer.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifkhmer/NotoSerifKhmer%5Bwdth%2Cwght%5D.ttf",
+      "sha256": "50ad032042491e98b440e41490d26b716d8d43886eebfafa9735f6284c1980e2",
+      "size": 498288
+    },
+    {
+      "file": "NotoSerifKhmer-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifkhmer/OFL.txt",
+      "sha256": "be0407f060aea48787ff9e75d8d3aedef70aef113b3ce9aca26fdaacd10b1870",
+      "size": 4381
+    }
+  ],
+  "subsets": [
+    {
+      "file": "ComplexKhmerSans.ttf",
+      "sha256": "1e61d1989e790049dacfaea81aa20aa083a3b483f625b9744bb413815aeb34b4",
+      "size": 71368,
+      "source_family": "NotoSansKhmer",
+      "source_axes": {
+        "wght": 400,
+        "wdth": 100
+      }
+    },
+    {
+      "file": "ComplexKhmerSerif.ttf",
+      "sha256": "15e40d577bd664c89c0cba2b65691e4c4ee9cc0b43981b2ec04581ac3585cab9",
+      "size": 101392,
+      "source_family": "NotoSerifKhmer",
+      "source_axes": {
+        "wght": 400,
+        "wdth": 100
+      }
+    }
+  ]
+}

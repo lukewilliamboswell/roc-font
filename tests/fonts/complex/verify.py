@@ -4,14 +4,15 @@ No oracle dependencies, tolerance, or selected hard-coded answers. Kept
 outside the global gate while the corresponding model is being activated.
 """
 from pathlib import Path
-import json,os,subprocess,sys
+import argparse,json,os,subprocess,sys
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'))
 import flight,conformance
 from _common import parse_case_file,load_records
-roc=os.environ.get('ROC','roc');work=ROOT/'.roc-font-tmp/complex-replay';work.mkdir(parents=True,exist_ok=True)
-path=HERE/'indic-cases.jsonc';cases,problems=parse_case_file(path);assert not problems,problems
-records={record['id']:record for record in map(json.loads,(HERE/'indic-cases-records.jsonl').read_text().splitlines())};locations=conformance.Locations()
+parser=argparse.ArgumentParser();parser.add_argument('--model',choices=['indic','khmer'],default='indic');args=parser.parse_args()
+roc=os.environ.get('ROC','roc');work=ROOT/('.roc-font-tmp/'+args.model+'-replay');work.mkdir(parents=True,exist_ok=True)
+path=HERE/(args.model+'-cases.jsonc');cases,problems=parse_case_file(path);assert not problems,problems
+records={record['id']:record for record in map(json.loads,(HERE/(args.model+'-cases-records.jsonl')).read_text().splitlines())};locations=conformance.Locations()
 with flight.flight(roc,work=work/'flight') as dep:
  command=[roc,'build','--opt=speed',str(ROOT/'tools/driver/main.roc'),f'--output={work/"query"}',*dep]
  built=subprocess.run(command,cwd=ROOT,capture_output=True,text=True);print(built.stdout,built.stderr);assert built.returncode==0
