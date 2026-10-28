@@ -231,3 +231,14 @@ expect {
 	full = Font.at(read(variable_file), Font.Variation.{ weight: Black })
 	Font.math_kern_table(full, 3, TopRight) == { heights: [0, 25, 100, 100], values: [1, 2, 3, 4, 5] } and Font.math_kern(full, 3, TopRight, 0) == 2 and Font.math_kern(full, 3, TopRight, 100) == 4
 }
+
+# Mathematical leaf shaping uses the existing public feature controls.
+# Direct HarfBuzz14.6/uharfbuzz0.56.3 results for this pinned Noto font:
+# mathematical italic x is1056, scriptstyle1240, scriptscriptstyle1300.
+expect {
+	noto = read(noto_file)
+	ordinary = Font.shape(noto, "𝑥", Font.ShapeOptions.{ script: "Zmth" })
+	script = Font.shape(noto, "𝑥", Font.ShapeOptions.{ script: "Zmth", features: [Font.Feature.{ tag: "ssty", value: 1 }] })
+	script_script = Font.shape(noto, "𝑥", Font.ShapeOptions.{ script: "Zmth", features: [Font.Feature.{ tag: "ssty", value: 2 }] })
+	ordinary.glyphs == [1056] and script.glyphs == [1240] and script_script.glyphs == [1300]
+}
