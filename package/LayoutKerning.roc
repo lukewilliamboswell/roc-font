@@ -77,7 +77,7 @@ LayoutKerning := {
 	## One pair's effect: on the first glyph, on the second, whether the
 	## pair skips the second glyph (it has a second value record) and
 	## whether any value is not zero.
-	Found : { first : Value, second : Value, skips : Bool, nonzero : Bool }
+	Found : { base : U64, first_at : U64, second_at : U64, format1 : U64, format2 : U64, kern : I64, skips : Bool, nonzero : Bool }
 
 	## Adjustments per glyph, index-aligned with the run, and the run with
 	## unsafe-to-break flags set.
@@ -143,7 +143,14 @@ LayoutKerning := {
 	position_full_with_policy : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), Bool, [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64, operations : U64 }
 	position_full_with_policy = |kerning, plan, auto_zwj, zero_late, legacy, items, glyph_count, base, backward, limits| {
 		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
-			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0, operations: 0 }
+			placed = LayoutKerning.position_absolute(kerning, plan, legacy, items, glyph_count, base)
+			{ items: placed_items, ax, dx, dy } = placed
+			var $delta = ax
+			for i in 0..<$delta.len() {
+				# The aligned absolute output is uniquely owned after placement.
+				$delta = $delta.set(i, ($delta.get(i) ?? 0) - (base.get(i) ?? 0)) ?? []
+			}
+			{ positions: { items: placed_items, ax: $delta, dx, dy }, stopped: 0, operations: 0 }
 		} else {
 			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, zero_late, items, base, backward, limits)
 			positions = { items: placed_items, ax, dx, dy }
@@ -173,9 +180,16 @@ LayoutKerning := {
 	## at or past `glyph_count` are never a first glyph of `GPOS` pair
 	## formats; as a second glyph they are in class 0.
 	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64 -> Positions
-	position = |kerning, plan, legacy, items, glyph_count| {
+	position = |kerning, plan, legacy, items, glyph_count| LayoutKerning.position_absolute(kerning, plan, legacy, items, glyph_count, List.repeat(0, items.len()))
+
+	# Shape positions use absolute base advances: saturation must happen
+	# before returning the existing delta-based result to the caller.
+	position_absolute : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64) -> Positions
+	position_absolute = |kerning, plan, legacy, items, glyph_count, base| {
 		count = items.len()
-		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: List.repeat(0, count) }
+		# `base` has one signed-32-bit advance per item. Its first mutation
+		# copies a shared base instead of allocating the former zero array.
+		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: base }
 		for entry in plan {
 			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end
 			lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
@@ -241,22 +255,27 @@ LayoutKerning := {
 						second = $items.get(j) ?? LayoutGsub.no_item
 						match LayoutKerning.pair(kerning, data, subtables, digests, from, end, first.glyph, second.glyph, glyph_count) {
 							Applied(found) => {
-								values =
-									if legacy {
-										kern = found.first.ax
-										kern1 = kern.shr_wrap(1)
-										kern2 = kern - kern1
-										{ first: { dx: 0, dy: 0, ax: kern1 }, second: { dx: kern2, dy: 0, ax: kern2 } }
-									} else {
-										{ first: found.first, second: found.second }
-									}
 								# `$i < j < count`, the length of every list.
-								$dx = $dx.set($i, ($dx.get($i) ?? 0) + values.first.dx) ?? []
-								$dy = $dy.set($i, ($dy.get($i) ?? 0) + values.first.dy) ?? []
-								$ax = $ax.set($i, ($ax.get($i) ?? 0) + values.first.ax) ?? []
-								$dx = $dx.set(j, ($dx.get(j) ?? 0) + values.second.dx) ?? []
-								$dy = $dy.set(j, ($dy.get(j) ?? 0) + values.second.dy) ?? []
-								$ax = $ax.set(j, ($ax.get(j) ?? 0) + values.second.ax) ?? []
+								if legacy {
+									# hb_kern_machine_t splits with arithmetic shift, then
+									# saturates both advances and the second offset separately.
+									kern1 = found.kern.shr_wrap(1)
+									kern2 = found.kern - kern1
+									$ax = $ax.set($i, LayoutVar.position_add($ax.get($i) ?? 0, kern1)) ?? []
+									$ax = $ax.set(j, LayoutVar.position_add($ax.get(j) ?? 0, kern2)) ?? []
+									$dx = $dx.set(j, LayoutVar.position_add($dx.get(j) ?? 0, kern2)) ?? []
+								} else {
+									first_position = { x_placement: $dx.get($i) ?? 0, y_placement: $dy.get($i) ?? 0, x_advance: $ax.get($i) ?? 0, y_advance: 0 }
+									second_position = { x_placement: $dx.get(j) ?? 0, y_placement: $dy.get(j) ?? 0, x_advance: $ax.get(j) ?? 0, y_advance: 0 }
+									first_value = LayoutVar.apply_value(kerning.lv, kerning.loc, data, found.base, found.first_at, found.format1, first_position)
+									second_value = LayoutVar.apply_value(kerning.lv, kerning.loc, data, found.base, found.second_at, found.format2, second_position)
+									$dx = $dx.set($i, first_value.x_placement) ?? []
+									$dy = $dy.set($i, first_value.y_placement) ?? []
+									$ax = $ax.set($i, first_value.x_advance) ?? []
+									$dx = $dx.set(j, second_value.x_placement) ?? []
+									$dy = $dy.set(j, second_value.y_placement) ?? []
+									$ax = $ax.set(j, second_value.x_advance) ?? []
+								}
 								if found.nonzero {
 									$items = LayoutKerning.unsafe_to_break($items, $i, j + 1)
 								}
@@ -385,7 +404,7 @@ LayoutKerning := {
 				} else {
 					value = Bytes.i16(data, r + 4)
 					# A zero value is no kerning (HarfBuzz skips the pair).
-					$result = if (value == 0) NotApplied else Applied({ first: { dx: 0, dy: 0, ax: value }, second: LayoutKerning.no_value, skips: False, nonzero: True })
+					$result = if (value == 0) NotApplied else Applied({ base: 0, first_at: 0, second_at: 0, format1: 0, format2: 0, kern: value, skips: False, nonzero: True })
 					$low = $high
 				}
 			}
@@ -443,11 +462,10 @@ LayoutKerning := {
 	# with devices takes their deltas; otherwise the stored values.
 	found : LayoutKerning, List(U8), U64, U64, U64, U64, U64 -> Found
 	found = |kerning, data, base, first_at, format1, second_at, format2| {
-		varied = kerning.loc.active and format1.bitwise_or(format2).bitwise_and(0xF0) != 0
-		first = if (varied) LayoutKerning.varied_value(kerning, data, base, first_at, format1) else LayoutKerning.value(data, first_at, format1)
-		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.value(data, second_at, format2)
-		nonzero = if (varied) LayoutPosition.value_applies(data, first_at, format1, kerning.loc.active) or LayoutPosition.value_applies(data, second_at, format2, kerning.loc.active) else first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
-		{ first, second, skips: format2 != 0, nonzero }
+		# Keep checked scalar references, not stored+device sums: applying the
+		# stored fields may saturate before the device reverses direction.
+		nonzero = LayoutPosition.value_applies(data, first_at, format1, kerning.loc.active) or LayoutPosition.value_applies(data, second_at, format2, kerning.loc.active)
+		{ base, first_at, second_at, format1, format2, kern: 0, skips: format2 != 0, nonzero }
 	}
 
 	## The coverage index of a glyph in a checked coverage table: a sorted
@@ -1007,6 +1025,72 @@ expect {
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
 			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, n)
 			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]
+		}
+		Err(_) => False
+	}
+}
+
+# A checked one-pair font table for private absolute-position tests. `raw`
+# is the stored signed-16 x advance; `device` supplies an optional index.
+numeric_pair_gpos : U64, Bool -> List(U8)
+numeric_pair_gpos = |raw, device| {
+	header = [0, 1, 0, 0].concat(be16(10)).concat(be16(30)).concat(be16(44))
+	scripts = be16(1).concat("DFLT".to_utf8()).concat(be16(8)).concat(be16(4)).concat(be16(0))
+	language = be16(0).concat(be16(0xFFFF)).concat(be16(1)).concat(be16(0))
+	features = be16(1).concat("kern".to_utf8()).concat(be16(8)).concat(be16(0)).concat(be16(1)).concat(be16(0))
+	lookups = be16(1).concat(be16(4)).concat(be16(2)).concat(be16(0)).concat(be16(1)).concat(be16(8))
+	fields = be16(1).concat(be16(12)).concat(be16(if (device) 0x44 else 4)).concat(be16(0)).concat(be16(1)).concat(be16(18))
+	coverage = be16(1).concat(be16(1)).concat(be16(1))
+	pair = be16(1).concat(be16(2)).concat(be16(raw))
+	tail = if (device) be16(8).concat(be16(0)).concat(be16(0)).concat(be16(0x8000)) else []
+	header.concat(scripts).concat(language).concat(features).concat(lookups).concat(fields).concat(coverage).concat(pair).concat(tail)
+}
+
+## fuzz regression: pair-only positioning saturates ABSOLUTE advances,
+## then returns their deltas. Saturating a delta from zero would return20.
+expect {
+	lv = LayoutVar.none(0)
+	match LayoutKerning.read_gpos(numeric_pair_gpos(20, False), 3, lv) {
+		Ok(gpos) => {
+			kerning = LayoutKerning.combine(Present(gpos), Absent, lv, LayoutGdef.none)
+			items = [1, 2].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
+			positioned = LayoutKerning.position_full(kerning, [{ index: 0, mask: 1 }], NoKern, items, 3, [2147483637, 0], False, { budget: 100, depth: 64 })
+			positioned.positions.ax == [10, 0] and positioned.stopped == 0
+		}
+		Err(_) => False
+	}
+}
+
+## fuzz regression: a variable pair retains its scalar record references
+## so stored+20 saturates before device-75, rather than combining to-55.
+expect {
+	# GDEF1.3 with one axis, region[0,1,1] and one item whose delta is-75.
+	header = be16(1).concat(be16(3)).concat(List.repeat(0, 10)).concat([0, 0, 0, 18])
+	store = be16(1).concat([0, 0, 0, 12]).concat(be16(1)).concat([0, 0, 0, 22]).concat(be16(1)).concat(be16(1)).concat(be16(0)).concat(be16(16384)).concat(be16(16384)).concat(be16(1)).concat(be16(1)).concat(be16(1)).concat(be16(0)).concat(be16(65461))
+	match LayoutVar.read_gdef(header.concat(store), 1) {
+		Ok(lv) => match LayoutKerning.read_gpos(numeric_pair_gpos(20, True), 3, lv) {
+			Ok(gpos) => {
+				kerning = LayoutKerning.at_location(LayoutKerning.combine(Present(gpos), Absent, lv, LayoutGdef.none), LayoutVar.location(lv, [16384]))
+				items = [1, 2].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
+				positioned = LayoutKerning.position_full(kerning, [{ index: 0, mask: 1 }], NoKern, items, 3, [2147483637, 0], False, { budget: 100, depth: 64 })
+				positioned.positions.ax == [-65, 0] and positioned.stopped == 0
+			}
+			Err(_) => False
+		}
+		Err(_) => False
+	}
+}
+
+## fuzz regression: legacy negative odd kerning splits down/rest and
+## independently saturates both absolute advances and the second offset.
+expect {
+	data = be16(0).concat(be16(1)).concat(be16(0)).concat(be16(20)).concat(be16(1)).concat(be16(1)).concat(be16(6)).concat(be16(0)).concat(be16(0)).concat(be16(1)).concat(be16(2)).concat(be16(65533))
+	match LayoutKerning.read_kern(data) {
+		Ok(legacy) => {
+			kerning = LayoutKerning.combine(Absent, Present(legacy), LayoutVar.none(0), LayoutGdef.none)
+			items = [1, 2].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
+			positioned = LayoutKerning.position_full(kerning, [], Kern(1), items, 3, [2147483647, -2147483648], False, { budget: 100, depth: 64 })
+			positioned.positions.ax == [-2, 0] and positioned.positions.dx == [0, -1]
 		}
 		Err(_) => False
 	}
