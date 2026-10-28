@@ -23,6 +23,7 @@ import TableCaret
 import TableOutline
 import TableMath
 import TableColorImages
+import TablePalette
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -57,6 +58,7 @@ Face := {
 	svg_images : TableColorImages,
 	sbix_images : TableColorImages,
 	cbdt_images : TableColorImages,
+	palettes : TablePalette,
 	units_per_em : U16,
 	glyph_count : U64,
 	advances : List(U16),
@@ -317,6 +319,20 @@ Face := {
 				keep_variations = $var_problems.is_empty()
 				images = Face.read_image_tables(bytes, tables, glyph_count)
 				$optional = $optional.concat(images.problems)
+				palettes = match Sfnt.located(bytes, tables, "CPAL", 0) {
+					Missing => TablePalette.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("CPAL", at))
+						TablePalette.none
+					}
+					Found(found) => match TablePalette.read(found.data) {
+						Ok(value) => value
+						Err(offsets) => {
+							$optional = $optional.concat(offsets.map(|at| Sfnt.bad("CPAL", found.offset + at)))
+							TablePalette.none
+						}
+					}
+				}
 				math = match Sfnt.located(bytes, tables, "MATH", 0) {
 					Missing => TableMath.none
 					Bad(at) => {
@@ -372,6 +388,7 @@ Face := {
 								svg_images: images.svg,
 								sbix_images: images.sbix,
 								cbdt_images: images.cbdt,
+								palettes,
 								units_per_em: h.units_per_em,
 								glyph_count,
 								advances: a,

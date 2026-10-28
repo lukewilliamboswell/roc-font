@@ -3,6 +3,7 @@ import Shaper
 import TableMetadata
 import TableMath
 import TableColorImages
+import TablePalette
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
 import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
@@ -426,6 +427,54 @@ Font :: { face : Face }.{
 	## parts, in font units; zero without mathematical typesetting data.
 	math_min_connector_overlap : Font -> I32
 	math_min_connector_overlap = |font| TableMath.min_connector_overlap(font.face.math)
+
+	## One unpremultiplied sRGB color from a font palette. Every channel,
+	## including alpha, is an unsigned byte. Transparent colors retain the
+	## font's original RGB values.
+	Color : { red : U8, green : U8, blue : U8, alpha : U8 }
+
+	## An ordered color palette. Background flags express the font's
+	## preferences; both false means no preference was supplied.
+	ColorPalette : { colors : List(Color), light_background : Bool, dark_background : Bool }
+
+	## Every color palette in font order; palette zero is the format's
+	## default. Entries at the same index in each palette color the same
+	## artwork. Fonts without palettes give an empty list.
+	color_palettes : Font -> List(ColorPalette)
+	color_palettes = |font| TablePalette.palettes(font.face.palettes).map(
+		|palette| {
+			colors: match TablePalette.colors(font.face.palettes, palette.index) {
+				Present(colors) => colors
+				Absent => []
+			},
+			light_background: palette.light_background,
+			dark_background: palette.dark_background,
+		},
+	)
+
+	## One palette entry without listing the rest of the palette. An index
+	## past either the palettes or their entries gives `Absent`.
+	color_palette_color : Font, U32, U32 -> [Present(Color), Absent]
+	color_palette_color = |font, palette, entry| TablePalette.color(font.face.palettes, palette, entry)
+
+	## The font's display name for a palette, chosen in English when
+	## available; `Missing` means that no usable name was supplied.
+	color_palette_name : Font, U32 -> Try(Str, [Missing])
+	color_palette_name = |font, index| match TablePalette.palettes(font.face.palettes).get(index.to_u64()) {
+		Ok(palette) => match palette.name_id {
+			Present(id) => Face.name(font.face, id)
+			Absent => Err(Missing)
+		}
+		Err(_) => Err(Missing)
+	}
+
+	## A display name for a color entry, shared by that index in every
+	## palette. Missing labels and indices past the entries give `Missing`.
+	color_entry_name : Font, U32 -> Try(Str, [Missing])
+	color_entry_name = |font, index| match TablePalette.entry_name_id(font.face.palettes, index) {
+		Present(id) => Face.name(font.face, id)
+		Absent => Err(Missing)
+	}
 
 	## Encoding of an embedded SVG document. The bytes remain encoded;
 	## callers decode UTF-8/XML or gzip using their own image pipeline.
