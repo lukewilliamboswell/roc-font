@@ -1647,3 +1647,11 @@ expect {
 	limits = { x_min: n(-100), y_min: n(-100), x_max: n(100), y_max: n(100) }
 	!GraphiteCollision.broad_active(collision_square, collision_square, n(-851), 0, limits, 0, 0, n(1)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-851), 0, limits, 0, 0, n(10)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-400), n(-150), limits, 0, 0, n(50)) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-400), n(-151), limits, 0, 0, n(50))
 }
+
+expect {
+	# Independent margin challenge: the X guard expands its physical
+	# reach by the authored margin, including the exact endpoint.
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-1000), y_min: n(-1000), x_max: n(1000), y_max: n(1000) }
+	GraphiteCollision.broad_active(collision_square, collision_square, n(-1601), 0, limits, 0, 0, n(50)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-1650), 0, limits, 0, 0, n(50)) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-1651), 0, limits, 0, 0, n(50)) and GraphiteCollision.broad_active(collision_square, collision_square, n(-2100), 0, limits, 0, 0, n(500)) and !GraphiteCollision.broad_active(collision_square, collision_square, n(-2101), 0, limits, 0, 0, n(500))
+}
