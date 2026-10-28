@@ -174,7 +174,7 @@ ShaperThai :: {}.{
 				minimum = ($chars.get($base) ?? ShaperNormalize.no_char).cluster
 				# Earlier marks were already flagged by the preceding iteration.
 				# Extending the unsafe span once keeps long mark sequences linear.
-				if i > $base + 1 {
+				if i > $base + 1 and i - $base <= 255 {
 					prior = $chars.get(i - 1) ?? ShaperNormalize.no_char
 					if prior.cluster != minimum {
 						$chars = $chars.set(i - 1, { ..prior, mask: prior.mask.bitwise_or(LayoutGsub.unsafe) }) ?? []
