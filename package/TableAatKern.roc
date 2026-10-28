@@ -1,6 +1,6 @@
 import LayoutGsub
 import LayoutVar
-import PositionSum
+import LayoutPosition
 import TableAatAnchor
 import Bytes
 import AatLookup
@@ -18,7 +18,7 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 	none : TableAatKern
 	none = { bytes: [], subtables: [], lookups: [], states: [], pairs: [], values: [] }
 	has_data : TableAatKern -> Bool
-	has_data = |t| !t.subtables.is_empty()
+	has_data = |t| !t.bytes.is_empty() and Bytes.u32(t.bytes, 0) != 0
 	has_machine : TableAatKern -> Bool
 	has_machine = |t| t.subtables.any(|s| s.kind == 1)
 	has_cross_stream : TableAatKern -> Bool
@@ -258,19 +258,37 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 		right_at = s.at + (if (s.extended) Bytes.u32(t.bytes, fields + size) else Bytes.u16(t.bytes, fields + size))
 		array = s.at + (if (s.extended) Bytes.u32(t.bytes, fields + 2 * size) else Bytes.u16(t.bytes, fields + 2 * size))
 		vector = if (six) s.at + Bytes.u32(t.bytes, at + 20) else s.at
-		if !Bytes.fits(array, 0, s.end) or (s.tuples > 0 and !Bytes.fits(vector, 0, s.end)) {
-			return bad(fields + 2 * size)
+		var $problems = []
+		if !Bytes.fits(array, 0, s.end) {
+			$problems = $problems.append({ offset: fields + 2 * size })
+		}
+		if s.tuples > 0 and !Bytes.fits(vector, 0, s.end) {
+			$problems = $problems.append({ offset: at + 20 })
 		}
 		bounded = t.bytes.take_first(s.end)
-		left = TableAatKern.read_class(bounded, left_at, glyphs, s.extended, width)?
-		right = TableAatKern.read_class(bounded, right_at, glyphs, s.extended, width)?
+		left = match TableAatKern.read_class(bounded, left_at, glyphs, s.extended, width) {
+			Ok(v) => v
+			Err(ps) => {
+				$problems = $problems.concat(ps)
+				AatLookup.empty
+			}
+		}
+		right = match TableAatKern.read_class(bounded, right_at, glyphs, s.extended, width) {
+			Ok(v) => v
+			Err(ps) => {
+				$problems = $problems.concat(ps)
+				AatLookup.empty
+			}
+		}
+		if !$problems.is_empty() {
+			return Err($problems)
+		}
 		lv = TableAatKern.class_values(left, glyphs)
 		rv = TableAatKern.class_values(right, glyphs)
 		# Encoded class arrays may alias the same matrix rows many times.
 		# Extrema bound every possible sum without visiting their Cartesian
 		# product. Tuple vectors belong to a dense matrix span and are checked
 		# once per encoded cell, never once per glyph pair.
-		var $problems = []
 		if !lv.is_empty() and !rv.is_empty() {
 			minimum = lv.fold(0xffffffff.U64, |a, b| a.min(b)) + rv.fold(0xffffffff.U64, |a, b| a.min(b))
 			maximum = lv.fold(0.U64, |a, b| a.max(b)) + rv.fold(0.U64, |a, b| a.max(b))
@@ -675,66 +693,15 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 
 	resolve : Run, Bool -> Run
 	resolve = |run, backward| {
-		if !run.attachment_active or run.parents.all(|p| p == 0) {
+		if !run.attachment_active {
 			return run
 		}
-		count = run.items.len()
-		var $prefix = List.with_capacity(count + 1).append(0.I128)
-		var $sum = 0.I128
-		var $positive = False
-		var $negative = False
-		for advance in run.advances {
-			$sum = $sum + advance.to_i128()
-			$prefix = $prefix.append($sum)
-			$positive = $positive or advance > 0
-			$negative = $negative or advance < 0
-		}
-		mixed = $positive and $negative and run.attachments.contains(1)
-		ranges = if (mixed) PositionSum.make(run.advances) else PositionSum.make([])
-		var $major = run.major
-		var $cross = run.cross
-		var $parents = run.parents
-		var $path = List.with_capacity(count.min(64))
-		for index in 0..<count {
-			i = if (backward) count - 1 - index else index
-			$path = $path.clear()
-			var $at = i
-			var $left = 64
-			var $walk = ($parents.get($at) ?? 0) != 0
-			while $walk {
-				parent = $parents.get($at) ?? 0
-				$parents = $parents.set($at, 0) ?? []
-				if parent == 0 or parent > count or $left == 0 {
-					$walk = False
-				} else {
-					$path = $path.append({ child: $at, parent: parent - 1 })
-					$at = parent - 1
-					$left = $left - 1
-					$walk = ($parents.get($at) ?? 0) != 0
-				}
-			}
-			while !$path.is_empty() {
-				edge = $path.last() ?? { child: 0, parent: 0 }
-				$path = $path.drop_last(1)
-				j = edge.child
-				k = edge.parent
-				$cross = $cross.set(j, LayoutVar.position_add($cross.get(j) ?? 0, $cross.get(k) ?? 0)) ?? []
-				if (run.attachments.get(j) ?? 0) == 1 {
-					start = j.min(k) + (if (backward) 1 else 0)
-					end = j.max(k) + (if (backward) 1 else 0)
-					subtract = if (k < j) !backward else backward
-					initial = LayoutVar.position_add($major.get(j) ?? 0, $major.get(k) ?? 0)
-					value = if mixed {
-						PositionSum.apply(ranges, start, end, initial, subtract)
-					} else {
-						distance = ($prefix.get(end) ?? 0) - ($prefix.get(start) ?? 0)
-						(initial.to_i128() + (if (subtract) -distance else distance)).max(-2147483648).min(2147483647).to_i64_wrap()
-					}
-					$major = $major.set(j, value) ?? []
-				}
-			}
-		}
-		{ ..run, major: $major, cross: $cross, parents: $parents }
+		# The reference propagates parent cross offsets for cursive edges;
+		# mark edges propagate only the flow-axis offset. AAT format4 leaves
+		# its cross-axis anchor difference unchanged at this final phase.
+		state = { items: run.items, ax: run.advances, dx: run.major, dy: run.cross, parents: run.parents, attachments: run.attachments, stopped: run.stopped, operations: run.operations }
+		resolved = LayoutPosition.resolve(state, backward)
+		{ ..run, advances: resolved.ax, major: resolved.dx, cross: resolved.dy, parents: resolved.parents }
 	}
 
 }
@@ -749,7 +716,7 @@ aat_u32 = |n| aat_u16(n.shr_zf_wrap(16)).concat(aat_u16(n))
 aat_pair_table : List(U8)
 aat_pair_table = [0, 2, 0, 0, 0, 0, 0, 1].concat(aat_u32(34)).concat([0, 0, 0, 0, 0, 0, 0, 0]).concat(aat_u32(1)).concat(List.repeat(0, 12)).concat([0, 1, 0, 2, 255, 206])
 expect match TableAatKern.read_kerx([0, 2, 0, 0, 0, 0, 0, 0], 3) {
-	Ok(t) => !TableAatKern.has_data(t)
+	Ok(t) => TableAatKern.has_data(t)
 	Err(_) => False
 }
 expect match TableAatKern.read_kerx(aat_pair_table, 3) {
