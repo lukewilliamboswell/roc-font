@@ -22,11 +22,12 @@ and raw tables, OpenType MATH facts, COLR/CPAL paint graphs, embedded SVG
 and bitmap glyph assets. Variable fonts are queried at the selected weight,
 width, optical size or custom axes.
 
-Arabic joining, Hebrew, Thai/Lao, Hangul, Khmer and nine Indic scripts
-have dedicated shaping stages, tested across real font families. Myanmar
-and USE shaping are being developed. The API remains
-provisional while real bundled consumers and cached reference tests verify
-these additions. See [TODO.md](TODO.md) for remaining integration work.
+Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Khmer, Myanmar, nine Indic scripts
+and the Universal Shaping Engine have dedicated shaping stages. Real-font
+reference tests cover Tibetan, Sinhala, NKo, Adlam and Mongolian USE shaping.
+The API remains provisional during integration. See
+[the shaping support matrix](docs/shaping-support.adoc) for tested coverage
+and limitations, and [TODO.md](TODO.md) for remaining work.
 
 ## Example
 

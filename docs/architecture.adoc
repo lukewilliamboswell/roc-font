@@ -720,6 +720,16 @@ all references, graph cycles and bounded depth/work before any query.
 A valid CPAL is required to retain COLR. The graph is evaluated at the
 font's selected variation location; no pixels or trigonometry are computed.
 
+[cols="1,2,2",options="header"]
+|===
+|Color container |Supported data |Consumer supplies
+|CPAL / COLR0 |Palettes, labels and ordered glyph layers |Palette choice and painting
+|COLR1 |All 32 paint formats, variable values, clips and flat paint graphs |Paint evaluation and compositing
+|SVG |Glyph document ranges; original UTF-8 or gzip payload |XML/gzip decoding and SVG drawing
+|sbix |Strikes, original tagged payloads and resolved duplicate origins |Image decoding and strike choice
+|CBDT / CBLC |PNG image formats 17/18/19 and all five index formats |PNG decoding and strike choice
+|===
+
 `svg_glyph` returns the exact encoded SVG or gzip document; it validates
 the container and leaves XML/gzip decoding to the caller. `bitmap_strikes`
 and `bitmap_glyph` expose sbix and CBDT/CBLC encoded payloads, native strike
@@ -753,9 +763,12 @@ bound:
 . *Finish*: merge clusters at the configured level, compute unsafe-to-break
   flags, reverse for right-to-left output order.
 
-Complex scripts (Arabic joining, Indic reordering, the Universal Shaping
-Engine, Hangul) are separate shaper modules plugged into the stages and are
-added with a published per-script support matrix.
+Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Indic, Khmer, Myanmar and Universal
+Shaping Engine models plug script-specific preparation, feature stages and
+reordering into this pipeline. The font's selected script table participates
+in model selection, following the pinned reference.
+link:shaping-support.adoc[The shaping support matrix] distinguishes model
+selection from the scripts and font families covered by recorded oracles.
 
 === 6.2 Behaviour browsers have that GSUB does not express
 

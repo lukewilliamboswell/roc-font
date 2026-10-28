@@ -843,11 +843,14 @@ Font :: { face : Face }.{
 	## no width, and missing spaces take widths from the font's space.
 	## Substitution and positioning follow the font's selected features,
 	## including cursive and mark attachment and contextual positioning.
-	## Dedicated script stages handle Arabic joining, Hebrew mark order,
-	## Thai/Lao Sara Am, Khmer, and Hangul syllables, Jamo forms and tone
+	## Dedicated script stages handle Arabic/Syriac joining, Hebrew mark order,
+	## Thai/Lao Sara Am, Khmer, Myanmar, and Hangul syllables, Jamo forms and tone
 	## marks. Indic syllable reordering covers Devanagari, Bengali, Gurmukhi,
 	## Gujarati, Odia, Tamil, Telugu, Kannada and Malayalam when the font's
-	## script data selects that model.
+	## script data selects that model. The Universal Shaping Engine handles
+	## its script-specific syllables and joining, including Tibetan, Sinhala,
+	## NKo, Adlam and Mongolian. Arabic presentation-form fallback and Syriac
+	## stretching apply when selected by the font and script.
 	## Other scripts use the default shaping model, which applies the
 	## font's lookups without script-specific syllable reordering.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
