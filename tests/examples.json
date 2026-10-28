@@ -121,6 +121,32 @@
           "exit_code": 0
         }
       ]
+    },
+    {
+      "path": "examples/font-metadata.roc",
+      "cases": [
+        {
+          "name": "stored-font-facts",
+          "args": [],
+          "stdin": "",
+          "stdout": "Full name: Merriweather Light\nPostScript name: Merriweather-Light\nOriginal embedding flags: 0\nStored header: 1968, -546, 0\nOriginal head table: 54 bytes\nOriginal directory: 22 tables\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "path": "examples/positioning.roc",
+      "cases": [
+        {
+          "name": "stacked-and-ligature-marks",
+          "args": [],
+          "stdin": "",
+          "stdout": "glyph 750 at 0,0\nglyph 2287 at 133,-375\nglyph 2262 at 274,-103\nglyph 1858 at 1188,0\nglyph 801 at 1662,0\nglyph 2237 at 3101,0\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
     }
   ]
 }
