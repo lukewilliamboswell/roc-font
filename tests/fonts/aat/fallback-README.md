@@ -14,12 +14,16 @@ advance is observable independently of the mark's offset.
 identity rule; `fallback-gdef-dflt-marks.ttf` also explicitly classifies g7 as
 a mark in GDEF. These distinguish the selected original default model from
 an Indic or Myanmar model even though the caller supplies the same script.
+`fallback-gpos-dflt-marks.ttf` adds a zero-valued GPOS pair. This disables
+geometric fallback without moving either glyph, so original default-model
+late mark-zeroing is independently visible. HarfBuzz returns zero mark advance
+for Syriac/Devanagari/Myanmar in this variant.
 HarfBuzz zeroes and positions the mark for Devanagari/Myanmar with DFLT here,
 but retains its 230 advance without that DFLT selection.
 
-`fallback-cases.jsonc` contains four preparation variants across Hebrew, Arabic,
+`fallback-cases.jsonc` contains five preparation variants across Hebrew, Arabic,
 Syriac, Hangul, Thai, Lao, Devanagari, Khmer, Myanmar, Tibetan and Latin, each
-in all four directions: 176 cases. These are authored scripts and directions,
+in all four directions: 220 cases. These are authored scripts and directions,
 including deliberate direction overrides. The cached oracle controls the
 expected policy; the tests do not enable geometric fallback for every script.
 In particular Devanagari/Myanmar horizontal mark advance remains 230 in these
@@ -36,7 +40,14 @@ python3 scripts/record_oracle.py --check tests/fonts/aat/fallback-cases.jsonc
 
 The first command reproduces every font byte and case; the second validates
 cache keys without running an oracle. Recording uses the repository's pinned
-uharfbuzz 0.56.3/HarfBuzz 14.6.0 extractor with full output flags. All five
+uharfbuzz 0.56.3/HarfBuzz 14.6.0 extractor with full output flags. All six
 original fonts are accepted by pinned OTS 9.3.0. Native/public replay evidence
 is reported separately after the served-bundle check, rather than inferred
 from the reference records.
+
+Native evidence in `fallback-proof.json` records an actual regression:
+the initial fallback-policy fix agrees 214/220, with six nonzero mark-advance
+differences in Syriac/Devanagari/Myanmar horizontal GPOS-DFLT cases; the
+refined original-model selection fix agrees 220/220. Both optimized binaries
+were built with Oct 27 against served bundles in source-sentinel mirrors.
+The final public API expects are likewise checked through the served bundle.

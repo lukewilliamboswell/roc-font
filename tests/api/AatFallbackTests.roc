@@ -4,6 +4,7 @@ import "../fonts/aat/fallback-script-marks.ttf" as scripts : List(U8)
 import "../fonts/aat/fallback-nonzero-marks.ttf" as nonzero : List(U8)
 import "../fonts/aat/fallback-dflt-marks.ttf" as dflt : List(U8)
 import "../fonts/aat/fallback-gdef-dflt-marks.ttf" as gdef_dflt : List(U8)
+import "../fonts/aat/fallback-gpos-dflt-marks.ttf" as gpos_dflt : List(U8)
 
 ## Original script mark-positioning policy survives Apple substitutions.
 AatFallbackTests :: {}.{}
@@ -96,4 +97,22 @@ expect {
 	font = Font.from_bytes(gdef_dflt, Font.ReadOptions.{ strict: True }) ?? crash "valid DFLT script-selection fixture"
 	run = Font.shape(font, "က့", Font.ShapeOptions.{ script: "Mymr", direction: LeftToRight })
 	run.glyphs == [1, 7] and run.advances == [{ x: 700, y: 0 }, { x: 0, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: -400, y: 0 }]
+}
+
+expect {
+	font = Font.from_bytes(gpos_dflt, Font.ReadOptions.{ strict: True }) ?? crash "valid Apple/GPOS default-model mark fixture"
+	run = Font.shape(font, "क़", Font.ShapeOptions.{ script: "Deva", direction: LeftToRight })
+	run.glyphs == [1, 7] and run.advances == [{ x: 700, y: 0 }, { x: 0, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: 0, y: 0 }]
+}
+
+expect {
+	font = Font.from_bytes(gpos_dflt, Font.ReadOptions.{ strict: True }) ?? crash "valid Apple/GPOS default-model mark fixture"
+	run = Font.shape(font, "က့", Font.ShapeOptions.{ script: "Mymr", direction: LeftToRight })
+	run.glyphs == [1, 7] and run.advances == [{ x: 700, y: 0 }, { x: 0, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: 0, y: 0 }]
+}
+
+expect {
+	font = Font.from_bytes(gpos_dflt, Font.ReadOptions.{ strict: True }) ?? crash "valid Apple/GPOS default-model mark fixture"
+	run = Font.shape(font, "ܒܰ", Font.ShapeOptions.{ script: "Syrc", direction: LeftToRight })
+	run.glyphs == [7, 1] and run.advances == [{ x: 0, y: 0 }, { x: 700, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: 0, y: 0 }]
 }
