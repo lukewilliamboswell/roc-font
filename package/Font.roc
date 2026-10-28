@@ -2,6 +2,7 @@ import Face
 import Shaper
 import TableMetadata
 import TableMath
+import TableColorImages
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
 import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
@@ -424,6 +425,71 @@ Font :: { face : Face }.{
 	## parts, in font units; zero without mathematical typesetting data.
 	math_min_connector_overlap : Font -> I32
 	math_min_connector_overlap = |font| TableMath.min_connector_overlap(font.face.math)
+
+	## Encoding of an embedded SVG document. The bytes remain encoded;
+	## callers decode UTF-8/XML or gzip using their own image pipeline.
+	SvgEncoding : [Utf8, Gzip]
+
+	## An encoded SVG glyph document, which can describe a range of glyphs.
+	## Document coordinates use the font's em space. Payloads are returned
+	## unchanged; roc-font validates their container, not XML or image data.
+	SvgDocument : { bytes : List(U8), encoding : SvgEncoding, first_glyph : U32, last_glyph : U32 }
+
+	## Embedded SVG artwork for a glyph, or `Absent`. Use the document's
+	## glyph elements when one document supplies several glyphs. No artwork
+	## is synthesized from outlines or another color format.
+	svg_glyph : Font, U32 -> [Present(SvgDocument), Absent]
+	svg_glyph = |font, id| TableColorImages.svg(font.face.svg_images, id.to_u64())
+
+	## Native strike-pixel placement and advance for an embedded bitmap.
+	## These values are pixels at that strike's ppem, unlike outline and
+	## shaping coordinates, which are font units.
+	BitmapBearingAdvance : { bearing_x : I16, bearing_y : I16, advance : U16 }
+
+	## Font-stored line metrics of a bitmap strike, in native strike pixels.
+	BitmapLineMetrics : { ascender : I16, descender : I16, width_max : U8, caret_slope_numerator : I16, caret_slope_denominator : I16, caret_offset : I16, min_origin_side_bearing : I16, min_advance_side_bearing : I16, max_before_baseline : I16, min_after_baseline : I16 }
+
+	## A bitmap size offered by the font. `Sbix` is a self-contained image
+	## strike with a ppem and device density; `ColorBitmap` supplies separate
+	## horizontal and vertical metrics through the CBDT/CBLC tables.
+	## The flags and bit depth describe the stored image format.
+	BitmapStrike : [Sbix({ ppem : U16, ppi : U16, draw_outlines : Bool }), ColorBitmap({ ppem_x : U8, ppem_y : U8, bit_depth : U8, flags : U8, first_glyph : U32, last_glyph : U32, horizontal : BitmapLineMetrics, vertical : BitmapLineMetrics })]
+
+	## Every embedded bitmap strike: sbix strikes first, then CBDT/CBLC
+	## strikes, each in its own table order. The index selects that exact
+	## entry in `bitmap_glyph`; choosing a size is the consumer's policy.
+	bitmap_strikes : Font -> List(BitmapStrike)
+	bitmap_strikes = |font| TableColorImages.strikes(font.face.sbix_images).concat(TableColorImages.strikes(font.face.cbdt_images))
+
+	## Encoding of the original bitmap payload. `Other` preserves an
+	## unrecognized four-byte graphics tag as a big-endian number.
+	BitmapFormat : [Png, Jpeg, Tiff, Pdf, Mask, Other(U32)]
+
+	## Native pixel dimensions and placement stored with a CBDT bitmap.
+	BitmapMetrics : { width : U8, height : U8, horizontal : [Present(BitmapBearingAdvance), Absent], vertical : [Present(BitmapBearingAdvance), Absent] }
+
+	## Bitmap placement in its native strike pixels. A resolved sbix
+	## duplicate identifies the source glyph whose image and origin it uses.
+	BitmapPlacement : [Sbix({ origin_x : I16, origin_y : I16, source_glyph : U32 }), Bitmap(BitmapMetrics)]
+
+	## Encoded bitmap bytes and their stored placement. Image decoding and
+	## rendering belong to the consumer; malformed encoded image content
+	## is not repaired or rasterized by this font-container reader.
+	BitmapImage : { format : BitmapFormat, bytes : List(U8), placement : BitmapPlacement }
+
+	## Artwork for one glyph at exactly the selected `bitmap_strikes`
+	## index. Missing glyphs, unavailable strikes and absent images give
+	## `Absent`; no size selection, rescaling or cross-format fallback occurs.
+	bitmap_glyph : Font, U32, U32 -> [Present(BitmapImage), Absent]
+	bitmap_glyph = |font, id, strike| {
+		first_count = font.face.sbix_images.strike_records.len()
+		index = strike.to_u64()
+		if index < first_count {
+			TableColorImages.bitmap(font.face.sbix_images, index, id.to_u64())
+		} else {
+			TableColorImages.bitmap(font.face.cbdt_images, index - first_count, id.to_u64())
+		}
+	}
 
 	## One point of a glyph path, in fractional font units. Composite
 	## transforms and variations are evaluated without hinting or rounding

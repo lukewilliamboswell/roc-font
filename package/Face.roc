@@ -22,6 +22,7 @@ import TableMetadata
 import TableCaret
 import TableOutline
 import TableMath
+import TableColorImages
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -53,6 +54,9 @@ Face := {
 	metadata : TableMetadata,
 	carets : TableCaret,
 	math : TableMath,
+	svg_images : TableColorImages,
+	sbix_images : TableColorImages,
+	cbdt_images : TableColorImages,
 	units_per_em : U16,
 	glyph_count : U64,
 	advances : List(U16),
@@ -311,6 +315,8 @@ Face := {
 				}
 				# Variation problems drop every variation table as one unit.
 				keep_variations = $var_problems.is_empty()
+				images = Face.read_image_tables(bytes, tables, glyph_count)
+				$optional = $optional.concat(images.problems)
 				math = match Sfnt.located(bytes, tables, "MATH", 0) {
 					Missing => TableMath.none
 					Bad(at) => {
@@ -363,6 +369,9 @@ Face := {
 								metadata: { bytes, tables, glyph_count, metric_count: hh.metric_count },
 								carets,
 								math,
+								svg_images: images.svg,
+								sbix_images: images.sbix,
+								cbdt_images: images.cbdt,
 								units_per_em: h.units_per_em,
 								glyph_count,
 								advances: a,
@@ -405,6 +414,54 @@ Face := {
 				Err(required.concat(Face.unique($optional).drop_if(|p| required.contains(p))))
 			}
 		}
+	}
+
+	## Encoded color assets are independent optional font facts. This checks
+	## container structure; consumers decode image/XML payloads themselves.
+	read_image_tables : List(U8), List(Sfnt.Table), U64 -> { svg : TableColorImages, sbix : TableColorImages, cbdt : TableColorImages, problems : List(Problem) }
+	read_image_tables = |bytes, tables, glyph_count| {
+		one = |tag, reader| match Sfnt.located(bytes, tables, tag, 0) {
+			Missing => { value: TableColorImages.none, problems: [] }
+			Bad(at) => { value: TableColorImages.none, problems: [Sfnt.bad(tag, at)] }
+			Found(found) => match reader(found.data, glyph_count) {
+				Ok(value) => { value, problems: [] }
+				Err(Bad(problem)) => { value: TableColorImages.none, problems: [Sfnt.bad(problem.table, found.offset + problem.offset)] }
+			}
+		}
+		svg = one("SVG ", TableColorImages.read_svg)
+		sbix = one("sbix", TableColorImages.read_sbix)
+		cblc = Sfnt.located(bytes, tables, "CBLC", 0)
+		cbdt = Sfnt.located(bytes, tables, "CBDT", 0)
+		bitmap = match (cblc, cbdt) {
+			(Missing, Missing) => { value: TableColorImages.none, problems: [] }
+			(Found(locations), Found(data)) => match TableColorImages.read_cbdt(locations.data, data.data, glyph_count) {
+				Ok(value) => { value, problems: [] }
+				Err(Bad(problem)) => { value: TableColorImages.none, problems: [Sfnt.bad(problem.table, Face.table_offset(tables, problem.table) + problem.offset)] }
+			}
+			_ => {
+				var $problems = []
+				match cblc {
+					Found(found) => {
+						$problems = $problems.append(Sfnt.bad("CBLC", found.offset))
+					}
+					Bad(at) => {
+						$problems = $problems.append(Sfnt.bad("CBLC", at))
+					}
+					Missing => {}
+				}
+				match cbdt {
+					Found(found) => {
+						$problems = $problems.append(Sfnt.bad("CBDT", found.offset))
+					}
+					Bad(at) => {
+						$problems = $problems.append(Sfnt.bad("CBDT", at))
+					}
+					Missing => {}
+				}
+				{ value: TableColorImages.none, problems: $problems }
+			}
+		}
+		{ svg: svg.value, sbix: sbix.value, cbdt: bitmap.value, problems: svg.problems.concat(sbix.problems).concat(bitmap.problems) }
 	}
 
 	## The table records OTS rejects a font for, each named by its table and
