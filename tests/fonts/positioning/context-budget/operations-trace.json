@@ -1,0 +1,45 @@
+{
+  "harfbuzz": "14.6.0",
+  "font": "attachment-mixed-advances.ttf",
+  "font_sha256": "124ffc6adc262f79c8e7e46da68ac074fe64b29b7f323d48b68ed4078f4642db",
+  "probe_source_sha256": "63b996acb81045de1902f2941a0420b8edec0a94b2eb7014173dccd9ccf049f7",
+  "probe_binary_sha256": "fcbc6422cb08bba2ab45fa2031a4dfb42c8ef5ea602d937e23863963957fd591",
+  "library_sha256": "6fa7187e6aa42d4602101240984dccbb5587b6174b076124a204f6eb7a49b5e7",
+  "padding": 8,
+  "flags": "DEFAULT",
+  "trace": [
+    "HarfBuzz 14.6.0",
+    "before ops=536870911 len=10",
+    "ops=65534 len=10 idx=0 out=0 start decompose",
+    "ops=65534 len=10 idx=0 out=0 end decompose",
+    "ops=65534 len=10 idx=0 out=0 start reorder",
+    "ops=65534 len=10 idx=0 out=0 end reorder",
+    "ops=65534 len=10 idx=0 out=0 start compose",
+    "ops=65534 len=10 idx=0 out=0 end compose",
+    "ops=65534 len=10 idx=0 out=0 start table GSUB script tag 'DFLT'",
+    "ops=65534 len=10 idx=0 out=0 start lookup 0 feature 'ccmp'",
+    "ops=65534 len=11 idx=0 out=0 end lookup 0 feature 'ccmp'",
+    "ops=65534 len=11 idx=0 out=0 end table GSUB script tag 'DFLT'",
+    "ops=65534 len=11 idx=0 out=0 start table GPOS script tag 'DFLT'",
+    "ops=65534 len=11 idx=0 out=0 start lookup 0 feature 'mark'",
+    "ops=65534 len=11 idx=11 out=0 end lookup 0 feature 'mark'",
+    "ops=65534 len=11 idx=11 out=0 start lookup 1 feature 'mark'",
+    "ops=65531 len=11 idx=11 out=0 end lookup 1 feature 'mark'",
+    "ops=65531 len=11 idx=11 out=0 start lookup 2 feature 'mark'",
+    "ops=0 len=11 idx=11 out=0 end lookup 2 feature 'mark'",
+    "ops=0 len=11 idx=11 out=0 end table GPOS script tag 'DFLT'",
+    "after ops=536870911 successful=1"
+  ],
+  "established_charges": {
+    "initial_grapheme_merge": 2,
+    "multiple_substitution": 0,
+    "mark_base_unsafe_flags": 3
+  },
+  "sources": [
+    "src/hb-ot-shape.cc:581",
+    "src/hb-buffer.cc:564",
+    "src/OT/Layout/GPOS/MarkArray.hh:66",
+    "src/hb-buffer.hh:657"
+  ],
+  "note": "Before/after max_ops536870911 is the buffer placeholder restored outside shaping; the message callback counters expose the active65536 budget."
+}

@@ -18,7 +18,7 @@ def main():
  for path in sorted(HERE.glob('*.ttf')):
   if path.stem=='pair-absolute':texts=['ab']
   elif path.stem=='float-anchor':texts=['a\u0301']
-  elif path.stem=='attachment-mixed-advances':texts=['a\u0301'+' '*30]
+  elif path.stem=='attachment-mixed-advances':texts=['a\u0301'+' '*n for n in [8,30,64,256]]
   elif path.stem=='attachment-distance':texts=['a'+'b'*(n-1)+'\u0301' for n in [32767,32768,32769]]
   elif path.stem.startswith('device-'):texts=['a'*32]
   elif path.stem.startswith('saturating-'):texts=['a'*64]
@@ -29,7 +29,7 @@ def main():
   for text in texts:
    for direction in ['ltr','rtl']:
     c={'id':f'{path.stem}-{len(cases)}','font':path.name,'text':text,'direction':direction,'depth':64,'operations':4096,'weight':1 if path.stem.startswith('device-') or path.stem in ['float-anchor','pair-absolute'] else 0}
-    if path.stem.startswith(('saturating-','device-')):c['expected_budgets']=['Operations']
+    if path.stem.startswith(('saturating-','device-')) or (path.stem=='attachment-mixed-advances' and max(65536,4096*len(text))<73737):c['expected_budgets']=['Operations']
     c['font_sha256']=hashlib.sha256(path.read_bytes()).hexdigest();c['oracle']=shape(path,text,direction,c['weight'])
     if path.stem=='attachment-distance':
      c['sample']=sorted({0,len(text)-1,*[i for i,g in enumerate(c['oracle']['glyphs']) if g==3]});c['oracle']={key:[values[i] for i in c['sample']] for key,values in c['oracle'].items()}

@@ -57,11 +57,11 @@ OTS checks that the record end is at most 65535 and coverage starts after
 it. The package rejects them under its existing OTS policy; they are not
 examples of valid fonts in the positive replay.
 
-`oracle.py` records 134 cases from uharfbuzz 0.56.3 / HarfBuzz 14.6.0. It
+`oracle.py` records 140 cases from uharfbuzz 0.56.3 / HarfBuzz 14.6.0. It
 caches actual returned glyphs, positions and clusters or an explicit
 MemoryError for the cyclic reference failure. Twenty-two custom-depth
 cases test the package contract separately, using a literal bounded DFS
-interpreter in `verify.py`. There are 128 native replay cases; six wide-font
+interpreter in `verify.py`. There are 134 native replay cases; six wide-font
 reference runs are retained solely as validator provenance. Cycle probes
 at depths 65535 and 65536 distinguish combined Depth and Operations reports
 from Operations alone when the work bound wins the simultaneous check.
