@@ -307,7 +307,8 @@ TableVar := {
 
 	## Normalised coordinates (F2Dot14, one per axis) for design-space values
 	## given per axis tag. A tag the font lacks is ignored; an axis not given
-	## takes its default; a later value for the same tag wins. Values are
+	## takes its default; all axes sharing a tag receive its setting, and a
+	## later value for that tag wins. Values are
 	## `Dec`, rounded to the nearest single-precision value as HarfBuzz
 	## receives a `float`.
 	coords_for : TableVar, List({ tag : U32, value : Dec }) -> List(I16)
@@ -318,12 +319,13 @@ TableVar := {
 			$design = $design.append(TableVar.f32_from_fixed((tv.default.get(a) ?? 0).to_i64()))
 		}
 		for setting in settings {
-			match TableVar.find_axis(tv.tags, setting.tag) {
-				Ok(a) => {
-					# `find_axis` returns an index below the axis count.
-					$design = $design.set(a, TableVar.f32_from_ratio(Dec.to_attos(setting.value), 1_000_000_000_000_000_000)) ?? []
+			value = TableVar.f32_from_ratio(Dec.to_attos(setting.value), 1_000_000_000_000_000_000)
+			for a in 0..<count {
+				if (tv.tags.get(a) ?? 0) == setting.tag {
+					# Each a indexes the preallocated design vector. The font
+					# setter changes every matching axis, preserving duplicate tags.
+					$design = $design.set(a, value) ?? []
 				}
-				Err(_) => {}
 			}
 		}
 		TableVar.coords_from_design(tv, $design)
