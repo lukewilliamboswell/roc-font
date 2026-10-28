@@ -6,6 +6,7 @@ import LayoutGsub
 import LayoutKerning
 import LayoutVar
 import ShaperKhmer
+import ShaperIndicVowels
 import ShaperIndic
 import ShaperHangul
 import ShaperThai
@@ -53,6 +54,7 @@ Shaper :: {}.{
 	## name the features of each step for traced shaping.
 	Plan : {
 		backward : Bool,
+		script : U64,
 		native : [Ltr, Rtl, Either],
 		gsub : List(LayoutGsub.Step),
 		gsub_stage_count : U64,
@@ -434,6 +436,7 @@ Shaper :: {}.{
 		}
 		{
 			backward: requested == Rtl,
+			script: ShaperTags.script_of(options.script),
 			native,
 			gsub,
 			gsub_stage_count: stage_count,
@@ -956,6 +959,8 @@ Shaper :: {}.{
 		if n == 0 {
 			return { run: Shaper.empty_run, items: [], stopped: 0 }
 		}
+		limit = (p.growth * n).max(16384)
+		budget = (p.operations * n).max(16384)
 		gsub = Face.gsub(face)
 		{ chars: prepared, found } = ShaperNormalize.prepare(scalars, p.global_mask)
 		clustered =
@@ -979,11 +984,15 @@ Shaper :: {}.{
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
 		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
+		{ chars: vowels, operations: pre_operations, stopped: pre_stopped } = match p.model {
+			Indic(_) => ShaperIndicVowels.preprocess(p.script, legacy, limit, budget)
+			_ => { chars: legacy, operations: 0, stopped: 0 }
+		}
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = match p.model {
-			Indic(_) => ShaperNormalize.normalize_script(ctx, legacy, Indic)
-			Khmer(_) => ShaperNormalize.normalize_script(ctx, legacy, Khmer)
-			Simple => if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else if (p.hangul) ShaperNormalize.normalize_short_circuit(ctx, legacy) else ShaperNormalize.normalize(ctx, legacy)
+			Indic(_) => ShaperNormalize.normalize_script(ctx, vowels, Indic)
+			Khmer(_) => ShaperNormalize.normalize_script(ctx, vowels, Khmer)
+			Simple => if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, vowels, ShaperArabic.reorder) else if (p.hangul) ShaperNormalize.normalize_short_circuit(ctx, vowels) else ShaperNormalize.normalize(ctx, vowels)
 		}
 		joined = match p.model {
 			Indic(_) => ShaperIndic.setup(normalized)
@@ -1012,16 +1021,14 @@ Shaper :: {}.{
 				}
 			$items = $items.append({ glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) })
 		}
-		limit = (p.growth * n).max(16384)
-		budget = (p.operations * n).max(16384)
 		applied = match p.model {
-			Simple => LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
-			Indic(model) => Shaper.apply_indic(face, model, p.staged, gsub, $items, { limit, budget, depth: Face.max_depth(face) })
-			Khmer(model) => Shaper.apply_khmer(face, model, p.staged, gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+			Simple => LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
+			Indic(model) => Shaper.apply_indic(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
+			Khmer(model) => Shaper.apply_khmer(face, model, p.staged, gsub, $items, { limit, budget: budget - pre_operations, depth: Face.max_depth(face) })
 		}
-		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - applied.operations)
+		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations)
 		placed = positioned.placed
-		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped.bitwise_or(positioned.stopped) }
+		{ run: Shaper.finish(placed), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped) }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
@@ -1050,7 +1057,7 @@ Shaper :: {}.{
 				}
 			}
 		}
-		full = LayoutKerning.position_full_with_joiners(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
+		full = LayoutKerning.position_full_with_policy(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.zero_marks == Late, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
 		positioned = full.positions
 		var $items = positioned.items
 		var $ax = List.with_capacity(count)
