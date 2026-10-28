@@ -1,0 +1,17 @@
+{
+  "source_commit": "6d006ee",
+  "bundle": "61BAyXZp8wuypunKW4A8TvfNGMkDKbomCXmQveAbhc6p.tar.zst",
+  "binary_sha256": "cf97e111ab6288782ffd688ed499094343646af2e92effbebac304bc552effb6",
+  "compiler": "roc nightly macos apple silicon 2026-10-27 de79a0f",
+  "reference": "HarfBuzz14.6.0/uharfbuzz0.56.3",
+  "native_cached_cases": {
+    "kern-policy": 93,
+    "upstream-per-script-kern-fallback": 12,
+    "agreed": 105,
+    "failed": 0
+  },
+  "public_bundled_expects": 5,
+  "source_closure_expects": 398,
+  "fonts_ots": "9.3.0 all3 PASS",
+  "note": "Source-only change reuses the existing prepared fallback_position Boolean; parent owns full final integration tests and allocation ratchet."
+}
