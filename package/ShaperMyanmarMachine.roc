@@ -160,15 +160,24 @@ ShaperMyanmarMachine :: {}.{
 								item = $items.get(i) ?? LayoutGsub.no_item
 								$items = $items.set(i, { ..item, mask: item.mask.bitwise_and(0xFE01FFFFFFFFFFFF).bitwise_or(syllable) }) ?? []
 							}
-							if $te - $ts >= 2 and $te - $ts <= 255 {
-								cost = 2 * ($te - $ts)
-								if cost > budget - $ops {
-									$stopped = 2
-								} else {
-									$ops = $ops + cost
-									cluster = LayoutGsub.end_cluster($items, $ts, $te, 0xFFFFFFFFFFFFFFFF)
-									$items = LayoutGsub.flag_range($items, $ts, $te, cluster)
+
+							# HB's foreach_syllable caps each visit at64,
+							# even when Ragel assigned one serial to a
+							# longer span. This also bounds unsafe flags.
+							var $first = $ts
+							while $first < $te and $stopped == 0 {
+								last = $first + ($te - $first).min(64)
+								if last - $first >= 2 {
+									cost = 2 * (last - $first)
+									if cost > budget - $ops {
+										$stopped = 2
+									} else {
+										$ops = $ops + cost
+										cluster = LayoutGsub.end_cluster($items, $first, last, 0xFFFFFFFFFFFFFFFF)
+										$items = LayoutGsub.flag_range($items, $first, last, cluster)
+									}
 								}
+								$first = last
 							}
 							$serial = if $serial == 15 {
 								1

@@ -305,7 +305,7 @@ ShaperMyanmar := {}.{
 		while $start < $work.items.len() and $work.stopped == 0 {
 			id = ShaperIndic.syllable(ShaperIndic.at($work.items, $start).mask)
 			var $end = $start + 1
-			while $end < $work.items.len() and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == id and $work.stopped == 0 {
+			while $end < $work.items.len() and $end - $start < 64 and ShaperIndic.syllable(ShaperIndic.at($work.items, $end).mask) == id and $work.stopped == 0 {
 				$work = ShaperIndic.charge($work, 1)
 				$end = $end + 1
 			}
@@ -373,4 +373,13 @@ expect {
 	items = categories.map_with_index(|category, i| { ..LayoutGsub.no_item, glyph: i + 1, cluster: 0, mask: ShaperIndic.set_syllable(ShaperIndic.set_category(0, category), 16) })
 	result = ShaperMyanmar.reorder_syllable({ items, operations: 0, stopped: 0, budget: 100000 }, 0, 5)
 	result.stopped == 0 and result.items.map(|item| item.glyph) == [4, 5, 2, 3, 1]
+}
+
+## fuzz regression: HarfBuzz's foreach_syllable visits at most64glyphs.
+## The DFA serial remains one, so long left-vowel runs reorder in chunks
+## and the original base lands atindex63 rather than at the far edge.
+expect {
+	items = [1.U64].concat(List.repeat(22, 256)).map_with_index(|category, i| { glyph: i + 1, cluster: i, mask: ShaperIndic.set_syllable(ShaperIndic.set_category(0, category), 16), props: 0 })
+	result = ShaperMyanmar.reorder(items, { dotted_circle: Absent, limit: 1000, budget: 100000 })
+	result.stopped == 0 and (result.items.get(63) ?? LayoutGsub.no_item).glyph == 1 and result.items.len() == 257
 }
