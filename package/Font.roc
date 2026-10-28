@@ -996,6 +996,9 @@ Font :: { face : Face }.{
 	## feature tags can also be supplied with `Feature`; numeric choices
 	## here override a matching tag choice. Defaults come from the font and
 	## selected language. Unsupported ids or values retain those defaults.
+	## Feat version 2.1 aliases share the preceding feature's settings and
+	## value. This follows the table's alias definition; Graphite2 1.3.14
+	## treats those entries as independent features.
 	GraphiteFeature := { id : U32, value : I16 ?? 1 }
 
 	## Which primary rule system chooses and reorders this plan's glyphs.
