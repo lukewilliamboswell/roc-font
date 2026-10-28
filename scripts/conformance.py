@@ -107,7 +107,12 @@ DRIVER_BIN = TMP_ROOT / "conformance" / "driver"
 DRIVER_PACKAGE = TMP_ROOT / "conformance" / "driver.package"
 # Proven external matrices share this optimized driver, avoiding one
 # identical native build per script while retaining exact comparisons.
-EXTERNAL_CASES = (ROOT / "tests/fonts/complex/indic-cases.jsonc",)
+EXTERNAL_CASES = (
+    ROOT / "tests/fonts/complex/indic-cases.jsonc",
+    ROOT / "tests/fonts/complex/khmer-cases.jsonc",
+    ROOT / "tests/fonts/complex/vowel-cases.jsonc",
+    ROOT / "tests/fonts/shaping/indic-wide/cases.jsonc",
+)
 SCORES = ROOT / "tests" / "scores.json"
 SCORES_ABOUT = (
     "Scored conformance suites (architecture §7.1). `scored` lists path prefixes under tests/cases whose case files are scored "

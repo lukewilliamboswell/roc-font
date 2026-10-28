@@ -844,8 +844,10 @@ Font :: { face : Face }.{
 	## Substitution and positioning follow the font's selected features,
 	## including cursive and mark attachment and contextual positioning.
 	## Dedicated script stages handle Arabic joining, Hebrew mark order,
-	## Thai/Lao Sara Am, Devanagari syllables and reordering, and Hangul
-	## syllables, Jamo forms and tone marks.
+	## Thai/Lao Sara Am, Khmer, and Hangul syllables, Jamo forms and tone
+	## marks. Indic syllable reordering covers Devanagari, Bengali, Gurmukhi,
+	## Gujarati, Odia, Tamil, Telugu, Kannada and Malayalam when the font's
+	## script data selects that model.
 	## Other scripts use the default shaping model, which applies the
 	## font's lookups without script-specific syllable reordering.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
