@@ -11,6 +11,8 @@ It has TrueType outlines, 5,015 glyphs, and a MATH 1.0 table. The table
 contains 215 vertical constructions (1,149 variants, 57 assemblies) and
 29 horizontal constructions (132 variants, 22 assemblies).
 
+All four fonts pass the pinned OTS 9.3.0 sanitizer.
+
 The three `math*.ttf` fixtures are original generated test data, under this
 repository's Universal Permissive License (`SYNTHETIC-LICENSE.txt`). Run
 `generate.py` with fontTools 4.61.1 to reproduce them. They cover all four

@@ -141,7 +141,7 @@ broken = |table| {
 	}
 }
 
-expect [0.U64, 1, 9, 10, 100, 223].all(|n| broken(math_bytes.take_first(n)))
+expect [1.U64, 9, 10, 100, 223].all(|n| broken(math_bytes.take_first(n)))
 expect broken(FontBuild.patch(math_bytes, 0, [0, 2]))
 expect broken(FontBuild.patch(math_bytes, 4, [255, 255]))
 expect broken(FontBuild.patch(math_bytes, 6, [255, 255]))
@@ -166,4 +166,59 @@ expect {
 	device = math_bytes.len()
 	table = FontBuild.patch(math_bytes.concat([0, 10, 0, 10, 0, 1]), record + 2, FontBuild.u16(device - constants))
 	broken(table)
+}
+
+# Counts and sorted coverage indexes must agree before a query can use them.
+expect {
+	info = be(math_bytes, 6)
+	italic = info + be(math_bytes, info)
+	broken(FontBuild.patch(math_bytes, italic + 2, [0, 1]))
+}
+expect {
+	info = be(math_bytes, 6)
+	italic = info + be(math_bytes, info)
+	coverage = italic + be(math_bytes, italic)
+	# This fixture's correction coverage is format 1 with glyphs 1 and 3.
+	broken(FontBuild.patch(math_bytes, coverage + 6, [0, 1]))
+}
+# All branches of the device format are checked, even at zero ppem.
+expect {
+	constants = be(math_bytes, 4)
+	record = constants + 8 + 4 * 34
+	device = constants + be(math_bytes, record + 2)
+	broken(FontBuild.patch(math_bytes, device + 4, [0, 4]))
+}
+# A variation device with no GDEF row is invalid; the format's explicit
+# no-variation sentinel is valid and contributes exactly zero.
+expect {
+	constants = be(math_bytes, 4)
+	record = constants + 8 + 4 * 34
+	target = math_bytes.len()
+	with_device = |data| FontBuild.patch(math_bytes.concat(data), record + 2, FontBuild.u16(target - constants))
+	invalid = with_device([0, 0, 0, 0, 128, 0])
+	sentinel = with_device([255, 255, 255, 255, 128, 0])
+	broken(invalid) and (
+		match Font.from_bytes(FontBuild.parity_font([{ tag: "MATH", data: sentinel }]), Font.ReadOptions.{ strict: True }) {
+			Ok(font) => match Font.math_constants(font) {
+				Present(c) => c.fraction_rule_thickness == 40
+				Absent => False
+			}
+			Err(_) => False
+		}
+	)
+}
+
+# An empty table directory entry is a structural font error, before the
+# optional MATH policy is applied.
+expect {
+	bytes = FontBuild.parity_font([{ tag: "MATH", data: [] }])
+	match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True }) {
+		Ok(_) => False
+		Err(problems) => problems.any(
+			|p| match p {
+				BadTable(b) => b.table == "MATH"
+				_ => False
+			},
+		)
+	}
 }
