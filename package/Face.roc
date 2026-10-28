@@ -24,6 +24,7 @@ import TableOutline
 import TableMath
 import TableColorImages
 import TablePalette
+import TableColor
 
 ## A prepared face at a location of its variation space: every table
 ## `Font` uses, checked once, the queries on it, and the location state
@@ -59,6 +60,7 @@ Face := {
 	sbix_images : TableColorImages,
 	cbdt_images : TableColorImages,
 	palettes : TablePalette,
+	color : TableColor,
 	units_per_em : U16,
 	glyph_count : U64,
 	advances : List(U16),
@@ -333,6 +335,32 @@ Face := {
 						}
 					}
 				}
+				color = match Sfnt.located(bytes, tables, "COLR", 0) {
+					Missing => TableColor.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("COLR", at))
+						TableColor.none
+					}
+					Found(found) => {
+						# COLR depends on a valid CPAL, including foreground-only artwork.
+						if TablePalette.palette_count(palettes) == 0 {
+							$optional = $optional.append(Sfnt.bad("COLR", found.offset))
+							TableColor.none
+						} else {
+							color_axes = match fvar_axes {
+								Present(n) => n
+								Absent => 0
+							}
+							match TableColor.read(found.data, glyph_count, TablePalette.entry_count(palettes).to_u64(), color_axes) {
+								Ok(value) => TableColor.at_location(value, [])
+								Err(offsets) => {
+									$optional = $optional.concat(offsets.map(|at| Sfnt.bad("COLR", found.offset + at)))
+									TableColor.none
+								}
+							}
+						}
+					}
+				}
 				math = match Sfnt.located(bytes, tables, "MATH", 0) {
 					Missing => TableMath.none
 					Bad(at) => {
@@ -389,6 +417,7 @@ Face := {
 								sbix_images: images.sbix,
 								cbdt_images: images.cbdt,
 								palettes,
+								color,
 								units_per_em: h.units_per_em,
 								glyph_count,
 								advances: a,
@@ -779,7 +808,7 @@ Face := {
 	moved = |face, given| {
 		loc = Face.location(face, given)
 		layout_location = LayoutVar.location(face.layout_var, loc.coords)
-		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, layout_location) }
+		{ ..face, location: loc, kerning: LayoutKerning.at_location(face.kerning, layout_location), math: TableMath.at_location(face.math, layout_location), color: TableColor.at_location(face.color, loc.coords) }
 	}
 
 	## The face moved to a `Font.Variation`'s location (see `settings`). A

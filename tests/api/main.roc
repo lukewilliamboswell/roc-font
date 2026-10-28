@@ -23,6 +23,7 @@ import CaretTests
 import PositionTests
 import ColorImageTests
 import ArabicTests
+import ThaiLaoTests
 import ContextTests
 
 ## The tests of roc-font's public API. They import the package through

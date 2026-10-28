@@ -4,6 +4,7 @@ import TableMetadata
 import TableMath
 import TableColorImages
 import TablePalette
+import TableColor
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
 import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
@@ -460,12 +461,9 @@ Font :: { face : Face }.{
 	## The font's display name for a palette, chosen in English when
 	## available; `Missing` means that no usable name was supplied.
 	color_palette_name : Font, U32 -> Try(Str, [Missing])
-	color_palette_name = |font, index| match TablePalette.palettes(font.face.palettes).get(index.to_u64()) {
-		Ok(palette) => match palette.name_id {
-			Present(id) => Face.name(font.face, id)
-			Absent => Err(Missing)
-		}
-		Err(_) => Err(Missing)
+	color_palette_name = |font, index| match TablePalette.palette_name_id(font.face.palettes, index) {
+		Present(id) => Face.name(font.face, id)
+		Absent => Err(Missing)
 	}
 
 	## A display name for a color entry, shared by that index in every
@@ -475,6 +473,69 @@ Font :: { face : Face }.{
 		Present(id) => Face.name(font.face, id)
 		Absent => Err(Missing)
 	}
+
+	## A palette entry or the caller's foreground color.
+	ColorSource : [PaletteEntry(U16), Foreground]
+
+	## One ordered outline layer of COLR version 0 artwork.
+	ColorLayer : { glyph : U32, color : ColorSource }
+
+	## A position in font units.
+	ColorPoint : { x : F64, y : F64 }
+
+	## A clipping rectangle in font units.
+	ColorRect : { x_min : F64, y_min : F64, x_max : F64, y_max : F64 }
+
+	## A checked contiguous span in the graph's edges or stops pool.
+	ColorSpan : { start : U64, len : U64 }
+
+	## A gradient stop: offset and alpha are fractions, color remains unresolved.
+	ColorStop : { offset : F64, color : ColorSource, alpha : F64 }
+
+	## How a gradient extends beyond its first and last stops.
+	ColorExtend : [Pad, Repeat, Reflect]
+
+	## The compositing operation defined by the font.
+	ColorMode : [Clear, Source, Destination, SourceOver, DestinationOver, SourceIn, DestinationIn, SourceOut, DestinationOut, SourceAtop, DestinationAtop, Xor, Plus, Screen, Overlay, Darken, Lighten, ColorDodge, ColorBurn, HardLight, SoftLight, Difference, Exclusion, Multiply, HslHue, HslSaturation, HslColor, HslLuminosity]
+
+	## A transform in font units; angles are degrees. Consumers apply the transform.
+	ColorOperation : [
+		Affine({ xx : F64, yx : F64, xy : F64, yy : F64, dx : F64, dy : F64 }),
+		Translate(ColorPoint),
+		Scale({ x : F64, y : F64, center : ColorPoint }),
+		Rotate({ degrees : F64, center : ColorPoint }),
+		Skew({ x_degrees : F64, y_degrees : F64, center : ColorPoint }),
+	]
+
+	## One paint node; child references index the graph's nodes. Layers index edges; gradients index stops.
+	ColorPaint : [
+		Layers(ColorSpan),
+		Solid({ color : ColorSource, alpha : F64 }),
+		LinearGradient({ stops : ColorSpan, extend : ColorExtend, p0 : ColorPoint, p1 : ColorPoint, p2 : ColorPoint }),
+		RadialGradient({ stops : ColorSpan, extend : ColorExtend, c0 : ColorPoint, radius0 : F64, c1 : ColorPoint, radius1 : F64 }),
+		SweepGradient({ stops : ColorSpan, extend : ColorExtend, center : ColorPoint, start_degrees : F64, end_degrees : F64 }),
+		Glyph({ glyph : U32, paint : U32 }),
+		ColorGlyph({ glyph : U32, paint : U32, clip : [Present(ColorRect), Absent] }),
+		Transform({ paint : U32, operation : ColorOperation }),
+		Composite({ source : U32, backdrop : U32, mode : ColorMode }),
+	]
+
+	## A flat paint graph. Start at root; edges and stops are shared pools. The optional clip applies to the whole graph.
+	ColorGlyph : { root : U32, nodes : List(ColorPaint), edges : List(U32), stops : List(ColorStop), clip : [Present(ColorRect), Absent] }
+
+	## Ordered outline layers for a glyph with COLR version 0 artwork.
+	## Resolve each color using a palette or the caller's foreground, then
+	## obtain its outline with `outline`. Other glyphs return an empty list.
+	color_layers : Font, U32 -> List(ColorLayer)
+	color_layers = |font, id| TableColor.layers(font.face.color, id)
+
+	## Paint instructions for a color glyph at the font's current variation
+	## location. Includes COLR version 0 layers and version 1 gradients,
+	## transforms, clipping and composition. Colors remain palette references;
+	## rendering these instructions belongs to the consumer. Missing artwork
+	## gives `Absent`. All coordinates remain in font units.
+	color_glyph : Font, U32 -> [Present(ColorGlyph), Absent]
+	color_glyph = |font, id| TableColor.graph(font.face.color, id)
 
 	## Encoding of an embedded SVG document. The bytes remain encoded;
 	## callers decode UTF-8/XML or gzip using their own image pipeline.

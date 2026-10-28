@@ -202,6 +202,20 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-thai-lao": TargetConfig(
+        sources=(FUZZ_ROOT / "font-thai-lao.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-thai-lao.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=32,
+        timeout=10,
+        contract=(
+            "Arabic joining and positioning in two real families at 2/16 "
+            "text sizes: join controls, both directions and cluster levels, "
+            "bounded deterministic runs and linear allocations; no leaks"
+        ),
+        font_files=False,
+    ),
     "font-color-images": TargetConfig(
         sources=(FUZZ_ROOT / "font-color-images.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-color-images.json",
