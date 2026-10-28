@@ -468,7 +468,7 @@ expect {
 	GraphiteSlots.get(c.state, 1).position_x == TableVar.f32_from_int(-140) and GraphiteSlots.get(c.state, 2).position_x == TableVar.f32_from_int(-220) and c.state.advance_x == TableVar.f32_from_int(1284)
 }
 expect {
-	# Public C-API witness with512 preceding32768-unit glyphs. Rounding
+	# Public C-API witness with 512 preceding 32768-unit glyphs. Rounding
 	# the parent's physical position before adding the attachment delta
 	# differs from adding a summed collision offset to the child's base.
 	n = TableVar.f32_from_int
