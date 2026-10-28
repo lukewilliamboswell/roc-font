@@ -979,6 +979,10 @@ LayoutPosition := {
 	resolve : State, Bool -> State
 	resolve = |state, backward| {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
+		# Single and pair positioning need no attachment distance structures.
+		if parents.all(|parent| parent == 0) {
+			return state
+		}
 		count = items.len()
 		var $prefix = List.with_capacity(count + 1).append(0.I128)
 		var $sum = 0.I128
@@ -990,7 +994,7 @@ LayoutPosition := {
 			$negative = $negative or advance < 0
 			$prefix = $prefix.append($sum)
 		}
-		mixed = $positive and $negative
+		mixed = $positive and $negative and attachments.contains(1)
 		ranges = if (mixed) PositionSum.make(ax) else PositionSum.make([])
 		var $parents = parents
 		var $dx = dx
