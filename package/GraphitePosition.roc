@@ -232,7 +232,11 @@ GraphitePosition :: {}.{
 						enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
 						ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
 						physical_x = TableVar.f32_add(advance_x, ox)
-						$left = TableVar.f32_min($left, TableVar.f32_sub(physical_x, root_physical_x))
+						# A negative relative anchor rebases a cluster only when
+						# its unrebased physical point crosses the segment origin.
+						if TableVar.f32_lt(TableVar.f32_add($pen_x, physical_x), 0) {
+							$left = TableVar.f32_min($left, TableVar.f32_sub(physical_x, root_physical_x))
+						}
 						if child.child != 0 {
 							$pending = $pending.append({ id: child.child, x, y, parent_x: physical_x })
 						}
@@ -595,4 +599,26 @@ expect {
 	shifted = GraphiteSlots.set_extra(GraphiteSlots.set_extra(second.state, 2, 31, 1), 2, 8, n(-480).to_i32_wrap())
 	placed = GraphitePosition.position(shifted, False, 100)
 	placed.state.advance_x == n(1082) and GraphiteSlots.get(placed.state, 1).position_x == n(380) and GraphiteSlots.get(placed.state, 2).position_x == 0 and GraphiteSlots.get(placed.state, 3).position_x == n(300)
+}
+
+expect {
+	# Original two-zero-mark chain reproduces the real Scheherazade
+	# interior-root case. Prefix 26 still triggers the full 27-unit relative
+	# rebase; prefix 27 reaches absolute zero and suppresses it entirely.
+	n = TableVar.f32_from_int
+	var $good = True
+	for prefix in [0, 10, 26, 27, 28, 604] {
+		a = GraphiteSlots.append(GraphiteSlots.make(0, 4), { ..GraphiteSlots.no_slot, attach_x: n(30) })
+		b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, attach_x: n(-27) })
+		c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, advance_x: n(603) })
+		d = GraphiteSlots.append(c.state, { ..GraphiteSlots.no_slot, advance_x: n(prefix) })
+		first = GraphitePosition.attach(d.state, 1, 2, 100)
+		second = GraphitePosition.attach(first.state, 2, 3, 100)
+		placed = GraphitePosition.position(second.state, True, 100)
+		shift = if (prefix < 27) 27 else 0
+		if placed.state.advance_x != n(prefix + 603 + shift) or GraphiteSlots.get(placed.state, 3).position_x != n(prefix + shift) {
+			$good = False
+		}
+	}
+	$good
 }
