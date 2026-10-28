@@ -1,0 +1,16 @@
+{
+  "about": "Original attachment, sequencing, retry and cluster-kerning controls; real Awami collision font; hostile font mutations and three increasing geometry run sizes.",
+  "seeds": [
+    {"why": "attached forest and 8/16/32 scaling", "parts": [{"hex": "00 00"}]},
+    {"why": "cluster kerning and 8/16/32 scaling", "parts": [{"hex": "01 01"}]},
+    {"why": "sequence penalties and 8/16/32 scaling", "parts": [{"hex": "02 02"}]},
+    {"why": "fractional prior-pass retry", "parts": [{"hex": "03 03"}]},
+    {"why": "real Awami Arabic collisions", "parts": [{"hex": "04"}]},
+    {"why": "opposite-direction attachment", "parts": [{"hex": "0a 0f"}]},
+    {"why": "opposite-direction kerning", "parts": [{"hex": "0b 0f"}]},
+    {"why": "opposite-direction sequencing", "parts": [{"hex": "0c 0f"}]},
+    {"why": "original attachment bytes", "parts": [{"file": "tests/fonts/graphite-geometry/attach-forward-ltr.ttf"}]},
+    {"why": "original kerning bytes", "parts": [{"file": "tests/fonts/graphite-geometry/kerning-audit/collision-kern-audit-base-ltr.ttf"}]},
+    {"why": "licensed real collision font bytes", "parts": [{"file": "tests/fonts/graphite/AwamiNastaliq-Regular.ttf"}]}
+  ]
+}
