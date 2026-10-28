@@ -90,3 +90,23 @@ and copies. `live-copy` keeps an authored advance17; `set-glyph-copy` restores
 original advance601. Conditional and SetFeat controls pin stack operand order
 and unsigned feature-value clipping before narrowing. All these original
 fonts retain their Graphite tables under OTS9.3.
+
+`feature-divergences.json` lists exactly16 Feat2.1 alias cases. The official
+GTF FeatureFlags section defines bit0 as an alias of the previous feature.
+We interpret that as sharing the selected value, setting domain and Sill
+language default, while allowing a different UI label. Graphite2 1.3.14 ignores
+this flag and treats the second feature as independent. Its raw cached answers
+remain in `feature-records.json`. `check_aliases.py` independently decodes the
+original font with fontTools and constructs the normative runs from its two
+0/1 settings and explicit language default. The verifier checks every complete
+normative run against an exact cached reference key; no general feature or
+font mismatch is ignored. Enable this registry only for its dedicated matrix:
+
+```
+python check_aliases.py --check
+python verify.py --cases feature-cases.jsonc --records feature-records.json \
+  --oracle feature-oracle.json --divergences feature-divergences.json
+```
+
+The path arguments above are relative to the current directory; run this example
+from this fixture directory, or supply paths from the repository root.

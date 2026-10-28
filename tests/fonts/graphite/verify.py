@@ -8,7 +8,7 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'));import flight
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--divergences',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
  subprocess.run([sys.executable,str(HERE/'record_shapes.py'),'--check','--cases',str(args.cases.resolve()),'--output',str(args.records.resolve()),'--oracle',str(args.oracle.resolve()),'--font-root',str(args.font_root.resolve())],check=True)
  cases=json.loads(args.cases.read_text())['cases'];records={r['id']:r for r in json.loads(args.records.read_text())['records']}
  selected=[c for c in cases if args.only in c['id']];assert selected,'empty Graphite replay selection'
@@ -36,13 +36,20 @@ def main():
   if run.returncode:reader_failures.append(font);print(font,run.stdout,run.stderr,file=sys.stderr);continue
   for line in run.stdout.splitlines():
    key,value=line.split('\t',1);assert key not in actual,key;actual[key]=json.loads(value)
- failures=[]
+ failures=[];exact=0;normative=0
+ divergences={r['id']:r for r in json.loads(args.divergences.read_text())['cases']} if args.divergences else {}
  for case in selected:
-  key=case['id'];got=actual.get(key);expected=records[key]['result'];engine='OpenType' if case.get('engine')=='ot' else 'Graphite'
+  key=case['id'];got=actual.get(key);raw=records[key]['result'];expected=raw
+  if key in divergences:
+   divergence=divergences[key];assert divergence['reference_key']==records[key]['key'],key
+   expected=divergence['expected'];assert expected!=raw,key
+  engine='OpenType' if case.get('engine')=='ot' else 'Graphite'
   if got is None or got.get('budgets') or got.get('engine')!=engine or {k:got.get(k) for k in expected}!=expected:
    failures.append(key);print('DIFFER',key,'expected',expected,'actual',got,file=sys.stderr)
- report={'cases':len(selected),'agree':len(selected)-len(failures),'failures':failures,'reader_failures':reader_failures,'provenance':provenance}
+  elif key in divergences:normative+=1
+  else:exact+=1
+ report={'cases':len(selected),'agree':exact,'normative':normative,'failures':failures,'reader_failures':reader_failures,'provenance':provenance}
  if args.output:args.output.write_text(json.dumps(report,indent=2)+'\n')
- print(f"{report['agree']}/{len(selected)} exact cached HB14.6/Graphite2 public runs agree")
+ print(f"{report['agree']} exact, {normative} declared normative, {len(failures)} failures / {len(selected)} cached HB14.6/Graphite2 public runs")
  return bool(failures or reader_failures)
 if __name__=='__main__':raise SystemExit(main())

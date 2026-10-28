@@ -1,0 +1,630 @@
+{
+  "source": "https://github.com/silnrsi/graphite/blob/1.3.14/doc/GTF.asc#feat",
+  "section": "FeatureDefn / FeatureFlags, bit0: alias of the previous feature",
+  "interpretation": "An alias shares its target feature value, domain and language defaults; its UI label can differ.",
+  "font_sha256": "3df9e4ebe9c8702bda5b09d51a750bff09c063dfa9cb3002cc3ec122a0057a13",
+  "independent_decode": {
+    "version": "2.1",
+    "features": [
+      [
+        100,
+        2,
+        0,
+        44,
+        32768,
+        256
+      ],
+      [
+        101,
+        0,
+        0,
+        52,
+        1,
+        256
+      ]
+    ],
+    "target_settings": [
+      0,
+      1
+    ],
+    "sill": {
+      "ksw": {
+        "100": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "feature-alias/none/-1/ltr",
+      "reference_key": "075e437aed33eb5faca30c87ca0c3335537b7df573dd21187d724b812c6e5ec9",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/none/-1/rtl",
+      "reference_key": "e893b81c631709acc3e80a51f4c8496e88c7131a5a898aecd58c7dc92cf549db",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/none/32767/ltr",
+      "reference_key": "361905eb18234e453710c039cdaa5d80ce9c68d9285e55ba1f93ffd4cf3d9ca2",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/none/32767/rtl",
+      "reference_key": "f978010c70b9f025f2421944d52eb56d9857dbb69826f44c64c46e8a4539514c",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/None/ltr",
+      "reference_key": "b7ebba7ebc7a5ee958a7b012adaa0c4212c39ce7c04c750bef78ec27cd201e3d",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/None/rtl",
+      "reference_key": "419bd713a768c39f651914dc3920efc97da53154b493d0a72b8dbe470e66df7a",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/-1/ltr",
+      "reference_key": "f7065d084cca1a03b9b5820ca9ce8c0fb470ce54b90c36e2f799d0a4d35c1a89",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/-1/rtl",
+      "reference_key": "750415d8da8c83a016dda1cdd4ff03541276fd0b53285023619fc9b4716386a5",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/32767/ltr",
+      "reference_key": "a7bfd25673697d91f0055dd9a1d6b5e01a31f522b22c4cd930f7b696d13469b0",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw/32767/rtl",
+      "reference_key": "c56227d544f1ab8c619580bc67aeb7b11afdd6f21c6335df441aba54b52cd8ff",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/None/ltr",
+      "reference_key": "c332e17ac0d8067cdb6f48c5550ca8a07b4ccc0e03b5663646df992ec06aa2d8",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/None/rtl",
+      "reference_key": "5252693beaff5e2447ac459c4b1ae6d22566516bfd0b622c60e67e8b3fa9a580",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/-1/ltr",
+      "reference_key": "d14056aa8bf09cbcd63bdde7816146531a38ea842fb5b2628de433ac3d546e7b",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/-1/rtl",
+      "reference_key": "551d0af89d988d5ebfb52babb054542a8fac35ce75c3f6b791d3950f1c38f9cd",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/32767/ltr",
+      "reference_key": "866437972aa10e714bed10c278b1fc8d5a5f4fe71f49b9d3796c296b8f04a0cc",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    },
+    {
+      "id": "feature-alias/ksw-ZZ/32767/rtl",
+      "reference_key": "d86bb87d49c8e7793c1c73c784ffb07acbb60adcefb179879ade008bb12a7085",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              602,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "reason": "Graphite2 1.3.14 ignores the normative Feat2.1 alias flag."
+    }
+  ]
+}
