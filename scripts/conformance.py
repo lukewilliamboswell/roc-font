@@ -121,6 +121,7 @@ EXTERNAL_CASES = (
     ROOT / "tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc",
     ROOT / "tests/fonts/shaping/arabic-fallback/windows-cases.jsonc",
     ROOT / "tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc",
+    ROOT / "tests/fonts/shaping/fallback-marks/mark-cases.jsonc",
     ROOT / "tests/fonts/shaping/thai-legacy/long-cases.jsonc",
     ROOT / "tests/fonts/positioning/attachment-caps/attachment-cases.jsonc",
 )

@@ -246,6 +246,16 @@ TARGETS: dict[str, TargetConfig] = {
         contract="GPOS contextual record fanout, nested order, ignored inputs and resource bounds: deterministic aligned runs, exact work limits, flat allocation scaling and no leaks",
         font_files=False,
     ),
+    "font-arabic-stretch": TargetConfig(
+        sources=(FUZZ_ROOT / "font-arabic-stretch.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-arabic-stretch.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=4096,
+        timeout=10,
+        contract="Arabic presentation fallback, Windows glyph heuristics and Syriac stretching: deterministic aligned bounded runs, original clusters, trace origins, scaling and no leaks",
+        font_files=False,
+    ),
     "font-arabic": TargetConfig(
         sources=(FUZZ_ROOT / "font-arabic.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-arabic.json",

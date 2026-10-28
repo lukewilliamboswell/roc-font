@@ -21,7 +21,7 @@ allocation growth, determinism and the feature's public contract:
 - Font facts: `font-metadata`, `font-math`, `font-outlines`, `font-color`
   and `font-color-images`.
 - Script stages with licensed real fonts: `font-arabic`, `font-thai-lao`,
-  `font-hangul`, `font-indic`, `font-khmer`, `font-myanmar`, `font-use`.
+  `font-arabic-stretch`, `font-hangul`, `font-indic`, `font-khmer`, `font-myanmar`, `font-use`.
 - Reading checks shared with OTS, one damaged table at a time: `font-ots`.
 
 All targets import the served package bundle through `--replace-dep`,

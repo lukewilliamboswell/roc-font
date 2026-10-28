@@ -30,6 +30,7 @@ import PositionTests
 import ColorTests
 import ColorImageTests
 import ArabicTests
+import ArabicFallbackTests
 import HangulTests
 import ThaiLaoTests
 import ContextTests
