@@ -149,7 +149,7 @@ GraphiteMachine :: {}.{
 				}
 				source = GraphiteSlots.get($state, $cursor)
 				insertion = if (ctx.reverse) (if ($cursor == 0) $state.first else GraphiteSlots.get($state, $cursor).next) else $cursor
-				inserted = GraphiteSlots.insert($state, insertion, { ..GraphiteSlots.no_slot, before: source.before, after: source.before, original: source.original, feature: source.feature, trace: 2 })
+				inserted = GraphiteSlots.insert($state, insertion, { ..GraphiteSlots.no_slot, before: source.before, after: source.before, original: source.original, direction: if (ctx.rtl) 1 else 0, feature: source.feature, trace: 2 })
 				$state = inserted.state
 				$cursor = inserted.id
 				$input = $input - 1

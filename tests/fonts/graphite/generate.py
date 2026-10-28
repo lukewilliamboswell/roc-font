@@ -38,6 +38,7 @@ def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b
  assert len(sub)==pass_start+len(pass_data),(len(sub),pass_start,len(pass_data))
  return u32(0x30000)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
 programs={
+ 'slot-direction':(bytes([0x28,16,0,0x23,0,0x32]),True),
  'live-copy':(bytes([1,17,0x23,0,0x1e,0,0x19,0x31]),False),
  'glyph-set-copy':(bytes([0x1c,0,1,17,0x23,0,0x1e,0,0x19,0x31]),False),
  'set-glyph-copy':(bytes([1,17,0x23,0,0x1c,0,0x1e,0,0x19,0x31]),False),

@@ -24,7 +24,7 @@ GraphiteSlotAttributes :: {}.{
 			9 => when_float(s.with_y)
 			13 => GraphiteSlots.get_extra(state, id, 28)
 			14 => s.break_weight
-			16 => 0
+			16 => s.direction
 			17 => if (s.insert_before) 1 else 0
 			18 => when_float(s.position_x)
 			19 => when_float(s.position_y)

@@ -73,7 +73,7 @@ ShaperGraphite := {
 				}
 			}
 			cell = GraphiteSlots.new_feature($state)
-			added = GraphiteSlots.append(cell.state, { ..GraphiteSlots.no_slot, feature: cell.id, glyph: mapped.glyph, missing: mapped.missing, before: i.to_i64_wrap(), after: i.to_i64_wrap(), original: i.to_i64_wrap(), advance_x: TableVar.f32_from_int(metric(mapped.glyph, 8, 0).to_i64()), advance_y: TableVar.f32_from_int(metric(mapped.glyph, 9, 0).to_i64()), break_weight: GraphiteAttributes.get(face.graphite.attributes, mapped.glyph, sub.break_attribute).to_i8_wrap().to_i32() })
+			added = GraphiteSlots.append(cell.state, { ..GraphiteSlots.no_slot, feature: cell.id, glyph: mapped.glyph, direction: if (plan.rtl) 1 else 0, missing: mapped.missing, before: i.to_i64_wrap(), after: i.to_i64_wrap(), original: i.to_i64_wrap(), advance_x: TableVar.f32_from_int(metric(mapped.glyph, 8, 0).to_i64()), advance_y: TableVar.f32_from_int(metric(mapped.glyph, 9, 0).to_i64()), break_weight: GraphiteAttributes.get(face.graphite.attributes, mapped.glyph, sub.break_attribute).to_i8_wrap().to_i32() })
 			$state = added.state
 		}
 		if scalars.len() > limit {
