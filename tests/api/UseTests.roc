@@ -1,4 +1,5 @@
 import font.Font
+import build.FontBuild
 import "../../tests/fonts/shaping/use-joining/UseNKoSans.ttf" as nko_bytes : List(U8)
 import "../../tests/fonts/shaping/use-joining/UseNKoUnjoined.ttf" as unjoined_bytes : List(U8)
 import "../../tests/fonts/shaping/use-joining/UseAdlamSans.ttf" as adlam_bytes : List(U8)
@@ -59,3 +60,31 @@ expect {
 	run.glyphs == [12, 45, 1, 1, 12] and run.clusters == [9, 2, 2, 2, 0] and run.advances.map(|a| a.x) == [265, 0, 0, 0, 265] and run.flags == [0, 1, 1, 1, 0]
 }
 expect Font.shape(nko, "", Font.ShapeOptions.{ script: "Nkoo" }).glyphs.is_empty()
+
+## fuzz regression: a halant consumed by ccmp remains a ligature across
+## USE's substitution-flag pauses. It must not stop a pre-base vowel.
+expect {
+	cmap = FontBuild.cmap([
+		{
+			system: 3,
+			encoding: 10,
+			subtable: FontBuild.cmap12([
+				{ first: 0x1B13, last: 0x1B13, glyph: 3 },
+				{ first: 0x1B1B, last: 0x1B1B, glyph: 1 },
+				{ first: 0x1B3E, last: 0x1B3E, glyph: 4 },
+				{ first: 0x1B44, last: 0x1B44, glyph: 2 },
+			]),
+		},
+	])
+	gsub = FontBuild.layout(
+		"bali",
+		[{ tag: "ccmp", lookups: [0] }],
+		[
+			{ kind: 4, subtables: [FontBuild.ligature([2], [[{ glyph: 5, rest: [3] }]])] },
+		],
+	)
+	bytes = FontBuild.file(FontBuild.replace(FontBuild.sixty_four, "cmap", cmap).concat([{ tag: "GSUB", data: gsub }]))
+	font = read(bytes)
+	run = Font.shape(font, "ᬛ᭄ᬓᬾ", Font.ShapeOptions.{ script: "Bali" })
+	run.glyphs == [4, 1, 5] and run.clusters == [0, 0, 0]
+}

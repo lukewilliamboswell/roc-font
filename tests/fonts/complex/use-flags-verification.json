@@ -1,0 +1,209 @@
+{
+  "fix_commit": "459471a",
+  "cause": "USE pause cleared0x70 instead of onlySUBSTITUTED0x10. LosingLIGATED turns consumed halants into false VPre reorder barriers.",
+  "reference": {
+    "version": "HarfBuzz14.6.0",
+    "clear_substitution_source": "src/hb-ot-layout.hh:609-616",
+    "halant_source": "src/hb-ot-shaper-use.cc:355-358",
+    "reorder_source": "src/hb-ot-shaper-use.cc:425-444"
+  },
+  "font_selection": {
+    "explicit_case_options": false,
+    "cached_guessed_scripts": [
+      "Java",
+      "Bali",
+      "Newa"
+    ],
+    "selected_GSUB_tags": [
+      "java",
+      "bali",
+      "newa"
+    ],
+    "classification": "Concrete shared metadata defect; not an absent USE model or unsupported option."
+  },
+  "native_replay": {
+    "bundle": "GDmWFfHNysBrw1NMTiwvLxuWY6HEV6n1AhHu8ryYu8MC.tar.zst",
+    "binary_sha256": "5cdf0680438d4473b17bedc8adfc706b58e2ae06ef14fc1c875c314032959ed7",
+    "totals": {
+      "agree": 1453
+    },
+    "timing": "{'requests': 1453, 'answered': 1453, 'seconds': 0.08204708399716765}"
+  },
+  "matrices": {
+    "javanese": 54,
+    "other_in_house_use": 17,
+    "tibetan": 194,
+    "sinhala": 400,
+    "joining": 788
+  },
+  "previously_differing_cases": {
+    "count": 14,
+    "all_now_agree": true,
+    "ids": [
+      "harfbuzz/in-house/use-javanese/ce10af05decfb",
+      "harfbuzz/in-house/use-javanese/c0bfc3d13cbbc",
+      "harfbuzz/in-house/use-javanese/cd3464b9fbc6f",
+      "harfbuzz/in-house/use-javanese/c9a967dd5d783",
+      "harfbuzz/in-house/use-javanese/cd1e05d81602f",
+      "harfbuzz/in-house/use-javanese/cbad950f73d50",
+      "harfbuzz/in-house/use-javanese/cb1eb74eea326",
+      "harfbuzz/in-house/use-javanese/ca60f2403d871",
+      "harfbuzz/in-house/use-javanese/c9e4e7845a71e",
+      "harfbuzz/in-house/use-javanese/cfa88e5c27954",
+      "harfbuzz/in-house/use-javanese/ce636e369a461",
+      "harfbuzz/in-house/use-javanese/ca85378e01b02",
+      "harfbuzz/in-house/use/c6bb61a4c8f2d",
+      "harfbuzz/in-house/use/c217d2206838a"
+    ]
+  },
+  "causal_diagnostic": {
+    "untouched_HB_matches_expected": 14,
+    "controlled_clear_ligated_multiplied_reproduces_before_Roc": 14,
+    "note": "Diagnostic mutation of pinned oracle buffer metadata; canonical expectations remain unmodified normal HarfBuzz records.",
+    "details": [
+      {
+        "id": "harfbuzz/in-house/use-javanese/ce10af05decfb",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/c0bfc3d13cbbc",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/cd3464b9fbc6f",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/c9a967dd5d783",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/cd1e05d81602f",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/cbad950f73d50",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/cb1eb74eea326",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/ca60f2403d871",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/c9e4e7845a71e",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/cfa88e5c27954",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/ce636e369a461",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use-javanese/ca85378e01b02",
+        "script": [
+          "start table GSUB script tag 'java'"
+        ],
+        "mutation_phase": "start lookup 21 feature 'pref'"
+      },
+      {
+        "id": "harfbuzz/in-house/use/c6bb61a4c8f2d",
+        "script": [
+          "start table GSUB script tag 'bali'"
+        ],
+        "mutation_phase": "start reordering USE"
+      },
+      {
+        "id": "harfbuzz/in-house/use/c217d2206838a",
+        "script": [
+          "start table GSUB script tag 'newa'"
+        ],
+        "mutation_phase": "start lookup 1 feature 'pref'"
+      }
+    ]
+  },
+  "public_regression": {
+    "file": "tests/api/UseTests.roc",
+    "before_bundle": "FWqQNAGXTRKYGMMXZivuZ2EJgFXPz7P4MvCzDNdHJg6a.tar.zst",
+    "before": "Exactly the new regression fails;15other Use/test-builder expects pass;0compiler errors.",
+    "after": "9Use expects+7test-builder expects all pass through the fixed served bundle."
+  },
+  "native_fuzz": {
+    "bundle": "GDmWFfHNysBrw1NMTiwvLxuWY6HEV6n1AhHu8ryYu8MC.tar.zst",
+    "flags": [
+      "--fuzz",
+      "--opt=speed"
+    ],
+    "targets": [
+      {
+        "target": "font-use",
+        "runs": 1000,
+        "seed": 268,
+        "result": "pass",
+        "elapsed_seconds": 16,
+        "binary_sha256": "d2e6758a8578d1740c85922786afc380228cd7b5cc3ec8a67930c483f35ffc25",
+        "source_sha256": "b72a5fc72cdb679d6b958580f81ec472c95572c0f06af4b3d19c2c91b75c6fce"
+      },
+      {
+        "target": "font-gsub",
+        "runs": 1000,
+        "seed": 269,
+        "result": "pass",
+        "elapsed_seconds": 2,
+        "binary_sha256": "94d0442ce6be777ae4aa8b2d066eed356b80da98cca5b21ae0f097ccdb198957",
+        "source_sha256": "481a798a66080814ccdf68b2b83bf47f655856d8fdc2c71144cc3c0d6bfb262f"
+      }
+    ],
+    "contract": "Total deterministic index-aligned bounded output,feature-specific generated-size allocation scaling and no leaks through served public bundle."
+  },
+  "provenance": {
+    "bundle_sha256": "b729002665d2005609a14c2dbd97e36ddff2e0387e0f6876991ab38641f881d7",
+    "LayoutGsub_bundled_source_sha256": "178da3f0ea77556656bee4856b70da2a1378ccec4611bbfcb86728b33adf67bc",
+    "replay_results_sha256": "e1968f4758a8ffffc6a531895a9595ed5d002a515176ea40b407c43b83d03b1b",
+    "compiler": "Roc compiler version nightly-2026-10-27-de79a0f"
+  },
+  "notes": [
+    "All54Javanese and17otherUSE records pass, including57previously agreeing cases; existing1382USE cases remain exact.",
+    "Native imported-case replay passes cached oracle detail script/direction guesses, matching the shared conformance harness.",
+    "Existing narrow fuzz targets retain their index alignment,determinism,bounded output,allocation scaling and leak assertions."
+  ]
+}
