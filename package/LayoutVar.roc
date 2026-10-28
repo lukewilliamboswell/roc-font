@@ -23,8 +23,9 @@ import TableVar
 ## arithmetic). A device delta is the store's single-precision sum rounded
 ## half up (`roundf` in HarfBuzz is `floor(x + 0.5)`), added to the value
 ## record's own value, each device separately. HarfBuzz applies no device
-## at the default location (every coordinate zero), even where a malformed
-## region would give a nonzero scalar there, so neither does this module.
+## at the default location (every coordinate zero), even where a constant
+## region would give a nonzero scalar there, so text positioning follows
+## that behavior. MATH facts use `math_location` instead.
 ## Hinting devices (delta formats 1 to 3) adjust by pixels per em, which a
 ## font-unit result never has, so they add nothing (HarfBuzz at a ppem of 0).
 ##
