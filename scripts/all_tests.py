@@ -271,7 +271,8 @@ def sentinel_control(ctx: Context) -> Result:
 
 
 def step_check(ctx: Context) -> Result:
-    source = run_all(ctx, [[ctx.roc, "check", "package/main.roc"]])
+    source = run_all(ctx, [[sys.executable, "scripts/test_flight_cache.py"],
+                           [ctx.roc, "check", "package/main.roc"]])
     source.detail = "package source: " + source.detail
     consumers = run_all(ctx, [[ctx.roc, "check", path, *ctx.dep] for path in consumer_apps()], cwd=ctx.consumer_root)
     consumers.detail = ("consumers against the bundle: " if ctx.dep else "consumers against source: ") + consumers.detail

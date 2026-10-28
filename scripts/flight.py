@@ -20,7 +20,7 @@ own expects (the only source-level tests) and build the artifact.
 The package cache is shared: a bundle's URL ends in its content hash, which
 roc verifies on download and names its cache entry by, so a cached entry
 can only ever hold the same bytes and a stale bundle cannot be masked. An
-entry this run created is removed at the end so edits do not accumulate
+entry this run created is removed after its last concurrent user so edits do not accumulate
 6 MB entries (re-fetching from loopback costs milliseconds).
 
 A parent process shares its served bundle with child scripts through
@@ -47,6 +47,8 @@ from __future__ import annotations
 import argparse
 import contextlib
 import http.server
+import hashlib
+import json
 import os
 import re
 import shutil
@@ -132,26 +134,78 @@ class _Bundle(http.server.BaseHTTPRequestHandler):
 
 
 @contextlib.contextmanager
+def cache_lease(entry: Path, prune: bool) -> Iterator[None]:
+    """Keep a shared package while any cooperating compiler still uses it.
+
+    OS locks release on process exit. A crashed generation's leftover cache
+    becomes pre-existing data for the next generation and is preserved.
+    """
+    try:
+        import fcntl
+    except ImportError:
+        # Platforms without flock can safely retain the compiler's cache.
+        yield
+        return
+    directory = Path(tempfile.gettempdir()) / 'roc-font-cache-leases'
+    directory.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha256(str(entry.resolve()).encode()).hexdigest()
+    state_path = directory / (key + '.json')
+    with (directory / (key + '.meta')).open('a+b') as metadata, (directory / (key + '.active')).open('a+b') as active:
+        fcntl.flock(metadata, fcntl.LOCK_EX)
+        try:
+            try:
+                fcntl.flock(active, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                fresh = True
+            except BlockingIOError:
+                fresh = False
+            if fresh:
+                state = {'owned': not entry.exists(), 'preserve': not prune}
+                fcntl.flock(active, fcntl.LOCK_UN)
+            else:
+                state = json.loads(state_path.read_text())
+                state['preserve'] = state['preserve'] or not prune
+            state_path.write_text(json.dumps(state))
+            fcntl.flock(active, fcntl.LOCK_SH)
+        finally:
+            fcntl.flock(metadata, fcntl.LOCK_UN)
+        try:
+            yield
+        finally:
+            fcntl.flock(active, fcntl.LOCK_UN)
+            fcntl.flock(metadata, fcntl.LOCK_EX)
+            try:
+                try:
+                    fcntl.flock(active, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    pass
+                else:
+                    state = json.loads(state_path.read_text())
+                    if state['owned'] and not state['preserve']:
+                        shutil.rmtree(entry, ignore_errors=True)
+                        with contextlib.suppress(FileNotFoundError):
+                            Path(f'{entry}.deps').unlink()
+                    state_path.unlink(missing_ok=True)
+            finally:
+                fcntl.flock(active, fcntl.LOCK_UN)
+                fcntl.flock(metadata, fcntl.LOCK_UN)
+
+
+@contextlib.contextmanager
 def serve(bundle: Path, prune_cache: bool = True) -> Iterator[str]:
     """Serve `bundle` on loopback; yields its URL. With `prune_cache`, the
     package-cache entry for this bundle is removed afterwards if this run
-    created it."""
+    created it and the last concurrent user has finished."""
     if not BUNDLE_NAME.fullmatch(bundle.name):
         raise ValueError(f"{bundle.name} is not a roc bundle name (<hash>.tar.zst)")
     entry = roc_cache_dir() / bundle.name.removesuffix(".tar.zst")
-    cached_before = entry.exists()
     handler = type("Handler", (_Bundle,), {"path_served": "/" + bundle.name, "body": bundle.read_bytes()})
-    with socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler) as server:
+    with cache_lease(entry, prune_cache), socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler) as server:
         server.daemon_threads = True
         threading.Thread(target=server.serve_forever, daemon=True).start()
         try:
             yield f"http://127.0.0.1:{server.server_address[1]}/{bundle.name}"
         finally:
             server.shutdown()
-    if prune_cache and not cached_before:
-        shutil.rmtree(entry, ignore_errors=True)
-        with contextlib.suppress(FileNotFoundError):
-            Path(f"{entry}.deps").unlink()
 
 
 @contextlib.contextmanager
