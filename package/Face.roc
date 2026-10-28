@@ -26,6 +26,7 @@ import TableVmtx
 import TableVorg
 import TableVvar
 import AatMorx
+import AatMort
 import AatLanguage
 import AatFeatures
 import AatFeatureSelect
@@ -333,17 +334,31 @@ Face := {
 						}
 					}
 				}
-				aat = match Sfnt.located(bytes, tables, "morx", 8) {
+				mort = match Sfnt.located(bytes, tables, "mort", 8) {
 					Missing => Absent
 					Bad(at) => {
-						$optional = $optional.append(Sfnt.bad("morx", at))
+						$optional = $optional.append(Sfnt.bad("mort", at))
 						Absent
+					}
+					Found(found) => match AatMort.read(found.data, glyph_count) {
+						Ok(value) => Present(value)
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("mort", found.offset + at))
+							Absent
+						}
+					}
+				}
+				aat = match Sfnt.located(bytes, tables, "morx", 8) {
+					Missing => mort
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("morx", at))
+						mort
 					}
 					Found(found) => match AatMorx.read(found.data, glyph_count) {
 						Ok(value) => Present(value)
 						Err(Bad(at)) => {
 							$optional = $optional.append(Sfnt.bad("morx", found.offset + at))
-							Absent
+							mort
 						}
 					}
 				}
