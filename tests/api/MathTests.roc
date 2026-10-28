@@ -222,3 +222,12 @@ expect {
 		)
 	}
 }
+
+# Equal correction heights preserve table order and HarfBuzz's first
+# visited binary-search tie, rather than upper_bound over all equal values.
+expect Font.math_kern_table(math_font, 3, TopRight) == { heights: [0, 0, 100, 100], values: [1, 2, 3, 4, 5] }
+expect [-1.I32, 0, 1, 99, 100, 101].map(|h| Font.math_kern(math_font, 3, TopRight, h)) == [1, 3, 3, 3, 4, 5]
+expect {
+	full = Font.at(read(variable_file), Font.Variation.{ weight: Black })
+	Font.math_kern_table(full, 3, TopRight) == { heights: [0, 25, 100, 100], values: [1, 2, 3, 4, 5] } and Font.math_kern(full, 3, TopRight, 0) == 2 and Font.math_kern(full, 3, TopRight, 100) == 4
+}

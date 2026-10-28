@@ -61,7 +61,7 @@ def make(name, varied=False, empty=False):
         italicsCorrections={} if empty else {'g1':12,'g3':-9},
         topAccentAttachments={} if empty else {'g1':240,'g3':0},
         extendedShapes=set() if empty else {'g1','g3'},
-        mathKerns={} if empty else {'g1':{'TopRight':([-100,100],[10,20,30]),'TopLeft':([50],[-10,25]),'BottomRight':([],[7]),'BottomLeft':([-50,0,50],[-30,-20,-10,0])}},
+        mathKerns={} if empty else {'g1':{'TopRight':([-100,100],[10,20,30]),'TopLeft':([50],[-10,25]),'BottomRight':([],[7]),'BottomLeft':([-50,0,50],[-30,-20,-10,0])},'g3':{'TopRight':([0,0,100,100],[1,2,3,4,5])}},
         minConnectorOverlap=0 if empty else 20,
         vertGlyphVariants={} if empty else {'g1':[('g2',700),('g3',1100)]},
         horizGlyphVariants={} if empty else {'g3':[('g4',800),('g5',1200)]},
@@ -86,6 +86,7 @@ def make(name, varied=False, empty=False):
         table.MathGlyphInfo.MathTopAccentAttachment.TopAccentAttachment[0].DeviceTable=device(0x8000,0,2)
         kern=table.MathGlyphInfo.MathKernInfo.MathKernInfoRecords[0].TopRightMathKern
         kern.CorrectionHeight[1].DeviceTable=device(0x8000,0,3)
+        table.MathGlyphInfo.MathKernInfo.MathKernInfoRecords[1].TopRightMathKern.CorrectionHeight[1].DeviceTable=device(0x8000,0,3)
         kern.KernValue[0].DeviceTable=device(0x8000,0,4)
         table.MathVariants.VertGlyphConstruction[0].GlyphAssembly.ItalicsCorrection.DeviceTable=device(0x8000,0,5)
     font.save(HERE/name,reorderTables=True)

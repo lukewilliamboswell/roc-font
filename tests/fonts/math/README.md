@@ -16,7 +16,7 @@ All four fonts pass the pinned OTS 9.3.0 sanitizer.
 The three `math*.ttf` fixtures are original generated test data, under this
 repository's Universal Permissive License (`SYNTHETIC-LICENSE.txt`). Run
 `generate.py` with fontTools 4.61.1 to reproduce them. They cover all four
-corner kern tables, exact threshold equality, signed corrections, all three
+corner kern tables, duplicate heights and exact threshold equality, signed corrections, all three
 pixel device formats, zero-part assemblies, missing data and GDEF variation
 devices. The latter change constants, corrections, accent attachments,
 kern thresholds, kern values and assembly corrections.

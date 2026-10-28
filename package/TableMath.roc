@@ -236,17 +236,23 @@ TableMath := {
 			return 0
 		}
 		n = Bytes.u16(math.bytes, at)
-		var $lo = 0
-		var $hi = n
-		while $lo < $hi {
+		# HarfBuzz's inclusive binary search stops on the first equality
+		# it visits. Preserve that deterministic tie rule for duplicate
+		# heights instead of sorting, repairing or skipping equal records.
+		var $lo = 0.I64
+		var $hi = n.to_i64_wrap() - 1
+		while $lo <= $hi {
 			mid = $lo + ($hi - $lo) // 2
-			if height < TableMath.value(math, at, at + 2 + 4 * mid) {
-				$hi = mid
-			} else {
+			candidate = TableMath.value(math, at, at + 2 + 4 * mid.to_u64_wrap())
+			if height < candidate {
+				$hi = mid - 1
+			} else if height > candidate {
 				$lo = mid + 1
+			} else {
+				return TableMath.value(math, at, at + 2 + 4 * (n + mid.to_u64_wrap() + 1))
 			}
 		}
-		TableMath.value(math, at, at + 2 + 4 * (n + $lo))
+		TableMath.value(math, at, at + 2 + 4 * (n + $lo.to_u64_wrap()))
 	}
 
 	kern_table : TableMath, U32, Corner -> KernTable
@@ -556,7 +562,7 @@ TableMath := {
 		for i in 0..<n {
 			r = at + 2 + 4 * i
 			height = Bytes.i16(data, r)
-			if height <= $previous {
+			if height < $previous {
 				return Err(Bad(r))
 			}
 			$previous = height
@@ -718,6 +724,19 @@ expect {
 			Present(a) => (a.parts.first() ?? { glyph: 0, start_connector: 0, end_connector: 0, full_advance: 0, extender: False }).start_connector == 32767
 			Absent => False
 		}
+		Err(_) => False
+	}
+}
+
+## fuzz regression: equal correction heights are preserved in table order.
+## HarfBuzz's inclusive binary search selects the value after its first
+## visited equal record, not after every equal record.
+expect {
+	# Both fixture indices are proven in bounds.
+	bytes = math_fixture_bytes.set(306, 255) ?? []
+	changed = bytes.set(307, 156) ?? []
+	match TableMath.read(changed, 16, LayoutVar.none(0)) {
+		Ok(math) => TableMath.kern(math, 1, TopRight, -100) == 20 and TableMath.kern(math, 1, TopRight, -99) == 30
 		Err(_) => False
 	}
 }

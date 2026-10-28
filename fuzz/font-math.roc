@@ -50,9 +50,25 @@ test! = |bytes| {
 	}
 	match Font.from_bytes(candidate, Font.ReadOptions.{}) {
 		Ok(font) => {
-			for glyph in [0.U32, 1, 7, Font.glyph_count(font), 4294967295] {
-				if query(font, glyph) != query(font, glyph) {
-					crash "MATH query is nondeterministic"
+			again = match Font.from_bytes(candidate, Font.ReadOptions.{}) {
+				Ok(ready) => ready
+				Err(_) => crash "reading the same bytes changed its result"
+			}
+			for weight in [100.U16, 400, 650, 900] {
+				moved = Font.at(font, Font.Variation.{ weight: Weight(weight) })
+				repeated = Font.at(again, Font.Variation.{ weight: Weight(weight) })
+				for glyph in [0.U32, 1, 7, Font.glyph_count(font), 4294967295] {
+					observed = query(moved, glyph)
+					if observed != query(repeated, glyph) {
+						crash "MATH query is nondeterministic across independent reads"
+					}
+					if observed.variants.len() > 65535 or observed.tables.any(|t| t.heights.len() > 65535 or t.values.len() > 65536) {
+						crash "MATH output escaped its checked counts"
+					}
+					match observed.assembly {
+						Present(assembly) if assembly.parts.len() > 65535 => crash "MATH assembly escaped its checked count"
+						_ => {}
+					}
 				}
 			}
 		}
