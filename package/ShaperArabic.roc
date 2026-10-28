@@ -66,42 +66,48 @@ ShaperArabic :: {}.{
 			0
 		}
 		else if tag == ShaperTags.tag_of("isol") {
-			2
-		}
-		else if tag == ShaperTags.tag_of("fina") {
 			3
 		}
-		else if tag == ShaperTags.tag_of("fin2") {
+		else if tag == ShaperTags.tag_of("fina") {
 			4
 		}
-		else if tag == ShaperTags.tag_of("fin3") {
+		else if tag == ShaperTags.tag_of("fin2") {
 			5
 		}
-		else if tag == ShaperTags.tag_of("medi") {
+		else if tag == ShaperTags.tag_of("fin3") {
 			6
 		}
-		else if tag == ShaperTags.tag_of("med2") {
+		else if tag == ShaperTags.tag_of("medi") {
 			7
 		}
-		else if tag == ShaperTags.tag_of("init") {
+		else if tag == ShaperTags.tag_of("med2") {
 			8
 		}
-		else if tag == ShaperTags.tag_of("rlig") {
+		else if tag == ShaperTags.tag_of("init") {
 			9
 		}
-		else if tag == ShaperTags.tag_of("calt") or tag == ShaperTags.tag_of("rclt") {
+		else if tag == ShaperTags.tag_of("rlig") {
 			10
 		}
-		else if tag == ShaperTags.tag_of("liga") or tag == ShaperTags.tag_of("clig") or tag == ShaperTags.tag_of("mset") {
+		else if tag == ShaperTags.tag_of("calt") {
 			11
 		}
-		else {
+		else if tag == ShaperTags.tag_of("liga") or tag == ShaperTags.tag_of("clig") or tag == ShaperTags.tag_of("mset") {
+			12
+		}
+		else if ["stch", "ltra", "ltrm", "rtla", "rtlm", "frac", "numr", "dnom", "rand", "Harf", "HARF"].any(|name| tag == ShaperTags.tag_of(name)) {
 			1
+		}
+		else if tag == ShaperTags.tag_of("ccmp") or tag == ShaperTags.tag_of("locl") {
+			2
+		}
+		else {
+			12
 		}
 	}
 
 	manual_tags : List(Str)
-	manual_tags = ShaperArabic.form_names.concat(["ccmp", "locl", "rlig", "calt", "rclt", "liga", "clig", "mset"])
+	manual_tags = ShaperArabic.form_names.concat(["ccmp", "locl", "rlig", "calt", "liga", "clig", "mset"])
 	manual_zwj : U64 -> Bool
 	manual_zwj = |tag| ShaperArabic.manual_tags.any(|name| ShaperTags.tag_of(name) == tag)
 	Entry : { previous : U8, current : U8, state : U8 }
@@ -254,7 +260,13 @@ ShaperArabic :: {}.{
 	}
 
 	setup : List(ShaperNormalize.Char), Masks, { before : List(U32), after : List(U32) } -> List(ShaperNormalize.Char)
-	setup = |chars, masks, context| {
+	setup = |chars, masks, context| ShaperArabic.setup_mode(chars, masks, context, False)
+
+	setup_mongolian : List(ShaperNormalize.Char), Masks, { before : List(U32), after : List(U32) } -> List(ShaperNormalize.Char)
+	setup_mongolian = |chars, masks, context| ShaperArabic.setup_mode(chars, masks, context, True)
+
+	setup_mode : List(ShaperNormalize.Char), Masks, { before : List(U32), after : List(U32) }, Bool -> List(ShaperNormalize.Char)
+	setup_mode = |chars, masks, context, mongolian| {
 		count = chars.len()
 		var $actions = List.repeat(7.U64, count)
 		var $unsafe = List.repeat(False, count)
@@ -279,9 +291,12 @@ ShaperArabic :: {}.{
 					# The previous nontransparent character is in this run.
 					$actions = $actions.set($previous, entry.previous.to_u64()) ?? []
 					minimum = (chars.get($previous) ?? ShaperNormalize.no_char).cluster.min(current.cluster)
-					for j in $previous..=i {
-						if (chars.get(j) ?? ShaperNormalize.no_char).cluster != minimum {
-							$unsafe = $unsafe.set(j, True) ?? []
+					# HarfBuzz does not set glyph flags on an explicit span over255.
+					if i + 1 - $previous <= 255 {
+						for j in $previous..=i {
+							if (chars.get(j) ?? ShaperNormalize.no_char).cluster != minimum {
+								$unsafe = $unsafe.set(j, True) ?? []
+							}
 						}
 					}
 				}
@@ -303,6 +318,17 @@ ShaperArabic :: {}.{
 			}
 			$after = $after + 1
 		}
+		if mongolian {
+			# FVS adopts the previous computed action, never its feature mask:
+			# ranged caller features may differ between the two characters.
+			for i in 1..<count {
+				cp = (chars.get(i) ?? ShaperNormalize.no_char).cp
+				if (cp >= 0x180B and cp <= 0x180D) or cp == 0x180F {
+					previous_action = $actions.get(i - 1) ?? 7
+					$actions = $actions.set(i, previous_action) ?? []
+				}
+			}
+		}
 		var $out = List.with_capacity(count)
 		for i in 0..<count {
 			c = chars.get(i) ?? ShaperNormalize.no_char
@@ -317,3 +343,13 @@ ShaperArabic :: {}.{
 expect ShaperArabic.joining_type(0x200D) == 3 and ShaperArabic.joining_type(0x200C) == 0 and ShaperArabic.joining_type(0x064E) == 6
 
 expect ShaperJoiningData.ranges.all(|r| r.first <= r.last and r.last <= 0x10FFFF and r.kind > 0 and r.kind <= 6)
+
+expect {
+	chars = [
+		{ ..ShaperNormalize.no_char, cp: 0x1820, cluster: 0, mask: 1 },
+		{ ..ShaperNormalize.no_char, cp: 0x180B, cluster: 1, mask: 2 },
+		{ ..ShaperNormalize.no_char, cp: 0x1821, cluster: 2, mask: 4 },
+	]
+	masks = { isol: 8, init: 16, medi: 32, fina: 64, fin2: 128, fin3: 256, med2: 512 }
+	ShaperArabic.setup_mongolian(chars, masks, { before: [], after: [] }).map(|c| c.mask.bitwise_and(0x7FFFFFFFFFFFFFFF)) == [17, 18, 68]
+}

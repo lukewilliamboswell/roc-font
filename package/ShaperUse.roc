@@ -55,6 +55,7 @@ import LayoutGsub
 ## reorder phases. The script/font selection remains the orchestrator's
 ## responsibility; supports/selected expose the pinned selection facts.
 ShaperUse := {
+	script : U64,
 	rphf_mask : U64,
 	joining_masks : ShaperArabic.Masks,
 	arabic_joining : Bool,
@@ -63,7 +64,7 @@ ShaperUse := {
 	Feature : ShaperIndic.Feature
 	Context : ShaperIndic.Context
 	Event : [SetupSyllables, ClearSubstitutionFlags, RecordRphf, RecordPref, Reorder, ClearSyllables]
-	make = |facts| ShaperUse.{ rphf_mask: facts.rphf_mask, joining_masks: facts.joining_masks, arabic_joining: facts.arabic_joining, global_mask: facts.global_mask }
+	make = |facts| ShaperUse.{ script: facts.script, rphf_mask: facts.rphf_mask, joining_masks: facts.joining_masks, arabic_joining: facts.arabic_joining, global_mask: facts.global_mask }
 	supports : U64 -> Bool
 	supports = |script| ShaperUseData.scripts.any(|value| value == script)
 	has_arabic_joining : U64 -> Bool
@@ -124,10 +125,14 @@ ShaperUse := {
 	}
 	setup : ShaperUse, List(ShaperNormalize.Char), { before : List(U32), after : List(U32) } -> List(ShaperNormalize.Char)
 	setup = |plan, chars, context| {
-		joined = if plan.arabic_joining {
-			ShaperArabic.setup(chars, plan.joining_masks, context)
-		} else {
+		joined = if !plan.arabic_joining {
 			chars
+		}
+		else if plan.script == ShaperTags.tag_of("Mong") {
+			ShaperArabic.setup_mongolian(chars, plan.joining_masks, context)
+		}
+		else {
+			ShaperArabic.setup(chars, plan.joining_masks, context)
 		}
 		var $chars = joined
 		for i in 0..<$chars.len() {
