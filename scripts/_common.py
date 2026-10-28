@@ -962,7 +962,7 @@ def is_imported(case: Case) -> bool:
 
 
 # A script code or language tag the driver can carry in a flag.
-FLAG_TEXT = re.compile(r"[A-Za-z0-9_-]+")
+FLAG_TEXT = re.compile(r"[A-Za-z0-9_.-]+")
 # A feature tag the driver can carry: one to four bytes, none of the
 # protocol's separators.
 FEATURE_TAG = re.compile(r"[\x21-\x7e]{1,4}")

@@ -23,6 +23,7 @@ import TablePost
 import TableCmap
 import TableAatKern
 import ShaperAatPosition
+import AatLanguage
 import AatMorx
 import AatFeatureSelect
 
@@ -530,7 +531,7 @@ Shaper :: {}.{
 			aat,
 			aat_features: if aat {
 				match face.aat {
-					Present(table) => AatMorx.plan(table, AatFeatureSelect.requests(face.aat_features, options.features))
+					Present(table) => AatMorx.plan_languages(table, AatFeatureSelect.requests(face.aat_features, options.features), AatLanguage.selectors(face.aat_languages, options.language))
 					Absent => { spans: [], ranges: [] }
 				}
 			} else { spans: [], ranges: [] },

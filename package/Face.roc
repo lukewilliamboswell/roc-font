@@ -26,6 +26,7 @@ import TableVmtx
 import TableVorg
 import TableVvar
 import AatMorx
+import AatLanguage
 import AatFeatures
 import AatFeatureSelect
 import TableCff
@@ -91,6 +92,7 @@ Face := {
 	gsub : LayoutGsub,
 	aat : [Present(AatMorx), Absent],
 	aat_features : AatFeatures,
+	aat_languages : AatLanguage,
 	graphite : TableGraphite,
 	kerx : TableAatKern,
 	aat_kern : TableAatKern,
@@ -314,6 +316,20 @@ Face := {
 						}
 					}
 				}
+				aat_languages = match Sfnt.located(bytes, tables, "ltag", 12) {
+					Missing => AatLanguage.none
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("ltag", at))
+						AatLanguage.none
+					}
+					Found(found) => match AatLanguage.read(found.data) {
+						Ok(value) => value
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("ltag", found.offset + at))
+							AatLanguage.none
+						}
+					}
+				}
 				aat_features = match Sfnt.located(bytes, tables, "feat", 12) {
 					Missing => AatFeatures.none
 					Bad(at) => {
@@ -433,7 +449,7 @@ Face := {
 				cff_only = !tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x43464620 or t.tag == 0x43464632)
 				kern = match LayoutKerning.from_kern(bytes, tables) {
 					Ok(Present(_)) if cff_only => Err(Drop(Sfnt.bad("kern", Face.table_offset(tables, "kern"))))
-					Err(_) if TableAatKern.has_data(aat_kern.value) and !cff_only => Ok(Absent)
+					Err(Drop(_)) if TableAatKern.has_data(aat_kern.value) and !cff_only => Ok(Absent)
 					read => read
 				}
 				match kern {
@@ -600,6 +616,7 @@ Face := {
 								gsub: LayoutGsub.with_gdef(gsub ?? LayoutGsub.none, gdef),
 								aat,
 								aat_features,
+								aat_languages,
 								graphite: graphite.value,
 								kerx: kerx.value,
 								aat_kern: if (cff_only) TableAatKern.none else aat_kern.value,

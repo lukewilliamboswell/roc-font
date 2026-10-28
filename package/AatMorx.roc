@@ -246,8 +246,11 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 	## Feature choices are reusable work for the exact font and plan.
 	## The common no-override path stores no additional range arrays.
 	plan : AatMorx, List(Requested) -> Plan
-	plan = |table, requested| {
-		if requested.is_empty() {
+	plan = |table, requested| AatMorx.plan_languages(table, requested, [])
+
+	plan_languages : AatMorx, List(Requested), List(U64) -> Plan
+	plan_languages = |table, requested, languages| {
+		if requested.is_empty() and languages.is_empty() {
 			return { spans: [], ranges: [] }
 		}
 		var $boundaries = [0.U64]
@@ -268,7 +271,7 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 					Ok(next) => next - 1
 					Err(_) => 0xFFFFFFFFFFFFFFFF
 				}
-				$ranges = $ranges.append({ first, last, flags: AatMorx.flags_for(table, chain, requested, first) })
+				$ranges = $ranges.append({ first, last, flags: AatMorx.flags_for(table, chain, requested, languages, first) })
 			}
 			$spans = $spans.append({ start, count: $ranges.len() - start })
 		}
@@ -327,12 +330,12 @@ AatMorx := { chains : List(Chain), features : List(Feature), subtables : List(Su
 		{ items: $items, operations: $operations, stopped: 0 }
 	}
 
-	flags_for : AatMorx, Chain, List(Requested), U64 -> U64
-	flags_for = |table, chain, requested, cluster| {
+	flags_for : AatMorx, Chain, List(Requested), List(U64), U64 -> U64
+	flags_for = |table, chain, requested, languages, cluster| {
 		var $flags = chain.flags
 		for i in chain.feature_start..<(chain.feature_start + chain.feature_count) {
 			f = table.features.get(i) ?? { type: 0, setting: 0, enable: 0, disable: 0 }
-			matches = AatMorx.selected(requested, f.type, f.setting, cluster) or (f.type == 3 and f.setting == 3 and AatMorx.selected(requested, 37, 1, cluster))
+			matches = (f.type == 39 and f.setting != 0 and languages.contains(f.setting)) or AatMorx.selected(requested, f.type, f.setting, cluster) or (f.type == 3 and f.setting == 3 and AatMorx.selected(requested, 37, 1, cluster))
 			if matches {
 				$flags = $flags.bitwise_and(f.disable).bitwise_or(f.enable)
 			}

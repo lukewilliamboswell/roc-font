@@ -6,9 +6,16 @@ import "../fonts/aat/ligature-logical.ttf" as ligature : List(U8)
 import "../fonts/aat/insertion-logical.ttf" as insertion : List(U8)
 import "../fonts/aat/direct-features.ttf" as feature_direct : List(U8)
 import "../fonts/aat/ligature-features.ttf" as feature_ligature : List(U8)
+import "../fonts/aat/language.ttf" as languages : List(U8)
 
 ## Apple font programs through the public served package.
 AatTests :: {}.{}
+
+expect {
+	font = Font.from_bytes(languages, Font.ReadOptions.{ strict: True }) ?? crash "valid AAT language fixture"
+	shape = |language| Font.shape(font, "ab", Font.ShapeOptions.{ language }).glyphs
+	shape("en") == [5, 6] and shape("en-US") == [6, 7] and shape("EN_us.utf8") == [6, 7] and shape("eng") == [1, 2] and shape("fr-CA") == [7, 8]
+}
 
 expect {
 	font = Font.from_bytes(direct, Font.ReadOptions.{ strict: True }) ?? crash "valid AAT direct fixture"
