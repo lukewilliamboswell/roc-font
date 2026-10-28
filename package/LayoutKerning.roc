@@ -130,20 +130,20 @@ LayoutKerning := {
 	## Full positioning needs advances and direction to resolve attachments
 	## after every lookup. Pair-only fonts retain the original allocation
 	## and application path. Returned advances are deltas, as in `position`.
-	position_full : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64, operations : U64 }
 	position_full = |kerning, plan, legacy, items, glyph_count, base, backward, limits| {
 		LayoutKerning.position_full_with_joiners(kerning, plan, [], legacy, items, glyph_count, base, backward, limits)
 	}
 
-	position_full_with_joiners : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full_with_joiners : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64, operations : U64 }
 	position_full_with_joiners = |kerning, plan, auto_zwj, legacy, items, glyph_count, base, backward, limits| {
 		LayoutKerning.position_full_with_policy(kerning, plan, auto_zwj, True, legacy, items, glyph_count, base, backward, limits)
 	}
 
-	position_full_with_policy : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), Bool, [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full_with_policy : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), Bool, [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64, operations : U64 }
 	position_full_with_policy = |kerning, plan, auto_zwj, zero_late, legacy, items, glyph_count, base, backward, limits| {
 		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
-			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0 }
+			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0, operations: 0 }
 		} else {
 			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, zero_late, items, base, backward, limits)
 			positions = { items: placed_items, ax, dx, dy }
@@ -163,7 +163,7 @@ LayoutKerning := {
 			for i in 0..<resolved.ax.len() {
 				$ax = $ax.append((resolved.ax.get(i) ?? 0) - (base.get(i) ?? 0))
 			}
-			{ positions: { items: resolved.items, ax: $ax, dx: resolved.dx, dy: resolved.dy }, stopped }
+			{ positions: { items: resolved.items, ax: $ax, dx: resolved.dx, dy: resolved.dy }, stopped, operations: resolved.operations }
 		}
 	}
 
