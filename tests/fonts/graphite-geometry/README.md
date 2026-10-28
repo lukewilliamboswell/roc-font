@@ -105,3 +105,25 @@ stripped; those results are a reader-policy comparison, not validation of their
 Graphite semantics. OTS also warns about collision attributes in Silf3, while
 retaining the tables. The GTF document explicitly permits reserved fields to
 acquire their later meaning in an earlier-version table.
+
+`face0-records.json` is a separate controlled reference, not the upstream default.
+Its unchanged Graphite2 library is called through the same HB14.6 public adapter
+with only `gr_make_face_with_ops(..., gr_face_preloadAll)` changed to
+`gr_make_face_with_ops(..., gr_face_default)`. The exact original/patched adapter
+hashes, compiler, command and resulting library hash are in
+`face0-configuration.json`; `build_face0.py` reproduces that one-line reference
+build from the pinned original HarfBuzz source. No Graphite2 implementation code
+is opened or incorporated.
+
+This isolates collision semantics exposed by the public non-preloaded C API
+from Graphite2 1.3.14's preload behavior. It does not relax the default-HB gate:
+`public-records.json` still uses the unmodified preloadAll6 adapter. Replay the
+independent configuration explicitly:
+
+```
+python tests/fonts/graphite-geometry/verify.py --records tests/fonts/graphite-geometry/face0-records.json --oracle tests/fonts/graphite-geometry/face0-oracle.json
+```
+
+Each cache remains checked against all font bytes, case fields and its own
+library pin. Comparing the two configurations identifies a reference-mode
+difference; it does not establish that an unmatched Roc result is correct.

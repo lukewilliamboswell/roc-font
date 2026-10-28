@@ -1,0 +1,16 @@
+{
+  "name": "HB14.6 Graphite2 adapter, face default option0; controlled reference variant, not upstream default",
+  "upstream_version": "14.6.0",
+  "file": "src/hb-graphite2.cc",
+  "original_file_sha256": "16bb2f22d00bb96b66c6a85d72598b32faaa9d8b957b17db81a6b9e93ccc658f",
+  "patched_file_sha256": "bc9bf7efc716f86320ca70929eceffefe05d6d97b711364ef529bfb816df21c0",
+  "replacement": {
+    "from": "gr_make_face_with_ops (data, &ops, gr_face_preloadAll)",
+    "to": "gr_make_face_with_ops (data, &ops, gr_face_default)"
+  },
+  "graphite2_implementation": "unchanged external public library; no implementation source read",
+  "library_sha256": "3e2b5a66190284df3ce84c64ef7bd964d6105b62b175df1dc08f61a124c2a0e6",
+  "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+  "build_command": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2 -o /private/tmp/libroc-font-hb14-graphite-default.dylib",
+  "upstream_default_preserved": "public-records.json uses unchanged adapter preloadAll6 and remains the compatibility gate"
+}

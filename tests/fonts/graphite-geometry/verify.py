@@ -22,11 +22,11 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def check_records():
+def check_records(records_path, oracle_path):
     subprocess.run([sys.executable, str(HERE / 'public_cases.py'), '--check'], check=True)
     cases = json.loads((HERE / 'public-cases.jsonc').read_text())['cases']
-    cached = json.loads((HERE / 'public-records.json').read_text())
-    pin = json.loads((HERE / 'public-oracle.json').read_text())
+    cached = json.loads(records_path.read_text())
+    pin = json.loads(oracle_path.read_text())
     assert cached['oracle'] == pin
     assert len(cases) == len(cached['records'])
     for case, record in zip(cases, cached['records']):
@@ -44,17 +44,19 @@ def main():
     parser.add_argument('--dev', action='store_true')
     parser.add_argument('--only', default='')
     parser.add_argument('--output', type=Path)
+    parser.add_argument('--records', type=Path, default=HERE / 'public-records.json')
+    parser.add_argument('--oracle', type=Path, default=HERE / 'public-oracle.json')
     args = parser.parse_args()
-    cases, records = check_records()
+    cases, records = check_records(args.records, args.oracle)
     if args.check:
-        print(f'{len(cases)} direct public HB14.6/Graphite2 geometry records current')
+        print(f'{len(cases)} direct public HB14.6/Graphite2 geometry records current ({args.records.name})')
         return 0
     selected = [c for c in cases if args.only in c['id']]
     assert selected, 'empty geometry selection'
     work = ROOT / '.roc-font-tmp/graphite-geometry-replay'
     work.mkdir(parents=True, exist_ok=True)
     binary = args.binary.resolve() if args.binary else work / 'query'
-    provenance = {}
+    provenance = {'oracle_records': args.records.name, 'oracle_sha256': sha(args.oracle.read_bytes())}
     if not args.binary:
         roc = os.environ.get('ROC', 'roc')
         with flight.flight(roc, bundle=args.bundle, work=work / 'flight') as dep:
@@ -64,7 +66,7 @@ def main():
             if built.returncode:
                 sys.stderr.write(built.stdout + built.stderr)
                 return 1
-            provenance = {'bundle': dep[-1].split('/')[-1], 'compiler_sha256': sha(Path(roc).read_bytes()), 'optimized': not args.dev, 'source_sentinel': True}
+            provenance.update({'bundle': dep[-1].split('/')[-1], 'compiler_sha256': sha(Path(roc).read_bytes()), 'optimized': not args.dev, 'source_sentinel': True})
     provenance['binary_sha256'] = sha(binary.read_bytes())
     grouped = collections.defaultdict(list)
     for case in selected:
