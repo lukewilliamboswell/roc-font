@@ -275,7 +275,7 @@ GraphiteMachine :: {}.{
 							if resolved.exhausted {
 								return { state: $state, input: $input, cursor: $cursor, value: 0, operations: $operations, stopped: 2, aborted: False }
 							}
-							$value = resolved.value.to_i32()
+							$value = resolved.value.to_i16_wrap().to_i32()
 						}
 					}
 					if op != 0x42 {
