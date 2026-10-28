@@ -278,14 +278,20 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 			$problems = $problems.append({ offset: at + 20 })
 		}
 		bounded = t.bytes.take_first(s.end)
-		left = match TableAatKern.read_class(bounded, left_at, glyphs, s.extended, width) {
+		left = if !Bytes.fits(left_at, 2, s.end) {
+			$problems = $problems.append({ offset: fields })
+			AatLookup.empty
+		} else match TableAatKern.read_class(bounded, left_at, glyphs, s.extended, width) {
 			Ok(v) => v
 			Err(ps) => {
 				$problems = $problems.concat(ps)
 				AatLookup.empty
 			}
 		}
-		right = match TableAatKern.read_class(bounded, right_at, glyphs, s.extended, width) {
+		right = if !Bytes.fits(right_at, 2, s.end) {
+			$problems = $problems.append({ offset: fields + size })
+			AatLookup.empty
+		} else match TableAatKern.read_class(bounded, right_at, glyphs, s.extended, width) {
 			Ok(v) => v
 			Err(ps) => {
 				$problems = $problems.concat(ps)

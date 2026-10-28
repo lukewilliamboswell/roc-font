@@ -25,7 +25,7 @@ TableAatAnchor := { bytes : List(U8), lookup : AatLookup, data : U64, glyphs : U
 		data = Bytes.u32(bytes, 8)
 		lookup = if lookup_at == 0 {
 			AatLookup.empty
-		} else if lookup_at < 12 {
+		} else if lookup_at < 12 or !Bytes.fits(lookup_at, 2, bytes.len()) {
 			$problems = $problems.append({ offset: 4 })
 			AatLookup.empty
 		} else match AatLookup.read(bytes, lookup_at, glyphs, 2) {

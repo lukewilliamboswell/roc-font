@@ -1,0 +1,43 @@
+{
+  "roc_path": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+  "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "bundle": "6aH3zcx5suwNmpbM3VUYkUvSR6QVAovfzv1r13AFuxX7.tar.zst",
+  "source_sentinel_public_expects": 33,
+  "source_tests": {
+    "TableAatKern_import_closure": 232,
+    "TableAatAnchor_import_closure": 7
+  },
+  "cached_reference_cases": 5064,
+  "capable_HarfBuzz_cases": 5048,
+  "numeric_materialization_cases": 16,
+  "oracle_native_replay_identical": true,
+  "oracle_query_bundle": "EfcNbYYEqWm7nbKTrh2GWnVbr9RTLGzeGrTJUm8PsyKh.tar.zst",
+  "final_diagnostic_only_change_exercised_by_optimized_fuzz": true,
+  "fonts_reproducible": 54,
+  "fuzz": {
+    "outcome": "passed",
+    "duration_ms": 2622,
+    "libfuzzer": {
+      "coverage_kind": "sanitizer_edge_feedback",
+      "executed_units": 1000,
+      "average_exec_per_sec": 500,
+      "new_units_added": 193,
+      "slowest_unit_time_sec": 0,
+      "peak_rss_mb": 32,
+      "coverage_edges": 4062,
+      "coverage_features": 9246
+    }
+  },
+  "fuzz_binary_sha256": "a19ed0df4ee01e72757f1899c55c119f2c806cf9c484c60b5a23026e0f4135e4",
+  "fuzz_source_sha256": "3c2bc5b6d8186718185e5fb87ba8d0ea21814ead81f38a7c477b7fbbf0632dc0",
+  "seed_manifest_sha256": "dcb5ca5a1ac01ff6acde853c51f0520dd7747be4153bb629aedbd32a32ad16b6",
+  "final_core_sha256": "4591f878d9108cb5a3afde67e5b1e8caf5eced9cf8e9cf502f1fdc6c0c069bf2",
+  "notes": [
+    "All compiler invocations explicitly used October27 de79a0f latest verified nightly, never PATH fallback.",
+    "Final public and optimized fuzz consumers compile against served bundle in source-sentinel mirror.",
+    "Full native oracle matrix replay uses the ownership-fixed bundle; the final additional reader change only identifies invalid pointer fields for diagnostic aggregation.",
+    "OTS9.3 strips AAT tables; accepted container reports are not presented as AAT validation.",
+    "The first fuzz trial exposed an incorrect test-model advance literal; it was corrected to the already cached HB values before the final campaigns. No font/shaper crash was observed.",
+    "Whole-repository docs, bundle-only-default-font checks and full integrated suite belong to the integration owner."
+  ]
+}

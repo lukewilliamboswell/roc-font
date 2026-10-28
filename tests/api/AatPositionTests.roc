@@ -138,3 +138,18 @@ expect {
 	run = Font.shape(read(state_file), "ab", Font.ShapeOptions.{ script: "Latn", features: [Font.Feature.{ tag: "kern", value: 0, start: 0, end: 1 }] })
 	run.advances == [{ x: 510, y: 0 }, { x: 500, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: -20, y: 0 }]
 }
+
+# Independent class-lookup problems aggregate within and across subtables.
+expect {
+	data = match Font.table_bytes(read(matrix_file), "kerx") {
+		Present(b) => b
+		Absent => []
+	}
+	damaged = FontBuild.patch(FontBuild.patch(data, 24, [255, 255, 255, 255]), 28, [255, 255, 255, 255])
+	twice = FontBuild.patch(damaged.concat(damaged.drop_first(8)), 4, [0, 0, 0, 2])
+	bytes = FontBuild.file(FontBuild.replace(source_tables, "kerx", twice))
+	match Font.from_bytes(bytes, Font.ReadOptions.{}) {
+		Ok(f) => Font.dropped(f).len() == 4
+		Err(_) => False
+	}
+}
