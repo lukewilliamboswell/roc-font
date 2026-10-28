@@ -1,0 +1,1 @@
+Unmodified Tibetan fonts and adjacent OFL licences from the pinned Google Fonts revision in sources.json. Intended as a first USE oracle slice. No completeness claim or temporary generic shaping policy is implied by the fixtures.
