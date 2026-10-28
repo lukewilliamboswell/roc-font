@@ -225,7 +225,7 @@ GraphiteMachine :: {}.{
 					var $value = 0.I32
 					if op == 0x28 or op == 0x2E {
 						if instruction.a == 18 or instruction.a == 19 {
-							located = GraphitePosition.position($state, ctx.rtl, limits.operations - $operations)
+							located = GraphitePosition.position_for_font($state, ctx.rtl, ctx.sub.direction.bitwise_and(1) == 0, limits.operations - $operations)
 							$state = located.state
 							$operations = $operations + located.operations
 							if located.stopped != 0 {
@@ -254,7 +254,7 @@ GraphiteMachine :: {}.{
 								$value = metric(GraphiteSlots.get($state, parent).glyph, instruction.a.to_u64_wrap(), 0)
 							}
 						} else {
-							measured = GraphitePosition.metric($state, metric_id, instruction.a.to_u64_wrap(), instruction.c, ctx.rtl, limits.operations - $operations, metric)
+							measured = GraphitePosition.metric_for_font($state, metric_id, instruction.a.to_u64_wrap(), instruction.c, ctx.rtl, ctx.sub.direction.bitwise_and(1) == 0, limits.operations - $operations, metric)
 							$state = measured.state
 							$operations = $operations + measured.operations
 							if measured.stopped != 0 {

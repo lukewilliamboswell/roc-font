@@ -145,7 +145,7 @@ ShaperGraphite := {
 		if associated.aborted {
 			return { run: GraphiteRun.empty.run, origins: [], stopped: $stopped, operations: $operations, abort: ProgramAbort }
 		}
-		placed = GraphitePosition.position($state, plan.rtl, budget - $operations)
+		placed = GraphitePosition.position_for_font($state, plan.rtl, sub.direction.bitwise_and(1) == 0, budget - $operations)
 		$operations = $operations + placed.operations
 		$stopped = $stopped.bitwise_or(placed.stopped)
 		finished = GraphiteRun.finish(placed.state, scalars, plan.rtl, trace, |glyph| GraphiteMachine.real(context, glyph).to_u32_wrap())
