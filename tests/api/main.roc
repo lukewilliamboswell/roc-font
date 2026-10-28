@@ -39,6 +39,7 @@ import VerticalTests
 import CffTests
 import VariationCompletionTests
 import AatTests
+import AatFallbackTests
 import AatPositionTests
 import GraphiteReaderTests
 import MortTests

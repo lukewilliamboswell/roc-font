@@ -114,6 +114,7 @@ EXTERNAL_CASES = (
     ROOT / "tests/fonts/aat/gdef-cases.jsonc",
     ROOT / "tests/fonts/aat/applicability-cases.jsonc",
     ROOT / "tests/fonts/aat/rearrangement-cases.jsonc",
+    ROOT / "tests/fonts/aat/fallback-cases.jsonc",
     ROOT / "tests/fonts/aat-mort/mort-cases.jsonc",
     ROOT / "tests/fonts/aat-mort/body-cases.jsonc",
     ROOT / "tests/fonts/aat-mort/scaling-cases.jsonc",
