@@ -108,7 +108,9 @@ GraphitePosition :: {}.{
 				shift = GraphitePosition.shift_x(child, rtl)
 				x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
 				y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
-				$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
+				if TableVar.f32_lt(0, child.advance_x) {
+					$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
+				}
 				$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
 				$min_x = TableVar.f32_min($min_x, TableVar.f32_add(x, TableVar.f32_from_int(base_metric(child.glyph, 4, 0).to_i64())))
 				$max_x = TableVar.f32_max($max_x, TableVar.f32_add(x, TableVar.f32_from_int(base_metric(child.glyph, 5, 0).to_i64())))
@@ -203,7 +205,9 @@ GraphitePosition :: {}.{
 						y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
 						$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
 						$members = $members.append(frame.id)
-						$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
+						if TableVar.f32_lt(0, child.advance_x) {
+							$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(x, shift), child.advance_x))
+						}
 						$left = TableVar.f32_min($left, TableVar.f32_sub(x, root_x))
 						if child.child != 0 {
 							$pending = $pending.append({ id: child.child, x, y })
@@ -488,4 +492,22 @@ expect {
 	c = GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(GraphiteSlots.set_extra(b.state, a.id, 31, 1), a.id, 3, 17), a.id, 8, n(-210).to_i32_wrap()), a.id, 9, n(100).to_i32_wrap())
 	d = GraphitePosition.position(c, False, 100)
 	GraphiteSlots.get(d.state, a.id).position_x == 0 and GraphiteSlots.get(d.state, a.id).position_y == n(500) and GraphiteSlots.get(d.state, b.id).position_x == n(-110)
+}
+
+expect {
+	# CAPI Charis a+acute and original far-child programs: only a positive
+	# child advance extends the cluster's right edge. Nonpositive children
+	# still participate in left rebasing and keep their physical position.
+	n = TableVar.f32_from_int
+	var $good = True
+	for advance in [-1, 0, 1] {
+		a = GraphiteSlots.append(GraphiteSlots.make(0, 2), { ..GraphiteSlots.no_slot, advance_x: n(advance), attach_x: n(1000) })
+		b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602) })
+		linked = GraphitePosition.attach(b.state, 1, 2, 100)
+		positioned = GraphitePosition.position(linked.state, False, 100)
+		if positioned.stopped != 0 or positioned.state.advance_x != n(if (advance > 0) 1001 else 602) or GraphiteSlots.get(positioned.state, 1).position_x != n(1000) {
+			$good = False
+		}
+	}
+	$good
 }
