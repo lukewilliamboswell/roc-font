@@ -199,6 +199,19 @@
           "exit_code": 0
         }
       ]
+    },
+    {
+      "path": "examples/complex-shaping.roc",
+      "cases": [
+        {
+          "name": "default",
+          "args": [],
+          "stdin": "",
+          "stdout": "6 glyphs; advances and offsets in font units\nglyph=790 byte=0 advance={ x: 1228, y: 0 } offset={ x: 0, y: 0 } unsafe=False missing=False\nglyph=647 byte=1 advance={ x: 678, y: 0 } offset={ x: 0, y: 0 } unsafe=False missing=False\nglyph=647 byte=2 advance={ x: 758, y: 0 } offset={ x: 0, y: 0 } unsafe=True missing=False\nglyph=689 byte=3 advance={ x: 496, y: 0 } offset={ x: 0, y: 0 } unsafe=False missing=False\nglyph=586 byte=4 advance={ x: 1170, y: 0 } offset={ x: 0, y: 0 } unsafe=False missing=False\nglyph=614 byte=5 advance={ x: 1194, y: 0 } offset={ x: 0, y: 0 } unsafe=False missing=False\n",
+          "stderr": "",
+          "exit_code": 0
+        }
+      ]
     }
   ]
 }
