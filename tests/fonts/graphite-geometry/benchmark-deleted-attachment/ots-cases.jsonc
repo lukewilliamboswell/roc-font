@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "id": "deleted-attachment-benchmark-4",
+      "font": "benchmark-deleted-attachment/all-zero-advances.ttf",
+      "text": "abcdabcdabcdabcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "cluster_level": 0,
+      "engine": "graphite2",
+      "face_options": 6,
+      "copies": 4,
+      "first_action_hex": "030000230001012602030000230303000023080300002304030000230919010126020300002303030000230803000023040300002309030000230032"
+    },
+    {
+      "id": "deleted-attachment-positive-diagnostic-4",
+      "font": "benchmark-deleted-attachment/positive-root-diagnostic.ttf",
+      "text": "abcdabcdabcdabcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "cluster_level": 0,
+      "engine": "graphite2",
+      "face_options": 6,
+      "copies": 4,
+      "first_action_hex": "030000230001012602030000230303000023080300002304030000230919010126020300002303030000230803000023040300002309030000230032"
+    }
+  ]
+}

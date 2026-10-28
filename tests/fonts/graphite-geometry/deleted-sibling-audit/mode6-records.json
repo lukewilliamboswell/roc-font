@@ -1,0 +1,5014 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 2,
+    "face_options": "explicit per case",
+    "logging": false,
+    "deleted_sibling_extractor": 1
+  },
+  "records": [
+    {
+      "id": "collision-deleted-sibling-star-1-0-ltr",
+      "font_sha256": "923b6d8c38fb8389dbb162432b8cb3288bd0d610a514f222a47fa3f689d0ab54",
+      "key": "6570d475b027b0616600415282d7e83a2358c15602d7b4086afaa5fc8bff2f0d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-1-1-ltr",
+      "font_sha256": "d4bc42447458d9edb67e8e813cfb280ca4ca252dc9124dc64fdc9949d023c23c",
+      "key": "7bdb1481e337b3dad496bfc4cf87cc4060392aa39f4ec0663298c0895c440751",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-2-0-ltr",
+      "font_sha256": "bff36f34957d04574f1d61c0b0b2c5244ce45c0c1071e1c933caa74588c5bd05",
+      "key": "59b2b5a2dfa29e40f563580910556523ce76efd55cb2b1c33c56aacbe05b2611",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-2-1-ltr",
+      "font_sha256": "63acb06d673be270456872595c6846dd9820e2b38d80e883938c953fa0d1c592",
+      "key": "8eb0ac55356319d0bb07bb9481c1b5bea3a1846d702de9b8c045854d43869f44",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": false,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-3-0-ltr",
+      "font_sha256": "96a7aa73ba64520c654ebd54542523b0dff6a412080ad32e9156e67a343e2219",
+      "key": "be06308bef33210be5d39cbb3c57940b9a0b7f065c28e362304837b4286bb9b3",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-3-1-ltr",
+      "font_sha256": "01e187f98f8f3aa13b2ed38839a5ffdbb7ee52e0b5418f90b44f60a2aa9ef003",
+      "key": "178f54ad261373efa94736b278a80a866c33671c1825cfef6e357c94788ff18b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 2,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              5
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1175314432,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": false,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-getter-1-1-ltr",
+      "font_sha256": "22bac31294b6c3760df82f9b1165d37c6943effe71337480dafe80fde66cb8fe",
+      "key": "898d81fd907d660a774c1b81a7e639647982525918c533992515bcd714a2f6bf",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 1
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-constant-1-1-ltr",
+      "font_sha256": "25d0564a5316f1b1c8d3506d0764618d2ee5cde684f9914797248b478292b2bb",
+      "key": "bf158288208beb7b7408283ae9ccea2a81bbbef99fe1c0fcde6586b0a7be2e9b",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 123
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-getter-1-1-detached-ltr",
+      "font_sha256": "cc4ee64a7e99e7f4e331ecb3bf0003418b17c29e8bcafe6b7c0017fd90ab0397",
+      "key": "685a232bf50dcd806c0950fbfbb465875de24c25d174306e40f5b522cc739b5a",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              5
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              1142358016,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-1-0-rtl",
+      "font_sha256": "53393b68ccceb3563e3b17fe3b7bbd5f87057f9b94b8d23a2e31c980e39e8662",
+      "key": "4a12f8710769d62b060609941b4bdbca0c270f907b62a66fefbc65c449c94a96",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-1-1-rtl",
+      "font_sha256": "a48d157d128fa46847c56bb00b173745ac66032ea4b037d483af0bd599ff7734",
+      "key": "3617f9391611ad1e5e5b8f25c35181ae77781847a2e76abddb9c3965ea876082",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-2-0-rtl",
+      "font_sha256": "5b1c9808f2e8a3c626330c7214937012a42971f23b6a9d8ce4183324318c4e9e",
+      "key": "51de45d7bef0cd6c3d375f1edc764089eaffe08977d714a2347d6a5f9f9e7c9d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-2-1-rtl",
+      "font_sha256": "16539c4cd085745428ddc76100a694383f4119e4e3681cdcd19f9397760e4ba2",
+      "key": "e0f1dd03d2a52e03fa6e66f5cb04e5e10e318af104e7d55a425a10312cee26e4",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": false,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-3-0-rtl",
+      "font_sha256": "25b6d984cdc61a5b3c45dfe018580e7bcdac638cb35426f2b3746a1a0d3916dc",
+      "key": "b38c2bf978582fb5c1cbfce28c8d3bfeb4bd393a96a3d4290d68011bfd840fed",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-star-3-1-rtl",
+      "font_sha256": "15ba15508ae9fa6af752594ffd2c8bbbf6f19f782eb6f6df94604c968bc25fec",
+      "key": "615ba65449d8561ed5a7b2983575a46dd47bf18d73d8007990d200021b1036be",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 2,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1175933952,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 1,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              2
+            ]
+          },
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ]
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ]
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ]
+          },
+          {
+            "glyph": 3,
+            "active": false,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1175232512,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-getter-1-1-rtl",
+      "font_sha256": "08c41a0376211bb27ecaab5de5ed2a351191f25924e994b10d19a41df72c44fd",
+      "key": "d953f978cbcad81c1640a93c76637acd9fbff2cbd70456436bc6b121f06756e0",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 1
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-constant-1-1-rtl",
+      "font_sha256": "2019cbe161d6c51ca5f2a28dd4f5bdf06ec785cbac89745eb721b09d5c30d1f1",
+      "key": "4ce016c764b053381be7ea69b785535776151e894bbb49e1549142d315abbf87",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 123
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "collision-deleted-sibling-getter-1-1-detached-rtl",
+      "font_sha256": "a1cd288a6e2604181db33319e7b5e97f0ed83608f1a110952c30ce170e7f8437",
+      "key": "38adc73231b1cd6fd023922206fa3f026b30261aca5d7396ae7e7536b2c52337",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 5,
+            "before": 4,
+            "after": 4,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150754816,
+          0
+        ],
+        "reachable_family": [
+          {
+            "glyph": 2,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              3
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 3,
+            "active": true,
+            "position_bits": [
+              1143685120,
+              1126825984
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              4,
+              null,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 4,
+            "active": true,
+            "position_bits": [
+              1142374400,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "user0": 0
+          },
+          {
+            "glyph": 5,
+            "active": true,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142374400,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              4
+            ],
+            "user0": 0
+          }
+        ]
+      }
+    }
+  ]
+}

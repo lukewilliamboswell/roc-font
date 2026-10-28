@@ -1,0 +1,6 @@
+{
+"oracle":{"extractor": 1, "graphite2": "1.3.14", "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a", "harfbuzz": "14.6.0", "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2", "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0", "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"},
+"records":[
+{"id":"collision-negative-window-three-roots","key":"e002c979a4596a055d0fad75e3810e91465addcdf1d83b6594227e8d5bfe6f9a","result":{"success":true,"abort":"NoAbort","glyphs":[{"glyph":3,"cluster":2,"advance":[1284,0],"offset":[0,0],"flags":1},{"glyph":2,"cluster":1,"advance":[683,0],"offset":[0,0],"flags":1},{"glyph":1,"cluster":0,"advance":[601,0],"offset":[0,170],"flags":0}]}}
+]
+}

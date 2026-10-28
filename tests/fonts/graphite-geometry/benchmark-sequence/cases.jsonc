@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "geometry-benchmark-sequence-members-4",
+      "font": "benchmark-sequence/sequence-members.ttf",
+      "text": "abababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 4
+    },
+    {
+      "id": "geometry-benchmark-sequence-members-8",
+      "font": "benchmark-sequence/sequence-members.ttf",
+      "text": "abababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 8
+    },
+    {
+      "id": "geometry-benchmark-sequence-members-16",
+      "font": "benchmark-sequence/sequence-members.ttf",
+      "text": "abababababababababababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 16
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "provenance": {
+    "source_snapshot": "526a7cc plus uncommitted diagnostic dbg only",
+    "source_sentinel": true,
+    "mode": "explicit dev diagnostic; never release",
+    "bundle": "6znUne6n3XPnoB2anpMbVBfuFeGVBwmw8q5XMiuKD69G.tar.zst",
+    "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+    "exit_code": 0
+  },
+  "input": {
+    "font": "Awami byte-preserving first 11 passes",
+    "font_sha256": "8f9eee5a8afde0422a6299113b6ad49aa9e0505107ceac718d9ba698260ea26b",
+    "text": "بَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَبَ",
+    "script": "Arab",
+    "direction": "rtl",
+    "cluster_level": 0,
+    "unicode_scalars": 258,
+    "active_glyphs": 387
+  },
+  "executions": [
+    {
+      "begin": [
+        5,
+        0,
+        387,
+        966433
+      ],
+      "totals": {
+        "GC-POS": 205436,
+        "GC-INK": 362026,
+        "GC-SEQ": 214398,
+        "GC-SOLVE": 178007
+      },
+      "calls": {
+        "GC-POS": 555,
+        "GC-INK": 555,
+        "GC-SEQ": 554,
+        "GC-SOLVE": 550
+      },
+      "modes": {
+        "0": {
+          "GC-POS": 81788,
+          "GC-INK": 84207,
+          "GC-SEQ": 49923,
+          "GC-SOLVE": 45180
+        },
+        "2": {
+          "GC-POS": 123648,
+          "GC-INK": 277819,
+          "GC-SEQ": 164475,
+          "GC-SOLVE": 132827
+        }
+      },
+      "end": [
+        966433,
+        2
+      ]
+    },
+    {
+      "begin": [
+        5,
+        0,
+        387,
+        966433
+      ],
+      "totals": {
+        "GC-POS": 205436,
+        "GC-INK": 362026,
+        "GC-SEQ": 214398,
+        "GC-SOLVE": 178007
+      },
+      "calls": {
+        "GC-POS": 555,
+        "GC-INK": 555,
+        "GC-SEQ": 554,
+        "GC-SOLVE": 550
+      },
+      "modes": {
+        "0": {
+          "GC-POS": 81788,
+          "GC-INK": 84207,
+          "GC-SEQ": 49923,
+          "GC-SOLVE": 45180
+        },
+        "2": {
+          "GC-POS": 123648,
+          "GC-INK": 277819,
+          "GC-SEQ": 164475,
+          "GC-SOLVE": 132827
+        }
+      },
+      "end": [
+        966433,
+        2
+      ]
+    }
+  ],
+  "query_process_exit": 1,
+  "stderr_sha256": "631deb78800ea55c1915468c2f30a249be2e8e338eec10f8cb4535e155c904f3",
+  "notes": [
+    "The public query performs two deterministic executions. Totals are separate, not added together.",
+    "Explicit dev instrumentation only; no elapsed-time or conformance claim.",
+    "The SHIFT pass exhausts its remaining 966433 operations. Stage totals 959867 exclude 6566 preparation/traversal operations."
+  ]
+}

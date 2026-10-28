@@ -1,0 +1,183 @@
+{
+  "family": "padauk",
+  "text_piece": "\u1019\u103c\u1014\u103a\u1019\u102c \u1000\u1039\u1000 \u1004\u103a\u1039\u1000 ",
+  "font_sha256": "33bf40de2d446c893c8680fe2279a6121a54cf0f634964e8dd75f4a58239df5c",
+  "script": "Mymr",
+  "direction": "ltr",
+  "bundle": "http://127.0.0.1:59527/6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst",
+  "compiler": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "binary_sha256": "d0353ff442ac2d10478be2a95477a2e49f3293b95c8d3573b3db807686b90355",
+  "allocation_binary_sha256": "e611a2bacc159e621cc1690285066f9a4396c9d937c9fb0bb89860aeb95fd964",
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "graphite2": "1.3.14",
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1,
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "rows": [
+    {
+      "copies": 4,
+      "scalars": 64,
+      "utf8_bytes": 168,
+      "input_checksum": 12343848854014186393,
+      "output_checksum": 14618291252096432869,
+      "allocations": 1615,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 261718.75,
+          "hb_graphite_ns": 46812.5,
+          "ratio": 5.5907877169559415,
+          "before_roc_ns": 253145.8125,
+          "before_ratio": 5.407654205607477
+        },
+        {
+          "roc_ns": 242799.5,
+          "hb_graphite_ns": 22375.0,
+          "ratio": 10.851374301675978,
+          "before_roc_ns": 239619.8125,
+          "before_ratio": 10.709265363128491
+        },
+        {
+          "roc_ns": 242989.5625,
+          "hb_graphite_ns": 22625.0,
+          "ratio": 10.739870165745856,
+          "before_roc_ns": 240049.5,
+          "before_ratio": 10.6099226519337
+        },
+        {
+          "roc_ns": 229666.6875,
+          "hb_graphite_ns": 20875.0,
+          "ratio": 11.001997005988024,
+          "before_roc_ns": 224880.1875,
+          "before_ratio": 10.772703592814372
+        },
+        {
+          "roc_ns": 229838.5625,
+          "hb_graphite_ns": 20625.0,
+          "ratio": 11.143687878787878,
+          "before_roc_ns": 225294.25,
+          "before_ratio": 10.923357575757576
+        }
+      ],
+      "median_ratio": 10.851374301675978,
+      "before_allocations": 1615,
+      "before_leaked": 0,
+      "before_median_ratio": 10.709265363128491
+    },
+    {
+      "copies": 16,
+      "scalars": 256,
+      "utf8_bytes": 672,
+      "input_checksum": 9263579140241385301,
+      "output_checksum": 2556129342598014249,
+      "allocations": 6405,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 1059994.75,
+          "hb_graphite_ns": 78687.5,
+          "ratio": 13.470942017474187,
+          "before_roc_ns": 1054729.125,
+          "before_ratio": 13.404023828435266
+        },
+        {
+          "roc_ns": 1069981.8125,
+          "hb_graphite_ns": 79312.5,
+          "ratio": 13.490708431836092,
+          "before_roc_ns": 1047531.25,
+          "before_ratio": 13.207643814026794
+        },
+        {
+          "roc_ns": 1059278.625,
+          "hb_graphite_ns": 77312.5,
+          "ratio": 13.701259498787389,
+          "before_roc_ns": 1038614.5625,
+          "before_ratio": 13.433979789814066
+        },
+        {
+          "roc_ns": 1069835.9375,
+          "hb_graphite_ns": 77000.0,
+          "ratio": 13.893973214285714,
+          "before_roc_ns": 1041562.5,
+          "before_ratio": 13.526785714285714
+        },
+        {
+          "roc_ns": 1064716.125,
+          "hb_graphite_ns": 77000.0,
+          "ratio": 13.827482142857143,
+          "before_roc_ns": 1046752.625,
+          "before_ratio": 13.594189935064936
+        }
+      ],
+      "median_ratio": 13.701259498787389,
+      "before_allocations": 6405,
+      "before_leaked": 0,
+      "before_median_ratio": 13.433979789814066
+    },
+    {
+      "copies": 64,
+      "scalars": 1024,
+      "utf8_bytes": 2688,
+      "input_checksum": 1198899607483899461,
+      "output_checksum": 5800494017696554969,
+      "allocations": 25560,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 7000177.0625,
+          "hb_graphite_ns": 312437.5,
+          "ratio": 22.405047609521905,
+          "before_roc_ns": 6908588.5625,
+          "before_ratio": 22.11190578115623
+        },
+        {
+          "roc_ns": 7008510.4375,
+          "hb_graphite_ns": 305937.5,
+          "ratio": 22.90830786516854,
+          "before_roc_ns": 7002947.9375,
+          "before_ratio": 22.890126046986722
+        },
+        {
+          "roc_ns": 7012463.5625,
+          "hb_graphite_ns": 305000.0,
+          "ratio": 22.99168381147541,
+          "before_roc_ns": 6917755.25,
+          "before_ratio": 22.68116475409836
+        },
+        {
+          "roc_ns": 7015177.125,
+          "hb_graphite_ns": 304500.0,
+          "ratio": 23.03834852216749,
+          "before_roc_ns": 6918359.375,
+          "before_ratio": 22.720392036124796
+        },
+        {
+          "roc_ns": 6986984.375,
+          "hb_graphite_ns": 306375.0,
+          "ratio": 22.80533455732354,
+          "before_roc_ns": 6916643.1875,
+          "before_ratio": 22.575742758057935
+        }
+      ],
+      "median_ratio": 22.90830786516854,
+      "before_allocations": 25560,
+      "before_leaked": 0,
+      "before_median_ratio": 22.68116475409836
+    }
+  ],
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "notes": [
+    "Font read and plan excluded; five interleaved samples,16 executions each.",
+    "Actual Graphite backend asserted; identical byte input and ordered glyph/cluster/advance/offset/flag checksum asserted against HB14.6 Graphite adapter.",
+    "roc-fuzz0.4.3 does not expose requested or peak live bytes."
+  ],
+  "before_bundle": "http://127.0.0.1:59018/2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst",
+  "before_binary_sha256": "e53500015e275ef8250d3d182209f8a2827fcfd98b78be1d52ce39b32bddfac1",
+  "before_allocation_binary_sha256": "11cbba83e037182962b4f85dcf2032adad3d6adb479e25e230ebf5951c6aec07"
+}

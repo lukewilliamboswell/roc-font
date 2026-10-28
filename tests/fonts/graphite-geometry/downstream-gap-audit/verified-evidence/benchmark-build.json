@@ -1,0 +1,42 @@
+{
+  "source_snapshot": "dde4ce3",
+  "bundle": "2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8.tar.zst",
+  "bundle_sha256": "f89d75ad76f42153e806ac5fdb57db0f7708eaf718fb2460b05c80d394dfe284",
+  "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "source_sentinel": true,
+  "optimization": "speed",
+  "consumers": [
+    {
+      "name": "shape_bench",
+      "source_sha256": "dd38d7959001d948a8df7c3e0f76c492c9ae60c15d29b9b1f65acc58816da188",
+      "binary_sha256": "25409003be7e1cb230a73a6990e4bb9ad4af3d95f128974392749aee2597e918",
+      "command": [
+        "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+        "build",
+        "--opt=speed",
+        "tests/fonts/graphite/shape_bench.roc",
+        "--output=/private/tmp/graphite-right-cell-bench/shape_bench",
+        "--replace-dep",
+        "./package/main.roc",
+        "http://127.0.0.1:61733/2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8.tar.zst"
+      ]
+    },
+    {
+      "name": "shape_alloc",
+      "source_sha256": "2f202fa1a26a4b36402671ab28b3a258ae02ba819ef246e06da5732eefe1c1cd",
+      "binary_sha256": "04a1b0944d5cf419486f404f195c4504b1d7660b60374e302be84b43b4ce1874",
+      "command": [
+        "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+        "build",
+        "--opt=speed",
+        "--fuzz",
+        "tests/fonts/graphite/shape_alloc.roc",
+        "--output=/private/tmp/graphite-right-cell-bench/shape_alloc",
+        "--replace-dep",
+        "./package/main.roc",
+        "http://127.0.0.1:61733/2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8.tar.zst"
+      ]
+    }
+  ]
+}

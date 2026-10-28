@@ -1,0 +1,295 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "source_archive_sha256": "7a3b342c5681921ce2e0c2496509d30b5b078399d5a7bd2358f95166d57d91df",
+    "build": "Release AppleClang17, GRAPHITE2_NTRACING=OFF, file-face enabled, direct VM",
+    "api": "gr_start_logging public JSON trace",
+    "extractor": 1
+  },
+  "records": [
+    {
+      "id": "collision-negative-window-three-roots",
+      "key": "68e09a9bce4c66b2baee95fdb07fd8e915557cdd88cb31254fb3fbf866609607",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1,
+                  0,
+                  1
+                ],
+                "target": {
+                  "origin": [
+                    1967,
+                    170
+                  ],
+                  "currShift": [
+                    0,
+                    0
+                  ],
+                  "currOffset": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    0,
+                    0,
+                    300,
+                    600
+                  ],
+                  "slantBox": [
+                    0,
+                    -600,
+                    900,
+                    300
+                  ],
+                  "fix": "shift"
+                },
+                "vectors": [
+                  {
+                    "direction": "x",
+                    "targetMin": 0,
+                    "removals": [
+                      [
+                        "slot-2",
+                        -1,
+                        "remove",
+                        [
+                          -983,
+                          317
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          -983,
+                          -983,
+                          10,
+                          -9830,
+                          9662890.0
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          317,
+                          317,
+                          10,
+                          3170,
+                          1004890.0
+                        ]
+                      ],
+                      [
+                        "slot-3",
+                        -1,
+                        "remove",
+                        [
+                          -2267,
+                          -967
+                        ]
+                      ],
+                      [
+                        "slot-3",
+                        -1,
+                        "exclude",
+                        [
+                          -2267,
+                          -2267,
+                          10,
+                          -22670,
+                          51392900.0
+                        ]
+                      ],
+                      [
+                        "slot-3",
+                        -1,
+                        "exclude",
+                        [
+                          -967,
+                          -967,
+                          10,
+                          -9670,
+                          9350890.0
+                        ]
+                      ]
+                    ],
+                    "ranges": [
+                      [
+                        -1000,
+                        0
+                      ]
+                    ],
+                    "bestCost": -1,
+                    "bestVal": 0
+                  },
+                  {
+                    "direction": "y",
+                    "targetMin": 0,
+                    "removals": [
+                      [
+                        "slot-2",
+                        -1,
+                        "remove",
+                        [
+                          -770,
+                          430
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          -770,
+                          -770,
+                          10,
+                          -7700,
+                          5929000.0
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          430,
+                          430,
+                          10,
+                          4300,
+                          1849000.0
+                        ]
+                      ]
+                    ],
+                    "ranges": [
+                      [
+                        -1,
+                        1
+                      ]
+                    ],
+                    "bestCost": -1,
+                    "bestVal": 0
+                  },
+                  {
+                    "direction": "sum (NE-SW)",
+                    "targetMin": 0,
+                    "removals": [
+                      [
+                        "slot-2",
+                        -1,
+                        "remove",
+                        [
+                          -1540,
+                          634
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          -1540,
+                          -1540,
+                          2.5,
+                          -3850,
+                          5929000.0
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          634,
+                          634,
+                          2.5,
+                          1585,
+                          1004890.0
+                        ]
+                      ]
+                    ],
+                    "ranges": [
+                      [
+                        -2,
+                        0
+                      ]
+                    ],
+                    "bestCost": -1,
+                    "bestVal": 0
+                  },
+                  {
+                    "direction": "diff (NW-SE)",
+                    "targetMin": 0,
+                    "removals": [
+                      [
+                        "slot-2",
+                        -1,
+                        "remove",
+                        [
+                          -860,
+                          634
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          -860,
+                          -860,
+                          2.5,
+                          -2150,
+                          1849000.0
+                        ]
+                      ],
+                      [
+                        "slot-2",
+                        -1,
+                        "exclude",
+                        [
+                          634,
+                          634,
+                          2.5,
+                          1585,
+                          1004890.0
+                        ]
+                      ]
+                    ],
+                    "ranges": [
+                      [
+                        -2,
+                        0
+                      ]
+                    ],
+                    "bestCost": -1,
+                    "bestVal": 0
+                  }
+                ],
+                "result": [
+                  0,
+                  0
+                ],
+                "bestAxis": -1,
+                "stillBad": true
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}

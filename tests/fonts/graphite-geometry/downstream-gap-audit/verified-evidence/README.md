@@ -1,0 +1,11 @@
+# Verified geometry integration snapshot
+
+The package source is `dde4ce3`, immutable bundle `2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8`. The native dev public query passes all 1,549 geometry cases in both reference modes. Default mode has 425 narrowly keyed independent preload declarations; face0 is strict throughout. The dedicated DELETE matrix passes 100/100. All previously passing feature/direction/association/width/pass-condition/metrics matrices remain passing.
+
+Full Graphite conformance remains incomplete. Main real-font cases pass 1,024/1,069: 37 completed Awami geometry differences and eight default operation-budget stops remain. The broad NSM matrix passes 1,440/1,984 (544 geometry differences); smaller diagnostic matrices overlap that scope and are separately preserved in the full report. No new case is waived.
+
+The speed-native twelve-mode geometry fuzz consumer passes requested 1,000 runs, seed 1: 2,710 executed units, 13,202 edges, 59 MiB peak RSS, 11.264 seconds. It checks alignment, deterministic empty/nonempty calls, bounded growth/allocation scaling, hostile mutation and leaks through a served immutable dependency and source-sentinel mirror. The compiler is the recorded Oct27 nightly. These results are not relabelled as Oct28 results.
+
+The optimized allocation consumer now matches all 15 exact feature cases after the explicit kerning-parts decrease to 70/107/179. The archive contains exactly the three default fonts and licences, with no test paths. Root integration still owns full docs/all_tests and the next-nightly checks.
+
+Timing remains limited to the measured fonts and workloads. Earlier matched reports retain the ordinary Padauk CPU scaling gap (about 13x/23x/58x HB at 256/1,024/4,096 scalars) and modest/slower ratios on degenerate deleted-node controls. The new sampled-right/whole-empty implementation also costs 9–16 percent on a small matched LTR empty-only control despite unchanged 63/91/148 calls. That temporary control derives from committed `collision-empty-gap-only-empty-0-0.ttf` by changing glyph1 collision flags 17→19, repeats `abc` 4/8/16 times, and matches complete HB output before/after. Its measured report and exact app hashes are preserved; no general speed improvement is claimed. Unverified scalar-hoisting experiments are excluded from this source snapshot.

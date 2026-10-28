@@ -46,8 +46,18 @@ def main():
     parser.add_argument('--output', type=Path)
     parser.add_argument('--records', type=Path, default=HERE / 'public-records.json')
     parser.add_argument('--oracle', type=Path, default=HERE / 'public-oracle.json')
+    parser.add_argument('--divergences', type=Path)
     args = parser.parse_args()
     cases, records = check_records(args.records, args.oracle)
+    declared = {}
+    independent_records = {}
+    if args.divergences:
+        assert args.records.resolve() == (HERE / 'public-records.json').resolve(), 'independent face0 replay must remain strict'
+        assert args.oracle.resolve() == (HERE / 'public-oracle.json').resolve()
+        import preload_policy
+        registry = preload_policy.check(args.divergences)
+        declared = {row['id']: row for row in registry['cases']}
+        _, independent_records = check_records(HERE / 'face0-records.json', HERE / 'face0-oracle.json')
     if args.check:
         print(f'{len(cases)} direct public HB14.6/Graphite2 geometry records current ({args.records.name})')
         return 0
@@ -88,22 +98,32 @@ def main():
             assert key not in actual, key
             actual[key] = json.loads(value)
     failures = []
+    declared_cases = []
+    raw_default_agree = 0
     for case in selected:
         key = case['id']
-        got, expected = actual.get(key), records[key]
+        got, raw_expected = actual.get(key), records[key]
+        expected = independent_records[key] if key in declared else raw_expected
+        if key in declared:
+            declared_cases.append(key)
         # A NULL reference segment exposes no partial geometry. Program abort
         # agreement checks its explicit result; the query separately checks
         # determinism/alignment of Roc's returned bounded partial work.
         comparable = {k: got.get(k) for k in expected} if got else None
         if got and not expected['success']:
             comparable = {'success': got.get('success'), 'abort': got.get('abort'), 'glyphs': []}
+        raw_comparable = {k: got.get(k) for k in raw_expected} if got else None
+        if got and not raw_expected['success']:
+            raw_comparable = {'success': got.get('success'), 'abort': got.get('abort'), 'glyphs': []}
+        if raw_comparable == raw_expected:
+            raw_default_agree += 1
         if got is None or got.get('budgets') or got.get('engine') != 'Graphite' or comparable != expected:
             failures.append(key)
             print('DIFFER', key, 'expected', expected, 'actual', got, file=sys.stderr)
-    report = {'cases': len(selected), 'agree': len(selected) - len(failures), 'failures': failures, 'process_failures': process_failures, 'provenance': provenance}
+    report = {'cases': len(selected), 'agree': len(selected) - len(failures), 'failures': failures, 'process_failures': process_failures, 'provenance': provenance, 'raw_reference_agree': raw_default_agree, 'declared_preload_cases': declared_cases}
     if args.output:
         args.output.write_text(json.dumps(report, indent=2) + '\n')
-    print(f"{report['agree']}/{len(selected)} exact public geometry runs agree; {len(process_failures)} process failures")
+    print(f"{report['agree']}/{len(selected)} exact public geometry runs agree; {len(process_failures)} process failures; {len(declared_cases)} declared preload cases checked against independent cached facts")
     return bool(failures or process_failures)
 
 

@@ -1,0 +1,21 @@
+{
+  "scope": "BEFORE ONLY; degenerate all-zero-advance matched-output fixture",
+  "speed_bundle_label": "2qu",
+  "query_bundle_label": "Hqk",
+  "query_source": "5e5c31d",
+  "query_sha256": "8b4212239a91f239762a3fdc6c5db6054cbd5801a98db6cb87ac6213b0229be5",
+  "speed_binary_sha256": "e53500015e275ef8250d3d182209f8a2827fcfd98b78be1d52ce39b32bddfac1",
+  "allocation_binary_sha256": "11cbba83e037182962b4f85dcf2032adad3d6adb479e25e230ebf5951c6aec07",
+  "benchmark_runner_sha256": "a987295f690b961403460777fd2a647a4274f09554a8b893001aedd8a65ab56f",
+  "native_reference_wrapper_source_sha256": "9421b3b8943c9a21c5b94deec3dd40122d9cb210067c4caf5f8ba356995f9301",
+  "native_reference_wrapper_binary_sha256": "b7d6542ca3fcf7daf9bca5cd81f68cd314306cdd4084aa810159453997a686da",
+  "compiler_report": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "compiler_sha256_reported_by_runner": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "notes": [
+    "The preserved 2qu speed apps and Hqk query are distinct snapshots, both before the deleted-intermediate traversal change.",
+    "No Roc binary was rebuilt. The existing original C reference wrapper alone was recompiled by the authorized runner.",
+    "Read/plan and process startup are outside the measured loops; five interleaved samples of16 executions per size.",
+    "This degenerate fixture is not a representative font workload and establishes no after speedup.",
+    "Requested and peak live bytes are unavailable in roc-fuzz0.4.3."
+  ]
+}

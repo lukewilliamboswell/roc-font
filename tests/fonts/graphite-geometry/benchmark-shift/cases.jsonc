@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "geometry-benchmark-shifting-parts-4",
+      "font": "benchmark-shift/shifting-parts.ttf",
+      "text": "abababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 4
+    },
+    {
+      "id": "geometry-benchmark-shifting-parts-8",
+      "font": "benchmark-shift/shifting-parts.ttf",
+      "text": "abababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 8
+    },
+    {
+      "id": "geometry-benchmark-shifting-parts-16",
+      "font": "benchmark-shift/shifting-parts.ttf",
+      "text": "abababababababababababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 16
+    }
+  ]
+}

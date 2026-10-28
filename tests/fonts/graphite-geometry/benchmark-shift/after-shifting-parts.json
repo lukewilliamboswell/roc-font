@@ -1,0 +1,198 @@
+{
+  "family": "caller",
+  "text_piece": "ab",
+  "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+  "script": "Arab",
+  "direction": "rtl",
+  "bundle": "http://127.0.0.1:57370/2W7jXeGa8iiQ1dMcT9LbB1rvHBJdsp5srYzvnqC3r6Dg.tar.zst",
+  "compiler": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "binary_sha256": "1a72fa344c586330ba9fad3a1c0f87cd761ee19cdc4d6711d1fce01a936b989d",
+  "allocation_binary_sha256": "d3f0c90c532f1e57489e761f9863bb70bfa1dea2769218db5327998ed9dc262a",
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "graphite2": "1.3.14",
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1,
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "rows": [
+    {
+      "copies": 4,
+      "scalars": 8,
+      "utf8_bytes": 8,
+      "input_checksum": 7572149243533841,
+      "output_checksum": 8693018508798741868,
+      "allocations": 149,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 114825.5625,
+          "hb_graphite_ns": 23000.0,
+          "ratio": 4.992415760869565,
+          "before_roc_ns": 134497.4375,
+          "before_ratio": 5.8477146739130434
+        },
+        {
+          "roc_ns": 97862.0,
+          "hb_graphite_ns": 6625.0,
+          "ratio": 14.771622641509435,
+          "before_roc_ns": 109088.5,
+          "before_ratio": 16.466188679245285
+        },
+        {
+          "roc_ns": 97312.5,
+          "hb_graphite_ns": 6500.0,
+          "ratio": 14.971153846153847,
+          "before_roc_ns": 108872.375,
+          "before_ratio": 16.749596153846152
+        },
+        {
+          "roc_ns": 97054.6875,
+          "hb_graphite_ns": 6187.5,
+          "ratio": 15.68560606060606,
+          "before_roc_ns": 108921.875,
+          "before_ratio": 17.603535353535353
+        },
+        {
+          "roc_ns": 96901.0625,
+          "hb_graphite_ns": 6125.0,
+          "ratio": 15.820581632653061,
+          "before_roc_ns": 108838.5,
+          "before_ratio": 17.769551020408162
+        }
+      ],
+      "median_ratio": 14.971153846153847,
+      "before_allocations": 149,
+      "before_leaked": 0,
+      "before_median_ratio": 16.749596153846152
+    },
+    {
+      "copies": 8,
+      "scalars": 16,
+      "utf8_bytes": 16,
+      "input_checksum": 16659621471890172701,
+      "output_checksum": 12645660546436526332,
+      "allocations": 278,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 263226.5625,
+          "hb_graphite_ns": 13437.5,
+          "ratio": 19.58895348837209,
+          "before_roc_ns": 411182.3125,
+          "before_ratio": 30.599613953488372
+        },
+        {
+          "roc_ns": 263203.125,
+          "hb_graphite_ns": 13187.5,
+          "ratio": 19.958530805687204,
+          "before_roc_ns": 410557.3125,
+          "before_ratio": 31.132308056872038
+        },
+        {
+          "roc_ns": 262872.375,
+          "hb_graphite_ns": 12937.5,
+          "ratio": 20.31863768115942,
+          "before_roc_ns": 411263.0625,
+          "before_ratio": 31.788449275362318
+        },
+        {
+          "roc_ns": 262593.75,
+          "hb_graphite_ns": 13000.0,
+          "ratio": 20.19951923076923,
+          "before_roc_ns": 412437.5,
+          "before_ratio": 31.72596153846154
+        },
+        {
+          "roc_ns": 262638.0,
+          "hb_graphite_ns": 13125.0,
+          "ratio": 20.010514285714287,
+          "before_roc_ns": 410039.0625,
+          "before_ratio": 31.241071428571427
+        }
+      ],
+      "median_ratio": 20.010514285714287,
+      "before_allocations": 278,
+      "before_leaked": 0,
+      "before_median_ratio": 31.241071428571427
+    },
+    {
+      "copies": 16,
+      "scalars": 32,
+      "utf8_bytes": 32,
+      "input_checksum": 10812079976431546677,
+      "output_checksum": 128593753864890188,
+      "allocations": 534,
+      "leaked": 0,
+      "samples": [
+        {
+          "roc_ns": 755132.8125,
+          "hb_graphite_ns": 33750.0,
+          "ratio": 22.374305555555555,
+          "before_roc_ns": 1592671.875,
+          "before_ratio": 47.19027777777778
+        },
+        {
+          "roc_ns": 750299.5,
+          "hb_graphite_ns": 31937.5,
+          "ratio": 23.492743639921724,
+          "before_roc_ns": 1587502.5625,
+          "before_ratio": 49.70653816046967
+        },
+        {
+          "roc_ns": 754966.125,
+          "hb_graphite_ns": 31500.0,
+          "ratio": 23.967178571428573,
+          "before_roc_ns": 1597416.625,
+          "before_ratio": 50.71163888888889
+        },
+        {
+          "roc_ns": 750950.5,
+          "hb_graphite_ns": 34375.0,
+          "ratio": 21.84583272727273,
+          "before_roc_ns": 1598307.3125,
+          "before_ratio": 46.49621272727273
+        },
+        {
+          "roc_ns": 751270.875,
+          "hb_graphite_ns": 33750.0,
+          "ratio": 22.259877777777778,
+          "before_roc_ns": 1624429.6875,
+          "before_ratio": 48.13125
+        }
+      ],
+      "median_ratio": 22.374305555555555,
+      "before_allocations": 534,
+      "before_leaked": 0,
+      "before_median_ratio": 48.13125
+    }
+  ],
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "notes": [
+    "Font read and plan excluded; five interleaved samples,16 executions each.",
+    "Actual Graphite backend asserted; identical byte input and ordered glyph/cluster/advance/offset/flag checksum asserted against HB14.6 Graphite adapter.",
+    "roc-fuzz0.4.3 does not expose requested or peak live bytes."
+  ],
+  "before_bundle": "http://127.0.0.1:56437/BphJj3Vttc8GRLAB6xuuk2X85mFY6WZRtmzuhXPM6xTh.tar.zst",
+  "before_binary_sha256": "aeb8637df81d8ddbc4572440d75e458e50433070c4ed68efdcd1c8aac884acb9",
+  "before_allocation_binary_sha256": "ffffdb2aa136f25f47bc6879715aeeb363aaaa2c5063440dc596f3674e6fa781",
+  "source_snapshot": "e3edf5c in isolated graphite-pruning-bench, exact Collision at f53b287; no NSM draft",
+  "source_core_commits": [
+    "276ba54",
+    "eb2beaa",
+    "8513ec8",
+    "39d7059",
+    "f53b287"
+  ],
+  "consumer_contract_commits": [
+    "405956f",
+    "1d2806e",
+    "e9bfe6f"
+  ],
+  "raw_report_sha256": "adeb446060eafc07385c57219ee5ff47d51f9bdae15ebf62e02e1c07da5925a4",
+  "scope": "Paired before/after caller inputs only; broad real-font parity and final snapshot fuzz remain separate gates."
+}

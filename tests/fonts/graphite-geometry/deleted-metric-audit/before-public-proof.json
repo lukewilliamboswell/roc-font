@@ -1,0 +1,2574 @@
+{
+  "query_sha256": "2561729dc26e4f29ffe6a2ccd72b4c9dd47585be3be38373bec51a3fcaa993d4",
+  "scope": "preserved pre-metric-correction public query; historical evidence only",
+  "rows": [
+    {
+      "id": "collision-deleted-metric-intermediate-8-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-8-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-head-8-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-head-8-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-2-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-2-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              600,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              940,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-middle-2-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-tail-2-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-head-2-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              770,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-5-0-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              300,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              300,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-5-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              300,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              160,
+              340
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -5080,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              460,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-middle-5-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-tail-5-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9080,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-head-5-1-ltr",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              80,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              380,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-8-1-rtl",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -4920,
+              340
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              5080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -4920,
+              340
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-1-rtl",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9000,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -9000,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-1-rtl",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              9080,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 1,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              9000,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-deleted-metric-head-8-1-rtl",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              524,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 5,
+            "cluster": 4,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              80,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 0,
+            "advance": [
+              524,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    }
+  ]
+}

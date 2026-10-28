@@ -1,0 +1,18 @@
+{
+  "cases": 1374,
+  "agree": 1370,
+  "failures": [
+    "collision-kern-frame-pass-reset",
+    "collision-kern-frame-promotion-prior-y-0",
+    "collision-kern-frame-promotion-downstream-0-False",
+    "collision-kern-frame-promotion-downstream-17-False"
+  ],
+  "process_failures": [],
+  "provenance": {
+    "oracle_records": "face0-records.json",
+    "oracle_sha256": "e6bb70776c84b8f3ceda8899cba0291720661c279b5aea14f32e70d74916f173",
+    "binary_sha256": "896a029e0ece70ffd736af645fc4396172d85b242f98d8b3435463349c0bdf34"
+  },
+  "raw_reference_agree": 1370,
+  "declared_preload_cases": []
+}

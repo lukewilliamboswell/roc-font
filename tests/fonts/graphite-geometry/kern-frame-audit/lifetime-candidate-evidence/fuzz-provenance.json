@@ -1,0 +1,20 @@
+{
+  "source_snapshot": "f47895c; corrected frame, prior-overlap, retained deleted nodes, head-only DELETE and valid-current abort",
+  "bundle": "FUmiew97AKLoH5U41SLgKCtWhjoLmFrom8V4xpYtfJmE.tar.zst",
+  "bundle_sha256": "790bde9d3b8f423bb52f85af5baeb249c1aea537def2661188807642971af466",
+  "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "source_sentinel": true,
+  "build_command": [
+    "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "build",
+    "--opt=speed",
+    "--fuzz",
+    "fuzz/font-graphite-geometry.roc",
+    "--output=/private/tmp/graphite-geometry-fuzz-lifetime-native/state/fuzz/bin/font-graphite-geometry",
+    "--replace-dep",
+    "./package/main.roc",
+    "http://127.0.0.1:61129/FUmiew97AKLoH5U41SLgKCtWhjoLmFrom8V4xpYtfJmE.tar.zst"
+  ],
+  "target_sha256": "79791e8b59b175943e885361bb710b83dd1688e0fc351d10086969a73f9a535b"
+}

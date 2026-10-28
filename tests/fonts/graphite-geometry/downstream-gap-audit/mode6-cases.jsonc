@@ -1,0 +1,1007 @@
+{
+  "cases": [
+    {
+      "id": "collision-empty-gap-ltr-finite-empty",
+      "font": "downstream-gap-audit/collision-empty-gap-ltr-finite-empty.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "ltr-finite-empty",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-ltr-empty-finite",
+      "font": "downstream-gap-audit/collision-empty-gap-ltr-empty-finite.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "ltr-empty-finite",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "swap": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-0",
+      "font": "downstream-gap-audit/collision-empty-gap-rtl-mirror-0.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "rtl-mirror-0",
+        "target": [
+          -300,
+          0,
+          0,
+          600
+        ],
+        "finite": [
+          -400,
+          0,
+          -100,
+          600
+        ],
+        "empty": [
+          -500,
+          700,
+          -200,
+          800
+        ],
+        "rtl": true,
+        "swap": false
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-1",
+      "font": "downstream-gap-audit/collision-empty-gap-rtl-mirror-1.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "rtl-mirror-1",
+        "target": [
+          -300,
+          0,
+          0,
+          600
+        ],
+        "finite": [
+          -400,
+          0,
+          -100,
+          600
+        ],
+        "empty": [
+          -500,
+          700,
+          -200,
+          800
+        ],
+        "rtl": true,
+        "swap": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-0",
+      "font": "downstream-gap-audit/collision-empty-gap-rtl-negative-0.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "rtl-negative-0",
+        "target": [
+          700,
+          0,
+          1000,
+          600
+        ],
+        "finite": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "empty": [
+          0,
+          700,
+          50,
+          800
+        ],
+        "rtl": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-1200",
+      "font": "downstream-gap-audit/collision-empty-gap-rtl-negative-1200.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "rtl-negative-1200",
+        "target": [
+          700,
+          0,
+          1000,
+          600
+        ],
+        "finite": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "empty": [
+          1200,
+          700,
+          1250,
+          800
+        ],
+        "rtl": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-0",
+      "font": "downstream-gap-audit/collision-empty-gap-only-empty-0-0.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "only-empty-0-0",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "ignore_finite": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-1",
+      "font": "downstream-gap-audit/collision-empty-gap-only-empty-0-1.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "only-empty-0-1",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          3000,
+          500,
+          3100
+        ],
+        "rtl": false,
+        "ignore_finite": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-0",
+      "font": "downstream-gap-audit/collision-empty-gap-only-empty-1-0.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "only-empty-1-0",
+        "target": [
+          700,
+          0,
+          1000,
+          600
+        ],
+        "finite": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "empty": [
+          1200,
+          700,
+          1250,
+          800
+        ],
+        "rtl": true,
+        "ignore_finite": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-1",
+      "font": "downstream-gap-audit/collision-empty-gap-only-empty-1-1.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "rtl",
+      "face_options": 6,
+      "recipe": {
+        "name": "only-empty-1-1",
+        "target": [
+          700,
+          0,
+          1000,
+          600
+        ],
+        "finite": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "empty": [
+          1200,
+          3000,
+          1250,
+          3100
+        ],
+        "rtl": true,
+        "ignore_finite": true
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-target-cropped",
+      "font": "downstream-gap-audit/collision-empty-gap-target-cropped.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "target-cropped",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "target_parts": [
+          [
+            0,
+            128,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-target-diagonal",
+      "font": "downstream-gap-audit/collision-empty-gap-target-diagonal.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "target-diagonal",
+        "target": [
+          500,
+          0,
+          800,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          100,
+          700,
+          400,
+          800
+        ],
+        "rtl": false,
+        "diag": [
+          0,
+          100,
+          0,
+          100
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-part-only-empty",
+      "font": "downstream-gap-audit/collision-empty-gap-part-only-empty.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "part-only-empty",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          0,
+          500,
+          1200
+        ],
+        "rtl": false,
+        "empty_parts": [
+          [
+            0,
+            255,
+            213,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-part-finite-empty",
+      "font": "downstream-gap-audit/collision-empty-gap-part-finite-empty.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "part-finite-empty",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          0,
+          500,
+          1200
+        ],
+        "rtl": false,
+        "empty_parts": [
+          [
+            0,
+            255,
+            0,
+            128,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            213,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-part-empty-finite",
+      "font": "downstream-gap-audit/collision-empty-gap-part-empty-finite.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "part-empty-finite",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          0,
+          500,
+          1200
+        ],
+        "rtl": false,
+        "empty_parts": [
+          [
+            0,
+            255,
+            213,
+            255,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            0,
+            128,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-empty-cropped-x",
+      "font": "downstream-gap-audit/collision-empty-gap-empty-cropped-x.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "empty-cropped-x",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "empty_parts": [
+          [
+            128,
+            255,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-hole-low",
+      "font": "downstream-gap-audit/collision-empty-gap-hole-low.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "hole-low",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          250,
+          500,
+          300
+        ],
+        "rtl": false,
+        "target_parts": [
+          [
+            0,
+            255,
+            0,
+            43,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-hole-high",
+      "font": "downstream-gap-audit/collision-empty-gap-hole-high.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "hole-high",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          250,
+          500,
+          300
+        ],
+        "rtl": false,
+        "target_parts": [
+          [
+            0,
+            255,
+            213,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-hole-separated",
+      "font": "downstream-gap-audit/collision-empty-gap-hole-separated.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "hole-separated",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          250,
+          500,
+          300
+        ],
+        "rtl": false,
+        "target_parts": [
+          [
+            0,
+            255,
+            0,
+            43,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            213,
+            255,
+            0,
+            255,
+            0,
+            255
+          ]
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-target-child-far",
+      "font": "downstream-gap-audit/collision-empty-gap-target-child-far.ttf",
+      "text": "abcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "target-child-far",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "child": [
+          500,
+          3000,
+          800,
+          3600
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230019030000230001fd2602030000230303000023080300002304030000230932"
+    },
+    {
+      "id": "collision-empty-gap-target-child-inside",
+      "font": "downstream-gap-audit/collision-empty-gap-target-child-inside.ttf",
+      "text": "abcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "target-child-inside",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "child": [
+          500,
+          300,
+          800,
+          400
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230019030000230001fd2602030000230303000023080300002304030000230932"
+    },
+    {
+      "id": "collision-empty-gap-two-empty",
+      "font": "downstream-gap-audit/collision-empty-gap-two-empty.ttf",
+      "text": "abcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "two-empty",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "extra": [
+          800,
+          700,
+          1100,
+          800
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-two-empty-swapped",
+      "font": "downstream-gap-audit/collision-empty-gap-two-empty-swapped.ttf",
+      "text": "abcd",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "two-empty-swapped",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          800,
+          700,
+          1100,
+          800
+        ],
+        "rtl": false,
+        "extra": [
+          200,
+          700,
+          500,
+          800
+        ]
+      },
+      "action_hex": "030000230019030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-margin13",
+      "font": "downstream-gap-audit/collision-empty-gap-margin13.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "margin13",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "margin": 13
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-margin30",
+      "font": "downstream-gap-audit/collision-empty-gap-margin30.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "margin30",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false,
+        "margin": 30
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-margin101",
+      "font": "downstream-gap-audit/collision-empty-gap-margin101.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "margin101",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          1000,
+          500,
+          1100
+        ],
+        "rtl": false,
+        "margin": 101
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    },
+    {
+      "id": "collision-empty-gap-width400",
+      "font": "downstream-gap-audit/collision-empty-gap-width400.ttf",
+      "text": "abc",
+      "script": "Latn",
+      "direction": "ltr",
+      "face_options": 6,
+      "recipe": {
+        "name": "width400",
+        "target": [
+          0,
+          0,
+          400,
+          600
+        ],
+        "finite": [
+          100,
+          0,
+          400,
+          600
+        ],
+        "empty": [
+          200,
+          700,
+          500,
+          800
+        ],
+        "rtl": false
+      },
+      "action_hex": "030000230019030000230019030000230032"
+    }
+  ]
+}

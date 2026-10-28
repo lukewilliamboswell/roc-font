@@ -1,0 +1,296 @@
+{
+  "oracle": {
+    "engine": "OTS",
+    "version": "ots 9.3.0",
+    "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
+    "source_commit": "884861e"
+  },
+  "records": [
+    {
+      "id": "collision-deleted-metric-intermediate-8-0-ltr",
+      "font_sha256": "6b02c844411d7d0d12bcb85731d8cc56b3e35d6e2237dcd7c1d8ad4875335b84",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "f2833dc90556dcb61fac6e66ff2b76dc0e8c97e4b180273b37f10cd4ef6d1da3"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-8-1-ltr",
+      "font_sha256": "25af572f526f0c4b309f14ed8d6b82098e794f09f396686a846cae059e29ac97",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "0b044a06b017cd966555ae11081bd4184c53028b3e7461f44c382bd94df20545"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-0-ltr",
+      "font_sha256": "81297ec4839d50ddde18d6c62be4b177dccb70464f987e08fed263d5ec5add15",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "310cba3a062b718e2fe760980a98b18056a29df93edffb3119de63f4eccb5912"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-1-ltr",
+      "font_sha256": "6536d32d6addb35a9f274536539004299d62e9c340a00349ae3a2472edc17793",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "52a2043499e0cd5f83142cfc5e68cc76a3713d71c2cb2132f723f5a43502f232"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-0-ltr",
+      "font_sha256": "71f3c734c132be6438504f7b8f5bc9f3678057ccdc30d61cbdbd0b6452f7edb2",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "51c8f1e10649d2208268d3d2696b5e063c1922ae7f7fb6de42bfbac57219d413"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-1-ltr",
+      "font_sha256": "c1ac0714a4ed5446663c0091ad307707bc7642b1a926cc9b78d3daaf899d4ad5",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "8ee21556c1c6852406a477fb684837ce5dcf7fea7f508e98f83f373e5f4a739a"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-head-8-0-ltr",
+      "font_sha256": "691ee973f83d2e8f822e7f62a47cd8d721ffcb0dc1436716ac30c49f280b2075",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "46c6218ac70697c72b9ec8ec0fafa5b3ee6de222123cb3c0663b5c703c2739d4"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-head-8-1-ltr",
+      "font_sha256": "3dc1eca3d5ad83dca6f2465339d6819a99282640b08528a0da93b99770ee7103",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "4409ccc7e8569161f23897ac23cd5ea0549737c84a634711ebe02c7a19a40af0"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-2-0-ltr",
+      "font_sha256": "21e13ec8a5ba05d8ccb9fa4e3835072a5a8840978ac19cb9c540d7a382be183e",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "aa9fab4d2bd21b8ed85f3b2f31f4f8fd02431f007a1fc010c4e25ac9ef0c4479"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-2-1-ltr",
+      "font_sha256": "5bb7883e41c5c88a52396b2e4a4eda03a87bc097eda484a0019cf4ba90fb3ed3",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "5b8e61ef4cbe73211cce03b20fa151f8526ae73dd5cd5fb22274a3dab620ab05"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-middle-2-1-ltr",
+      "font_sha256": "1131cb93c11e42e82d4127b26f2993e4199d06b6f647a892b1d92f7c628f42ce",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "b36b4ee6878156c492e9901e0fcbbe6202558a58889247d8cb410f21c065ff5c"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-tail-2-1-ltr",
+      "font_sha256": "87d7c8a0ab74fcfe6bb7ce2c8875ca95c322d46f00cec93447a14548ae361e01",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "78ccc7a44a600f40d25298dc56c9b65223a6603208e0f65cd7eb0cd715b4544f"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-head-2-1-ltr",
+      "font_sha256": "5ccbc49fdf6c14c52ec5b962ce75cee11047f3be945ecfdbc73f365310d3e4aa",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "cb7d084925d20c31aed0cfeee5756e023f0bd5caad257c90df3bf3830db9618c"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-5-0-ltr",
+      "font_sha256": "d45e1ab4337c6eb9a001e6f33f0ba2c812614d6979f94621605bda57aac1fa05",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "a6f2f034b95416de2cd968d2dc973f7e97585e2369a94a382b1cee44c393879f"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-5-1-ltr",
+      "font_sha256": "ebd5f4631731512a111d027cbd66cb298978b71d9e352c953ba000d8694824a5",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "0b64b1aa79a74331e696caf8b702b0ff6f9a9f96e9c612588502bda6b8b4f956"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-middle-5-1-ltr",
+      "font_sha256": "03e87c78a055134fcc32da91c965928105c72029e3d81d1c2caceb1213580881",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "c8ce6c57b3e5f01e2f06a4432f0740a08f3e2e31ad9f8eba64980780b9e4dc8d"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-tail-5-1-ltr",
+      "font_sha256": "17bdd4c099d79f06aabdef126bdfa8e0702eb221efbce25a11d54cdbc3d90e61",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "a655d2db8458affb83f4aa2d4f965e5545d6bf38a55225188ce252790f36b5e4"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-head-5-1-ltr",
+      "font_sha256": "50ea86176f8fad7d80f9896f26640800678c892c84247fba5da5a74b427691e7",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "21e7235924b639f1d9d53364757a3e7963ca41738224c435445f16f18151a527"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-intermediate-8-1-rtl",
+      "font_sha256": "0f581b3881fe163bdfae1a415afcdd08c375193516071d8ea116d7b5e799ac08",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "680835860ef523bcec42b2bdae673dba2d9c093d7286852c1b7db34376a979f8"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-middle-8-1-rtl",
+      "font_sha256": "8956e21ea6bcdc4dce1d1d64d04a755b5b9af7d3318063968115a1167b481a37",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "c20425470d80d41ba5b1a889b2c92945f493c5f296ab1e12d122fceffbd1490e"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-tail-8-1-rtl",
+      "font_sha256": "242bb5088f4202931ab432b7d020390b7e3763d57c04eb9ed2018e35cbf1eb24",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "c0ec9d160a610c806b97b3793f49d2bfe88e4a84aedce0edb4e56cc7e5cd930a"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-metric-head-8-1-rtl",
+      "font_sha256": "64bc1929887a577d9a451868003c3d63004424bc57c2e86ed09ccd5c04e0baa2",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a66d515589cb42b6c08658724721e217a949de4741a92f7aa849703af7664d83",
+        "Gloc": "97098c7e92b4159f75d0b1263dd6b288b61b85884a7bdfe9a2c2b59eb261ea08",
+        "Silf": "e87f004049fad36f6ae9b4160dd78af3a5739df37806942387f8299cab6d7b17"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    }
+  ]
+}

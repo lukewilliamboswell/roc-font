@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "attachment",
+      "font": "attachment.ttf",
+      "script": "Latn",
+      "direction": "ltr",
+      "text": "ab",
+      "sizes": [
+        8,
+        32,
+        128
+      ]
+    },
+    {
+      "id": "kerning-parts",
+      "font": "kerning-parts.ttf",
+      "script": "Arab",
+      "direction": "rtl",
+      "text": "ab",
+      "sizes": [
+        4,
+        8,
+        16
+      ]
+    }
+  ]
+}

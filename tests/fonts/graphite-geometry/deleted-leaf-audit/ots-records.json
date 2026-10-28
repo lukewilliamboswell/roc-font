@@ -1,0 +1,244 @@
+{
+  "oracle": {
+    "engine": "OTS",
+    "version": "ots 9.3.0",
+    "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
+    "source_commit": "884861e"
+  },
+  "records": [
+    {
+      "id": "collision-deleted-leaf-keep-ltr",
+      "font_sha256": "f4b1dd27a61e8b664ce5a6e7e9edff32c12170ed876437dc774a092ed61d2f6d",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "12975fbb2e63af451f745277bc8d8fe0f25303cf365706ee984e98ea3b3471a1"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-d-ltr",
+      "font_sha256": "395f81a75c02ecb8ae4ef4e212ca4030b33399c0918df697f27b1de8a4838032",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "df5c654af10158eaacb0a61ae4352b7f13022f80824744210a6039af6392e84f"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-a-ltr",
+      "font_sha256": "16b1d01021fca6cdc370841ddef6a84767890350938b9f9fd1b6ee984c026eeb",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "78b2f0cde5d3c0881df565430eb10cb7d511bb49a5e6c663cc4ff7d8e43571a3"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-da-ltr",
+      "font_sha256": "e8ffff5e004744ddc4ce1ba7b2d413c20064f6f6e63b055d99c3546f0e6f05c1",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "9c18b36507843d8d4d86e23ea93430e27fc0a02dead94de7a603a70041c4aea2"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-ad-ltr",
+      "font_sha256": "cc7d5f8d8cca6fc9bad890d20da0421c2c2fe73a5a914bdbe414fca9226f632f",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "c985602b7e8f5538dac6da8bb1cc25666dcc3119053d784e78faf563122a1872"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-getter-ltr",
+      "font_sha256": "ea5da52630ee71ef3e081cda401ab15789808a250ea5980c4404a245b9e562d0",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "8c4aad66425c586885642fec1660e34ab2e000b6ff6611f48c833ae80d523ae6"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-getter-detached-ltr",
+      "font_sha256": "40a7105eb8f1f2a1b64cc490a73a7128aff2460f16ecbcd1daba91d6a4d5e543",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "6d2fa1a2c70a5cd1ba883b6edc340f8d75394b691dc487b12ec13ef239d35a09"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-constant-ltr",
+      "font_sha256": "eeaaf4596b8d78045ca27171a0614f80a57eeb4171f5ad99fa22c30719bd8281",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "c9cd6fe9000f8762bf52d05912e6a606b8b1e988a24141d9950f7f7d21dfd7ab"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-constant-detached-ltr",
+      "font_sha256": "a34735e2dc55b5c128e4ffb29619d46a249ad4c2abce45bb44b2a43fff7036d5",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "7cbb47f6d5e89d972a10f5a69b8e5ed9efdb2baed7d001d041a2e1ca3f420dff"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-keep-rtl",
+      "font_sha256": "5d665c4c47f2c541b5681a3c1902617214983a7d0afad10d18af45b7f3532b3a",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "56c1a9a7605512bca1d6bcdadd9284d96c2abc49b4acacecc6c52210d2b85833"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-d-rtl",
+      "font_sha256": "99e36540cfaaae1df1312fd66fb4d68a1c42c571a6d2c40faf00c8c8c8c60ef1",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "31719f634c94b20c5956f5442181b6050b54aa553dc074c33b112940f0adbb9c"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-a-rtl",
+      "font_sha256": "1eaca870e480108f8caccb202dde932d71802986a04609b5128cfe793287318a",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "fa084650491c6da9abd435579d27e1b684787ad8465cd656852efd65f76ac4cd"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-da-rtl",
+      "font_sha256": "406117cdb4e3fb4ba238444337f4d4e0f84a7d6a84b2d60a15a7964a2bc88ab2",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "6c85fbc85a1eb4a16048e1fc2cdcda4eb070879510aa2a167beed27a6a28dac1"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-delete-ad-rtl",
+      "font_sha256": "db42be50020c7e207a3eb92ff3f7b5ecc3352c1107d31dcbb4025066bfe5d3bb",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "6c822b9968671b755ee947fb13cde653e4ab699e3e9e4ba10a31f446489f9b83"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-getter-rtl",
+      "font_sha256": "c7746e074b69bf08c4e1515e6f05371838f34b4043289b5250730d93c17c12d1",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "e9fb0e8dbac292a994b5fd4f4fe72407209987ef780424df17a28caa0272e900"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-getter-detached-rtl",
+      "font_sha256": "6b411c1c2cec73ed8e34060151d0811bed88f4cb134f13b7951fecf74bae6927",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "aa04cc4100f3ff6d74a91afb98815013b6440b4c4cc06bd86573a8c43e5b5250"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-constant-rtl",
+      "font_sha256": "011ff59b381ae477174e553d9c0be7a91208f194ab2adbfd0c0818224db86798",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "1212390d3115142912a2b2496405619c536a2bd558460fada3bce05707d49662"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-deleted-leaf-constant-detached-rtl",
+      "font_sha256": "70ddcc41d8b7069b13e7ece58534f498f0b70b5e6cb5c9d693db835b0fed84f4",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "d1dc436716c09676b5169e94eb896f004bbfbf87d2e53a1cf5e8dbe1ff9ffc6f"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    }
+  ]
+}

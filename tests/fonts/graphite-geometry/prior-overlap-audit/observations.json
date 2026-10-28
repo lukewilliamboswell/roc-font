@@ -1,0 +1,2461 @@
+{
+  "about": "Bounded observations only. Actual prior offsets come from the first public trace; exact final bits come from unlogged public C-ABI records. The deciding gates/projections in this matrix have exactly representable integer inputs. No general float association, diagonal projection, arbitrary overlapping-gate or numerical-bound proof is inferred.",
+  "raw_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 2,
+    "prior_overlap_extractor": 1,
+    "face_options": "explicit per case",
+    "logging": false
+  },
+  "trace_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "source_archive_sha256": "7a3b342c5681921ce2e0c2496509d30b5b078399d5a7bd2358f95166d57d91df",
+    "build": "Release AppleClang17, GRAPHITE2_NTRACING=OFF, file-face enabled, direct VM",
+    "api": "gr_start_logging public JSON trace",
+    "extractor": 1
+  },
+  "rows": [
+    {
+      "id": "collision-prior-overlap-y-offset-100",
+      "recipe": {
+        "name": "y-offset-100",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 100,
+        "first_upper": 1000
+      },
+      "font_sha256": "38b2cb0effb5a739ccc43d595e0925f455d97e21433a8d204dda9e7480807f07",
+      "raw_key": "1c539ae093f59e9bef7f56cb3e146a4f011e399600a86197f240d3f1c9ee500a",
+      "trace_key": "dbe3da755bcdc5ce2d007cdd2a46895500842aac60211de4eed5c0d3d60b81ed",
+      "first_delta_logged": [
+        0,
+        100
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -430
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          3273654272
+        ],
+        "2": [
+          0,
+          3282370560
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 100,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -270
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1100,
+        "y_max": 900
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-300",
+      "recipe": {
+        "name": "y-offset-300",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 300,
+        "first_upper": 1000
+      },
+      "font_sha256": "c018273869527109f72f0537521b3b67653400c84c6b43d7e58c1634831130cf",
+      "raw_key": "13694396f71d3bb45a7b2f639d2fba7009b2469c9c69d1401571f5843b9fe377",
+      "trace_key": "787b1500b8b62fa51c23ba2c625c3e0faa09562ef6dee3c7222a86572744a03f",
+      "first_delta_logged": [
+        0,
+        300
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -430
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1109393408
+        ],
+        "2": [
+          0,
+          3271688192
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 300,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -470
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1300,
+        "y_max": 700
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-414",
+      "recipe": {
+        "name": "y-offset-414",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 414,
+        "first_upper": 1000
+      },
+      "font_sha256": "e8ec023314e61650eae79ab94679aa5ec6da5e036959c10a95e1488caccad7ec",
+      "raw_key": "c12b7e1cc66f1a3c28b9d1196319bfb08fd160d7b3f6c98dc38af8b00df1ee52",
+      "trace_key": "907606a075fa7b92e5adda7ab3f89a38da0d28e16338ae42fd6104171970fb1e",
+      "first_delta_logged": [
+        0,
+        414
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -430
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1125777408
+        ],
+        "2": [
+          0,
+          3246391296
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 414,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -584
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1414,
+        "y_max": 586
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-415",
+      "recipe": {
+        "name": "y-offset-415",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 415,
+        "first_upper": 1000
+      },
+      "font_sha256": "81800bab454c3b589252f74cb0ab49e221e29fee1198ba5f364bfa36498f88bc",
+      "raw_key": "0103a7d501c28c969aed278796c7d14b384570434175f83dfca36b6b4d2c4144",
+      "trace_key": "e15d2176efff2926fddbae2b00d9465da7146fc483a9bfa23b4981366107f250",
+      "first_delta_logged": [
+        0,
+        415
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -430
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1125842944
+        ],
+        "2": [
+          0,
+          3245342720
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 415,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -585
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1415,
+        "y_max": 585
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-416",
+      "recipe": {
+        "name": "y-offset-416",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 416,
+        "first_upper": 1000
+      },
+      "font_sha256": "313cbc1d4c7681b28af37cbceaa62d4bb9515a05f252e4e3fa96c40aaf52a8bd",
+      "raw_key": "9457edf4d82c0f7acc93387814a9f023851a558498cb85d349730f43753dfcac",
+      "trace_key": "9343a7619d9d27ef8762c7641373fadb309276e6f3da14bba2f5f8431c485f0c",
+      "first_delta_logged": [
+        0,
+        416
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1142063104
+        ],
+        "2": [
+          0,
+          1137704960
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 416,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -586
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1416,
+        "y_max": 584
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-500",
+      "recipe": {
+        "name": "y-offset-500",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 500,
+        "first_upper": 1000
+      },
+      "font_sha256": "eea4c1fac24c9f0ca8ea8c6c34eb222c338d3d642d36130362c33035c4b5233c",
+      "raw_key": "3e883f1e3aa9e1f8e39f6f69bb83dbe149d25648deb462023f3468b6c2fbf853",
+      "trace_key": "0e5d23689ea50bd05176798400f3659998f5bba43ca3e2a0e50b8a3606440e32",
+      "first_delta_logged": [
+        0,
+        500
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1143439360
+        ],
+        "2": [
+          0,
+          1140457472
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 500,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -670
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1500,
+        "y_max": 500
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-600",
+      "recipe": {
+        "name": "y-offset-600",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 600,
+        "first_upper": 1000
+      },
+      "font_sha256": "310cb6f0579a0923cf7e7b59906fa84b572d579fbb48972026f1b1497448f2cd",
+      "raw_key": "61062532f2487a67f5018c4b2b473741dd1ad61b34798a7d54adb632e26c45d2",
+      "trace_key": "707674268b729d4206f60a66fc84a1a891816f7d49d2797f00cda0834f8aeb0a",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 600,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -770
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1600,
+        "y_max": 400
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-800",
+      "recipe": {
+        "name": "y-offset-800",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 800,
+        "first_upper": 1000
+      },
+      "font_sha256": "5b4588c80c0cc06404ea12300ac3d4ce90a4a0332edd458d9541b784d059cf4b",
+      "raw_key": "f3f0cbad17da5fdc7374d1bb3ac916a848af06c702d01351886cf349f60c68fd",
+      "trace_key": "72c255e5457211f5531aacd0a279d44254a5bb5b40dda2fc2c53f45d1381efa2",
+      "first_delta_logged": [
+        0,
+        800
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1148354560
+        ],
+        "2": [
+          0,
+          1145569280
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 800,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        -970
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1800,
+        "y_max": 200
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m10-p465",
+      "recipe": {
+        "name": "y-h300-r80-m10-p465",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 465,
+        "first_upper": 2000
+      },
+      "font_sha256": "15bc1fb21f615f91d4aa7a11534369db4b2d09c2c05c55371dc520f80721d768",
+      "raw_key": "6f687445ac019b91b9fce585dcf55fa4e043b551ffd1deece3100bc0d1c71405",
+      "trace_key": "a22c22e4d523ac2e2903dcebf44aad24ab183e6f64b8e76419da418c1b61c164",
+      "first_delta_logged": [
+        0,
+        465
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -465
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1117782016
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 465,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -545
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1465,
+        "y_max": 535
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m10-p466",
+      "recipe": {
+        "name": "y-h300-r80-m10-p466",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 466,
+        "first_upper": 2000
+      },
+      "font_sha256": "a8c9fa7500798f3625099f16db628be6938b1f04fdc3ca10f52cbfda5234a0f3",
+      "raw_key": "e29dd9cdc17f7461c8662d6a87e2f2ec0a2559ffd782b6861494858909cfb4c9",
+      "trace_key": "0565544d2168c62c203edf5758a5eb9604b52f0a85996ca303ab2456512400d1",
+      "first_delta_logged": [
+        0,
+        466
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1141407744
+        ],
+        "2": [
+          0,
+          1139343360
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 466,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -546
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1466,
+        "y_max": 534
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m30-p475",
+      "recipe": {
+        "name": "y-h300-r80-m30-p475",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 475,
+        "first_upper": 2000
+      },
+      "font_sha256": "d3b833372acbae0f912f89ef6d9691d88d0a0e57337a38d0f0db2e73eaea17a9",
+      "raw_key": "bae6bb0d647878d279c52ad95d776825d6cb8a89f30c79b887c690956ad4c868",
+      "trace_key": "282c359b6eac813f0dd536aa235aaf0ff2ca61cf2c480c4ef2915a49ce4dc692",
+      "first_delta_logged": [
+        0,
+        475
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -475
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1117782016
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 475,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -555
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1475,
+        "y_max": 525
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m30-p476",
+      "recipe": {
+        "name": "y-h300-r80-m30-p476",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 476,
+        "first_upper": 2000
+      },
+      "font_sha256": "969b33671bbac81a9726dabb48df1fe4dca36639a15dcc78aef026f8e97736d3",
+      "raw_key": "35f0e25c56a4449f0e5a89fee09a36b3ffa9eaf0d117b169da70b4d88600e87b",
+      "trace_key": "9cb57ddd7a25fe64b1a102088b84cc533c1ac5be65eee5a901d4a1b0beb7e288",
+      "first_delta_logged": [
+        0,
+        476
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1141571584
+        ],
+        "2": [
+          0,
+          1139671040
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 476,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -556
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1476,
+        "y_max": 524
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m10-p355",
+      "recipe": {
+        "name": "y-h300-r300-m10-p355",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 355,
+        "first_upper": 2000
+      },
+      "font_sha256": "ae6a12cc0c194843143cb4a6445d5438dca6bbb309c697f620ded51071c243df",
+      "raw_key": "c59edf83bfb4a0a7161f14d003cf5251101f89a7d0b7329c4041c01c1732129f",
+      "trace_key": "e4aa0ce408d796e176b5e3c759ede571ed17209b2c0a362715ac6c4d12e76772",
+      "first_delta_logged": [
+        0,
+        355
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -355
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1133903872
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 355,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -655
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1355,
+        "y_max": 645
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m10-p356",
+      "recipe": {
+        "name": "y-h300-r300-m10-p356",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 356,
+        "first_upper": 2000
+      },
+      "font_sha256": "4690df9e3eb81794ae29d31849b8064829965addf50a27b1b3a2be796561e6eb",
+      "raw_key": "eae566ee5579203dd74ba0d810dcf56b49258d3181012d18f511d7d9876ba795",
+      "trace_key": "dfcde16c7bcc10ed826bc724fe01d76b7d54d17c5c775ba147c1400179e566c1",
+      "first_delta_logged": [
+        0,
+        356
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1143209984
+        ],
+        "2": [
+          0,
+          1135738880
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 356,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -656
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1356,
+        "y_max": 644
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m30-p365",
+      "recipe": {
+        "name": "y-h300-r300-m30-p365",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 365,
+        "first_upper": 2000
+      },
+      "font_sha256": "bd46886c27ed180345fec4c6d8147ffca29b1ad3fa186238f7354bacbfcf2350",
+      "raw_key": "a09ed2cf90eb71d7ddf35d77a7b23b13df40e48f2d5017fcd672b0becb4c899a",
+      "trace_key": "6118827d5c3ccde6297441a61f74d1bc640713c146b90ba3a2c0030b73bdb85b",
+      "first_delta_logged": [
+        0,
+        365
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -365
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1133903872
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 365,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -665
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1365,
+        "y_max": 635
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m30-p366",
+      "recipe": {
+        "name": "y-h300-r300-m30-p366",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 366,
+        "first_upper": 2000
+      },
+      "font_sha256": "bc96212cbff3c8624f6ccb29e9ef22acfb0ba892e109b047793843fdc04592c8",
+      "raw_key": "c18ae3053b4a007499386804815bf0881be13f035a23a10698213efc093f4422",
+      "trace_key": "57d816b134435546a3949edaae0cc445baf89ab4d55e934126e150d99e6c3dda",
+      "first_delta_logged": [
+        0,
+        366
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1143373824
+        ],
+        "2": [
+          0,
+          1136066560
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 366,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -666
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1366,
+        "y_max": 634
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m10-p465",
+      "recipe": {
+        "name": "y-h900-r80-m10-p465",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 465,
+        "first_upper": 2000
+      },
+      "font_sha256": "fbe267ed0435902502af693537f899ed88c7ef20a3c8197b40857bb35cde7465",
+      "raw_key": "2692733ceaa0b262f063cd6de6faf4980afcc3e0f25ebd5e9492bc312208b81f",
+      "trace_key": "d4297e40a912765553a1f0da8444c36cff1210abb200cce46611f6cd43d94004",
+      "first_delta_logged": [
+        0,
+        465
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -820
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          3280568320
+        ],
+        "2": [
+          0,
+          3283189760
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 465,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -545
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1465,
+        "y_max": 535
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m10-p466",
+      "recipe": {
+        "name": "y-h900-r80-m10-p466",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 466,
+        "first_upper": 2000
+      },
+      "font_sha256": "df6cbe00418395277f834a1e621486229fc7dfb30381567a9297049d460ef137",
+      "raw_key": "e44837f5835b2e60977f95e364758fe7d9acaf4a444b4ff386f527a2e4c0d134",
+      "trace_key": "aaf3aad19e43ac60d5dcb230699b4a4b3732797f34edf5c7cc5cc0ce69d57f72",
+      "first_delta_logged": [
+        0,
+        466
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1141407744
+        ],
+        "2": [
+          0,
+          1139343360
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 466,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -546
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1466,
+        "y_max": 534
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m30-p475",
+      "recipe": {
+        "name": "y-h900-r80-m30-p475",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 475,
+        "first_upper": 2000
+      },
+      "font_sha256": "55f1fe52cb3230495313654cacfce00788cf4371a8f95e0fa2178c4666d0cdb3",
+      "raw_key": "caff07f7b895db673462815c6dd518c1c773ceae2d33c1be94e600aa5394def2",
+      "trace_key": "4fa21c762f35c8a293721ebfca79a674d611580ee1c1f42f1893cc52e66f0fca",
+      "first_delta_logged": [
+        0,
+        475
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -820
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          3280240640
+        ],
+        "2": [
+          0,
+          3282862080
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 475,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -555
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1475,
+        "y_max": 525
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m30-p476",
+      "recipe": {
+        "name": "y-h900-r80-m30-p476",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 476,
+        "first_upper": 2000
+      },
+      "font_sha256": "14ef1b5494c248f406165a8e4ebb009bcb293ec2f124f34a207815f3777932fe",
+      "raw_key": "1c6c7d018f1a9aaaceb285a811180ce7267d396757cbcd26c50ba54dc97fc158",
+      "trace_key": "57b500cee7dc9c067b04787f55d8e34419c334aefd1191f8bee117e153b007a5",
+      "first_delta_logged": [
+        0,
+        476
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1141571584
+        ],
+        "2": [
+          0,
+          1139671040
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 476,
+      "physical_displacement": [
+        -80,
+        -80
+      ],
+      "gate_displacement": [
+        -80,
+        -556
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1476,
+        "y_max": 524
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m10-p355",
+      "recipe": {
+        "name": "y-h900-r300-m10-p355",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 355,
+        "first_upper": 2000
+      },
+      "font_sha256": "8ed2f46649d32b8cf4234112afbd3d27003dcdd26cbb823e9a1191c0450dc1dd",
+      "raw_key": "55e0fb071ac03fd91cd0589d591e533c1d827dc10f29f039294f0d5db86075b0",
+      "trace_key": "6e17b16dc1b9900ead975d4cf57a459084e0fa411bb711229c975f77074d896e",
+      "first_delta_logged": [
+        0,
+        355
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -600
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1113325568
+        ],
+        "2": [
+          0,
+          3279224832
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 355,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -655
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1355,
+        "y_max": 645
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m10-p356",
+      "recipe": {
+        "name": "y-h900-r300-m10-p356",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 356,
+        "first_upper": 2000
+      },
+      "font_sha256": "cd077d81303e4e2aa30bbe9bf117ea59c0b26b6d37efb3189898641b85a547fb",
+      "raw_key": "715f87fe897cc0c5072fecb9c1e079d11bf92be15ada3f614b8085b88312fb29",
+      "trace_key": "14f941f8b41e202f63db3b6f46dcb16e7945ccd60656ef8f9320d8d6606d41a6",
+      "first_delta_logged": [
+        0,
+        356
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1143209984
+        ],
+        "2": [
+          0,
+          1135738880
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 356,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -656
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1356,
+        "y_max": 644
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m30-p365",
+      "recipe": {
+        "name": "y-h900-r300-m30-p365",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 365,
+        "first_upper": 2000
+      },
+      "font_sha256": "928c8f4ec8419e9af6e644791daf5b2fc2817e9db94ae653c6e6bc43e80408ab",
+      "raw_key": "3c2b393ea30c6ea033d887822e0db2ab7431f35e19063481d84334c7708d3b8b",
+      "trace_key": "4d28cf9c06fb46d42cf23e3936f6a8af93819efb0dbde130e0d2fac05fc3c93b",
+      "first_delta_logged": [
+        0,
+        365
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        -605.909
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1114397984
+        ],
+        "2": [
+          0,
+          3278956728
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 365,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -665
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1365,
+        "y_max": 635
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m30-p366",
+      "recipe": {
+        "name": "y-h900-r300-m30-p366",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 366,
+        "first_upper": 2000
+      },
+      "font_sha256": "7d6047233329ae3e907d58d2a4327420872cc93358a5c880f2b64a95c589bd75",
+      "raw_key": "42cf547632426902a0d6a9df36d077ac13d2aacba1f09b375b0c6ce9ab32ab49",
+      "trace_key": "76405c12af45c84ae68fb5cc2a2dad21f4e8997b2f30e2bea37cbb4ae1612e5a",
+      "first_delta_logged": [
+        0,
+        366
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1143373824
+        ],
+        "2": [
+          0,
+          1136066560
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 366,
+      "physical_displacement": [
+        -80,
+        -300
+      ],
+      "gate_displacement": [
+        -80,
+        -666
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -1366,
+        "y_max": 634
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-negative--885",
+      "recipe": {
+        "name": "y-negative--885",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": -885,
+        "first_upper": 2000
+      },
+      "font_sha256": "862985f1d242f5e4d7858655d86e508ee22e3ef55f3f8a7a3a6a2a4d02e82467",
+      "raw_key": "0defff90d18975377532d65005aaeb71b616bdad2b26348f388fa9c88bf27c15",
+      "trace_key": "0acb40004ee43938b99fa3ce156343a1f98eb6ba91458b86619e9ab07ce6a777",
+      "first_delta_logged": [
+        0,
+        -885
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        885
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1126825984
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": -885,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        715
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -115,
+        "y_max": 1885
+      },
+      "x_overlap": true,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-y-negative--886",
+      "recipe": {
+        "name": "y-negative--886",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": -886,
+        "first_upper": 2000
+      },
+      "font_sha256": "8fa587734279bde05237c45085e3aebb4da6861da90de013e5b37c66317aa08e",
+      "raw_key": "dd21341b321445bd7199e52b8f2a9d23d44c285276286d954b6cac435d0f1e4f",
+      "trace_key": "4a541ad43c24ea84c4fdf5ba99bb62ab77a1d5bf6bce3bd649ace928fd28b526",
+      "first_delta_logged": [
+        0,
+        -886
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          3291676672
+        ],
+        "2": [
+          0,
+          3294461952
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": -886,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -80,
+        716
+      ],
+      "window": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -114,
+        "y_max": 1886
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "X",
+        "low": -220,
+        "high": 380,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p460",
+      "recipe": {
+        "name": "x-m0-p460",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": 460
+      },
+      "font_sha256": "982520172eb84f9ed5d3da73bd1eb208e2bb357199ea1eadbad8908233ed390a",
+      "raw_key": "b2d6ffc194b7e4c0db02d968134d6bb7f7ef5e81f27ca53607c48e7b82e71767",
+      "trace_key": "ffba02c7a7742eedbd9ddfdcaa4996320f0d90c0b89c3e2a7da045ed264fd7d5",
+      "first_delta_logged": [
+        460,
+        0
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        -460,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1126825984
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 460,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -540,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 540,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": true,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p461",
+      "recipe": {
+        "name": "x-m0-p461",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": 461
+      },
+      "font_sha256": "5107a1f3f0ae821a59f20186a45e23fe0d1af15e5213bd9cb785c59d7a4371c1",
+      "raw_key": "36b00db8e7136e66b8ebebb41d0282e7973ec04e3dc73a60ad66a33022a2ff51",
+      "trace_key": "6833ce6f961093c7fdb5e74324e76db3e9b09f0d6680cd8ff844520f3eed9e2d",
+      "first_delta_logged": [
+        461,
+        0
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1141325824,
+          1126825984
+        ],
+        "2": [
+          1139179520,
+          0
+        ],
+        "3": [
+          1142964224,
+          0
+        ]
+      },
+      "actual_prior": 461,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -541,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 539,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p465",
+      "recipe": {
+        "name": "x-m10-p465",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": 465
+      },
+      "font_sha256": "37e1bce85252c844dea0480f16c454415242f41160f76f23eafa065144d2bbd0",
+      "raw_key": "7301c8bbd87b816fc3250364d6c49921254f107164ac375df935d5dd17f74dc5",
+      "trace_key": "8a1600963ddb4998e34d30f9e2319bc389dfa7e5ec921ebcc081682bb3403480",
+      "first_delta_logged": [
+        465,
+        0
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        -465,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1126825984
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": 465,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -545,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 535,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": true,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p466",
+      "recipe": {
+        "name": "x-m10-p466",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": 466
+      },
+      "font_sha256": "33a2806e07d1e002bda21cd209a72c4d1f5d8887952f079a8b9d62d193d72a55",
+      "raw_key": "ade0f4a738eac9ca866cba6a5c46b84e38ac2acc97c42e9d6ca233afa8453b8a",
+      "trace_key": "098c3c7c01b56abdcf5f95b4b3feaa66d832e33fb460e004b30fab668608e838",
+      "first_delta_logged": [
+        466,
+        0
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          1141407744,
+          1126825984
+        ],
+        "2": [
+          1139343360,
+          0
+        ],
+        "3": [
+          1143046144,
+          0
+        ]
+      },
+      "actual_prior": 466,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        -546,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 534,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p-1380",
+      "recipe": {
+        "name": "x-m0-p-1380",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": -1380
+      },
+      "font_sha256": "7192c9a9e8749ef9077dbc6591ae48e14a4d9d1ff6dcfa30685011df2b06514d",
+      "raw_key": "1b7334aaa402e9d4a2d7d376041b0888aa9e9898c9e8c6a2732f7edd2fddad48",
+      "trace_key": "29f597707e5ad550495b8da790dd6c70df1076e17324f753949a08b2c39c18fb",
+      "first_delta_logged": [
+        -1380,
+        0
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        1380,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1126825984
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": -1380,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        1300,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 2380,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": true,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p-1381",
+      "recipe": {
+        "name": "x-m0-p-1381",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": -1381
+      },
+      "font_sha256": "e249b9fe4aab4bfb17597b7e6bc37c3ee4d8ffe21d72b035fb18bed5f47f4d4b",
+      "raw_key": "5e260820b07a04832b40f6c9c8538c4ce7508517064383723599d575e7b560e9",
+      "trace_key": "fba27d269fa7b735f2b5cab646e62c8dbeb42a57b139d6d98665e79385174950",
+      "first_delta_logged": [
+        -1381,
+        0
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          3298992128,
+          1126825984
+        ],
+        "2": [
+          3299647488,
+          0
+        ],
+        "3": [
+          1120403456,
+          0
+        ]
+      },
+      "actual_prior": -1381,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        1301,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 2381,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p-1390",
+      "recipe": {
+        "name": "x-m10-p-1390",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": -1390
+      },
+      "font_sha256": "817fa9be206d6556d254413a9e414aa95e62f9435a15bb2060199968d5d76502",
+      "raw_key": "1be99d6c88dd337fee02df8ffab89b6cff47d3cd8004452e56ca5b3a0da76a78",
+      "trace_key": "92fd1cce13ecad67ce9218d306fd784dc661bb387b1d5295ac947229e0a52ab7",
+      "first_delta_logged": [
+        -1390,
+        0
+      ],
+      "second_obstacles": [
+        "slot-1"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        1390,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1126825984
+        ],
+        "2": [
+          0,
+          0
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "actual_prior": -1390,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        1310,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 2390,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": true,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": true,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p-1391",
+      "recipe": {
+        "name": "x-m10-p-1391",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": -1391
+      },
+      "font_sha256": "71980b5763dc90b05cf9f2b121fee6340dae3f08be09cdd7d3bde5990f7db51f",
+      "raw_key": "23ad06daffafccdccef403ac73ee51950c756733a70ec09a61c0ba88cc0468cd",
+      "trace_key": "83ce6f0f2f7bc87f6d86a480fd1e0fe1e662419cbf9f06546d02ca6edc7eef66",
+      "first_delta_logged": [
+        -1391,
+        0
+      ],
+      "second_obstacles": [],
+      "second_missed": true,
+      "second_delta_logged": null,
+      "final_position_bits": {
+        "1": [
+          3299074048,
+          1126825984
+        ],
+        "2": [
+          3299729408,
+          0
+        ],
+        "3": [
+          1120403456,
+          0
+        ]
+      },
+      "actual_prior": -1391,
+      "physical_displacement": [
+        -80,
+        -170
+      ],
+      "gate_displacement": [
+        1311,
+        -170
+      ],
+      "window": {
+        "x_min": -1000,
+        "x_max": 2391,
+        "y_min": -1,
+        "y_max": 1
+      },
+      "x_overlap": false,
+      "y_overlap": false,
+      "physical_projection": {
+        "axis": "Y",
+        "low": -430,
+        "high": 770,
+        "gap": 0
+      },
+      "mixed_accepts": false,
+      "physical_gate_accepts": true
+    },
+    {
+      "id": "collision-prior-overlap-structure-attached",
+      "recipe": {
+        "name": "structure-attached",
+        "kind": "structure",
+        "relation": "attached"
+      },
+      "font_sha256": "e32aaaa347c8bc26ed9a18a5431bdcb08d6a151b22e0c1894546d0e848fea9a6",
+      "raw_key": "0b6da3072b3bd351a4d7209687b79a65c9234dc23061110a9278cf949565b05b",
+      "trace_key": "b6b46e7d285ac783681ac54de07ca2d062e0ad42f40b1548d385feada2cd4a75",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-prior-overlap-structure-independent",
+      "recipe": {
+        "name": "structure-independent",
+        "kind": "structure",
+        "relation": "independent"
+      },
+      "font_sha256": "d06df72635f8b805ff09251f0d8385db0cf48967e61e7a8b5a975b12224c7501",
+      "raw_key": "4dc4cc1356ecf7d3bcb000fed75807cadfaabaed610e7f38a761155d9df5dcfb",
+      "trace_key": "a8e67d9a293afbb328fc767661e1dbdd18c61dd6177ffe303e7854da13ad4172",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-baseline",
+      "recipe": {
+        "name": "capture-baseline",
+        "kind": "capture",
+        "expression": "baseline"
+      },
+      "font_sha256": "29f2044541135560b49decfa90d65af61d06ffd4bb3c028537d72b904d8635f7",
+      "raw_key": "73c21b6d5ea0be9ba99af727eea9fbe6824ba2b563fce274342745eb1a5fcab1",
+      "trace_key": "98587659c2b7165d27995713c47be5a7865a8f24545c338b410de3dc6d0c9abb",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 0
+    },
+    {
+      "id": "collision-prior-overlap-capture-constant",
+      "recipe": {
+        "name": "capture-constant",
+        "kind": "capture",
+        "expression": "constant"
+      },
+      "font_sha256": "860a4417c26954efe88416fbf3d1c16c10c4a746b5c2c15e9c9a3590a0d7afc2",
+      "raw_key": "de506ebf02d42c81a679549accdbd5a0c2ad31d0eca0c0e0031ac6828bbd0d16",
+      "trace_key": "54419250bfd230f8c5e2b67536c7e37183bda2085d9caa268ff6b4833d2e2022",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 123
+    },
+    {
+      "id": "collision-prior-overlap-capture-before",
+      "recipe": {
+        "name": "capture-before",
+        "kind": "capture",
+        "expression": "before"
+      },
+      "font_sha256": "b471e03d6f8677e764f7487b78e20e61b4e9e0d3735e10dc877e3beb1a05479e",
+      "raw_key": "8c3dc9cffe7d659800174c2a71efad4b6dc93253799363d7e748f83b357b2a1f",
+      "trace_key": "95839bb19243c82c3deecda1fca2101fcd0db119535b0291b3f80f45ef35b5f0",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 0
+    },
+    {
+      "id": "collision-prior-overlap-capture-after",
+      "recipe": {
+        "name": "capture-after",
+        "kind": "capture",
+        "expression": "after"
+      },
+      "font_sha256": "4cf3f82b502d72bef3983ea65278a043157ac7cd8a557ff459294a93e5d4dc6b",
+      "raw_key": "47b84f31631114743e897f520c0fa73630b20ab569018088afeec85497f445d1",
+      "trace_key": "11c691f81789a78cc4197bbc98f7e46f32845d06e1fa3d8ff4eafab5bf24b849",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 770
+    },
+    {
+      "id": "collision-prior-overlap-capture-target-before",
+      "recipe": {
+        "name": "capture-target-before",
+        "kind": "capture",
+        "expression": "target-before"
+      },
+      "font_sha256": "313e5340582eeb6ea2f0e47f5c83a0e1002b11def0a66e6ff8f29a9269debfa7",
+      "raw_key": "0b3360646aec4b53177c49d968b396e8bd0361944a9378859ea038880937ff2c",
+      "trace_key": "187e162143afd5792ea1c8eaeca2fb8fa0f4a4ffd3ffb8c06aa37c35ed81da89",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 600
+    },
+    {
+      "id": "collision-prior-overlap-capture-target-after",
+      "recipe": {
+        "name": "capture-target-after",
+        "kind": "capture",
+        "expression": "target-after"
+      },
+      "font_sha256": "b8aaeead8657926704e04552a5861f2ae944321eff0df44bf28e3716525d14dc",
+      "raw_key": "bb9d5f6e3f080e74db643f9fea1de2fbef8ac63e11dc6f87ebffba595e7e6b08",
+      "trace_key": "8f0195f85110cbaca141b99de310a28877413664a09ed9a2d9b59afa5d2049d7",
+      "first_delta_logged": [
+        0,
+        600
+      ],
+      "second_obstacles": [
+        "slot-3"
+      ],
+      "second_missed": false,
+      "second_delta_logged": [
+        0,
+        0
+      ],
+      "final_position_bits": {
+        "1": [
+          1117782016,
+          1145077760
+        ],
+        "2": [
+          0,
+          1142292480
+        ],
+        "3": [
+          1127481344,
+          0
+        ]
+      },
+      "captured_A_user0": 600
+    }
+  ]
+}

@@ -1,0 +1,4265 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 2,
+    "attachment_lifetime_extractor": 1,
+    "face_options": "explicit per case",
+    "logging": false
+  },
+  "records": [
+    {
+      "id": "collision-attachment-lifetime-descendant",
+      "font_sha256": "4288784042e3ac4acfd2891ad96b3094cec73e6084f3487da7a4f3447b0b3f22",
+      "key": "0803692a407393a74407a4fcf1f82677bb216f6476be0186d9f9a127dbda9121",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1145077760
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              600,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1127481344,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1145290752,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-descendant-ignore",
+      "font_sha256": "6563fed84a1fb330308f59cc2b8ea06185f8e05e0f645ea1cc2a2f74123bdf6f",
+      "key": "d1ebe3753e6684a34a36b5870d1b6a0d933d6c8b66b51ecf87b77a0fa18869cf",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1145077760
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              600,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1127481344,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1145290752,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-ancestor",
+      "font_sha256": "dfb21ea808feb63d7b406236f9b02a89594ddad2f7999f995ce6a920c0968a1d",
+      "key": "1894a60165962b4df02b59592aef0516afac448cd9fd166813bed83b1465ef2a",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              3
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              1,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              430,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1127481344,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1145290752,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-siblings",
+      "font_sha256": "6854f80495620f1ee394633d394926f0101717bf4e9fa75633059070a1580e20",
+      "key": "5b31085db417073600e73f21b42eecd9089369ca6f9560e4813e7bb7a4f36ea9",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1145077760
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              600,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1142341632,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-siblings-ignore",
+      "font_sha256": "7288a4512c642d9d4e064bea5e5b0f61501d149648186230b4f8b1575c6365d9",
+      "key": "4b3ba2f5f6c26bafedce89fd1962f2a618b9a32cb9de28aee7cc2181ddfd9ae5",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1117782016,
+              1126825984
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              2
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              430,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1142341632,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-two-level",
+      "font_sha256": "3c582330ba41d7cd0abfd6d50d5e2d284682ad2be73cbddd697c76d61e9bcdcf",
+      "key": "067f3e9938356c62878a7c92f105fc46ac796c29e4e6c11987eec969c63ff646",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1126170624,
+              1147863040
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1145077760
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              600,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1132593152,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1146617856,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-two-level-ignore-middle",
+      "font_sha256": "d3b412a6f022c245b61f6caf5e8f139204ee3f085a81716b5efe26239a1f0903",
+      "key": "05f4281f677c89e13509f3eb2a2edcfc05c60b43ea97c5770c9cdc681bfc230e",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1126170624,
+              1147863040
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1145077760
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              3,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              1142292480
+            ],
+            "advance_bits": [
+              1120403456,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              600,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1132593152,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1146617856,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete0-ignore0",
+      "font_sha256": "3ae867b92b00e503877437edc4c2f246207af69ca7f0f19d729bcee8c131bb94",
+      "key": "8fa16b6ef7c22b85d133358cb2c7df581612de55cc6b34e977ecfeba63b1af3c",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1126170624,
+              3266576384
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              3280076800
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              3,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              3285647360
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              -430,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1144930304,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1152032768,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete0-ignore1",
+      "font_sha256": "2aa7e474eed0f997515cd23492ddc0391e97712e232eae17555641b9865fbeab",
+      "key": "8cc19dff75fbd6493a0e73140d845edd19322dd434e6c0e07def995a77998a22",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1126170624,
+              3266576384
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              3280076800
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              3,
+              1,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              3285647360
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              -430,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1144930304,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1152032768,
+          0
+        ]
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete1-ignore0",
+      "font_sha256": "1cbf87ddb868bdb5da2abe13748807518d8bcba86c23416b68127902a2f8691b",
+      "key": "5e585136f4c3aa0fa37be44a345f41a01731da4e53f74e7ae4546cc35b314a4d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1117782016
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              3280076800
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              -260,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1144930304,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1152032768,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            3266576384
+          ],
+          "advance_bits": [
+            1142325248,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 602,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": -90,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 0,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete1-ignore1",
+      "font_sha256": "f52b34ebd6fd383a6049027733061a2c4cd8d8baf878f25f70f8b15f1f69759f",
+      "key": "fa2c47acd92a96c8551abe155b4ec462dc4288f273064ebdb471fec309ea4332",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1144930304,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1152032768,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            1142325248,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 602,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d-5000",
+      "font_sha256": "5276d781824e0ac9f9be485657c3d7ae1582e69cc639081356a37f36ea77abdf",
+      "key": "c4c6f4451ad750a91a4a42fad918bbcdbfeb2fe3bcffb6b73da64ca1df0b32ad",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142341632,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150738432,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            3315351552,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": -5000,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d0",
+      "font_sha256": "ef625df310198ebd9326635f41575e7d7102cdd14b7875a5d1a4d01af966ed42",
+      "key": "04cc8d95e8adbd04e7d6d922ad43be3ba64efc84bdcb73e2b90d241be5c4aed9",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142341632,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150738432,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            0,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 0,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d5000",
+      "font_sha256": "7ea328e62829b41146c5f3e128c5dc9ecfed07496c745d482d805f7a40f39453",
+      "key": "d28ea42eccadd3cdc6ccbfa7b8d676e08238f6c65b56041005aa9acb8b9cf918",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1168031744,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1169268736,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            1167867904,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 5000,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d-5000",
+      "font_sha256": "de6801ec6cd3928960aa541e65ce9e276e451d3ad9968f850a3fcbb15c513761",
+      "key": "ddeb4ace2b98580ad0ea56106e0b67911de5b962de79118658d207ed5b4aba6c",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142341632,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150738432,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            3315351552,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": -5000,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d0",
+      "font_sha256": "2646b060073cb5780437469ac690872441b9ef3bda7ae55900b2eebb3e97378c",
+      "key": "5b1b53bf14e6a3f9ac03c43332f3d4395581d520e4c8ae036a3b7023f818b8bf",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1142341632,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1150738432,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            0,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 0,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d5000",
+      "font_sha256": "4fa4e95990e7596e7df13c7dcb425742913a1576ce0cb093371da2602e0a249c",
+      "key": "0570542a1b0b2a34905ae75e589729331fa37e81ba0449dd0b5f7aea94aec7ac",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1126170624,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1168031744,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1169268736,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            1117782016,
+            1126825984
+          ],
+          "advance_bits": [
+            1167867904,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 5000,
+            "1": 0,
+            "2": 1,
+            "3": 100,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 80,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d-1",
+      "font_sha256": "81f9f81b707444dc860f52e240d6c30237d6ad3d0e16db42f8d57f397c95a1ae",
+      "key": "bfd0ff341e02c14ad35cb1294f0f9f901d9dba0ccb40cbca140199eb9a153b23",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            3212836864,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": -1,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d0",
+      "font_sha256": "c3e731996490534ced0ccfc5708bcbbedbdce45855fe029c17223aabeb46296b",
+      "key": "9ba51c1e6b9932f1f1a099017fee316baa23fd56d1fd1c25d0aa0cffd2a5cfa3",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            0,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 0,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d1",
+      "font_sha256": "5a6d2a1d6e2c3f291db4cef41429aa81ed22a54804f9b9121f7d4429e89c564f",
+      "key": "fad99e107a50c82ebb95b4908830911ffd5e479659d26cacb734d37037495716",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              0,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            1065353216,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 1,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d-1",
+      "font_sha256": "f5ca7e63a78448d32673ef4f184d4ade9427f01eb20d7b5483d2490d388b1efe",
+      "key": "591641f793379a9244005ee9f92dee13e6fe6cbd3c70786e739cdd84cff1dbe8",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            3212836864,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": -1,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d0",
+      "font_sha256": "c888c25a1a4b13436c8cade791866d61d12b7bc6147b8922d660680f308b8426",
+      "key": "295ff65fc27a7ac7d7663c9b8f4f664f68eb18bac919f6f52f5efaf08e3f2de1",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            0,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 0,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d1",
+      "font_sha256": "0faa3e90ab86a03320019282c4d9f7972d25adf9d32dfe2614e3a83b0de437a4",
+      "key": "576300d29a0aa36a69341a3fcc9237633adbea9eca5e5554d06c14c49b1d87c3",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 1,
+            "position_bits": [
+              1117782016,
+              1135214592
+            ],
+            "advance_bits": [
+              1065353216,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              2,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 3,
+            "before": 1,
+            "after": 2,
+            "position_bits": [
+              1117782016,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              4
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              65,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "glyph": 4,
+            "before": 3,
+            "after": 3,
+            "position_bits": [
+              1143652352,
+              0
+            ],
+            "advance_bits": [
+              1142358016,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0,
+            "collision_attributes": [
+              0,
+              -1,
+              -1000,
+              1,
+              1000,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "advance_bits": [
+          1151393792,
+          0
+        ],
+        "deleted_intermediate": {
+          "glyph": 2,
+          "position_bits": [
+            0,
+            1126825984
+          ],
+          "advance_bits": [
+            1065353216,
+            0
+          ],
+          "parent_glyph": 3,
+          "child_glyph": 1,
+          "attributes": {
+            "0": 1,
+            "1": 0,
+            "2": 1,
+            "3": -60,
+            "4": 200,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 20,
+            "9": 30,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 1,
+            "18": 0,
+            "19": 170,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": -1,
+            "57": 2,
+            "58": -1,
+            "59": -1000,
+            "60": 1,
+            "61": 1000,
+            "62": 0,
+            "63": 0,
+            "64": 10,
+            "65": 10,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0
+          }
+        }
+      }
+    }
+  ]
+}

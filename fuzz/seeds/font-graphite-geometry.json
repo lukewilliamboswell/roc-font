@@ -1,16 +1,301 @@
 {
-  "about": "Original attachment, sequencing, retry and cluster-kerning controls; real Awami collision font; hostile font mutations and three increasing geometry run sizes.",
+  "about": "Original attachment, sequencing, retry, cluster kerning, changing prefixes, deleted intermediates and childless attachment-head removal and composite metric queries and ordered empty-neighbor kerning, sampling frames, whole-neighbor eligibility, real Awami and hostile mutation; three-size allocation bounds.",
   "seeds": [
-    {"why": "attached forest and 8/16/32 scaling", "parts": [{"hex": "00 00"}]},
-    {"why": "cluster kerning and 8/16/32 scaling", "parts": [{"hex": "01 01"}]},
-    {"why": "sequence penalties and 8/16/32 scaling", "parts": [{"hex": "02 02"}]},
-    {"why": "fractional prior-pass retry", "parts": [{"hex": "03 03"}]},
-    {"why": "real Awami Arabic collisions", "parts": [{"hex": "04"}]},
-    {"why": "opposite-direction attachment", "parts": [{"hex": "0a 0f"}]},
-    {"why": "opposite-direction kerning", "parts": [{"hex": "0b 0f"}]},
-    {"why": "opposite-direction sequencing", "parts": [{"hex": "0c 0f"}]},
-    {"why": "original attachment bytes", "parts": [{"file": "tests/fonts/graphite-geometry/attach-forward-ltr.ttf"}]},
-    {"why": "original kerning bytes", "parts": [{"file": "tests/fonts/graphite-geometry/kerning-audit/collision-kern-audit-base-ltr.ttf"}]},
-    {"why": "licensed real collision font bytes", "parts": [{"file": "tests/fonts/graphite/AwamiNastaliq-Regular.ttf"}]}
+    {
+      "why": "attached forest and 4/8/16-copy scaling",
+      "parts": [
+        {
+          "hex": "00 00"
+        }
+      ]
+    },
+    {
+      "why": "cluster kerning and 4/8/16-copy scaling",
+      "parts": [
+        {
+          "hex": "01 01"
+        }
+      ]
+    },
+    {
+      "why": "sequence penalties and 4/8/16-copy scaling",
+      "parts": [
+        {
+          "hex": "02 02"
+        }
+      ]
+    },
+    {
+      "why": "fractional prior-pass retry",
+      "parts": [
+        {
+          "hex": "03 03"
+        }
+      ]
+    },
+    {
+      "why": "real Awami Arabic collisions",
+      "parts": [
+        {
+          "hex": "04"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction attachment",
+      "parts": [
+        {
+          "hex": "24 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction kerning",
+      "parts": [
+        {
+          "hex": "25 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction sequencing",
+      "parts": [
+        {
+          "hex": "26 0f"
+        }
+      ]
+    },
+    {
+      "why": "original attachment bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/attach-forward-ltr.ttf"
+        }
+      ]
+    },
+    {
+      "why": "original kerning bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/kerning-audit/collision-kern-audit-base-ltr.ttf"
+        }
+      ]
+    },
+    {
+      "why": "licensed real collision font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite/AwamiNastaliq-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "why": "cell midpoint exact-boundary geometry",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/first-cell-audit/collision-cell-equality-margin101.ttf"
+        }
+      ]
+    },
+    {
+      "why": "phase3 SPACE priority over ignored group markers",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/phase3-space-audit/collision-space-ink-142-rtl.ttf"
+        }
+      ]
+    },
+    {
+      "why": "nonzero point remains a phase3 ink obstacle",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/phase3-space-audit/collision-space-point-0-rtl.ttf"
+        }
+      ]
+    },
+    {
+      "why": "positive child guard space changes later exact prefixes in RTL",
+      "parts": [
+        {
+          "hex": "29 03"
+        }
+      ]
+    },
+    {
+      "why": "larger prefix-changing collision run",
+      "parts": [
+        {
+          "hex": "29 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite direction of the prefix-changing font",
+      "parts": [
+        {
+          "hex": "05 07"
+        }
+      ]
+    },
+    {
+      "why": "real Awami Arabic in RTL",
+      "parts": [
+        {
+          "hex": "28 00"
+        }
+      ]
+    },
+    {
+      "why": "original prefix-changing font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/benchmark-prefix/prefix-changing.ttf"
+        }
+      ]
+    },
+    {
+      "why": "deleted intermediate retains positive guard width",
+      "parts": [
+        {
+          "hex": "06 03"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction deleted intermediate",
+      "parts": [
+        {
+          "hex": "2a 0f"
+        }
+      ]
+    },
+    {
+      "why": "visited prior slots change the sampling frame",
+      "parts": [
+        {
+          "hex": "07 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction sampling frame",
+      "parts": [
+        {
+          "hex": "2b 03"
+        }
+      ]
+    },
+    {
+      "why": "whole-neighbor lower eligibility boundary",
+      "parts": [
+        {
+          "hex": "08 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction neighbor eligibility",
+      "parts": [
+        {
+          "hex": "20 03"
+        }
+      ]
+    },
+    {
+      "why": "original focused geometry font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/attachment-lifetime-audit/collision-attachment-lifetime-metrics-a0-d5000.ttf"
+        }
+      ]
+    },
+    {
+      "why": "original focused geometry font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/kern-frame-audit/collision-kern-frame-sample--603.ttf"
+        }
+      ]
+    },
+    {
+      "why": "original focused geometry font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/kern-eligibility-audit/collision-eligibility-lower-10--31.ttf"
+        }
+      ]
+    },
+    {
+      "why": "childless attachment-head unlink",
+      "parts": [
+        {
+          "hex": "09 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction attachment-head unlink",
+      "parts": [
+        {
+          "hex": "21 03"
+        }
+      ]
+    },
+    {
+      "why": "original leaf-deletion font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/deleted-leaf-audit/collision-deleted-leaf-delete-ad-ltr.ttf"
+        }
+      ]
+    },
+    {
+      "why": "retained deleted composite metric and 4/8/16-copy scaling",
+      "parts": [
+        {
+          "hex": "0a 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction retained deleted composite metric",
+      "parts": [
+        {
+          "hex": "22 0f"
+        }
+      ]
+    },
+    {
+      "why": "original post-deletion metric program bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/deleted-metric-audit/collision-deleted-metric-intermediate-8-1-ltr.ttf"
+        }
+      ]
+    },
+    {
+      "why": "ordered finite then empty whole-neighbor kerning and three-size scaling",
+      "parts": [
+        {
+          "hex": "0b 0f"
+        }
+      ]
+    },
+    {
+      "why": "opposite-direction ordered empty-neighbor kerning",
+      "parts": [
+        {
+          "hex": "23 0f"
+        }
+      ]
+    },
+    {
+      "why": "original empty-neighbor kerning program bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/graphite-geometry/downstream-gap-audit/collision-empty-gap-ltr-finite-empty.ttf"
+        }
+      ]
+    }
   ]
 }

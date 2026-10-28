@@ -1,0 +1,301 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "collision-deleted-leaf-keep-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-keep-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "keep",
+        "rtl": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-d-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-d-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-d",
+        "rtl": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "1920",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-a-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-a-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-a",
+        "rtl": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "20",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-da-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-da-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-da",
+        "rtl": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "192020",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-ad-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-ad-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-ad",
+        "rtl": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "201920",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-getter-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-getter-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "getter",
+        "rtl": false,
+        "detached": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e2309",
+        "20280200192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-getter-detached-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-getter-detached-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "getter",
+        "rtl": false,
+        "detached": true
+      },
+      "actions_hex": [
+        "0300012300",
+        "20280200192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-constant-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-constant-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "constant",
+        "rtl": false,
+        "detached": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e2309",
+        "20017b192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-constant-detached-ltr",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-constant-detached-ltr.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "face_options": 0,
+      "recipe": {
+        "kind": "constant",
+        "rtl": false,
+        "detached": true
+      },
+      "actions_hex": [
+        "0300012300",
+        "20017b192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-keep-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-keep-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "keep",
+        "rtl": true
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-d-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-d-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-d",
+        "rtl": true
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "1920",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-a-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-a-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-a",
+        "rtl": true
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "20",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-da-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-da-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-da",
+        "rtl": true
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "192020",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-delete-ad-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-delete-ad-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "delete-ad",
+        "rtl": true
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e23091901012602030064230303001423080300c8230403001e23090313882300",
+        "201920",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-getter-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-getter-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "getter",
+        "rtl": true,
+        "detached": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e2309",
+        "20280200192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-getter-detached-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-getter-detached-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "getter",
+        "rtl": true,
+        "detached": true
+      },
+      "actions_hex": [
+        "0300012300",
+        "20280200192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-constant-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-constant-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "constant",
+        "rtl": true,
+        "detached": false
+      },
+      "actions_hex": [
+        "030001230001012602030064230303001423080300c8230403001e2309",
+        "20017b192316",
+        ""
+      ]
+    },
+    {
+      "id": "collision-deleted-leaf-constant-detached-rtl",
+      "font": "deleted-leaf-audit/collision-deleted-leaf-constant-detached-rtl.ttf",
+      "text": "abcd",
+      "direction": "rtl",
+      "face_options": 0,
+      "recipe": {
+        "kind": "constant",
+        "rtl": true,
+        "detached": true
+      },
+      "actions_hex": [
+        "0300012300",
+        "20017b192316",
+        ""
+      ]
+    }
+  ]
+}

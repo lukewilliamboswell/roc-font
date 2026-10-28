@@ -80,7 +80,7 @@ and reference checks are not an end-to-end collision-stage support claim. The
 full/missed broad-phase decision still has unresolved distinguishing witnesses;
 native public replay, fuzzing and performance measurements remain separate gates.
 
-`public_cases.py` selects 1078 accepted reference faces from these matrices. Ten
+`public_cases.py` selects 1161 accepted reference faces from these matrices. Ten
 rejected reference faces remain explicitly listed as raw reader witnesses.
 `public-records.json` is a direct HarfBuzz 14.6 Graphite2-adapter glyph-run oracle,
 not a conversion guessed from raw slot positions. `public-oracle.json` pins both
@@ -127,3 +127,26 @@ python tests/fonts/graphite-geometry/verify.py --records tests/fonts/graphite-ge
 Each cache remains checked against all font bytes, case fields and its own
 library pin. Comparing the two configurations identifies a reference-mode
 difference; it does not establish that an unmatched Roc result is correct.
+
+`preload-divergences.json` is an explicit per-case reference compatibility policy,
+not a general collision exception. `preload_policy.py --check` proves each entry
+has the exact font hash, both independent reference keys, uncompressed Glat3
+whole-octabox metadata and zero subboxes across the entire font. It also pins
+the explicit-mode public trace audit and the one-line adapter configuration.
+No Roc output participates in selection or expected-result generation.
+
+An explicitly requested policy replay compares unchanged cases directly to the
+upstream default reference and the 425 declared cases to their independently
+cached font-defined geometry. A wrong result still fails; the registry never
+selects whichever reference happens to match Roc:
+
+```
+python tests/fonts/graphite-geometry/verify.py --divergences tests/fonts/graphite-geometry/preload-divergences.json
+```
+
+The full independent face0 replay remains a separate strict required gate. The
+verifier rejects applying the registry to that gate. Raw default comparison is
+always reported alongside declared cases. Real SIL-font outputs are identical
+across the observed modes and receive no preload exception. Passing this policy
+check does not excuse any remaining implementation mismatch or establish full
+stage agreement.

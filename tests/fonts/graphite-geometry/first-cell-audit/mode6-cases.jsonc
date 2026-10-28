@@ -1,0 +1,1394 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "collision-cell-whole-height1",
+      "font": "first-cell-audit/collision-cell-whole-height1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "whole-height1",
+        "target": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "whole first cell seeds horizontal bound"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-part-height1",
+      "font": "first-cell-audit/collision-cell-part-height1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "part-height1",
+        "target": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": [
+          0,
+          255,
+          0,
+          255,
+          0,
+          255,
+          0,
+          255
+        ],
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "geometrically identical actual part also seeds"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-whole-formal-height1",
+      "font": "first-cell-audit/collision-cell-whole-formal-height1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "whole-formal-height1",
+        "target": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          127,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "formal upper SUM remains active"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-part-formal-height1",
+      "font": "first-cell-audit/collision-cell-part-formal-height1.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "part-formal-height1",
+        "target": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          1
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": [
+          0,
+          255,
+          0,
+          255,
+          0,
+          127,
+          0,
+          255
+        ],
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "actual part formal control"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-fractional-part-formal",
+      "font": "first-cell-audit/collision-cell-fractional-part-formal.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "fractional-part-formal",
+        "target": [
+          0,
+          53,
+          300,
+          93
+        ],
+        "neighbor": [
+          0,
+          40,
+          137,
+          43
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": [
+          17,
+          249,
+          23,
+          247,
+          0,
+          247,
+          0,
+          255
+        ],
+        "shift_x": 0,
+        "shift_y": 11,
+        "distance": 100,
+        "purpose": "part-bounds proxy fails; actual diagonal corner is used"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          11,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-fractional-part-seeded",
+      "font": "first-cell-audit/collision-cell-fractional-part-seeded.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "fractional-part-seeded",
+        "target": [
+          0,
+          0,
+          300,
+          40
+        ],
+        "neighbor": [
+          -30000,
+          -9,
+          -29700,
+          -8
+        ],
+        "margin": 17,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": [
+          0,
+          253,
+          1,
+          255,
+          0,
+          250,
+          0,
+          255
+        ],
+        "shift_x": 0,
+        "shift_y": 11,
+        "distance": 100,
+        "purpose": "nonempty fractional part seeds and retains fractional x cap"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          11,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-shifted-neighbor5",
+      "font": "first-cell-audit/collision-cell-shifted-neighbor5.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "shifted-neighbor5",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          5,
+          300,
+          6
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "cell2 formal control"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-shifted-neighbor6",
+      "font": "first-cell-audit/collision-cell-shifted-neighbor6.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "shifted-neighbor6",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          6,
+          300,
+          7
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "cell2 seeded control"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-lower-diff-cut",
+      "font": "first-cell-audit/collision-cell-lower-diff-cut.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "lower-diff-cut",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          247
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "lower DIFF remains active"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-combined-245-253",
+      "font": "first-cell-audit/collision-cell-combined-245-253.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "combined-245-253",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          245,
+          0,
+          253
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "SUM-DIFF corner rejects whole-bounds proxy"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-combined-245-251",
+      "font": "first-cell-audit/collision-cell-combined-245-251.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "combined-245-251",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          245,
+          0,
+          251
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "both facets cut with distinct output"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-combined-part",
+      "font": "first-cell-audit/collision-cell-combined-part.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "combined-part",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": [
+          0,
+          255,
+          0,
+          255,
+          0,
+          245,
+          0,
+          253
+        ],
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "combined cuts in actual part"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-later-cell3",
+      "font": "first-cell-audit/collision-cell-later-cell3.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "later-cell3",
+        "target": [
+          0,
+          0,
+          300,
+          100
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          100
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          200,
+          0,
+          245
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "center facet choice applies beyond first cell"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-later-cell46",
+      "font": "first-cell-audit/collision-cell-later-cell46.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "later-cell46",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          128,
+          0,
+          128
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "later diagonal vertex has no horizontal cap"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-later-cell20",
+      "font": "first-cell-audit/collision-cell-later-cell20.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "later-cell20",
+        "target": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          600
+        ],
+        "margin": 13,
+        "diagonal": [
+          0,
+          132,
+          0,
+          208
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "later diagonal vertex with horizontal cap"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-equality-margin101",
+      "font": "first-cell-audit/collision-cell-equality-margin101.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "equality-margin101",
+        "target": [
+          0,
+          0,
+          300,
+          40
+        ],
+        "neighbor": [
+          0,
+          -6,
+          300,
+          4
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "2*low+width association is rejected"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-equality-margin13",
+      "font": "first-cell-audit/collision-cell-equality-margin13.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "equality-margin13",
+        "target": [
+          0,
+          0,
+          300,
+          40
+        ],
+        "neighbor": [
+          0,
+          -2,
+          300,
+          0
+        ],
+        "margin": 13,
+        "diagonal": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "independent equality margin control"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-translated-midpoint32000",
+      "font": "first-cell-audit/collision-cell-translated-midpoint32000.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "translated-midpoint32000",
+        "target": [
+          0,
+          32000,
+          300,
+          32400
+        ],
+        "neighbor": [
+          1000,
+          32100,
+          1200,
+          32301
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          170,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 1200,
+        "purpose": "normalized midpoint rejected by exact needed101"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          4,
+          176,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-translated-midpoint31900",
+      "font": "first-cell-audit/collision-cell-translated-midpoint31900.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "translated-midpoint31900",
+        "target": [
+          0,
+          31900,
+          300,
+          32300
+        ],
+        "neighbor": [
+          2000,
+          32000,
+          2200,
+          32201
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          170,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 2200,
+        "purpose": "translated equality replication"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          8,
+          152,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-fractional85",
+      "font": "first-cell-audit/collision-cell-fractional85.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "fractional85",
+        "target": [
+          0,
+          0,
+          300,
+          1000
+        ],
+        "neighbor": [
+          0,
+          33,
+          202,
+          637
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          85,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "same right facets as q170 with different raw normalization"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-fractional170",
+      "font": "first-cell-audit/collision-cell-fractional170.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "fractional170",
+        "target": [
+          0,
+          0,
+          300,
+          1000
+        ],
+        "neighbor": [
+          0,
+          33,
+          202,
+          234
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          170,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "same right facets as q85"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-recurrence-unresolved",
+      "font": "first-cell-audit/collision-cell-recurrence-unresolved.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "recurrence-unresolved",
+        "target": [
+          0,
+          -31,
+          300,
+          969
+        ],
+        "neighbor": [
+          0,
+          69,
+          202,
+          675
+        ],
+        "margin": 101,
+        "diagonal": [
+          0,
+          85,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "retains unresolved later-sample F32 association evidence"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-sum245-formal",
+      "font": "first-cell-audit/collision-cell-sum245-formal.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "sum245-formal",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          245,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "upper SUM threshold below seed"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-cell-sum246-seeded",
+      "font": "first-cell-audit/collision-cell-sum246-seeded.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "face_options": 6,
+      "recipe": {
+        "name": "sum246-seeded",
+        "target": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "neighbor": [
+          0,
+          0,
+          300,
+          10
+        ],
+        "margin": 10,
+        "diagonal": [
+          0,
+          246,
+          0,
+          255
+        ],
+        "part": null,
+        "shift_x": 0,
+        "shift_y": 0,
+        "distance": 100,
+        "purpose": "upper SUM threshold above seed"
+      },
+      "programs": [
+        [
+          25,
+          3,
+          0,
+          100,
+          35,
+          0,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    }
+  ]
+}

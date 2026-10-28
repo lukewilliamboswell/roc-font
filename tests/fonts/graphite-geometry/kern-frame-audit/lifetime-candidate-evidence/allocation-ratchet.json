@@ -1,0 +1,114 @@
+{
+  "binary_sha256": "9adf82a71a37404d7eb54c697882a4017da19f258f83cc4ffa7638395ebfe8eb",
+  "baseline_sha256": "e1d2f9ef57cb141b4776403acef30a4885e6898d2d53ce7478689faa591ba2a0",
+  "rows": [
+    {
+      "id": "attachment-8",
+      "allocations": 82,
+      "leaked": 0,
+      "output_checksum": 14525329208503566346,
+      "passed": true
+    },
+    {
+      "id": "attachment-32",
+      "allocations": 251,
+      "leaked": 0,
+      "output_checksum": 11277038690814771066,
+      "passed": true
+    },
+    {
+      "id": "attachment-128",
+      "allocations": 926,
+      "leaked": 0,
+      "output_checksum": 13111414603472431802,
+      "passed": true
+    },
+    {
+      "id": "kerning-parts-4",
+      "allocations": 70,
+      "leaked": 0,
+      "output_checksum": 8016509685935121140,
+      "passed": false
+    },
+    {
+      "id": "kerning-parts-8",
+      "allocations": 107,
+      "leaked": 0,
+      "output_checksum": 7065728181293340348,
+      "passed": false
+    },
+    {
+      "id": "kerning-parts-16",
+      "allocations": 179,
+      "leaked": 0,
+      "output_checksum": 9117213081122116492,
+      "passed": false
+    },
+    {
+      "id": "shifting-parts-4",
+      "allocations": 150,
+      "leaked": 0,
+      "output_checksum": 8693018508798741868,
+      "passed": true
+    },
+    {
+      "id": "shifting-parts-8",
+      "allocations": 279,
+      "leaked": 0,
+      "output_checksum": 12645660546436526332,
+      "passed": true
+    },
+    {
+      "id": "shifting-parts-16",
+      "allocations": 535,
+      "leaked": 0,
+      "output_checksum": 128593753864890188,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-16",
+      "allocations": 387,
+      "leaked": 0,
+      "output_checksum": 4733405774577831116,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-64",
+      "allocations": 1493,
+      "leaked": 0,
+      "output_checksum": 6639840138428045996,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-256",
+      "allocations": 5913,
+      "leaked": 0,
+      "output_checksum": 3970979776383301676,
+      "passed": true
+    },
+    {
+      "id": "prefix-changing-4",
+      "allocations": 104,
+      "leaked": 0,
+      "output_checksum": 5007165539358496624,
+      "passed": true
+    },
+    {
+      "id": "prefix-changing-8",
+      "allocations": 176,
+      "leaked": 0,
+      "output_checksum": 151265287089899292,
+      "passed": true
+    },
+    {
+      "id": "prefix-changing-16",
+      "allocations": 321,
+      "leaked": 0,
+      "output_checksum": 10520850321509213724,
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

@@ -1,0 +1,747 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "collision-prior-overlap-y-offset-100",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-100.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-100",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 100,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-300",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-300.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-300",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 300,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-414",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-414.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-414",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 414,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-415",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-415.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-415",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 415,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-416",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-416.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-416",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 416,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-500",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-500.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-500",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 500,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-600",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-600.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-600",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 600,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-offset-800",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-offset-800.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-offset-800",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": 800,
+        "first_upper": 1000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m10-p465",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r80-m10-p465.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r80-m10-p465",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 465,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m10-p466",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r80-m10-p466.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r80-m10-p466",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 466,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m30-p475",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r80-m30-p475.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r80-m30-p475",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 475,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r80-m30-p476",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r80-m30-p476.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r80-m30-p476",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 476,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m10-p355",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r300-m10-p355.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r300-m10-p355",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 355,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m10-p356",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r300-m10-p356.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r300-m10-p356",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 356,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m30-p365",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r300-m30-p365.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r300-m30-p365",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 365,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h300-r300-m30-p366",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h300-r300-m30-p366.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h300-r300-m30-p366",
+        "kind": "y",
+        "height": 300,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 366,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m10-p465",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r80-m10-p465.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r80-m10-p465",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 465,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m10-p466",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r80-m10-p466.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r80-m10-p466",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 10,
+        "desired_prior": 466,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m30-p475",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r80-m30-p475.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r80-m30-p475",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 475,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r80-m30-p476",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r80-m30-p476.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r80-m30-p476",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 80,
+        "margin": 30,
+        "desired_prior": 476,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m10-p355",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r300-m10-p355.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r300-m10-p355",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 355,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m10-p356",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r300-m10-p356.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r300-m10-p356",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 10,
+        "desired_prior": 356,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m30-p365",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r300-m30-p365.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r300-m30-p365",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 365,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-h900-r300-m30-p366",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-h900-r300-m30-p366.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-h900-r300-m30-p366",
+        "kind": "y",
+        "height": 900,
+        "relative_y": 300,
+        "margin": 30,
+        "desired_prior": 366,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-negative--885",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-negative--885.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-negative--885",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": -885,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-y-negative--886",
+      "font": "prior-overlap-audit/collision-prior-overlap-y-negative--886.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "y-negative--886",
+        "kind": "y",
+        "height": 600,
+        "relative_y": 170,
+        "margin": 0,
+        "desired_prior": -886,
+        "first_upper": 2000
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p460",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m0-p460.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m0-p460",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": 460
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p461",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m0-p461.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m0-p461",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": 461
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p465",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m10-p465.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m10-p465",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": 465
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p466",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m10-p466.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m10-p466",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": 466
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p-1380",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m0-p-1380.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m0-p-1380",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": -1380
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m0-p-1381",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m0-p-1381.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m0-p-1381",
+        "kind": "x",
+        "margin": 0,
+        "desired_prior": -1381
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p-1390",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m10-p-1390.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m10-p-1390",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": -1390
+      }
+    },
+    {
+      "id": "collision-prior-overlap-x-m10-p-1391",
+      "font": "prior-overlap-audit/collision-prior-overlap-x-m10-p-1391.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "x-m10-p-1391",
+        "kind": "x",
+        "margin": 10,
+        "desired_prior": -1391
+      }
+    },
+    {
+      "id": "collision-prior-overlap-structure-attached",
+      "font": "prior-overlap-audit/collision-prior-overlap-structure-attached.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "structure-attached",
+        "kind": "structure",
+        "relation": "attached"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-structure-independent",
+      "font": "prior-overlap-audit/collision-prior-overlap-structure-independent.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "structure-independent",
+        "kind": "structure",
+        "relation": "independent"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-baseline",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-baseline.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-baseline",
+        "kind": "capture",
+        "expression": "baseline"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-constant",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-constant.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-constant",
+        "kind": "capture",
+        "expression": "constant"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-before",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-before.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-before",
+        "kind": "capture",
+        "expression": "before"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-after",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-after.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-after",
+        "kind": "capture",
+        "expression": "after"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-target-before",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-target-before.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-target-before",
+        "kind": "capture",
+        "expression": "target-before"
+      }
+    },
+    {
+      "id": "collision-prior-overlap-capture-target-after",
+      "font": "prior-overlap-audit/collision-prior-overlap-capture-target-after.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "capture-target-after",
+        "kind": "capture",
+        "expression": "target-after"
+      }
+    }
+  ]
+}

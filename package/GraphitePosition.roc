@@ -6,6 +6,13 @@ import TableVar
 GraphitePosition :: {}.{
 
 	Applied : { state : GraphiteSlots, operations : U64, stopped : U64 }
+	Prefix : { present : Bool, x : U32, y : U32, previous : U64, next : U64 }
+	Cache : { prefixes : List(Prefix), rtl : Bool, native_rtl : Bool }
+	Cached : { state : GraphiteSlots, cache : [Present(Cache), Absent], operations : U64, stopped : U64 }
+	CachePreparation : { cache : [Present(Cache), Absent], operations : U64 }
+	PositionStart : { id : U64, previous : U64, x : U32, y : U32, prefixes : List(Prefix), resume : Bool }
+	empty_prefix : Prefix
+	empty_prefix = { present: False, x: 0, y: 0, previous: 0, next: 0 }
 	Copied : { state : GraphiteSlots, operations : U64, stopped : U64, aborted : Bool }
 	Frame : { id : U64, x : U32, y : U32 }
 
@@ -107,7 +114,7 @@ GraphitePosition :: {}.{
 			if child.sibling != 0 {
 				$pending = $pending.append({ ..frame, id: child.sibling })
 			}
-			if !child.deleted and GraphiteSlots.get_extra(state, frame.id, 28) <= level.to_u8_wrap().to_i32() {
+			if GraphiteSlots.get_extra(state, frame.id, 28) <= level.to_u8_wrap().to_i32() {
 				shift = GraphitePosition.shift_x(child, native_rtl)
 				x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
 				y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
@@ -153,16 +160,76 @@ GraphitePosition :: {}.{
 		if state.positioned {
 			return { state, operations: 0, stopped: 0 }
 		}
-		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x: _, advance_y: _ } = state
+		id = if (rtl) state.last else state.first
+		result = GraphitePosition.position_run(state, rtl, native_rtl, budget, { id, previous: 0, x: 0, y: 0, prefixes: [], resume: False })
+		{ state: result.state, operations: result.operations, stopped: result.stopped }
+	}
+
+	# Cache only complete positioning results. The pass owns all subsequent
+	# geometry changes; ordinary VM edits keep using the complete traversal.
+	prepare_cache : GraphiteSlots, Bool, Bool, U64 -> CachePreparation
+	prepare_cache = |state, rtl, native_rtl, budget| {
+		count = state.nodes.len()
+		if !state.positioned or count > budget or state.active > budget - count {
+			return { cache: Absent, operations: 0 }
+		}
+		var $prefixes = List.repeat(GraphitePosition.empty_prefix, count)
+		var $id = if (rtl) state.last else state.first
+		var $walked = 0
+		var $previous = 0
+		var $x = 0
+		var $y = 0
+		while $id != 0 and $walked < state.active {
+			$walked = $walked + 1
+			slot = GraphiteSlots.get(state, $id)
+			if slot.parent == 0 and !slot.deleted {
+				if $previous != 0 {
+					old = $prefixes.get($previous) ?? GraphitePosition.empty_prefix
+					$prefixes = $prefixes.set($previous, { ..old, next: $id }) ?? []
+				}
+				$prefixes = $prefixes.set($id, { present: True, x: $x, y: $y, previous: $previous, next: 0 }) ?? []
+				$previous = $id
+				$x = TableVar.f32_add($x, GraphiteSlots.get_extra(state, $id, 29).to_u32_wrap())
+				$y = TableVar.f32_add($y, GraphiteSlots.get_extra(state, $id, 30).to_u32_wrap())
+			}
+			$id = if (rtl) slot.previous else slot.next
+		}
+		{ cache: Present({ prefixes: $prefixes, rtl, native_rtl }), operations: count + $walked }
+	}
+
+	# A collision pass changes one root's physical offsets at a time. Begin
+	# from its exact prior prefix, retaining the full algorithm's rounding.
+	# Once the following prefix is bit-identical, its untouched suffix is
+	# still valid. The collision pass keeps forest/order/author metrics
+	# fixed; this cache does not validate arbitrary VM topology changes.
+	# A root absent from the prepared active forest uses Whole.
+	position_from : GraphiteSlots, Cache, U64, Bool, Bool, U64 -> Cached
+	position_from = |state, { prefixes, rtl: cached_rtl, native_rtl: cached_native_rtl }, root, rtl, native_rtl, budget| {
+		if state.positioned {
+			return { state, cache: Present({ prefixes, rtl: cached_rtl, native_rtl: cached_native_rtl }), operations: 0, stopped: 0 }
+		}
+		prefix = prefixes.get(root) ?? GraphitePosition.empty_prefix
+		slot = GraphiteSlots.get(state, root)
+		if slot.deleted or slot.parent != 0 or cached_rtl != rtl or cached_native_rtl != native_rtl or prefixes.len() != state.nodes.len() or !prefix.present {
+			id = if (rtl) state.last else state.first
+			return GraphitePosition.position_run(state, rtl, native_rtl, budget, { id, previous: 0, x: 0, y: 0, prefixes: [], resume: False })
+		}
+		GraphitePosition.position_run(state, rtl, native_rtl, budget, { id: root, previous: prefix.previous, x: prefix.x, y: prefix.y, prefixes, resume: True })
+	}
+
+	position_run : GraphiteSlots, Bool, Bool, U64, PositionStart -> Cached
+	position_run = |state, rtl, native_rtl, budget, { id: initial_id, previous: initial_previous, x: initial_x, y: initial_y, prefixes, resume }| {
+		var $prefixes = prefixes
+		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x: old_advance_x, advance_y: old_advance_y } = state
 		var $nodes = nodes
 		var $users = users
 		var $operations = 0
 		var $stopped = 0
-		var $pen_x = 0
-		var $pen_y = 0
-		var $id = if (rtl) last else first
+		var $pen_x = initial_x
+		var $pen_y = initial_y
+		var $id = initial_id
 		var $walked = 0
-		var $previous_root = 0
+		var $previous_root = initial_previous
 		var $pending = []
 		var $members = []
 		while $id != 0 and $walked < active and $stopped == 0 {
@@ -176,6 +243,14 @@ GraphitePosition :: {}.{
 			root = $nodes.get(root_id) ?? GraphiteSlots.no_slot
 			$id = if (rtl) root.previous else root.next
 			if root.parent == 0 and !root.deleted {
+				if resume {
+					old = $prefixes.get(root_id) ?? GraphitePosition.empty_prefix
+					# The first dirty root starts at its unchanged exact prefix.
+					# Avoid writing identical data, including any needless COW.
+					if old.x != $pen_x or old.y != $pen_y {
+						$prefixes = $prefixes.set(root_id, { ..old, x: $pen_x, y: $pen_y }) ?? []
+					}
+				}
 				# The public C API includes subsequent roots in the sibling chain.
 				if $previous_root != 0 {
 					previous = $nodes.get($previous_root) ?? GraphiteSlots.no_slot
@@ -213,33 +288,35 @@ GraphitePosition :: {}.{
 					if child.sibling != 0 {
 						$pending = $pending.append({ ..frame, id: child.sibling })
 					}
-					if !child.deleted {
-						shift = GraphitePosition.shift_x(child, native_rtl)
-						x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
-						y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
-						$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
-						$members = $members.append(frame.id)
-						# The right edge inherits parent collision motion but
-						# excludes this child's own collision correction. Left
-						# rebasing compares physical child/root origins; level metrics
-						# retain their independently queried authored geometry.
-						advance_x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.parent_x), TableVar.f32_add(shift, child.justify_width))
-						if TableVar.f32_lt(0, child.advance_x) {
-							$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(advance_x, shift), child.advance_x))
-						}
-						at = child.user_start + user_count
-						kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
-						enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
-						ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
-						physical_x = TableVar.f32_add(advance_x, ox)
-						# A negative relative anchor rebases a cluster only when
-						# its unrebased physical point crosses the segment origin.
-						if TableVar.f32_lt(TableVar.f32_add($pen_x, physical_x), 0) {
-							$left = TableVar.f32_min($left, TableVar.f32_sub(physical_x, root_physical_x))
-						}
-						if child.child != 0 {
-							$pending = $pending.append({ id: child.child, x, y, parent_x: physical_x })
-						}
+					# Deleted attachment nodes retain their geometry and authored
+					# advance. Their live descendants still inherit that transform;
+					# only the active output list excludes the deleted node.
+					shift = GraphitePosition.shift_x(child, native_rtl)
+					x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
+					y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
+					$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
+					$members = $members.append(frame.id)
+					# The right edge inherits parent collision motion but
+					# excludes this child's own collision correction. Left
+					# rebasing compares physical child/root origins; level metrics
+					# retain their independently queried authored geometry.
+					advance_x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.parent_x), TableVar.f32_add(shift, child.justify_width))
+					if TableVar.f32_lt(0, child.advance_x) {
+						$right = TableVar.f32_max($right, TableVar.f32_add(TableVar.f32_sub(advance_x, shift), child.advance_x))
+					}
+					at = child.user_start + user_count
+					kern = ($users.get(at + 3) ?? 0).bitwise_and(16) != 0
+					enabled = ($users.get(at + 31) ?? 0) != 0 and (native_rtl or !kern)
+					ox = if (enabled) ($users.get(at + 8) ?? 0).to_u32_wrap() else 0
+					physical_x = TableVar.f32_add(advance_x, ox)
+					# Positive-advance children reserve their full negative
+					# relative extent. Zero/negative-advance marks can overlay
+					# preceding roots until they cross the segment origin.
+					if TableVar.f32_lt(0, child.advance_x) or TableVar.f32_lt(TableVar.f32_add($pen_x, physical_x), 0) {
+						$left = TableVar.f32_min($left, TableVar.f32_sub(physical_x, root_physical_x))
+					}
+					if child.child != 0 {
+						$pending = $pending.append({ id: child.child, x, y, parent_x: physical_x })
 					}
 				}
 				if $stopped != 0 {
@@ -274,9 +351,26 @@ GraphitePosition :: {}.{
 				$users = $users.set(root.user_start + user_count + 30, $cluster_y.to_i32_wrap()) ?? []
 				$pen_x = TableVar.f32_add($pen_x, cluster_x)
 				$pen_y = TableVar.f32_add($pen_y, $cluster_y)
+				if resume {
+					entry = $prefixes.get(root_id) ?? GraphitePosition.empty_prefix
+					if entry.next != 0 {
+						next = $prefixes.get(entry.next) ?? GraphitePosition.empty_prefix
+						if next.x == $pen_x and next.y == $pen_y {
+							# Whole would link this root when visiting its successor.
+							current = $nodes.get(root_id) ?? GraphiteSlots.no_slot
+							$nodes = $nodes.set(root_id, { ..current, sibling: entry.next }) ?? []
+							# The cached suffix, including its final advance, is exact.
+							$pen_x = old_advance_x
+							$pen_y = old_advance_y
+							break
+						}
+					}
+					# Root links skip active descendants already positioned above.
+					$id = entry.next
+				}
 			}
 		}
-		{ state: { nodes: $nodes, users: $users, user_count, justification_levels, feature_changes, first, last, active, positioned: $stopped == 0, advance_x: $pen_x, advance_y: $pen_y }, operations: $operations, stopped: $stopped }
+		{ state: { nodes: $nodes, users: $users, user_count, justification_levels, feature_changes, first, last, active, positioned: $stopped == 0, advance_x: $pen_x, advance_y: $pen_y }, cache: if (resume and $stopped == 0) Present({ prefixes: $prefixes, rtl, native_rtl }) else Absent, operations: $operations, stopped: $stopped }
 	}
 
 	# Public Graphite2 C-API witnesses establish that self-links and links
@@ -621,4 +715,206 @@ expect {
 		}
 	}
 	$good
+}
+
+# Original public controls distinguish a positive child's reserved extent
+# from a zero/negative mark overlay after a preceding 602-unit root.
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for advance in [-1, 0, 1, 601] {
+		a = GraphiteSlots.append(GraphiteSlots.make(0, 3), { ..GraphiteSlots.no_slot, advance_x: n(602) })
+		b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(advance), attach_x: n(-601) })
+		c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, advance_x: n(603) })
+		linked = GraphitePosition.attach(c.state, 2, 3, 100)
+		positioned = GraphitePosition.position(linked.state, False, 100)
+		child = GraphiteSlots.get(positioned.state, 2)
+		root = GraphiteSlots.get(positioned.state, 3)
+		$ok = $ok and positioned.stopped == 0 and child.position_x == n(if (advance > 0) 602 else 1) and root.position_x == n(if (advance > 0) 1203 else 602)
+	}
+	$ok
+}
+
+# Incremental collision positioning must be bit-identical to a complete
+# traversal, including zero-advance origin guards and large F32 prefixes.
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	var $saved = 0
+	for rtl in [False, True] {
+		for native_rtl in [False, True] {
+			for prefix in [0, 16777216] {
+				for child_advance in [-1, 0, 1, 601] {
+					var $state = GraphiteSlots.make(0, 5)
+					for advance in [prefix, 601, 602, child_advance, 0] {
+						appended = GraphiteSlots.append($state, { ..GraphiteSlots.no_slot, advance_x: n(advance), shift_y: n(7), attach_x: n(31), attach_y: n(13), with_x: n(237), with_y: n(17) })
+						$state = GraphiteSlots.set_extra(appended.state, appended.id, 31, 1)
+					}
+					$state = GraphitePosition.attach($state, 4, 2, 1000).state
+					$state = GraphitePosition.attach($state, 5, 3, 1000).state
+					positioned = GraphitePosition.position_for_font($state, rtl, native_rtl, 1000)
+					cache = GraphitePosition.prepare_cache(positioned.state, rtl, native_rtl, 1000)
+					match cache.cache {
+						Absent => {
+							$ok = False
+						}
+						Present(prepared) => {
+							for pair in [(2, 2), (4, 2), (3, 3), (5, 3)] {
+								for offset in [-500, -1, 1, 500] {
+									changed = GraphiteSlots.set_extra(GraphiteSlots.set_extra(positioned.state, pair.0, 8, n(offset).to_i32_wrap()), pair.0, 9, n(-offset).to_i32_wrap())
+									dirty = { ..changed, positioned: False }
+									full = GraphitePosition.position_for_font(dirty, rtl, native_rtl, 1000)
+									partial = GraphitePosition.position_from(dirty, prepared, pair.1, rtl, native_rtl, 1000)
+									$ok = $ok and full.stopped == 0 and partial.stopped == 0 and full.state.nodes == partial.state.nodes and full.state.users == partial.state.users and full.state.advance_x == partial.state.advance_x and full.state.advance_y == partial.state.advance_y and full.state.positioned == partial.state.positioned
+									if partial.operations < full.operations {
+										$saved = $saved + 1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	$ok and $saved > 0
+}
+
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for rtl in [False, True] {
+		for native_rtl in [False, True] {
+			var $state = GraphiteSlots.make(0, 5)
+			for advance in [16777216, 601, -300, 0, 602] {
+				appended = GraphiteSlots.append($state, { ..GraphiteSlots.no_slot, advance_x: n(advance), attach_x: n(13), with_x: n(37), attach_y: n(-2), with_y: n(7) })
+				$state = GraphiteSlots.set_extra(appended.state, appended.id, 31, 1)
+			}
+			$state = GraphitePosition.attach($state, 4, 2, 1000).state
+			$state = GraphitePosition.attach($state, 5, 3, 1000).state
+			$state = GraphiteSlots.set_extra($state, 2, 3, 17)
+			$state = GraphitePosition.position_for_font($state, rtl, native_rtl, 1000).state
+			var $cache = GraphitePosition.prepare_cache($state, rtl, native_rtl, 1000).cache
+			for change in [(4, 2, -500), (1, 1, 13), (3, 3, 1), (5, 3, 510), (4, 2, 0), (1, 1, -37), (2, 2, 2)] {
+				match $cache {
+					Absent => {
+						$ok = False
+					}
+					Present(prepared) => {
+						changed = GraphiteSlots.set_extra($state, change.0, 8, n(change.2).to_i32_wrap())
+						dirty = { ..changed, positioned: False }
+						full = GraphitePosition.position_for_font(dirty, rtl, native_rtl, 1000)
+						partial = GraphitePosition.position_from(dirty, prepared, change.1, rtl, native_rtl, 1000)
+						fresh = GraphitePosition.prepare_cache(full.state, rtl, native_rtl, 1000)
+						$ok = $ok and partial.stopped == 0 and full.state.nodes == partial.state.nodes and full.state.users == partial.state.users and full.state.advance_x == partial.state.advance_x and full.state.advance_y == partial.state.advance_y and fresh.cache == partial.cache
+						$state = partial.state
+						$cache = partial.cache
+					}
+				}
+			}
+		}
+	}
+	$ok
+}
+
+expect {
+	f = attachment_fixture
+	attached = GraphitePosition.attach(f.state, 1, 3, 100).state
+	deleted = GraphiteSlots.delete(attached, 3)
+	positioned = GraphitePosition.position_for_font(deleted, False, True, 100)
+	exact = positioned.state.nodes.len() + positioned.state.active
+	prepared = GraphitePosition.prepare_cache(positioned.state, False, True, exact)
+	short = GraphitePosition.prepare_cache(positioned.state, False, True, exact - 1)
+	match prepared.cache {
+		Absent => False
+		Present(cache) => {
+			dirty = { ..positioned.state, positioned: False }
+			full = GraphitePosition.position_for_font(dirty, False, True, 100)
+			orphan = GraphitePosition.position_from(dirty, cache, 3, False, True, 100)
+			exhausted = GraphitePosition.position_from(dirty, cache, 2, False, True, 0)
+			prepared.operations == exact and short.operations == 0 and short.cache == Absent and orphan.cache == Absent and orphan.state.nodes == full.state.nodes and orphan.state.users == full.state.users and exhausted.stopped == 2 and exhausted.operations == 0 and exhausted.cache == Absent
+		}
+	}
+}
+
+expect {
+	f = attachment_fixture
+	positioned = GraphitePosition.position_for_font(f.state, False, False, 100)
+	match GraphitePosition.prepare_cache(positioned.state, False, False, 100).cache {
+		Absent => False
+		Present(cache) => {
+			changed = GraphitePosition.attach(positioned.state, 2, 1, 100).state
+			full = GraphitePosition.position_for_font(changed, False, False, 100)
+			fallback = GraphitePosition.position_from(changed, cache, 2, False, False, 100)
+			fallback.cache == Absent and fallback.state.nodes == full.state.nodes and fallback.state.users == full.state.users and fallback.state.advance_x == full.state.advance_x and fallback.stopped == 0
+		}
+	}
+}
+
+# Public-C-API original controls establish that a deleted intermediate
+# retains its attachment transform and positive/negative guard bounds.
+deleted_attachment_fixture = |dead_advance, live_advance, dead_x| {
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 4), { ..GraphiteSlots.no_slot, glyph: 1, advance_x: n(live_advance), attach_x: n(100), with_x: n(20), attach_y: n(190), with_y: n(20) })
+	d = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, glyph: 2, advance_x: n(dead_advance), attach_x: n(dead_x + 20), with_x: n(20), attach_y: n(190), with_y: n(20) })
+	b = GraphiteSlots.append(d.state, { ..GraphiteSlots.no_slot, glyph: 3, advance_x: n(603) })
+	e = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, glyph: 4, advance_x: n(604) })
+	first = GraphitePosition.attach(e.state, a.id, d.id, 100).state
+	second = GraphitePosition.attach(first, d.id, b.id, 100).state
+	GraphiteSlots.delete(second, d.id)
+}
+
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for dead_advance in [-5000, 0, 5000] {
+		for live_advance in [0, 1] {
+			positioned = GraphitePosition.position_for_font(deleted_attachment_fixture(dead_advance, live_advance, 80), False, False, 100)
+			next_x = if (dead_advance == 5000) 5080 else 603
+			$ok = $ok and positioned.stopped == 0 and GraphiteSlots.get(positioned.state, 1).position_x == n(160) and GraphiteSlots.get(positioned.state, 1).position_y == n(340) and GraphiteSlots.get(positioned.state, 2).position_x == n(80) and GraphiteSlots.get(positioned.state, 2).position_y == n(170) and GraphiteSlots.get(positioned.state, 4).position_x == n(next_x) and positioned.state.advance_x == n(next_x + 604)
+		}
+	}
+	$ok
+}
+
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for dead_advance in [-1, 0, 1] {
+		for live_advance in [0, 1] {
+			positioned = GraphitePosition.position_for_font(deleted_attachment_fixture(dead_advance, live_advance, -80), False, False, 100)
+			$ok = $ok and positioned.stopped == 0 and GraphiteSlots.get(positioned.state, 3).position_x == n(80) and GraphiteSlots.get(positioned.state, 2).position_x == 0 and GraphiteSlots.get(positioned.state, 1).position_x == n(80) and GraphiteSlots.get(positioned.state, 4).position_x == n(683) and positioned.state.advance_x == n(1287)
+		}
+	}
+	$ok
+}
+
+expect {
+	initial = GraphitePosition.position_for_font(deleted_attachment_fixture(5000, 1, 80), False, False, 100).state
+	match GraphitePosition.prepare_cache(initial, False, False, 100).cache {
+		Absent => False
+		Present(cache) => {
+			root = GraphiteSlots.get(initial, 3)
+			dirty = GraphiteSlots.set(initial, 3, { ..root, shift_y: TableVar.f32_from_int(17) })
+			full = GraphitePosition.position_for_font(dirty, False, False, 100)
+			partial = GraphitePosition.position_from(dirty, cache, 3, False, False, 100)
+			partial.stopped == 0 and partial.state.nodes == full.state.nodes and partial.state.users == full.state.users and partial.state.advance_x == full.state.advance_x and partial.state.advance_y == full.state.advance_y
+		}
+	}
+}
+
+# Original post-DELETE VM metric probes keep a linked inactive intermediate
+# in the composite metric, including its descendant and reserved advance.
+expect {
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 3), { ..GraphiteSlots.no_slot, advance_x: n(100), attach_x: n(80), attach_y: n(170) })
+	d = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(5000), attach_x: n(80), attach_y: n(170) })
+	r = GraphiteSlots.append(d.state, { ..GraphiteSlots.no_slot, advance_x: n(603) })
+	first = GraphitePosition.attach(r.state, 1, 2, 100)
+	second = GraphitePosition.attach(first.state, 2, 3, 100)
+	deleted = GraphiteSlots.delete(second.state, 2)
+	advance = GraphitePosition.metric(deleted, 3, 8, 1, False, 1000, geometry_metric)
+	top = GraphitePosition.metric(deleted, 3, 2, 1, False, 1000, geometry_metric)
+	right = GraphitePosition.metric(deleted, 3, 5, 1, False, 1000, geometry_metric)
+	advance.stopped == 0 and advance.value == 5080 and top.value == 940 and right.value == 460
 }

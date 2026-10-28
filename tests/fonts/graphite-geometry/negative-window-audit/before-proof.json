@@ -1,0 +1,118 @@
+{
+  "font_sha256": "dfa0a21bc0cf25925f15f6a905c1e4087b0ff42412e382bb37da3f79c4fb8d1a",
+  "mode0_equals_mode6": true,
+  "before_binary_sha256": "31038851e8addbd4ea471cc7bd35135e13f5d87f9f7be989fdcc2ae430cb1d6d",
+  "expected": {
+    "success": true,
+    "abort": "NoAbort",
+    "glyphs": [
+      {
+        "glyph": 3,
+        "cluster": 2,
+        "advance": [
+          1284,
+          0
+        ],
+        "offset": [
+          0,
+          0
+        ],
+        "flags": 1
+      },
+      {
+        "glyph": 2,
+        "cluster": 1,
+        "advance": [
+          683,
+          0
+        ],
+        "offset": [
+          0,
+          0
+        ],
+        "flags": 1
+      },
+      {
+        "glyph": 1,
+        "cluster": 0,
+        "advance": [
+          601,
+          0
+        ],
+        "offset": [
+          0,
+          170
+        ],
+        "flags": 0
+      }
+    ]
+  },
+  "actual_before": {
+    "success": true,
+    "abort": "NoAbort",
+    "glyphs": [
+      {
+        "glyph": 3,
+        "cluster": 2,
+        "advance": [
+          1284,
+          0
+        ],
+        "offset": [
+          0,
+          0
+        ],
+        "flags": 1
+      },
+      {
+        "glyph": 2,
+        "cluster": 1,
+        "advance": [
+          -300,
+          0
+        ],
+        "offset": [
+          0,
+          0
+        ],
+        "flags": 1
+      },
+      {
+        "glyph": 1,
+        "cluster": 0,
+        "advance": [
+          1584,
+          0
+        ],
+        "offset": [
+          0,
+          170
+        ],
+        "flags": 0
+      }
+    ],
+    "ot_glyph2_advance": 602,
+    "budgets": [],
+    "engine": "Graphite"
+  },
+  "source_predicate": {
+    "dx": 1967,
+    "dy": 170,
+    "limits": [
+      -1000,
+      -1,
+      0,
+      1
+    ],
+    "far_forbidden_x": [
+      -2267,
+      -967
+    ],
+    "near_forbidden_x": [
+      -983,
+      317
+    ],
+    "source_broad_active_before": false
+  },
+  "reference_trace_sha256": "5d1ae6ba303c9cf4801b8fd8f47b0bbecfb1d9891582b1c3d171925201fbfc93"
+}

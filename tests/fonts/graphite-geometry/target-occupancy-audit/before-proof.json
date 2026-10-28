@@ -1,0 +1,87 @@
+{
+  "binary_sha256": "1cb260a751506a378a5e5ec1eb000485e6cf6871947cc84c4155294a11278925",
+  "binary_path": "/private/tmp/graphite-index-dev/query",
+  "scope": "historical pre-upper-margin native public query, not reference oracle",
+  "rows": [
+    {
+      "id": "collision-target-bin-25",
+      "font_sha256": "737ee0e067f43e2f6722ad047a2ad924f64cbd936d3410db32ff12d1a412e56f",
+      "request": "collision-target-bin-25\t\t\trtl\t0\t\tgraphite2\t0\t18446744073709551615\tab",
+      "answer": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -900,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      }
+    },
+    {
+      "id": "collision-target-bin-26",
+      "font_sha256": "548602b746a0f65d9b8e30f6011713e72eaf63c521911ece58c0511abbaf8485",
+      "request": "collision-target-bin-26\t\t\trtl\t0\t\tgraphite2\t0\t18446744073709551615\tab",
+      "answer": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              308,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              601,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "oracle": {
+    "engine": "OTS",
+    "version": "ots 9.3.0",
+    "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
+    "source_commit": "884861e"
+  },
+  "records": [
+    {
+      "id": "deleted-attachment-benchmark-4",
+      "font_sha256": "5b6a75682eee17ed044e306cc4d9a98097fa5536ff31394909dcdb9ba9b7c7c3",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "f7804afd3671a62d31e1adfd6739a4f846e7c0f7c63ec7387c5548c1a5e8329e"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "deleted-attachment-positive-diagnostic-4",
+      "font_sha256": "062afd005afaffd4331ba3691377ea489b1e9ab8c1953c92cdc0881354abe322",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "80b0a5eaec06f5423a2dd24b00b60afafc3766e7d4f90b6b9f5ed964b9186cf2",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "f7804afd3671a62d31e1adfd6739a4f846e7c0f7c63ec7387c5548c1a5e8329e"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "description": "Optimized native narrow totality campaign after target upper occupancy, sequencing index, phase3 spacing, and conservative pruning; source-sentinel served bundle.",
+  "artifact": {
+    "source_snapshot": "6c0b843; Collision33fc73d plus indexd6b2d4c",
+    "bundle": "2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst",
+    "bundle_sha256": "ae8af22ff45e0b93dc733768393c9137e2c704cda7aa36261f6be8cdc9077fcb",
+    "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+    "source_sentinel": true,
+    "build_command": [
+      "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+      "build",
+      "--opt=speed",
+      "--fuzz",
+      "fuzz/font-graphite-geometry.roc",
+      "--output=/private/tmp/graphite-geometry-fuzz-occupancy/state/fuzz/bin/font-graphite-geometry",
+      "--replace-dep",
+      "./package/main.roc",
+      "http://127.0.0.1:58391/2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst"
+    ],
+    "target_sha256": "99d61f70c6b70651acc38e383f48a169e51c86ad00035ce5eba099da8dd05bfd"
+  },
+  "report_sha256": "2b2ed0d1f4923e808af98971be859f168c52c8c03c4dc2fdb5ea6a27e736e729",
+  "duration_ms": 21141,
+  "outcome": "passed",
+  "finding_kind": null,
+  "configuration": {
+    "corpus": "/private/tmp/graphite-geometry-fuzz-occupancy/state/fuzz/smoke-corpus/font-graphite-geometry",
+    "time_seconds": null,
+    "runs": "1000",
+    "max_input_size": "1048576",
+    "memory_limit_mb": "2048",
+    "timeout_seconds": "10",
+    "dictionary": "/private/tmp/graphite-geometry-fuzz-occupancy/mirror/fuzz/dictionaries/narrow.dict",
+    "seed": "1",
+    "leak_detection": true,
+    "command": [
+      "/private/tmp/graphite-geometry-fuzz-occupancy/state/fuzz/bin/font-graphite-geometry",
+      "run",
+      "/private/tmp/graphite-geometry-fuzz-occupancy/state/fuzz/smoke-corpus/font-graphite-geometry",
+      "--max-input-size=1048576",
+      "--timeout=10",
+      "--memory-limit=2048",
+      "--dictionary=/private/tmp/graphite-geometry-fuzz-occupancy/mirror/fuzz/dictionaries/narrow.dict",
+      "--runs=1000",
+      "--seed=1",
+      "--artifact-dir=/private/tmp/graphite-geometry-fuzz-occupancy/state/fuzz/runs/font-graphite-geometry/smoke/failures",
+      "--print-final-stats"
+    ]
+  },
+  "executable": {
+    "name": "font-graphite-geometry",
+    "sha256": "59f7c39498a5e883c3702536d6e916c25da888ccabcf6be76d564186c74e541d"
+  },
+  "termination": {
+    "exit_code": 0,
+    "signal": null
+  },
+  "libfuzzer": {
+    "coverage_kind": "sanitizer_edge_feedback",
+    "executed_units": 2454,
+    "average_exec_per_sec": 116,
+    "new_units_added": 0,
+    "slowest_unit_time_sec": 0,
+    "peak_rss_mb": 59,
+    "coverage_edges": 13454,
+    "coverage_features": 36622
+  },
+  "failures": [],
+  "corpus_count": 2453,
+  "corpus_manifest_sha256": "ae980cf6425dfc15e747548f84762832acc806ed12645f5327fd25d5c28ff55b"
+}

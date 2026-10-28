@@ -1,0 +1,25 @@
+{
+  "source": "cb95122f811b6e7e686cbca4ef02abdbdc6e8c07",
+  "bundle": "25Gg9U3PhPLmKwu7S9Ga8emgkWzmjcSgLyDqNifFbVm2.tar.zst",
+  "bundle_sha256": "eecf8e51a35e5171ce8bd0a79f833ec2b7e0e0b780aaf4c070b9808a8b2dce62",
+  "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "query_sha256": "aa128d50e1c31e7812b9bc2125355b67bb5160457487be5c680453f427a12bba",
+  "source_sentinel": true,
+  "optimization": "dev",
+  "build_command": [
+    "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "build",
+    "--opt=dev",
+    "tests/fonts/graphite/query.roc",
+    "--output=/private/tmp/graphite-frame-dev/query",
+    "--replace-dep",
+    "./package/main.roc",
+    "http://127.0.0.1:60315/25Gg9U3PhPLmKwu7S9Ga8emgkWzmjcSgLyDqNifFbVm2.tar.zst"
+  ],
+  "owned_modules": {
+    "GraphiteCollision.roc": "b29faa4711faaf715a84b55dce5e71618abd3ffb2b3e45d6cd65e8666e93d70a",
+    "GraphitePosition.roc": "fb22e83af4f3fb4574e99ace21645c60673a7e729dbffc3bd53c37689d388ce4"
+  },
+  "binary_sha256": "896a029e0ece70ffd736af645fc4396172d85b242f98d8b3435463349c0bdf34"
+}

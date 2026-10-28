@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "geometry-benchmark-attachment-8",
+      "font": "benchmark/attachment.ttf",
+      "text": "abababababababab",
+      "direction": "ltr",
+      "script": "Latn",
+      "copies": 8
+    },
+    {
+      "id": "geometry-benchmark-attachment-32",
+      "font": "benchmark/attachment.ttf",
+      "text": "abababababababababababababababababababababababababababababababab",
+      "direction": "ltr",
+      "script": "Latn",
+      "copies": 32
+    },
+    {
+      "id": "geometry-benchmark-attachment-128",
+      "font": "benchmark/attachment.ttf",
+      "text": "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab",
+      "direction": "ltr",
+      "script": "Latn",
+      "copies": 128
+    },
+    {
+      "id": "geometry-benchmark-kerning-parts-4",
+      "font": "benchmark/kerning-parts.ttf",
+      "text": "abababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 4
+    },
+    {
+      "id": "geometry-benchmark-kerning-parts-8",
+      "font": "benchmark/kerning-parts.ttf",
+      "text": "abababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 8
+    },
+    {
+      "id": "geometry-benchmark-kerning-parts-16",
+      "font": "benchmark/kerning-parts.ttf",
+      "text": "abababababababababababababababab",
+      "direction": "rtl",
+      "script": "Arab",
+      "copies": 16
+    }
+  ]
+}

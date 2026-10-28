@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "engine_implementation_sources_used": false,
+  "release_tracing_bit_identical": 24,
+  "mode0_mode6_bit_identical": 24,
+  "release_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 2,
+    "face_options": "explicit per case"
+  },
+  "tracing_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 2,
+    "face_options": "explicit per case"
+  },
+  "records.json_sha256": "0a9fc182c45750617629de7afbe97e80b593b2eeb504cf8cd30f15924c5c7772",
+  "mode6-records.json_sha256": "cb128ccec20f9dca63ffe375be0e421e12c8f58ac617d8aba9bf7555afab90da",
+  "traces.json_sha256": "f55d183da92141e8be23ee01e83dd58ef7d5315894f5ac4db85616036f625e4e"
+}

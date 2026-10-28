@@ -28,7 +28,10 @@ GraphiteCollision :: {}.{
 	# authored during that pass. Recovering one from the rounded sum changes
 	# later positions; both components are required even between groups.
 	Offset : { base_x : U32, base_y : U32, delta_x : U32, delta_y : U32 }
-	Work : { state : GraphiteSlots, offsets : List(Offset), roots : List(U64), ranks : List(U64) }
+	MemberSpan : { start : U64, length : U64 }
+	Members : [Pending, Scan, Ready({ spans : List(MemberSpan), ids : List(U64) })]
+	PositionCache : [Pending, Scan, Ready({ rtl : Bool, native_rtl : Bool })]
+	Work : { state : GraphiteSlots, offsets : List(Offset), roots : List(U64), ranks : List(U64), members : Members, positions : PositionCache, prefixes : List(GraphitePosition.Prefix), dirty_root : U64 }
 	Worked : { work : Work, operations : U64, stopped : U64, movement : U32 }
 	Prepared : { work : Work, operations : U64, stopped : U64 }
 
@@ -36,7 +39,7 @@ GraphiteCollision :: {}.{
 	prepare_work = |state, budget| {
 		count = state.nodes.len()
 		if count > budget {
-			return { work: { state, offsets: [], roots: [], ranks: [] }, operations: 0, stopped: 2 }
+			return { work: { state, offsets: [], roots: [], ranks: [], members: Scan, positions: Pending, prefixes: [], dirty_root: 0 }, operations: 0, stopped: 2 }
 		}
 		var $offsets = List.with_capacity(count)
 		for id in 0..<count {
@@ -52,7 +55,7 @@ GraphiteCollision :: {}.{
 			var $root = 0
 			while $cursor != 0 {
 				if $operations >= budget {
-					return { work: { state, offsets: $offsets, roots: [], ranks: [] }, operations: $operations, stopped: 2 }
+					return { work: { state, offsets: $offsets, roots: [], ranks: [], members: Scan, positions: Pending, prefixes: [], dirty_root: 0 }, operations: $operations, stopped: 2 }
 				}
 				$operations = $operations + 1
 				known = $roots.get($cursor) ?? 0
@@ -67,7 +70,7 @@ GraphiteCollision :: {}.{
 					break
 				}
 				if $path.len() >= count {
-					return { work: { state, offsets: $offsets, roots: [], ranks: [] }, operations: $operations, stopped: 4 }
+					return { work: { state, offsets: $offsets, roots: [], ranks: [], members: Scan, positions: Pending, prefixes: [], dirty_root: 0 }, operations: $operations, stopped: 4 }
 				}
 				$cursor = parent
 			}
@@ -77,23 +80,95 @@ GraphiteCollision :: {}.{
 		}
 		var $cursor = state.first
 		var $rank = 0
+		var $sequence = False
 		while $cursor != 0 and $rank < state.active {
 			if $operations >= budget {
-				return { work: { state, offsets: $offsets, roots: [], ranks: [] }, operations: $operations, stopped: 2 }
+				return { work: { state, offsets: $offsets, roots: [], ranks: [], members: Scan, positions: Pending, prefixes: [], dirty_root: 0 }, operations: $operations, stopped: 2 }
 			}
 			$operations = $operations + 1
 			$ranks = $ranks.set($cursor, $rank) ?? []
+			if GraphiteSlots.get_extra(state, $cursor, 3).bitwise_and(17) == 1 and GraphiteSlots.get_extra(state, $cursor, 15) != 0 {
+				$sequence = True
+			}
 			$cursor = (state.nodes.get($cursor) ?? GraphiteSlots.no_slot).next
 			$rank = $rank + 1
 		}
-		{ work: { state, offsets: $offsets, roots: $roots, ranks: $ranks }, operations: $operations, stopped: 0 }
+		{ work: { state, offsets: $offsets, roots: $roots, ranks: $ranks, members: if ($sequence) Pending else Scan, positions: Pending, prefixes: [], dirty_root: 0 }, operations: $operations, stopped: 0 }
+	}
+
+	# Roots and ranks are fixed throughout a positioning pass: collision
+	# corrections change coordinates, never active or attachment links.
+	# Group root members once, in active-list order. A low-budget call keeps
+	# the original scan instead of exhausting its work just to build a cache.
+	prepare_members : Work, U64 -> Prepared
+	prepare_members = |work, budget| {
+		match work.members {
+			Pending => {}
+			_ => return { work, operations: 0, stopped: 0 }
+		}
+		count = work.state.nodes.len()
+		active = work.state.active
+		if count > budget or active > (budget - count) / 2 {
+			return { work: { ..work, members: Scan }, operations: 0, stopped: 0 }
+		}
+		var $spans = List.repeat({ start: 0, length: 0 }, count)
+		var $cursor = work.state.first
+		var $walked = 0
+		while $cursor != 0 and $walked < active {
+			root = work.roots.get($cursor) ?? 0
+			span = $spans.get(root) ?? { start: 0, length: 0 }
+			# Prepared root IDs index the aligned node pool.
+			$spans = $spans.set(root, { ..span, length: span.length + 1 }) ?? []
+			$cursor = GraphiteSlots.get(work.state, $cursor).next
+			$walked = $walked + 1
+		}
+		var $start = 0
+		for root in 0..<count {
+			span = $spans.get(root) ?? { start: 0, length: 0 }
+			$spans = $spans.set(root, { start: $start, length: 0 }) ?? []
+			$start = $start + span.length
+		}
+		var $ids = List.repeat(0, $start)
+		$cursor = work.state.first
+		$walked = 0
+		while $cursor != 0 and $walked < active {
+			root = work.roots.get($cursor) ?? 0
+			span = $spans.get(root) ?? { start: 0, length: 0 }
+			# The counting pass reserved exactly this root's active members.
+			$ids = $ids.set(span.start + span.length, $cursor) ?? []
+			$spans = $spans.set(root, { ..span, length: span.length + 1 }) ?? []
+			$cursor = GraphiteSlots.get(work.state, $cursor).next
+			$walked = $walked + 1
+		}
+		{ work: { ..work, members: Ready({ spans: $spans, ids: $ids }) }, operations: count + active * 2, stopped: 0 }
+	}
+
+	# The member pool is sorted by active rank within each root span.
+	member_bound : List(U64), List(U64), MemberSpan, U64, U64 -> { index : U64, operations : U64, stopped : U64 }
+	member_bound = |ids, ranks, span, rank, budget| {
+		var $low = span.start
+		var $high = span.start + span.length
+		var $operations = 0
+		while $low < $high {
+			if $operations >= budget {
+				return { index: $low, operations: $operations, stopped: 2 }
+			}
+			$operations = $operations + 1
+			mid = $low + ($high - $low) / 2
+			if (ranks.get(ids.get(mid) ?? 0) ?? 0) < rank {
+				$low = mid + 1
+			} else {
+				$high = mid
+			}
+		}
+		{ index: $low, operations: $operations, stopped: 0 }
 	}
 
 	# Called only for an index covered by prepare_work's aligned pool.
 	# The stored physical offset is rounded base + independently rounded delta.
-	store_work_shift : Work, U64, U32, U32, Bool -> { work : Work, movement : U32 }
-	store_work_shift = |work, id, x, y, feasible| {
-		{ state, offsets, roots, ranks } = work
+	store_work_shift : Work, U64, U32, U32, Bool, Bool, Bool, U64 -> { work : Work, movement : U32, operations : U64 }
+	store_work_shift = |work, id, x, y, feasible, rtl, native_rtl, budget| {
+		{ state, offsets, roots, ranks, members, positions, prefixes, dirty_root } = work
 		old = offsets.get(id) ?? { base_x: 0, base_y: 0, delta_x: 0, delta_y: 0 }
 		delta_x = TableVar.f32_sub(x, old.base_x)
 		delta_y = TableVar.f32_sub(y, old.base_y)
@@ -103,7 +178,62 @@ GraphiteCollision :: {}.{
 		stored = { ..old, delta_x, delta_y }
 		# The aligned pool and slot were checked by the pass walk.
 		updated = offsets.set(id, stored) ?? []
-		{ work: { state: GraphiteCollision.store_shift(state, id, TableVar.f32_add(old.base_x, delta_x), TableVar.f32_add(old.base_y, delta_y), feasible), offsets: updated, roots, ranks }, movement }
+		physical_x = TableVar.f32_add(old.base_x, delta_x)
+		physical_y = TableVar.f32_add(old.base_y, delta_y)
+		changed = GraphiteSlots.get_extra(state, id, 8).to_u32_wrap() != physical_x or GraphiteSlots.get_extra(state, id, 9).to_u32_wrap() != physical_y
+		var $positions = positions
+		var $prefixes = prefixes
+		var $operations = 0
+		if changed {
+			match $positions {
+				Pending => {
+					{ cache: prepared_cache, operations: preparation_operations } = GraphitePosition.prepare_cache(state, rtl, native_rtl, budget)
+					$operations = preparation_operations
+					match prepared_cache {
+						Absent => {
+							$positions = Scan
+						}
+						Present(cache) => {
+							$positions = Ready({ rtl: cache.rtl, native_rtl: cache.native_rtl })
+							$prefixes = cache.prefixes
+						}
+					}
+				}
+				Ready(_) => {
+					# Multiple independently dirty roots require a complete pass.
+					if !state.positioned {
+						$positions = Scan
+						$prefixes = []
+					}
+				}
+				Scan => {}
+			}
+		}
+		{ work: { state: GraphiteCollision.store_shift(state, id, physical_x, physical_y, feasible), offsets: updated, roots, ranks, members, positions: $positions, prefixes: $prefixes, dirty_root: if (changed) (roots.get(id) ?? 0) else dirty_root }, movement, operations: $operations }
+	}
+
+	# Only SHIFT uses the single-dirty-root cache. KERN changes authored
+	# advances as well and keeps the ordinary complete traversal.
+	position_work : Work, Context, U64 -> Prepared
+	position_work = |{ state, offsets, roots, ranks, members, positions, prefixes, dirty_root }, context, budget| {
+		if state.positioned {
+			return { work: { state, offsets, roots, ranks, members, positions, prefixes, dirty_root: 0 }, operations: 0, stopped: 0 }
+		}
+		# The mutable pool is a direct Work field, not inside the tag payload
+		# inspected to choose the path. No tagged cache owner spans mutation.
+		match positions {
+			Ready(flags) => {
+				{ state: positioned, cache: updated_cache, operations, stopped } = GraphitePosition.position_from(state, { prefixes, rtl: flags.rtl, native_rtl: flags.native_rtl }, dirty_root, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget)
+				match updated_cache {
+					Present({ prefixes: positioned_prefixes, rtl, native_rtl }) => { work: { state: positioned, offsets, roots, ranks, members, positions: Ready({ rtl, native_rtl }), prefixes: positioned_prefixes, dirty_root: 0 }, operations, stopped }
+					Absent => { work: { state: positioned, offsets, roots, ranks, members, positions: Scan, prefixes: [], dirty_root: 0 }, operations, stopped }
+				}
+			}
+			other => {
+				{ state: positioned, operations, stopped } = GraphitePosition.position_for_font(state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget)
+				{ work: { state: positioned, offsets, roots, ranks, members, positions: other, prefixes, dirty_root: 0 }, operations, stopped }
+			}
+		}
 	}
 
 	store_shift : GraphiteSlots, U64, U32, U32, Bool -> GraphiteSlots
@@ -137,6 +267,36 @@ GraphiteCollision :: {}.{
 		rank = work.ranks.get(id) ?? 0
 		var $cursor = group.first
 		var $operations = 0
+		var $member_start = 0
+		var $member_end = 0
+		var $member_index = 0
+		match work.members {
+			Ready(index) => {
+				span = index.spans.get(root) ?? { start: 0, length: 0 }
+				first_rank = work.ranks.get(group.first) ?? 0
+				last_rank = work.ranks.get(group.last) ?? 0
+				low_rank = if (first_rank < last_rank) first_rank else last_rank
+				high_rank = if (first_rank < last_rank) last_rank else first_rank
+				low = GraphiteCollision.member_bound(index.ids, work.ranks, span, low_rank, budget)
+				if low.stopped != 0 {
+					return { regions: [], operations: low.operations, stopped: low.stopped }
+				}
+				high = GraphiteCollision.member_bound(index.ids, work.ranks, span, high_rank + 1, budget - low.operations)
+				$operations = low.operations + high.operations
+				if high.stopped != 0 {
+					return { regions: [], operations: $operations, stopped: high.stopped }
+				}
+				$member_start = low.index
+				$member_end = high.index
+				if low.index == high.index {
+					$cursor = 0
+				} else {
+					$member_index = if (reverse) high.index - 1 else low.index
+					$cursor = index.ids.get($member_index) ?? 0
+				}
+			}
+			_ => {}
+		}
 		var $walked = 0
 		var $regions = []
 		while $cursor != 0 and $walked < work.state.active {
@@ -161,10 +321,21 @@ GraphiteCollision :: {}.{
 					}
 				}
 			}
-			if $cursor == group.last {
-				break
+			match work.members {
+				Ready(index) => {
+					if (reverse and $member_index == $member_start) or (!reverse and $member_index + 1 == $member_end) {
+						break
+					}
+					$member_index = if (reverse) $member_index - 1 else $member_index + 1
+					$cursor = index.ids.get($member_index) ?? 0
+				}
+				_ => {
+					if $cursor == group.last {
+						break
+					}
+					$cursor = if (reverse) neighbor.previous else neighbor.next
+				}
 			}
-			$cursor = if (reverse) neighbor.previous else neighbor.next
 		}
 		{ regions: $regions, operations: $operations, stopped: 0 }
 	}
@@ -174,13 +345,14 @@ GraphiteCollision :: {}.{
 	# retained across all sweeps and overlapping groups.
 	shift_work_once : Work, Context, Group, Bool, U64, U64, (U64, U64, I32 -> I32) -> Worked
 	shift_work_once = |initial, context, group, reverse, mode, budget, base_metric| {
-		var $work = initial
+		{ work: member_work, operations: member_operations, stopped: _ } = GraphiteCollision.prepare_members(initial, budget)
+		var $work = member_work
 		backward = mode == 1
 		var $id = if (backward) group.last else group.first
 		end = if (backward) group.first else group.last
 		walk_reverse = reverse != backward
 		var $walked = 0
-		var $operations = 0
+		var $operations = member_operations
 		var $movement = 0
 		while $id != 0 and $walked < $work.state.active {
 			if $operations >= budget {
@@ -198,11 +370,11 @@ GraphiteCollision :: {}.{
 				if backward {
 					$work = { ..$work, state: GraphiteSlots.set_extra($work.state, $id, 3, flags.bitwise_or(256)) }
 				}
-				prepared = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
-				$work = { ..$work, state: prepared.state }
-				$operations = $operations + prepared.operations
-				if prepared.stopped != 0 {
-					return { work: $work, operations: $operations, stopped: prepared.stopped, movement: $movement }
+				{ work: positioned_work, operations: position_operations, stopped: position_stopped } = GraphiteCollision.position_work($work, context, budget - $operations)
+				$work = positioned_work
+				$operations = $operations + position_operations
+				if position_stopped != 0 {
+					return { work: $work, operations: $operations, stopped: position_stopped, movement: $movement }
 				}
 				offset = $work.offsets.get($id) ?? { base_x: 0, base_y: 0, delta_x: 0, delta_y: 0 }
 				input = GraphiteCollision.collect_ink_at($work.state, context, $id, group, reverse, offset, backward, budget - $operations, base_metric)
@@ -225,9 +397,10 @@ GraphiteCollision :: {}.{
 							if solved.stopped != 0 {
 								return { work: $work, operations: $operations, stopped: solved.stopped, movement: $movement }
 							}
-							stored = GraphiteCollision.store_work_shift($work, $id, solved.x, solved.y, solved.feasible)
-							$work = stored.work
-							$movement = TableVar.f32_max($movement, stored.movement)
+							{ work: stored_work, operations: stored_operations, movement: stored_movement } = GraphiteCollision.store_work_shift($work, $id, solved.x, solved.y, solved.feasible, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
+							$work = stored_work
+							$operations = $operations + stored_operations
+							$movement = TableVar.f32_max($movement, stored_movement)
 						} else {
 							$work = { ..$work, state: GraphiteCollision.store_shift($work.state, $id, input.current_x, input.current_y, True) }
 						}
@@ -240,8 +413,8 @@ GraphiteCollision :: {}.{
 			slot = GraphiteSlots.get($work.state, $id)
 			$id = if (walk_reverse) slot.previous else slot.next
 		}
-		positioned = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
-		{ work: { ..$work, state: positioned.state }, operations: $operations + positioned.operations, stopped: positioned.stopped, movement: $movement }
+		{ work: final_work, operations: final_operations, stopped: final_stopped } = GraphiteCollision.position_work($work, context, budget - $operations)
+		{ work: final_work, operations: $operations + final_operations, stopped: final_stopped, movement: $movement }
 	}
 
 	# One group traversal, the ordinary ink/exclusion correction phase.
@@ -322,13 +495,13 @@ GraphiteCollision :: {}.{
 		threshold = TableVar.f32_from_int((if (encoded_threshold == 0) 10 else encoded_threshold).to_i64_wrap())
 		threshold_squared = TableVar.f32_mul(threshold, threshold)
 		for group in grouped.groups {
-			first = GraphiteCollision.shift_work_once($work, context, group, reverse, 0, budget - $operations, base_metric)
-			$work = first.work
-			$operations = $operations + first.operations
-			if first.stopped != 0 {
-				return { state: $work.state, operations: $operations, stopped: first.stopped }
+			{ work: initial_sweep_work, operations: initial_sweep_operations, stopped: initial_sweep_stopped, movement: initial_sweep_movement } = GraphiteCollision.shift_work_once($work, context, group, reverse, 0, budget - $operations, base_metric)
+			$work = initial_sweep_work
+			$operations = $operations + initial_sweep_operations
+			if initial_sweep_stopped != 0 {
+				return { state: $work.state, operations: $operations, stopped: initial_sweep_stopped }
 			}
-			var $movement = first.movement
+			var $movement = initial_sweep_movement
 			for _ in 1..<rounds {
 				bad = GraphiteCollision.bad_in_group($work.state, group, reverse, budget - $operations)
 				$operations = $operations + bad.operations
@@ -339,21 +512,21 @@ GraphiteCollision :: {}.{
 				if !bad.bad and !refine {
 					break
 				}
-				rescued = GraphiteCollision.shift_work_once($work, context, group, reverse, 1, budget - $operations, base_metric)
-				$work = rescued.work
-				$operations = $operations + rescued.operations
-				if rescued.stopped != 0 {
-					return { state: $work.state, operations: $operations, stopped: rescued.stopped }
+				{ work: rescued_sweep_work, operations: rescued_sweep_operations, stopped: rescued_sweep_stopped, movement: _ } = GraphiteCollision.shift_work_once($work, context, group, reverse, 1, budget - $operations, base_metric)
+				$work = rescued_sweep_work
+				$operations = $operations + rescued_sweep_operations
+				if rescued_sweep_stopped != 0 {
+					return { state: $work.state, operations: $operations, stopped: rescued_sweep_stopped }
 				}
 				$movement = 0
 				if refine {
-					forward = GraphiteCollision.shift_work_once($work, context, group, reverse, 2, budget - $operations, base_metric)
-					$work = forward.work
-					$operations = $operations + forward.operations
-					if forward.stopped != 0 {
-						return { state: $work.state, operations: $operations, stopped: forward.stopped }
+					{ work: forward_sweep_work, operations: forward_sweep_operations, stopped: forward_sweep_stopped, movement: forward_sweep_movement } = GraphiteCollision.shift_work_once($work, context, group, reverse, 2, budget - $operations, base_metric)
+					$work = forward_sweep_work
+					$operations = $operations + forward_sweep_operations
+					if forward_sweep_stopped != 0 {
+						return { state: $work.state, operations: $operations, stopped: forward_sweep_stopped }
 					}
-					$movement = forward.movement
+					$movement = forward_sweep_movement
 				}
 			}
 		}
@@ -418,22 +591,34 @@ GraphiteCollision :: {}.{
 								}
 							}
 						}
-						first_part = if ($parts == 0) 0 else 1
-						for part in first_part..<($parts + 1) {
+						physical_dx = TableVar.f32_sub(slot.position_x, world_x)
+						physical_dy = TableVar.f32_sub(slot.position_y, world_y)
+						possible = if $parts > 1 {
 							if $operations >= budget {
 								return { ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 2 }
 							}
 							$operations = $operations + 1
-							match GraphiteCollision.load_box(context.table.attributes, glyph, part, base_metric) {
-								Absent => {}
-								Present(box) => {
-									physical_dx = TableVar.f32_sub(slot.position_x, world_x)
-									physical_dy = TableVar.f32_sub(slot.position_y, world_y)
-									if GraphiteCollision.broad_active(target, box, physical_dx, physical_dy, input.limits, offset.base_x, offset.base_y, input.margin) {
-										$active = True
-										dx = TableVar.f32_sub(origin_x, world_x)
-										dy = TableVar.f32_sub(origin_y, world_y)
-										$obstacles = $obstacles.append(GraphiteCollision.forbidden(target, box, dx, dy))
+							match GraphiteCollision.load_box(context.table.attributes, glyph, 0, base_metric) {
+								Absent => False
+								Present(whole) => GraphiteCollision.broad_possible(target, GraphiteCollision.part_cover(whole), physical_dx, physical_dy, input.limits, offset.base_x, offset.base_y, input.margin)
+							}
+						} else True
+						if possible {
+							first_part = if ($parts == 0) 0 else 1
+							for part in first_part..<($parts + 1) {
+								if $operations >= budget {
+									return { ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 2 }
+								}
+								$operations = $operations + 1
+								match GraphiteCollision.load_box(context.table.attributes, glyph, part, base_metric) {
+									Absent => {}
+									Present(box) => {
+										if GraphiteCollision.broad_active(target, box, physical_dx, physical_dy, input.limits, offset.base_x, offset.base_y, input.margin) {
+											$active = True
+											dx = TableVar.f32_sub(origin_x, world_x)
+											dy = TableVar.f32_sub(origin_y, world_y)
+											$obstacles = $obstacles.append(GraphiteCollision.forbidden(target, box, dx, dy))
+										}
 									}
 								}
 							}
@@ -447,6 +632,57 @@ GraphiteCollision :: {}.{
 			$neighbor_id = if (reverse) neighbor.previous else neighbor.next
 		}
 		{ ..input, obstacles: $obstacles, active: $active, operations: $operations, stopped: 0 }
+	}
+
+	# Cover every encoded subbox, without trusting the stored whole-glyph
+	# diagonal approximation to contain it. Endpoints use the exact same
+	# normalized arithmetic as load_box, including its binary32 rounding.
+	part_cover : Octabox -> Octabox
+	part_cover = |whole| {
+		x_span = TableVar.f32_sub(whole.x_max, whole.x_min)
+		y_span = TableVar.f32_sub(whole.y_max, whole.y_min)
+		span = TableVar.f32_add(x_span, y_span)
+		sum_base = TableVar.f32_add(whole.x_min, whole.y_min)
+		diff_base = TableVar.f32_sub(whole.x_min, whole.y_max)
+		{ x_min: GraphiteCollision.coordinate(whole.x_min, x_span, 0), x_max: GraphiteCollision.coordinate(whole.x_min, x_span, 255), y_min: GraphiteCollision.coordinate(whole.y_min, y_span, 0), y_max: GraphiteCollision.coordinate(whole.y_min, y_span, 255), sum_min: GraphiteCollision.coordinate(sum_base, span, 0), sum_max: GraphiteCollision.coordinate(sum_base, span, 255), diff_min: GraphiteCollision.coordinate(diff_base, span, 0), diff_max: GraphiteCollision.coordinate(diff_base, span, 255) }
+	}
+
+	# Necessary conditions only: raw cover intervals enclose every part's
+	# projected intervals. Its orthogonal gap is no larger, so its padding
+	# is no smaller. The original exact guard still decides each candidate.
+	broad_possible : Octabox, Octabox, U32, U32, Rect, U32, U32, U32 -> Bool
+	broad_possible = |target, cover, dx, dy, limits, base_x, base_y, margin| {
+		add = TableVar.f32_add
+		sub = TableVar.f32_sub
+		lt = TableVar.f32_lt
+		window = { x_min: limits.x_max.bitwise_xor(0x80000000), y_min: sub(limits.y_min, base_y), x_max: sub(limits.x_max, base_x), y_max: sub(limits.y_max, base_y) }
+		projected_min_x = TableVar.f32_min(window.x_min, limits.x_min)
+		box = GraphiteCollision.forbidden(target, cover, dx, dy)
+		for axis in 0..<4 {
+			orthogonal = match axis {
+				0 => { low: box.y_min, high: box.y_max }
+				1 => { low: box.x_min, high: box.x_max }
+				2 => { low: box.diff_min, high: box.diff_max }
+				_ => { low: box.sum_min, high: box.sum_max }
+			}
+			orth = TableVar.f32_min(orthogonal.high, TableVar.f32_max(orthogonal.low, 0))
+			distance = TableVar.f32_max(sub(0, orth), sub(orth, 0))
+			gap = if (axis < 2) distance else TableVar.f32_mul(distance, 0x3F3504F3)
+			if !lt(margin, gap) {
+				range = match axis {
+					0 => { low: projected_min_x, high: window.x_max, span: sub(target.x_max, target.x_min), box_low: box.x_min, box_high: box.x_max }
+					1 => { low: window.y_min, high: window.y_max, span: sub(target.y_max, target.y_min), box_low: box.y_min, box_high: box.y_max }
+					2 => { low: add(projected_min_x, window.y_min), high: add(window.x_max, window.y_max), span: sub(target.sum_max, target.sum_min), box_low: box.sum_min, box_high: box.sum_max }
+					_ => { low: sub(projected_min_x, window.y_max), high: sub(window.x_max, window.y_min), span: sub(target.diff_max, target.diff_min), box_low: box.diff_min, box_high: box.diff_max }
+				}
+				remaining = sub(margin, gap)
+				padding = if (axis < 2) remaining else TableVar.f32_mul(remaining, 0x3FB504F3)
+				if !lt(add(range.high, add(range.span, padding)), range.box_low) and !lt(add(range.box_high, padding), range.low) {
+					return True
+				}
+			}
+		}
+		False
 	}
 
 	# START records the start of a following group; END closes the current
@@ -489,31 +725,34 @@ GraphiteCollision :: {}.{
 		{ groups: $groups, operations: $operations, stopped: 0 }
 	}
 
-	# Candidate collection uses physical geometry, independently of the
-	# unshifted origin retained by the optimizer. This conservative window
-	# intentionally differs from the final movement slices. A full normal
-	# span extends its high end; orthogonal gaps are tested before solving.
+	# Normal projections use physical displacement. The coarse overlap gates
+	# recover the prior-offset-free point before comparing with the retained
+	# base-adjusted window; current-pass displacement remains independent.
+	# This search window differs from the final movement slices.
 	broad_active : Octabox, Octabox, U32, U32, Rect, U32, U32, U32 -> Bool
 	broad_active = |target, neighbor, dx, dy, limits, base_x, base_y, margin| {
 		add = TableVar.f32_add
 		sub = TableVar.f32_sub
 		lt = TableVar.f32_lt
 		window = { x_min: limits.x_max.bitwise_xor(0x80000000), y_min: sub(limits.y_min, base_y), x_max: sub(limits.x_max, base_x), y_max: sub(limits.y_max, base_y) }
-		x_overlap = !lt(sub(neighbor.y_max, dy), sub(window.y_min, margin)) and !lt(add(window.y_max, margin), sub(neighbor.y_min, dy))
-		y_overlap = !lt(sub(neighbor.x_max, dx), sub(window.x_min, margin)) and !lt(add(window.x_max, margin), sub(neighbor.x_min, dx))
+		rough_dx = sub(dx, base_x)
+		rough_dy = sub(dy, base_y)
+		x_overlap = !lt(sub(neighbor.y_max, rough_dy), sub(window.y_min, margin)) and !lt(add(window.y_max, margin), sub(neighbor.y_min, rough_dy))
+		y_overlap = !lt(sub(neighbor.x_max, rough_dx), sub(window.x_min, margin)) and !lt(add(window.x_max, margin), sub(neighbor.x_min, rough_dx))
 		if !x_overlap and !y_overlap {
 			return False
 		}
+		projected_min_x = TableVar.f32_min(window.x_min, limits.x_min)
 		box = GraphiteCollision.forbidden(target, neighbor, dx, dy)
 		for axis in 0..<4 {
 			if !((axis == 0 and !x_overlap) or (axis == 1 and !y_overlap)) {
 				p = GraphiteCollision.project(box, axis, 0, 0)
 				if !lt(margin, p.gap) {
 					range = match axis {
-						0 => { low: window.x_min, high: window.x_max, span: sub(target.x_max, target.x_min) }
+						0 => { low: projected_min_x, high: window.x_max, span: sub(target.x_max, target.x_min) }
 						1 => { low: window.y_min, high: window.y_max, span: sub(target.y_max, target.y_min) }
-						2 => { low: add(window.x_min, window.y_min), high: add(window.x_max, window.y_max), span: sub(target.sum_max, target.sum_min) }
-						_ => { low: sub(window.x_min, window.y_max), high: sub(window.x_max, window.y_min), span: sub(target.diff_max, target.diff_min) }
+						2 => { low: add(projected_min_x, window.y_min), high: add(window.x_max, window.y_max), span: sub(target.sum_max, target.sum_min) }
+						_ => { low: sub(projected_min_x, window.y_max), high: sub(window.x_max, window.y_min), span: sub(target.diff_max, target.diff_min) }
 					}
 					remaining = sub(margin, p.gap)
 					padding = if (axis < 2) remaining else TableVar.f32_mul(remaining, 0x3FB504F3)
@@ -791,17 +1030,18 @@ GraphiteCollision :: {}.{
 		$count
 	}
 
-	ClusterBoxes : { boxes : List(Octabox), min_y : [Present(U32), Absent], operations : U64, stopped : U64 }
+	KernPart : { box : Octabox, whole_min_y : U32, whole_max_y : U32 }
+	YFrame : { min_y : U32, max_y : U32 }
+	ClusterBoxes : { boxes : List(KernPart), operations : U64, stopped : U64 }
 	cluster_boxes : Work, Context, U64, U64, (U64, U64, I32 -> I32) -> ClusterBoxes
 	cluster_boxes = |work, context, root, budget, base_metric| {
 		var $boxes = []
-		var $min_y = Absent
 		var $id = work.state.first
 		var $operations = 0
 		var $walked = 0
 		while $id != 0 and $walked < work.state.active {
 			if $operations >= budget {
-				return { boxes: $boxes, min_y: $min_y, operations: $operations, stopped: 2 }
+				return { boxes: $boxes, operations: $operations, stopped: 2 }
 			}
 			$operations = $operations + 1
 			$walked = $walked + 1
@@ -810,24 +1050,19 @@ GraphiteCollision :: {}.{
 				match GraphiteCollision.load_box(context.table.attributes, slot.glyph, 0, base_metric) {
 					Absent => {}
 					Present(whole) => {
-						y = TableVar.f32_add(whole.y_min, slot.position_y)
-						$min_y = Present(
-							match $min_y {
-								Absent => y
-								Present(previous) => TableVar.f32_min(previous, y)
-							},
-						)
+						min_y = TableVar.f32_add(whole.y_min, slot.position_y)
+						max_y = TableVar.f32_add(whole.y_max, slot.position_y)
 						parts = GraphiteCollision.part_count(context.table.attributes, slot.glyph)
 						first_part = if (parts == 0) 0 else 1
 						for part in first_part..<(parts + 1) {
 							if $operations >= budget {
-								return { boxes: $boxes, min_y: $min_y, operations: $operations, stopped: 2 }
+								return { boxes: $boxes, operations: $operations, stopped: 2 }
 							}
 							$operations = $operations + 1
 							match GraphiteCollision.load_box(context.table.attributes, slot.glyph, part, base_metric) {
 								Absent => {}
 								Present(box) => {
-									$boxes = $boxes.append(GraphiteCollision.translate_box(box, slot.position_x, slot.position_y))
+									$boxes = $boxes.append({ box: GraphiteCollision.translate_box(box, slot.position_x, slot.position_y), whole_min_y: min_y, whole_max_y: max_y })
 								}
 							}
 						}
@@ -836,23 +1071,39 @@ GraphiteCollision :: {}.{
 			}
 			$id = slot.next
 		}
-		{ boxes: $boxes, min_y: $min_y, operations: $operations, stopped: 0 }
+		{ boxes: $boxes, operations: $operations, stopped: 0 }
+	}
+
+	kern_capacity : U32, U32, U32 -> I64
+	kern_capacity = |min_y, max_y, width| {
+		span = TableVar.f32_add(TableVar.f32_sub(max_y, min_y), TableVar.f32_from_int(2))
+		TableVar.f32_floor(TableVar.f32_add(TableVar.f32_mul(TableVar.f32_div(span, width), 0x3FC00000), TableVar.f32_one))
+	}
+
+	# Neighbor eligibility uses its whole glyph bounds and the finite
+	# sampling frame, independently of actual part/target-cell overlap.
+	kern_neighbor_in_frame : U32, U32, U32, U32, U32, I64 -> Bool
+	kern_neighbor_in_frame = |whole_min, whole_max, min_y, width, margin, capacity| {
+		lower = TableVar.f32_sub(min_y, TableVar.f32_mul(TableVar.f32_from_int(2), margin))
+		first = TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_sub(whole_min, min_y), TableVar.f32_one), width))
+		!TableVar.f32_lt(whole_max, lower) and first < capacity
 	}
 
 	# Apply one root's advance correction. The target cluster's occupied
 	# bins share one vertical origin; external spaces reserve their advance
-	# independently of ink. No floating-derived array capacity is allocated.
-	kern_cluster : Work, Context, U64, Group, Bool, U64, (U64, U64, I32 -> I32) -> Worked
-	kern_cluster = |initial, context, id, group, reverse, budget, base_metric| {
+	# independently of ink. Occupied bins are bounded before allocation.
+	kern_cluster : Work, Context, U64, Group, Bool, YFrame, U64, (U64, U64, I32 -> I32) -> Worked
+	kern_cluster = |initial, context, id, group, reverse, frame, budget, base_metric| {
 		if id == group.last {
 			return { work: initial, operations: 0, stopped: 0, movement: 0 }
 		}
-		positioned = GraphitePosition.position_for_font(initial.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget)
-		var $operations = positioned.operations
-		var $work = { ..initial, state: positioned.state }
-		if positioned.stopped != 0 {
-			return { work: $work, operations: $operations, stopped: positioned.stopped, movement: 0 }
-		}
+		native_rtl = context.sub.direction.bitwise_and(1) == 0
+		# Phase3 samples the pass-entry physical positions. Authored advances
+		# and flags may change, but positions are refreshed only after the
+		# complete phase, including native-LTR promotion offset suppression.
+		var $operations = 0
+		var $work = initial
+
 		cluster = GraphiteCollision.cluster_boxes($work, context, id, budget - $operations, base_metric)
 		$operations = $operations + cluster.operations
 		if cluster.stopped != 0 {
@@ -863,14 +1114,27 @@ GraphiteCollision :: {}.{
 		}
 		margin = TableVar.f32_from_int(GraphiteSlots.get_extra($work.state, id, 10).to_i64())
 		m = TableVar.f32_max(margin, TableVar.f32_from_int(10))
-		# Subboxes supply occupied ink, but the bin frame remains anchored
-		# to the complete target cluster bounds, including empty part ranges.
-		min_y = match cluster.min_y {
-			Absent => return { work: $work, operations: $operations, stopped: 0, movement: 0 }
-			Present(value) => value
+		# A lower bound on every RTL edge, or an upper bound on every
+		# LTR edge. Each facet clips to this part's rectangular extent.
+		var $edge_bound = Absent
+		for part in cluster.boxes {
+			box = part.box
+			if $operations >= budget {
+				return { work: $work, operations: $operations, stopped: 2, movement: 0 }
+			}
+			$operations = $operations + 1
+			edge = if (native_rtl) TableVar.f32_sub(box.x_min, m) else TableVar.f32_add(box.x_max, m)
+			$edge_bound = Present(
+				match $edge_bound {
+					Absent => edge
+					Present(previous) => if (native_rtl) TableVar.f32_min(previous, edge) else TableVar.f32_max(previous, edge)
+				},
+			)
 		}
-		cache_min_y = TableVar.f32_sub(min_y, m)
-		cache = GraphiteCollision.target_bins(cluster.boxes, m, cache_min_y, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
+		cache_min_y = TableVar.f32_sub(frame.min_y, m)
+		cache_max_y = TableVar.f32_add(frame.max_y, m)
+		cache = GraphiteCollision.target_bins(cluster.boxes, m, cache_min_y, cache_max_y, native_rtl, budget - $operations)
+		capacity = GraphiteCollision.kern_capacity(cache_min_y, cache_max_y, cache.width)
 		$operations = $operations + cache.operations
 		if cache.stopped != 0 {
 			return { work: $work, operations: $operations, stopped: cache.stopped, movement: 0 }
@@ -889,25 +1153,70 @@ GraphiteCollision :: {}.{
 			$walked = $walked + 1
 			neighbor = GraphiteSlots.get($work.state, $cursor)
 			flags = GraphiteSlots.get_extra($work.state, $cursor, 3)
-			if (initial.roots.get($cursor) ?? 0) != id and flags.bitwise_and(2) == 0 {
-				if flags.bitwise_and(128) != 0 {
+			if (initial.roots.get($cursor) ?? 0) != id {
+				if GraphiteCollision.kerning_space(neighbor.glyph, flags, base_metric) {
 					$space = TableVar.f32_add($space, TableVar.f32_mul(TableVar.f32_from_int(2), neighbor.advance_x))
-				} else {
-					parts = GraphiteCollision.part_count(context.table.attributes, neighbor.glyph)
-					first_part = if (parts == 0) 0 else 1
-					for part in first_part..<(parts + 1) {
-						if $operations >= budget {
-							return { work: $work, operations: $operations, stopped: 2, movement: 0 }
+				} else if flags.bitwise_and(2) == 0 {
+					# Every part remains inside the validated whole glyph box.
+					# Monotonic binary32 subtraction therefore gives a lower
+					# bound on its possible gap, including whitespace reserve.
+					# Strict inequality preserves all equal-gap tie behavior.
+					whole_min = TableVar.f32_add(TableVar.f32_from_int(base_metric(neighbor.glyph, 3, 0).to_i64()), neighbor.position_y)
+					whole_max = TableVar.f32_add(TableVar.f32_from_int(base_metric(neighbor.glyph, 2, 0).to_i64()), neighbor.position_y)
+					eligible = GraphiteCollision.kern_neighbor_in_frame(whole_min, whole_max, cache_min_y, cache.width, m, capacity)
+					var $empty_whole = False
+					if eligible and !native_rtl {
+						intersection = GraphiteCollision.bins_intersect_y(cache, whole_min, whole_max, budget - $operations)
+						$operations = $operations + intersection.operations
+						if intersection.stopped != 0 {
+							return { work: $work, operations: $operations, stopped: intersection.stopped, movement: 0 }
 						}
-						$operations = $operations + 1
+						$empty_whole = !intersection.present
+					}
+					if $empty_whole {
+						match (cache.bound, GraphiteCollision.load_box(context.table.attributes, neighbor.glyph, 0, base_metric)) {
+							(Present(bound), Present(whole)) => {
+								# Pinned public C-API controls establish this ordered
+								# LTR update. Finite comparisons take a minimum;
+								# a later eligible whole glyph missing every finite
+								# target cell raises that result to the sampled bound.
+								left = TableVar.f32_add(whole.x_min, neighbor.position_x)
+								fallback = TableVar.f32_sub(TableVar.f32_add(bound, m), left)
+								$gap = TableVar.f32_max($gap, TableVar.f32_sub(fallback, $space))
+								$external = True
+							}
+							(Absent, Present(_)) => {
+								$external = True
+							}
+							_ => {}
+						}
+					}
+					pruned = if (!eligible or $empty_whole) True else $external and match $edge_bound {
+						Absent => False
+						Present(bound) => {
+							glyph_edge = TableVar.f32_add(TableVar.f32_from_int(base_metric(neighbor.glyph, if (native_rtl) 5 else 4, 0).to_i64()), neighbor.position_x)
+							geometric_bound = if (native_rtl) TableVar.f32_sub(bound, glyph_edge) else TableVar.f32_sub(glyph_edge, bound)
+							# bins_gap also includes its finite initial sentinel
+							# in the minimum; preserve that part of its bound.
+							gap_bound = TableVar.f32_min(0x7CF0BDC2, geometric_bound)
+							TableVar.f32_lt($gap, TableVar.f32_sub(gap_bound, $space))
+						}
+					}
+					if !pruned {
+						parts = GraphiteCollision.part_count(context.table.attributes, neighbor.glyph)
+						first_part = if (parts == 0) 0 else 1
+						for part in first_part..<(parts + 1) {
+							if $operations >= budget {
+								return { work: $work, operations: $operations, stopped: 2, movement: 0 }
+							}
+							$operations = $operations + 1
 
-						match GraphiteCollision.load_box(context.table.attributes, neighbor.glyph, part, base_metric) {
-							Absent => {}
-							Present(box) => {
-								if box.x_min != box.x_max or box.y_min != box.y_max {
+							match GraphiteCollision.load_box(context.table.attributes, neighbor.glyph, part, base_metric) {
+								Absent => {}
+								Present(box) => {
 									$external = True
 									world = GraphiteCollision.translate_box(box, neighbor.position_x, neighbor.position_y)
-									pair = GraphiteCollision.bins_gap(cache, world, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
+									pair = GraphiteCollision.bins_gap(cache, world, native_rtl, budget - $operations)
 									$operations = $operations + pair.operations
 									if pair.stopped != 0 {
 										return { work: $work, operations: $operations, stopped: pair.stopped, movement: 0 }
@@ -927,7 +1236,7 @@ GraphiteCollision :: {}.{
 		if !$external {
 			return { work: $work, operations: $operations, stopped: 0, movement: 0 }
 		}
-		needed = if (context.sub.direction.bitwise_and(1) == 0) $gap.bitwise_xor(0x80000000) else $gap
+		needed = if (native_rtl) $gap.bitwise_xor(0x80000000) else $gap
 		previous = GraphiteSlots.get_extra($work.state, id, 8).to_u32_wrap()
 		low = TableVar.f32_sub(TableVar.f32_from_int(GraphiteSlots.get_extra($work.state, id, 4).to_i64()), previous)
 		high = TableVar.f32_sub(TableVar.f32_from_int(GraphiteSlots.get_extra($work.state, id, 6).to_i64()), previous)
@@ -942,54 +1251,78 @@ GraphiteCollision :: {}.{
 		{ work: $work, operations: $operations, stopped: 0, movement: TableVar.f32_mul(increment, increment) }
 	}
 
+	# Phase3 reserves explicit SPACE and the origin-zero bounding box
+	# even when IGNORE is also set. A nonzero point or a zero-area line
+	# is still an ink obstacle; emptiness is not just zero extent.
+	kerning_space : U64, I32, (U64, U64, I32 -> I32) -> Bool
+	kerning_space = |glyph, flags, metric| flags.bitwise_and(128) != 0 or (metric(glyph, 4, 0) == 0 and metric(glyph, 3, 0) == 0 and metric(glyph, 5, 0) == 0 and metric(glyph, 2, 0) == 0)
+
+	visit_y_frame : [Present(YFrame), Absent], U32, U32 -> YFrame
+	visit_y_frame = |previous, min_y, max_y| match previous {
+		Absent => { min_y, max_y }
+		Present(frame) => { min_y: TableVar.f32_min(frame.min_y, min_y), max_y: TableVar.f32_max(frame.max_y, max_y) }
+	}
+
 	kerning : GraphiteSlots, Context, U64, U64, (U64, U64, I32 -> I32) -> Applied
 	kerning = |initial, context, pass_flags, budget, base_metric| {
 		if pass_flags.bitwise_and(8) == 0 {
 			return { state: initial, operations: 0, stopped: 0 }
 		}
 		reverse = (context.rtl != (context.sub.direction.bitwise_and(1) == 0)) != (pass_flags.bitwise_and(32) != 0)
-		grouped = GraphiteCollision.groups(initial, reverse, budget)
-		if grouped.stopped != 0 {
-			return { state: initial, operations: grouped.operations, stopped: grouped.stopped }
+		# Collision-shift groups do not bound phase3 kerning. Its target
+		# and neighbor scans cross START/END markers over the whole run.
+		group = { first: if (reverse) initial.last else initial.first, last: if (reverse) initial.first else initial.last }
+		{ state: positioned_state, operations: position_operations, stopped: position_stopped } = GraphitePosition.position_for_font(initial, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget)
+		if position_stopped != 0 {
+			return { state: positioned_state, operations: position_operations, stopped: position_stopped }
 		}
-		prepared = GraphiteCollision.prepare_work(initial, budget - grouped.operations)
+		prepared = GraphiteCollision.prepare_work(positioned_state, budget - position_operations)
 		var $work = prepared.work
-		var $operations = grouped.operations + prepared.operations
+		var $operations = position_operations + prepared.operations
 		if prepared.stopped != 0 {
 			return { state: $work.state, operations: $operations, stopped: prepared.stopped }
 		}
-		for group in grouped.groups {
-			var $id = group.first
-			var $walked = 0
-			while $id != 0 and $walked < $work.state.active {
-				if $operations >= budget {
-					return { state: $work.state, operations: $operations, stopped: 2 }
+		var $frame = Absent
+		var $id = group.first
+		var $walked = 0
+		while $id != 0 and $walked < $work.state.active {
+			if $operations >= budget {
+				return { state: $work.state, operations: $operations, stopped: 2 }
+			}
+			$operations = $operations + 1
+			$walked = $walked + 1
+			slot = GraphiteSlots.get($work.state, $id)
+			match GraphiteCollision.load_box(context.table.attributes, slot.glyph, 0, base_metric) {
+				Absent => {}
+				Present(whole) => {
+					$frame = Present(GraphiteCollision.visit_y_frame($frame, TableVar.f32_add(whole.y_min, slot.position_y), TableVar.f32_add(whole.y_max, slot.position_y)))
 				}
-				$operations = $operations + 1
-				$walked = $walked + 1
-				slot = GraphiteSlots.get($work.state, $id)
-				flags = GraphiteSlots.get_extra($work.state, $id, 3)
-				if flags.bitwise_and(17) == 17 {
-					if slot.parent != 0 {
-						# Promotion follows the scan. An already visited parent
-						# does not retroactively become a kerning target.
-						parent_flags = GraphiteSlots.get_extra($work.state, slot.parent, 3)
-						promoted = GraphiteSlots.set_extra($work.state, slot.parent, 3, parent_flags.bitwise_or(17))
-						$work = { ..$work, state: { ..promoted, positioned: promoted.positioned and parent_flags.bitwise_and(16) != 0 } }
-					} else {
-						result = GraphiteCollision.kern_cluster($work, context, $id, group, reverse, budget - $operations, base_metric)
-						$work = result.work
-						$operations = $operations + result.operations
-						if result.stopped != 0 {
-							return { state: $work.state, operations: $operations, stopped: result.stopped }
-						}
+			}
+
+			flags = GraphiteSlots.get_extra($work.state, $id, 3)
+			if flags.bitwise_and(17) == 17 {
+				if slot.parent != 0 {
+					# Promotion follows the scan. An already visited parent
+					# does not retroactively become a kerning target.
+					parent_flags = GraphiteSlots.get_extra($work.state, slot.parent, 3)
+					promoted = GraphiteSlots.set_extra($work.state, slot.parent, 3, parent_flags.bitwise_or(17))
+					$work = { ..$work, state: { ..promoted, positioned: promoted.positioned and parent_flags.bitwise_and(16) != 0 } }
+				} else {
+					result = match $frame {
+						Absent => { work: $work, operations: 0, stopped: 0, movement: 0 }
+						Present(frame) => GraphiteCollision.kern_cluster($work, context, $id, group, reverse, frame, budget - $operations, base_metric)
+					}
+					$work = result.work
+					$operations = $operations + result.operations
+					if result.stopped != 0 {
+						return { state: $work.state, operations: $operations, stopped: result.stopped }
 					}
 				}
-				if $id == group.last {
-					break
-				}
-				$id = if (reverse) slot.previous else slot.next
 			}
+			if $id == group.last {
+				break
+			}
+			$id = if (reverse) slot.previous else slot.next
 		}
 		positioned = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
 		{ state: positioned.state, operations: $operations + positioned.operations, stopped: positioned.stopped }
@@ -1030,65 +1363,140 @@ GraphiteCollision :: {}.{
 		}
 	}
 
+	# Select the right facet at the cell center, retaining the upper-edge
+	# sample association and applying the target margin after the facet.
+	kern_right_cell : Octabox, U32, U32, U32 -> U32
+	kern_right_cell = |box, high, midpoint, margin| {
+		corner = TableVar.f32_sub(box.sum_max, box.diff_max)
+		facet = if (!TableVar.f32_lt(corner, midpoint)) TableVar.f32_add(box.diff_max, high) else TableVar.f32_sub(box.sum_max, high)
+		TableVar.f32_min(TableVar.f32_add(box.x_max, margin), TableVar.f32_add(facet, margin))
+	}
+
 	KernBin : { edge : U32, present : Bool }
-	TargetBins : { bins : List(KernBin), start : I64, width : U32, min_y : U32, operations : U64, stopped : U64 }
+	TargetBins : { bins : List(KernBin), start : I64, width : U32, min_y : U32, bound : [Present(U32), Absent], operations : U64, stopped : U64 }
 
 	# Cache the target union once. Combining target edges before scanning
 	# neighbors avoids a target-parts × neighbor-parts × bins work product.
-	target_bins : List(Octabox), U32, U32, Bool, U64 -> TargetBins
-	target_bins = |parts, margin, min_y, rtl, budget| {
+	target_bins : List(KernPart), U32, U32, U32, Bool, U64 -> TargetBins
+	target_bins = |parts, margin, min_y, max_y, rtl, budget| {
 		width = TableVar.f32_div(TableVar.f32_mul(TableVar.f32_from_int(2), margin), TableVar.f32_from_int(3))
 		index = |y| TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_sub(y, min_y), TableVar.f32_one), width))
+		# The cache frame follows visited slots. Each glyph's whole bounds
+		# limit margin expansion of its own parts; drawing also stays within
+		# the reference frame's finite vector. Only occupied bins are stored.
+		capacity = GraphiteCollision.kern_capacity(min_y, max_y, width)
+		last_index = |part| {
+			whole_cap = index(part.whole_max_y) + 1
+			cap = if (whole_cap < 0) 0 else whole_cap
+			value = TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(part.box.y_max, min_y), margin), TableVar.f32_one), width))
+			bounded = if (value > cap) cap else value
+			if (bounded >= capacity) capacity - 1 else bounded
+		}
+		first_index = |part| {
+			cap = index(part.whole_min_y)
+			value = TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_sub(TableVar.f32_sub(part.box.y_min, min_y), margin), TableVar.f32_one), width))
+			bounded = if (value < cap) cap else value
+			if (bounded < 0) 0 else bounded
+		}
+
 		var $bounds = Absent
 		var $operations = 0
 		for part in parts {
 			if $operations >= budget {
-				return { bins: [], start: 0, width, min_y, operations: $operations, stopped: 2 }
+				return { bins: [], start: 0, width, min_y, bound: Absent, operations: $operations, stopped: 2 }
 			}
 			$operations = $operations + 1
-			first = index(part.y_min)
-			last = index(part.y_max) + 1
-			$bounds = Present(
-				match $bounds {
-					Absent => { first, last }
-					Present(previous) => { first: if (first < previous.first) first else previous.first, last: if (last > previous.last) last else previous.last }
-				},
-			)
+			first = first_index(part)
+			last = last_index(part)
+			# The lower sentinel can leave an otherwise finite span empty.
+			# Test its order before converting its length to an unsigned count.
+			if last >= first {
+				$bounds = Present(
+					match $bounds {
+						Absent => { first, last }
+						Present(previous) => { first: if (first < previous.first) first else previous.first, last: if (last > previous.last) last else previous.last }
+					},
+				)
+			}
 		}
 		bounds = match $bounds {
-			Absent => return { bins: [], start: 0, width, min_y, operations: $operations, stopped: 0 }
+			Absent => return { bins: [], start: 0, width, min_y, bound: Absent, operations: $operations, stopped: 0 }
 			Present(value) => value
 		}
 		count = (bounds.last - bounds.first).to_u64_wrap() + 1
 		if count > budget - $operations {
-			return { bins: [], start: bounds.first, width, min_y, operations: $operations, stopped: 2 }
+			return { bins: [], start: bounds.first, width, min_y, bound: Absent, operations: $operations, stopped: 2 }
 		}
 		var $bins = List.repeat({ edge: 0, present: False }, count)
+		var $bound = Absent
 		$operations = $operations + count
 		for part in parts {
-			first = index(part.y_min)
-			last = index(part.y_max) + 1
-			for offset in 0..<((last - first).to_u64_wrap() + 1) {
-				if $operations >= budget {
-					return { bins: $bins, start: bounds.first, width, min_y, operations: $operations, stopped: 2 }
+			first = first_index(part)
+			last = last_index(part)
+			if last >= first {
+				for offset in 0..<((last - first).to_u64_wrap() + 1) {
+					if $operations >= budget {
+						return { bins: $bins, start: bounds.first, width, min_y, bound: $bound, operations: $operations, stopped: 2 }
+					}
+					$operations = $operations + 1
+					i = first + offset.to_i64_wrap()
+					low = TableVar.f32_sub(TableVar.f32_add(min_y, TableVar.f32_mul(TableVar.f32_from_int(i), width)), TableVar.f32_one)
+					high = TableVar.f32_add(low, width)
+					# Right facets are chosen at the cell midpoint, then
+					# evaluated at its upper sample, as for RTL neighbors.
+					edge = if rtl or (part.box.x_min == part.box.x_max and part.box.y_min == part.box.y_max) {
+						GraphiteCollision.kern_edge(part.box, low, high, margin, rtl)
+					} else {
+						midpoint = TableVar.f32_add(TableVar.f32_mul(TableVar.f32_from_int(2), TableVar.f32_sub(min_y, TableVar.f32_one)), TableVar.f32_mul(TableVar.f32_from_int(2 * i + 1), width))
+						GraphiteCollision.kern_right_cell(part.box, high, midpoint, margin)
+					}
+					at = (i - bounds.first).to_u64_wrap()
+					previous = $bins.get(at) ?? crash "checked target bin index"
+					combined = if (!previous.present) edge else if (rtl) TableVar.f32_min(previous.edge, edge) else TableVar.f32_max(previous.edge, edge)
+					$bins = $bins.set(at, { edge: combined, present: True }) ?? []
+					$bound = Present(
+						match $bound {
+							Absent => combined
+							Present(previous_bound) => if (rtl) TableVar.f32_min(previous_bound, combined) else TableVar.f32_max(previous_bound, combined)
+						},
+					)
 				}
-				$operations = $operations + 1
-				i = first + offset.to_i64_wrap()
-				low = TableVar.f32_sub(TableVar.f32_add(min_y, TableVar.f32_mul(TableVar.f32_from_int(i), width)), TableVar.f32_one)
-				high = TableVar.f32_add(low, width)
-				edge = GraphiteCollision.kern_edge(part, low, high, margin, rtl)
-				at = (i - bounds.first).to_u64_wrap()
-				previous = $bins.get(at) ?? crash "checked target bin index"
-				combined = if (!previous.present) edge else if (rtl) TableVar.f32_min(previous.edge, edge) else TableVar.f32_max(previous.edge, edge)
-				$bins = $bins.set(at, { edge: combined, present: True }) ?? []
 			}
 		}
-		{ bins: $bins, start: bounds.first, width, min_y, operations: $operations, stopped: 0 }
+		{ bins: $bins, start: bounds.first, width, min_y, bound: $bound, operations: $operations, stopped: 0 }
+	}
+
+	# The empty-comparison rule concerns whole-glyph vertical coverage of
+	# finite target cells. A hole inside the cached span is still empty;
+	# an empty actual sub-box inside a qualifying whole glyph is not.
+	bins_intersect_y : TargetBins, U32, U32, U64 -> { present : Bool, operations : U64, stopped : U64 }
+	bins_intersect_y = |target, min_y, max_y, budget| {
+		if target.bins.is_empty() {
+			return { present: False, operations: 0, stopped: 0 }
+		}
+		index = |y| TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_sub(y, target.min_y), TableVar.f32_one), target.width))
+		first = if (index(min_y) > target.start) index(min_y) else target.start
+		cache_last = target.start + target.bins.len().to_i64_wrap() - 1
+		last = if (index(max_y) < cache_last) index(max_y) else cache_last
+		var $operations = 0
+		if last >= first {
+			for offset in 0..<((last - first).to_u64_wrap() + 1) {
+				if $operations >= budget {
+					return { present: False, operations: $operations, stopped: 2 }
+				}
+				$operations = $operations + 1
+				bin = target.bins.get((first - target.start).to_u64_wrap() + offset) ?? crash "checked whole-neighbor bin index"
+				if bin.present {
+					return { present: True, operations: $operations, stopped: 0 }
+				}
+			}
+		}
+		{ present: False, operations: $operations, stopped: 0 }
 	}
 
 	bins_gap : TargetBins, Octabox, Bool, U64 -> KernGap
 	bins_gap = |target, neighbor, rtl, budget| {
-		if target.bins.is_empty() or (neighbor.x_min == neighbor.x_max and neighbor.y_min == neighbor.y_max) {
+		if target.bins.is_empty() {
 			return { gap: 0x7CF0BDC2, operations: 0, stopped: 0 }
 		}
 		index = |y| TableVar.f32_floor(TableVar.f32_div(TableVar.f32_add(TableVar.f32_sub(y, target.min_y), TableVar.f32_one), target.width))
@@ -1102,6 +1510,11 @@ GraphiteCollision :: {}.{
 		if last < first {
 			return { gap: $gap, operations: 0, stopped: 0 }
 		}
+		# Select the right-hand facet by each cell's midpoint. SUM−DIFF
+		# is twice the Y coordinate of their intersection; evaluate the
+		# selected facet at the cell's upper sample, then clip to xMax.
+		corner = TableVar.f32_sub(neighbor.sum_max, neighbor.diff_max)
+		midpoint_base = TableVar.f32_mul(TableVar.f32_from_int(2), TableVar.f32_sub(target.min_y, TableVar.f32_one))
 		for offset in 0..<((last - first).to_u64_wrap() + 1) {
 			if $operations >= budget {
 				return { gap: $gap, operations: $operations, stopped: 2 }
@@ -1112,7 +1525,16 @@ GraphiteCollision :: {}.{
 			if bin.present {
 				low = TableVar.f32_sub(TableVar.f32_add(target.min_y, TableVar.f32_mul(TableVar.f32_from_int(i), target.width)), TableVar.f32_one)
 				high = TableVar.f32_add(low, target.width)
-				edge = GraphiteCollision.kern_edge(neighbor, low, high, 0, !rtl)
+				edge = if rtl {
+					# Preserve this expanded binary32 association. Computing
+					# 2*low+width fails the exact-margin101 oracle boundary.
+					# f32_floor bounds i so doubling it remains within I64.
+					midpoint = TableVar.f32_add(midpoint_base, TableVar.f32_mul(TableVar.f32_from_int(2 * i + 1), target.width))
+					facet = if (!TableVar.f32_lt(corner, midpoint)) TableVar.f32_add(neighbor.diff_max, high) else TableVar.f32_sub(neighbor.sum_max, high)
+					TableVar.f32_min(neighbor.x_max, facet)
+				} else {
+					GraphiteCollision.kern_edge(neighbor, low, high, 0, !rtl)
+				}
 				gap = if (rtl) TableVar.f32_sub(bin.edge, edge) else TableVar.f32_sub(edge, bin.edge)
 				$gap = TableVar.f32_min($gap, gap)
 			}
@@ -1298,10 +1720,17 @@ GraphiteCollision :: {}.{
 				{ low: TableVar.f32_max(TableVar.f32_sub(TableVar.f32_mul(two, limits.x_min), orth), TableVar.f32_sub(orth, TableVar.f32_mul(two, limits.y_max))), high: TableVar.f32_min(TableVar.f32_sub(TableVar.f32_mul(two, limits.x_max), orth), TableVar.f32_sub(orth, TableVar.f32_mul(two, limits.y_min))), constant: TableVar.f32_mul(TableVar.f32_mul(orth, orth), TableVar.f32_half), coefficient: TableVar.f32_half }
 			}
 		}
-		# The pinned interval constructor retains an initially empty
-		# diagonal slice as its lower-endpoint point candidate. This is a
-		# derived search rule, not a repair of the font's stored bounds.
-		{ ..slice, high: TableVar.f32_max(slice.low, slice.high) }
+		# An initially empty diagonal retains the endpoint selected by
+		# ordered comparisons against the unconstrained minimum (zero).
+		# The reference's negative-only witness selects the upper endpoint;
+		# a positive-only slice selects the lower one. This is a derived
+		# search rule, not a repair of the font's stored movement bounds.
+		if axis >= 2 and TableVar.f32_lt(slice.high, slice.low) {
+			value = if (TableVar.f32_lt(0, slice.low)) slice.low else if (TableVar.f32_lt(slice.high, 0)) slice.high else 0
+			{ ..slice, low: value, high: value }
+		} else {
+			{ ..slice, high: TableVar.f32_max(slice.low, slice.high) }
+		}
 	}
 
 	# An independently derived interval optimizer. Each permitted range has
@@ -1431,6 +1860,10 @@ GraphiteCollision :: {}.{
 		{ state: { nodes, users: $users, user_count, justification_levels, feature_changes, first, last, active, positioned, advance_x, advance_y }, operations: $operations, stopped: $stopped }
 	}
 }
+
+# Source-only numerical fixtures share a single whole-glyph frame.
+collision_target_bins = |parts, margin, min_y, max_y, rtl, budget|
+	GraphiteCollision.target_bins(parts.map(|box| { box, whole_min_y: TableVar.f32_add(min_y, margin), whole_max_y: max_y }), margin, min_y, TableVar.f32_add(max_y, margin), rtl, budget)
 
 # Generated from `tests/fonts/graphite-geometry/collision-default-negative-ltr.ttf` by `tests/fonts/inline_tables.py`.
 
@@ -1825,6 +2258,547 @@ expect {
 expect {
 	# Bin capacity is checked against the remaining work before allocation.
 	n = TableVar.f32_from_int
-	cache = GraphiteCollision.target_bins([collision_square], n(10), n(-10), True, 4)
+	cache = collision_target_bins([collision_square], n(10), n(-10), n(600), True, 4)
 	cache.stopped == 2 and cache.bins.is_empty() and cache.operations == 1
+}
+
+expect {
+	# Original top-half target control: lower occupancy extends by the
+	# margin, while the bin frame remains the whole glyph's −10 origin.
+	n = TableVar.f32_from_int
+	top = { ..collision_square, y_min: GraphiteCollision.coordinate(0, n(600), 127) }
+	cache = collision_target_bins([top], n(10), n(-10), n(600), True, 1000)
+	cache.stopped == 0 and cache.start == 44 and cache.bins.len() == 49
+}
+
+# Original documented Glat metrics for the isolated Awami final-pass
+# witness. Copied bytes contain only four glyph approximation records;
+# no test font or test helper is imported into the package.
+awami_kerning_boxes = {
+	..GraphiteAttributes.none,
+	box_starts: [0, 6, 60, 130],
+	bytes: [0, 0, 4, 251, 32, 224, 0, 63, 18, 252, 71, 219, 1, 44, 20, 38, 20, 34, 156, 173, 200, 254, 218, 254, 213, 252, 72, 96, 94, 180, 0, 61, 27, 95, 190, 217, 189, 241, 93, 218, 121, 225, 84, 183, 20, 94, 0, 30, 19, 46, 173, 208, 180, 243, 26, 93, 70, 134, 170, 215, 0, 255, 18, 252, 19, 184, 4, 19, 193, 229, 77, 99, 20, 36, 91, 130, 34, 140, 69, 134, 117, 141, 5, 91, 0, 101, 24, 93, 63, 142, 170, 242, 124, 193, 161, 217, 141, 184, 1, 41, 101, 151, 43, 73, 41, 85, 130, 186, 87, 148, 116, 163, 124, 165, 233, 255, 178, 253, 217, 252, 153, 178, 0, 24, 151, 193, 59, 86, 27, 55, 255, 255, 0, 241, 57, 175, 43, 51, 182, 188, 137, 144, 62, 66, 12, 47, 140, 153, 99, 119, 75, 92, 146, 160, 221, 243, 199, 216, 60, 74, 34, 106, 175, 182, 130, 158, 63, 84, 118, 137, 185, 219, 163, 192, 65, 89, 8, 32, 44, 61, 32, 52, 135, 152, 99, 118, 182, 214, 155, 183, 63, 85, 51, 99, 182, 209, 140, 174, 61, 81, 9, 40, 61, 107, 44, 85, 104, 142, 11, 43, 107, 140, 76, 109, 82, 114, 160, 255, 193, 255, 183, 241, 57, 108, 137, 160, 189, 221, 172, 202, 68, 93, 17, 64, 153, 166, 109, 133, 69, 84, 26, 83, 166, 175, 121, 146, 65, 81, 1, 24, 0, 30, 1, 28, 155, 175, 6, 28, 30, 44, 23, 39, 146, 160],
+}
+
+awami_kerning_metric = |glyph, wanted, _level| {
+	box = match glyph {
+		0 => { xmin: 108, ymin: 141, xmax: 367, ymax: 1751 }
+		1 => { xmin: -281, ymin: 8, xmax: 485, ymax: 1900 }
+		2 => { xmin: -95, ymin: 106, xmax: 1263, ymax: 964 }
+		_ => { xmin: 58, ymin: -1109, xmax: 1134, ymax: 1177 }
+	}
+	match wanted {
+		2 => box.ymax
+		3 => box.ymin
+		4 => box.xmin
+		5 => box.xmax
+		_ => 0
+	}
+}
+
+awami_kerning_state = {
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 4), { ..GraphiteSlots.no_slot, glyph: 2, advance_x: n(1261), attach_x: n(426), attach_y: n(-7) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, glyph: 1, advance_x: n(426), attach_x: n(253), attach_y: n(-25) })
+	c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, glyph: 0, advance_x: n(253) })
+	d = GraphiteSlots.append(c.state, { ..GraphiteSlots.no_slot, glyph: 3, advance_x: n(1237) })
+	one = GraphitePosition.attach(d.state, 1, 2, 100)
+	two = GraphitePosition.attach(one.state, 2, 3, 100)
+	var $state = two.state
+	for id in [1, 2, 3, 4] {
+		$state = GraphiteSlots.set_extra($state, id, 31, 1)
+		$state = GraphiteSlots.set_extra($state, id, 4, -2000)
+		$state = GraphiteSlots.set_extra($state, id, 6, 2000)
+	}
+	$state = GraphiteSlots.set_extra($state, 3, 3, 17)
+	$state = GraphiteSlots.set_extra($state, 3, 10, 273)
+	$state = GraphiteSlots.set_extra($state, 4, 3, 17)
+	$state = GraphiteSlots.set_extra($state, 4, 10, 150)
+	$state
+}
+expect {
+	match collision_prepared {
+		Err(_) => False
+		Ok(table) => match table.program.subtables.first() {
+			Err(_) => False
+			Ok(sub) => {
+				context = { table: { ..table, attributes: awami_kerning_boxes }, sub: { ..sub, direction: 2 }, rtl: True }
+				result = GraphiteCollision.kerning(awami_kerning_state, context, 12, 65536, awami_kerning_metric)
+				advance = GraphiteSlots.integer(GraphiteSlots.get(result.state, 3).advance_x)
+				advance == 315 and result.stopped == 0
+			}
+		}
+	}
+}
+
+# Empty derived target spans must not wrap into an unsigned iteration count.
+expect {
+	n = TableVar.f32_from_int
+	below = { ..collision_square, y_min: n(-1000), y_max: n(-900) }
+	cache = collision_target_bins([below, collision_square], n(10), n(-10), n(600), True, 1000)
+	ordinary = collision_target_bins([collision_square], n(10), n(-10), n(600), True, 1000)
+	cache.stopped == 0 and cache.start == ordinary.start and cache.bins == ordinary.bins
+}
+
+# The cached broad-audit-080 trace preserves empty SUM[100,0] and
+# DIFF[-20,-100] searches, selecting +100 and -100 at equal cost.
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-10), x_max: 0, y_min: n(50), y_max: n(100) }
+	sum = GraphiteCollision.axis_limits(limits, 2, 0, 0)
+	diff = GraphiteCollision.axis_limits(limits, 3, 0, 0)
+	sum.low == n(100) and sum.high == n(100) and diff.low == n(-100) and diff.high == n(-100)
+}
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-10), x_max: 0, y_min: n(50), y_max: n(100) }
+	obstacle = { x_min: n(-300), x_max: n(300), y_min: n(-600), y_max: n(600), sum_min: n(-900), sum_max: n(900), diff_min: n(-900), diff_max: n(900) }
+	solved = GraphiteCollision.solve_shift(limits, 0, 0, [obstacle], 0, n(10), 1000)
+	solved.stopped == 0 and solved.x == n(50) and solved.y == n(50)
+}
+
+# A one-unit full rectangle seeds its only neighbor cell at the horizontal
+# edge; the SUM cut applies immediately to a substantially clipped diagonal.
+expect {
+	n = TableVar.f32_from_int
+	cache = collision_target_bins([collision_square], n(10), n(-10), n(600), True, 1000)
+	neighbor = { ..collision_square, y_max: n(1), sum_max: n(301), diff_min: n(-1) }
+	full = GraphiteCollision.bins_gap(cache, neighbor, True, 1000)
+	clipped = GraphiteCollision.bins_gap(cache, { ..neighbor, sum_max: n(150) }, True, 1000)
+	full.stopped == 0 and full.gap == n(-310) and TableVar.f32_lt(n(-160), clipped.gap)
+}
+
+# The exact margin101 tie distinguishes expanded midpoint arithmetic
+# from 2*low+width (which rounds above the accepted upper-SUM corner).
+expect {
+	n = TableVar.f32_from_int
+	cache = collision_target_bins([collision_square], n(101), n(-101), n(600), True, 1000)
+	neighbor = { x_min: 0, x_max: n(300), y_min: n(-6), y_max: n(4), sum_min: n(-6), sum_max: n(304), diff_min: n(-4), diff_max: n(306) }
+	gap = GraphiteCollision.bins_gap(cache, neighbor, True, 1000)
+	gap.stopped == 0 and gap.gap == n(-401)
+}
+# Public Graphite2 later-h600-s128-d128-m10 has a right peak at
+# 154.098... in cell46, rather than the other facet's149.431... .
+# This unit interval distinguishes the switch; the native cached oracle
+# separately enforces the exact public glyph run.
+expect {
+	n = TableVar.f32_from_int
+	cache = collision_target_bins([collision_square], n(10), n(-10), n(600), True, 1000)
+	neighbor = { ..collision_square, sum_max: GraphiteCollision.coordinate(0, n(900), 128), diff_max: GraphiteCollision.coordinate(n(-600), n(900), 128) }
+	gap = GraphiteCollision.bins_gap(cache, neighbor, True, 1000)
+	gap.stopped == 0 and TableVar.f32_lt(n(-165), gap.gap) and TableVar.f32_lt(gap.gap, n(-164))
+}
+
+phase3_space_state = |flags| {
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 3), { ..GraphiteSlots.no_slot, glyph: 1, advance_x: n(100) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, glyph: 0, advance_x: n(100) })
+	c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, glyph: 2, advance_x: n(603) })
+	var $state = c.state
+	for id in [1, 2, 3] {
+		$state = GraphiteSlots.set_extra($state, id, 31, 1)
+		$state = GraphiteSlots.set_extra($state, id, 4, -1000)
+		$state = GraphiteSlots.set_extra($state, id, 6, 1000)
+	}
+	$state = GraphiteSlots.set_extra($state, 1, 3, 17)
+	$state = GraphiteSlots.set_extra($state, 1, 10, 10)
+	GraphiteSlots.set_extra($state, 2, 3, flags)
+}
+
+# Independent phase3-space controls: START/END never bound the scan;
+# explicit SPACE takes precedence over IGNORE, as does an all-zero box.
+expect {
+	match collision_prepared {
+		Err(_) => False
+		Ok(table) => match table.program.subtables.first() {
+			Err(_) => False
+			Ok(sub) => {
+				attrs = { ..GraphiteAttributes.none, box_starts: [0, 6, 12], bytes: [0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255] }
+				var $ok = True
+				for rtl in [False, True] {
+					for blank in [False, True] {
+						metric = |glyph, wanted, _| {
+							if (blank and glyph == 0) 0 else match wanted {
+								2 => 600
+								5 => 300
+								_ => 0
+							}
+						}
+						for flags in [0, 2, 4, 8, 12, 14, 128, 130, 132, 136, 140, 142] {
+							context = { table: { ..table, attributes: attrs }, sub: { ..sub, direction: if (rtl) 2 else 1 }, rtl }
+							result = GraphiteCollision.kerning(phase3_space_state(flags), context, 9, 65536, metric)
+							space = blank or flags.bitwise_and(128) != 0
+							increment = if space {
+								if (rtl) -193 else -310
+							} else if flags.bitwise_and(2) != 0 {
+								if (rtl) -393 else -110
+							} else {
+								if (rtl) 210 else -210
+							}
+							$ok = $ok and result.stopped == 0 and GraphiteSlots.get(result.state, 1).advance_x == TableVar.f32_from_int(100 + increment)
+						}
+					}
+				}
+				$ok
+			}
+		}
+	}
+}
+expect {
+	point = |_, wanted, _| if (wanted == 0 or wanted == 4 or wanted == 5) 5 else if (wanted == 2 or wanted == 3) 10 else 0
+	!GraphiteCollision.kerning_space(0, 0, point) and !GraphiteCollision.kerning_space(0, 2, point) and GraphiteCollision.kerning_space(0, 130, point)
+}
+
+# A nonzero point is an ink obstacle with an occupied cell. Only the
+# all-zero glyph box is classified as whitespace before this geometry step.
+expect {
+	n = TableVar.f32_from_int
+	cache = collision_target_bins([collision_square], n(10), n(-10), n(600), True, 1000)
+	point = { x_min: n(5), x_max: n(5), y_min: n(10), y_max: n(10), sum_min: n(15), sum_max: n(15), diff_min: n(-5), diff_max: n(-5) }
+	gap = GraphiteCollision.bins_gap(cache, point, True, 1000)
+	gap.stopped == 0 and TableVar.f32_lt(n(-10), gap.gap) and TableVar.f32_lt(gap.gap, n(-9))
+}
+
+# A later logical obstacle shifted physically closer must still improve
+# the gap, even beyond another KERN target. Public CAPI reports +506.
+expect {
+	match collision_prepared {
+		Err(_) => False
+		Ok(table) => match table.program.subtables.first() {
+			Err(_) => False
+			Ok(sub) => {
+				n = TableVar.f32_from_int
+				a = GraphiteSlots.append(GraphiteSlots.make(0, 4), { ..GraphiteSlots.no_slot, glyph: 1, advance_x: n(100) })
+				b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, glyph: 0, advance_x: n(100) })
+				c = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, glyph: 2, advance_x: n(100) })
+				d = GraphiteSlots.append(c.state, { ..GraphiteSlots.no_slot, glyph: 0, advance_x: n(604), shift_x: n(-1000) })
+				var $state = d.state
+				for id in [1, 2, 3, 4] {
+					$state = GraphiteSlots.set_extra($state, id, 31, 1)
+					$state = GraphiteSlots.set_extra($state, id, 4, -5000)
+					$state = GraphiteSlots.set_extra($state, id, 6, 5000)
+					$state = GraphiteSlots.set_extra($state, id, 10, 10)
+				}
+				$state = GraphiteSlots.set_extra($state, 1, 3, 17)
+				$state = GraphiteSlots.set_extra($state, 3, 3, 17)
+				attrs = { ..GraphiteAttributes.none, box_starts: [0, 6, 12], bytes: [0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255] }
+				metric = |_, wanted, _| match wanted {
+					2 => 600
+					5 => 300
+					_ => 0
+				}
+				result = GraphiteCollision.kerning($state, { table: { ..table, attributes: attrs }, sub: { ..sub, direction: 2 }, rtl: True }, 9, 65536, metric)
+				result.stopped == 0 and GraphiteSlots.get(result.state, 1).advance_x == n(606)
+			}
+		}
+	}
+}
+
+# Rounded normalization at255 can extend beyond the mathematical diagonal
+# endpoint. The cover must enclose the decoder's actual output bits.
+expect {
+	n = TableVar.f32_from_int
+	whole = { x_min: n(-32768), x_max: n(32767), y_min: n(-32768), y_max: n(32766), sum_min: 0, sum_max: 0, diff_min: 0, diff_max: 0 }
+	cover = GraphiteCollision.part_cover(whole)
+	TableVar.f32_lt(n(65533), cover.sum_max) and TableVar.f32_lt(n(65535), cover.diff_max)
+}
+
+shift_bound_part = |whole, seed| {
+	pair = |step| {
+		a = (seed * 37 + step * 11) % 256
+		b = (seed * 79 + step * 23 + 1) % 256
+		{ low: if (a < b) a else b, high: if (a < b) b else a }
+	}
+	x = pair(1)
+	y = pair(2)
+	s = pair(3)
+	d = pair(4)
+	x_span = TableVar.f32_sub(whole.x_max, whole.x_min)
+	y_span = TableVar.f32_sub(whole.y_max, whole.y_min)
+	span = TableVar.f32_add(x_span, y_span)
+	sum_base = TableVar.f32_add(whole.x_min, whole.y_min)
+	diff_base = TableVar.f32_sub(whole.x_min, whole.y_max)
+	{ x_min: GraphiteCollision.coordinate(whole.x_min, x_span, x.low), x_max: GraphiteCollision.coordinate(whole.x_min, x_span, x.high), y_min: GraphiteCollision.coordinate(whole.y_min, y_span, y.low), y_max: GraphiteCollision.coordinate(whole.y_min, y_span, y.high), sum_min: GraphiteCollision.coordinate(sum_base, span, s.low), sum_max: GraphiteCollision.coordinate(sum_base, span, s.high), diff_min: GraphiteCollision.coordinate(diff_base, span, d.low), diff_max: GraphiteCollision.coordinate(diff_base, span, d.high) }
+}
+
+# Differential property: an exact reference-pinned candidate must survive
+# the cheaper cover test. Include extreme boxes, points, fractional bases
+# and inverted movement windows; no coherent-diagonal assumption is used.
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	var $active = 0
+	var $rejected = 0
+	for whole in [collision_square, { ..collision_square, x_min: n(-32768), x_max: n(32767), y_min: n(-32768), y_max: n(32766) }, { ..collision_square, x_min: n(5), x_max: n(5), y_min: n(10), y_max: n(10) }, { ..collision_square, x_min: n(-50), x_max: n(100), y_min: n(-70), y_max: n(200) }] {
+		cover = GraphiteCollision.part_cover(whole)
+		for target in [collision_square, { x_min: 0, x_max: 0, y_min: 0, y_max: 0, sum_min: 0, sum_max: 0, diff_min: 0, diff_max: 0 }] {
+			for seed in 0..<32 {
+				part = shift_bound_part(whole, seed)
+				dx = TableVar.f32_div(n(((seed * 997) % 5000).to_i64_wrap() - 2500), n(3))
+				dy = TableVar.f32_div(n(((seed * 617) % 3500).to_i64_wrap() - 1750), n(7))
+				base_x = TableVar.f32_div(n(((seed * 19) % 301).to_i64_wrap() - 150), n(3))
+				base_y = TableVar.f32_div(n(((seed * 29) % 401).to_i64_wrap() - 200), n(7))
+				limits = { x_min: n(((seed * 67) % 1001).to_i64_wrap() - 500), x_max: n(((seed * 79) % 1001).to_i64_wrap() - 500), y_min: n(((seed * 83) % 1001).to_i64_wrap() - 500), y_max: n(((seed * 97) % 1001).to_i64_wrap() - 500) }
+				margin = n(((seed * 31) % 101).to_i64_wrap())
+				exact = GraphiteCollision.broad_active(target, part, dx, dy, limits, base_x, base_y, margin)
+				possible = GraphiteCollision.broad_possible(target, cover, dx, dy, limits, base_x, base_y, margin)
+				$ok = $ok and (!exact or possible)
+				if exact {
+					$active = $active + 1
+				}
+				if !possible {
+					$rejected = $rejected + 1
+				}
+			}
+		}
+	}
+	$ok and $active > 0 and $rejected > 0
+}
+
+# Index membership survives a deleted stable root and interleaved trees.
+# Inclusive reversed and overlapping groups preserve the scan's region
+# order and every scalar coefficient, including live retry-flag changes.
+expect {
+	match collision_prepared {
+		Err(_) => False
+		Ok(table) => match table.program.subtables.first() {
+			Err(_) => False
+			Ok(sub) => {
+				n = TableVar.f32_from_int
+				var $state = GraphiteSlots.make(0, 6)
+				for id in 1..<7 {
+					appended = GraphiteSlots.append($state, { ..GraphiteSlots.no_slot, glyph: 1, parent: if (id < 5) (if (id % 2 == 1) 5 else 6) else 0, position_x: n(id.to_i64_wrap() * 10), position_y: n(id.to_i64_wrap() * 20) })
+					$state = appended.state
+					for field in [(3, 1), (15, 1), (17, 1), (18, id.to_i32_wrap() * 7), (19, 100), (20, id.to_i32_wrap() * 11), (21, 200), (22, 150), (23, 300)] {
+						$state = GraphiteSlots.set_extra($state, id, field.0, field.1)
+					}
+				}
+				$state = GraphiteSlots.delete($state, 5)
+				prepared = GraphiteCollision.prepare_work($state, 1000)
+				indexed = GraphiteCollision.prepare_members(prepared.work, 1000)
+				attrs = { ..GraphiteAttributes.none, box_starts: [0, 6, 12], bytes: [0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255, 0, 0, 0, 255, 0, 255] }
+				context = { table: { ..table, attributes: attrs }, sub, rtl: False }
+				metric = |_, wanted, _| match wanted {
+					2 => 600
+					5 => 300
+					_ => 0
+				}
+				input = { target: Present(collision_square), obstacles: [], active: True, current_x: 0, current_y: 0, limits: { x_min: n(-1000), y_min: n(-1000), x_max: n(1000), y_max: n(1000) }, margin: n(10), weight: n(100), operations: 0, stopped: 0 }
+				var $ok = prepared.stopped == 0 and indexed.stopped == 0
+				var $nonempty = 0
+				for flags in [0, 1, 33, 257, 289, 2, 17] {
+					live = GraphiteSlots.set_extra(indexed.work.state, 1, 3, flags)
+					work = { ..indexed.work, state: live }
+					for retry in [False, True] {
+						for reverse in [False, True] {
+							for pair in [(1, 6), (2, 4), (3, 3)] {
+								group = if (reverse) { first: pair.1, last: pair.0 } else { first: pair.0, last: pair.1 }
+								a = GraphiteCollision.collect_sequence(work, context, 3, group, reverse, retry, input, 1000, metric)
+								b = GraphiteCollision.collect_sequence({ ..work, members: Scan }, context, 3, group, reverse, retry, input, 1000, metric)
+								$ok = $ok and a.stopped == 0 and b.stopped == 0 and a.regions == b.regions
+								$nonempty = $nonempty + a.regions.len()
+							}
+						}
+					}
+				}
+				fallback = GraphiteCollision.prepare_members(prepared.work, 0)
+				$ok and $nonempty > 0 and fallback.operations == 0 and fallback.stopped == 0 and match fallback.work.members {
+					Scan => True
+					_ => False
+				}
+			}
+		}
+	}
+}
+
+expect {
+	state = GraphiteSlots.set_extra(GraphiteSlots.set_extra(collision_ink_state, 2, 15, 1), 2, 3, 1)
+	prepared = GraphiteCollision.prepare_work(state, 100)
+	exact = state.nodes.len() + 2 * state.active
+	built = GraphiteCollision.prepare_members(prepared.work, exact)
+	short = GraphiteCollision.prepare_members(prepared.work, exact - 1)
+	none = GraphiteCollision.prepare_work(GraphiteSlots.make(0, 0), 100)
+	built.operations == exact and built.stopped == 0 and short.operations == 0 and short.stopped == 0 and (
+		match built.work.members {
+			Ready(_) => True
+			_ => False
+		}
+	) and (
+		match short.work.members {
+			Scan => True
+			_ => False
+		}
+	) and (
+		match none.work.members {
+			Scan => True
+			_ => False
+		}
+	)
+}
+
+# Original public-C-API upper-occupancy witnesses distinguish adding the
+# margin before division from adding one after flooring. Complete bounds
+# cap part occupancy independently of the cache's allocated capacity.
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for sample in [(600, 10, 128, 48), (600, 10, 127, 47), (600, 10, 64, 25), (600, 10, 248, 90), (600, 10, 254, 92), (600, 10, 255, 92), (600, 30, 128, 18), (600, 30, 127, 17), (600, 30, 64, 10), (600, 30, 255, 32), (9, 10, 255, 4), (609, 10, 255, 94)] {
+		height = n(sample.0)
+		part = { ..collision_square, y_max: GraphiteCollision.coordinate(0, height, sample.2) }
+		cache = collision_target_bins([part], n(sample.1), n(-sample.1), height, True, 1000)
+		$ok = $ok and cache.stopped == 0 and cache.start == 1 and cache.bins.len() == sample.3
+	}
+	$ok
+}
+
+# The public three-root negative-X control keeps a far obstacle that
+# blocks the nearer obstacle's apparent escape. The display/overlap box's
+# symmetric X minimum is not the projected movement interval minimum.
+expect {
+	n = TableVar.f32_from_int
+	neighbor = { x_min: 0, y_min: 0, x_max: n(1000), y_max: n(600), sum_min: 0, sum_max: n(1600), diff_min: n(-600), diff_max: n(1000) }
+	limits = { x_min: n(-1000), y_min: n(-1), x_max: 0, y_max: n(1) }
+	GraphiteCollision.broad_active(collision_square, neighbor, n(1967), n(170), limits, 0, 0, 0)
+}
+
+# A positive-only movement interval retains the reflected outer search
+# radius observed by the public broad-audit034 control.
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(101), y_min: n(20), x_max: n(201), y_max: n(300) }
+	GraphiteCollision.broad_active(collision_square, collision_square, n(550), 0, limits, 0, 0, 0)
+}
+
+# A previous-pass offset does not translate the reflected lower radius.
+# The cached broad-audit073 obstacle ends one unit outside that radius.
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-100), y_min: n(-100), x_max: n(100), y_max: n(100) }
+	!GraphiteCollision.broad_active(collision_square, collision_square, n(401), 0, limits, 0, n(200), 0)
+}
+
+# Visited prior glyphs move the sampling origin, while each current whole
+# glyph retains its own terminal occupied-bin limit (public frame audit).
+expect {
+	n = TableVar.f32_from_int
+	part = { box: collision_square, whole_min_y: 0, whole_max_y: n(600) }
+	bins = GraphiteCollision.target_bins([part], n(10), n(-610), n(1210), True, 1000)
+	bins.stopped == 0 and bins.start == 91 and bins.bins.len() == 92
+}
+
+# A later child may draw outside the root's displayed frame. Its own
+# whole limits permit that ink, and the finite frame vector caps drawing.
+expect {
+	n = TableVar.f32_from_int
+	box = GraphiteCollision.translate_box({ ..collision_square, y_min: n(-600), y_max: n(1200), sum_min: n(-600), sum_max: n(1500), diff_min: n(-1200), diff_max: n(900) }, 0, n(170))
+	bins = GraphiteCollision.target_bins([{ box, whole_min_y: n(-430), whole_max_y: n(1370) }], n(10), n(-10), n(610), True, 1000)
+	bins.stopped == 0 and bins.start == 0 and bins.bins.len() == 140
+}
+
+# Per-glyph whole lower bounds constrain the expanded parts independently
+# of earlier visited glyphs; a negative whole lower index can reach zero.
+expect {
+	n = TableVar.f32_from_int
+	box = { ..collision_square, y_min: n(6), y_max: n(248) }
+	bins = GraphiteCollision.target_bins([{ box, whole_min_y: n(-7), whole_max_y: n(248) }], n(10), n(-10), n(610), True, 1000)
+	bins.stopped == 0 and bins.start == 1
+}
+
+# Whole upper bounds can retain the lower sentinel, while the signed
+# expanded part interval still leaves sufficiently distant ink empty.
+expect {
+	n = TableVar.f32_from_int
+	check = |max_y, expected| {
+		box = { ..collision_square, y_min: n(max_y - 600), y_max: n(max_y) }
+		cache = GraphiteCollision.target_bins([{ box, whole_min_y: box.y_min, whole_max_y: box.y_max }], n(10), n(-10), n(610), True, 1000)
+		cache.stopped == 0 and cache.bins.len() == expected
+	}
+	check(-18, 1) and check(-25, 0) and check(-1000, 0)
+}
+
+# Public whole-glyph boundary controls distinguish eligibility from
+# occupied target cells and from the actual neighbor's subbox bounds.
+expect {
+	n = TableVar.f32_from_int
+	m = n(10)
+	width = TableVar.f32_div(n(20), n(3))
+	capacity = GraphiteCollision.kern_capacity(n(-10), n(610), width)
+	capacity == 140 and GraphiteCollision.kern_neighbor_in_frame(n(922), n(923), n(-10), width, m, capacity) and !GraphiteCollision.kern_neighbor_in_frame(n(923), n(924), n(-10), width, m, capacity) and GraphiteCollision.kern_neighbor_in_frame(n(-31), n(-30), n(-10), width, m, capacity) and !GraphiteCollision.kern_neighbor_in_frame(n(-32), n(-31), n(-10), width, m, capacity)
+}
+
+expect {
+	n = TableVar.f32_from_int
+	var $ok = True
+	for value in [(13, 930, -39), (17, 945, -51), (30, 968, -90), (101, 1109, -303)] {
+		margin = n(value.0)
+		min_y = n(-value.0)
+		max_y = n(600 + value.0)
+		width = TableVar.f32_div(n(2 * value.0), n(3))
+		capacity = GraphiteCollision.kern_capacity(min_y, max_y, width)
+		$ok = $ok and GraphiteCollision.kern_neighbor_in_frame(n(value.1), n(value.1 + 100), min_y, width, margin, capacity) and !GraphiteCollision.kern_neighbor_in_frame(n(value.1 + 1), n(value.1 + 101), min_y, width, margin, capacity) and GraphiteCollision.kern_neighbor_in_frame(n(value.2 - 100), n(value.2), min_y, width, margin, capacity) and !GraphiteCollision.kern_neighbor_in_frame(n(value.2 - 101), n(value.2 - 1), min_y, width, margin, capacity)
+	}
+	$ok
+}
+
+# Original two-pass controls keep physical geometry constant while varying
+# the established prior offset. Coarse gates use the recovered point;
+# the forbidden projection remains in physical coordinates.
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-1), y_min: n(-1000), x_max: n(1), y_max: n(1000) }
+	var $ok = True
+	for sample in [(100, True), (300, True), (414, True), (415, True), (416, False), (500, False), (600, False), (800, False), (-885, True), (-886, False)] {
+		actual = GraphiteCollision.broad_active(collision_square, collision_square, n(-80), n(-170), limits, 0, n(sample.0), 0)
+		$ok = $ok and actual == sample.1
+	}
+	$ok
+}
+
+expect {
+	n = TableVar.f32_from_int
+	limits = { x_min: n(-1000), y_min: n(-1), x_max: n(1000), y_max: n(1) }
+	var $ok = True
+	for sample in [(460, 0, True), (461, 0, False), (465, 10, True), (466, 10, False), (-1380, 0, True), (-1381, 0, False), (-1390, 10, True), (-1391, 10, False)] {
+		actual = GraphiteCollision.broad_active(collision_square, collision_square, n(-80), n(-170), limits, n(sample.0), 0, n(sample.1))
+		$ok = $ok and actual == sample.2
+	}
+	$ok
+}
+
+# A disjoint whole-glyph query differs from an empty actual part. The
+# whole-y probe checks present cells, including holes inside the cache.
+expect {
+	n = TableVar.f32_from_int
+	low = { ..collision_square, y_max: n(100) }
+	high = { ..collision_square, y_min: n(500) }
+	parts = [{ box: low, whole_min_y: 0, whole_max_y: n(600) }, { box: high, whole_min_y: 0, whole_max_y: n(600) }]
+	cache = GraphiteCollision.target_bins(parts, n(10), n(-10), n(610), False, 10000)
+	hole = GraphiteCollision.bins_intersect_y(cache, n(250), n(300), 1000)
+	whole = GraphiteCollision.bins_intersect_y(cache, 0, n(600), 1000)
+	outside = GraphiteCollision.bins_intersect_y(cache, n(700), n(800), 1000)
+	limited = GraphiteCollision.bins_intersect_y(cache, 0, n(600), 0)
+	cache.stopped == 0 and !hole.present and hole.stopped == 0 and whole.present and whole.stopped == 0 and !outside.present and outside.operations == 0 and limited.stopped == 2
+}
+
+# Sampled bounds exclude an attached part wholly beyond the finite vector;
+# including it in a conservative bbox would change the empty comparison.
+expect {
+	n = TableVar.f32_from_int
+	far = GraphiteCollision.translate_box(collision_square, n(500), n(3000))
+	parts = [{ box: collision_square, whole_min_y: 0, whole_max_y: n(600) }, { box: far, whole_min_y: n(3000), whole_max_y: n(3600) }]
+	left = GraphiteCollision.target_bins(parts, n(10), n(-10), n(610), True, 10000)
+	right = GraphiteCollision.target_bins(parts, n(10), n(-10), n(610), False, 10000)
+	left.stopped == 0 and right.stopped == 0 and left.bound == Present(n(-10)) and right.bound == Present(n(310))
+}
+
+# A trimmed target's sampled maximum exposes midpoint facet selection;
+# taking both facets at the upper edge gives a different public advance.
+expect {
+	n = TableVar.f32_from_int
+	box = { ..collision_square, x_min: n(500), x_max: n(800), sum_min: n(500), sum_max: GraphiteCollision.coordinate(n(500), n(900), 100), diff_min: n(-100), diff_max: GraphiteCollision.coordinate(n(-100), n(900), 100) }
+	cache = GraphiteCollision.target_bins([{ box, whole_min_y: 0, whole_max_y: n(600) }], n(10), n(-10), n(610), False, 10000)
+	cache.stopped == 0 and match cache.bound {
+		Absent => False
+		Present(bound) => GraphiteSlots.integer(bound) == 565
+	}
 }

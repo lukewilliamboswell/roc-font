@@ -1,0 +1,378 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "collision-attachment-lifetime-descendant",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-descendant.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "descendant",
+        "kind": "family",
+        "relation": "descendant"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-descendant-ignore",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-descendant-ignore.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "descendant-ignore",
+        "kind": "family",
+        "relation": "descendant-ignore"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-ancestor",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-ancestor.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "ancestor",
+        "kind": "family",
+        "relation": "ancestor"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-siblings",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-siblings.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "siblings",
+        "kind": "family",
+        "relation": "siblings"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-siblings-ignore",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-siblings-ignore.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "siblings-ignore",
+        "kind": "family",
+        "relation": "siblings-ignore"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-two-level",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-two-level.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "two-level",
+        "kind": "family",
+        "relation": "two-level"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-two-level-ignore-middle",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-two-level-ignore-middle.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "two-level-ignore-middle",
+        "kind": "family",
+        "relation": "two-level-ignore-middle"
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete0-ignore0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-pre-delete0-ignore0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "pre-delete0-ignore0",
+        "kind": "pre",
+        "deleted": false,
+        "ignored": false
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete0-ignore1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-pre-delete0-ignore1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "pre-delete0-ignore1",
+        "kind": "pre",
+        "deleted": false,
+        "ignored": true
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete1-ignore0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-pre-delete1-ignore0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "pre-delete1-ignore0",
+        "kind": "pre",
+        "deleted": true,
+        "ignored": false
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-pre-delete1-ignore1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-pre-delete1-ignore1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "pre-delete1-ignore1",
+        "kind": "pre",
+        "deleted": true,
+        "ignored": true
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d-5000",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a0-d-5000.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a0-d-5000",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": -5000
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a0-d0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a0-d0",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": 0
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a0-d5000",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a0-d5000.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a0-d5000",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": 5000
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d-5000",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a1-d-5000.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a1-d-5000",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": -5000
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a1-d0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a1-d0",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": 0
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-metrics-a1-d5000",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-metrics-a1-d5000.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "metrics-a1-d5000",
+        "kind": "metrics",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": 5000
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d-1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a0-d-1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a0-d-1",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": -1
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a0-d0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a0-d0",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": 0
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a0-d1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a0-d1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a0-d1",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 0,
+        "dead_advance": 1
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d-1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a1-d-1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a1-d-1",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": -1
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d0",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a1-d0.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a1-d0",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": 0
+      }
+    },
+    {
+      "id": "collision-attachment-lifetime-left-a1-d1",
+      "font": "attachment-lifetime-audit/collision-attachment-lifetime-left-a1-d1.ttf",
+      "text": "abcd",
+      "direction": "ltr",
+      "script": "Latn",
+      "face_options": 6,
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "left-a1-d1",
+        "kind": "left",
+        "deleted": true,
+        "active_advance": 1,
+        "dead_advance": 1
+      }
+    }
+  ]
+}

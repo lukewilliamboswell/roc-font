@@ -1,0 +1,361 @@
+{
+  "oracle": {
+    "engine": "OTS",
+    "version": "ots 9.3.0",
+    "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
+    "source_commit": "884861e"
+  },
+  "records": [
+    {
+      "id": "collision-empty-gap-ltr-finite-empty",
+      "font_sha256": "f2ea064cc6472995d217dc9a550765e913fd4ab2229ecdf42ed9f456d707aa3d",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-ltr-empty-finite",
+      "font_sha256": "e4a2dbc940cd1600a86e161c15f343a02c707cffcf906e770e291dc577be079a",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-0",
+      "font_sha256": "90964c231d13f4fbf411f3629c13f23cc3a4b858ef2887d4af803e0a242ff759",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-1",
+      "font_sha256": "70b5f2c740a483871eb79a76eff62e80f0958afeb8e53d636596e366d38ff7cb",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-0",
+      "font_sha256": "8f66cb4a05a13228aa1a536aabb8f901738852491be377dd8106b964a31648bf",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-1200",
+      "font_sha256": "ceda6ef933239dba224d1f462fd4f0f01832cd01b4e7430fb3e7e164c5bf000e",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-0",
+      "font_sha256": "1b946da073c0ff88b00d80c8c0d8531ae3ca0c20cb4f577225ed620ef428640d",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "ced79f0dedda0483896acc6011a478c69c27f6dff50aacd5735007f90d0b18ee",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-1",
+      "font_sha256": "a88d8cb29ab7bc35ccc61f08d5b3f7d7bc2882cb89fbad8aa2799fc0f0f3a500",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "ced79f0dedda0483896acc6011a478c69c27f6dff50aacd5735007f90d0b18ee",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-0",
+      "font_sha256": "f1711d1e7478791d7f437b75fa0f0b2bb60ddceff74336773787ed73ff6ba121",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "ced79f0dedda0483896acc6011a478c69c27f6dff50aacd5735007f90d0b18ee",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-1",
+      "font_sha256": "b6a82303ff8ab7355eed69cf5d2eb6372523eb7e7c7732fce284581eb791c0ab",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "ced79f0dedda0483896acc6011a478c69c27f6dff50aacd5735007f90d0b18ee",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "30a1a92292ac327dbec078b41ce10b18dbf2ad610a4a226d4977095ad0af5d98"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-target-cropped",
+      "font_sha256": "4c32ded83761aa3347d7aed9de7a4aa593f829e1dc6f4e42395ec4306ebd6148",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "59996145f3c3f13c0514970b02489791fe2d5acfbf7ea78180e926c104eb34a3",
+        "Gloc": "673a0dafca032f469f3b8cf4b1dbc5a4ff85748fb02155a5b62932744ea82c34",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-target-diagonal",
+      "font_sha256": "342b3cf874db9a12ad275bc7d603f301b46ea3c5013478079897c35437e91330",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "186f5ff8f3c9bdc9f2fe79b6a964eaca182b2bf43d32aec0ca7ae8b0fd4a573f",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-part-only-empty",
+      "font_sha256": "0f179c229cd2c0087f01ecb8b2d18fc55c4bbae31318a42c5cebac606a317845",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "997d76de81eb573cb7d2ed0c5a52392554d568c1f3835416bc3e322fe30ae800",
+        "Gloc": "7f31402b6c1661403cc433c9d03a7fe26f51f0de85167578947d551916cfa4f3",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-part-finite-empty",
+      "font_sha256": "aecf76b4047aa923c0141c4b2fdb7dd92e98520d0edcbef1b192ee0857d50322",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "3f3a28a92b5e62dff53b409adc3f3e7067aaf7116a9527a5de9bf7379ecc076d",
+        "Gloc": "80361e7c36dc4b96acbd6353ff91b2c16a340202fc60b1ec44ad995c22881293",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-part-empty-finite",
+      "font_sha256": "85fb488548f1ca370cf58642630f7892e084de2d31370d2e107de2482f002b60",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "663618174dfbd90869697ecbaeb3db1b9aebc9d20f72964589ab26c02c2ad159",
+        "Gloc": "80361e7c36dc4b96acbd6353ff91b2c16a340202fc60b1ec44ad995c22881293",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-empty-cropped-x",
+      "font_sha256": "7b9447779d88d87383b0dcdc1a8c8c125849254ebc2e7a9a2fd64eda66ae4acf",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "45ea7a9b04f8cf13fa61dda6a0005c9d83e4be6504c3ea660b9690afdfb6350d",
+        "Gloc": "7f31402b6c1661403cc433c9d03a7fe26f51f0de85167578947d551916cfa4f3",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-hole-low",
+      "font_sha256": "4cbd91dc1105e72313d789e1545486f3c00f32b5d793fc7ef5be3a835ac4b153",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "97b2f80ae3b58fedc7fdbdf7b84c27de249581aece7b37f1ae121c3e3bf17c0a",
+        "Gloc": "673a0dafca032f469f3b8cf4b1dbc5a4ff85748fb02155a5b62932744ea82c34",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-hole-high",
+      "font_sha256": "316c95fc636503871f31d13570d6c474b6d926506af0c0a73380a922dff86ec3",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "a0d5a24a06cef97104c7996002b8e2f339120b7ba6ad35257db49d892ea7042b",
+        "Gloc": "673a0dafca032f469f3b8cf4b1dbc5a4ff85748fb02155a5b62932744ea82c34",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-hole-separated",
+      "font_sha256": "fcca7892929ebfcc36b14f201e692c0beb43612e4f1bb6d47a5416234bc6987e",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "bdc7d68a19979b3a62e363097978ff12efaedad00f0a70dc3158dddba1ab6f6e",
+        "Gloc": "ebc2f440e1592fd8fff01145328e9267f14d054370153bc3f1c04b4b5005980e",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-target-child-far",
+      "font_sha256": "904430cf4c4e6c7e37fba99e297b6fea05425f4d83b78682bb6a2ff13999f5d5",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "75528d513a0d85deee230f62a3d7bcff272d11008df213b0e8cbfef816ed5926",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "1c6404d595c4a26cb4a0eddaff887309369e23d75641eb7a6276937b90af34cf"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-target-child-inside",
+      "font_sha256": "7e914678b7bee57518c451b9cbb1ecb8b4ac57ec58bd82351a6f49020c1a7426",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "75528d513a0d85deee230f62a3d7bcff272d11008df213b0e8cbfef816ed5926",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "1c6404d595c4a26cb4a0eddaff887309369e23d75641eb7a6276937b90af34cf"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-two-empty",
+      "font_sha256": "df9256ce77ba2f05f016ca647235fe97024818ef1bb2ab70c247c3bc7ce39f56",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "75528d513a0d85deee230f62a3d7bcff272d11008df213b0e8cbfef816ed5926",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "806b3d4a558f1ed07267d1d7c023bc903b8df4a5d8edec60b209bd120ddb434c"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-two-empty-swapped",
+      "font_sha256": "8f88ea5949fee46af729908bcec7c9b5490cf00c44f90c63ddd543692dbcf6a2",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "75528d513a0d85deee230f62a3d7bcff272d11008df213b0e8cbfef816ed5926",
+        "Gloc": "40452f6cac82f4b2a525214885015dec109e71d7d0f48638b2f04374ab6e2973",
+        "Silf": "806b3d4a558f1ed07267d1d7c023bc903b8df4a5d8edec60b209bd120ddb434c"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-margin13",
+      "font_sha256": "9f48e225d5041854428e7f2776e9d10aaa4f7be88d507ee37c1959272fe526da",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "ecd5bd6e6d746194fca03069e7f799b8eae1bb5cb7622b08f00c15c9c000605b",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-margin30",
+      "font_sha256": "8f98f7e8b70e81b52c082ea2324018789695346b9d271d35ea1e1e6b920e0cef",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "1249eabddaed3f1d516886189022f8cf77da3bced5275b693d39b48fd70f2b08",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-margin101",
+      "font_sha256": "21c81cf0680a8a689a5850d50401529b9b854c317f300c4d124b83ffa562939a",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "1822fe9e0a3fe586b5f659c0fd8efd0f8de6cb26a817f3f60316733b4d62943f",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    },
+    {
+      "id": "collision-empty-gap-width400",
+      "font_sha256": "8ff0f1f12cc9e2272479cb1e4dfbea940490de86b83f7580a18e7c5989a07a21",
+      "accepted": true,
+      "graphite_tables": {
+        "Glat": "7508656576ac2588639f0da9bd8aea1488929d7d55e9bda8541a06c92a200cb0",
+        "Gloc": "cc3af626e3cabace98010de78d1d881d249780e9828b7077d58c3d943dba94db",
+        "Silf": "e1163dd586498d48ccff985044cb1f6120cbadd111008598ad040ae908e0db1b"
+      },
+      "graphite_retained_identically": true,
+      "stdout": "File sanitized successfully!\n",
+      "stderr": ""
+    }
+  ]
+}

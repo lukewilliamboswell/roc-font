@@ -1,0 +1,85 @@
+{
+  "source_snapshot": "1bbedbd, prefix core through1abce98",
+  "bundle": "6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst",
+  "bundle_sha256": "5068c5a7cf169259fd216df4ecac2c459efb4db7f3c0e06c1ece64579bccf069",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "source_sentinel": true,
+  "build_command": [
+    "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "build",
+    "--opt=speed",
+    "--fuzz",
+    "tests/fonts/graphite/shape_alloc.roc",
+    "--output=/private/tmp/graphite-prefix-flat-work-bench/shape_alloc",
+    "--replace-dep",
+    "./package/main.roc",
+    "http://127.0.0.1:59496/6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst"
+  ],
+  "before_binary_sha256": "11cbba83e037182962b4f85dcf2032adad3d6adb479e25e230ebf5951c6aec07",
+  "after_binary_sha256": "e611a2bacc159e621cc1690285066f9a4396c9d937c9fb0bb89860aeb95fd964",
+  "rows": [
+    {
+      "id": "geometry-benchmark-shifting-parts-4",
+      "copies": 4,
+      "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+      "before": 149,
+      "after": 150,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 8693018508798741868
+    },
+    {
+      "id": "geometry-benchmark-shifting-parts-8",
+      "copies": 8,
+      "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+      "before": 278,
+      "after": 279,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 12645660546436526332
+    },
+    {
+      "id": "geometry-benchmark-shifting-parts-16",
+      "copies": 16,
+      "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+      "before": 534,
+      "after": 535,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 128593753864890188
+    },
+    {
+      "id": "geometry-benchmark-prefix-changing-4",
+      "copies": 4,
+      "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+      "before": 103,
+      "after": 104,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 5007165539358496624
+    },
+    {
+      "id": "geometry-benchmark-prefix-changing-8",
+      "copies": 8,
+      "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+      "before": 175,
+      "after": 176,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 151265287089899292
+    },
+    {
+      "id": "geometry-benchmark-prefix-changing-16",
+      "copies": 16,
+      "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+      "before": 320,
+      "after": 321,
+      "additional_calls": 1,
+      "leaked": 0,
+      "output_checksum": 10520850321509213724
+    }
+  ],
+  "bounded_one_pool": true,
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

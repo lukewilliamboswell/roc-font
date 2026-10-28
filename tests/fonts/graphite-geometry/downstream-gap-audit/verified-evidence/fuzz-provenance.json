@@ -1,0 +1,20 @@
+{
+  "source_snapshot": "dde4ce3; corrected frame/deletion/metric and ordered empty-neighbor sampled-right geometry",
+  "bundle": "2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8.tar.zst",
+  "bundle_sha256": "f89d75ad76f42153e806ac5fdb57db0f7708eaf718fb2460b05c80d394dfe284",
+  "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "source_sentinel": true,
+  "build_command": [
+    "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "build",
+    "--opt=speed",
+    "--fuzz",
+    "fuzz/font-graphite-geometry.roc",
+    "--output=/private/tmp/graphite-geometry-fuzz-right-cell/state/fuzz/bin/font-graphite-geometry",
+    "--replace-dep",
+    "./package/main.roc",
+    "http://127.0.0.1:61660/2PyGu4AQAczuvGXoFU7QAEYHQD5L1b2mxk6uSGHhbcx8.tar.zst"
+  ],
+  "target_sha256": "e6162081d0525eb17e5cddfe9417006f5c47ec6f3c8e5c84b6f1ccf1670a2d0f"
+}

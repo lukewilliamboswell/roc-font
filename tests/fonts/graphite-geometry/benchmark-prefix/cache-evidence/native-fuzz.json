@@ -1,0 +1,77 @@
+{
+  "description": "Optimized native narrow totality campaign for the exact-prefix SHIFT cache, including the genuine prefix-changing sixth generated mode; source-sentinel served bundle. This is a bounded contract campaign, not reference parity or full release validation.",
+  "artifact": {
+    "source_snapshot": "1bbedbd; exact-prefix cache through1abce98, no PC/broad candidate",
+    "bundle": "6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst",
+    "bundle_sha256": "5068c5a7cf169259fd216df4ecac2c459efb4db7f3c0e06c1ece64579bccf069",
+    "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+    "source_sentinel": true,
+    "build_command": [
+      "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+      "build",
+      "--opt=speed",
+      "--fuzz",
+      "fuzz/font-graphite-geometry.roc",
+      "--output=/private/tmp/graphite-geometry-fuzz-prefix/state/fuzz/bin/font-graphite-geometry",
+      "--replace-dep",
+      "./package/main.roc",
+      "http://127.0.0.1:59654/6tcA4mjKHjFWBwoANiHDK32GEXqu4Yg5dJv1oD635kq9.tar.zst"
+    ],
+    "target_sha256": "746b071265ade8bcb9422618bd3d44a8faf12148cfc1467a7de9bdbd6ee3d7b7"
+  },
+  "report_sha256": "16fb67664a317a09e05b88408ae1c032dfb6a60368e018014ef1dfa735f8e879",
+  "duration_ms": 10742,
+  "outcome": "passed",
+  "finding_kind": null,
+  "configuration": {
+    "corpus": "/private/tmp/graphite-geometry-fuzz-prefix/state/fuzz/smoke-corpus/font-graphite-geometry",
+    "time_seconds": null,
+    "runs": "1000",
+    "max_input_size": "1048576",
+    "memory_limit_mb": "2048",
+    "timeout_seconds": "10",
+    "dictionary": "/private/tmp/graphite-geometry-fuzz-prefix/mirror/fuzz/dictionaries/narrow.dict",
+    "seed": "1",
+    "leak_detection": true,
+    "command": [
+      "/private/tmp/graphite-geometry-fuzz-prefix/state/fuzz/bin/font-graphite-geometry",
+      "run",
+      "/private/tmp/graphite-geometry-fuzz-prefix/state/fuzz/smoke-corpus/font-graphite-geometry",
+      "--max-input-size=1048576",
+      "--timeout=10",
+      "--memory-limit=2048",
+      "--dictionary=/private/tmp/graphite-geometry-fuzz-prefix/mirror/fuzz/dictionaries/narrow.dict",
+      "--runs=1000",
+      "--seed=1",
+      "--artifact-dir=/private/tmp/graphite-geometry-fuzz-prefix/state/fuzz/runs/font-graphite-geometry/smoke/failures",
+      "--print-final-stats"
+    ]
+  },
+  "executable": {
+    "name": "font-graphite-geometry",
+    "sha256": "405fc62ed3ba949d01c5d6085ff7679b7cbb57857c0667e2c7a56b081215e060"
+  },
+  "termination": {
+    "exit_code": 0,
+    "signal": null
+  },
+  "libfuzzer": {
+    "coverage_kind": "sanitizer_edge_feedback",
+    "executed_units": 2463,
+    "average_exec_per_sec": 246,
+    "new_units_added": 0,
+    "slowest_unit_time_sec": 0,
+    "peak_rss_mb": 59,
+    "coverage_edges": 13025,
+    "coverage_features": 36358
+  },
+  "failures": [],
+  "corpus_count": 2462,
+  "corpus_manifest_sha256": "5ab7e0d5935be97e4f3a02deb662d754ad4cf1d13a232b9d5b8070704a1fc565",
+  "notes": [
+    "2676 input seeds were present; eight files above the configured 1 MiB limit were excluded by the campaign runner.",
+    "Allocation scaling, deterministic checked/unchecked runs, index alignment, finite integer output, bounded growth and leaks are asserted by the public target.",
+    "No full-package all_tests or docs result is inferred from this campaign."
+  ]
+}

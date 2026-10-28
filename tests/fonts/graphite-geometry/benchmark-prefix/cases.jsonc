@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "geometry-benchmark-prefix-changing-4",
+      "font": "benchmark-prefix/prefix-changing.ttf",
+      "text": "abcabcabcabc",
+      "script": "Arab",
+      "direction": "rtl",
+      "copies": 4
+    },
+    {
+      "id": "geometry-benchmark-prefix-changing-8",
+      "font": "benchmark-prefix/prefix-changing.ttf",
+      "text": "abcabcabcabcabcabcabcabc",
+      "script": "Arab",
+      "direction": "rtl",
+      "copies": 8
+    },
+    {
+      "id": "geometry-benchmark-prefix-changing-16",
+      "font": "benchmark-prefix/prefix-changing.ttf",
+      "text": "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
+      "script": "Arab",
+      "direction": "rtl",
+      "copies": 16
+    }
+  ]
+}

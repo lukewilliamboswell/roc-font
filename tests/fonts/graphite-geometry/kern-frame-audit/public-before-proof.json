@@ -1,0 +1,381 @@
+{
+  "about": "Historical native public before-proof for new frame audit; this does not claim candidate agreement.",
+  "binary_sha256": "31038851e8addbd4ea471cc7bd35135e13f5d87f9f7be989fdcc2ae430cb1d6d",
+  "bundle": "2quGXLcXBgc1urPX3Z2svaxJvuK8GSrRLqKcGBKTt6Nf.tar.zst",
+  "optimization": "dev",
+  "source_sentinel": true,
+  "oracle": {
+    "extractor": 1,
+    "graphite2": "1.3.14",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "harfbuzz": "14.6.0",
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "agree": 44,
+  "cases": 47,
+  "passing_ids": [
+    "collision-kern-frame-first-0",
+    "collision-kern-frame-first-1",
+    "collision-kern-frame-first-2",
+    "collision-kern-frame-first-17",
+    "collision-kern-frame-future-tall",
+    "collision-kern-frame-middle-0",
+    "collision-kern-frame-middle-1",
+    "collision-kern-frame-middle-2",
+    "collision-kern-frame-middle-17",
+    "collision-kern-frame-second-tall",
+    "collision-kern-frame-child-forward-0",
+    "collision-kern-frame-child-forward-1",
+    "collision-kern-frame-child-forward-17",
+    "collision-kern-frame-child-forward-2",
+    "collision-kern-frame-child-backward-0",
+    "collision-kern-frame-child-backward-1",
+    "collision-kern-frame-child-backward-17",
+    "collision-kern-frame-child-backward-2",
+    "collision-kern-frame-seed-blank",
+    "collision-kern-frame-seed-point0",
+    "collision-kern-frame-seed-raised",
+    "collision-kern-frame-sample-0",
+    "collision-kern-frame-sample--607",
+    "collision-kern-frame-first-tall-ltr",
+    "collision-kern-frame-child-part-128",
+    "collision-kern-frame-child-part-160",
+    "collision-kern-frame-child-part-255",
+    "collision-kern-frame-capacity-9-10-0",
+    "collision-kern-frame-capacity-10-10-0",
+    "collision-kern-frame-capacity-601-10-0",
+    "collision-kern-frame-capacity-1-30-0",
+    "collision-kern-frame-capacity-201-101-0",
+    "collision-kern-frame-capacity-201-101-32000",
+    "collision-kern-frame-lower-child--7-None",
+    "collision-kern-frame-lower-child--2-None",
+    "collision-kern-frame-lower-child-3-None",
+    "collision-kern-frame-lower-child--7-13",
+    "collision-kern-frame-lower-child-3-64",
+    "collision-kern-frame-lower-target-13",
+    "collision-kern-frame-negative-upper--18",
+    "collision-kern-frame-negative-upper--11",
+    "collision-kern-frame-negative-upper--25",
+    "collision-kern-frame-negative-upper--1000",
+    "collision-kern-frame-negative-upper-part"
+  ],
+  "failures": [
+    {
+      "case": {
+        "id": "collision-kern-frame-pass-reset",
+        "font": "kern-frame-audit/collision-kern-frame-pass-reset.ttf",
+        "text": "abc",
+        "direction": "rtl",
+        "script": "Latn",
+        "source": "kern-frame-audit/cases.jsonc"
+      },
+      "font_sha256": "f9c3752fa698c11cacc65972ca96d0970b8a6897fe0a47ee794f8f71234c8c5d",
+      "oracle_key": "9ea1413989a1fe265ee4824ce9ec9e887f8577744352b6c031d023fadaca50c0",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              310,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -110,
+              0
+            ],
+            "offset": [
+              0,
+              3000
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              310,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -607,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -110,
+              0
+            ],
+            "offset": [
+              0,
+              3000
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      }
+    },
+    {
+      "case": {
+        "id": "collision-kern-frame-sample--603",
+        "font": "kern-frame-audit/collision-kern-frame-sample--603.ttf",
+        "text": "abc",
+        "direction": "rtl",
+        "script": "Latn",
+        "source": "kern-frame-audit/cases.jsonc"
+      },
+      "font_sha256": "4bfa2f665eac985f5b3e11f681ab362bd202fd140212bccdfaad2c39a5e556f9",
+      "oracle_key": "dde15e83d8e0017feaeaa784d78a6359aed4fe31c4eb3526155c80cbc79b2e6c",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              310,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              100,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              100,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              308,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              100,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              100,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      }
+    },
+    {
+      "case": {
+        "id": "collision-kern-frame-negative-upper--12",
+        "font": "kern-frame-audit/collision-kern-frame-negative-upper--12.ttf",
+        "text": "abc",
+        "direction": "rtl",
+        "script": "Latn",
+        "source": "kern-frame-audit/cases.jsonc"
+      },
+      "font_sha256": "025f6b86d19e5d904171c7b1940b37e6b6ceb77e1ce2edf69aba3f136d4e67d5",
+      "oracle_key": "33d8be5c90f82e7b3112ecc8dad8e6e175d65c31f8b7f51790c52adfdbebb04b",
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              390,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              682,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ]
+      },
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              1683,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -80,
+              0
+            ],
+            "offset": [
+              0,
+              170
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              682,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      }
+    }
+  ]
+}

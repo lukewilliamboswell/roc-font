@@ -1,0 +1,93 @@
+{
+  "binary_sha256": "87f591ac54675fe1a309cc5225c60fb2d2dbe75ef1c683735a89081c651d0170",
+  "baseline_sha256": "0bf61d1bdd41e00f7e2cca564e08825e559238913b9a6e804457b3b93805bc2c",
+  "rows": [
+    {
+      "id": "attachment-8",
+      "allocations": 82,
+      "leaked": 0,
+      "output_checksum": 14525329208503566346,
+      "passed": true
+    },
+    {
+      "id": "attachment-32",
+      "allocations": 251,
+      "leaked": 0,
+      "output_checksum": 11277038690814771066,
+      "passed": true
+    },
+    {
+      "id": "attachment-128",
+      "allocations": 926,
+      "leaked": 0,
+      "output_checksum": 13111414603472431802,
+      "passed": true
+    },
+    {
+      "id": "kerning-parts-4",
+      "allocations": 77,
+      "leaked": 0,
+      "output_checksum": 8016509685935121140,
+      "passed": true
+    },
+    {
+      "id": "kerning-parts-8",
+      "allocations": 122,
+      "leaked": 0,
+      "output_checksum": 7065728181293340348,
+      "passed": true
+    },
+    {
+      "id": "kerning-parts-16",
+      "allocations": 210,
+      "leaked": 0,
+      "output_checksum": 9117213081122116492,
+      "passed": true
+    },
+    {
+      "id": "shifting-parts-4",
+      "allocations": 149,
+      "leaked": 0,
+      "output_checksum": 8693018508798741868,
+      "passed": true
+    },
+    {
+      "id": "shifting-parts-8",
+      "allocations": 278,
+      "leaked": 0,
+      "output_checksum": 12645660546436526332,
+      "passed": true
+    },
+    {
+      "id": "shifting-parts-16",
+      "allocations": 534,
+      "leaked": 0,
+      "output_checksum": 128593753864890188,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-16",
+      "allocations": 387,
+      "leaked": 0,
+      "output_checksum": 4733405774577831116,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-64",
+      "allocations": 1493,
+      "leaked": 0,
+      "output_checksum": 6639840138428045996,
+      "passed": true
+    },
+    {
+      "id": "sequence-members-256",
+      "allocations": 5913,
+      "leaked": 0,
+      "output_checksum": 3970979776383301676,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "requested_bytes": null,
+  "peak_live_bytes": null
+}

@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "reference_compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "notes": [
+    "Exact counts ratchet both increases and decreases; changes require an explicit reviewed baseline update.",
+    "Compiler identity is provenance, not a compiler pin. Compare untouched main before attributing changed counts to a new nightly.",
+    "Output checksums were independently matched to pinned HB14.6 and the retained before binary.",
+    "Sequence membership introduces two bounded flat index pools; its initial ratchet records this measured cost and a separate native completed-work reduction, not a claimed material CPU gain.",
+    "The exact-prefix SHIFT cache adds one bounded flat pool per call that actually changes a physical offset; cached unchanged and genuinely changed prefix paths are measured separately in benchmark-prefix/cache-evidence.",
+    "Verified 2Py geometry snapshot reduces kerning-parts calls from77/122/210 to70/107/179; all other12 cases remain exact. The Oct27 compiler hash is provenance, not a pin."
+  ],
+  "cases": [
+    {
+      "id": "attachment",
+      "font": "attachment.ttf",
+      "font_sha256": "de1011441ac7535cf270615bf7852797096d762071763c5d3d7a1d0b7f65aa6b",
+      "script": "Latn",
+      "direction": "ltr",
+      "text": "ab",
+      "rows": [
+        {
+          "copies": 8,
+          "allocations": 82,
+          "leaked": 0,
+          "output_checksum": 14525329208503566346
+        },
+        {
+          "copies": 32,
+          "allocations": 251,
+          "leaked": 0,
+          "output_checksum": 11277038690814771066
+        },
+        {
+          "copies": 128,
+          "allocations": 926,
+          "leaked": 0,
+          "output_checksum": 13111414603472431802
+        }
+      ]
+    },
+    {
+      "id": "kerning-parts",
+      "font": "kerning-parts.ttf",
+      "font_sha256": "3cf2c15fd234084ee6e1462e41f9ae1ffb77fb66c04196fa525e4cc4153a2ede",
+      "script": "Arab",
+      "direction": "rtl",
+      "text": "ab",
+      "rows": [
+        {
+          "copies": 4,
+          "allocations": 70,
+          "leaked": 0,
+          "output_checksum": 8016509685935121140
+        },
+        {
+          "copies": 8,
+          "allocations": 107,
+          "leaked": 0,
+          "output_checksum": 7065728181293340348
+        },
+        {
+          "copies": 16,
+          "allocations": 179,
+          "leaked": 0,
+          "output_checksum": 9117213081122116492
+        }
+      ]
+    },
+    {
+      "id": "shifting-parts",
+      "font": "../benchmark-shift/shifting-parts.ttf",
+      "font_sha256": "6f20f80e21971a2de5eb0b1886b41923cab3b7bef72ab6d7490193d022398e8b",
+      "script": "Arab",
+      "direction": "rtl",
+      "text": "ab",
+      "rows": [
+        {
+          "copies": 4,
+          "allocations": 150,
+          "leaked": 0,
+          "output_checksum": 8693018508798741868
+        },
+        {
+          "copies": 8,
+          "allocations": 279,
+          "leaked": 0,
+          "output_checksum": 12645660546436526332
+        },
+        {
+          "copies": 16,
+          "allocations": 535,
+          "leaked": 0,
+          "output_checksum": 128593753864890188
+        }
+      ]
+    },
+    {
+      "id": "sequence-members",
+      "font": "../benchmark-sequence/sequence-members.ttf",
+      "font_sha256": "5e03e35671dccfb60c4f92d958ebbe6fddade97cc9d78108bdc81b1d4b0c6873",
+      "script": "Arab",
+      "direction": "rtl",
+      "text": "ab",
+      "rows": [
+        {
+          "copies": 16,
+          "allocations": 387,
+          "leaked": 0,
+          "output_checksum": 4733405774577831116
+        },
+        {
+          "copies": 64,
+          "allocations": 1493,
+          "leaked": 0,
+          "output_checksum": 6639840138428045996
+        },
+        {
+          "copies": 256,
+          "allocations": 5913,
+          "leaked": 0,
+          "output_checksum": 3970979776383301676
+        }
+      ]
+    },
+    {
+      "id": "prefix-changing",
+      "font": "../benchmark-prefix/prefix-changing.ttf",
+      "font_sha256": "9a9a4a13252029efa73237e6bc05e7211dec6a9fea2e2b0ca58f141dec2a3517",
+      "script": "Arab",
+      "direction": "rtl",
+      "text": "abc",
+      "rows": [
+        {
+          "copies": 4,
+          "allocations": 104,
+          "leaked": 0,
+          "output_checksum": 5007165539358496624
+        },
+        {
+          "copies": 8,
+          "allocations": 176,
+          "leaked": 0,
+          "output_checksum": 151265287089899292
+        },
+        {
+          "copies": 16,
+          "allocations": 321,
+          "leaked": 0,
+          "output_checksum": 10520850321509213724
+        }
+      ]
+    }
+  ]
+}

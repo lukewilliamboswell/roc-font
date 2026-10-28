@@ -1,0 +1,4520 @@
+{
+  "query_sha256": "8b4212239a91f239762a3fdc6c5db6054cbd5801a98db6cb87ac6213b0229be5",
+  "query_source": "5e5c31d",
+  "query_bundle_label": "Hqk",
+  "scope": "Preserved old skip-D engine; positive-root failures intentionally retained",
+  "rows": [
+    {
+      "id": "deleted-attachment-benchmark-4",
+      "scope": "all-zero matched benchmark",
+      "font_sha256": "5b6a75682eee17ed044e306cc4d9a98097fa5536ff31394909dcdb9ba9b7c7c3",
+      "request": "deleted-attachment-benchmark-4\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": true
+    },
+    {
+      "id": "deleted-attachment-benchmark-8",
+      "scope": "all-zero matched benchmark",
+      "font_sha256": "5b6a75682eee17ed044e306cc4d9a98097fa5536ff31394909dcdb9ba9b7c7c3",
+      "request": "deleted-attachment-benchmark-8\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcdabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": true
+    },
+    {
+      "id": "deleted-attachment-benchmark-16",
+      "scope": "all-zero matched benchmark",
+      "font_sha256": "5b6a75682eee17ed044e306cc4d9a98097fa5536ff31394909dcdb9ba9b7c7c3",
+      "request": "deleted-attachment-benchmark-16\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 35,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 39,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 43,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 47,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 51,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 55,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 59,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 63,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 35,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 39,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 43,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 47,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 51,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 55,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 59,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 63,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": true
+    },
+    {
+      "id": "deleted-attachment-positive-diagnostic-4",
+      "scope": "positive-root correctness failure, excluded from timing",
+      "font_sha256": "062afd005afaffd4331ba3691377ea489b1e9ab8c1953c92cdc0881354abe322",
+      "request": "deleted-attachment-positive-diagnostic-4\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              -603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              -1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              -3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              4224,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": false
+    },
+    {
+      "id": "deleted-attachment-positive-diagnostic-8",
+      "scope": "positive-root correctness failure, excluded from timing",
+      "font_sha256": "062afd005afaffd4331ba3691377ea489b1e9ab8c1953c92cdc0881354abe322",
+      "request": "deleted-attachment-positive-diagnostic-8\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcdabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              -603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              -1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              -3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              4224,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              -4224,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              5431,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              -5431,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              6638,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              -6638,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              7845,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              -7845,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              9052,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": false
+    },
+    {
+      "id": "deleted-attachment-positive-diagnostic-16",
+      "scope": "positive-root correctness failure, excluded from timing",
+      "font_sha256": "062afd005afaffd4331ba3691377ea489b1e9ab8c1953c92cdc0881354abe322",
+      "request": "deleted-attachment-positive-diagnostic-16\tLatn\t\tltr\t0\t\tgraphite2\t0\t18446744073709551615\tabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              -603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              -1810,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              -3017,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              4224,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              -4224,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              5431,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              -5431,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              6638,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              -6638,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              7845,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              -7845,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              9052,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              -9052,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 32,
+            "advance": [
+              10259,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 35,
+            "advance": [
+              -10259,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 36,
+            "advance": [
+              11466,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 39,
+            "advance": [
+              -11466,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 40,
+            "advance": [
+              12673,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 43,
+            "advance": [
+              -12673,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 44,
+            "advance": [
+              13880,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 47,
+            "advance": [
+              -13880,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 48,
+            "advance": [
+              15087,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 51,
+            "advance": [
+              -15087,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 52,
+            "advance": [
+              16294,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 55,
+            "advance": [
+              -16294,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 56,
+            "advance": [
+              17501,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 59,
+            "advance": [
+              -17501,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 60,
+            "advance": [
+              18708,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 63,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 3,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 4,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 4,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 7,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 8,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 8,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 11,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 12,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 12,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 15,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 16,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 16,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 19,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 20,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 20,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 23,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 24,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 24,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 27,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 28,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 28,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 31,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 32,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 32,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 35,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 36,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 36,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 39,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 40,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 40,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 43,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 44,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 44,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 47,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 48,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 48,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 51,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 52,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 52,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 55,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 56,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 56,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 59,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 60,
+            "advance": [
+              603,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 60,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              -603,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 63,
+            "advance": [
+              604,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "exact_complete_run": false
+    }
+  ]
+}

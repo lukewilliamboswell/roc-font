@@ -1,0 +1,77 @@
+{
+  "description": "Native totality check for frozen per-cell geometry snapshot; newer phase3 spacing changes are not included.",
+  "artifact": {
+    "source_snapshot": "a788393",
+    "bundle": "FntTJT7xk17NDw7YtM4EF9hBsgU14eJwgJF6yvhbZrTw.tar.zst",
+    "bundle_sha256": "06327e73899615824bea148a67d6aa76995c8d431a6f43a2c1e73c4a4c7589f1",
+    "compiler": "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+    "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+    "source_sentinel": true,
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "scripts/run_fuzz.py",
+      "smoke",
+      "font-graphite-geometry",
+      "--roc",
+      "/private/tmp/roc-font-toolchain/roc_nightly-macos_apple_silicon-2026-10-27-de79a0f/roc",
+      "--runs",
+      "1000",
+      "--seed",
+      "1"
+    ],
+    "target_sha256": "bf550f756f52f170f250f143cf955e4741ddebb22301bf064bf7ee4f6a157d37"
+  },
+  "report_sha256": "026b11e45a49a21175edce65e422cb5dd57fa531e19763580ff1895546933f02",
+  "duration_ms": 20602,
+  "outcome": "passed",
+  "finding_kind": null,
+  "configuration": {
+    "corpus": "/private/tmp/graphite-geometry-fuzz-fnt/state/fuzz/smoke-corpus/font-graphite-geometry",
+    "time_seconds": null,
+    "runs": "1000",
+    "max_input_size": "1048576",
+    "memory_limit_mb": "2048",
+    "timeout_seconds": "10",
+    "dictionary": "/private/tmp/graphite-geometry-fuzz-fnt/mirror/fuzz/dictionaries/narrow.dict",
+    "seed": "1",
+    "leak_detection": true,
+    "command": [
+      "/private/tmp/graphite-geometry-fuzz-fnt/state/fuzz/bin/font-graphite-geometry",
+      "run",
+      "/private/tmp/graphite-geometry-fuzz-fnt/state/fuzz/smoke-corpus/font-graphite-geometry",
+      "--max-input-size=1048576",
+      "--timeout=10",
+      "--memory-limit=2048",
+      "--dictionary=/private/tmp/graphite-geometry-fuzz-fnt/mirror/fuzz/dictionaries/narrow.dict",
+      "--runs=1000",
+      "--seed=1",
+      "--artifact-dir=/private/tmp/graphite-geometry-fuzz-fnt/state/fuzz/runs/font-graphite-geometry/smoke/failures",
+      "--print-final-stats"
+    ]
+  },
+  "executable": {
+    "name": "font-graphite-geometry",
+    "sha256": "29cd75ae20590fdff64e8c03e0778cfea1905cc7889c8ba5e5087ee9e8e0a4c5"
+  },
+  "termination": {
+    "exit_code": 0,
+    "signal": null
+  },
+  "libfuzzer": {
+    "coverage_kind": "sanitizer_edge_feedback",
+    "executed_units": 2262,
+    "average_exec_per_sec": 113,
+    "new_units_added": 0,
+    "slowest_unit_time_sec": 0,
+    "peak_rss_mb": 58,
+    "coverage_edges": 13282,
+    "coverage_features": 35987
+  },
+  "failures": [],
+  "notes": [
+    "The source-sentinel mirror intentionally has no git revision; the outer artifact provenance pins a788393 and the actual Fnt bundle hash.",
+    "One preliminary attempt omitted the child bundle URL and failed on the sentinel before compiling a target; it is excluded.",
+    "The successful build command explicitly passed --replace-dep ./package/main.roc with the served Fnt URL.",
+    "Post-276ba54/eb2beaa final-snapshot fuzz remains required."
+  ]
+}

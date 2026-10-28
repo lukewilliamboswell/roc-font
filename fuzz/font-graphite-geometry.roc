@@ -11,27 +11,49 @@ import "../tests/fonts/graphite-geometry/kerning-audit/collision-kern-audit-base
 import "../tests/fonts/graphite-geometry/sequencing-audit/collision-sequence-audit-canonical-ltr.ttf" as sequenced : List(U8)
 import "../tests/fonts/graphite-geometry/retry-audit/collision-retry-audit-fractional-prior-pass-100-ltr.ttf" as retried : List(U8)
 import "../tests/fonts/graphite/AwamiNastaliq-Regular.ttf" as awami : List(U8)
+import "../tests/fonts/graphite-geometry/benchmark-prefix/prefix-changing.ttf" as changing : List(U8)
+import "../tests/fonts/graphite-geometry/attachment-lifetime-audit/collision-attachment-lifetime-metrics-a0-d5000.ttf" as lifetime : List(U8)
+import "../tests/fonts/graphite-geometry/kern-frame-audit/collision-kern-frame-sample--603.ttf" as framed : List(U8)
+import "../tests/fonts/graphite-geometry/kern-eligibility-audit/collision-eligibility-lower-10--31.ttf" as eligible : List(U8)
+import "../tests/fonts/graphite-geometry/deleted-leaf-audit/collision-deleted-leaf-delete-ad-ltr.ttf" as leaf : List(U8)
+import "../tests/fonts/graphite-geometry/deleted-metric-audit/collision-deleted-metric-intermediate-8-1-ltr.ttf" as composite_metric : List(U8)
+import "../tests/fonts/graphite-geometry/downstream-gap-audit/collision-empty-gap-ltr-finite-empty.ttf" as empty_gap : List(U8)
 
 ## Original attachment, sequencing, retry and advance-correction programs;
-## real collision font; hostile font mutation. Three increasing run sizes
+## deleted attachment intermediates and visited-slot sampling frames;
+## real collision font and hostile mutation. Three increasing run sizes
 ## retain the geometry path independently of VM instruction-count targets.
 test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	choice = (bytes.first() ?? 0).to_u64()
-	file = match choice % 5 {
+	kind = choice % 12
+	file = match kind {
 		0 => attached
 		1 => kerned
 		2 => sequenced
 		3 => retried
-		_ => awami
+		4 => awami
+		5 => changing
+		6 => lifetime
+		7 => framed
+		8 => eligible
+		9 => leaf
+		10 => composite_metric
+		_ => empty_gap
 	}
-	settings = Font.ShapeOptions.{ script: if (choice % 5 == 4) "Arab" else "Latn", direction: if (choice.bitwise_and(8) == 0) LeftToRight else RightToLeft }
+	settings = Font.ShapeOptions.{ script: if (kind == 4 or kind == 5) "Arab" else "Latn", direction: if (choice.bitwise_and(32) == 0) LeftToRight else RightToLeft }
 	font = Font.from_bytes(file, Font.ReadOptions.{}) ?? crash "original Graphite geometry font rejected"
 	plan = Font.plan(font, settings)
 	if Font.shaping_engine(plan) != Graphite {
 		crash "geometry fixture escaped its font programs"
 	}
-	text = if (choice % 5 == 4) "بِسْمِ اللَّهِ" else Str.join_with(List.repeat("ab", 1 + (bytes.get(1) ?? 0).to_u64() % 16), "")
+	piece = if (kind == 6 or kind == 9 or kind == 10) "abcd" else if (kind == 5 or kind == 7 or kind == 11) "abc" else "ab"
+	empty = Font.shape_range_checked(font, plan, "", Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF })
+	check("", empty)
+	if empty != Font.shape_range_checked(font, plan, "", Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF }) {
+		crash "empty geometry output is nondeterministic"
+	}
+	text = if (kind == 4) "بِسْمِ اللَّهِ" else Str.join_with(List.repeat(piece, 1 + (bytes.get(1) ?? 0).to_u64() % 16), "")
 	checked = Font.shape_range_checked(font, plan, text, Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF })
 	if checked != Font.shape_range_checked(font, plan, text, Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF }) {
 		crash "nondeterministic geometry result"
@@ -42,14 +64,14 @@ test! = |bytes| {
 	# Interacting targets permit quadratic work. Doubling the run must not
 	# produce an unbounded higher-order allocation curve; exact counts are
 	# separately ratcheted by the native benchmark after reference replay.
-	if choice % 5 != 4 {
-		a_text = "abababab"
+	if kind != 4 {
+		a_text = Str.join_with(List.repeat(piece, 4), "")
 		b_text = "${a_text}${a_text}"
 		c_text = "${b_text}${b_text}"
 		a = Fuzz.measure_allocs!(|{}| Font.shape_range_checked(font, plan, a_text, Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF }))
 		b = Fuzz.measure_allocs!(|{}| Font.shape_range_checked(font, plan, b_text, Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF }))
 		c = Fuzz.measure_allocs!(|{}| Font.shape_range_checked(font, plan, c_text, Font.TextRange.{ start: 0, end: 0xFFFFFFFFFFFFFFFF }))
-		if b.allocations > a.allocations * 8 + 128 or c.allocations > b.allocations * 8 + 128 {
+		if b.allocations > a.allocations * 4 + 128 or c.allocations > b.allocations * 4 + 128 {
 			crash "geometry allocations grew faster than interacting glyph pairs"
 		}
 		check(a_text, a.value)

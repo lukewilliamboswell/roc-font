@@ -1,0 +1,2783 @@
+{
+  "query_sha256": "2561729dc26e4f29ffe6a2ccd72b4c9dd47585be3be38373bec51a3fcaa993d4",
+  "scope": "historical pre-empty-update public query; not the reference oracle",
+  "rows": [
+    {
+      "id": "collision-empty-gap-ltr-finite-empty",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-ltr-empty-finite",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-0",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-rtl-mirror-1",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-0",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -390,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -390,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-rtl-negative-1200",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -390,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -390,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-0",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1000,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              1000,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-only-empty-0-1",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-0",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -1000,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              -1000,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-only-empty-1-1",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-target-cropped",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -60,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -29,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-target-diagonal",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -460,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              475,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-part-only-empty",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-part-finite-empty",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-part-empty-finite",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": true
+    },
+    {
+      "id": "collision-empty-gap-empty-cropped-x",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-hole-low",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-hole-high",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-hole-separated",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-target-child-far",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-target-child-inside",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -710,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              710,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              -710,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              620,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              -620,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              620,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-two-empty",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-two-empty-swapped",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -210,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              120,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 4,
+            "cluster": 3,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-margin13",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -213,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              126,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-margin30",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -230,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              160,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-margin101",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -301,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              302,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    },
+    {
+      "id": "collision-empty-gap-width400",
+      "actual": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              -310,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "budgets": [],
+        "engine": "Graphite"
+      },
+      "expected": {
+        "success": true,
+        "abort": "NoAbort",
+        "glyphs": [
+          {
+            "glyph": 1,
+            "cluster": 0,
+            "advance": [
+              220,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 0
+          },
+          {
+            "glyph": 2,
+            "cluster": 1,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          },
+          {
+            "glyph": 3,
+            "cluster": 2,
+            "advance": [
+              0,
+              0
+            ],
+            "offset": [
+              0,
+              0
+            ],
+            "flags": 1
+          }
+        ],
+        "ot_glyph2_advance": 602,
+        "graphite_face_available": true
+      },
+      "passed": false
+    }
+  ]
+}
