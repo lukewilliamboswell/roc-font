@@ -738,7 +738,7 @@ Shaper :: {}.{
 		backward = if (reverse) !p.backward else p.backward
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
-		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
+		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, mirrored, ShaperArabic.reorder) else ShaperNormalize.normalize(ctx, mirrored)
 		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else normalized
 		masked = Shaper.setup_masks(p, joined, found.fraction_slash, !backward)
 		gdef = Face.gdef(face)

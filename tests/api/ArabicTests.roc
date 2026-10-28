@@ -7,6 +7,16 @@ import "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf" as naskh_file : Lis
 ArabicTests :: {}.{}
 
 expect {
+	match Font.from_bytes(naskh_file, Font.ReadOptions.{}) {
+		Ok(font) => {
+			run = Font.shape(font, "ب\u(064E)\u(0654)", Font.ShapeOptions.{ script: "Arab" })
+			run.glyphs == [380, 305, 323, 14] and run.offsets == [{ x: 259, y: -225 }, { x: 291, y: -429 }, { x: 308, y: -31 }, { x: 0, y: 0 }]
+		}
+		Err(_) => False
+	}
+}
+
+expect {
 	match Font.from_bytes(sans_file, Font.ReadOptions.{}) {
 		Ok(font) => {
 			run = Font.shape(font, "سلام", Font.ShapeOptions.{ script: "Arab", language: "ar" })

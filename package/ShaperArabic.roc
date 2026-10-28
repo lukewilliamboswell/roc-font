@@ -46,6 +46,7 @@ import ShaperJoiningData
 import ShaperNormalize
 import LayoutGsub
 import ShaperTags
+import ShaperUnicode
 
 ## Arabic joining actions over logical characters, including transparent
 ## marks and join controls. Context participates in joining but is never
@@ -187,6 +188,69 @@ ShaperArabic :: {}.{
 		5 => m.med2
 		6 => m.init
 		_ => 0
+	}
+
+	modifier_marks : List(U64)
+	modifier_marks = [0x0654, 0x0655, 0x0658, 0x06DC, 0x06E3, 0x06E7, 0x06E8, 0x08CA, 0x08CB, 0x08CD, 0x08CE, 0x08CF, 0x08D3, 0x08F3]
+
+	## Arabic modifier marks precede ordinary vowel marks of their combining
+	## sequence (UTR53). The callback runs between canonical ordering and
+	## recomposition; renumbering preserves the normalizer's sorted invariant.
+	## HarfBuzz only reorders mark groups of at most32 characters.
+	reorder : List(ShaperNormalize.Char) -> List(ShaperNormalize.Char)
+	reorder = |chars| {
+		count = chars.len()
+		var $chars = chars
+		var $at = 0
+		var $temporary = List.with_capacity(32)
+		while $at < count {
+			if ShaperUnicode.class_of(($chars.get($at) ?? ShaperNormalize.no_char).props) == 0 {
+				$at = $at + 1
+			} else {
+				var $end = $at + 1
+				while $end < count and ShaperUnicode.class_of(($chars.get($end) ?? ShaperNormalize.no_char).props) != 0 {
+					$end = $end + 1
+				}
+				if $end - $at <= 32 {
+					var $start = $at
+					var $i = $at
+					for cc in [220, 230] {
+						while $i < $end and ShaperUnicode.class_of(($chars.get($i) ?? ShaperNormalize.no_char).props) < cc {
+							$i = $i + 1
+						}
+						if $i < $end and ShaperUnicode.class_of(($chars.get($i) ?? ShaperNormalize.no_char).props) == cc {
+							var $j = $i
+							while $j < $end and ShaperUnicode.class_of(($chars.get($j) ?? ShaperNormalize.no_char).props) == cc and ShaperArabic.modifier_marks.contains(($chars.get($j) ?? ShaperNormalize.no_char).cp) {
+								$j = $j + 1
+							}
+							if $j > $i {
+								$chars = ShaperNormalize.merge_clusters($chars, $start, $j)
+								$temporary = $temporary.clear()
+								for k in $i..<$j {
+									$temporary = $temporary.append($chars.get(k) ?? ShaperNormalize.no_char)
+								}
+								n = $j - $i
+								var $k = $i
+								while $k > $start {
+									$k = $k - 1
+									# `$k+n` remains before `$j <= end <= count`.
+									$chars = $chars.set($k + n, $chars.get($k) ?? ShaperNormalize.no_char) ?? []
+								}
+								new_cc = (ShaperUnicode.modified_classes.get(if (cc == 220) 22 else 26) ?? 0).to_u64()
+								for k in 0..<n {
+									c = $temporary.get(k) ?? ShaperNormalize.no_char
+									$chars = $chars.set($start + k, { ..c, props: ShaperUnicode.with_high(c.props, new_cc) }) ?? []
+								}
+								$start = $start + n
+								$i = $j
+							}
+						}
+					}
+				}
+				$at = $end
+			}
+		}
+		$chars
 	}
 
 	setup : List(ShaperNormalize.Char), Masks, { before : List(U32), after : List(U32) } -> List(ShaperNormalize.Char)
