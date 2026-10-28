@@ -1,3 +1,7 @@
+import LayoutGsub
+import LayoutVar
+import PositionSum
+import TableAatAnchor
 import Bytes
 import AatLookup
 import AatState
@@ -196,7 +200,7 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 				index = if (s.extended) entry.a else entry.flags.bitwise_and(0x3fff)
 				active = if (s.extended) index != 65535 else index != 0
 				if active {
-					target = if (s.extended) action + index * 2 else base + index
+					target = if (s.extended) action + (index // 2) * 2 else base + index
 					if (!s.extended and target < action) or !Bytes.fits(target, 2 * (s.tuples.max(1)), s.end) {
 						$problems = $problems.append({ offset: target })
 					}
@@ -380,6 +384,359 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 		} else Missing
 	}
 
+	PointQuery : U64, U64 -> [Present(TableAatAnchor.Point), Absent]
+	Context : { vertical : Bool, backward : Bool, kern_mask : U64, budget : U64, point : PointQuery }
+	Initial : { advances : List(I64), major : List(I64), cross : List(I64) }
+	Applied : { items : List(LayoutGsub.Item), advances : List(I64), major : List(I64), cross : List(I64), operations : U64, stopped : U64 }
+	Run : { items : List(LayoutGsub.Item), advances : List(I64), major : List(I64), cross : List(I64), parents : List(U64), attachments : List(U8), attachment_active : Bool, operations : U64, stopped : U64 }
+
+	apply : TableAatKern, TableAatAnchor, List(LayoutGsub.Item), Initial, Context -> Applied
+	apply = |table, anchors, items, initial, context| {
+		count = items.len()
+		var $run = { items, advances: initial.advances, major: initial.major, cross: initial.cross, parents: List.repeat(0.U64, count), attachments: List.repeat(0.U8, count), attachment_active: False, operations: 0, stopped: 0 }
+		var $cross_seen = False
+		for sub in table.subtables {
+			if sub.vertical == context.vertical and (sub.extended or !sub.variation) and TableAatKern.intersects(table, sub, $run.items) {
+				if !$cross_seen and sub.cross {
+					$cross_seen = True
+					var $parents = $run.parents
+					for i in 0..<count {
+						parent = i.to_i64_wrap() + (if (context.backward) 1 else -1)
+						$parents = $parents.set(i, if (parent >= 0 and parent < count.to_i64_wrap()) parent.to_u64_wrap() + 1 else 0) ?? []
+					}
+					$run = { ..$run, parents: $parents, attachments: List.repeat(2.U8, count) }
+				}
+				reverse = sub.backwards != context.backward
+				if sub.kind == 1 or sub.kind == 4 {
+					if context.kern_mask != 0 or sub.cross or sub.kind == 4 {
+						$run = TableAatKern.apply_machine(table, anchors, sub, $run, context, reverse)
+					}
+				} else if context.kern_mask != 0 and !sub.backwards and (sub.kind == 0 or sub.kind == 2 or sub.kind == 3 or sub.kind == 6) {
+					$run = TableAatKern.apply_pairs(table, sub, $run, context, reverse)
+				}
+				if $run.stopped != 0 {
+					break
+				}
+			}
+		}
+		resolved = TableAatKern.resolve($run, context.backward)
+		{ items: resolved.items, advances: resolved.advances, major: resolved.major, cross: resolved.cross, operations: resolved.operations, stopped: resolved.stopped }
+	}
+
+	initiates : Sub, AatState.Entry -> Bool
+	initiates = |_sub, entry| entry.flags.bitwise_and(0x8000) != 0
+	actionable : Sub, AatState.Entry -> Bool
+	actionable = |sub, entry| if (sub.extended) entry.a != 65535 else entry.flags.bitwise_and(0x3FFF) != 0
+
+	intersects : TableAatKern, Sub, List(LayoutGsub.Item) -> Bool
+	intersects = |table, sub, items| {
+		if sub.kind == 0 {
+			for item in items {
+				var $low = 0
+				var $high = sub.count
+				while $low < $high {
+					mid = $low + ($high - $low) // 2
+					pair = table.pairs.get(sub.start + mid) ?? { key: 0, value: 0 }
+					left = pair.key // 65536
+					if left == item.glyph {
+						return True
+					}
+					if left < item.glyph {
+						$low = mid + 1
+					} else {
+						$high = mid
+					}
+				}
+			}
+		} else if sub.kind == 2 or sub.kind == 6 {
+			lookup = table.lookups.get(sub.left) ?? AatLookup.empty
+			for item in items {
+				match AatLookup.get(lookup, item.glyph) {
+					Found(_) => return True
+					Missing => {}
+				}
+			}
+		} else if sub.kind == 3 {
+			return sub.count > 0 and !items.is_empty()
+		} else if sub.kind == 1 or sub.kind == 4 {
+			machine = table.states.get(sub.machine) ?? crash "validated AAT state index"
+			lookup = AatState.class_lookup(machine)
+			columns = AatState.column_count(machine)
+			for item in items {
+				found = if item.glyph == 65535 and columns <= 512 {
+					Known(2.U64)
+				} else match AatLookup.get(lookup, item.glyph) {
+					Found(c) => Known(c.to_u64())
+					Missing => Unknown
+				}
+				match found {
+					Known(class) => {
+						if columns > 512 {
+							return True
+						}
+						entry = AatState.entry(machine, 0, class)
+						if entry.next != 0 or TableAatKern.initiates(sub, entry) or TableAatKern.actionable(sub, entry) {
+							return True
+						}
+					}
+					Unknown => {}
+				}
+			}
+		}
+		False
+	}
+
+	physical : U64, U64, Bool -> U64
+	physical = |index, count, reverse| if (reverse and index < count) count - 1 - index else index
+
+	unsafe_range : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
+	unsafe_range = |items, start, end| {
+		if end < start or end - start > 255 or end > items.len() {
+			items
+		} else LayoutGsub.flag_range(items, start, end, LayoutGsub.min_cluster(items, start, end, 0xFFFFFFFFFFFFFFFF))
+	}
+
+	apply_pairs : TableAatKern, Sub, Run, Context, Bool -> Run
+	apply_pairs = |table, sub, run, context, reverse| {
+		{ items, advances, major, cross, parents, attachments, attachment_active, operations, stopped } = run
+		var $items = items
+		var $advances = advances
+		var $major = major
+		var $cross = cross
+		var $active = attachment_active
+		var $operations = operations
+		count = items.len()
+		var $i = 0
+		while $i < count {
+			if $operations >= context.budget {
+				return { items: $items, advances: $advances, major: $major, cross: $cross, parents, attachments, attachment_active: $active, operations: $operations, stopped: 2 }
+			}
+			$operations = $operations + 1
+			i = TableAatKern.physical($i, count, reverse)
+			first = $items.get(i) ?? LayoutGsub.no_item
+			if !LayoutGsub.applies(first.mask, context.kern_mask) {
+				$i = $i + 1
+			} else {
+				var $j = $i + 1
+				var $found = False
+				var $searching = True
+				while $j < count and $searching {
+					item = $items.get(TableAatKern.physical($j, count, reverse)) ?? LayoutGsub.no_item
+					if LayoutGsub.is_mark_item(item) or LayoutGsub.is_default_ignorable(item) {
+						$j = $j + 1
+					} else {
+						$found = LayoutGsub.applies(item.mask, context.kern_mask)
+						$searching = False
+					}
+				}
+				if $found {
+					j = TableAatKern.physical($j, count, reverse)
+					second = $items.get(j) ?? LayoutGsub.no_item
+					match TableAatKern.pair_value(table, sub, first.glyph, second.glyph) {
+						Value(value) if value != 0 => {
+							if sub.cross {
+								$cross = $cross.set(j, value) ?? []
+								$active = True
+							} else {
+								left = value.shr_wrap(1)
+								right = value - left
+								$advances = $advances.set(i, LayoutVar.position_add($advances.get(i) ?? 0, left)) ?? []
+								$advances = $advances.set(j, LayoutVar.position_add($advances.get(j) ?? 0, right)) ?? []
+								$major = $major.set(j, LayoutVar.position_add($major.get(j) ?? 0, right)) ?? []
+							}
+							$items = TableAatKern.unsafe_range($items, i.min(j), i.max(j) + 1)
+						}
+						_ => {}
+					}
+					$i = $j
+				} else {
+					$i = if ($j < count) $j + 1 else count
+				}
+			}
+		}
+		{ items: $items, advances: $advances, major: $major, cross: $cross, parents, attachments, attachment_active: $active, operations: $operations, stopped }
+	}
+
+	apply_machine : TableAatKern, TableAatAnchor, Sub, Run, Context, Bool -> Run
+	apply_machine = |table, anchors, sub, run, context, reverse| {
+		machine = table.states.get(sub.machine) ?? crash "validated AAT state index"
+		count = run.items.len()
+		var $run = run
+		var $state = 0
+		var $cursor = 0
+		var $stack = List.with_capacity(8)
+		var $mark = count
+		while $cursor <= count {
+			if $run.operations >= context.budget {
+				return { ..$run, stopped: 2 }
+			}
+			$run = { ..$run, operations: $run.operations + 1 }
+			index = TableAatKern.physical($cursor, count, reverse)
+			class = if ($cursor == count) 0 else AatState.class(machine, ($run.items.get(index) ?? LayoutGsub.no_item).glyph)
+			entry = AatState.entry(machine, $state, class)
+			from_start = AatState.entry(machine, 0, class)
+			before_end = AatState.entry(machine, $state, 0)
+			dont_advance = entry.flags.bitwise_and(0x4000) != 0
+			safe = !TableAatKern.actionable(sub, entry) and ($state == 0 or (dont_advance and entry.next == 0) or (!TableAatKern.actionable(sub, from_start) and entry.next == from_start.next and dont_advance == (from_start.flags.bitwise_and(0x4000) != 0))) and !TableAatKern.actionable(sub, before_end)
+			if !safe and $cursor > 0 and $cursor < count {
+				previous = TableAatKern.physical($cursor - 1, count, reverse)
+				$run = { ..$run, items: TableAatKern.unsafe_range($run.items, previous.min(index), previous.max(index) + 1) }
+			}
+			if sub.kind == 1 {
+				if sub.extended and entry.flags.bitwise_and(0x2000) != 0 {
+					$stack = $stack.clear()
+				}
+				if entry.flags.bitwise_and(0x8000) != 0 {
+					if $stack.len() < 8 {
+						$stack = $stack.append(index)
+					} else {
+						$stack = $stack.clear()
+					}
+				}
+				if TableAatKern.actionable(sub, entry) and !$stack.is_empty() {
+					stride = sub.tuples.max(1) * 2
+					encoded = if (sub.extended) sub.action + entry.a else sub.array + entry.flags.bitwise_and(0x3FFF)
+					# Legacy action offsets floor relative to the value array.
+					action = sub.action + (encoded - sub.action) // 2 * 2
+					if !Bytes.fits(action, $stack.len() * stride, sub.end) {
+						$stack = $stack.clear()
+					} else {
+						var $action = action
+						var $last = False
+						while !$last and !$stack.is_empty() {
+							if $run.operations >= context.budget {
+								return { ..$run, stopped: 2 }
+							}
+							$run = { ..$run, operations: $run.operations + 1 }
+							at = $stack.last() ?? count
+							$stack = $stack.drop_last(1)
+							raw = Bytes.i16(table.bytes, $action)
+							$action = $action + stride
+							if at < count {
+								$last = raw.bitwise_and(1) != 0
+								value = raw.bitwise_and(-2)
+								if sub.cross {
+									if value == -32768 {
+										$run = { ..$run, cross: $run.cross.set(at, 0) ?? [], parents: $run.parents.set(at, 0) ?? [], attachments: $run.attachments.set(at, 0) ?? [] }
+									} else if ($run.attachments.get(at) ?? 0) != 0 {
+										$run = { ..$run, cross: $run.cross.set(at, LayoutVar.position_add($run.cross.get(at) ?? 0, value)) ?? [], attachment_active: True }
+									}
+								} else if LayoutGsub.applies(($run.items.get(at) ?? LayoutGsub.no_item).mask, context.kern_mask) {
+									$run = { ..$run, advances: $run.advances.set(at, LayoutVar.position_add($run.advances.get(at) ?? 0, value)) ?? [], major: $run.major.set(at, LayoutVar.position_add($run.major.get(at) ?? 0, value)) ?? [] }
+								}
+							}
+						}
+					}
+				}
+			} else {
+				if $mark < count and entry.a != 65535 and index < count {
+					$run = TableAatKern.attach(table, anchors, sub, $run, context, entry.a, $mark, index)
+				}
+				if entry.flags.bitwise_and(0x8000) != 0 {
+					$mark = index
+				}
+			}
+			$state = entry.next
+			if $cursor == count {
+				break
+			}
+			if !dont_advance {
+				$cursor = $cursor + 1
+			}
+		}
+		$run
+	}
+
+	attach : TableAatKern, TableAatAnchor, Sub, Run, Context, U64, U64, U64 -> Run
+	attach = |table, anchors, sub, run, context, action, mark, current| {
+		at = sub.action + action * (if (sub.action_type == 2) 8 else 4)
+		mark_glyph = (run.items.get(mark) ?? LayoutGsub.no_item).glyph
+		current_glyph = (run.items.get(current) ?? LayoutGsub.no_item).glyph
+		pair = if sub.action_type == 2 {
+			{ first: { x: Bytes.i16(table.bytes, at).to_i32_wrap(), y: Bytes.i16(table.bytes, at + 2).to_i32_wrap() }, second: { x: Bytes.i16(table.bytes, at + 4).to_i32_wrap(), y: Bytes.i16(table.bytes, at + 6).to_i32_wrap() } }
+		} else {
+			first_index = Bytes.u16(table.bytes, at)
+			second_index = Bytes.u16(table.bytes, at + 2)
+			point_of = context.point
+			first = if (sub.action_type == 0) point_of(mark_glyph, first_index) else TableAatAnchor.anchor(anchors, mark_glyph, first_index)
+			second = if (sub.action_type == 0) point_of(current_glyph, second_index) else TableAatAnchor.anchor(anchors, current_glyph, second_index)
+			match (first, second) {
+				(Present(a), Present(b)) => { first: a, second: b }
+				_ => return run
+			}
+		}
+		x = LayoutVar.position_sub(pair.first.x.to_i64(), pair.second.x.to_i64())
+		y = LayoutVar.position_sub(pair.first.y.to_i64(), pair.second.y.to_i64())
+		distance = (mark.to_i64_wrap() - current.to_i64_wrap()).to_i16_wrap().to_i64()
+		parent = current.to_i64_wrap() + distance
+		link = if (distance != 0 and parent >= 0 and parent < run.items.len().to_i64_wrap()) parent.to_u64_wrap() + 1 else 0
+		{ ..run, major: run.major.set(current, if (context.vertical) y else x) ?? [], cross: run.cross.set(current, if (context.vertical) x else y) ?? [], parents: run.parents.set(current, link) ?? [], attachments: run.attachments.set(current, 1) ?? [], attachment_active: True }
+	}
+
+	resolve : Run, Bool -> Run
+	resolve = |run, backward| {
+		if !run.attachment_active or run.parents.all(|p| p == 0) {
+			return run
+		}
+		count = run.items.len()
+		var $prefix = List.with_capacity(count + 1).append(0.I128)
+		var $sum = 0.I128
+		var $positive = False
+		var $negative = False
+		for advance in run.advances {
+			$sum = $sum + advance.to_i128()
+			$prefix = $prefix.append($sum)
+			$positive = $positive or advance > 0
+			$negative = $negative or advance < 0
+		}
+		mixed = $positive and $negative and run.attachments.contains(1)
+		ranges = if (mixed) PositionSum.make(run.advances) else PositionSum.make([])
+		var $major = run.major
+		var $cross = run.cross
+		var $parents = run.parents
+		var $path = List.with_capacity(count.min(64))
+		for index in 0..<count {
+			i = if (backward) count - 1 - index else index
+			$path = $path.clear()
+			var $at = i
+			var $left = 64
+			var $walk = ($parents.get($at) ?? 0) != 0
+			while $walk {
+				parent = $parents.get($at) ?? 0
+				$parents = $parents.set($at, 0) ?? []
+				if parent == 0 or parent > count or $left == 0 {
+					$walk = False
+				} else {
+					$path = $path.append({ child: $at, parent: parent - 1 })
+					$at = parent - 1
+					$left = $left - 1
+					$walk = ($parents.get($at) ?? 0) != 0
+				}
+			}
+			while !$path.is_empty() {
+				edge = $path.last() ?? { child: 0, parent: 0 }
+				$path = $path.drop_last(1)
+				j = edge.child
+				k = edge.parent
+				$cross = $cross.set(j, LayoutVar.position_add($cross.get(j) ?? 0, $cross.get(k) ?? 0)) ?? []
+				if (run.attachments.get(j) ?? 0) == 1 {
+					start = j.min(k) + (if (backward) 1 else 0)
+					end = j.max(k) + (if (backward) 1 else 0)
+					subtract = if (k < j) !backward else backward
+					initial = LayoutVar.position_add($major.get(j) ?? 0, $major.get(k) ?? 0)
+					value = if mixed {
+						PositionSum.apply(ranges, start, end, initial, subtract)
+					} else {
+						distance = ($prefix.get(end) ?? 0) - ($prefix.get(start) ?? 0)
+						(initial.to_i128() + (if (subtract) -distance else distance)).max(-2147483648).min(2147483647).to_i64_wrap()
+					}
+					$major = $major.set(j, value) ?? []
+				}
+			}
+		}
+		{ ..run, major: $major, cross: $cross, parents: $parents }
+	}
+
 }
 
 # Original table bytes; helpers remain outside the namesake/API.
@@ -405,3 +762,27 @@ expect [0.U64, 3, 7, 10, 41].all(
 		Ok(_) => False
 	},
 )
+
+aat_runtime_context : TableAatKern.Context
+aat_runtime_context = { vertical: False, backward: False, kern_mask: 16, budget: 65536, point: |_g, _i| Absent }
+
+aat_runtime_items : List(LayoutGsub.Item)
+aat_runtime_items = [{ glyph: 1, cluster: 0, mask: 16, props: 0 }, { glyph: 2, cluster: 1, mask: 16, props: 0 }]
+expect match TableAatKern.read_kerx(aat_pair_table, 3) {
+	Ok(t) => {
+		r = TableAatKern.apply(t, TableAatAnchor.none, aat_runtime_items, { advances: [510, 520], major: [0, 0], cross: [0, 0] }, aat_runtime_context)
+		r.advances == [485, 495] and r.major == [0, -25] and r.cross == [0, 0] and r.stopped == 0
+	}
+	Err(_) => False
+}
+expect match TableAatKern.read_kerx(aat_pair_table, 3) {
+	Ok(t) => {
+		r = TableAatKern.apply(t, TableAatAnchor.none, aat_runtime_items, { advances: [510, 520], major: [0, 0], cross: [0, 0] }, { ..aat_runtime_context, backward: True })
+		r.advances == [510, 520] and r.major == [0, 0]
+	}
+	Err(_) => False
+}
+expect match TableAatKern.read_kerx(aat_pair_table, 3) {
+	Ok(t) => TableAatKern.apply(t, TableAatAnchor.none, aat_runtime_items, { advances: [510, 520], major: [0, 0], cross: [0, 0] }, { ..aat_runtime_context, budget: 0 }).stopped == 2
+	Err(_) => False
+}
