@@ -32,6 +32,12 @@ BASE=attach()
 
 def variants():
  yield 'plain',b'',True,False,2
+ yield 'default-forward',bytes([1,1,0x26,2]),True,False,2
+ yield 'default-backward',NEXT+bytes([1,255,0x26,2]),True,False,2
+ yield 'default-forward-two',bytes([1,2,0x26,2]),True,False,3
+ yield 'default-backward-two',NEXT+NEXT+bytes([1,254,0x26,2]),True,False,3
+ yield 'default-points-first',set_attr(3,100)+set_attr(8,20)+bytes([1,1,0x26,2]),True,False,2
+ yield 'default-advance-y',set_attr(1,100)+bytes([1,1,0x26,2]),True,False,2
  yield 'attach-forward',BASE,True,False,2
  yield 'attach-backward',NEXT+attach(-1),True,False,2
  yield 'attach-cycle',BASE+NEXT+attach(-1),True,False,2

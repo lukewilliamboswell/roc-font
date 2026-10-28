@@ -20,6 +20,210 @@
       "action": []
     },
     {
+      "id": "default-forward-ltr",
+      "font": "default-forward-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-forward-rtl",
+      "font": "default-forward-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-backward-ltr",
+      "font": "default-backward-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        1,
+        255,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-backward-rtl",
+      "font": "default-backward-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        1,
+        255,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-forward-two-ltr",
+      "font": "default-forward-two-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        2,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-forward-two-rtl",
+      "font": "default-forward-two-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        1,
+        2,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-backward-two-ltr",
+      "font": "default-backward-two-ltr.ttf",
+      "text": "abc",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        25,
+        1,
+        254,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-backward-two-rtl",
+      "font": "default-backward-two-rtl.ttf",
+      "text": "abc",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        25,
+        1,
+        254,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-points-first-ltr",
+      "font": "default-points-first-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-points-first-rtl",
+      "font": "default-points-first-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-advance-y-ltr",
+      "font": "default-advance-y-ltr.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        1,
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
+      "id": "default-advance-y-rtl",
+      "font": "default-advance-y-rtl.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        1,
+        1,
+        1,
+        38,
+        2
+      ]
+    },
+    {
       "id": "attach-forward-ltr",
       "font": "attach-forward-ltr.ttf",
       "text": "ab",

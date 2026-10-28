@@ -1,16 +1,27 @@
 {
   "compiler": "roc nightly 2026-10-27 de79a0f macos apple silicon",
   "fontTools": "4.61.1",
-  "generated_fonts": 434,
+  "generated_fonts": 755,
   "ots": {
     "version": "9.3.0",
     "source_commit": "884861e0103b41d7e9845fdaf9fd1e3c12819103",
     "binary_sha256": "593fe6835d8a808d0e00700fcd060fbf360bb30028d968cbece2031cb865dad4",
-    "accepted_with_graphite_tables_retained": 434
+    "accepted_with_graphite_tables_retained": 748,
+    "accepted_containers": 755,
+    "stripped_glat2_controls": 7
   },
-  "geometry_source_closure_expects": 74,
+  "geometry_source_closure_expects": 79,
   "native_public_replay": "pending integration",
   "fuzz": "pending",
   "benchmark": "pending",
-  "collision_source_closure_expects": 107
+  "collision_source_closure_expects": 117,
+  "geometry_cases": 446,
+  "collision_cases": 288,
+  "box_dependency_cases": 21,
+  "tracing_reference_parity": {
+    "cases": 755,
+    "different_results": 0,
+    "oracle": "collision-traces.json:oracle"
+  },
+  "collision_stage": "in progress; completed components are not an integrated-stage claim"
 }

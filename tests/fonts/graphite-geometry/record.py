@@ -7,8 +7,8 @@ def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')
 def bits(value):return struct.unpack('>I',struct.pack('>f',value))[0]
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
- cases=json.loads((HERE/'geometry-cases.jsonc').read_text())['cases'];output=HERE/'geometry-records.json'
+ p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--cases',default='geometry-cases.jsonc');p.add_argument('--output',default='geometry-records.json');p.add_argument('--library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
+ cases=json.loads((HERE/args.cases).read_text())['cases'];output=HERE/args.output
  if args.check:
   saved=json.loads(output.read_text());records={r['id']:r for r in saved['records']}
   assert len(records)==len(cases)

@@ -114,6 +114,718 @@
       }
     },
     {
+      "id": "default-forward-ltr",
+      "font_sha256": "5da226858f23b41eac225c58e97c0514a881c1381792ef18da1b36ad006b0667",
+      "key": "6783aadca012a98f7d2b17ddb3ad114beea839327048572945d5e017087c562f",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1142308864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-forward-rtl",
+      "font_sha256": "a28afdaa8c0d760fe7dae5e0ef0028b9110e839f251e23be19a272ac9b4690e7",
+      "key": "cff3f8ad3b459cc49d8aac7fbce4c9af15284564fdd465dfeaaf675ef8b73d2e",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1142325248,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-backward-ltr",
+      "font_sha256": "4507373d79f4d6c7fc54625c1b9884a39dd549c17c321df8fc24608bb192d36f",
+      "key": "807a443bf157fe10bff9e61bb6b31870b4b08af9b1db6f3629d3491ea5c4324d",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1142308864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              1,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-backward-rtl",
+      "font_sha256": "7c450bad14bc3b8d433a23b5ed2261536fe97b8f9b303056f5fdc8b53dca47f5",
+      "key": "be1c4f5a8a80d0de14ea6be3d1d8cacc6a69b8ebe625e6b223995f1bffd946e2",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1142325248,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              null,
+              2,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              1,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-forward-two-ltr",
+      "font_sha256": "72feb6e74c0c0c15380d1bcb072f0b479dd6cb3737312fa63ca8dea053aa49ba",
+      "key": "2269523e3b57d1cbb4ea2aab7b683591e0a8c9d7184b6c8635d0259f027b816e",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1142325248,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              3
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1150705664,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1155645440,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-forward-two-rtl",
+      "font_sha256": "008f0c0e30905c5e1dfe580e698c8bd655a8c7aba601b7cae447f0750cd55015",
+      "key": "753243b2e8d294737e0a791fca72652bb9a4069b12cb63b4100727058425cc52",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1142341632,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              3,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1150713856,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              2
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1155645440,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-backward-two-ltr",
+      "font_sha256": "f08e7ea44e720b39ac1baef60842d2f5d31d7a9a1118bc85476653777342d658",
+      "key": "42f521a04e70660dc585261e597204e9293564984e19902b2ca68c4ab19ccbbd",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              null,
+              3,
+              2
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1150713856,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1142308864,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              1,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1155645440,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-backward-two-rtl",
+      "font_sha256": "959ff98f968670267f226a8b9ac85f66a3e51935526f5e162afb69a992e1421f",
+      "key": "946116da11d1fbf5d63f35a91cbf581657bfc516b3ed52f89ab2887fc4781725",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1150722048,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              null,
+              3,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              null,
+              1
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 3,
+            "before": 2,
+            "after": 2,
+            "position_bits": [
+              1142325248,
+              0
+            ],
+            "advance_bits": [
+              1142341632,
+              0
+            ],
+            "links_glyph": [
+              1,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1155645440,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-points-first-ltr",
+      "font_sha256": "a5853043a6b89bcf1ff1549686733a41663d84d7c68332073d34e1123e573529",
+      "key": "4b1436a0d59663490038934d77253bbccb1c0d05a88dc77c807e5f95a810b005",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1140490240,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1149886464,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-points-first-rtl",
+      "font_sha256": "ac6f229e39890a515def3702bb4308f24f1e0bf856ed34a4bca90f4e7cd89b18",
+      "key": "5badc806cfbd4ed8c5e10da6f443d2bed6dbaa233594def0d0d4abacebb7b526",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1141997568,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              0
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150541824,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-advance-y-ltr",
+      "font_sha256": "04d68bacd5699c42204995d86d955c3c42a66efd7ac1ee97741a524c1239735c",
+      "key": "d7074e6892094d92bae8f44b803dc6da747e91aea0acc234ace2d5513195a7f5",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              1120403456
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              1142308864,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
+      "id": "default-advance-y-rtl",
+      "font_sha256": "14ac8e8c483f86add1190fa847ef45de015db41e2588fec8912e9690541315e7",
+      "key": "359ab847970374831bdd31561f466a28845fd20316b7a9b70b98caff3608a0b1",
+      "result": {
+        "face_accepted": true,
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "position_bits": [
+              1142325248,
+              0
+            ],
+            "advance_bits": [
+              1142308864,
+              1120403456
+            ],
+            "links_glyph": [
+              2,
+              null,
+              null
+            ],
+            "attachment_level": 0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "position_bits": [
+              0,
+              0
+            ],
+            "advance_bits": [
+              1142325248,
+              0
+            ],
+            "links_glyph": [
+              null,
+              1,
+              null
+            ],
+            "attachment_level": 0
+          }
+        ],
+        "advance_bits": [
+          1150705664,
+          0
+        ]
+      }
+    },
+    {
       "id": "attach-forward-ltr",
       "font_sha256": "cffa27f9abfed53d90d44107256e58197ae1bc3b459db97bc0876aee90d27056",
       "key": "b637c2ca699ae294af1a2d8ff5335c2b09deab60275c118096b514607ec1801f",

@@ -1,4 +1,4 @@
-These 434 original UPL fonts exercise Graphite geometry through the documented
+These 446 original UPL fonts exercise Graphite geometry through the documented
 GTF tables and bytecode language. No Graphite2 implementation source is copied
 or translated. `generate.py` builds the bytes from scratch with fontTools
 4.61.1; the adjacent licence covers the fonts and generator.
@@ -52,3 +52,36 @@ retains that state. Coordinate fields use signed16 values; flags, classes and
 weights use unsigned16 values. Collision-shift fields 62/63 are read-only to
 bytecode, even though the collision solver stores fractional binary32 shifts.
 The matrix includes writes of −1 and 65536 to every collision attribute.
+
+`collision_generate.py` adds 288 original collision programs: movement limits,
+margin ownership and weights, four projection directions, two-pass reads,
+collision kerning, overlapping START/END groups, sub-boxes, and inherited
+parent shifts after long prefixes. `collision-records.json` stores their public
+C-API results. The 21 separate box-dependency controls distinguish Glat versions
+and collision-pass flags. Graphite2 rejects ten Glat1/2 controls with collision
+bits, while it accepts the remaining controls. `record_fonttools.py` separately
+records their decoded attributes; this matters for Glat3 without octaboxes,
+where the specification/fontTools and Graphite2 disagree about attribute bytes.
+
+`collision-traces.json` comes from the documented `gr_start_logging` API of a
+separately built, pinned Graphite2 1.3.14 release with tracing enabled. Pointer
+identifiers are renamed by initial slot order. It records observations of
+intervals and costs; runtime code is original, rather than a translation of the
+reference implementation. `record_traces.py --check` validates cache keys
+without the reference installed. All 755 public-C-API results also agree between
+this tracing build and the normal reference build, including floating-point
+origin bits and face/program rejection.
+
+The independent source components currently cover octabox decoding, projected
+forbidden regions, piecewise quadratic interval costs, and overlapping group
+boundaries. A complete collision pass additionally needs sequencing, exclusion
+glyphs, retry scheduling, and collision kerning. These components are not yet an
+end-to-end collision-stage support claim. Native public replay, fuzzing and
+performance measurements remain listed separately in `checks.json`.
+
+OTS accepts all 755 font containers and retains every Graphite table in 748.
+Its seven Glat2 controls are accepted only after the Graphite tables are
+stripped; those results are a reader-policy comparison, not validation of their
+Graphite semantics. OTS also warns about collision attributes in Silf3, while
+retaining the tables. The GTF document explicitly permits reserved fields to
+acquire their later meaning in an earlier-version table.
