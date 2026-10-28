@@ -519,6 +519,15 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 	physical : U64, U64, Bool -> U64
 	physical = |index, count, reverse| if (reverse and index < count) count - 1 - index else index
 
+	# Destructure before the helper consumes items. Keeping the old Run
+	# in a record-spread expression aliases the complete glyph list and
+	# copies it once per state action when setting unsafe-break flags.
+	flag_run : Run, U64, U64 -> Run
+	flag_run = |run, start, end| {
+		{ items, advances, major, cross, parents, attachments, attachment_active, operations, stopped } = run
+		flagged = TableAatKern.unsafe_range(items, start, end)
+		{ items: flagged, advances, major, cross, parents, attachments, attachment_active, operations, stopped }
+	}
 	unsafe_range : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
 	unsafe_range = |items, start, end| {
 		if end < start or end - start > 255 or end > items.len() {
@@ -610,7 +619,7 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 			safe = !TableAatKern.actionable(sub, entry) and ($state == 0 or (dont_advance and entry.next == 0) or (!TableAatKern.actionable(sub, from_start) and entry.next == from_start.next and dont_advance == (from_start.flags.bitwise_and(0x4000) != 0))) and !TableAatKern.actionable(sub, before_end)
 			if !safe and $cursor > 0 and $cursor < count {
 				previous = TableAatKern.physical($cursor - 1, count, reverse)
-				$run = { ..$run, items: TableAatKern.unsafe_range($run.items, previous.min(index), previous.max(index) + 1) }
+				$run = TableAatKern.flag_run($run, previous.min(index), previous.max(index) + 1)
 			}
 			if sub.kind == 1 {
 				if sub.extended and entry.flags.bitwise_and(0x2000) != 0 {

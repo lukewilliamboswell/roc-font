@@ -1,0 +1,139 @@
+{
+  "build": {
+    "git": "649ea192488ba0049cebe0d4aa01a181f25a6fe6",
+    "bundle": "EfcNbYYEqWm7nbKTrh2GWnVbr9RTLGzeGrTJUm8PsyKh.tar.zst",
+    "sentinel": "## Not roc-font: the checks' mirror of the checkout replaces the package\n## with this file. A consumer that compiles it took the source tree\n## instead of the served bundle (scripts/flight.py).\nthis file is deliberately not Roc\n",
+    "consumer_sources_uncommitted_at_measurement": true
+  },
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "hb_binary_sha256": "4ce2601750348d6a2d09741993594f3a836c848ccfdd8e3fabf2f97a45528bd1",
+  "rows": [
+    {
+      "font": "kerx0",
+      "copies": 8,
+      "scalars": 16,
+      "font_sha256": "f49aec3dcc54cf3efa1a0f6b9f1cc02576bbddf59641ecdf0324c92d89cd1ddd",
+      "allocations": 17,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 3914.3828125,
+      "hb_ns": 765.625,
+      "roc_to_hb": 5.112663265306122
+    },
+    {
+      "font": "kerx0",
+      "copies": 64,
+      "scalars": 128,
+      "font_sha256": "f49aec3dcc54cf3efa1a0f6b9f1cc02576bbddf59641ecdf0324c92d89cd1ddd",
+      "allocations": 16,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 11473.953125,
+      "hb_ns": 4523.4375,
+      "roc_to_hb": 2.5365561312607943
+    },
+    {
+      "font": "kerx0",
+      "copies": 256,
+      "scalars": 512,
+      "font_sha256": "f49aec3dcc54cf3efa1a0f6b9f1cc02576bbddf59641ecdf0324c92d89cd1ddd",
+      "allocations": 16,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 37344.3984375,
+      "hb_ns": 17117.1875,
+      "roc_to_hb": 2.1816900958466454
+    },
+    {
+      "font": "kerx1",
+      "copies": 8,
+      "scalars": 16,
+      "font_sha256": "6d3fece1b1b935801e87426a78d1f6da88cd0b410d621b3797f8abab17783cfd",
+      "allocations": 18,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 4045.25,
+      "hb_ns": 750.0,
+      "roc_to_hb": 5.393666666666666
+    },
+    {
+      "font": "kerx1",
+      "copies": 64,
+      "scalars": 128,
+      "font_sha256": "6d3fece1b1b935801e87426a78d1f6da88cd0b410d621b3797f8abab17783cfd",
+      "allocations": 17,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 12937.8203125,
+      "hb_ns": 4515.625,
+      "roc_to_hb": 2.8651228373702424
+    },
+    {
+      "font": "kerx1",
+      "copies": 256,
+      "scalars": 512,
+      "font_sha256": "6d3fece1b1b935801e87426a78d1f6da88cd0b410d621b3797f8abab17783cfd",
+      "allocations": 17,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 42677.40625,
+      "hb_ns": 16882.8125,
+      "roc_to_hb": 2.527861175381768
+    },
+    {
+      "font": "kerx4-coordinate",
+      "copies": 8,
+      "scalars": 16,
+      "font_sha256": "c672bd716900eaf964d88a2c9f5dded4616dadca0168b2cc73840cc59350629c",
+      "allocations": 20,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 4132.8125,
+      "hb_ns": 773.4375,
+      "roc_to_hb": 5.343434343434343
+    },
+    {
+      "font": "kerx4-coordinate",
+      "copies": 64,
+      "scalars": 128,
+      "font_sha256": "c672bd716900eaf964d88a2c9f5dded4616dadca0168b2cc73840cc59350629c",
+      "allocations": 19,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 13086.9140625,
+      "hb_ns": 4453.125,
+      "roc_to_hb": 2.938815789473684
+    },
+    {
+      "font": "kerx4-coordinate",
+      "copies": 256,
+      "scalars": 512,
+      "font_sha256": "c672bd716900eaf964d88a2c9f5dded4616dadca0168b2cc73840cc59350629c",
+      "allocations": 19,
+      "leaked": 0,
+      "requested_bytes": null,
+      "peak_live_bytes": null,
+      "roc_ns": 43515.625,
+      "hb_ns": 16984.375,
+      "roc_to_hb": 2.562097516099356
+    }
+  ],
+  "notes": [
+    "Native loops exclude font preparation and planning; five samples and128 repetitions per size, exact full-position/cluster/glyph checksums guarded.",
+    "roc-fuzz0.4.3 exposes allocation calls/live allocation count only. Requested and peak-live bytes unavailable, not estimated."
+  ],
+  "runtime_core_sha256": "8f42c90bd8dc6b95a12f8fcad944a2b5a4888e7f0db216e9ae80a2b9730bfb42",
+  "binary_sha256": {
+    "bench": "7e317f9d20cb4845fbe4c70f62f31a87f3d80db9b2ba0ec7e7c911b36991c969",
+    "alloc": "33fd73f70454f3187582939cfea38c20d35ce897f22d87eb4f8edd864b161fab"
+  }
+}
