@@ -101,6 +101,13 @@ Internal contracts agreed before consumer work:
   advances can agree while glyph offsets differ. Preserve the explicit
   direction and font-specific oracle cases when resolving this gap.
 - [ ] WOFF/WOFF2 unwrapping outside the core.
+- [ ] Interpreted `BASE` baseline facts for consumers aligning different
+  scripts or font families. Original table bytes are available now; a
+  consumer should establish the query shape before adding a public API.
+- [ ] Font-defined target-width justification, if a downstream layout
+  package needs it. Reading Graphite justification attributes does not
+  expose `gr_seg_justify`/HarfBuzz justification as a Roc query; paragraph
+  and line-breaking policy remain outside this package.
 
 ### Evidence and performance
 
