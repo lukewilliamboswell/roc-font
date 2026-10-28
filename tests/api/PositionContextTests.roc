@@ -23,6 +23,8 @@ import "../fonts/positioning/context-budget/float-anchor.ttf" as float_anchor : 
 import "../fonts/positioning/context-budget/attachment-distance.ttf" as distance_file : List(U8)
 import "../fonts/positioning/context-budget/attachment-mixed-advances.ttf" as mixed_file : List(U8)
 
+import "../fonts/positioning/context-budget/pair-absolute.ttf" as pair_absolute : List(U8)
+
 PositionContextTests :: {}.{}
 
 read = |bytes, depth| match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True, limits: Font.Limits.{ max_depth: depth } }) {
@@ -124,3 +126,5 @@ expect [32767.U64, 32768, 32769].all(
 		run.glyphs.len() == distance + 1 and (run.offsets.last() ?? { x: 0, y: 0 }) == (if (distance <= 32768) { x: -410, y: 700 } else { x: 0, y: 0 })
 	},
 )
+
+expect Font.shape(varied(pair_absolute), "ab", options).advances == [{ x: 2147450879, y: 0 }, { x: 520, y: 0 }]

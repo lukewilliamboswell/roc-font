@@ -1,11 +1,11 @@
 # Context positioning scheduling fixtures
 
-These 27 original TrueType fonts and their generator are UPL-licensed (see
+These 28 original TrueType fonts and their generator are UPL-licensed (see
 LICENSE). Rebuild with fontTools 4.61.1 using `python generate.py`; glyph
 outlines and metrics come from the repository's deterministic benchmark
 builder. No third-party font was modified.
 
-Twenty-four fonts pass OTS 9.3.0 (commit 884861e0103b41d7e9845fdaf9fd1e3c12819103):
+Twenty-five fonts pass OTS 9.3.0 (commit 884861e0103b41d7e9845fdaf9fd1e3c12819103):
 
 - `many-{8,64,256,2048,8192}` calls the same SinglePos lookup in table order.
   The fonts with 256, 2048 and 8192 records reproduce the benchmark's
@@ -45,6 +45,11 @@ and 32768 attach at (-410,700); distance 32769 refuses attachment entirely
 and leaves (0,0). These long cases cache only selected output indices,
 while the native driver still validates alignment and every cluster.
 
+`pair-absolute` isolates the pair-only fast path: a variable correction of
+2147483520 overflows when added to the nominal advance 510, then a second
+lookup subtracts 32768. Saturating the absolute advance gives 2147450879;
+saturating accumulated deltas would incorrectly add another 383.
+
 The three `wide-*` files are deliberate validator-negative fonts. Their
 extension offsets reach direct record arrays beyond 65535 bytes, and their
 coverage aliases initial ignored records. HarfBuzz 14.6 shapes these, but
@@ -52,11 +57,11 @@ OTS checks that the record end is at most 65535 and coverage starts after
 it. The package rejects them under its existing OTS policy; they are not
 examples of valid fonts in the positive replay.
 
-`oracle.py` records 132 cases from uharfbuzz 0.56.3 / HarfBuzz 14.6.0. It
+`oracle.py` records 134 cases from uharfbuzz 0.56.3 / HarfBuzz 14.6.0. It
 caches actual returned glyphs, positions and clusters or an explicit
 MemoryError for the cyclic reference failure. Twenty-two custom-depth
 cases test the package contract separately, using a literal bounded DFS
-interpreter in `verify.py`. There are 126 native replay cases; six wide-font
+interpreter in `verify.py`. There are 128 native replay cases; six wide-font
 reference runs are retained solely as validator provenance. Cycle probes
 at depths 65535 and 65536 distinguish combined Depth and Operations reports
 from Operations alone when the work bound wins the simultaneous check.

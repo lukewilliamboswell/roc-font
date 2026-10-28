@@ -37,7 +37,7 @@
       "why": "cyclic depth three",
       "parts": [
         {
-          "hex": "21"
+          "hex": "24"
         }
       ]
     },
@@ -45,7 +45,7 @@
       "why": "finite fanout operations floor",
       "parts": [
         {
-          "hex": "17"
+          "hex": "19"
         }
       ]
     },
@@ -53,7 +53,7 @@
       "why": "cyclic maximum default depth",
       "parts": [
         {
-          "hex": "2c"
+          "hex": "30"
         }
       ]
     },
@@ -190,6 +190,30 @@
       "parts": [
         {
           "file": "tests/fonts/positioning/context-budget/attachment-distance.ttf"
+        }
+      ]
+    },
+    {
+      "why": "pair-only absolute advance overflow, LTR",
+      "parts": [
+        {
+          "hex": "23 ff"
+        }
+      ]
+    },
+    {
+      "why": "pair-only RTL traversal",
+      "parts": [
+        {
+          "hex": "0b ff"
+        }
+      ]
+    },
+    {
+      "why": "valid pair-only variable font bytes",
+      "parts": [
+        {
+          "file": "tests/fonts/positioning/context-budget/pair-absolute.ttf"
         }
       ]
     }

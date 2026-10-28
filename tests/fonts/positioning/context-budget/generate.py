@@ -132,6 +132,19 @@ def attachment_mixed():
  feature=f['GPOS'].table.FeatureList.FeatureRecord[0].Feature;feature.LookupListIndex=[0,1,2];feature.LookupCount=3
  save(f,'attachment-mixed-advances.ttf',[adv,attach,outer,inner,pos])
 
+def pair_absolute():
+ from fontTools.fontBuilder import FontBuilder
+ from fontTools.varLib.builder import buildVarRegionList,buildVarData,buildVarStore
+ names=['.notdef','a','b'];f=TTFont(io.BytesIO(bench._build_font(names,{97:'a',98:'b'},'feature kern {pos a b 0;}kern;')),recalcTimestamp=False);f.setGlyphOrder(names)
+ FontBuilder(font=f).setupFvar([('wght',0,0,1,'Weight')],[])
+ g=newTable('GDEF');g.table=ot.GDEF();g.table.Version=0x10003;g.table.populateDefaults();g.table.VarStore=buildVarStore(buildVarRegionList([{'wght':(0,1,1)}],['wght']),[buildVarData([0],[[2147483520]],optimize=False)]);f['GDEF']=g
+ first=f['GPOS'].table.LookupList.Lookup[0];second=copy.deepcopy(first)
+ d=ot.Device();d.StartSize=0;d.EndSize=0;d.DeltaFormat=0x8000
+ first.SubTable[0].ValueFormat1=0x44;first.SubTable[0].PairSet[0].PairValueRecord[0].Value1=value('XAdvance',0);first.SubTable[0].PairSet[0].PairValueRecord[0].Value1.XAdvDevice=d
+ second.SubTable[0].ValueFormat1=4;second.SubTable[0].PairSet[0].PairValueRecord[0].Value1=value('XAdvance',-32768)
+ feature=f['GPOS'].table.FeatureList.FeatureRecord[0].Feature;feature.LookupListIndex=[0,1];feature.LookupCount=2
+ save(f,'pair-absolute.ttf',[first,second])
+
 def wide(n):
  # Coverage overlaps the first ignored records, keeping Offset16 small
  # despite a >64KiB record list. The layout permits shared byte ranges.
@@ -156,5 +169,5 @@ if __name__=='__main__':
  order('attach-shift.ttf',[(1,1),(1,2)])
  recursive(8192);recursive(8192,fanout=True)
  for field in ['XAdvance','XPlacement']:saturation(field);saturation_device(field)
- float_anchor();attachment_distance();attachment_mixed()
+ float_anchor();attachment_distance();attachment_mixed();pair_absolute()
  for n in [16385,16386,16387]:wide(n)

@@ -22,6 +22,8 @@ import "../tests/fonts/positioning/context-budget/float-anchor.ttf" as float_anc
 import "../tests/fonts/positioning/context-budget/attachment-distance.ttf" as distance_file : List(U8)
 import "../tests/fonts/positioning/context-budget/attachment-mixed-advances.ttf" as mixed_file : List(U8)
 
+import "../tests/fonts/positioning/context-budget/pair-absolute.ttf" as pair_absolute : List(U8)
+
 ## Isolate contextual record count at 8/64/256 while keeping matched
 ## positions and glyph count fixed. Huge valid cyclic/fanout fonts exercise
 ## the explicit depth and operations bounds without materialising calls.
@@ -29,7 +31,7 @@ test! : List(U8) => Fuzz.Outcome
 test! = |bytes| {
 	choice = (bytes.first() ?? 0).to_u64()
 	direction = if (choice.bitwise_and(8) == 0) LeftToRight else RightToLeft
-	settings = Font.ShapeOptions.{ script: "Latn", language: "en", direction, limits: Font.ShapeLimits.{ growth: if (choice % 11 == 10) 1 else 256, operations: if (choice % 11 == 10) 1 else 4096 } }
+	settings = Font.ShapeOptions.{ script: "Latn", language: "en", direction, limits: Font.ShapeLimits.{ growth: if (choice % 12 == 10) 1 else 256, operations: if (choice % 12 == 10) 1 else 4096 } }
 	a = read(small, 64)
 	b = read(medium, 64)
 	c = read(large, 64)
@@ -45,7 +47,7 @@ test! = |bytes| {
 	if x.value.advances != [{ x: 518, y: 0 }] or y.value.advances != [{ x: 574, y: 0 }] or z.value.advances != [{ x: 766, y: 0 }] {
 		crash "lazy contextual records were skipped or reordered"
 	}
-	branch = choice % 11
+	branch = choice % 12
 	file = match branch {
 		0 => cycle
 		1 => fanout
@@ -57,9 +59,10 @@ test! = |bytes| {
 		7 => device_placement
 		8 => float_anchor
 		9 => mixed_file
-		_ => distance_file
+		10 => distance_file
+		_ => pair_absolute
 	}
-	depth = if (branch >= 4) 64.U32 else match (choice / 11) % 5 {
+	depth = if (branch >= 4) 64.U32 else match (choice / 12) % 5 {
 		0 => 0
 		1 => 1
 		2 => 2
@@ -68,7 +71,7 @@ test! = |bytes| {
 	}
 	coordinate = (bytes.get(1) ?? 255).to_u64().to_dec() / 255
 	original = read(file, depth)
-	font = if (branch >= 6 and branch <= 8) Font.at(original, Font.Variation.{ axes: [{ tag: "wght", value: coordinate }] }) else original
+	font = if ((branch >= 6 and branch <= 8) or branch == 11) Font.at(original, Font.Variation.{ axes: [{ tag: "wght", value: coordinate }] }) else original
 	distance = 32767 + (bytes.get(1) ?? 0).to_u64() % 3
 	text = match branch {
 		0 | 1 | 2 => "a"
@@ -77,7 +80,8 @@ test! = |bytes| {
 		6 | 7 => Str.join_with(List.repeat("a", 32), "")
 		8 => "a\u(301)"
 		9 => "a\u(301)${Str.join_with(List.repeat(" ", 30), "")}"
-		_ => "a${Str.join_with(List.repeat("b", distance - 1), "")}\u(301)"
+		10 => "a${Str.join_with(List.repeat("b", distance - 1), "")}\u(301)"
+		_ => "ab"
 	}
 	plan = Font.plan(font, settings)
 	run = Font.shape_planned(font, plan, text)
@@ -103,12 +107,15 @@ test! = |bytes| {
 	if branch == 10 {
 		for i in 0..<run.glyphs.len() {
 			if (run.glyphs.get(i) ?? 0) == 3 {
-				expected = if (distance <= 32768) { x: -410, y: 700 } else { x: 0, y: 0 }
+				expected = if (direction == LeftToRight and distance <= 32768) { x: -410, y: 700 } else { x: 0, y: 0 }
 				if (run.offsets.get(i) ?? { x: 0, y: 0 }) != expected {
 					crash "attachment parent distance escaped signed16 bounds"
 				}
 			}
 		}
+	}
+	if branch == 11 and coordinate == 1 and direction == LeftToRight and !run.advances.any(|p| p.x == 2147450879) {
+		crash "pair-only positioning saturated deltas rather than absolute advances"
 	}
 	Fuzz.expect_no_leaks!(|{}| Font.shape_planned(font, plan, text))
 	if branch == 9 {

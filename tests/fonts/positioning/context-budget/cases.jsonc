@@ -5884,7 +5884,87 @@
       }
     },
     {
-      "id": "saturating-advance-98",
+      "id": "pair-absolute-98",
+      "font": "pair-absolute.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "depth": 64,
+      "operations": 4096,
+      "weight": 1,
+      "font_sha256": "2813ac4332c6eb46891a3e7dcf35baadeafe9bb51315f5b503b71b34cade8667",
+      "oracle": {
+        "glyphs": [
+          1,
+          2
+        ],
+        "advances": [
+          [
+            2147450879,
+            0
+          ],
+          [
+            520,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "pair-absolute-99",
+      "font": "pair-absolute.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "depth": 64,
+      "operations": 4096,
+      "weight": 1,
+      "font_sha256": "2813ac4332c6eb46891a3e7dcf35baadeafe9bb51315f5b503b71b34cade8667",
+      "oracle": {
+        "glyphs": [
+          2,
+          1
+        ],
+        "advances": [
+          [
+            520,
+            0
+          ],
+          [
+            510,
+            0
+          ]
+        ],
+        "offsets": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "clusters": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "saturating-advance-100",
       "font": "saturating-advance.ttf",
       "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "direction": "ltr",
@@ -6547,7 +6627,7 @@
       }
     },
     {
-      "id": "saturating-advance-99",
+      "id": "saturating-advance-101",
       "font": "saturating-advance.ttf",
       "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "direction": "rtl",
@@ -7210,7 +7290,7 @@
       }
     },
     {
-      "id": "saturating-placement-100",
+      "id": "saturating-placement-102",
       "font": "saturating-placement.ttf",
       "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "direction": "ltr",
@@ -7873,7 +7953,7 @@
       }
     },
     {
-      "id": "saturating-placement-101",
+      "id": "saturating-placement-103",
       "font": "saturating-placement.ttf",
       "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "direction": "rtl",
@@ -8536,7 +8616,7 @@
       }
     },
     {
-      "id": "shift-attach-102",
+      "id": "shift-attach-104",
       "font": "shift-attach.ttf",
       "text": "á",
       "direction": "ltr",
@@ -8576,7 +8656,7 @@
       }
     },
     {
-      "id": "shift-attach-103",
+      "id": "shift-attach-105",
       "font": "shift-attach.ttf",
       "text": "á",
       "direction": "rtl",
@@ -8616,7 +8696,7 @@
       }
     },
     {
-      "id": "wide-16383-104",
+      "id": "wide-16383-106",
       "font": "wide-16383.ttf",
       "text": "a",
       "direction": "ltr",
@@ -8646,7 +8726,7 @@
       }
     },
     {
-      "id": "wide-16383-105",
+      "id": "wide-16383-107",
       "font": "wide-16383.ttf",
       "text": "a",
       "direction": "rtl",
@@ -8676,7 +8756,7 @@
       }
     },
     {
-      "id": "wide-16384-106",
+      "id": "wide-16384-108",
       "font": "wide-16384.ttf",
       "text": "a",
       "direction": "ltr",
@@ -8706,7 +8786,7 @@
       }
     },
     {
-      "id": "wide-16384-107",
+      "id": "wide-16384-109",
       "font": "wide-16384.ttf",
       "text": "a",
       "direction": "rtl",
@@ -8736,7 +8816,7 @@
       }
     },
     {
-      "id": "wide-16385-108",
+      "id": "wide-16385-110",
       "font": "wide-16385.ttf",
       "text": "a",
       "direction": "ltr",
@@ -8766,7 +8846,7 @@
       }
     },
     {
-      "id": "wide-16385-109",
+      "id": "wide-16385-111",
       "font": "wide-16385.ttf",
       "text": "a",
       "direction": "rtl",
