@@ -138,7 +138,7 @@ LayoutGsub := {
 	## rules, `rand`, and the index in the plan of the step being applied
 	## (recorded in the origin of every glyph it substitutes, also through
 	## nested lookups).
-	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64 }
+	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64, per_syllable : Bool }
 
 	## HarfBuzz's buffer while a lookup applies: the input `info` read from
 	## `idx`, and, when `output`, the output written so far. `serial`
@@ -409,7 +409,7 @@ LayoutGsub := {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
 			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
-				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index }
+				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index, per_syllable: False }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
 					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
@@ -437,6 +437,147 @@ LayoutGsub := {
 			}
 		}
 		{ items: $run, stopped: $stopped, operations: $ops }
+	}
+
+	## State retained across script-specific pauses. Origin step numbers,
+	## ligature serials, random state, work lists and budgets never reset.
+	Session : { items : List(Item), serial : U64, random : U64, operations : U64, stopped : U64, step_offset : U64, spare : List(Item), work : Work }
+	StageStep : { step : Step, per_syllable : Bool }
+
+	begin : List(Item) -> Session
+	begin = |items| { items, serial: 0, random: 1, operations: 0, stopped: 0, step_offset: 0, spare: [], work: { scratch: [], frames: [], positions: [] } }
+
+	with_items : Session, List(Item) -> Session
+	with_items = |session, items| { ..session, items }
+
+	clear_substitution_flags : List(Item) -> List(Item)
+	clear_substitution_flags = |items| items.map(|item| LayoutGsub.with_gprops(item, LayoutGsub.gprops(item).bitwise_and(0xFF8F)))
+
+	resume : LayoutGsub, List(StageStep), Session, Limits -> Session
+	resume = |shape, plan, session, limits| {
+		{ items, serial: serial_in, random: random_in, operations, stopped: stopped_in, step_offset, spare, work: work_in } = session
+		var $run = items
+		# The previous run of a general lookup, whose allocation the next one
+		# writes into.
+		var $spare = spare
+		var $serial = serial_in
+		var $random = random_in
+		var $ops = operations
+		var $stopped = stopped_in
+		var $work = work_in
+		# A digest of the run's glyphs, made again after each lookup that
+		# runs: a lookup whose digest misses it cannot start anywhere, so
+		# it is passed over without visiting the run.
+		var $digest = LayoutGsub.run_digest($run)
+		for step_index in 0..<plan.len() {
+			entry = plan.get(step_index) ?? { step: { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }, per_syllable: False }
+			step = entry.step
+			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
+			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
+				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_offset + step_index, per_syllable: entry.per_syllable }
+				if lookup.reverse {
+					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
+					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
+					$run = info
+					$serial = serial
+					$random = random
+					$ops = ops
+					$stopped = stopped
+					$work = work
+				} else if lookup.mode == 0 {
+					$run = LayoutGsub.apply_singles(shape, lookup, ctx, $run)
+				} else {
+					{ buf, work } = LayoutGsub.apply_forward(shape, lookup, ctx, { info: $run, out: $spare.clear().reserve($run.len()), idx: 0, output: True, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: True }, limits, $work)
+					{ info, out, idx, output: _, serial, random, ops, stopped, aliased: _ } = buf
+					# Sync: the rest of the input follows the output.
+					$run = if (idx < info.len()) out.concat(info.drop_first(idx)) else out
+					$spare = info
+					$serial = serial
+					$random = random
+					$ops = ops
+					$stopped = stopped
+					$work = work
+				}
+				$digest = LayoutGsub.run_digest($run)
+			}
+		}
+		{ items: $run, serial: $serial, random: $random, operations: $ops, stopped: $stopped, step_offset: step_offset + plan.len(), spare: $spare, work: $work }
+	}
+
+	## HarfBuzz's structural would-apply probe. Context rules test their
+	## input only; chained rules with zero_context additionally require
+	## empty backtrack/lookahead. No glyphs, flags or trace state change.
+	would_substitute : LayoutGsub, List(U64), List(U64), Bool, U64 -> { matches : Bool, operations : U64, stopped : U64 }
+	would_substitute = |shape, indices, glyphs, zero_context, budget| {
+		if glyphs.is_empty() {
+			return { matches: False, operations: 0, stopped: 0 }
+		}
+		var $operations = 0
+		for index in indices {
+			if $operations >= budget {
+				return { matches: False, operations: $operations, stopped: LayoutGsub.stopped_operations }
+			}
+			$operations = $operations + 1
+			lookup = shape.lookups.get(index) ?? LayoutGsub.no_lookup
+			for at in lookup.start..<(lookup.start + lookup.count) {
+				sub = shape.subtables.get(at) ?? LayoutGsub.no_sub
+				if LayoutGsub.probe_subtable(shape, sub, glyphs, zero_context) {
+					return { matches: True, operations: $operations, stopped: 0 }
+				}
+			}
+		}
+		{ matches: False, operations: $operations, stopped: 0 }
+	}
+
+	probe_sequence : LayoutGsub, Seq, List(U64) -> Bool
+	probe_sequence = |shape, seq, glyphs| {
+		var $matches = True
+		for i in 1..<glyphs.len() {
+			if !LayoutGsub.seq_matches(shape, seq, i - 1, glyphs.get(i) ?? 0) {
+				$matches = False
+			}
+		}
+		$matches
+	}
+
+	probe_subtable : LayoutGsub, Sub, List(U64), Bool -> Bool
+	probe_subtable = |shape, sub, glyphs, zero_context| {
+		first = glyphs.first() ?? 0
+		coverage = LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, first) ?? return False
+		if sub.kind == 1 or sub.kind == 2 or sub.kind == 3 or sub.kind == 8 {
+			return glyphs.len() == 1
+		}
+		if sub.kind == 4 {
+			if coverage >= sub.data_len {
+				return False
+			}
+			end = shape.values.get(sub.data + coverage + 1) ?? 0
+			var $at = shape.values.get(sub.data + coverage) ?? 0
+			while $at < end {
+				components = shape.values.get($at + 1) ?? 0
+				if components + 1 == glyphs.len() and LayoutGsub.probe_sequence(shape, { kind: 0, classes: 0, classes_len: 0, at: $at + 2, stride: 1 }, glyphs) {
+					return True
+				}
+				$at = $at + 2 + components
+			}
+		} else if sub.kind == 5 {
+			slot = if (sub.match_kind == 1) LayoutGsub.class_in(shape.ranges, sub.input, sub.input_len, first) else if (sub.match_kind == 2) 0 else coverage
+			if slot >= sub.data_len {
+				return False
+			}
+			start = shape.values.get(sub.data + slot) ?? 0
+			end = shape.values.get(sub.data + slot + 1) ?? 0
+			for at in start..<end {
+				rule = shape.rules.get(at) ?? LayoutGsub.no_rule
+				if rule.input_len + 1 == glyphs.len() and (!zero_context or sub.delta == 0 or (rule.back_len == 0 and rule.ahead_len == 0)) {
+					seq = { kind: sub.match_kind, classes: sub.input, classes_len: sub.input_len, at: rule.input, stride: if (sub.match_kind == 2) 2 else 1 }
+					if LayoutGsub.probe_sequence(shape, seq, glyphs) {
+						return True
+					}
+				}
+			}
+		}
+		False
 	}
 
 	## The digest of every glyph of a run, in the form of a lookup's (see
@@ -1177,7 +1318,11 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, False, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
+						# Only input matching is constrained to the starting syllable;
+						# skipped glyphs and context use HarfBuzz's iterator rules.
+						syllable = cur.mask.bitwise_and(0x1FE000000000000)
+						same_syllable = !ctx.per_syllable or syllable == 0 or item.mask.bitwise_and(0x1FE000000000000) == syllable
+						match LayoutGsub.step_item(shape, ctx, item, False, same_syllable and LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -3222,3 +3367,56 @@ expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props
 expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [102, 20]
 expect ligated(0, False, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [103, 20, 11]
 expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }]).glyphs == [103, 20]
+
+# Resuming must retain global origin indices and ligature serials; a
+# stage with no applicable lookup still occupies a plan step.
+expect {
+	match LayoutGsub.read(liga_gsub(0)) {
+		Ok(shape) => {
+			items = [10.U64, 11, 10, 12].map_with_index(|glyph, cluster| { glyph, cluster, mask: 1, props: 0 })
+			no_op = { index: 999, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+			lig = { ..no_op, index: 0 }
+			limits = { limit: 64, budget: 64, depth: 8 }
+			whole = LayoutGsub.apply(shape, [no_op, lig], items, limits)
+			first = LayoutGsub.resume(shape, [{ step: no_op, per_syllable: False }], LayoutGsub.begin(items), limits)
+			resumed = LayoutGsub.resume(shape, [{ step: lig, per_syllable: False }], first, limits)
+			resumed.items == whole.items and resumed.step_offset == 2 and resumed.serial == 2 and resumed.items.all(|item| LayoutGsub.origin_step(item) == 1) and resumed.operations == whole.operations and resumed.stopped == whole.stopped
+		}
+		Err(_) => False
+	}
+}
+
+# A feature restricted to syllables cannot ligate across the boundary.
+expect {
+	match LayoutGsub.read(liga_gsub(0)) {
+		Ok(shape) => {
+			items = [10.U64, 11].map_with_index(|glyph, cluster| { glyph, cluster, mask: 1 + (cluster + 1).shl_wrap(49), props: 0 })
+			step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+			limits = { limit: 64, budget: 64, depth: 8 }
+			separate = LayoutGsub.resume(shape, [{ step, per_syllable: True }], LayoutGsub.begin(items), limits)
+			joined = LayoutGsub.resume(shape, [{ step, per_syllable: False }], LayoutGsub.begin(items), limits)
+			separate.items.map(|item| item.glyph) == [103, 11] and joined.items.map(|item| item.glyph) == [102]
+		}
+		Err(_) => False
+	}
+}
+
+expect {
+	match LayoutGsub.read(liga_gsub(0)) {
+		Ok(shape) => {
+			a = LayoutGsub.would_substitute(shape, [0], [10, 11], True, 1)
+			b = LayoutGsub.would_substitute(shape, [0], [10, 11, 11], False, 1)
+			c = LayoutGsub.would_substitute(shape, [0], [10, 12, 11], False, 1)
+			d = LayoutGsub.would_substitute(shape, [999, 0], [10, 11], True, 1)
+			e = LayoutGsub.would_substitute(shape, [0], [], True, 0)
+			a == { matches: True, operations: 1, stopped: 0 } and b.matches and !c.matches and d == { matches: False, operations: 1, stopped: LayoutGsub.stopped_operations } and e == { matches: False, operations: 0, stopped: 0 }
+		}
+		Err(_) => False
+	}
+}
+
+expect {
+	item = { glyph: 7, cluster: 9, mask: 0x8002000000000001, props: 0xAB123456007A4321 }
+	cleared = LayoutGsub.clear_substitution_flags([item])
+	cleared == [{ ..item, props: 0xAB123456000A4321 }]
+}

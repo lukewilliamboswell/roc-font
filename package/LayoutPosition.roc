@@ -532,7 +532,7 @@ LayoutPosition := {
 		if sub.kind == 7 or sub.kind == 8 {
 			matcher = LayoutGsub.with_gdef(p.contexts, ctx.gdef)
 			buf = { info: state.items, out: [], idx: i, output: False, serial: 0, random: 1, ops: 0, stopped: 0, aliased: False }
-			match_ctx = { mask, props, auto_zwnj: True, auto_zwj: True, random: False, step: 0 }
+			match_ctx = { mask, props, auto_zwnj: True, auto_zwj: True, random: False, step: 0, per_syllable: False }
 			matched = LayoutGsub.apply_context(matcher, matcher.subtables.get(sub.context) ?? LayoutGsub.no_sub, match_ctx, buf, { scratch: [], frames: [], positions: [] })
 			s = { ..state, items: matched.buf.info }
 			match matched.outcome {
