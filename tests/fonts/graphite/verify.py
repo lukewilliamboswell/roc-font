@@ -30,6 +30,7 @@ def main():
   for case in items:
    start,end=case.get('range',[0,2**64-1]);settings=','.join(f"{f['id']}:{f['value']}" for f in case.get('features',[]))
    fields=[case['id'],case.get('script','Latn'),case.get('language',''),case.get('direction','ltr'),str(case.get('cluster_level',0)),settings,case.get('engine','graphite2'),str(start),str(end),case['text']]
+   if case.get('variations'):fields.append(','.join(f"{v['tag']}:{v['value']}" for v in case['variations']))
    assert all('\t' not in f and '\n' not in f for f in fields)
    requests.append('\t'.join(fields))
   run=subprocess.run([str(binary),str(args.font_root/font)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)

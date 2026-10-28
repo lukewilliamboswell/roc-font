@@ -17,7 +17,12 @@ main! = |args| {
 	font = Font.from_bytes(bytes, Font.ReadOptions.{}) ?? crash "Graphite caller font rejected"
 	for line in Str.from_utf8_lossy(Stdin.read_to_end!()?).split_on("\n") {
 		if !line.is_empty() {
-			match line.split_on("\t") {
+			fields = line.split_on("\t")
+			request = match fields {
+				[id, script, language, direction, cluster_level, settings, engine, start, end, text, variations] => { parts: [id, script, language, direction, cluster_level, settings, engine, start, end, text], variations }
+				_ => { parts: fields, variations: "" }
+			}
+			match request.parts {
 				[id, script, language, direction, cluster_level, settings, engine, start, end, text] => {
 					var $features = []
 					if !settings.is_empty() {
@@ -30,8 +35,20 @@ main! = |args| {
 							}
 						}
 					}
+					var $axes = []
+					if !request.variations.is_empty() {
+						for pair in request.variations.split_on(",") {
+							match pair.split_on(":") {
+								[tag, value] => {
+									$axes = $axes.append({ tag, value: Dec.from_str(value) ?? crash "invalid variation coordinate" })
+								}
+								_ => crash "variation requires tag:value"
+							}
+						}
+					}
+					active_font = if ($axes.is_empty()) font else Font.at(font, Font.Variation.{ axes: $axes })
 					plan = Font.plan(
-						font,
+						active_font,
 						Font.ShapeOptions.{
 							script,
 							language,
@@ -48,8 +65,8 @@ main! = |args| {
 						},
 					)
 					range = Font.TextRange.{ start: U64.from_str(start) ?? crash "invalid range start", end: U64.from_str(end) ?? crash "invalid range end" }
-					checked = Font.shape_range_checked(font, plan, text, range)
-					if checked != Font.shape_range_checked(font, plan, text, range) {
+					checked = Font.shape_range_checked(active_font, plan, text, range)
+					if checked != Font.shape_range_checked(active_font, plan, text, range) {
 						crash "nondeterministic Graphite result"
 					}
 					{ run, abort, budgets } = match checked {
@@ -70,7 +87,7 @@ main! = |args| {
 						$rows = $rows.append("{\"glyph\":${glyph.to_str()},\"cluster\":${cluster.to_str()},\"advance\":[${advance.x.to_str()},${advance.y.to_str()}],\"offset\":[${offset.x.to_str()},${offset.y.to_str()}],\"flags\":${flags}}")
 					}
 					budget_json = Str.join_with(budgets.map(Str.inspect), ",")
-					Stdout.line!("${id}\t{\"success\":${if (abort == "NoAbort") "true" else "false"},\"abort\":${Str.inspect(abort)},\"glyphs\":[${Str.join_with($rows, ",")}],\"budgets\":[${budget_json}],\"engine\":${Str.inspect(Str.inspect(Font.shaping_engine(plan)))}}")?
+					Stdout.line!("${id}\t{\"success\":${if (abort == "NoAbort") "true" else "false"},\"abort\":${Str.inspect(abort)},\"glyphs\":[${Str.join_with($rows, ",")}],\"ot_glyph2_advance\":${Font.advance(active_font, 2).to_str()},\"budgets\":[${budget_json}],\"engine\":${Str.inspect(Str.inspect(Font.shaping_engine(plan)))}}")?
 				}
 				_ => crash "Graphite query requires id/script/language/direction/clusters/features/engine/start/end/text"
 			}
