@@ -102,10 +102,10 @@ TableVar := {
 
 	# ------------------------------------------------------------ limits
 
-	## Axes accepted in `fvar`. The OpenType format allows 65535; real fonts
-	## use fewer than 20. A provisional limit until `Font.Limits` carries it.
+	## The fvar axis-count field is uint16. Payload and instance-size
+	## checks below bound preparation before any count-sized allocation.
 	axis_limit : U64
-	axis_limit = 64
+	axis_limit = 65535
 
 	## The specification's bound on `VariationRegionList.regionCount`.
 	region_limit : U64
