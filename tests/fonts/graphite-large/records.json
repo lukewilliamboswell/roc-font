@@ -1,0 +1,399 @@
+{
+  "oracle": {
+    "harfbuzz": "14.6.0",
+    "graphite2": "1.3.14",
+    "harfbuzz_library_sha256": "fbd2e87f8989aba2b10d49f5dbefa117b8b17b78822221899bca7b98e0b706e0",
+    "graphite_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1,
+    "harfbuzz_build": "clang++ -O2 -std=c++17 -fPIC -dynamiclib -DHAVE_GRAPHITE2 -I/opt/homebrew/include src/harfbuzz.cc -L/opt/homebrew/lib -lgraphite2",
+    "harfbuzz_source": "https://github.com/harfbuzz/harfbuzz/releases/tag/14.6.0"
+  },
+  "font_sha256": "af38ac4132f9d9a38858417ebe5342b497a094f9a19aad8dbd9791dc6983f342",
+  "results": [
+    {
+      "n": 32767,
+      "input_sha256": "c537ea855bd720b41b3eba4959f1aee4b4113481e3dfee045b7d2a2f1f04eb02",
+      "success": true,
+      "count": 32767,
+      "sum_advances_i64": 2147417856,
+      "rows_sha256_be_IIiiii": "db62ef161df919c6443c8ca8b9a56327abfc784e5f7466ed80800b0be6bd81d4",
+      "flags_sha256": "75fe81200b02dd5b9e3529ddc100ce8fb60a5e2eba4e561399dda11d26c96ca6",
+      "samples": [
+        {
+          "index": 0,
+          "row": [
+            2,
+            0,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "row": [
+            2,
+            1,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "row": [
+            2,
+            2,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32764,
+          "row": [
+            2,
+            32764,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32765,
+          "row": [
+            2,
+            32765,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32766,
+          "row": [
+            2,
+            32766,
+            65536,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "input_sha256": "1234e2b34a2f7303e44a65c546423b14c2f7983aad3a0e9cd4a9a37b1f576324",
+      "success": true,
+      "count": 32768,
+      "sum_advances_i64": 2147483392,
+      "rows_sha256_be_IIiiii": "aaa7902763a533c334ba0a18fe6563dddc4b26c4a6077efd48a687664262eeba",
+      "flags_sha256": "0d168fe285a1f85e04f001a37c4f66e0c01ac753ecffdfec11364e5e833a0e28",
+      "samples": [
+        {
+          "index": 0,
+          "row": [
+            2,
+            0,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "row": [
+            2,
+            1,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "row": [
+            2,
+            2,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32765,
+          "row": [
+            2,
+            32765,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32766,
+          "row": [
+            2,
+            32766,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32767,
+          "row": [
+            2,
+            32767,
+            65536,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "n": 32769,
+      "input_sha256": "b73b0b3f5eeca24c89b75135947ecf73aa5593e4ed6e53426326ddb119d8c00c",
+      "success": true,
+      "count": 32769,
+      "sum_advances_i64": 2147548928,
+      "rows_sha256_be_IIiiii": "17c4856206b9bd43a0ef9ea1d6aebcc10ad03a009df1c58c85e30d49757e1083",
+      "flags_sha256": "91c4ba1cc0098cd102f510ffd130748e5b6399d52794c195441dff547bed0f14",
+      "samples": [
+        {
+          "index": 0,
+          "row": [
+            2,
+            0,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "row": [
+            2,
+            1,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "row": [
+            2,
+            2,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32766,
+          "row": [
+            2,
+            32766,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32767,
+          "row": [
+            2,
+            32767,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32768,
+          "row": [
+            2,
+            32768,
+            65536,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "n": 32770,
+      "input_sha256": "c77349e70ee3f6b26e12d30227181df5ceaaadf1de6eea76308e2c33ab86ee76",
+      "success": true,
+      "count": 32770,
+      "sum_advances_i64": 2147614464,
+      "rows_sha256_be_IIiiii": "d4a77415be3c518c19955f49fdf7526ff6ac4d11d05c481274b3ad64c167972a",
+      "flags_sha256": "e24756ba6ac73e5566e1eab73510dc4ceed9317f20dff6f51d5610192eda78b5",
+      "samples": [
+        {
+          "index": 0,
+          "row": [
+            2,
+            0,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "row": [
+            2,
+            1,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "row": [
+            2,
+            2,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32767,
+          "row": [
+            2,
+            32767,
+            65536,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32768,
+          "row": [
+            2,
+            32768,
+            255,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32769,
+          "row": [
+            2,
+            32769,
+            130817,
+            0,
+            65281,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "n": 32771,
+      "input_sha256": "b22200696b139ffa3cb8ca0e196ed58792fced7a21d8065205cd8393d4c966e9",
+      "success": true,
+      "count": 32771,
+      "sum_advances_i64": 2147680000,
+      "rows_sha256_be_IIiiii": "ed6088acb210f8ef64fdf4ace47fc1d3a910851084a6a48e662670ee8a3844f2",
+      "flags_sha256": "97f86227436d6a11f2c04f16c21234599ae201c2b269b4da0b049040ec831432",
+      "samples": [
+        {
+          "index": 0,
+          "row": [
+            2,
+            0,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "row": [
+            2,
+            1,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "row": [
+            2,
+            2,
+            65535,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32768,
+          "row": [
+            2,
+            32768,
+            255,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 32769,
+          "row": [
+            2,
+            32769,
+            0,
+            0,
+            65281,
+            0
+          ]
+        },
+        {
+          "index": 32770,
+          "row": [
+            2,
+            32770,
+            196353,
+            0,
+            130817,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}
