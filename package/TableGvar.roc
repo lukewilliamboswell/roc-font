@@ -342,6 +342,162 @@ TableGvar := {
 		{ values: $out, next: $p }
 	}
 
+	## Phantom coordinates as binary32 values. Top/bottom are meaningful
+	## only after attaching vertical metrics with with_vertical.
+	Phantoms : { left : U32, right : U32, top : U32, bottom : U32 }
+
+	## Width from varied phantom points, as the reference's unsigned
+	## unscaled advance. At the default location hmtx is authoritative.
+	advance : TableGlyfPoints, TableGvar, Location, U64 -> I64
+	advance = |glyf, gvar, loc, glyph| {
+		if glyph >= TableGlyfPoints.glyph_total(glyf) {
+			return 0
+		}
+		if !loc.nonzero or gvar.glyph_count == 0 {
+			return TableGlyfPoints.advance(glyf, glyph)
+		}
+		p = TableGvar.phantoms(glyf, gvar, loc, glyph)
+		TableVar.f32_round_half_up(TableVar.f32_sub(p.right, p.left)).max(0).min(2147483648)
+	}
+
+	## Evaluate only the metric points. A metrics component's phantoms are
+	## copied before its transform, so no contour decoding is necessary.
+	phantoms : TableGlyfPoints, TableGvar, Location, U64 -> Phantoms
+	phantoms = |glyf, gvar, loc, glyph| {
+		if glyph >= TableGlyfPoints.glyph_total(glyf) {
+			return { left: 0, right: 0, top: 0, bottom: 0 }
+		}
+		selected = if (loc.nonzero and gvar.glyph_count > 0) TableGlyfPoints.metrics_source(glyf, glyph) else glyph
+		x = TableGlyfPoints.phantom_xs(glyf, selected)
+		y = TableGlyfPoints.phantom_ys(glyf, selected)
+		base = { left: x.get(0) ?? 0, right: x.get(1) ?? 0, top: y.get(2) ?? 0, bottom: y.get(3) ?? 0 }
+		if selected >= gvar.glyph_count or !loc.nonzero {
+			return base
+		}
+		start = gvar.data_at + TableGvar.offset(gvar, selected)
+		if TableGvar.offset(gvar, selected + 1) == TableGvar.offset(gvar, selected) {
+			return base
+		}
+		bytes = gvar.bytes
+		field = TableVar.u16(bytes, start)
+		tuples = field.bitwise_and(0xFFF)
+		serial = start + TableVar.u16(bytes, start + 2)
+		shared = if (field.bitwise_and(0x8000) != 0) TableGvar.points_at(bytes, serial) else { points: [], next: serial }
+		var $scalars = List.with_capacity(tuples)
+		var $indexes = List.with_capacity(tuples)
+		var $datas = List.with_capacity(tuples)
+		var $header = start + 4
+		var $data = shared.next
+		for _ in 0..<tuples {
+			index = TableVar.u16(bytes, $header + 2)
+			region = if (index.bitwise_and(0x4000) != 0) Intermediate($header + 4 + (if (index.bitwise_and(0x8000) != 0) 2 * gvar.axis_count else 0)) else Absent
+			scalar = if index.bitwise_and(0x8000) != 0 {
+				TableGvar.tuple_scalar(gvar, loc.coords, $header + 4, region)
+			} else if index.bitwise_and(0x4000) != 0 {
+				TableGvar.tuple_scalar(gvar, loc.coords, gvar.shared_at + 2 * gvar.axis_count * index.bitwise_and(0xFFF), region)
+			} else {
+				loc.shared.get(index.bitwise_and(0xFFF)) ?? 0
+			}
+			$scalars = $scalars.append(scalar)
+			$indexes = $indexes.append(index)
+			$datas = $datas.append($data)
+			$data = $data + TableVar.u16(bytes, $header)
+			$header = $header + TableGvar.header_size(gvar, $header)
+		}
+		var $first = tuples
+		for k in 0..<tuples {
+			if $first == tuples and !TableGvar.f32_zero($scalars.get(k) ?? 0) {
+				$first = k
+			}
+		}
+		var $any_private = False
+		for k in $first..<tuples {
+			if ($indexes.get(k) ?? 0).bitwise_and(0x2000) != 0 {
+				$any_private = True
+			}
+		}
+		first_point = TableGlyfPoints.point_count(glyf, selected)
+		var $points = base
+		var $deltas = { left: 0.U32, right: 0.U32, top: 0.U32, bottom: 0.U32 }
+		var $flush = False
+		for k in $first..<tuples {
+			scalar = $scalars.get(k) ?? 0
+			if !TableGvar.f32_zero(scalar) {
+				index = $indexes.get(k) ?? 0
+				at = $datas.get(k) ?? 0
+				private = index.bitwise_and(0x2000) != 0
+				named = if (private) TableGvar.points_at(bytes, at) else shared
+				all = named.points.is_empty()
+				count = if (all) first_point + 4 else named.points.len()
+				xd = TableGvar.phantom_values(bytes, if (private) named.next else at, count, named.points, first_point, scalar)
+				yd = TableGvar.phantom_values(bytes, xd.next, count, named.points, first_point, scalar)
+				d = { left: xd.a, right: xd.b, top: yd.c, bottom: yd.d }
+				if all and !$any_private {
+					$points = TableGvar.add_phantoms($points, d)
+				} else {
+					if !all {
+						if $flush {
+							$points = TableGvar.add_phantoms($points, $deltas)
+						}
+						$deltas = { left: 0, right: 0, top: 0, bottom: 0 }
+					}
+					$deltas = TableGvar.add_phantoms($deltas, d)
+					$flush = True
+				}
+			}
+		}
+		if $flush {
+			$points = TableGvar.add_phantoms($points, $deltas)
+		}
+		$points
+	}
+
+	add_phantoms : Phantoms, Phantoms -> Phantoms
+	add_phantoms = |a, b| { left: TableGvar.shifted(a.left, b.left), right: TableGvar.shifted(a.right, b.right), top: TableGvar.shifted(a.top, b.top), bottom: TableGvar.shifted(a.bottom, b.bottom) }
+
+	## Decode checked packed deltas without allocating contour-sized lists.
+	## Only four point numbers are retained; duplicate named points still
+	## accumulate in their original order.
+	phantom_values : List(U8), U64, U64, List(U64), U64, U32 -> { a : U32, b : U32, c : U32, d : U32, next : U64 }
+	phantom_values = |bytes, start, count, named, first, scalar| {
+		var $at = start
+		var $done = 0.U64
+		var $a = 0.U32
+		var $b = 0.U32
+		var $c = 0.U32
+		var $d = 0.U32
+		while $done < count {
+			control = TableVar.u8(bytes, $at)
+			run = control.bitwise_and(0x3F) + 1
+			width = TableGvar.value_width(control)
+			begin = if (named.is_empty() and first > $done) (first - $done).min(run) else 0
+			for k in begin..<run {
+				point = if (named.is_empty()) $done + k else named.get($done + k) ?? 0
+				if point >= first {
+					v = if (width == 0) 0 else if (width == 1) TableVar.i8(bytes, $at + 1 + k) else if (width == 2) TableVar.i16(bytes, $at + 1 + 2 * k) else TableVar.i32(bytes, $at + 1 + 4 * k)
+					match point - first {
+						0 => {
+							$a = TableGvar.move_by($a, v, scalar)
+						}
+						1 => {
+							$b = TableGvar.move_by($b, v, scalar)
+						}
+						2 => {
+							$c = TableGvar.move_by($c, v, scalar)
+						}
+						3 => {
+							$d = TableGvar.move_by($d, v, scalar)
+						}
+						_ => {}
+					}
+				}
+			}
+			$done = $done + run
+			$at = $at + 1 + width * run
+		}
+		{ a: $a, b: $b, c: $c, d: $d, next: $at }
+	}
+
 	# ------------------------------------------------------------ locations
 
 	## The state of a location given normalised coordinates (F2Dot14, one
@@ -727,14 +883,15 @@ TableGvar := {
 				g = $next
 				kind = TableGlyfPoints.kind(glyf, g)
 				phantom_x = TableGlyfPoints.phantom_xs(glyf, g)
+				phantom_y = TableGlyfPoints.phantom_ys(glyf, g)
 				if kind == 1 {
 					p = TableGlyfPoints.simple_points(glyf, g)
-					moved = TableGvar.apply(gvar, loc, g, p.xs.concat(phantom_x), p.ys.concat([0, 0, 0, 0]), p.ends.concat([False, False, False, False]))
+					moved = TableGvar.apply(gvar, loc, g, p.xs.concat(phantom_x), p.ys.concat(phantom_y), p.ends.concat([False, False, False, False]))
 					$all_x = $all_x.concat(moved.xs)
 					$all_y = $all_y.concat(moved.ys)
 					$mode = 2
 				} else if kind == 0 {
-					moved = TableGvar.apply(gvar, loc, g, phantom_x, [0, 0, 0, 0], [False, False, False, False])
+					moved = TableGvar.apply(gvar, loc, g, phantom_x, phantom_y, [False, False, False, False])
 					$all_x = $all_x.concat(moved.xs)
 					$all_y = $all_y.concat(moved.ys)
 					$mode = 2
@@ -749,7 +906,7 @@ TableGvar := {
 						$oy = $oy.append(TableVar.f32_from_int(c.dy))
 						$at = c.next
 					}
-					moved = TableGvar.apply(gvar, loc, g, $ox.concat(phantom_x), $oy.concat([0, 0, 0, 0]), List.repeat(True, n).concat([False, False, False, False]))
+					moved = TableGvar.apply(gvar, loc, g, $ox.concat(phantom_x), $oy.concat(phantom_y), List.repeat(True, n).concat([False, False, False, False]))
 					$f_glyph = $f_glyph.append(g)
 					$f_base = $f_base.append($comp_x.len())
 					$f_record = $f_record.append(TableGlyfPoints.first_component(glyf, g))
@@ -1419,3 +1576,13 @@ expect TableGvar.f64_to_f32(TableGvar.f64_ratio(1, 3)) == 0x3EAAAAAB
 # Subnormal doubles: the smallest one, and halving it to zero.
 expect TableGvar.f64_mul(1, TableGvar.f64_ratio(1, 2)) == 0
 expect TableGvar.f64_mul(3, TableGvar.f64_ratio(1, 2)) == 2
+
+# Packed phantom decoding retains stream offsets and duplicate point order.
+expect {
+	d = TableGvar.phantom_values([5, 1, 2, 3, 4, 5, 6], 0, 6, [], 2, TableVar.f32_one)
+	[d.a, d.b, d.c, d.d] == [3, 4, 5, 6].map(TableVar.f32_from_int) and d.next == 7
+}
+expect {
+	d = TableGvar.phantom_values([3, 5, 6, 7, 8], 0, 4, [0, 2, 2, 3], 2, TableVar.f32_one)
+	[d.a, d.b, d.c, d.d] == [13, 8, 0, 0].map(TableVar.f32_from_int) and d.next == 5
+}

@@ -20,6 +20,7 @@ TableGlyfPoints := {
 	hmtx : List(U8),
 	# numberOfHMetrics, at least 1 after reading.
 	long_metrics : U64,
+	vertical : [Absent, Present({ advances : List(U16), bearings : List(I16) })],
 	# Glyph g's bytes are starts[g] up to starts[g + 1] in glyf.
 	starts : List(U64),
 	# Per glyph: 0 empty, 1 simple, 2 composite.
@@ -184,7 +185,7 @@ TableGlyfPoints := {
 			return Err($problems)
 		}
 		order = TableGlyfPoints.composite_order(glyf, $starts, $kinds)?
-		points = { glyf, hmtx, long_metrics, starts: $starts, kinds: $kinds, counts: $counts, order }
+		points = { glyf, hmtx, long_metrics, vertical: Absent, starts: $starts, kinds: $kinds, counts: $counts, order }
 		TableGlyfPoints.check_work(points, [])?
 		Ok(points)
 	}
@@ -521,6 +522,58 @@ TableGlyfPoints := {
 		if ((t.starts.get(g + 1) ?? 0) - start >= 10) TableVar.i16(t.glyf, start + 2) else 0
 	}
 
+	## Attach index-aligned, already decoded vertical metrics. The length
+	## check is part of preparation; successful later queries are total.
+	with_vertical : TableGlyfPoints, { advances : List(U16), bearings : List(I16) } -> Try(TableGlyfPoints, List(Problem))
+	with_vertical = |t, metrics| {
+		if metrics.advances.len() != t.kinds.len() or metrics.bearings.len() != t.kinds.len() {
+			Err([{ table: "vmtx", offset: 0, reason: GlyphCountMismatch }])
+		} else {
+			Ok({ ..t, vertical: Present(metrics) })
+		}
+	}
+
+	## The vertical phantom bases. Only meaningful with attached vmtx facts.
+	phantom_ys : TableGlyfPoints, U64 -> List(U32)
+	phantom_ys = |t, g| match t.vertical {
+		Absent => [0, 0, 0, 0]
+		Present(v) => {
+			start = t.starts.get(g) ?? 0
+			y_max = if ((t.starts.get(g + 1) ?? 0) - start >= 10) TableVar.i16(t.glyf, start + 8) else 0
+			top = y_max + (v.bearings.get(g) ?? 0).to_i64()
+			[0, 0, TableVar.f32_from_int(top), TableVar.f32_from_int(top - (v.advances.get(g) ?? 0).to_i64())]
+		}
+	}
+
+	## Last USE_MY_METRICS component, transitively. Phantoms are copied
+	## before component transforms, so no matrix or point decoding is needed.
+	metrics_source : TableGlyfPoints, U64 -> U64
+	metrics_source = |t, root| {
+		var $glyph = root
+		var $depth = 0.U64
+		while $depth <= TableGlyfPoints.depth_limit {
+			if TableGlyfPoints.kind(t, $glyph) != 2 {
+				return $glyph
+			}
+			var $at = TableGlyfPoints.first_component(t, $glyph)
+			var $child = $glyph
+			var $found = False
+			for _ in 0..<TableGlyfPoints.point_count(t, $glyph) {
+				if TableVar.u16(t.glyf, $at).bitwise_and(0x200) != 0 {
+					$child = TableVar.u16(t.glyf, $at + 2)
+					$found = True
+				}
+				$at = $at + TableGlyfPoints.record_size(t.glyf, $at)
+			}
+			if !$found {
+				return $glyph
+			}
+			$glyph = $child
+			$depth = $depth + 1
+		}
+		crash "a validated metrics component chain exceeded its depth bound"
+	}
+
 	## The four phantom points' x coordinates (left, right, top, bottom) as
 	## HarfBuzz places them before variations: the left one at xMin minus
 	## the side bearing, the right one an advance further. The vertical
@@ -695,7 +748,7 @@ numeric_envelope_fixture = |extreme| {
 		$glyf = $glyf.concat(bytes)
 		$starts = $starts.append($glyf.len())
 	}
-	{ glyf: $glyf, hmtx: [], long_metrics: 1, starts: $starts, kinds: [0, 1].concat(List.repeat(2, 63)), counts: [0, 4].concat(List.repeat(1, 63)), order: $order }
+	{ glyf: $glyf, hmtx: [], long_metrics: 1, vertical: Absent, starts: $starts, kinds: [0, 1].concat(List.repeat(2, 63)), counts: [0, 4].concat(List.repeat(1, 63)), order: $order }
 }
 
 ## fuzz regression: a one-child matrix chain can overflow binary32 even
