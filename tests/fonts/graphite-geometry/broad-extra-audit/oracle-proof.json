@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "engine_implementation_sources_used": false,
+  "release_tracing_bit_identical": 14,
+  "release_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 1
+  },
+  "tracing_oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 1
+  },
+  "records.json_sha256": "4393e6ba077ee699ab1f6838727e7476bd7d961ce829491a96cb7cbc276fc16b",
+  "traces.json_sha256": "3c1063f520ba50fefda394f1435a86494714ea8c6bc79f58d073ed87fb1f5014"
+}

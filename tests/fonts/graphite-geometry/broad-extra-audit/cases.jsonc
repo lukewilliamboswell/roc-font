@@ -1,0 +1,726 @@
+{
+  "schema": 1,
+  "about": "Independent margins, translated bounds and fractional-prior probes; no general predicate inferred.",
+  "cases": [
+    {
+      "id": "collision-broad-extra-margin50-distance1601",
+      "font": "broad-extra-audit/collision-broad-extra-margin50-distance1601.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin50-distance1601",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 1601,
+          "margin": 50
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          6,
+          65,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin50-distance1649",
+      "font": "broad-extra-audit/collision-broad-extra-margin50-distance1649.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin50-distance1649",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 1649,
+          "margin": 50
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          6,
+          113,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin50-distance1650",
+      "font": "broad-extra-audit/collision-broad-extra-margin50-distance1650.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin50-distance1650",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 1650,
+          "margin": 50
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          6,
+          114,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin50-distance1651",
+      "font": "broad-extra-audit/collision-broad-extra-margin50-distance1651.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin50-distance1651",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 1651,
+          "margin": 50
+        },
+        "boxes": {},
+        "expected_mode": "missed"
+      },
+      "programs": [
+        [
+          3,
+          6,
+          115,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin500-distance1601",
+      "font": "broad-extra-audit/collision-broad-extra-margin500-distance1601.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin500-distance1601",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 1601,
+          "margin": 500
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          6,
+          65,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin500-distance2099",
+      "font": "broad-extra-audit/collision-broad-extra-margin500-distance2099.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin500-distance2099",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 2099,
+          "margin": 500
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          8,
+          51,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin500-distance2100",
+      "font": "broad-extra-audit/collision-broad-extra-margin500-distance2100.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin500-distance2100",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 2100,
+          "margin": 500
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          8,
+          52,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-margin500-distance2101",
+      "font": "broad-extra-audit/collision-broad-extra-margin500-distance2101.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "margin500-distance2101",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 2101,
+          "margin": 500
+        },
+        "boxes": {},
+        "expected_mode": "missed"
+      },
+      "programs": [
+        [
+          3,
+          8,
+          53,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-both-box-offset2000",
+      "font": "broad-extra-audit/collision-broad-extra-both-box-offset2000.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "both-box-offset2000",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 100
+        },
+        "boxes": {
+          "1": [
+            2000,
+            2000,
+            2300,
+            2600
+          ],
+          "2": [
+            2000,
+            2000,
+            2300,
+            2600
+          ]
+        },
+        "expected_mode": "missed"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-both-box-offset-2000",
+      "font": "broad-extra-audit/collision-broad-extra-both-box-offset-2000.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "both-box-offset-2000",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 1,
+          "flags_b": 0,
+          "distance": 100
+        },
+        "boxes": {
+          "1": [
+            -2000,
+            -2000,
+            -1700,
+            -1400
+          ],
+          "2": [
+            -2000,
+            -2000,
+            -1700,
+            -1400
+          ]
+        },
+        "expected_mode": "missed"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-fractional-prior-distance-1600",
+      "font": "broad-extra-audit/collision-broad-extra-fractional-prior-distance-1600.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "fractional-prior-distance-1600",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 0,
+          "flags_b": 1,
+          "margin": 50,
+          "second_distance": -1600,
+          "second_bounds": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ]
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          249,
+          192,
+          35,
+          0,
+          25,
+          3,
+          252,
+          24,
+          35,
+          58,
+          3,
+          252,
+          24,
+          35,
+          59,
+          3,
+          3,
+          232,
+          35,
+          60,
+          3,
+          3,
+          232,
+          35,
+          61
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-fractional-prior-distance-1599",
+      "font": "broad-extra-audit/collision-broad-extra-fractional-prior-distance-1599.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "fractional-prior-distance-1599",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 0,
+          "flags_b": 1,
+          "margin": 50,
+          "second_distance": -1599,
+          "second_bounds": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ]
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          249,
+          193,
+          35,
+          0,
+          25,
+          3,
+          252,
+          24,
+          35,
+          58,
+          3,
+          252,
+          24,
+          35,
+          59,
+          3,
+          3,
+          232,
+          35,
+          60,
+          3,
+          3,
+          232,
+          35,
+          61
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-fractional-prior-distance1100",
+      "font": "broad-extra-audit/collision-broad-extra-fractional-prior-distance1100.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "fractional-prior-distance1100",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 0,
+          "flags_b": 1,
+          "margin": 50,
+          "second_distance": 1100,
+          "second_bounds": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ]
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          4,
+          76,
+          35,
+          0,
+          25,
+          3,
+          252,
+          24,
+          35,
+          58,
+          3,
+          252,
+          24,
+          35,
+          59,
+          3,
+          3,
+          232,
+          35,
+          60,
+          3,
+          3,
+          232,
+          35,
+          61
+        ]
+      ]
+    },
+    {
+      "id": "collision-broad-extra-fractional-prior-distance1101",
+      "font": "broad-extra-audit/collision-broad-extra-fractional-prior-distance1101.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "recipe": {
+        "name": "fractional-prior-distance1101",
+        "params": {
+          "pass_flags": 1,
+          "flags_a": 0,
+          "flags_b": 1,
+          "margin": 50,
+          "second_distance": 1101,
+          "second_bounds": [
+            -1000,
+            -1000,
+            1000,
+            1000
+          ]
+        },
+        "boxes": {},
+        "expected_mode": "full"
+      },
+      "programs": [
+        [
+          3,
+          0,
+          100,
+          35,
+          0,
+          25,
+          3,
+          0,
+          0,
+          35,
+          20,
+          3,
+          0,
+          0,
+          35,
+          21
+        ],
+        [
+          3,
+          4,
+          77,
+          35,
+          0,
+          25,
+          3,
+          252,
+          24,
+          35,
+          58,
+          3,
+          252,
+          24,
+          35,
+          59,
+          3,
+          3,
+          232,
+          35,
+          60,
+          3,
+          3,
+          232,
+          35,
+          61
+        ]
+      ]
+    }
+  ]
+}
