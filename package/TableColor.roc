@@ -68,7 +68,7 @@ TableColor := {
 	at_location : TableColor, List(I16) -> TableColor
 	at_location = |table, coords| {
 		scalars = match table.ctx.store {
-			Present(store) => TableVar.region_scalars(store, coords)
+			Present(store) => TableVar.region_scalars_precise(store, coords)
 			Absent => []
 		}
 		{ ..table, scalars }
@@ -511,6 +511,18 @@ TableColor := {
 				Err(ps) => return Err(ps.map(|p| p.offset))
 			}
 		}
+		if map_offset != 0 {
+			if !Bytes.fits(map_offset, 4, data.len()) {
+				return bad(26)
+			}
+			entry_format = Bytes.u8(data, map_offset + 1)
+			entry_size = entry_format.shr_zf_wrap(4).bitwise_and(3) + 1
+			inner_bits = entry_format.bitwise_and(15) + 1
+			if entry_format.bitwise_and(0xC0) != 0 or inner_bits > 8 * entry_size {
+				return bad(map_offset + 1)
+			}
+		}
+
 		map = if map_offset == 0 {
 			Absent
 		} else {
@@ -1118,3 +1130,62 @@ expect match TableColor.read([], 36, 3, 1) {
 	Ok(_) => False
 }
 expect TableColor.graph(TableColor.none, 1) == Absent
+
+# Checked offset changes exercise individual validation gates without
+# introducing a dependency on test-font files into the package bundle.
+color_changed : List(U8), U64, List(U8) -> List(U8)
+color_changed = |bytes, at, replacement| bytes.take_first(at).concat(replacement).concat(bytes.drop_first(at + replacement.len()))
+
+expect {
+	# ColorGlyph g11 -> g11 is a reference cycle, including through glyph IDs.
+	bad = color_changed(color_all_bytes, 405, [0, 11])
+	match TableColor.read(bad, 36, 3, 1) {
+		Err(_) => True
+		Ok(_) => False
+	}
+}
+expect {
+	# A child Offset24 may not be NULL even if a header at zero is readable.
+	bad = color_changed(color_all_bytes, 408, [0, 0, 0])
+	match TableColor.read(bad, 36, 3, 1) {
+		Err(_) => True
+		Ok(_) => False
+	}
+}
+expect {
+	# Palette entry3 is out of range for a three-entry palette.
+	bad = color_changed(color_all_bytes, 707, [0, 3])
+	match TableColor.read(bad, 36, 3, 1) {
+		Err(_) => True
+		Ok(_) => False
+	}
+}
+expect {
+	# Glyph clipping references the exact font's glyph count.
+	bad = color_changed(color_all_bytes, 704, [0, 36])
+	match TableColor.read(bad, 36, 3, 1) {
+		Err(_) => True
+		Ok(_) => False
+	}
+}
+expect {
+	# Reserved entryFormat bits and inner bits wider than entry bytes fail.
+	[195.U8, 15].all(
+		|entry| match TableColor.read(color_changed(color_map_bytes, 748, [entry]), 36, 3, 1) {
+			Err(_) => True
+			Ok(_) => False
+		},
+	)
+}
+expect {
+	var $safe = True
+	for n in 0..<color_all_bytes.len() {
+		match TableColor.read(color_all_bytes.take_first(n), 36, 3, 1) {
+			Err(_) => {}
+			Ok(_) => {
+				$safe = False
+			}
+		}
+	}
+	$safe
+}
