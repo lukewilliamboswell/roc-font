@@ -13,7 +13,7 @@ substitution chain, exercise GDEF-early zero-width marks without GPOS, and
 prove that a missing dotted-circle glyph does not substitute glyph zero.
 
 `generate_cases.py` authors the finite JSONC input matrix in
-`tests/cases/myanmar.jsonc`. It covers two real font families and the three
+adjacent `cases.jsonc`. It covers two real font families and the three
 original fonts, both directions, kinzi, stacks, medials, below-vowel mark
 classes, repeated pre-vowels and variation selectors, broken clusters,
 explicit/missing dotted circles, joiners, language selection and disabled
@@ -44,3 +44,7 @@ circuit, GDEF-based mark advance zeroing before GPOS, and no geometric
 fallback mark positioning. The `DFLT`, `latn` and old `mymr` selected script
 tags use the default model, matching HarfBuzz. The distinct `Qaag` Zawgyi
 encoding mode is not claimed by this modern Unicode model.
+
+The matrix stays outside global gating cases until exact native agreement
+proves the Myanmar model activation. Moving the data does not change any
+font bytes, expected result or reference key.

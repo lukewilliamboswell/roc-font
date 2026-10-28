@@ -19,7 +19,7 @@ texts=[
 ]
 cases=[]
 def add(id,font,text,**options):
- cases.append(dict(id=id,font=f'../fonts/shaping/myanmar/{font}',text=text,options=dict(script='Mymr',language='my',hb_options=['--show-flags'],**options),expected='oracle'))
+ cases.append(dict(id=id,font=font,text=text,options=dict(script='Mymr',language='my',hb_options=['--show-flags'],**options),expected='oracle'))
 for family,font in [('sans','NotoSansMyanmar-Regular.ttf'),('serif','NotoSerifMyanmar-Regular.ttf')]:
  for i,text in enumerate(texts):
   for direction in ['ltr','rtl']:add(f'{family}-text-{i:03}-{direction}',font,text,direction=direction)
@@ -27,7 +27,7 @@ for family,font in [('sans','NotoSansMyanmar-Regular.ttf'),('serif','NotoSerifMy
   for text_index,text in enumerate(['င်္ကြွှေိံ','မြန်မာ']):
    add(f'{family}-disable-{feature}-{text_index}',font,text,direction='ltr',features=[f'{feature}=0'])
  for language in ['shn','mnw','ksw','pwo','kht','en']:
-  cases.append(dict(id=f'{family}-language-{language}',font=f'../fonts/shaping/myanmar/{font}',text='ၵႂၢမ်းတႆး ဘာသာမန် ကညီကျိာ်',options=dict(script='Mymr',language=language,direction='ltr',hb_options=['--show-flags']),expected='oracle'))
+  cases.append(dict(id=f'{family}-language-{language}',font=font,text='ၵႂၢမ်းတႆး ဘာသာမန် ကညီကျိာ်',options=dict(script='Mymr',language=language,direction='ltr',hb_options=['--show-flags']),expected='oracle'))
 for family,font in [('sans','NotoSansMyanmar-Regular.ttf'),('serif','NotoSerifMyanmar-Regular.ttf')]:
  for i,text in enumerate(['င်္က','ကြေ','ကိံ','ေ','ြ','က္က','က\u200cေ','က\u200dေ','မြန်မာ','ကေ\ufe00ေ\ufe01','က'+'ေ'*256,'abc မြန်မာ']):
   for direction in ['ltr','rtl']:add(f'{family}-characters-{i}-{direction}',font,text,direction=direction,cluster_level=1)
@@ -39,5 +39,5 @@ for font in ['modern.ttf','legacy.ttf','no-circle.ttf']:
   for direction in ['ltr','rtl']:add(f'{stem}-{i}-{direction}',font,text,direction=direction)
  for feature in ['rphf','pref','blwf','pstf','pres','abvs','blws','psts']:
   add(f'{stem}-disable-{feature}',font,'ကေ',direction='ltr',features=[f'{feature}=0'])
-(ROOT/'tests/cases/myanmar.jsonc').write_text(json.dumps(dict(schema=1,about='Myanmar modern mym2 shaping in two unmodified real families: kinzi, stacks, medials, vowels, variation selectors, broken clusters, language features, joins, directions, long syllables and unsafe flags.',cases=cases),ensure_ascii=False,indent=2)+'\n')
+(HERE/'cases.jsonc').write_text(json.dumps(dict(schema=1,about='Myanmar modern mym2 shaping in two unmodified real families: kinzi, stacks, medials, vowels, variation selectors, broken clusters, language features, joins, directions, long syllables and unsafe flags.',cases=cases),ensure_ascii=False,indent=2)+'\n')
 print(len(cases),'Myanmar cases')
