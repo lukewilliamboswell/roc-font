@@ -23,10 +23,17 @@ SOURCES = {
     'vertical': 'bench/vertical/alloc.roc',
     'aat-position': 'bench/aat-position/alloc.roc',
     'aat-morx': 'bench/aat-morx/alloc.roc',
+    'aat-mort': 'tests/fonts/aat-mort/alloc.roc',
+    'graphite-read': 'tests/fonts/graphite/read_alloc.roc',
 }
 
 def cases():
     """The exact inputs used by the independently referenced benchmarks."""
+    for size in [16, 64, 192]:
+        for mode, operation in enumerate(['read', 'shape']):
+            yield 'aat-mort', f'aat-mort/{operation}/{size}', f'tests/fonts/aat-mort/scaling-{size}.ttf', bytes([mode, size // 256, size % 256])
+    for size in [64, 256, 1024]:
+        yield 'graphite-read', f'graphite-read/shared/{size}', f'tests/fonts/graphite/overlap-{size}.ttf', b''
     for kind in ['lines', 'blends']:
         for size in [16, 64, 256]:
             path = f'tests/fonts/cff/{kind}-{size}-cff{1 if kind == "lines" else 2}.otf'
@@ -96,7 +103,7 @@ def main():
                 done = subprocess.run([str(binary), 'replay', str(file)], capture_output=True, text=True, timeout=120)
                 output = done.stdout + done.stderr
                 diagnostic = re.search(r'ALLOCATION_DIAGNOSTIC allocations=(\d+)(?: leaked=(\d+))?.*?checksum=([^\s]+)', output)
-                if done.returncode != 77 or diagnostic is None or (group != 'cff' and diagnostic[2] is None):
+                if done.returncode != 77 or diagnostic is None or (group not in ('cff', 'aat-mort') and diagnostic[2] is None):
                     failures.append(f'{key}: invalid diagnostic (exit {done.returncode})\n{output[-2000:]}')
                     continue
                 # The CFF transport traps a leak before emitting its marker;

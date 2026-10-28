@@ -961,6 +961,9 @@ Font :: { face : Face }.{
 	## themselves. A one-for-one substitution of a ligature or of a glyph of
 	## a multiple substitution keeps its kind (the glyph still draws the
 	## same characters) and takes the later feature.
+	## Graphite font programs report `Substituted` or `Inserted` with an
+	## empty `feature`: their rules do not identify an OpenType feature tag.
+	## Their character associations are available through the run's clusters.
 	##
 	## Fonts often list one substitution under several features (`liga`
 	## and `clig` listing the same ligatures, say). It is credited to one of

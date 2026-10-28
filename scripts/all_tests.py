@@ -178,6 +178,8 @@ BENCH_APPS = (
     "bench/aat-position/bench.roc", "bench/aat-position/alloc.roc",
     "bench/aat-morx/bench.roc", "bench/aat-morx/alloc.roc",
     "tests/fonts/cff/bench.roc", "tests/fonts/cff/alloc.roc",
+    "tests/fonts/aat-mort/bench.roc", "tests/fonts/aat-mort/alloc.roc",
+    "tests/fonts/graphite/read_alloc.roc",
     "tests/fonts/complex/bench.roc", "tests/fonts/complex/alloc.roc",
 )
 

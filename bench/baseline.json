@@ -456,6 +456,48 @@
     "version": "Roc compiler version nightly-2026-10-27-de79a0f"
   },
   "feature_cases": {
+    "aat-mort/read/16": {
+      "allocations": 72,
+      "case_sha256": "a33f3c91308bcb76e47e457a106e94eee57c49b7de43ec556b2770af3022c19f",
+      "checksum": "257",
+      "font_sha256": "c6b8f71d24973f088de2e8a57fc8d0fe263ff76a94f64f1bc2e7108b52983b1b",
+      "leaked": 0
+    },
+    "aat-mort/read/192": {
+      "allocations": 255,
+      "case_sha256": "b24e26feff268f4cfa9cc9851b22275625a15617c150d055c2d23e1f09fde42d",
+      "checksum": "257",
+      "font_sha256": "8a62a289a22ec12cdbada9fa55a5592c22091802274e7a138e55f393e41983a4",
+      "leaked": 0
+    },
+    "aat-mort/read/64": {
+      "allocations": 124,
+      "case_sha256": "58e4745048bdf98a9d32e9bca76d0f2531b88b8494bce78653705cc2ca5f4216",
+      "checksum": "257",
+      "font_sha256": "b7623f98d76b8002a23e51b9a12ce75152e60b4ebe0e83c2a328bde02ab51a12",
+      "leaked": 0
+    },
+    "aat-mort/shape/16": {
+      "allocations": 15,
+      "case_sha256": "55e21fb4575f2432cdc72f19b96cb08976022ab652d0d3b0058b3817084b25b8",
+      "checksum": "9775",
+      "font_sha256": "c6b8f71d24973f088de2e8a57fc8d0fe263ff76a94f64f1bc2e7108b52983b1b",
+      "leaked": 0
+    },
+    "aat-mort/shape/192": {
+      "allocations": 14,
+      "case_sha256": "25bdff0c405917470e665addaac2df9c8081379d2e2290380747d6aaf56890c9",
+      "checksum": "134207",
+      "font_sha256": "8a62a289a22ec12cdbada9fa55a5592c22091802274e7a138e55f393e41983a4",
+      "leaked": 0
+    },
+    "aat-mort/shape/64": {
+      "allocations": 14,
+      "case_sha256": "b99209b9bf55fa64b48ccc66d0109bffd528ad57b4d6b4094f188b38c4d15450",
+      "checksum": "40639",
+      "font_sha256": "b7623f98d76b8002a23e51b9a12ce75152e60b4ebe0e83c2a328bde02ab51a12",
+      "leaked": 0
+    },
     "aat-morx/context/16": {
       "allocations": 14,
       "case_sha256": "5c26cae6ef83f545f4ec12cf018379cccd6163f36334a1deca1a1c2a14aeb0cf",
@@ -790,6 +832,27 @@
       "case_sha256": "728cffc1bd36666868931954287aace2c723205c9fe6a404e21a120466fe67da",
       "checksum": "3",
       "font_sha256": "dd21578b1e1a1890ecc98da83633e0b398444c6c51793624a500ee290efcdbc2",
+      "leaked": 0
+    },
+    "graphite-read/shared/1024": {
+      "allocations": 71,
+      "case_sha256": "c7230af371be1834ea0370d6f8f96c9873166f95bd75ea769b8e801d7d0ee074",
+      "checksum": "3",
+      "font_sha256": "c7230af371be1834ea0370d6f8f96c9873166f95bd75ea769b8e801d7d0ee074",
+      "leaked": 0
+    },
+    "graphite-read/shared/256": {
+      "allocations": 71,
+      "case_sha256": "605bc6af318fd89cd047256e4c5edb6677216bfab5cef294bb5e38e8af256560",
+      "checksum": "3",
+      "font_sha256": "605bc6af318fd89cd047256e4c5edb6677216bfab5cef294bb5e38e8af256560",
+      "leaked": 0
+    },
+    "graphite-read/shared/64": {
+      "allocations": 71,
+      "case_sha256": "a82174a15d85df8f5464f3738583b051feacd7066a7da3e83c6b74cc4037832e",
+      "checksum": "3",
+      "font_sha256": "a82174a15d85df8f5464f3738583b051feacd7066a7da3e83c6b74cc4037832e",
       "leaked": 0
     },
     "variation/all/4": {
