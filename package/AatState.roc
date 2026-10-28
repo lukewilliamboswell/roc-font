@@ -97,6 +97,56 @@ AatState := { classes : AatLookup, columns : U64, transitions : List(Entry) }.{
 
 	entries : AatState -> List(Entry)
 	entries = |machine| machine.transitions
+
+	## Original byte-indexed state tables. Raw next states are byte
+	## offsets into the state array; preparation turns them into row ids.
+	read_legacy : List(U8), U64, U64, U64 -> Try(AatState, [Bad(U64)])
+	read_legacy = |bytes, base, glyphs, extra_words| {
+		if extra_words > 2 or !Bytes.fits(base, 8, bytes.len()) {
+			return Err(Bad(base))
+		}
+		columns = Bytes.u16(bytes, base)
+		class_at = base + Bytes.u16(bytes, base + 2)
+		state_offset = Bytes.u16(bytes, base + 4)
+		states_at = base + state_offset
+		entries_at = base + Bytes.u16(bytes, base + 6)
+		if columns < 4 {
+			return Err(Bad(base))
+		}
+		classes = AatLookup.legacy_classes(bytes, class_at, 1)?
+		if !AatLookup.values_valid(classes, glyphs, columns, False) {
+			return Err(Bad(class_at))
+		}
+		entry_bytes = 4 + extra_words * 2
+		var $last = 1
+		var $state = 0
+		while $state <= $last {
+			row = states_at + $state * columns
+			if !Bytes.fits(row, columns, bytes.len()) {
+				return Err(Bad(row))
+			}
+			for c in 0..<columns {
+				entry_at = entries_at + Bytes.u8(bytes, row + c) * entry_bytes
+				if !Bytes.fits(entry_at, entry_bytes, bytes.len()) {
+					return Err(Bad(entry_at))
+				}
+				raw = Bytes.u16(bytes, entry_at)
+				if raw < state_offset or (raw - state_offset) % columns != 0 {
+					return Err(Bad(entry_at))
+				}
+				$last = $last.max((raw - state_offset) // columns)
+			}
+			$state = $state + 1
+		}
+		var $transitions = List.with_capacity(($last + 1) * columns)
+		for state in 0..<($last + 1) {
+			for c in 0..<columns {
+				entry_at = entries_at + Bytes.u8(bytes, states_at + state * columns + c) * entry_bytes
+				$transitions = $transitions.append({ next: (Bytes.u16(bytes, entry_at) - state_offset) // columns, flags: Bytes.u16(bytes, entry_at + 2), a: if (extra_words > 0) Bytes.u16(bytes, entry_at + 4) else 0, b: if (extra_words > 1) Bytes.u16(bytes, entry_at + 6) else 0 })
+			}
+		}
+		Ok({ classes, columns, transitions: $transitions })
+	}
 }
 
 expect {

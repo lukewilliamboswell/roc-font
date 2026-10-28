@@ -164,6 +164,25 @@ AatLookup := { ranges : List(Segment), values : List(U32) }.{
 		}
 		True
 	}
+
+	## The original AAT class array has first/count fields followed by
+	## byte or word classes, rather than an extended lookup header.
+	legacy_classes : List(U8), U64, U64 -> Try(AatLookup, [Bad(U64)])
+	legacy_classes = |bytes, at, width| {
+		if (width != 1 and width != 2) or !Bytes.fits(at, 4, bytes.len()) {
+			return Err(Bad(at))
+		}
+		first = Bytes.u16(bytes, at)
+		count = Bytes.u16(bytes, at + 2)
+		if first + count > 65536 or !Bytes.fits(at + 4, count * width, bytes.len()) {
+			return Err(Bad(at))
+		}
+		var $values = List.with_capacity(count)
+		for i in 0..<count {
+			$values = $values.append(AatLookup.number(bytes, at + 4 + i * width, width).to_u32_wrap())
+		}
+		Ok({ ranges: if (count == 0) [] else [{ first, last: first + count - 1, value: 0, array: True }], values: $values })
+	}
 }
 
 expect {
