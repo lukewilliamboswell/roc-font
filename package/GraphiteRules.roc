@@ -217,7 +217,7 @@ expect {
 expect {
 	a = rules_test([0x20.U8, 0x31], [1, 1, 2])
 	s = GraphiteSlots.get(a.state, a.state.first)
-	!a.aborted and a.stopped == 0 and a.state.active == 1 and s.glyph == 2 and s.before == 0 and s.after == 2
+	!a.aborted and a.stopped == 0 and a.state.active == 1 and s.glyph == 2 and s.before == 2 and s.after == 2
 }
 expect {
 	a = rules_test([0x1F.U8, 0x1C, 0, 0x19, 0x32], [1, 2])

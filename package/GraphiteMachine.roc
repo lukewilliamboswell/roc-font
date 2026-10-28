@@ -155,12 +155,6 @@ GraphiteMachine :: {}.{
 				$input = $input - 1
 			} else if op == 0x20 {
 				s = GraphiteSlots.get($state, $cursor)
-				following = GraphiteMachine.forward($state, $cursor, ctx.reverse)
-				neighbor = if (following != 0) following else GraphiteMachine.backward($state, $cursor, ctx.reverse)
-				if neighbor != 0 {
-					n = GraphiteSlots.get($state, neighbor)
-					$state = GraphiteSlots.set($state, neighbor, { ..n, before: n.before.min(s.before), after: n.after.max(s.after) })
-				}
 				$state = GraphiteSlots.delete($state, $cursor)
 				$cursor = if (ctx.reverse) s.next else s.previous
 			} else if op == 0x21 {
@@ -428,7 +422,7 @@ expect {
 expect {
 	a = machine_test([0x20, 0x19, 0x32], 100, 10)
 	s = GraphiteSlots.get(a.state, a.state.first)
-	!a.aborted and a.cursor == a.state.first and a.state.active == 1 and s.glyph == 2 and s.before == 0 and s.after == 1
+	!a.aborted and a.cursor == a.state.first and a.state.active == 1 and s.glyph == 2 and s.before == 1 and s.after == 1
 }
 expect {
 	a = machine_test([1, 5, 1, 0, 9, 0x23, 0, 0x32], 100, 10)

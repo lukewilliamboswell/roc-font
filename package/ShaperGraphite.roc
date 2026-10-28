@@ -10,6 +10,7 @@ import GraphiteMetrics
 import GraphitePosition
 import GraphiteCollision
 import GraphiteRun
+import GraphiteAssociations
 import TableVar
 import TableGraphite
 
@@ -136,6 +137,13 @@ ShaperGraphite := {
 			$state = prepared.state
 			$operations = $operations + prepared.operations
 			$stopped = $stopped.bitwise_or(prepared.stopped)
+		}
+		associated = GraphiteAssociations.complete($state, scalars.len(), budget - $operations)
+		$state = associated.state
+		$operations = $operations + associated.operations
+		$stopped = $stopped.bitwise_or(associated.stopped)
+		if associated.aborted {
+			return { run: GraphiteRun.empty.run, origins: [], stopped: $stopped, operations: $operations, abort: ProgramAbort }
 		}
 		placed = GraphitePosition.position($state, plan.rtl, budget - $operations)
 		$operations = $operations + placed.operations
