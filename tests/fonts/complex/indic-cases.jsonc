@@ -1,0 +1,2426 @@
+{
+  "schema": 1,
+  "about": "Devanagari exact HarfBuzz14.6 vertical slice in two real OFL families; staged outside gating cases until implemented.",
+  "cases": [
+    {
+      "id": "complexdevasans-0-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-0-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-1-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-1-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-2-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "की",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-2-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "की",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-3-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कु",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-3-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कु",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-4-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कू",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-4-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कू",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-5-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "के",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-5-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "के",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-6-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कै",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-6-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कै",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-7-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "को",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-7-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "को",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-8-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कौ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-8-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कौ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-9-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-9-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-10-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कः",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-10-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कः",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-11-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-11-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-12-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-12-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-13-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "त्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-13-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "त्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-14-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "त्रि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-14-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "त्रि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-15-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ज्ञ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-15-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ज्ञ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-16-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ज्ञि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-16-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ज्ञि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-17-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-17-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-18-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-18-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-19-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-19-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-20-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-20-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-21-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‍क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-21-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‍क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-22-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‌क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-22-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‌क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-23-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‍ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-23-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‍ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-24-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‌ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-24-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‌ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-25-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "न्‍द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-25-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "न्‍द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-26-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "न्‌द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-26-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "न्‌द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-27-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फ़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-27-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फ़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-28-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फ़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-28-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फ़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-29-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ऱ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-29-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ऱ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-30-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-30-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-31-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-31-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-32-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-32-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-33-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-33-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-34-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-34-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-35-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-35-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-36-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "िह",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-36-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "िह",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-37-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क़्‍षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-37-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क़्‍षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-38-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "हिन्दी",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-38-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "हिन्दी",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-39-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "संस्कृतम्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-39-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "संस्कृतम्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-40-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "श्रीमद्भगवद्गीता",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-40-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "श्रीमद्भगवद्गीता",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-41-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क ि क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-41-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क ि क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-42-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‍",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-42-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‍",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-43-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‌",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-43-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्‌",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-44-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फि्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-44-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "फि्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-45-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ट्‌यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-45-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ट्‌यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-46-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ट्‍यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-46-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "ट्‍यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-47-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्को्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-47-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "र्को्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-48-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‍षिं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-48-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क्‍षिं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-49-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क‌ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-49-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क‌ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-50-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क‍ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-50-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "क‍ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-51-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कि़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-51-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "कि़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-52-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "्ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-52-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "्ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-53-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "िि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-53-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "िि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-54-ltr",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किंँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevasans-54-rtl",
+      "font": "ComplexDevaSans.ttf",
+      "text": "किंँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-0-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-0-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-1-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-1-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-2-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "की",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-2-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "की",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-3-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कु",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-3-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कु",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-4-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कू",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-4-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कू",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-5-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "के",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-5-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "के",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-6-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कै",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-6-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कै",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-7-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "को",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-7-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "को",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-8-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कौ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-8-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कौ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-9-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-9-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-10-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कः",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-10-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कः",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-11-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-11-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-12-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-12-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-13-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "त्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-13-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "त्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-14-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "त्रि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-14-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "त्रि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-15-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ज्ञ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-15-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ज्ञ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-16-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ज्ञि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-16-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ज्ञि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-17-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-17-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्र",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-18-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-18-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-19-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-19-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्कि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-20-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-20-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-21-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‍क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-21-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‍क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-22-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‌क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-22-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‌क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-23-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‍ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-23-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‍ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-24-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‌ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-24-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‌ष",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-25-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "न्‍द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-25-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "न्‍द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-26-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "न्‌द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-26-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "न्‌द",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-27-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फ़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-27-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फ़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-28-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फ़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-28-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फ़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-29-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ऱ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-29-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ऱ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-30-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-30-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क़ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-31-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-31-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-32-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-32-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-33-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-33-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-34-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-34-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-35-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-35-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-36-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "िह",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-36-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "िह",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-37-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क़्‍षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-37-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क़्‍षि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-38-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "हिन्दी",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-38-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "हिन्दी",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-39-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "संस्कृतम्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-39-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "संस्कृतम्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-40-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "श्रीमद्भगवद्गीता",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-40-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "श्रीमद्भगवद्गीता",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-41-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क ि क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-41-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क ि क",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-42-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‍",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-42-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‍",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-43-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‌",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-43-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्‌",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-44-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फि्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-44-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "फि्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-45-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ट्‌यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-45-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ट्‌यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-46-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ट्‍यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-46-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "ट्‍यि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-47-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्को्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-47-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "र्को्",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-48-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‍षिं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-48-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क्‍षिं",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-49-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क‌ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-49-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क‌ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-50-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क‍ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-50-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "क‍ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-51-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कि़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-51-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "कि़",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-52-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "्ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-52-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "्ि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-53-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "िि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-53-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "िि",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-54-ltr",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किंँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "complexdevaserif-54-rtl",
+      "font": "ComplexDevaSerif.ttf",
+      "text": "किंँ",
+      "options": {
+        "script": "Deva",
+        "language": "hi",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    }
+  ]
+}

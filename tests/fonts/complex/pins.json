@@ -1,0 +1,51 @@
+{
+  "google_fonts_commit": "ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansdevanagari/NotoSansDevanagari%5Bwdth%2Cwght%5D.ttf",
+      "sha256": "14ec4af41f27482216d1c2229f417ff9b1425e1babb014e57d1d40d03229853e",
+      "size": 641944,
+      "file": "NotoSansDevanagari.ttf"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansdevanagari/OFL.txt",
+      "sha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331",
+      "size": 4386,
+      "file": "NotoSansDevanagari-OFL.txt"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifdevanagari/NotoSerifDevanagari%5Bwdth%2Cwght%5D.ttf",
+      "sha256": "1191e07bfeb062d80e252eb85b0eafdfbda1e350707a2a60628668e8f677dbbb",
+      "size": 757692,
+      "file": "NotoSerifDevanagari.ttf"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notoserifdevanagari/OFL.txt",
+      "sha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331",
+      "size": 4386,
+      "file": "NotoSerifDevanagari-OFL.txt"
+    }
+  ],
+  "subsets": [
+    {
+      "file": "ComplexDevaSans.ttf",
+      "sha256": "e5e2b029f1eaf71b4d7b53a8e3962a5ad21930208e82875049a6bf0fc3358a05",
+      "size": 171532,
+      "source_family": "NotoSansDevanagari",
+      "source_axes": {
+        "wght": 400,
+        "wdth": 100
+      }
+    },
+    {
+      "file": "ComplexDevaSerif.ttf",
+      "sha256": "7ea61a4bd62b16c49986ec5796936cbaf790649db1c2c94ef8c617e0aaa8950e",
+      "size": 179168,
+      "source_family": "NotoSerifDevanagari",
+      "source_axes": {
+        "wght": 400,
+        "wdth": 100
+      }
+    }
+  ]
+}
