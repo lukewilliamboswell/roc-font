@@ -1,0 +1,18 @@
+{
+  "cases": 4,
+  "release_tracing_public_bits_equal": true,
+  "release": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 1
+  },
+  "tracing": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "api": "public C ABI, gr_nobidi, native font direction",
+    "extractor": 1
+  }
+}

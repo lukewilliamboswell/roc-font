@@ -6,8 +6,8 @@ def sha(data):return hashlib.sha256(data).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');args=p.parse_args()
- cases=json.loads((HERE/'collision-box-cases.jsonc').read_text())['cases'];path=HERE/'collision-box-fonttools.json'
+ p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--cases',default='collision-box-cases.jsonc');p.add_argument('--output',default='collision-box-fonttools.json');args=p.parse_args()
+ cases=json.loads((HERE/args.cases).read_text())['cases'];path=HERE/args.output
  if args.check:
   saved=json.loads(path.read_text());records={r['id']:r for r in saved['records']}
   for case in cases:
