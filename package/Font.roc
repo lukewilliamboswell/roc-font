@@ -236,6 +236,19 @@ Font :: { face : Face }.{
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
+	## A glyph's vertical pen distance in font units, before choosing the
+	## run's direction. Uses vertical metrics when present; otherwise uses
+	## the font's ascent plus descent. A glyph id past the font gives zero.
+	vertical_advance : Font, U32 -> I32
+	vertical_advance = |font, id| Face.vertical_advance(font.face, Face.current(font.face), id.to_u64())
+
+	## Where a glyph's vertical baseline meets its horizontal baseline,
+	## in font units. Subtract this origin from a horizontal glyph's drawing
+	## position to place it on a vertical baseline. A glyph id past the font
+	## gives { x: 0, y: 0 }.
+	vertical_origin : Font, U32 -> { x : I32, y : I32 }
+	vertical_origin = |font, id| Face.vertical_origin(font.face, Face.current(font.face), id.to_u64())
+
 	## A glyph's bounding box (its ink), in font units, y up from the
 	## baseline: from `x_min` to `x_max` across and from `y_min` to `y_max`
 	## up. See `extents`.

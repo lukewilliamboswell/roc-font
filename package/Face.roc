@@ -21,6 +21,9 @@ import Sorted
 import TableMetadata
 import TableCaret
 import TableOutline
+import TableVhea
+import TableVmtx
+import TableVorg
 import TableMath
 import TableColorImages
 import TablePalette
@@ -64,6 +67,10 @@ Face := {
 	units_per_em : U16,
 	glyph_count : U64,
 	advances : List(U16),
+	vhea : [Present(TableVhea.Header), Absent],
+	v_advances : List(U16),
+	v_bearings : List(I16),
+	vorg : [Present(TableVorg), Absent],
 	boxes : List(TableGlyf.Bounds),
 	# Whether the font has TrueType outlines (`glyf` and `loca`), so that
 	# `boxes` measure every glyph.
@@ -184,6 +191,10 @@ Face := {
 				boxes = TableGlyf.from_tables(bytes, tables, h.long_offsets, glyph_count, hh.metric_count)
 				$required = Face.collect($required, advances)
 				$required = Face.collect($required, boxes)
+				vertical = Face.read_vertical(bytes, tables, glyph_count)
+				$optional = $optional.concat(vertical.problems)
+				vorg = TableVorg.from_tables(bytes, tables, glyph_count)
+				$optional = Face.collect($optional, vorg)
 				# Every glyph's outline is checked as OTS checks it (flags,
 				# instruction lengths, coordinates, composites), whether or not
 				# the font varies: a broken `glyf` rejects the font. The points
@@ -421,6 +432,10 @@ Face := {
 								units_per_em: h.units_per_em,
 								glyph_count,
 								advances: a,
+								vhea: vertical.header,
+								v_advances: vertical.advances,
+								v_bearings: vertical.bearings,
+								vorg: vorg ?? Absent,
 								boxes: b,
 								has_glyf: tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x6C6F6361),
 								cmap: c,
@@ -907,6 +922,67 @@ Face := {
 
 	code_points : Face -> List(U32)
 	code_points = |face| TableCmap.code_points(face.cmap, face.glyph_count)
+
+	## Validate the optional vertical metric pair as one usable unit. A
+	## missing dependency is reported, never supplied by repairing bytes.
+	read_vertical : List(U8), List(Sfnt.Table), U64 -> { header : [Present(TableVhea.Header), Absent], advances : List(U16), bearings : List(I16), problems : List(Problem) }
+	read_vertical = |bytes, tables, glyphs| {
+		none = { header: Absent, advances: [], bearings: [], problems: [] }
+		header = TableVhea.from_tables(bytes, tables)
+		match header {
+			Err(problem) => { ..none, problems: [problem] }
+			Ok(Absent) => if (tables.any(|t| t.tag == 0x766D7478)) { ..none, problems: [MissingTable("vhea")] } else none
+			Ok(Present(h)) => match TableVmtx.from_tables(bytes, tables, h.metric_count, glyphs) {
+				Err(problem) => { ..none, problems: [problem] }
+				Ok(m) => { header: Present(h), advances: m.advances, bearings: m.bearings, problems: [] }
+			}
+		}
+	}
+
+	## Positive vertical pen distance. Without vertical metrics, synthesize
+	## it from horizontal font extents, as the OpenType reference does.
+	vertical_advance : Face, Location, U64 -> I32
+	vertical_advance = |face, loc, id| {
+		if id >= face.glyph_count {
+			return 0
+		}
+		match face.v_advances.get(id) {
+			Ok(advance) => advance.to_i32()
+			Err(_) => {
+				m = Face.metrics(face, loc)
+				(m.ascent.to_i64() + m.descent.to_i64()).max(-2147483648).min(2147483647).to_i32_wrap()
+			}
+		}
+	}
+
+	## Origin relative to the horizontal baseline. OpenType VORG applies
+	## to CFF/CFF2; TrueType uses its top bearing and outline instead.
+	vertical_origin : Face, Location, U64 -> { x : I32, y : I32 }
+	vertical_origin = |face, loc, id| {
+		if id >= face.glyph_count {
+			return { x: 0, y: 0 }
+		}
+		x = Face.advance(face, loc, id) // 2
+		if !face.has_glyf {
+			match face.vorg {
+				Present(v) => return { x, y: TableVorg.origin(v, id) }
+				Absent => {}
+			}
+		}
+		located_face = { ..face, location: loc }
+		y = match Face.extents(located_face, id) {
+			Extents(box) => match face.v_bearings.get(id) {
+				Ok(bearing) if face.has_glyf => box.y_max.to_i64() + bearing.to_i64()
+				_ => {
+					remaining = Face.vertical_advance(face, loc, id).to_i64() - (box.y_max.to_i64() - box.y_min.to_i64())
+					# Arithmetic shift gives floor division for a negative odd gap.
+					box.y_max.to_i64() + remaining.shr_wrap(1)
+				}
+			}
+			Empty | Unknown => Face.metrics(face, loc).ascent.to_i64()
+		}
+		{ x, y: y.max(-2147483648).min(2147483647).to_i32_wrap() }
+	}
 
 	## A glyph's advance at a location: `hmtx`, plus the `HVAR` delta away
 	## from the default location. Past the font: 0, as HarfBuzz.
