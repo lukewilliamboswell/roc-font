@@ -972,8 +972,10 @@ LayoutPosition := {
 
 	## Propagate the advance-direction offsets after all lookups and mark
 	## zeroing. Cross offsets of marks are captured when they attach, while
-	## cursive cross offsets follow their parent at the end. Prefix sums make
-	## distances constant time; iterative traversal follows the reference nesting cap.
+	## cursive cross offsets follow their parent at the end. Monotone
+	## advances use prefix sums; mixed signs use an ordered saturation tree
+	## to retain each operation without quadratic rescans. Traversal follows
+	## the reference nesting cap.
 	resolve : State, Bool -> State
 	resolve = |state, backward| {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state

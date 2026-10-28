@@ -870,6 +870,9 @@ Font :: { face : Face }.{
 	##   again) and `is_missing` (bit 1: glyph 0 drawn for a character the
 	##   font does not map, where a browser would fall back to another font).
 	##
+	## Positions use signed 32-bit font units. GPOS adjustments saturate
+	## each addition and subtraction at that range, before later corrections.
+	## Anchor conversions outside the range are held at its limits.
 	## `cluster_ranges` gives the part of the text each glyph draws.
 	##
 	## What every run guarantees (for `shape_scalars`, when the offsets

@@ -739,6 +739,17 @@ origins retained. Image codecs, scaling and painting stay outside the
 package. The licensed emoji consumers exercise ZWJ and variation-selector
 shaping followed by paint/outline or bitmap queries.
 
+*Position numerical order.* GPOS positions occupy a signed 32-bit domain.
+Stored value fields and variation/device corrections apply as separate
+saturating operations, in table order. Anchor arithmetic retains the
+reference's binary32 addition, subtraction and half-up rounding. Conversion
+of an out-of-range anchor is explicitly saturated; the reference's plain
+float-to-integer cast has no portable result there. Attachment links follow
+the reference's signed 16-bit relative-distance limits and propagation cap.
+Monotone advance ranges use wide prefix sums. Mixed signs use a flat ordered
+saturation tree, preserving per-advance rounding bounds in logarithmic time
+rather than rescanning long ranges quadratically.
+
 *PDF and inspection.* Raw-table queries retain original bytes and directory
 order, including tables the shaping pipeline does not interpret. Names,
 embedding flags, stored bounds/header metrics and stored left-side
