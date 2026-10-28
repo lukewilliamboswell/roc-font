@@ -1,0 +1,42 @@
+{
+  "bundle": "GwoM5RRgKJd6AMePj3KvZnEVytwXabDcWwTqToJtsFRx.tar.zst",
+  "roc": "nightly-macos_apple_silicon-2026-10-27-de79a0f",
+  "source_tests": {
+    "TableVar_import_closure": 58,
+    "TableGvar_import_closure": 96
+  },
+  "public_expects": 41,
+  "source_sentinel": true,
+  "native_cached_HB_cases": 139,
+  "native_repeated_output_identical": true,
+  "independent_freetype_metric_cases": 61,
+  "fixtures_reproducible_byte_for_byte": true,
+  "OTS_9_3": {
+    "retained_all_tables": 33,
+    "malformed_fvar_explicitly_discarded": [
+      "axes-invalid-instance.ttf"
+    ]
+  },
+  "fuzz": {
+    "outcome": "passed",
+    "duration_ms": 2962,
+    "libfuzzer": {
+      "coverage_kind": "sanitizer_edge_feedback",
+      "executed_units": 1000,
+      "average_exec_per_sec": 500,
+      "new_units_added": 85,
+      "slowest_unit_time_sec": 0,
+      "peak_rss_mb": 44,
+      "coverage_edges": 3996,
+      "coverage_features": 10056
+    }
+  },
+  "fuzz_binary_sha256": "becd7e1a2118b2292d2596ae658f7e1a178670fb6a9947c8a4c42b790def4edd",
+  "fuzz_source_sha256": "23ed790e664a381bc830b5792597a63ef827660b45ea73e30203bb9700b13d65",
+  "fuzz_seed_manifest_sha256": "fff055afbd444b9cf4c408db83ff57a9ed195dc5377ad1069fdc22fb15ba133c",
+  "notes": [
+    "Public API and optimized fuzz/timing/allocation consumers compiled from source-sentinel mirror with explicit served-bundle replacement.",
+    "Native query originally compiled explicitly against the same immutable bundle; cached139 cases replay without reference libraries.",
+    "The integration owner runs whole-package docs/bundle/default-font-only/full-suite gates; these are focused feature results."
+  ]
+}
