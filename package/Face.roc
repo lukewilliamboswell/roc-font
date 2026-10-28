@@ -25,6 +25,7 @@ import TableVhea
 import TableVmtx
 import TableVorg
 import TableVvar
+import AatMorx
 import TableMath
 import TableColorImages
 import TablePalette
@@ -82,6 +83,7 @@ Face := {
 	post : TablePost,
 	name : TableName,
 	gsub : LayoutGsub,
+	aat : [Present(AatMorx), Absent],
 	gdef : LayoutGdef,
 	kerning : LayoutKerning,
 	space : [Present(TableVar), Absent],
@@ -198,6 +200,20 @@ Face := {
 				$optional = $optional.concat(vertical.problems)
 				vorg = TableVorg.from_tables(bytes, tables, glyph_count)
 				$optional = Face.collect($optional, vorg)
+				aat = match Sfnt.located(bytes, tables, "morx", 8) {
+					Missing => Absent
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("morx", at))
+						Absent
+					}
+					Found(found) => match AatMorx.read(found.data, glyph_count) {
+						Ok(value) => Present(value)
+						Err(Bad(at)) => {
+							$optional = $optional.append(Sfnt.bad("morx", found.offset + at))
+							Absent
+						}
+					}
+				}
 				# Every glyph's outline is checked as OTS checks it (flags,
 				# instruction lengths, coordinates, composites), whether or not
 				# the font varies: a broken `glyf` rejects the font. The points
@@ -447,6 +463,7 @@ Face := {
 								post: Face.present(post ?? Absent, TablePost.none),
 								name: Face.present(name ?? Absent, TableName.none),
 								gsub: LayoutGsub.with_gdef(gsub ?? LayoutGsub.none, gdef),
+								aat,
 								gdef,
 								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
 								space: if (keep_variations) variations.space else Absent,
