@@ -305,7 +305,18 @@ ShaperNormalize :: {}.{
 	## Script-specific mark ordering runs after canonical ordering and before
 	## recomposition. The ordinary normalization path supplies the identity.
 	normalize_with_marks : Context, List(Char), (List(Char) -> List(Char)) -> { chars : List(Char), space_fallback : Bool }
-	normalize_with_marks = |ctx, chars, order_marks| {
+	normalize_with_marks = |ctx, chars, order_marks| ShaperNormalize.normalize_mode(ctx, chars, order_marks, False)
+
+	## The reference's NONE normalization mode: nominal mappings short
+	## circuit decomposition even in a mark cluster, and there is no final
+	## recomposition. Unmapped characters still get canonical decomposition
+	## and the ordinary space/variation-selector fallbacks; marks still get
+	## canonical ordering. This preserves a script shaper's Hangul choices.
+	normalize_short_circuit : Context, List(Char) -> { chars : List(Char), space_fallback : Bool }
+	normalize_short_circuit = |ctx, chars| ShaperNormalize.normalize_mode(ctx, chars, |marks| marks, True)
+
+	normalize_mode : Context, List(Char), (List(Char) -> List(Char)), Bool -> { chars : List(Char), space_fallback : Bool }
+	normalize_mode = |ctx, chars, order_marks, short_circuit| {
 		count = chars.len()
 		if count == 0 {
 			return { chars, space_fallback: False }
@@ -344,7 +355,7 @@ ShaperNormalize :: {}.{
 					$out = ShaperNormalize.variation_cluster(ctx, cluster, $out)
 				} else {
 					for c in cluster {
-						{ out, space } = ShaperNormalize.decompose_current(ctx, c, False, $out)
+						{ out, space } = ShaperNormalize.decompose_current(ctx, c, short_circuit, $out)
 						$out = out
 						$space = $space or space
 					}
@@ -362,7 +373,7 @@ ShaperNormalize :: {}.{
 		reordered = ShaperNormalize.reorder(ctx, $out)
 		unhidden = ShaperNormalize.unhide_joiners(order_marks(reordered))
 		# Third round: recompose.
-		{ chars: ShaperNormalize.recompose(ctx, unhidden), space_fallback: $space }
+		{ chars: if (short_circuit) unhidden else ShaperNormalize.recompose(ctx, unhidden), space_fallback: $space }
 	}
 
 	## HarfBuzz's `decompose_current_character`.
