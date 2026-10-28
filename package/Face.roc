@@ -659,7 +659,6 @@ Face := {
 					Ok(axes_only) => {
 						axes = TableVar.axis_total(axes_only)
 						avar = match Sfnt.located(bytes, tables, "avar", 0) {
-							Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => Unusable(Sfnt.bad("avar", found.offset))
 							Found(found) =>
 								match TableVar.read_avar(found.data, axes) {
 									Ok(maps) => Maps(maps)
@@ -669,7 +668,7 @@ Face := {
 							Missing => Identity
 						}
 						space = match avar {
-							Maps(maps) => { ..axes_only, map_starts: maps.starts, map_from: maps.from, map_to: maps.to }
+							Maps(maps) => TableVar.with_avar(axes_only, maps)
 							_ => axes_only
 						}
 						avar_problems = match avar {
@@ -703,16 +702,13 @@ Face := {
 							}
 							_ => Ok(Absent)
 						}
-						unusable = match avar {
-							Unusable(p) => [p]
-							_ => []
-						}
+
 						vvar = match Sfnt.located(bytes, tables, "VVAR", 0) {
 							Missing => Ok(Absent)
 							Bad(at) => Err([Sfnt.bad("VVAR", at)])
 							Found(found) => TableVvar.read(found.data, axes, glyph_count).map_ok(|value| Present(value)).map_err(placed)
 						}
-						problems = unusable.concat(Face.collect_all(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), vvar), mvar), outlines))
+						problems = Face.collect_all(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), vvar), mvar), outlines)
 						if problems.is_empty() {
 							{ space: Present(space), hvar: hvar ?? Absent, vvar: vvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
 						} else {
