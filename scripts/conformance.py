@@ -117,6 +117,12 @@ EXTERNAL_CASES = (
     ROOT / "tests/fonts/shaping/tibetan/tibetan-cases.jsonc",
     ROOT / "tests/fonts/shaping/use-sinhala/sinhala-cases.jsonc",
     ROOT / "tests/fonts/shaping/use-joining/joining-cases.jsonc",
+    ROOT / "tests/fonts/shaping/arabic-extra/extra-cases.jsonc",
+    ROOT / "tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc",
+    ROOT / "tests/fonts/shaping/arabic-fallback/windows-cases.jsonc",
+    ROOT / "tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc",
+    ROOT / "tests/fonts/shaping/thai-legacy/long-cases.jsonc",
+    ROOT / "tests/fonts/positioning/attachment-caps/attachment-cases.jsonc",
 )
 SCORES = ROOT / "tests" / "scores.json"
 SCORES_ABOUT = (
