@@ -1,0 +1,46 @@
+{
+  "label": "khmer-before",
+  "measurement_git": "83a3714ccb09d6751cc7bb5a3761f0e6fa8dd788",
+  "source_git": "a623269f32e5c9dd0134e99966d874f80db3cd54",
+  "bundle": "2eBwVEXwhaSTGUc57PkHQXa8dT6VbrZrm8Ny9wcj1Acy.tar.zst",
+  "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "hb": "14.6.0",
+  "font_sha256": "1e61d1989e790049dacfaea81aa20aa083a3b483f625b9744bb413815aeb34b4",
+  "rows": [
+    {
+      "copies": 16,
+      "utf8_bytes": 720,
+      "scalar_count": 272,
+      "allocations": 905,
+      "leaked": 0,
+      "roc_seconds": 0.0026096787109375,
+      "hb_seconds": 6.61328125e-05,
+      "roc_to_hb_ratio": 39.46117838157117
+    },
+    {
+      "copies": 64,
+      "utf8_bytes": 2880,
+      "scalar_count": 1088,
+      "allocations": 3545,
+      "leaked": 0,
+      "roc_seconds": 0.0146859954453125,
+      "hb_seconds": 0.0002343515625,
+      "roc_to_hb_ratio": 62.66651388472181
+    },
+    {
+      "copies": 256,
+      "utf8_bytes": 11520,
+      "scalar_count": 4352,
+      "allocations": 14105,
+      "leaked": 0,
+      "roc_seconds": 0.0838678499375,
+      "hb_seconds": 0.0009800625,
+      "roc_to_hb_ratio": 85.57398118742427
+    }
+  ],
+  "notes": [
+    "Native loops, font reading/planning excluded;128 iterations and five samples per size.",
+    "Before model activation generic shaping differs from HB; ratios compare cost on identical inputs. After-model correctness is established separately by the cached oracle matrix.",
+    "roc-fuzz0.4.3 exposes allocation call counts and live allocation count only; requested bytes and peak live bytes unavailable."
+  ]
+}
