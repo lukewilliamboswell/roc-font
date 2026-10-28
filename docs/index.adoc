@@ -50,9 +50,10 @@ roc-font returns:
 * the glyphs of a run after the font's default substitutions, with
   clusters pointing back into your text, and the kerning between them.
 
-Every result is in font units. Divide by the font's units per em and
-multiply by the font size to get the size you draw at; rounding to a pixel
-grid is yours to choose, because every renderer rounds differently.
+Shaped positions and outline coordinates are in font units. Divide by the
+font's units per em and multiply by the font size to get drawing coordinates.
+Embedded bitmap placement uses native strike pixels; its API names that
+unit explicitly. Scaling and rounding belong to the consumer.
 
 Reading is the only step that can fail. Font bytes are treated as
 untrusted: a file that cannot be used is reported with every problem
@@ -141,6 +142,28 @@ the text with a byte range, and pick stylistic alternates (`salt`).
 |Shape Hebrew right to left: glyphs come in visual order with clusters
 counting down, brackets mirror, and a flag marks each character the font
 cannot draw, where a program would switch to a fallback font.
+
+|`complex-shaping.roc`
+|Read a caller's font and shape a script run, retaining original byte
+clusters, positioned glyphs and work-limit reports.
+
+|`positioning.roc`
+|Query a complete positioned run, including stacked marks and ligatures.
+
+|`math.roc`
+|Inspect a caller's math font: fraction constants, script sizes, delimiter
+variants and repeatable assembly parts. Mathematical layout stays downstream.
+
+|`glyph-svg.roc`
+|Turn public TrueType path commands into a complete SVG document.
+
+|`font-metadata.roc`
+|Read names, embedding flags, stored metrics and original table bytes for a
+PDF or inspection consumer.
+
+|`color.roc`, `color-images.roc`
+|Read a caller's colour font: palettes and paint graphs, or encoded bitmap
+payloads and native strike placement. Image decoding and drawing stay downstream.
 |===
 
 Run one from a checkout with `roc examples/shape.roc`. Each release also
@@ -164,8 +187,12 @@ explain the design and each kind of test:
 * <<the-default-fonts>> records which fonts roc-font ships, their licences
   and provenance.
 * <<variable-fonts-in-roc-font>> scopes variable-font support.
+* <<shaping-models-and-evidence>> records script selection, tested families
+  and remaining limitations.
 
 include::architecture.adoc[leveloffset=+1]
+
+include::shaping-support.adoc[leveloffset=+1]
 
 include::conformance.adoc[leveloffset=+1]
 

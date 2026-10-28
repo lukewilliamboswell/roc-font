@@ -767,7 +767,7 @@ Arabic/Syriac, Hebrew, Thai/Lao, Hangul, Indic, Khmer, Myanmar and Universal
 Shaping Engine models plug script-specific preparation, feature stages and
 reordering into this pipeline. The font's selected script table participates
 in model selection, following the pinned reference.
-link:shaping-support.adoc[The shaping support matrix] distinguishes model
+<<shaping-models-and-evidence,The shaping support matrix>> distinguishes model
 selection from the scripts and font families covered by recorded oracles.
 
 === 6.2 Behaviour browsers have that GSUB does not express
