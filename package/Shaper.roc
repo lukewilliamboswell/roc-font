@@ -344,13 +344,17 @@ Shaper :: {}.{
 		} else False
 		hebrew = !aat and !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
 		chosen_script = LayoutCommon.select_script_tag(gsub_common, script_tags)
-		indic = !aat and Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
-		use_model = !aat and ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script)
-		myanmar = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")
+		original_indic = Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3'
+		original_use = ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script)
+		original_myanmar = ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")
+		original_arabic = !vertical and (ShaperTags.script_of(options.script) == Shaper.tag("Arab") or (ShaperTags.script_of(options.script) == Shaper.tag("Syrc") and chosen_script != Shaper.tag("DFLT")))
+		indic = !aat and original_indic
+		use_model = !aat and original_use
+		myanmar = !aat and original_myanmar
 		khmer = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Khmr")
 		hangul = !aat and ShaperTags.script_of(options.script) == Shaper.tag("Hang")
 		syriac = ShaperTags.script_of(options.script) == Shaper.tag("Syrc")
-		arabic = !aat and (ShaperTags.script_of(options.script) == Shaper.tag("Arab") or (ShaperTags.script_of(options.script) == Shaper.tag("Syrc") and chosen_script != Shaper.tag("DFLT")))
+		arabic = !aat and original_arabic
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if vertical {
@@ -509,11 +513,11 @@ Shaper :: {}.{
 			Err(_) => False
 		}
 		apply_kerx = prefer_kerx or (has_kerx and (!has_gpos_kern or !apply_gpos))
-		aat_dumber = aat and (["Hebr", "Arab", "Syrc", "Hang", "Thai", "Laoo", "Khmr", "Mymr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) or ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script))
+		aat_dumber = aat and (["Hebr", "Hang", "Thai", "Laoo", "Khmr"].map(Shaper.tag).contains(ShaperTags.script_of(options.script)) or original_arabic or original_indic or original_use or original_myanmar)
 		# The reference saves the original script's fallback policy before
 		# replacing its substitution model for Apple programs. In particular,
 		# Hebrew still positions marks when morx supplies no positioning.
-		fallback_position = !ShaperUse.selected(ShaperTags.script_of(options.script), chosen_script) and !(Shaper.indic_scripts.contains(ShaperTags.script_of(options.script)) and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script.bitwise_and(0xFF) != '3') and !(ShaperTags.script_of(options.script) == Shaper.tag("Mymr") and chosen_script != Shaper.tag("DFLT") and chosen_script != Shaper.tag("latn") and chosen_script != Shaper.tag("mymr")) and !["Khmr", "Thai", "Laoo"].map(Shaper.tag).contains(ShaperTags.script_of(options.script))
+		fallback_position = !original_use and !original_indic and !original_myanmar and !["Khmr", "Thai", "Laoo"].map(Shaper.tag).contains(ShaperTags.script_of(options.script))
 		apply_kern = !apply_kerx and fallback_position and (!has_gpos_kern or !apply_gpos) and TableAatKern.has_data(face.aat_kern) and (options.use_font_programs or Bytes.u32(face.aat_kern.bytes, 0) != 0x00010000)
 		kern = NoKern
 		gpos_steps =
