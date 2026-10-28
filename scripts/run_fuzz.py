@@ -241,10 +241,10 @@ TARGETS: dict[str, TargetConfig] = {
         seeds=FUZZ_ROOT / "seeds" / "font-position-context.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
-        max_input_size=96,
+        max_input_size=1048576,
         timeout=10,
         contract="GPOS contextual record fanout, nested order, ignored inputs and resource bounds: deterministic aligned runs, exact work limits, flat allocation scaling and no leaks",
-        font_files=False,
+        font_files=True,
     ),
     "font-arabic-stretch": TargetConfig(
         sources=(FUZZ_ROOT / "font-arabic-stretch.roc",),
