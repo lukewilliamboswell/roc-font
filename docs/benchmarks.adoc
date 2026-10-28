@@ -148,7 +148,7 @@ time and allocations (architecture §9.4).
 
 == Allocation ratchet
 
-`bench/roc/alloc.roc` is a roc-fuzz app built with `roc build --fuzz`. It
+`bench/roc/alloc.roc` is a roc-fuzz app built with `roc build --fuzz --opt=speed`. It
 replays one case file, runs the operation once inside
 `Fuzz.measure_allocs!`, and crashes on purpose to print its counts, so exit
 code 77 is the expected result:
