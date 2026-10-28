@@ -58,14 +58,17 @@ GraphitePosition :: {}.{
 	# Nonzero levels address the root's composite, with each attachment edge
 	# selecting descendants at or below the requested unsigned8 level.
 	metric : GraphiteSlots, U64, U64, I32, Bool, U64, (U64, U64, I32 -> I32) -> Metric
-	metric = |input, id, wanted, level, rtl, budget, base_metric| {
+	metric = |input, id, wanted, level, rtl, budget, base_metric| GraphitePosition.metric_for_font(input, id, wanted, level, rtl, rtl, budget, base_metric)
+
+	metric_for_font : GraphiteSlots, U64, U64, I32, Bool, Bool, U64, (U64, U64, I32 -> I32) -> Metric
+	metric_for_font = |input, id, wanted, level, rtl, native_rtl, budget, base_metric| {
 		if !GraphiteSlots.valid(input, id) {
 			return { state: input, value: 0, operations: 0, stopped: 0 }
 		}
 		if level == 0 {
 			return { value: base_metric(GraphiteSlots.get(input, id).glyph, wanted, 0), state: input, operations: 0, stopped: 0 }
 		}
-		prepared = GraphitePosition.position(input, rtl, budget)
+		prepared = GraphitePosition.position_for_font(input, rtl, native_rtl, budget)
 		var $operations = prepared.operations
 		if prepared.stopped != 0 {
 			return { state: prepared.state, value: 0, operations: $operations, stopped: prepared.stopped }
@@ -82,7 +85,7 @@ GraphitePosition :: {}.{
 			$root_id = GraphiteSlots.get(state, $root_id).parent
 		}
 		root = GraphiteSlots.get(state, $root_id)
-		root_shift = GraphitePosition.shift_x(root, rtl)
+		root_shift = GraphitePosition.shift_x(root, native_rtl)
 		root_x = TableVar.f32_add(root_shift, root.justify_width)
 		var $right = TableVar.f32_add(root.advance_x, root.justify_width)
 		var $left = 0
@@ -105,7 +108,7 @@ GraphitePosition :: {}.{
 				$pending = $pending.append({ ..frame, id: child.sibling })
 			}
 			if !child.deleted and GraphiteSlots.get_extra(state, frame.id, 28) <= level.to_u8_wrap().to_i32() {
-				shift = GraphitePosition.shift_x(child, rtl)
+				shift = GraphitePosition.shift_x(child, native_rtl)
 				x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
 				y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
 				if TableVar.f32_lt(0, child.advance_x) {
@@ -140,7 +143,13 @@ GraphitePosition :: {}.{
 	}
 
 	position : GraphiteSlots, Bool, U64 -> Applied
-	position = |state, rtl, budget| {
+	position = |state, rtl, budget| GraphitePosition.position_for_font(state, rtl, rtl, budget)
+
+	# Segment direction selects active-root traversal and physical collision
+	# conventions. The selected Silf's native direction independently gives
+	# the sign of authored horizontal shifts, including opposite-script runs.
+	position_for_font : GraphiteSlots, Bool, Bool, U64 -> Applied
+	position_for_font = |state, rtl, native_rtl, budget| {
 		if state.positioned {
 			return { state, operations: 0, stopped: 0 }
 		}
@@ -173,7 +182,7 @@ GraphitePosition :: {}.{
 					$nodes = $nodes.set($previous_root, { ..previous, sibling: root_id }) ?? []
 				}
 				$previous_root = root_id
-				root_shift = GraphitePosition.shift_x(root, rtl)
+				root_shift = GraphitePosition.shift_x(root, native_rtl)
 				root_x = TableVar.f32_add(root_shift, root.justify_width)
 				var $right = TableVar.f32_add(root.advance_x, root.justify_width)
 				var $left = 0
@@ -204,7 +213,7 @@ GraphitePosition :: {}.{
 						$pending = $pending.append({ ..frame, id: child.sibling })
 					}
 					if !child.deleted {
-						shift = GraphitePosition.shift_x(child, rtl)
+						shift = GraphitePosition.shift_x(child, native_rtl)
 						x = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_x, child.with_x), frame.x), TableVar.f32_add(shift, child.justify_width))
 						y = TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(child.attach_y, child.with_y), frame.y), child.shift_y)
 						$nodes = $nodes.set(frame.id, { ..child, position_x: x, position_y: y }) ?? []
@@ -248,7 +257,7 @@ GraphitePosition :: {}.{
 						{ x: TableVar.f32_add(origin_x, TableVar.f32_add(root_x, ox)), y: TableVar.f32_add($pen_y, TableVar.f32_add(root.shift_y, oy)) }
 					} else {
 						parent = $nodes.get(slot.parent) ?? GraphiteSlots.no_slot
-						shift = TableVar.f32_add(GraphitePosition.shift_x(slot, rtl), slot.justify_width)
+						shift = TableVar.f32_add(GraphitePosition.shift_x(slot, native_rtl), slot.justify_width)
 						{ x: TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(slot.attach_x, slot.with_x), parent.position_x), TableVar.f32_add(shift, ox)), y: TableVar.f32_add(TableVar.f32_add(TableVar.f32_sub(slot.attach_y, slot.with_y), parent.position_y), TableVar.f32_add(slot.shift_y, oy)) }
 					}
 					$nodes = $nodes.set(member, { ..slot, position_x: point.x, position_y: point.y }) ?? []
@@ -545,4 +554,16 @@ expect {
 	positioned = GraphitePosition.position(enabled, False, 100)
 	metric = GraphitePosition.metric(positioned.state, 2, 8, 1, False, 100, |_, _, _| 0)
 	positioned.state.advance_x == n(602) and GraphiteSlots.get(positioned.state, 1).position_x == n(-140) and metric.value == 681
+}
+
+expect {
+	# A native RTL font keeps negative physical ShiftX under an effective
+	# LTR segment as well. The public ABI's opposite-text control pins both
+	# positions and a 701-unit segment advance; traversal still uses LTR.
+	n = TableVar.f32_from_int
+	a = GraphiteSlots.append(GraphiteSlots.make(0, 2), { ..GraphiteSlots.no_slot, advance_x: n(601), attach_x: n(100), with_x: n(20), shift_x: n(100) })
+	b = GraphiteSlots.append(a.state, { ..GraphiteSlots.no_slot, advance_x: n(602) })
+	linked = GraphitePosition.attach(b.state, 1, 2, 100)
+	positioned = GraphitePosition.position_for_font(linked.state, False, True, 100)
+	positioned.state.advance_x == n(701) and GraphiteSlots.get(positioned.state, 1).position_x == 0 and GraphiteSlots.get(positioned.state, 2).position_x == n(20)
 }

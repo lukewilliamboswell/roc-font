@@ -196,7 +196,7 @@ GraphiteCollision :: {}.{
 				if backward {
 					$work = { ..$work, state: GraphiteSlots.set_extra($work.state, $id, 3, flags.bitwise_or(256)) }
 				}
-				prepared = GraphitePosition.position($work.state, context.rtl, budget - $operations)
+				prepared = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
 				$work = { ..$work, state: prepared.state }
 				$operations = $operations + prepared.operations
 				if prepared.stopped != 0 {
@@ -238,7 +238,7 @@ GraphiteCollision :: {}.{
 			slot = GraphiteSlots.get($work.state, $id)
 			$id = if (walk_reverse) slot.previous else slot.next
 		}
-		positioned = GraphitePosition.position($work.state, context.rtl, budget - $operations)
+		positioned = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
 		{ work: { ..$work, state: positioned.state }, operations: $operations + positioned.operations, stopped: positioned.stopped, movement: $movement }
 	}
 
@@ -768,7 +768,7 @@ GraphiteCollision :: {}.{
 		if id == group.last {
 			return { work: initial, operations: 0, stopped: 0, movement: 0 }
 		}
-		positioned = GraphitePosition.position(initial.state, context.rtl, budget)
+		positioned = GraphitePosition.position_for_font(initial.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget)
 		var $operations = positioned.operations
 		var $work = { ..initial, state: positioned.state }
 		if positioned.stopped != 0 {
@@ -897,7 +897,7 @@ GraphiteCollision :: {}.{
 				$id = if (reverse) slot.previous else slot.next
 			}
 		}
-		positioned = GraphitePosition.position($work.state, context.rtl, budget - $operations)
+		positioned = GraphitePosition.position_for_font($work.state, context.rtl, context.sub.direction.bitwise_and(1) == 0, budget - $operations)
 		{ state: positioned.state, operations: $operations + positioned.operations, stopped: positioned.stopped }
 	}
 
