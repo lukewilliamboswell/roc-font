@@ -110,7 +110,8 @@ ShaperGraphite := {
 			if $stopped == 0 {
 				pass = face.graphite.program.passes.get(index) ?? crash "selected prepared pass span"
 				native_rtl = sub.direction.bitwise_and(1) == 0
-				reverse = (plan.rtl != native_rtl) != (pass.flags.bitwise_and(32) != 0)
+				before_bidi = sub.bidi != 255 and index < sub.pass_start + sub.bidi
+				reverse = (!before_bidi and plan.rtl != native_rtl) != (pass.flags.bitwise_and(32) != 0)
 				changed = GraphiteRules.apply({ ..context, reverse }, pass, $state, { operations: budget - $operations, glyphs: limit }, metric)
 				$state = changed.state
 				$operations = $operations + changed.operations
