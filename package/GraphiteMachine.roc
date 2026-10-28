@@ -171,7 +171,9 @@ GraphiteMachine :: {}.{
 					$state = GraphiteSlots.set($state, $cursor, { ..s, before: $before, after: $after })
 				}
 			} else if (op >= 0x23 and op <= 0x27) or (op >= 0x33 and op <= 0x35) {
-				value = $stack.last() ?? crash "validated attribute stack depth"
+				# Slot-write operands are signed16, unlike the VM arithmetic
+				# stack and wide metric/feature getters.
+				value = ($stack.last() ?? crash "validated attribute stack depth").to_i16_wrap().to_i32()
 				$stack = $stack.drop_last(1)
 				attribute = instruction.a.to_u64_wrap()
 				index = if (op == 0x27 or op >= 0x33) instruction.b.to_u64_wrap() else 0
@@ -209,7 +211,7 @@ GraphiteMachine :: {}.{
 						}
 					}
 				} else {
-					$state = GraphiteSlotAttributes.set($state, $cursor, attribute, index, adjusted)
+					$state = GraphiteSlotAttributes.set($state, $cursor, attribute, index, adjusted.to_i16_wrap().to_i32())
 				}
 			} else if (op >= 0x28 and op <= 0x2E) or op == 0x3C or op == 0x3D or op == 0x42 {
 				position = $input + instruction.b.to_i64()
@@ -275,7 +277,7 @@ GraphiteMachine :: {}.{
 							if resolved.exhausted {
 								return { state: $state, input: $input, cursor: $cursor, value: 0, operations: $operations, stopped: 2, aborted: False }
 							}
-							$value = resolved.value.to_i16_wrap().to_i32()
+							$value = resolved.value.to_i32()
 						}
 					}
 					if op != 0x42 {

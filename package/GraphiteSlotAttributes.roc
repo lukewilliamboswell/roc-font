@@ -78,7 +78,7 @@ GraphiteSlotAttributes :: {}.{
 			_ if attribute >= 57 and attribute <= 77 => {
 				unsigned = [57.U64, 64, 65, 66, 69, 70, 71, 73, 75, 76, 77].contains(attribute)
 				stored = if (unsigned) value.to_u16_wrap().to_i32() else value.to_i16_wrap().to_i32()
-				return GraphiteSlots.set_extra(state, id, attribute - 54, stored)
+				return GraphiteSlots.set_extra(if (attribute == 57) { ..state, positioned: False } else state, id, attribute - 54, stored)
 			}
 			_ => return state
 		}
