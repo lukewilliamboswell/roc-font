@@ -14,7 +14,7 @@ import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 ## strict reading succeeds exactly when lenient reading succeeds with
 ## nothing dropped. On success every query is total: character lookups give
 ## glyphs the font has, the code point listing is ascending and agrees with
-## lookups, advances are non-negative, boxes are ordered, and shaping keeps
+## lookups, boxes are ordered, and shaping keeps
 ## its lists index-aligned, its clusters inside the text and in order, and
 ## its growth within HarfBuzz's bound (256 glyphs per character, at least
 ## 65536). The feature listing is four-byte tags in increasing order
@@ -127,9 +127,8 @@ check! = |font| {
 		$previous = Ok(cp)
 	}
 	for g in probe_glyphs(font) {
-		if Font.advance(font, g) < 0 {
-			crash "an advance is negative"
-		}
+		# Variation deltas can produce signed advances, including the
+		# reference's I32 wrap boundary. Sign alone is not a font invariant.
 		match Font.extents(font, g) {
 			Extents(box) if box.x_min > box.x_max or box.y_min > box.y_max => crash "a glyph box is not ordered"
 			_ => {}
@@ -161,9 +160,10 @@ check! = |font| {
 		}
 	}
 	bold = Font.at(font, Font.Variation.{ weight: Bold, axes: [{ tag: "opsz", value: 36 }] })
+	again = Font.at(font, Font.Variation.{ weight: Bold, axes: [{ tag: "opsz", value: 36 }] })
 	for g in probe_glyphs(font) {
-		if Font.advance(bold, g) < 0 {
-			crash "an advance at another location is negative"
+		if Font.advance(bold, g) != Font.advance(again, g) {
+			crash "a varied advance is not deterministic"
 		}
 	}
 }
