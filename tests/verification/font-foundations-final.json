@@ -1,0 +1,144 @@
+{
+  "assessment_date": "2026-10-28",
+  "compiler": "nightly-2026-10-27-de79a0f",
+  "oracle_versions": {
+    "HarfBuzz": "14.6.0",
+    "uharfbuzz": "0.56.3",
+    "fontTools": "4.61.1",
+    "OTS": "9.3.0"
+  },
+  "baseline": "font-foundations-baseline.json",
+  "final_bundle": "CZL2wf7Asv7vu2rSAmrwibXtQzw8Ser3BmGPksrrNbSz.tar.zst",
+  "final_bundle_sha256": "8980ff07c25c8509afaf0d32b1a8b380b1b58895f77da0c5ddc390479adf8bf8",
+  "scope": "After the full baseline workflow passed, the final source changes preserve USE ligature metadata, apply script fallback policy to legacy kerning, and document HVAR-only advances. Public regressions and 93 kerning oracle cases were added. All non-fuzz workflow steps were repeated on this final bundle; the four affected fuzz targets were rebuilt and repeated against the same immutable bundle. The other 21 fuzz targets were not repeated. Later commits contain documentation, score ratchets and verification records only.",
+  "non_fuzz_workflow": {
+    "command": "python scripts/all_tests.py --skip fuzz-smoke",
+    "result": "pass",
+    "log_sha256": "3f2b25f910cecefa61c9df8c052beeccdf5d9917933e87849ea46a536f433d64",
+    "source_expects": 450,
+    "consumer_expects": 1004,
+    "allocation_ratchet_cases": 64,
+    "public_doc_items": 125,
+    "internal_doc_leaks": 0,
+    "bundle_files": 63,
+    "bundle_uncompressed_bytes": 7369919,
+    "bundle_compressed_bytes": 4228961,
+    "pinned_font_and_licence_files": 6,
+    "consumer_source_sentinel": true
+  },
+  "conformance": {
+    "outcomes": {
+      "gating": {
+        "agree": 7098,
+        "unsupported": 2,
+        "differ": 16
+      },
+      "harfbuzz/in-house": {
+        "differ": 107,
+        "agree": 4935,
+        "unsupported": 73,
+        "skipped": 59
+      },
+      "hb-pending/M1-next": {
+        "differ": 4
+      },
+      "hb-pending/M3": {
+        "differ": 84
+      },
+      "hb-pending/M4": {
+        "differ": 50,
+        "unsupported": 4
+      },
+      "hb-pending/post-0.1": {
+        "agree": 5,
+        "differ": 58,
+        "unsupported": 2
+      }
+    },
+    "cases_sha256": "e79fbec1cde4e636f1b7f74c2a9562beddf9e645b7fd61d9b7a026f68a92f3b3",
+    "driver_sha256": "9e804168f95b854016a81b8ac801e31744c724ed93b6e4abcdff6b91cf51c950",
+    "score_ratchet_updated": true,
+    "score_ratchet_replay": "pass",
+    "score_ratchet_replay_log_sha256": "8fc7adfbfdaff10f0ed38b2171a5807bc63202a0f7a77c1e29e3507bb32f7b58",
+    "omitted_scored_suites": [
+      "harfbuzz/aots",
+      "harfbuzz/text-rendering-tests"
+    ],
+    "gating_known_differences": 16,
+    "gating_unexpected_failures": 0
+  },
+  "targeted_fuzz": [
+    {
+      "target": "font-use",
+      "outcome": "passed",
+      "finding_kind": null,
+      "units": 4000,
+      "duration_ms": 77240,
+      "peak_rss_mb": 42,
+      "provenance": {
+        "source_revision": "171b2b55ae8b72004280cec7231c603d3fbf0cca",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "ef29155148140b9bfbb8527f627738d16c8723e53c2b90ea9ccb583e0f7844ec",
+      "report_sha256": "542589050e39ab1c57ce389a9e02801afa05d061f98c295c5de7ea73dbcee859",
+      "log_sha256": "5ca2c8144a6ef93609dccdac8356d07a22fafc38ebea6bfd93975528dcc037e8"
+    },
+    {
+      "target": "font-gsub",
+      "outcome": "passed",
+      "finding_kind": null,
+      "units": 4000,
+      "duration_ms": 7902,
+      "peak_rss_mb": 35,
+      "provenance": {
+        "source_revision": "171b2b55ae8b72004280cec7231c603d3fbf0cca+dirty",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "125c1c307c1deaf233b0e76e7b87800927aedee9e784c3a0e6e1db48b7e76887",
+      "report_sha256": "3bcd8f8884608ffaaf093987b3ac23954bf69c96b16a834a03e3a4154c7fb312",
+      "log_sha256": "fb16ac6fe6d4a11b9b22caa247a2f5ed64d6da7eb584b5bc0471a14d5b7638f8"
+    },
+    {
+      "target": "font-indic",
+      "outcome": "passed",
+      "finding_kind": null,
+      "units": 4000,
+      "duration_ms": 212569,
+      "peak_rss_mb": 37,
+      "provenance": {
+        "source_revision": "21e8a223977e23e201a358a7dce7f85b0dd4c842+dirty",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "dd0cc1118470fc42071fbb2aa6b66775536c2a49f3af6de589a40a8bf5a16aad",
+      "report_sha256": "3b9f4a7cbfa7a79e2337bc44b8ff0d1f51c187a200f4cdc7ff6b3b5121254ffa",
+      "log_sha256": "4b53a7e9d39c562a6de4b71ae222684cd105109ae7bd8fc4d56b2cb0f21f620e"
+    },
+    {
+      "target": "font-gpos",
+      "outcome": "passed",
+      "finding_kind": null,
+      "units": 4000,
+      "duration_ms": 4891,
+      "peak_rss_mb": 32,
+      "provenance": {
+        "source_revision": "03fb06ea8f7b3991804dcf45fd0472d40c47a045",
+        "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+        "platform_release": "0.4.3",
+        "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+      },
+      "executable_sha256": "3d9d40d94f4de99fd57f09d2367d94610720013027706f7ef26043e85a6ac551",
+      "report_sha256": "214cd2824395867921756be114163c671061866d6e392fddef599d929bdd794a",
+      "log_sha256": "3abb31f38e414ed0ef9be18798f8f9bcefce0cffe1d2c4af25114b4c93e6068f"
+    }
+  ],
+  "targeted_fuzz_inputs": 16000,
+  "targeted_fuzz_workflow_log_sha256": "44f558785d41bc6eef448edbce02b4ff7b29e1edd828145a8fb9d0c38cda5f2f",
+  "allocation_measurement_limit": "roc-fuzz 0.4.3 exposes allocation counts but not requested bytes or peak live bytes; RSS is separate.",
+  "resource_exhaustion_limit": "Two contextual positioning partial-progress cases deliberately differ from HarfBuzz buffer-bookkeeping charges; independent model replay covers the documented Roc work budget."
+}
