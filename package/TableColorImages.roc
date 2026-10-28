@@ -402,6 +402,9 @@ TableColorImages := {
 				if image_format == 19 and format != 2 and format != 5 {
 					return TableColorImages.bad("CBLC", sub + 2)
 				}
+				if ($offsets.last() ?? 0) > data.len() - image_base {
+					return TableColorImages.bad("CBDT", image_base)
+				}
 				var $last_glyph = 0
 				for i in 0..<$glyphs.len() {
 					glyph = $glyphs.get(i) ?? lo
@@ -461,7 +464,9 @@ TableColorImages := {
 					Absent
 				},
 				vertical: if flags == 2 {
-					Present(axis)
+					# Small vertical metrics store top then left, unlike the
+					# big record. Expose both with x=left and y=top.
+					Present({ bearing_x: axis.bearing_y, bearing_y: axis.bearing_x, advance: axis.advance })
 				} else {
 					Absent
 				},
