@@ -1,7 +1,6 @@
 import Face
 import Shaper
 import TableMetadata
-import TableOutline
 import TableMath
 import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
 import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
@@ -288,31 +287,88 @@ Font :: { face : Face }.{
 	## Font-wide parameters for laying out mathematical expressions. All
 	## distances are in font units; the three fields ending in `percent`
 	## or `percent_scale_down` are percentages, not distances.
-	MathConstants : TableMath.Constants
+	MathConstants : {
+		script_percent_scale_down : I16,
+		script_script_percent_scale_down : I16,
+		delimited_sub_formula_min_height : I32,
+		display_operator_min_height : I32,
+		math_leading : I32,
+		axis_height : I32,
+		accent_base_height : I32,
+		flattened_accent_base_height : I32,
+		subscript_shift_down : I32,
+		subscript_top_max : I32,
+		subscript_baseline_drop_min : I32,
+		superscript_shift_up : I32,
+		superscript_shift_up_cramped : I32,
+		superscript_bottom_min : I32,
+		superscript_baseline_drop_max : I32,
+		sub_superscript_gap_min : I32,
+		superscript_bottom_max_with_subscript : I32,
+		space_after_script : I32,
+		upper_limit_gap_min : I32,
+		upper_limit_baseline_rise_min : I32,
+		lower_limit_gap_min : I32,
+		lower_limit_baseline_drop_min : I32,
+		stack_top_shift_up : I32,
+		stack_top_display_style_shift_up : I32,
+		stack_bottom_shift_down : I32,
+		stack_bottom_display_style_shift_down : I32,
+		stack_gap_min : I32,
+		stack_display_style_gap_min : I32,
+		stretch_stack_top_shift_up : I32,
+		stretch_stack_bottom_shift_down : I32,
+		stretch_stack_gap_above_min : I32,
+		stretch_stack_gap_below_min : I32,
+		fraction_numerator_shift_up : I32,
+		fraction_numerator_display_style_shift_up : I32,
+		fraction_denominator_shift_down : I32,
+		fraction_denominator_display_style_shift_down : I32,
+		fraction_numerator_gap_min : I32,
+		fraction_num_display_style_gap_min : I32,
+		fraction_rule_thickness : I32,
+		fraction_denominator_gap_min : I32,
+		fraction_denom_display_style_gap_min : I32,
+		skewed_fraction_horizontal_gap : I32,
+		skewed_fraction_vertical_gap : I32,
+		overbar_vertical_gap : I32,
+		overbar_rule_thickness : I32,
+		overbar_extra_ascender : I32,
+		underbar_vertical_gap : I32,
+		underbar_rule_thickness : I32,
+		underbar_extra_descender : I32,
+		radical_vertical_gap : I32,
+		radical_display_style_vertical_gap : I32,
+		radical_rule_thickness : I32,
+		radical_extra_ascender : I32,
+		radical_kern_before_degree : I32,
+		radical_kern_after_degree : I32,
+		radical_degree_bottom_raise_percent : I16,
+	}
 
 	## Which corner of a glyph a mathematical script is placed against.
-	MathCorner : TableMath.Corner
+	MathCorner : [TopRight, TopLeft, BottomRight, BottomLeft]
 
 	## The direction in which a mathematical symbol is stretched. This is
 	## independent of the direction of a shaped text run.
-	MathDirection : TableMath.Axis
+	MathDirection : [Horizontal, Vertical]
 
 	## A prebuilt mathematical symbol and its size along the stretch axis.
-	MathVariant : TableMath.Variant
+	MathVariant : { glyph : U32, advance : I32 }
 
 	## One component of a stretchable symbol. Connector lengths and full
 	## advance are in font units. Extenders may be repeated by the caller's
 	## bounded equation layout algorithm.
-	MathPart : TableMath.Part
+	MathPart : { glyph : U32, start_connector : I32, end_connector : I32, full_advance : I32, extender : Bool }
 
 	## A stretchable symbol's construction recipe, in table order, and its
 	## italic correction. Equation layout chooses repeats and overlaps.
-	MathAssembly : TableMath.Assembly
+	MathAssembly : { italic_correction : I32, parts : List(MathPart) }
 
 	## Height thresholds and corner kern values, in font units. There is
 	## one more value than threshold; `math_kern` selects the value at a
 	## correction height without requiring callers to search this list.
-	MathKernTable : TableMath.KernTable
+	MathKernTable : { heights : List(I32), values : List(I32) }
 
 	## Whether the font supplies mathematical typesetting data (`MATH`).
 	## A damaged optional MATH table is left out and reported by `dropped`
@@ -372,12 +428,12 @@ Font :: { face : Face }.{
 	## One point of a glyph path, in fractional font units. Composite
 	## transforms and variations are evaluated without hinting or rounding
 	## to pixels; their binary32 coordinates are widened exactly to F64.
-	OutlinePoint : TableOutline.Point
+	OutlinePoint : { x : F64, y : F64 }
 
 	## A glyph path in drawing order. Quadratic curves are used by TrueType;
 	## cubic commands allow consumers to share a path vocabulary. A new
 	## contour starts with `MoveTo` and ends with `Close`.
-	OutlineCommand : TableOutline.Command
+	OutlineCommand : [MoveTo(OutlinePoint), LineTo(OutlinePoint), QuadraticTo({ control : OutlinePoint, end : OutlinePoint }), CubicTo({ control1 : OutlinePoint, control2 : OutlinePoint, end : OutlinePoint }), Close]
 
 	## The glyph's outline at the current variation location, for vector
 	## output or a caller's renderer. An empty glyph or an id past the font
