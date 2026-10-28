@@ -1,0 +1,37 @@
+{
+  "scope": "One-time flat raw glyf bounding-box preparation; before71/71/71 allocations, after72/72/72. No query decoding or font-sized query scan.",
+  "measurement": {
+    "metadata": {
+      "bundle": "38M1gzdu1QNkut1gDvwGK28YcgV5ZtzxXm4WH2kw7oMx.tar.zst",
+      "source_sentinel": true,
+      "roc": "Roc compiler version nightly-2026-10-27-de79a0f",
+      "reused_binaries": false,
+      "requested_bytes": null,
+      "peak_live_bytes": null
+    },
+    "cases": {
+      "graphite-read/shared/64": {
+        "allocations": 72,
+        "leaked": 0,
+        "checksum": "3",
+        "font_sha256": "a82174a15d85df8f5464f3738583b051feacd7066a7da3e83c6b74cc4037832e",
+        "case_sha256": "a82174a15d85df8f5464f3738583b051feacd7066a7da3e83c6b74cc4037832e"
+      },
+      "graphite-read/shared/256": {
+        "allocations": 72,
+        "leaked": 0,
+        "checksum": "3",
+        "font_sha256": "605bc6af318fd89cd047256e4c5edb6677216bfab5cef294bb5e38e8af256560",
+        "case_sha256": "605bc6af318fd89cd047256e4c5edb6677216bfab5cef294bb5e38e8af256560"
+      },
+      "graphite-read/shared/1024": {
+        "allocations": 72,
+        "leaked": 0,
+        "checksum": "3",
+        "font_sha256": "c7230af371be1834ea0370d6f8f96c9873166f95bd75ea769b8e801d7d0ee074",
+        "case_sha256": "c7230af371be1834ea0370d6f8f96c9873166f95bd75ea769b8e801d7d0ee074"
+      }
+    },
+    "failures": []
+  }
+}
