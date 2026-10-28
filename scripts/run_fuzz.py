@@ -210,9 +210,7 @@ TARGETS: dict[str, TargetConfig] = {
         max_input_size=32,
         timeout=10,
         contract=(
-            "Arabic joining and positioning in two real families at 2/16 "
-            "text sizes: join controls, both directions and cluster levels, "
-            "bounded deterministic runs and linear allocations; no leaks"
+            'Thai/Lao Sara Am, legacy glyph fallback and GPOS at 2/16 text sizes: both cluster levels, deterministic aligned bounded runs, linear allocations and no leaks'
         ),
         font_files=False,
     ),
@@ -224,11 +222,23 @@ TARGETS: dict[str, TargetConfig] = {
         max_input_size=32,
         timeout=10,
         contract=(
-            "Arabic joining and positioning in two real families at 2/16 "
-            "text sizes: join controls, both directions and cluster levels, "
-            "bounded deterministic runs and linear allocations; no leaks"
+            'Hangul composition, Jamo features and tone placement in seven real/generated font modes at 2/16 text sizes: deterministic aligned bounded runs, linear allocations and no leaks'
         ),
         font_files=False,
+    ),
+    "font-color": TargetConfig(
+        sources=(FUZZ_ROOT / "font-color.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-color.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=1048576,
+        timeout=10,
+        contract=(
+            "CPAL/COLR at 8/64/256 glyphs: finite bounded deterministic paint "
+            "graphs, all formats and variations, linear preparation, constant "
+            "per-glyph allocations with unrelated glyph count; no leaks"
+        ),
+        font_files=True,
     ),
     "font-color-images": TargetConfig(
         sources=(FUZZ_ROOT / "font-color-images.roc",),

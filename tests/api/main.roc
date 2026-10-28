@@ -21,6 +21,7 @@ import MathTests
 import OutlineTests
 import CaretTests
 import PositionTests
+import ColorTests
 import ColorImageTests
 import ArabicTests
 import HangulTests
