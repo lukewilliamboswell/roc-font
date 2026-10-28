@@ -45,6 +45,7 @@ import GraphiteReaderTests
 import MortTests
 import GraphiteTests
 import GraphiteGeometryTests
+import GraphiteSelectionTests
 
 ## The tests of roc-font's public API. They import the package through
 ## `package/main.roc`, exactly what ships, and build their fonts with the
