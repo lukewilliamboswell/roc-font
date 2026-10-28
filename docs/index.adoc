@@ -55,10 +55,11 @@ font's units per em and multiply by the font size to get drawing coordinates.
 Embedded bitmap placement uses native strike pixels; its API names that
 unit explicitly. Scaling and rounding belong to the consumer.
 
-Reading is the only step that can fail. Font bytes are treated as
-untrusted: a file that cannot be used is reported with every problem
-found, and every query on a font that was read successfully has a defined
-result, including empty text and missing glyphs.
+Reading is the step that can reject font data. Bytes are treated as
+untrusted: an unusable file is reported with every independent problem
+found. Every query on a successfully read font has a defined result,
+including empty text and missing glyphs. Checked shaping also reports
+work limits with the partial run it produced.
 
 roc-font does not rasterise, hint, wrap lines, choose fallback fonts or find
 fonts on the system. Those belong to the program that uses it. Unicode text

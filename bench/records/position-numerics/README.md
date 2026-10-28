@@ -9,10 +9,10 @@ the bundled source hash identifies the exact override.
 All 64 preserved ordinary/corpus/adversarial benchmark cases have identical
 allocation counts, leaks, results and checksums before/after. No allocation
 baseline update is needed for this matrix. Inter shape uses 21 allocation
-calls at505 / 4088 / 32761 UTF8bytes, with zero leaks.
+calls at 505 / 4088 / 32761 UTF-8 bytes, with zero leaks.
 
 Three increasing optimized native shape cases have same-run HB 14.6.0 ratios
-3.90/3.53/3.83 before and4.00/3.44/3.57 after. The numerical change retains
+3.90/3.53/3.83 before and 4.00/3.44/3.57 after. The numerical change retains
 the measured allocation behavior; these timings amid integration builds
 do not establish a speedup. Reading/planning and process startup are
 outside the timed region. Each of five samples repeats 128 operations;

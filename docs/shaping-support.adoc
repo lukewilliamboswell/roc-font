@@ -26,8 +26,8 @@ rules. There is no dedicated two-family Hebrew oracle matrix here;
 public missing-glyph/direction tests do not establish Hebrew typography.
 |Arabic (`Arab`), Syriac (`Syrc`) |Arabic joining and staged features.
 Syriac selects this model unless the chosen font script is `DFLT`.
-Presentation-form fallback and `stch` have dedicated additional matrices;
-their presence alone is not evidence that their complete replay passes.
+Presentation-form fallback and `stch` have dedicated additional matrices
+replayed through the public native driver.
 |Hangul (`Hang`) |Jamo composition/decomposition, tone handling and Hangul
 feature masks, including missing-jamo/dotted-circle boundaries.
 |Thai (`Thai`), Lao (`Laoo`) |Script preprocessing; Thai also has legacy
@@ -71,7 +71,7 @@ link:../tests/cases/arabic-flags.jsonc[36 flag records].
 |Syriac; Nastaliq Arabic |Noto Sans Syriac 3.000, Eastern/Western 3.001;
 Noto Nastaliq Urdu 3.009
 |link:../tests/fonts/shaping/arabic-extra/extra-cases.jsonc[464 additional stress records].
-These require their own final agreement gate; they are not covered by the preceding Arabic result.
+These extend the two Arabic families with Syriac and Nastaliq stress cases.
 |Hangul |Nanum Gothic, Nanum Myeongjo
 |link:../tests/cases/hangul.jsonc[220 records], also five boundary fixtures.
 |Thai, Lao |Noto Sans/Serif Thai; Noto Sans/Serif Lao
@@ -111,8 +111,10 @@ Arabic's original-fixture matrices separately cover
 link:../tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc[540 Unicode fallback records],
 link:../tests/fonts/shaping/arabic-fallback/windows-cases.jsonc[200 Windows fallback records]
 and link:../tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc[150 stretching records].
-Two successful Arabic families do not establish Nastaliq or Syriac coverage;
-cached stress expectations must pass replay before an agreement claim.
+The combined script-worker replay passed 6,525 cached cases, including all
+1,354 additional Arabic/Syriac records. The shared conformance gate replays
+these matrices for each integration build. This establishes the listed
+cases and families; other font designs require their own evidence.
 
 == Measured cost
 
@@ -131,6 +133,12 @@ the same numbers for a release.
 |272 / 1088 / 4352 |34.27 / 35.79 / 35.15 |334 / 1246 / 4894
 |link:../tests/fonts/complex/use-after-measurements.json[Tibetan USE]
 |208 / 832 / 3328 |4.42 / 4.29 / 4.29 |21 / 21 / 21
+|link:../bench/arabic/presentation-final.json[Arabic presentation fallback]
+|128 / 512 / 2048 |2.81 / 2.64 / 2.65 |23 / 23 / 23
+|link:../bench/arabic/windows-final.json[Windows Arabic fallback]
+|128 / 512 / 2048 |3.49 / 2.82 / 2.84 |23 / 23 / 23
+|link:../bench/arabic/syriac-final.json[Real Noto Sans Syriac]
+|96 / 384 / 1536 |52.06 / 55.37 / 49.79 |261 / 936 / 3627
 |===
 
 All these runs reported zero leaked allocations. Requested bytes and peak
@@ -146,6 +154,11 @@ uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
 * CFF/CFF2 fonts can supply shaping facts, but their paths/extents remain
   explicitly unknown where the TrueType outline reader cannot expose them.
   This blocks a consumer needing those paths, not ordinary glyph-id shaping.
+* WOFF/WOFF2 data needs decompression before this sfnt reader can accept
+  the font bytes; container unwrapping remains separate work.
+* After work-budget exhaustion, partial progress can differ from HarfBuzz's
+  buffer-accounting progress. Explicit stopped-run cases are checked with
+  an independent model; completed runs require oracle agreement.
 * Direction is horizontal LTR/RTL. Vertical shaping and Mongolian vertical
   layout are not established by these matrices.
 * The shaping backend is OpenType; AAT and Graphite shaping are not implemented.
