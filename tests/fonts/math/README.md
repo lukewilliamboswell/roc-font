@@ -11,9 +11,9 @@ It has TrueType outlines, 5,015 glyphs, and a MATH 1.0 table. The table
 contains 215 vertical constructions (1,149 variants, 57 assemblies) and
 29 horizontal constructions (132 variants, 22 assemblies).
 
-All four fonts pass the pinned OTS 9.3.0 sanitizer.
+All five fonts pass the pinned OTS 9.3.0 sanitizer.
 
-The three `math*.ttf` fixtures are original generated test data, under this
+The four `math*.ttf` fixtures are original generated test data, under this
 repository's Universal Permissive License (`SYNTHETIC-LICENSE.txt`). Run
 `generate.py` with fontTools 4.61.1 to reproduce them. They cover all four
 corner kern tables, duplicate heights and exact threshold equality, signed corrections, all three
@@ -21,7 +21,7 @@ pixel device formats, zero-part assemblies, missing data and GDEF variation
 devices. The latter change constants, corrections, accent attachments,
 kern thresholds, kern values and assembly corrections.
 
-`cases.jsonc` defines six native conformance cases. `oracle.py` records
+`cases.jsonc` defines eight native conformance cases. `oracle.py` records
 font facts using pinned uharfbuzz 0.56.3 (HarfBuzz 14.6.0) and independently
 checks them against fontTools 4.61.1. `verify.py` builds `query.roc` with the
 optimized native backend, against `scripts/flight.py`'s served bundle,
@@ -47,3 +47,28 @@ attachment and italic-correction queries expose explicit absence, rather
 than HarfBuzz's half-advance/zero synthesis. The recorder compares absence
 with the fontTools coverage and validates the corresponding HarfBuzz
 fallback separately.
+
+## Wide mathematical variation values
+
+A valid ItemVariationData row can contain enough signed32-bit deltas to
+exceed I32 after summation. Delta-bearing math facts therefore use I64:
+constants, corrections, attachment positions, kern heights/values and
+assembly italic correction. Fixed unsigned16-bit variant and part sizes
+remain I32, while percentages remain I16. No accepted value is clamped.
+
+`math-large-variable.ttf` has32identical variation regions and positive
+and negative long-word columns. At maximum weight its delta magnitude is
+68,719,476,736 font units. The two large-variable cases independently use
+fontTools VarStoreInstancer with binary32 rounding of these exact
+identically weighted sums. They identify their oracle as
+`fonttools-varstore-f32-wide`. Such results cannot be materialized into a
+static MATH record, whose stored base value is signed16-bit. HarfBuzz14.6
+ignores MATH variation devices, so it is deliberately not claimed as an
+oracle for these wide values; its static queries still verify variant
+records and determine the unchanged kern threshold selection.
+
+An accepted row has at most65535columns, each delta fits I32 and each
+region scalar lies in [0,1]. Even allowing binary32 accumulation error,
+the rounded sum is below2^48 in magnitude, leaving room in I64 for the
+base value without overflow or saturation. Repeated region indices do not
+change that per-row count bound.

@@ -162,9 +162,9 @@ TableMath := {
 	value : TableMath, U64, U64 -> I64
 	value = |math, base, at| {
 		v = Bytes.i16(math.bytes, at) + LayoutVar.device_delta(math.lv, math.loc, math.bytes, base, at + 2)
-		# A valid store has at most32767regions, each scalar at most1,
-		# each long-word delta an I32. Even allowing binary32 accumulation
-		# error, the rounded delta is below2^47 in magnitude. Adding an
+		# A valid row has at most65535columns, each scalar at most1,
+		# and each delta fits I32. Even allowing binary32 accumulation
+		# error, the rounded delta is below2^48 in magnitude. Adding an
 		# I16 base therefore fits I64 without clamping valid font facts.
 		v
 	}

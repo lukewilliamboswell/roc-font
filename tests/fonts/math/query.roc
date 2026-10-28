@@ -37,21 +37,21 @@ main! = |_args| {
 	Ok({})
 }
 
-optional : [Present(I32), Absent] -> Str
+optional : [Present(I64), Absent] -> Str
 optional = |value| match value {
 	Present(n) => n.to_str()
 	Absent => "_"
 }
 
-numbers : List(I32) -> Str
+numbers : List(I64) -> Str
 numbers = |values| Str.join_with(values.map(|n| n.to_str()), ",")
 
-constants_values : Font.MathConstants -> List(I32)
+constants_values : Font.MathConstants -> List(I64)
 constants_values = |c| [
-	c.script_percent_scale_down.to_i32(),
-	c.script_script_percent_scale_down.to_i32(),
-	c.delimited_sub_formula_min_height,
-	c.display_operator_min_height,
+	c.script_percent_scale_down.to_i64(),
+	c.script_script_percent_scale_down.to_i64(),
+	c.delimited_sub_formula_min_height.to_i64(),
+	c.display_operator_min_height.to_i64(),
 	c.math_leading,
 	c.axis_height,
 	c.accent_base_height,
@@ -103,7 +103,7 @@ constants_values = |c| [
 	c.radical_extra_ascender,
 	c.radical_kern_before_degree,
 	c.radical_kern_after_degree,
-	c.radical_degree_bottom_raise_percent.to_i32(),
+	c.radical_degree_bottom_raise_percent.to_i64(),
 ]
 
 facts : Font -> List(Str)
@@ -125,7 +125,7 @@ facts = |font| {
 				$out = $out.append("kern-table|${glyph.to_str()}|${index.to_str()}|${numbers(table.heights)}|${numbers(table.values)}")
 				# These original and real fonts have ordered heights at every case's
 				# selected location. Only this finite list, not font data, is sorted.
-				candidates = [-2147483648.I32, 0, 2147483647].concat(table.heights.join_map(|h| [h - 1, h, h + 1]))
+				candidates = [-2147483648.I64, 0, 2147483647].concat(table.heights.join_map(|h| [h - 1, h, h + 1]))
 				ordered = candidates.sort_with(
 					|a, b| if a < b {
 						Before

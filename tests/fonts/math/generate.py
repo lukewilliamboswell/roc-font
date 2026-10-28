@@ -54,7 +54,7 @@ def base():
     return b.font
 
 
-def make(name, varied=False, empty=False):
+def make(name, varied=False, empty=False, large=False):
     font=base()
     buildMathTable(font,
         constants={'ScriptPercentScaleDown':80,'ScriptScriptPercentScaleDown':60,'AxisHeight':250,'FractionRuleThickness':40,'RadicalDegreeBottomRaisePercent':65},
@@ -89,8 +89,14 @@ def make(name, varied=False, empty=False):
         table.MathGlyphInfo.MathKernInfo.MathKernInfoRecords[1].TopRightMathKern.CorrectionHeight[1].DeviceTable=device(0x8000,0,3)
         kern.KernValue[0].DeviceTable=device(0x8000,0,4)
         table.MathVariants.VertGlyphConstruction[0].GlyphAssembly.ItalicsCorrection.DeviceTable=device(0x8000,0,5)
+    if large:
+        # Thirty-two valid long-word columns overflow I32 at a nondefault
+        # location. Heights stay ordered so the fixture isolates wide facts.
+        regions=[{'wght':(0,1,1)} for _ in range(32)]
+        rows=[[2147483647]*32,[-2147483648]*32,[2147483647]*32,[0]*32,[2147483647]*32,[-2147483648]*32]
+        font['GDEF'].table.VarStore=buildVarStore(buildVarRegionList(regions,['wght']),[buildVarData(list(range(32)),rows,optimize=False)])
     font.save(HERE/name,reorderTables=True)
 
 
 if __name__=='__main__':
-    make('math.ttf');make('math-variable.ttf',varied=True);make('math-empty.ttf',empty=True)
+    make('math.ttf');make('math-variable.ttf',varied=True);make('math-empty.ttf',empty=True);make('math-large-variable.ttf',varied=True,large=True)

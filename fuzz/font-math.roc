@@ -42,7 +42,9 @@ test! = |bytes| {
 	}
 	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large_bytes, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|{}| query(large, 1))
-	candidate = match choice % 4 {
+	candidate = if bytes.take_first(4) == [0, 1, 0, 0] or bytes.take_first(4) == "OTTO".to_utf8() or bytes.take_first(4) == "ttcf".to_utf8() {
+		bytes
+	} else match choice % 4 {
 		0 => FontBuild.mutate(noto_file, bytes.drop_first(1))
 		1 => FontBuild.mutate(variable_file, bytes.drop_first(1))
 		2 => FontBuild.mutate(large_bytes, bytes.drop_first(1))
@@ -57,7 +59,7 @@ test! = |bytes| {
 			for weight in [100.U16, 400, 650, 900] {
 				moved = Font.at(font, Font.Variation.{ weight: Weight(weight) })
 				repeated = Font.at(again, Font.Variation.{ weight: Weight(weight) })
-				for glyph in [0.U32, 1, 7, Font.glyph_count(font), 4294967295] {
+				for glyph in [0.U32, 1, 3, 7, Font.glyph_count(font), 4294967295] {
 					observed = query(moved, glyph)
 					if observed != query(repeated, glyph) {
 						crash "MATH query is nondeterministic across independent reads"
@@ -77,13 +79,13 @@ test! = |bytes| {
 	Fuzz.keep
 }
 
-query : Font, U32 -> { constants : [Present(Font.MathConstants), Absent], italic : [Present(I32), Absent], accent : [Present(I32), Absent], extended : Bool, kern : List(I32), tables : List(Font.MathKernTable), variants : List(Font.MathVariant), assembly : [Present(Font.MathAssembly), Absent] }
+query : Font, U32 -> { constants : [Present(Font.MathConstants), Absent], italic : [Present(I64), Absent], accent : [Present(I64), Absent], extended : Bool, kern : List(I64), tables : List(Font.MathKernTable), variants : List(Font.MathVariant), assembly : [Present(Font.MathAssembly), Absent] }
 query = |font, g| {
 	constants: Font.math_constants(font),
 	italic: Font.math_italic_correction(font, g),
 	accent: Font.math_top_accent_attachment(font, g),
 	extended: Font.math_extended_shape(font, g),
-	kern: [TopRight, TopLeft, BottomRight, BottomLeft].join_map(|corner| [-2147483648.I32, -100, 0, 100, 2147483647].map(|height| Font.math_kern(font, g, corner, height))),
+	kern: [TopRight, TopLeft, BottomRight, BottomLeft].join_map(|corner| [-2147483648.I64, -100, 0, 100, 2147483647].map(|height| Font.math_kern(font, g, corner, height))),
 	tables: [TopRight, TopLeft, BottomRight, BottomLeft].map(|corner| Font.math_kern_table(font, g, corner)),
 	variants: Font.math_variants(font, g, Vertical),
 	assembly: Font.math_assembly(font, g, Vertical),
@@ -99,13 +101,13 @@ check_generated = |bytes, n, delta| {
 		crash "generated MATH disappeared"
 	}
 	for glyph in [1.U32, n.to_u32_wrap()] {
-		if Font.math_italic_correction(font, glyph) != Present(delta.to_i32_wrap()) or Font.math_top_accent_attachment(font, glyph) != Present(200) or !Font.math_extended_shape(font, glyph) {
+		if Font.math_italic_correction(font, glyph) != Present(delta) or Font.math_top_accent_attachment(font, glyph) != Present(200) or !Font.math_extended_shape(font, glyph) {
 			crash "generated glyph facts changed"
 		}
 		if Font.math_kern_table(font, glyph, TopRight) != { heights: [-100, 100], values: [-10, 0, 10] } {
 			crash "generated corner kern changed"
 		}
-		if [-101.I32, -100, 99, 100].map(|h| Font.math_kern(font, glyph, TopRight, h)) != [-10, 0, 0, 10] {
+		if [-101.I64, -100, 99, 100].map(|h| Font.math_kern(font, glyph, TopRight, h)) != [-10, 0, 0, 10] {
 			crash "MATH threshold equality changed"
 		}
 		if Font.math_variants(font, glyph, Vertical) != [{ glyph: 1, advance: 700 }, { glyph: 2, advance: 1100 }] {

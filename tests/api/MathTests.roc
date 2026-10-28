@@ -2,6 +2,7 @@ import font.Font
 import build.FontBuild
 import "../../tests/fonts/math/math.ttf" as math_file : List(U8)
 import "../../tests/fonts/math/math-variable.ttf" as variable_file : List(U8)
+import "../../tests/fonts/math/math-large-variable.ttf" as large_variable_file : List(U8)
 import "../../tests/fonts/math/math-empty.ttf" as empty_file : List(U8)
 import "../../tests/fonts/math/NotoSansMath-Regular.ttf" as noto_file : List(U8)
 
@@ -226,7 +227,7 @@ expect {
 # Equal correction heights preserve table order and HarfBuzz's first
 # visited binary-search tie, rather than upper_bound over all equal values.
 expect Font.math_kern_table(math_font, 3, TopRight) == { heights: [0, 0, 100, 100], values: [1, 2, 3, 4, 5] }
-expect [-1.I32, 0, 1, 99, 100, 101].map(|h| Font.math_kern(math_font, 3, TopRight, h)) == [1, 3, 3, 3, 4, 5]
+expect [-1.I64, 0, 1, 99, 100, 101].map(|h| Font.math_kern(math_font, 3, TopRight, h)) == [1, 3, 3, 3, 4, 5]
 expect {
 	full = Font.at(read(variable_file), Font.Variation.{ weight: Black })
 	Font.math_kern_table(full, 3, TopRight) == { heights: [0, 25, 100, 100], values: [1, 2, 3, 4, 5] } and Font.math_kern(full, 3, TopRight, 0) == 2 and Font.math_kern(full, 3, TopRight, 100) == 4
@@ -241,4 +242,23 @@ expect {
 	script = Font.shape(noto, "𝑥", Font.ShapeOptions.{ script: "Zmth", features: [Font.Feature.{ tag: "ssty", value: 1 }] })
 	script_script = Font.shape(noto, "𝑥", Font.ShapeOptions.{ script: "Zmth", features: [Font.Feature.{ tag: "ssty", value: 2 }] })
 	ordinary.glyphs == [1056] and script.glyphs == [1240] and script_script.glyphs == [1300]
+}
+
+# Valid long-word variation rows can exceed I32. Font facts retain their
+# values without saturation;32columns exercise positive and negative sums.
+expect {
+	font = Font.at(read(large_variable_file), Font.Variation.{ weight: Black })
+	match Font.math_constants(font) {
+		Present(c) => c.axis_height == 68719476986
+		Absent => False
+	}
+		and Font.math_italic_correction(font, 1) == Present(-68719476724)
+		and Font.math_top_accent_attachment(font, 1) == Present(68719476976)
+		and Font.math_kern(font, 1, TopRight, -101) == 68719476746
+		and (
+			match Font.math_assembly(font, 1, Vertical) {
+				Present(a) => a.italic_correction == -68719476706
+				Absent => False
+			}
+		)
 }

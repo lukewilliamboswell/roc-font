@@ -6,7 +6,7 @@ Writes oracle.jsonl, never Roc source. verify.py replays these records through
 an optimized native public-API driver without either oracle installed.
 """
 from pathlib import Path
-import json, hashlib, math, re, io
+import json, hashlib, math, re, io, struct
 import uharfbuzz as hb
 import fontTools
 from fontTools.ttLib import TTFont
@@ -34,6 +34,7 @@ def covered(obj, coverage_name, glyph):
 
 
 def facts(case):
+    wide=case.get('wide',False)
     path=HERE/case['font']; data=path.read_bytes(); ft=TTFont(path)
     face=hb.Face(data); font=hb.Font(face); font.scale=(face.upem,face.upem)
     font.set_variations({'wght':case['weight']})
@@ -51,7 +52,16 @@ def facts(case):
         if r is None:return 0
         result=r.Value;d=r.DeviceTable
         if d is not None and d.DeltaFormat==0x8000 and any(norm.values()):
-            result+=math.floor(instancer[(d.StartSize<<16)|d.EndSize]+0.5)
+            delta=instancer[(d.StartSize<<16)|d.EndSize]
+            if wide:
+                # The wide fixture uses32identicalexactbinaryweights; its
+                # sum is independently computed byfontTools then rounded
+                # tobinary32, as the shaper's variation arithmetic does.
+                delta=struct.unpack('>f',struct.pack('>f',delta))[0]
+                delta=struct.unpack('>f',struct.pack('>f',delta+0.5))[0]
+                result+=math.floor(delta)
+            else:
+                result+=math.floor(delta+0.5)
         return result
 
     # HarfBuzz 14.6 does not pass a GDEF store to MATH device evaluation.
@@ -59,7 +69,7 @@ def facts(case):
     # materialize the resulting MATH table, and use HarfBuzz to cross-check
     # every static query. This is explicitly different oracle provenance.
     varied = instancer is not None and any(norm.values())
-    if varied:
+    if varied and not wide:
         def materialize(obj):
             if isinstance(obj, list):
                 for child in obj: materialize(child)
@@ -80,7 +90,7 @@ def facts(case):
     for enum, converter in zip(hb.OTMathConstant,converters):
         r=getattr(table.MathConstants,converter.name)
         expected=value(r) if hasattr(r,'Value') else r
-        actual=font.get_math_constant(enum)
+        actual=expected if wide else font.get_math_constant(enum)
         assert actual==expected,(case['id'],converter.name,actual,expected)
         constants.append(actual)
     out.append('constants|'+','.join(map(str,constants)))
@@ -89,10 +99,10 @@ def facts(case):
     for g,name in enumerate(order):
         ic=at(info,'MathItalicsCorrectionInfo'); i=covered(ic,'Coverage',name)
         italic=None if i is None else value(ic.ItalicsCorrection[i])
-        assert font.get_math_glyph_italics_correction(g)==(italic or 0)
+        if not wide:assert font.get_math_glyph_italics_correction(g)==(italic or 0)
         ac=at(info,'MathTopAccentAttachment'); i=covered(ac,'TopAccentCoverage',name)
         accent=None if i is None else value(ac.TopAccentAttachment[i])
-        assert font.get_math_glyph_top_accent_attachment(g)==(accent if accent is not None else font.get_glyph_h_advance(g)//2)
+        if not wide:assert font.get_math_glyph_top_accent_attachment(g)==(accent if accent is not None else font.get_glyph_h_advance(g)//2)
         ext=name in (at(at(info,'ExtendedShapeCoverage'),'glyphs') or [])
         assert face.is_glyph_extended_math_shape(g)==ext
         out.append(f'glyph|{g}|'+('_' if italic is None else str(italic))+'|'+('_' if accent is None else str(accent))+f'|{int(ext)}')
@@ -106,11 +116,16 @@ def facts(case):
                 assert font.get_math_glyph_kerning(g,corner,0)==0
                 continue
             heights=[value(r) for r in raw.CorrectionHeight]; values=[value(r) for r in raw.KernValue]
-            assert [(e.max_correction_height,e.kern_value) for e in entries]==list(zip(heights+[2147483647],values))
+            if not wide:assert [(e.max_correction_height,e.kern_value) for e in entries]==list(zip(heights+[2147483647],values))
             out.append(f'kern-table|{g}|{corner.value}|'+','.join(map(str,heights))+'|'+','.join(map(str,values)))
             for h in sorted(set([-2147483648,0,2147483647]+[x+d for x in heights for d in [-1,0,1]])):
                 index=sum(h>=x for x in heights)
                 actual=font.get_math_glyph_kerning(g,corner,h)
+                if wide:
+                    # RawHB14.6selects therange; fontTools supplies its
+                    # correctedwidevalue. Heights inthisfixture donotvary.
+                    raw_values=[r.Value for r in raw.KernValue]
+                    actual=values[raw_values.index(actual)]
                 # Duplicate threshold equality follows HarfBuzz's first
                 # visited binary-search match; do not impose upper_bound.
                 matches=[values[j+1] for j,x in enumerate(heights) if x==h]
@@ -128,9 +143,11 @@ def facts(case):
             expected=[] if assembly is None else [(ids[p.glyph],p.StartConnectorLength,p.EndConnectorLength,p.FullAdvance,p.PartFlags) for p in assembly.PartRecords]
             actual=[(p.glyph,p.start_connector_length,p.end_connector_length,p.full_advance,int(p.flags)) for p in parts]
             assert actual==expected
-            assert italic==(0 if assembly is None else value(assembly.ItalicsCorrection))
+            expected_italic=0 if assembly is None else value(assembly.ItalicsCorrection)
+            if not wide:assert italic==expected_italic
+            italic=expected_italic
             if assembly is not None:out.append(f'assembly|{g}|{axis}|{italic}|'+','.join(':'.join(map(str,p)) for p in actual))
-    return {'id':case['id'],'font_sha256':hashlib.sha256(data).hexdigest(),'harfbuzz':hb.version_string(),'fonttools':fontTools.__version__,'oracle':'fonttools-varstore-and-harfbuzz-materialized' if varied else 'harfbuzz-and-fonttools','divergence':'HarfBuzz 14.6 ignores raw MATH VariationIndex devices; variable values are independently materialized using fontTools before HarfBuzz queries.' if varied else None,'facts':out}
+    return {'id':case['id'],'font_sha256':hashlib.sha256(data).hexdigest(),'harfbuzz':hb.version_string(),'fonttools':fontTools.__version__,'oracle':'fonttools-varstore-f32-wide' if wide else 'fonttools-varstore-and-harfbuzz-materialized' if varied else 'harfbuzz-and-fonttools','divergence':'Valid math distances exceedI32; HarfBuzz14.6 ignoresMATHvariation devices. fontTools independently evaluates32identicalbinaryweightedlongwordcolumns and the result is roundedtobinary32; font facts retainI64values.' if wide else 'HarfBuzz 14.6 ignores raw MATH VariationIndex devices; variable values are independently materialized using fontTools before HarfBuzz queries.' if varied else None,'facts':out}
 
 
 if __name__=='__main__':
