@@ -53,7 +53,7 @@ main! = |args| {
 						crash "nondeterministic Graphite result"
 					}
 					{ run, abort, budgets } = match checked {
-						Ok(run) => { run, abort: "NoAbort", budgets: [] }
+						Ok(value) => { run: value, abort: "NoAbort", budgets: [] }
 						Err(OverBudget(result)) => { run: result.run, abort: "NoAbort", budgets: result.budgets.map(|budget| Str.inspect(budget)) }
 						Err(ProgramAborted(result)) => { run: result.run, abort: "ProgramAbort", budgets: [] }
 					}

@@ -46,7 +46,7 @@ GraphiteBench :: {}.{
 	run : Prepared -> Try(U64, U64)
 	run = |prepared| {
 		run = match Font.shape_checked(prepared.font, prepared.plan, prepared.text) {
-			Ok(run) => run
+			Ok(value) => value
 			Err(_) => return Err(0)
 		}
 		var $sum = 0.U64

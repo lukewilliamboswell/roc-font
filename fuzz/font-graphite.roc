@@ -56,7 +56,7 @@ check = |font, plan, text| {
 		crash "Graphite shaping is not deterministic"
 	}
 	run = match checked {
-		Ok(run) => run
+		Ok(value) => value
 		Err(OverBudget(result)) => result.run
 		Err(ProgramAborted(result)) => {
 			if !result.run.glyphs.is_empty() {
