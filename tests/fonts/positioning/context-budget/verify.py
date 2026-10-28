@@ -38,7 +38,7 @@ def main():
  if not args.binary:
   binary.parent.mkdir(parents=True,exist_ok=True);roc=os.environ.get('ROC','roc')
   with flight.flight(roc,work=binary.parent) as dep:subprocess.run([roc,'build','--opt=speed',str(HERE/'query.roc'),f'--output={binary}',*dep],cwd=ROOT,check=True)
- requests=''.join(f"{c['id']}\t{HERE/c['font']}\t{c['depth']}\t{c['operations']}\t{c['direction']}\t{c['text']}\n" for c in cases)
+ requests=''.join(f"{c['id']}\t{HERE/c['font']}\t{c['depth']}\t{c['operations']}\t{c['direction']}\t{c.get('weight',0)}\t{c['text']}\n" for c in cases)
  p=subprocess.run([str(binary)],input=requests,text=True,capture_output=True,check=True,timeout=120)
  actual={id:json.loads(row) for id,row in (s.split('\t',1) for s in p.stdout.splitlines())}
  errors=[]
@@ -53,7 +53,8 @@ def main():
    budgets=['Depth'] if c['depth']<2 else []
    if got['offsets']!=[[0,0],[target,vertical]] or got['budgets']!=budgets:errors.append((c['id'],{'offset':[target,vertical],'budgets':budgets},got))
   elif not c.get('contract_only') and 'reference_failure' not in expected:
-   if {k:got[k] for k in expected}!=expected or got['budgets']:errors.append((c['id'],expected,got))
+   compared={k:([got[k][i] for i in c['sample']] if 'sample' in c else got[k]) for k in expected}
+   if compared!=expected or got['budgets']:errors.append((c['id'],expected,got))
   # Queries stay index aligned and retain valid byte clusters on failures.
   n=len(got['glyphs']);assert all(len(got[k])==n for k in ['advances','offsets','clusters'])
   assert all(0<=i<len(c['text'].encode()) for i in got['clusters'])

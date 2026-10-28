@@ -17,6 +17,12 @@ import "../fonts/positioning/context-budget/wide-16383.ttf" as invalid_file : Li
 import "../fonts/positioning/context-budget/saturating-advance.ttf" as saturating_advance : List(U8)
 import "../fonts/positioning/context-budget/saturating-placement.ttf" as saturating_placement : List(U8)
 
+import "../fonts/positioning/context-budget/device-advance.ttf" as device_advance : List(U8)
+import "../fonts/positioning/context-budget/device-placement.ttf" as device_placement : List(U8)
+import "../fonts/positioning/context-budget/float-anchor.ttf" as float_anchor : List(U8)
+import "../fonts/positioning/context-budget/attachment-distance.ttf" as distance_file : List(U8)
+import "../fonts/positioning/context-budget/attachment-mixed-advances.ttf" as mixed_file : List(U8)
+
 PositionContextTests :: {}.{}
 
 read = |bytes, depth| match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True, limits: Font.Limits.{ max_depth: depth } }) {
@@ -96,3 +102,25 @@ expect {
 	run = Font.shape(read(saturating_placement, 64), Str.join_with(List.repeat("a", 64), ""), options)
 	run.offsets.take_first(2) == [{ x: -268435457, y: 0 }, { x: 806354943, y: 0 }]
 }
+
+varied = |bytes| Font.at(read(bytes, 64), Font.Variation.{ axes: [{ tag: "wght", value: 1 }] })
+expect {
+	run = Font.shape(varied(device_advance), Str.join_with(List.repeat("a", 32), ""), options)
+	run.advances.take_first(2) == [{ x: 2147450879, y: 0 }, { x: 1878434319, y: 0 }]
+}
+expect {
+	run = Font.shape(varied(device_placement), Str.join_with(List.repeat("a", 32), ""), options)
+	run.offsets.take_first(2) == [{ x: 2147450879, y: 0 }, { x: 1878433809, y: 0 }]
+}
+expect Font.shape(varied(float_anchor), "a\u(301)", options).offsets == [{ x: 0, y: 0 }, { x: -510, y: 0 }]
+expect {
+	run = Font.shape(read(mixed_file, 64), "a\u(301)                              ", options)
+	run.advances.take_first(3) == [{ x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 0 }] and run.offsets.take_first(3) == [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 2147483646, y: 0 }]
+}
+expect [32767.U64, 32768, 32769].all(
+	|distance| {
+		text = "a${Str.join_with(List.repeat("b", distance - 1), "")}\u(301)"
+		run = Font.shape(read(distance_file, 64), text, options)
+		run.glyphs.len() == distance + 1 and (run.offsets.last() ?? { x: 0, y: 0 }) == (if (distance <= 32768) { x: -410, y: 700 } else { x: 0, y: 0 })
+	},
+)

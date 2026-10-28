@@ -94,6 +94,44 @@ def saturation(field):
  lookups=[lookup(7,context([record(0,1) for _ in range(9)]+[record(0,2) for _ in range(9)])),lookup(7,context([record(0,3) for _ in range(8192)])),lookup(7,context([record(0,4) for _ in range(8192)])),pos,neg]
  save(f,'saturating-'+('advance' if field=='XAdvance' else 'placement')+'.ttf',lookups)
 
+def saturation_device(field):
+ from fontTools.fontBuilder import FontBuilder
+ from fontTools.varLib.builder import buildVarRegionList,buildVarData,buildVarStore
+ f=base();FontBuilder(font=f).setupFvar([('wght',0,0,1,'Weight')],[])
+ gdef=newTable('GDEF');gdef.table=ot.GDEF();gdef.table.Version=0x10003;gdef.table.populateDefaults()
+ gdef.table.VarStore=buildVarStore(buildVarRegionList([{'wght':(0,1,1)}],['wght']),[buildVarData([0],[[-32768]],optimize=False)]);f['GDEF']=gdef
+ gm=f.getReverseGlyphMap();pos=lookup(1,buildSinglePosSubtable({'a':value(field,32767)},gm));corrected=copy.deepcopy(pos)
+ d=ot.Device();d.StartSize=0;d.EndSize=0;d.DeltaFormat=0x8000
+ name,bit=('XAdvDevice',0x40) if field=='XAdvance' else ('XPlaDevice',0x10)
+ corrected.SubTable[0].ValueFormat|=bit;setattr(corrected.SubTable[0].Value,name,d)
+ lookups=[lookup(7,context([record(0,1) for _ in range(9)]+[record(0,3)])),lookup(7,context([record(0,2) for _ in range(8192)])),pos,corrected]
+ save(f,'device-'+('advance' if field=='XAdvance' else 'placement')+'.ttf',lookups)
+
+def float_anchor():
+ from fontTools.fontBuilder import FontBuilder
+ from fontTools.varLib.builder import buildVarRegionList,buildVarData,buildVarStore
+ f=base(True);FontBuilder(font=f).setupFvar([('wght',0,0,1,'Weight')],[])
+ f['GDEF'].table.Version=0x10003;f['GDEF'].table.VarStore=buildVarStore(buildVarRegionList([{'wght':(0,1,1)}],['wght']),[buildVarData([0],[[16777216]],optimize=False)])
+ d=ot.Device();d.StartSize=0;d.EndSize=0;d.DeltaFormat=0x8000
+ mark=buildAnchor(0,0,deviceX=d);anchor=buildAnchor(1,0,deviceX=copy.deepcopy(d))
+ attach=lookup(4,buildMarkBasePosSubtable({'acute':(0,mark)},{'a':{0:anchor}},f.getReverseGlyphMap()))
+ save(f,'float-anchor.ttf',[attach])
+
+def attachment_distance():
+ f=base(True);f['GDEF'].table.GlyphClassDef.classDefs['b']=3
+ attach=lookup(4,buildMarkBasePosSubtable({'acute':(0,buildAnchor(0,0))},{'a':{0:buildAnchor(100,700)}},f.getReverseGlyphMap()))
+ save(f,'attachment-distance.ttf',[attach])
+
+def attachment_mixed():
+ from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
+ f=base(True);gpos=f['GPOS'];gdef=f['GDEF'];addOpenTypeFeaturesFromString(f,'feature ccmp { sub a by a b; } ccmp;');f['GPOS']=gpos;f['GDEF']=gdef
+ gm=f.getReverseGlyphMap();adv=lookup(1,buildSinglePosSubtable({'a':value('XAdvance',-511),'b':value('XAdvance',-519)},gm))
+ attach=lookup(4,buildMarkBasePosSubtable({'acute':(0,buildAnchor(0,0))},{'a':{0:buildAnchor(0,0)}},gm))
+ pos=lookup(1,buildSinglePosSubtable({'acute':value('XPlacement',32767)},gm))
+ outer=lookup(7,context([record(0,3) for _ in range(9)],inputs=['acute']));inner=lookup(7,context([record(0,4) for _ in range(8192)],inputs=['acute']))
+ feature=f['GPOS'].table.FeatureList.FeatureRecord[0].Feature;feature.LookupListIndex=[0,1,2];feature.LookupCount=3
+ save(f,'attachment-mixed-advances.ttf',[adv,attach,outer,inner,pos])
+
 def wide(n):
  # Coverage overlaps the first ignored records, keeping Offset16 small
  # despite a >64KiB record list. The layout permits shared byte ranges.
@@ -117,5 +155,6 @@ if __name__=='__main__':
  order('shift-attach.ttf',[(1,2),(1,1)])
  order('attach-shift.ttf',[(1,1),(1,2)])
  recursive(8192);recursive(8192,fanout=True)
- for field in ['XAdvance','XPlacement']:saturation(field)
+ for field in ['XAdvance','XPlacement']:saturation(field);saturation_device(field)
+ float_anchor();attachment_distance();attachment_mixed()
  for n in [16385,16386,16387]:wide(n)
