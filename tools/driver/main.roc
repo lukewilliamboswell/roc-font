@@ -187,7 +187,11 @@ glyphs = |font, settings, shaping, scalars| {
 	items = scalars.map_with_index(|scalar, i| { scalar, offset: if (settings.utf8) offsets.get(i) ?? 0 else i })
 	features = shaping.features.map(|f| Font.Feature.{ tag: f.tag, value: f.value, start: f.start, end: f.end })
 	options = Font.ShapeOptions.{ script: shaping.script, language: shaping.language, direction: shaping.direction, features, clusters: shaping.clusters }
-	shaped = Font.shape_scalars(font, Font.plan(font, options), items)
+	plan = Font.plan(font, options)
+	shaped = match settings.text_range {
+		Whole => Font.shape_scalars(font, plan, items)
+		Range(range) => Font.shape_range(font, plan, scalar_text(scalars), Font.TextRange.{ start: range.start, end: range.end })
+	}
 	var $out = List.with_capacity(shaped.glyphs.len())
 	for i in 0..<shaped.glyphs.len() {
 		advance = shaped.advances.get(i) ?? { x: 0, y: 0 }
@@ -195,4 +199,25 @@ glyphs = |font, settings, shaping, scalars| {
 		$out = $out.append({ glyph: (shaped.glyphs.get(i) ?? 0).to_u64(), cluster: (shaped.clusters.get(i) ?? 0).to_u64(), dx: offset.x.to_i64(), dy: offset.y.to_i64(), ax: advance.x.to_i64(), ay: advance.y.to_i64() })
 	}
 	$out
+}
+
+# Case parsing proved these are Unicode scalar values.
+scalar_text : List(U32) -> Str
+scalar_text = |scalars| {
+	bytes = scalars.join_map(
+		|cp|
+			if cp < 0x80 {
+				[cp]
+			}
+			else if cp < 0x800 {
+				[0xC0 + cp.shr_zf_wrap(6), 0x80 + cp.bitwise_and(63)]
+			}
+			else if cp < 0x10000 {
+				[0xE0 + cp.shr_zf_wrap(12), 0x80 + cp.shr_zf_wrap(6).bitwise_and(63), 0x80 + cp.bitwise_and(63)]
+			}
+			else {
+				[0xF0 + cp.shr_zf_wrap(18), 0x80 + cp.shr_zf_wrap(12).bitwise_and(63), 0x80 + cp.shr_zf_wrap(6).bitwise_and(63), 0x80 + cp.bitwise_and(63)]
+			},
+	)
+	Str.from_utf8(bytes.map(|b| b.to_u8_wrap())) ?? ""
 }

@@ -234,6 +234,7 @@ def shape(font_path: str, options: list[str], unicodes: list[int], location: dic
     cluster_level = None
     buffer_flags = hb.BufferFlags.DEFAULT
     font_size = None
+    text_range = None
     for option in options:
         name, _, value = option.partition("=")
         if option in ("--no-glyph-names", "--font-funcs=ot", "--font-funcs=ft", "--single-par"):
@@ -276,6 +277,12 @@ def shape(font_path: str, options: list[str], unicodes: list[int], location: dic
             cluster_level = int(value)
         elif name == "--font-size" and value:
             font_size = value
+        elif name == "--text-range":
+            pieces = value.split(":")
+            if len(pieces) != 2 or any(not n.isascii() or not n.isdigit() or int(n) > 0xFFFFFFFFFFFFFFFF for n in pieces):
+                raise Unsupported(option)
+            text_range = tuple(map(int, pieces))
+            utf8 = True
         else:
             raise Unsupported(option)
 
@@ -294,7 +301,20 @@ def shape(font_path: str, options: list[str], unicodes: list[int], location: dic
     def run():
         buf = hb.Buffer()
         if utf8:
-            buf.add_utf8("".join(chr(u) for u in unicodes).encode("utf-8"))
+            encoded = [chr(u).encode("utf-8") for u in unicodes]
+            paragraph = b"".join(encoded)
+            if text_range is None:
+                buf.add_utf8(paragraph)
+            else:
+                start, end = text_range
+                offsets, at = [], 0
+                for scalar in encoded:
+                    offsets.append(at)
+                    at += len(scalar)
+                selected = [i for i, offset in enumerate(offsets) if start <= offset < end]
+                actual_start = offsets[selected[0]] if selected else len(paragraph)
+                actual_end = offsets[selected[-1]] + len(encoded[selected[-1]]) if selected else actual_start
+                buf.add_utf8(paragraph, actual_start, actual_end - actual_start)
         else:
             buf.add_codepoints(list(unicodes))
         if direction:

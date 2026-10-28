@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "about": "Per-call selected UTF-8 character ranges retain unshaped paragraph context for Arabic joining; no context glyphs are emitted.",
+  "cases": [
+    {
+      "id": "sans-whole",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:6"
+        ]
+      }
+    },
+    {
+      "id": "sans-initial",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:2"
+        ]
+      }
+    },
+    {
+      "id": "sans-medial",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4"
+        ]
+      }
+    },
+    {
+      "id": "sans-final",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    },
+    {
+      "id": "sans-transparent-prefix",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "بَت",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    },
+    {
+      "id": "sans-nonjoining-control",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=5:7"
+        ]
+      }
+    },
+    {
+      "id": "sans-joining-control",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=3:5"
+        ]
+      }
+    },
+    {
+      "id": "sans-empty",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=6:6"
+        ]
+      }
+    },
+    {
+      "id": "sans-paragraph",
+      "font": "../fonts/shaping/arabic/NotoSansArabic-Regular.ttf",
+      "text": "x ببب y",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    },
+    {
+      "id": "naskh-whole",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:6"
+        ]
+      }
+    },
+    {
+      "id": "naskh-initial",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=0:2"
+        ]
+      }
+    },
+    {
+      "id": "naskh-medial",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=2:4"
+        ]
+      }
+    },
+    {
+      "id": "naskh-final",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    },
+    {
+      "id": "naskh-transparent-prefix",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "بَت",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    },
+    {
+      "id": "naskh-nonjoining-control",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ب‌ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=5:7"
+        ]
+      }
+    },
+    {
+      "id": "naskh-joining-control",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "‍ب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=3:5"
+        ]
+      }
+    },
+    {
+      "id": "naskh-empty",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "ببب",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=6:6"
+        ]
+      }
+    },
+    {
+      "id": "naskh-paragraph",
+      "font": "../fonts/shaping/arabic/NotoNaskhArabic-Regular.ttf",
+      "text": "x ببب y",
+      "options": {
+        "script": "Arab",
+        "direction": "rtl",
+        "hb_options": [
+          "--text-range=4:6"
+        ]
+      }
+    }
+  ]
+}

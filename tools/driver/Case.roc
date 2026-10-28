@@ -29,7 +29,7 @@ Case :: {}.{
 
 	## The output settings of a shaping request. `font_size` is 0 when not
 	## given.
-	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64 }
+	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64, text_range : [Whole, Range({ start : U64, end : U64 })] }
 
 	## Where to measure, mirroring `Font.Variation` (whose field types these
 	## are, structurally) and named instances.
@@ -102,7 +102,7 @@ Case :: {}.{
 	## the other location flags.
 	flags : Str -> Try(Flags, Str)
 	flags = |field| {
-		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole }
 		var $face = 0.U32
 		var $instance = 0.U32
 		var $has_instance = False
@@ -129,6 +129,20 @@ Case :: {}.{
 					$s = { ..$s, advances: False }
 				} else if flag == "utf8-clusters" {
 					$s = { ..$s, utf8: True }
+				} else if flag.starts_with("text-range=") {
+					match flag.drop_prefix("text-range=").split_on(":") {
+						[start, end] => match (Case.decimal(start), Case.decimal(end)) {
+							(Ok(a), Ok(b)) => {
+								$s = { ..$s, text_range: Range({ start: a, end: b }), utf8: True }
+							}
+							_ => {
+								$bad = flag
+							}
+						}
+						_ => {
+							$bad = flag
+						}
+					}
 				} else if flag.starts_with("font-size=") {
 					match Case.decimal(flag.drop_prefix("font-size=")) {
 						Ok(size) if size > 0 => {
@@ -504,7 +518,7 @@ Case :: {}.{
 }
 
 plain : Case.Settings
-plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0, text_range: Whole }
 
 expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })

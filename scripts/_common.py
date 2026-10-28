@@ -1094,6 +1094,12 @@ def driver_request(case: Case, font: str, location: dict | None = None, protocol
         if s.get("remove_default_ignorables") and any(is_default_ignorable(c) for c in case.scalars):
             return None, "--remove-default-ignorables"
         for option in s.get("hb_options", []):
+            if option.startswith("--text-range="):
+                value = option.partition("=")[2]
+                if not re.fullmatch(r"[0-9]+:[0-9]+", value) or any(int(n) > 0xFFFFFFFFFFFFFFFF for n in value.split(":")):
+                    return None, option
+                flags += ["text-range=" + value, "utf8-clusters"]
+                continue
             if option not in DRIVER_NOOP_HB_OPTIONS and not (protocol >= 2 and option.startswith("--face-index=")):
                 return None, option
     if case.face:
