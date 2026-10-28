@@ -64,11 +64,32 @@ Negative seeds use their magnitude; zero/missing seeds use 987654321, matching
 FreeType's private-dictionary initialization. No hinting or rasterization is
 performed by this package.
 
-The first native gate passed 2348/2348 exact path/extents records and 160/160
-quantized FreeType records. CffMain passed 18 expects (11 CFF plus 7 support) in a
+The initial native gate passed 2348/2348 exact path/extents records and 160/160
+quantized FreeType records. The final expanded gate passes 2943/2943 exact
+normative F64 paths/extents and 160/160 quantized FreeType records. CffMain passes
+22 expects (15 CFF plus 7 support) in a
 source-sentinel mirror with explicit served dependency replacement. An earlier
 raw CLI invocation accidentally compiled the source closure; its 539 count is
 not public-bundle evidence and is not retained as such.
+
+The additional original fonts cover both predefined Expert charsets, custom
+charset format 2, both subroutine bias thresholds 1240/33900, and CFF2 FDSelect
+formats 0/3/4 with two dictionaries, nested blends and a flex1 branch that
+changes with location. All of these valid fixtures pass OTS 9.3. Separate files
+cover truncated INDEX data, missing subroutines, recursive subroutines/seac,
+missing required CFF2 PrivateDICT, and the exact/outside coordinate envelope.
+The edge and outside coordinate files both pass OTS: the outside rejection is
+explicitly our numeric resource bound, not a claim of malformed font data.
+
+Three declared HarfBuzz 14.6 default-draw differences are retained in the raw
+oracle records. For the CFF2 constant-region fixture, HB draw suppresses all
+blends at zero coordinates while its extents and fontTools apply the constant
+region. Its source `hb-ot-cff2-table.cc:223-224` passes zero coordinate count
+when `has_nonzero_coords` is false; extents uses the full coordinate vector.
+The public path follows the specification and agrees with fontTools and HB
+extents. The verifier checks the exact normative path and separately proves
+the raw HB path equals fontTools with blending disabled. No tolerance or
+unlisted exception is used.
 
 ## Hostile input and numerical limits
 
@@ -102,7 +123,39 @@ seeds exercise totality, finite output, deterministic repeated reads/queries,
 variation locations and out-of-range glyphs. `fuzz-small.json` and
 `fuzz-seeded.json` record 1000 optimized native inputs each, seeds 27128/27129.
 Requested bytes and peak live bytes are unavailable in roc-fuzz 0.4.3; RSS is
-not a substitute. Dedicated timing/allocation evidence is added separately.
+not a substitute. `font-cff2.roc` adds an independent narrow nested-blend target
+at 16/64/256 operators, including a constant default region and FDSelect 4.
+Final campaigns pass 1000 inputs each, seeds 27131/27132, on the final core.
+
+## Native performance evidence
+
+`native-measurements.json` records untouched 39b66c3, initial functional CFF,
+and optimized CFF at 16/64/256 operators for both straight-line and nested-blend
+programs. The untouched implementation returns Unknown; its zero query costs
+are not an equivalent-work speed comparison. The functional optimization
+returns an already-sized path buffer directly when there is no seac expansion.
+
+Plain outline allocations decline 9/11/13→2/2/2, and extents 2/2/2→1/1/1.
+Nested-blend outlines decline 10/12/14→3/3/3, and extents 3/3/3→2/2/2.
+Reading remains 47 allocations for plain programs and 78 for the variable fixture.
+These are feature-local allocation counts, not a change to unrelated default
+font workloads. Timing uses native optimized Roc and native HarfBuzz 14.6 C,
+with coordinate checksums and explicit matching locations: Regular 400 for
+extents and 500 for CFF2 drawing, avoiding HB's zero-coordinate draw shortcut.
+Both processes include startup, reading, preparation and stdout.
+
+Grouped timing samples were affected by run-order/system load. The additional
+`paired-timings.json` rotates initial/current/HB order over 7 repetitions.
+After/initial outline ratios at 16/64/256 are 0.894/0.950/0.978 for plain programs
+and 0.962/0.985/1.010 for nested blends. Largest-size after/HB ratios are about
+9.08 and 9.17 respectively. The deterministic allocation improvement is clear;
+the elapsed-time samples do not establish a general speed improvement.
+
+Reproduce with `build-bench.py` (served source-sentinel builds), `bench.py` and
+`paired-bench.py`. Timing flags are `--opt=speed`; allocation flags are
+`--fuzz --opt=speed`. The exact compiler, binary/font hashes, samples and
+measurement limits are recorded. The initial functional query code predates
+the direct-buffer optimization; the baseline query lacks CFF entirely.
 
 Primary format/reference sources:
 

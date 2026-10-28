@@ -58,6 +58,15 @@ def canonical(path):
         result.append([op, points])
     return result
 
+def narrowed_for_hb(path):
+    result = []
+    for op, points in path:
+        if op == "closePath" and result and result[-1][0] == "moveTo":
+            result.pop()
+        else:
+            result.append([op, [[f32(v) for v in point] for point in points]])
+    return result
+
 def locations(font):
     result = [{}]
     if "fvar" in font:
@@ -77,7 +86,10 @@ def generate():
     assert fontTools.__version__ == "4.61.1"
     assert hb.version_string() == "14.6.0"
     records = []
-    for file in ["sans-cff1.otf", "cid-cff1.otf", "sans-cff2.otf", "serif-cff2.otf", "operators-cff1.otf"]:
+    for file in ["sans-cff1.otf", "cid-cff1.otf", "sans-cff2.otf", "serif-cff2.otf", "operators-cff1.otf",
+                 "expert-cff1.otf", "expert-subset-cff1.otf", "charset2-cff1.otf",
+                 "bias-1240-cff1.otf", "bias-33900-cff1.otf",
+                 "blends-16-cff2.otf", "blends-64-cff2.otf", "blends-256-cff2.otf"]:
         path = HERE / file
         data = path.read_bytes()
         tt = TTFont(path, recalcTimestamp=False)
@@ -112,12 +124,28 @@ def generate():
                 bounds = None if extents is None else [extents.x_bearing,
                     extents.y_bearing + extents.height,
                     extents.x_bearing + extents.width, extents.y_bearing]
+                hb_path = canonical(hb_pen.value)
+                scalar_path = canonical(scalar_pen.value)
+                narrowed = narrowed_for_hb(scalar_path)
+                difference = None
+                if narrowed != hb_path:
+                    assert "CFF2" in tt and all(value == 0 for value in normalized.values()), (file, glyph, axes)
+                    skipped = tt.getGlyphSet(location={}, normalized=True)
+                    skipped.blender = None
+                    skipped_pen = DecomposingRecordingPen(skipped)
+                    skipped[name].draw(skipped_pen)
+                    skipped_path = canonical(skipped_pen.value)
+                    skipped_narrow = narrowed_for_hb(skipped_path)
+                    assert skipped_narrow == hb_path, (file, glyph, axes)
+                    difference = {"reason": "HarfBuzz14.6 CFF2 draw skips all blends at default coordinates, including constant regions; its extents and the specification apply them.",
+                                  "source": "hb-ot-cff2-table.cc:223-224", "fonttools_no_blend_path": skipped_path}
                 records.append({"id": f"cff-{len(records):05d}", "font": file,
                     "sha256": digest, "glyph": glyph, "axes": axes, "normalized": normalized,
                     "fonttools_path": canonical(ft_pen.value),
                     "region_scalars_f32": scalars,
-                    "fonttools_f32_scalar_path": canonical(scalar_pen.value),
-                    "harfbuzz_path": canonical(hb_pen.value), "harfbuzz_extents": bounds})
+                    "fonttools_f32_scalar_path": scalar_path,
+                    "harfbuzz_path": hb_path, "harfbuzz_extents": bounds,
+                    "declared_harfbuzz_draw_difference": difference})
     return {"fontTools": fontTools.__version__, "harfbuzz": hb.version_string(), "records": records}
 
 if __name__ == "__main__":

@@ -97,8 +97,13 @@ def main():
         draws = path is not None and any(op in ("lineTo", "curveTo", "qCurveTo") for op, _ in path)
         expected_extents = record["harfbuzz_extents"] if draws else None
         expected = record["fonttools_f32_scalar_path"]
+        difference = record.get("declared_harfbuzz_draw_difference")
+        if difference is not None:
+            assert record["normalized"] and all(value == 0 for value in record["normalized"].values())
+            assert harfbuzz_path(difference["fonttools_no_blend_path"]) == record["harfbuzz_path"]
+            assert harfbuzz_path(expected) != record["harfbuzz_path"]
         checks = {"id": tag == record["id"], "fontTools_f64": path == expected,
-                  "harfbuzz_f32": path is not None and harfbuzz_path(path) == record["harfbuzz_path"],
+                  "harfbuzz_f32_or_declared_difference": difference is not None or (path is not None and harfbuzz_path(path) == record["harfbuzz_path"]),
                   "extents": actual["extents"] == expected_extents}
         if not all(checks.values()):
             failures.append({"id": tag, "checks": checks, "actual": actual,
@@ -113,11 +118,13 @@ def main():
                                 "expected": record["path"]})
     (work / "results.json").write_text(json.dumps({"exact_records": len(records),
         "exact_agree": len(records) - len(failures), "freetype_quantized_records": len(ft_records),
+        "declared_harfbuzz_default_draw_differences": sum(record.get("declared_harfbuzz_draw_difference") is not None for record in records),
         "freetype_quantized_agree": len(ft_records) - len(ft_failures),
         "failures": failures + ft_failures}, separators=(",", ":")) + "\n")
     for failure in failures[:5]:
         print(json.dumps(failure), file=sys.stderr)
-    print(f"CFF paths/extents: {len(records) - len(failures)}/{len(records)} exact cached records")
+    differences = sum(record.get("declared_harfbuzz_draw_difference") is not None for record in records)
+    print(f"CFF paths/extents: {len(records) - len(failures)}/{len(records)} exact normative records; {differences} declared HarfBuzz default-draw differences")
     for failure in ft_failures[:5]:
         print(json.dumps(failure), file=sys.stderr)
     print(f"FreeType calculator/random: {len(ft_records) - len(ft_failures)}/{len(ft_records)} quantized path records")

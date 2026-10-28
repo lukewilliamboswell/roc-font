@@ -5,7 +5,9 @@ import io
 from pathlib import Path
 from fontTools.fontBuilder import FontBuilder
 from fontTools.misc.psCharStrings import T2CharString
-from fontTools.cffLib import SubrsIndex
+from fontTools.cffLib import SubrsIndex, FDSelect, cffIExpertStrings, cffExpertSubsetStrings, cffStandardStrings
+from fontTools.ttLib import TTFont
+from fontTools.ttLib.tables.DefaultTable import DefaultTable
 
 HERE = Path(__file__).resolve().parent
 START = [10, 20, "rmoveto"]
@@ -52,7 +54,7 @@ programs = {
     "random": START + ["random", 1000, "mul", 50, "rlineto", "random", 1000, "mul", 50, "rlineto", "random", 1000, "mul", 50, "rlineto"] + END,
 }
 
-def build(selected, seed=12345):
+def build(selected, seed=12345, subr_count=1):
     fb = FontBuilder(1000, isTTF=False)
     names = list(selected)
     fb.setupGlyphOrder(names)
@@ -66,8 +68,9 @@ def build(selected, seed=12345):
     fb.setupCFF("OriginalCffOperators-Regular", {"FullName": "Original CFF Operator Tests", "FamilyName": "Original CFF Operator Tests", "FontBBox": [0, 0, 5000, 5000]}, strings, {"initialRandomSeed": seed})
     top = fb.font["CFF "].cff.topDictIndex[0]
     top.Private.Subrs = SubrsIndex()
-    top.Private.Subrs.append(T2CharString(program=[25, 35, "rlineto", "return"], private=top.Private, globalSubrs=fb.font["CFF "].cff.GlobalSubrs))
-    fb.font["CFF "].cff.GlobalSubrs.append(T2CharString(program=[45, 55, "rlineto", "return"], private=top.Private, globalSubrs=fb.font["CFF "].cff.GlobalSubrs))
+    for index in range(subr_count):
+        top.Private.Subrs.append(T2CharString(program=[25, 35, "rlineto", "return"] if index == 0 else ["return"], private=top.Private, globalSubrs=fb.font["CFF "].cff.GlobalSubrs))
+        fb.font["CFF "].cff.GlobalSubrs.append(T2CharString(program=[45, 55, "rlineto", "return"] if index + 1 == subr_count else ["return"], private=top.Private, globalSubrs=fb.font["CFF "].cff.GlobalSubrs))
     for cs in strings.values():
         cs.private = top.Private
         cs.globalSubrs = fb.font["CFF "].cff.GlobalSubrs
@@ -78,10 +81,39 @@ def build(selected, seed=12345):
     fb.font.save(output)
     return output.getvalue()
 
+def variable(count, select_format):
+    font = TTFont(io.BytesIO(build({".notdef": END, "space": END, "A": END, "flex": END})), recalcBBoxes=False, recalcTimestamp=False)
+    font.getGlyphOrder()
+    del font["CFF "]
+    fb = FontBuilder(font=font, isTTF=False)
+    fb.setupFvar([("wght", 0, 0, 1000, "Weight")], [])
+    line = [0, 0, "rmoveto"]
+    for _ in range(count):
+        line += [1, 2, 2, 1, "blend", 2, 2, 1, "blend", 1, "rlineto"]
+    flex = [0, 0, "rmoveto", 0, 200, 0, 1, "blend", 20, 0, 20, 0, 20, 0, 20, 0, 20, 10, "flex1"]
+    strings = {name: T2CharString(program=program) for name, program in {".notdef": [], "space": [], "A": line, "flex": flex}.items()}
+    fb.setupCFF2(strings, fdArrayList=[{}, {}], regions=[{"wght": (0, 1, 1)}, {}])
+    top = font["CFF2"].cff.topDictIndex[0]
+    select = FDSelect(format=select_format)
+    select.gidArray = [0, 0, 1, 1]
+    top.FDSelect = select
+    top.CharStrings.fdSelect = select
+    for index, name in enumerate(font.getGlyphOrder()):
+        strings[name].fdSelectIndex = select.gidArray[index]
+        strings[name].private = top.FDArray[select.gidArray[index]].Private
+    output = io.BytesIO()
+    font.save(output)
+    return output.getvalue()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
+    def emit(file, data):
+        if args.check:
+            assert (HERE / file).read_bytes() == data, file
+        else:
+            (HERE / file).write_bytes(data)
     for file, selected in [("operators-cff1.otf", {name: program for name, program in programs.items() if not name.startswith("calc") and name != "random"}),
                            ("calculator-cff1.otf", programs)]:
         data = build(selected)
@@ -97,3 +129,66 @@ if __name__ == "__main__":
             assert (HERE / file).read_bytes() == data, file
         else:
             (HERE / file).write_bytes(data)
+    for count in (16, 64, 256):
+        program = [0, 0, "rmoveto"] + [value for _ in range(count) for value in (1, 1, "rlineto")] + END
+        data = build({".notdef": END, "space": END, "A": program})
+        file = f"lines-{count}-cff1.otf"
+        if args.check:
+            assert (HERE / file).read_bytes() == data, file
+        else:
+            (HERE / file).write_bytes(data)
+    for file, names in [("expert-cff1.otf", cffIExpertStrings),
+                        ("expert-subset-cff1.otf", cffExpertSubsetStrings),
+                        ("charset2-cff1.otf", cffStandardStrings[:300])]:
+        selected = {name: END if name in (".notdef", "space") else START + [20, 30, "rlineto"] + END for name in names}
+        emit(file, build(selected))
+    for count, bias in ((1240, 1131), (33900, 32768)):
+        selected = {".notdef": END, "space": END,
+                    "A": START + [-bias, "callsubr", count - 1 - bias, "callgsubr"] + END}
+        emit(f"bias-{count}-cff1.otf", build(selected, subr_count=count))
+    # Malformed required tables retain valid surrounding SFNT structure.
+    font = TTFont(HERE / "operators-cff1.otf", recalcBBoxes=False, recalcTimestamp=False)
+    font.getGlyphOrder()
+    top = font["CFF "].cff.topDictIndex[0]
+    raw = font.getTableData("CFF ")
+    index = top.CharStrings.charStringsIndex
+    local = top.Private.Subrs
+    changes = {"bad-index-cff1.otf": raw[:top.rawDict["CharStrings"] + 3]}
+    bad_call = bytearray(raw)
+    start = index.offsetBase + index.offsets[21]
+    assert bad_call[start + 3:start + 5] == b"\x20\x0a"
+    bad_call[start + 3] = 33  # -106 selects missing local subroutine1.
+    changes["bad-subr-cff1.otf"] = bytes(bad_call)
+    cycle = bytearray(raw)
+    subr_start = local.offsetBase + local.offsets[0]
+    assert cycle[subr_start:subr_start + 4] == bytes([164, 174, 5, 11])
+    cycle[subr_start:subr_start + 4] = bytes([32, 10, 11, 11])
+    changes["cycle-subr-cff1.otf"] = bytes(cycle)
+    for file, data in changes.items():
+        table = DefaultTable("CFF ")
+        table.data = data
+        font["CFF "] = table
+        output = io.BytesIO()
+        font.save(output)
+        emit(file, output.getvalue())
+    boundary = [32767, "dup", "mul", 32767, 2, "mul", "add", 0, "rmoveto"]
+    for file, tail in [("coordinate-edge-cff1.otf", END),
+                       ("coordinate-outside-cff1.otf", [1, 0, "rlineto"] + END)]:
+        emit(file, build({".notdef": END, "space": END, "A": boundary + tail}))
+    seac_cycle = {".notdef": END, "space": END, "A": [0, 0, 65, 194, "endchar"], "acute": START + [10, 10, "rlineto"] + END}
+    emit("cycle-seac-cff1.otf", build(seac_cycle))
+    for count, select_format in ((16, 0), (64, 3), (256, 4)):
+        emit(f"blends-{count}-cff2.otf", variable(count, select_format))
+    font = TTFont(io.BytesIO(variable(1, 4)), recalcBBoxes=False, recalcTimestamp=False)
+    font.getGlyphOrder()
+    top = font["CFF2"].cff.topDictIndex[0]
+    raw = bytearray(font.getTableData("CFF2"))
+    first_fd_end = top.FDArray.offsetBase + top.FDArray.offsets[1]
+    assert raw[first_fd_end - 1] == 18
+    raw[first_fd_end - 1] = 2  # unknown key clears args; PrivateDICT absent
+    table = DefaultTable("CFF2")
+    table.data = bytes(raw)
+    font["CFF2"] = table
+    output = io.BytesIO()
+    font.save(output)
+    emit("missing-private-cff2.otf", output.getvalue())

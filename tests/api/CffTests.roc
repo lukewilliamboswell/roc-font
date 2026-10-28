@@ -6,6 +6,13 @@ import "../fonts/cff/sans-cff2.otf" as sans_variable_file : List(U8)
 import "../fonts/cff/serif-cff2.otf" as serif_variable_file : List(U8)
 import "../fonts/cff/operators-cff1.otf" as operator_file : List(U8)
 import "../fonts/cff/calculator-cff1.otf" as calculator_file : List(U8)
+import "../fonts/cff/bad-index-cff1.otf" as bad_index_file : List(U8)
+import "../fonts/cff/bad-subr-cff1.otf" as bad_subr_file : List(U8)
+import "../fonts/cff/cycle-subr-cff1.otf" as cycle_subr_file : List(U8)
+import "../fonts/cff/cycle-seac-cff1.otf" as cycle_seac_file : List(U8)
+import "../fonts/cff/coordinate-edge-cff1.otf" as coordinate_edge_file : List(U8)
+import "../fonts/cff/coordinate-outside-cff1.otf" as coordinate_outside_file : List(U8)
+import "../fonts/cff/missing-private-cff2.otf" as missing_private_file : List(U8)
 
 ## A consumer can shape a CFF font and draw every returned glyph through
 ## the same public path API, including variable and CID-keyed outlines.
@@ -98,4 +105,44 @@ expect {
 		)
 		Ok(_) => False
 	}
+}
+expect [bad_index_file, bad_subr_file].all(
+	|bytes| match Font.from_bytes(bytes, Font.ReadOptions.{}) {
+		Err(problems) => problems.any(
+			|problem| match problem {
+				BadTable({ table, .. }) => table == "CFF "
+				_ => False
+			},
+		)
+		Ok(_) => False
+	},
+)
+expect {
+	match Font.from_bytes(missing_private_file, Font.ReadOptions.{}) {
+		Err(problems) => problems.any(
+			|problem| match problem {
+				BadTable({ table, .. }) => table == "CFF2"
+				_ => False
+			},
+		)
+		Ok(_) => False
+	}
+}
+expect [cycle_subr_file, cycle_seac_file, coordinate_outside_file].all(
+	|bytes| match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True }) {
+		Err(problems) => problems.any(
+			|problem| match problem {
+				OverLimit(_) => True
+				_ => False
+			},
+		)
+		Ok(_) => False
+	},
+)
+expect {
+	# The exact edge and one-unit-outside files both pass OTS9.3. The
+	# outside file exceeds our documented numeric resource proof, so it
+	# reports OverLimit rather than calling a legitimate program malformed.
+	font = read(coordinate_edge_file)
+	Font.outline(font, 2) == Outline([MoveTo({ x: 1073741823, y: 0 }), Close])
 }
