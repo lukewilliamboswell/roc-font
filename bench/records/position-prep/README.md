@@ -3,7 +3,8 @@
 `bench/position-prep.py` generates original fonts with 8, 64 and 256
 format-3 mark anchors. Native optimized Roc programs import the served
 bundle and use the standard read benchmark protocol; the native HarfBuzz
-comparator receives identical bytes. Both JSON records pin the fonts and
+comparator (system HarfBuzz13.2.1) receives identical bytes. Accuracy
+oracles independently use pinned HarfBuzz14.6.0. Both JSON records pin the fonts and
 bundle and retain all timing samples and their spread.
 
 | Marks | Before allocations | After allocations | Leaks | Before Roc/HarfBuzz time | After Roc/HarfBuzz time |

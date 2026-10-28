@@ -87,6 +87,6 @@
   "bundle": "9aCxgzLmvTukUR7w6krjzUQ7tPVFUe11d3hQkvhLHNqE.tar.zst",
   "build": "roc build --opt=speed bench/roc/font.roc --replace-dep ./package/main.roc <served-bundle>",
   "allocation_build": "roc build --fuzz bench/roc/alloc.roc --replace-dep ./package/main.roc <served-bundle>",
-  "reference": "native HarfBuzz14.6.0 standard benchmark comparator",
+  "reference": "native system HarfBuzz13.2.1 standard benchmark comparator (timing reference; cached accuracy oracles use14.6.0)",
   "note": "Concurrent compiler activity; time samples have substantial spread. Allocation counts are deterministic."
 }
