@@ -212,9 +212,16 @@ GraphiteRules :: {}.{
 		if to == 0 {
 			return { ahead: True, operations: 0, stopped: False }
 		}
+		# A deleted marker retains its old links. Newly inserted active slots
+		# between those neighbors are unreachable from either retained link.
+		# Recognize that local gap before searching the rest of the paragraph.
+		gap = GraphiteRules.in_deleted_gap(state, from, to, reverse, budget)
+		if gap.stopped or gap.inside {
+			return { ahead: False, operations: gap.operations, stopped: gap.stopped }
+		}
 		var $forward = from
 		var $backward = from
-		var $operations = 0
+		var $operations = gap.operations
 		var $walked = 0
 		while ($forward != 0 or $backward != 0) and $walked < state.nodes.len() {
 			$walked = $walked + 1
@@ -240,6 +247,53 @@ GraphiteRules :: {}.{
 			}
 		}
 		{ ahead: False, operations: $operations, stopped: False }
+	}
+
+	in_deleted_gap : GraphiteSlots, U64, U64, Bool, U64 -> { inside : Bool, operations : U64, stopped : Bool }
+	in_deleted_gap = |state, marker, target, reverse, budget| {
+		if !GraphiteSlots.get(state, marker).deleted {
+			return { inside: False, operations: 0, stopped: False }
+		}
+		var $operations = 0
+		var $left = GraphiteMachine.backward(state, marker, reverse)
+		var $right = GraphiteMachine.forward(state, marker, reverse)
+		var $direction = 0.U8
+		while $direction < 2 {
+			backwards = $direction == 0
+			var $node = if (backwards) $left else $right
+			var $walked = 0
+			while $node != 0 and GraphiteSlots.get(state, $node).deleted and $walked < state.nodes.len() {
+				if $operations >= budget {
+					return { inside: False, operations: $operations, stopped: True }
+				}
+				$operations = $operations + 1
+				$walked = $walked + 1
+				$node = if (backwards) GraphiteMachine.backward(state, $node, reverse) else GraphiteMachine.forward(state, $node, reverse)
+			}
+			if backwards {
+				$left = $node
+			} else {
+				$right = $node
+			}
+			$direction = $direction + 1
+		}
+		if target == $left or target == $right {
+			return { inside: False, operations: $operations, stopped: False }
+		}
+		var $node = if ($left == 0) GraphiteMachine.initial(state, reverse) else GraphiteMachine.forward(state, $left, reverse)
+		var $walked = 0
+		while $node != 0 and $node != $right and $walked < state.nodes.len() {
+			if $operations >= budget {
+				return { inside: False, operations: $operations, stopped: True }
+			}
+			$operations = $operations + 1
+			$walked = $walked + 1
+			if $node == target {
+				return { inside: True, operations: $operations, stopped: False }
+			}
+			$node = GraphiteMachine.forward(state, $node, reverse)
+		}
+		{ inside: False, operations: $operations, stopped: False }
 	}
 
 }
@@ -287,6 +341,26 @@ expect {
 	for count in [16.U64, 64, 256] {
 		a = rules_test([1.U8, 1, 0x24, 0, 0x32], List.repeat(1, count))
 		$ok = $ok and !a.aborted and a.stopped == 0 and a.operations <= 32 * count and a.state.nodes.drop_first(1).all(|s| GraphiteSlots.integer(s.advance_x) == 602)
+	}
+	$ok
+}
+
+## performance regression: deleted high-water links cannot reach a replacement
+## inserted between their old neighbors. Reject locally, without a full scan.
+expect {
+	var $ok = True
+	for count in [16.U64, 64, 256] {
+		var $state = GraphiteSlots.make(0, count + 1)
+		for _ in 0..<count {
+			a = GraphiteSlots.append($state, GraphiteSlots.no_slot)
+			$state = a.state
+		}
+		deleted = GraphiteSlots.delete($state, 2)
+		added = GraphiteSlots.insert(deleted, 3, GraphiteSlots.no_slot)
+		for reverse in [False, True] {
+			order = GraphiteRules.ahead(added.state, 2, added.id, reverse, 1000)
+			$ok = $ok and !order.ahead and !order.stopped and order.operations <= 2
+		}
 	}
 	$ok
 }
