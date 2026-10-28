@@ -154,6 +154,9 @@ uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
 * CFF/CFF2 fonts can supply shaping facts, but their paths/extents remain
   explicitly unknown where the TrueType outline reader cannot expose them.
   This blocks a consumer needing those paths, not ordinary glyph-id shaping.
+* Variable advances require `HVAR`. Fonts encoding advance changes only
+  in `gvar` phantom points currently retain their stored advances, which
+  blocks accurate variable-width layout for those fonts.
 * WOFF/WOFF2 data needs decompression before this sfnt reader can accept
   the font bytes; container unwrapping remains separate work.
 * After work-budget exhaustion, partial progress can differ from HarfBuzz's

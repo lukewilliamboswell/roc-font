@@ -12,6 +12,18 @@ evidence behind it. Measurements below were taken on 2026-10-24 with
 HarfBuzz 14.6.0 (uharfbuzz 0.56.3) and fontTools 4.61.1 from
 `tools/oracle/`.
 
+== Current metric boundary
+
+Outline and bounding-box queries apply `gvar`; advance variation currently
+uses `HVAR`. When a variable font omits `HVAR`, advances remain the stored
+`hmtx` values even if `gvar` changes its phantom-point advance. This affects
+a few older Windows variable fonts and Skia. The recorded HarfBuzz corpus
+provides direct reference cases for that remaining metric feature.
+
+The phases below describe the original design, including that unlanded
+advance fallback. Current remaining implementation work is tracked in
+`TODO.md`.
+
 == 1 Scope and phases
 
 All three phases are required for 0.1.0: the defaults are variable fonts,
@@ -453,8 +465,8 @@ and the byte offset in it. Independent problems are reported together
 Lenient reading (architecture §4.4) drops tables as units, never repairing
 one: a bad `fvar` or `avar` drops the whole variation space (`fvar`,
 `avar`, and with it every delta: the font reads as its default instance);
-a bad `HVAR` drops it (advances then come from `gvar` phantom points in
-phase 3, or are the defaults before it); a bad `MVAR` drops it (metrics are
+a bad `HVAR` drops it (advances currently remain the stored `hmtx`
+values; `gvar` outline variation is independent); a bad `MVAR` drops it (metrics are
 the defaults); a bad `GDEF` store drops `GDEF`, as HarfBuzz treats a table
 that fails to sanitise. `Font.dropped` names each. Strict reading rejects
 the font.
