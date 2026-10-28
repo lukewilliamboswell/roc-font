@@ -26,7 +26,8 @@ bits on every platform, in apps, packages, `expect`s and WebAssembly.
 * Reading and validating TrueType and OpenType files (`sfnt`, `ttcf`
   collections), reporting every independent problem.
 * Font facts in font units: metrics, character maps, glyph advances and
-  extents, names, and later outlines.
+  extents, names, TrueType paths, mathematical typesetting data and color
+  glyph instructions.
 * Shaping: Unicode text plus script, language, direction and feature
   choices in; a run of glyph ids, advances, offsets, clusters and flags
   out.
@@ -526,8 +527,10 @@ until variations are supported (§5.7) their prepared value measures
 Light, not the Regular a browser draws; avar, HVAR, MVAR and the GPOS
 deltas are therefore required before the defaults are exposed.
 
-A prepared face holds no font bytes; the bytes cost their file size only
-in apps that use them. `roc bundle` includes only files a module imports,
+A prepared face retains the original font bytes and checked directory for
+raw-table queries and PDF consumers. Preparation also retains checked
+outline data and optional font facts; consumers need not parse again.
+These constants cost space only in apps that use them. `roc bundle` includes only files a module imports,
 so each licence is imported as a `Str`, which also exposes it.
 
 Rules:
@@ -650,7 +653,7 @@ glyph record, so untraced shaping allocates nothing more.
 `extents` tells three cases apart: a box (`Extents`, named so callers
 can keep one), `Empty` (the glyph draws nothing, its outline has no
 contours, or its id is past the font) and `Unknown` (the font has no
-`glyf` outlines: CFF, CFF2 or bitmaps, which roc-font does not read), so
+`glyf` outlines: CFF, CFF2 or an image-only font), so
 a caller knows when to fall back on metrics and advances. `features`
 lists what a `Feature` can change, font-wide; it is a `List` because it
 is small and wanted whole. Run flags stay one `U8` column, as computed,
@@ -670,6 +673,69 @@ covers them with clusters and positions, and `shape_scalars` serves callers
 that do their own itemisation.
 
 [#shaping]
+=== 5.10 Font foundations beyond text runs
+
+The additional queries return font facts in font units. Layout and drawing
+remain consumer responsibilities. All consumers, including examples and
+feature-specific oracle drivers, import the served bundle (§7).
+
+*Mathematics.* `has_math` and `math_constants` expose the complete OpenType
+MATH constants. Glyph queries return italic corrections, top-accent
+attachments, extended-shape membership and four-corner kern tables (or a
+kern evaluated at a height). `math_variants` and `math_assembly` return
+horizontal or vertical stretch recipes and connector overlap information.
+The consumer selects variants, repeats extender parts and constructs its
+own mathematical boxes. This supports a pure Roc maths layout package;
+it adds no expression parser, mathematical layout or LaTeX pipeline here.
+A missing attachment is explicit absence, letting the consumer choose the
+format's recommended fallback. Height-dependent variation results use
+`I64`, since legal long deltas can exceed `I32`.
+
+MATH variation evaluation uses binary32 arithmetic without the text
+shaper's 2.30 scalar-cache quantization. Constant regions apply even at
+zero normalized coordinates. Cached fontTools instancing records cover
+these facts because the pinned HarfBuzz MATH queries ignore variation
+indices. The oracle provenance names that limitation (§7.1).
+
+*Outlines and editing carets.* `outline` returns TrueType move, line,
+quadratic and close commands, including composites, implied points and
+variable locations. Coordinates are finite `F64` values; fractional
+transforms and implied midpoints are retained. CFF/CFF2 paths remain
+`Unknown`. Preparation checks a conservative coordinate bound before
+queries, including every composite and accepted variation. A font outside
+that resource envelope is rejected rather than allowed to overflow later.
+`ligature_carets` returns each GDEF caret in font order, retaining an
+`Unavailable` slot when the font requests an outline point unavailable to
+this reader. Point-based carets use the contour's original point indices,
+not the expanded path command indices. Neither query applies pixel hinting.
+`examples/glyph-svg.roc` proves a complete path-to-SVG consumer.
+
+*Color glyphs.* CPAL queries expose ordered unpremultiplied sRGB palettes,
+background preferences and optional names. `color_layers` returns COLR0
+outline layers; `color_glyph` exposes COLR0/COLR1 paints as a flat graph
+with shared edge and gradient-stop pools. It covers all 32 paint formats,
+variation maps/stores, clipping, gradients, transforms and composite modes.
+Palette entries and foreground colors remain unresolved. Reading checks
+all references, graph cycles and bounded depth/work before any query.
+A valid CPAL is required to retain COLR. The graph is evaluated at the
+font's selected variation location; no pixels or trigonometry are computed.
+
+`svg_glyph` returns the exact encoded SVG or gzip document; it validates
+the container and leaves XML/gzip decoding to the caller. `bitmap_strikes`
+and `bitmap_glyph` expose sbix and CBDT/CBLC encoded payloads, native strike
+metrics and placement. The strike order is sbix followed by CBDT, each in
+file order. sbix duplicate references are eagerly resolved with their
+origins retained. Image codecs, scaling and painting stay outside the
+package. The licensed emoji consumers exercise ZWJ and variation-selector
+shaping followed by paint/outline or bitmap queries.
+
+*PDF and inspection.* Raw-table queries retain original bytes and directory
+order, including tables the shaping pipeline does not interpret. Names,
+embedding flags, stored bounds/header metrics and stored left-side
+bearings support a downstream PDF writer without duplicating the parser.
+These are raw font facts; font subsetting, PDF serialization and embedding
+policy remain with the consumer.
+
 == 6 Shaping
 
 === 6.1 Stages
@@ -852,7 +918,7 @@ provenance:
 |table parsing, metrics, cmap, names, kern pairs, subsetting round trips
 
 |FreeType (`freetype-py`)
-|glyph extents and, later, outlines
+|glyph extents, TrueType paths, contour-point carets and encoded bitmap facts
 
 |OTS (`ots-sanitize`, pinned release binary)
 |accept, reject or drop-table for hostile and malformed fonts, the

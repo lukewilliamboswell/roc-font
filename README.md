@@ -16,13 +16,16 @@ lines and choosing fallback fonts stay with your program.
 
 ## Status
 
-**0.1.0-rc2, a release candidate for the first release.** Text is shaped as HarfBuzz's default shaper
-shapes it, which covers Latin, Greek, Cyrillic and other scripts that need
-no script-specific shaper, plus HarfBuzz's Hebrew shaper. Variable fonts are
-measured at any weight, width or optical size. Scripts that need their own
-shaper (Arabic joining, the Indic scripts, Thai, Khmer and others) are shaped
-by the default shaper for now, and mark attachment, cursive and contextual
-positioning are not applied yet. The API may still change before 1.0.
+**Unreleased font foundation integration.** The development branch includes
+all GPOS positioning types, TrueType paths, ligature carets, PDF metadata
+and raw tables, OpenType MATH facts, COLR/CPAL paint graphs, embedded SVG
+and bitmap glyph assets. Variable fonts are queried at the selected weight,
+width, optical size or custom axes.
+
+Arabic joining, Hebrew, Thai/Lao and Hangul have dedicated shaping stages.
+Indic, Khmer, Myanmar and USE shaping are being developed. The API remains
+provisional while real bundled consumers and cached reference tests verify
+these additions. See [TODO.md](TODO.md) for remaining integration work.
 
 ## Example
 
