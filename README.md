@@ -22,8 +22,9 @@ and raw tables, OpenType MATH facts, COLR/CPAL paint graphs, embedded SVG
 and bitmap glyph assets. Variable fonts are queried at the selected weight,
 width, optical size or custom axes.
 
-Arabic joining, Hebrew, Thai/Lao and Hangul have dedicated shaping stages.
-Indic, Khmer, Myanmar and USE shaping are being developed. The API remains
+Arabic joining, Hebrew, Thai/Lao, Hangul and Devanagari have dedicated
+shaping stages. Other Indic scripts, Khmer, Myanmar and USE shaping are
+being developed. The API remains
 provisional while real bundled consumers and cached reference tests verify
 these additions. See [TODO.md](TODO.md) for remaining integration work.
 

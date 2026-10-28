@@ -188,6 +188,20 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-indic": TargetConfig(
+        sources=(FUZZ_ROOT / "font-indic.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-indic.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=256,
+        timeout=10,
+        contract=(
+            "Devanagari syllables, reph, matras, join controls and broken "
+            "clusters in two real families: aligned deterministic bounded "
+            "runs, original clusters, feature masks, linear allocations and no leaks"
+        ),
+        font_files=False,
+    ),
     "font-arabic": TargetConfig(
         sources=(FUZZ_ROOT / "font-arabic.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-arabic.json",

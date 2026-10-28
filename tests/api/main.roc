@@ -20,6 +20,8 @@ import MetadataTests
 import MathTests
 import OutlineTests
 import CaretTests
+import PositionFlagTests
+import IndicTests
 import PositionTests
 import ColorTests
 import ColorImageTests
