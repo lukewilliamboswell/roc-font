@@ -456,7 +456,10 @@ LayoutGsub := {
 	with_items = |session, items| { ..session, items }
 
 	clear_substitution_flags : List(Item) -> List(Item)
-	clear_substitution_flags = |items| items.map(|item| LayoutGsub.with_gprops(item, LayoutGsub.gprops(item).bitwise_and(0xFF8F)))
+	# HarfBuzz's _hb_clear_substitution_flags clears only SUBSTITUTED.
+	# USE still needs LIGATED to recognize consumed halants and MULTIPLIED
+	# to interpret component metadata when it reorders pre-base vowels.
+	clear_substitution_flags = |items| items.map(|item| LayoutGsub.with_gprops(item, LayoutGsub.gprops(item).bitwise_and(0xFFEF)))
 
 	resume : LayoutGsub, List(StageStep), Session, Limits -> Session
 	resume = |shape, plan, session, limits| {
@@ -3424,10 +3427,12 @@ expect {
 	}
 }
 
+## fuzz regression: a USE pause must preserve LIGATED and MULTIPLIED.
+## Clearing them turns a consumed halant into a false reorder barrier.
 expect {
 	item = { glyph: 7, cluster: 9, mask: 0x8002000000000001, props: 0xAB123456007A4321 }
 	cleared = LayoutGsub.clear_substitution_flags([item])
-	cleared == [{ ..item, props: 0xAB123456000A4321 }]
+	cleared == [{ ..item, props: 0xAB123456006A4321 }]
 }
 
 # Sixteen stages may contain 16*65535 steps when the read limit permits
