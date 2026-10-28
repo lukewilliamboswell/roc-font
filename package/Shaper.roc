@@ -24,7 +24,7 @@ import TableCmap
 ## Internal. Not done, each a documented difference from HarfBuzz: the
 ## shapers of complex scripts (Arabic joining, Indic, Khmer, Myanmar, the
 ## Universal Shaping Engine, Thai, Hangul; their text shapes as the
-## default shaper shapes it), vertical text, GPOS lookups other than pair
+## default shaper shapes it), vertical text,
 ## adjustment and the character cluster level. Features beyond the 27
 ## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
 Shaper :: {}.{
@@ -734,14 +734,18 @@ Shaper :: {}.{
 		limit = (p.growth * n).max(16384)
 		budget = (p.operations * n).max(16384)
 		applied = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
-		placed = Shaper.position(face, location, p, applied.items, backward, space_fallback, found.ignorables)
-		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped }
+		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - applied.operations)
+		placed = positioned.placed
+		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped.bitwise_or(positioned.stopped) }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
 	## and `hb_ot_substitute_post`).
 	position : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool -> Placed
-	position = |face, location, p, substituted, backward, space_fallback, ignorables| {
+	position = |face, location, p, substituted, backward, space_fallback, ignorables| Shaper.position_checked(face, location, p, substituted, backward, space_fallback, ignorables, (p.operations * substituted.len()).max(16384)).placed
+
+	position_checked : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool, U64 -> { placed : Placed, stopped : U64 }
+	position_checked = |face, location, p, substituted, backward, space_fallback, ignorables, remaining_budget| {
 		upem = Face.units_per_em(face).to_i64()
 		advance_of = |glyph| Face.advance(face, location, glyph).to_i64()
 		count = substituted.len()
@@ -752,7 +756,8 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_count(face))
+		full = LayoutKerning.position_full(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_count(face), $base, backward, { budget: remaining_budget, depth: Face.max_depth(face) })
+		positioned = full.positions
 		var $items = positioned.items
 		var $ax = List.with_capacity(count)
 		var $dx = positioned.dx
@@ -789,7 +794,7 @@ Shaper :: {}.{
 			$dy = fallback_dy
 		}
 		ordered = if (backward) { items: Shaper.reversed($items), ax: Shaper.reversed($ax), dx: Shaper.reversed($dx), dy: Shaper.reversed($dy) } else { items: $items, ax: $ax, dx: $dx, dy: $dy }
-		if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered
+		{ placed: if (ignorables) Shaper.hide_ignorables(face, ordered) else ordered, stopped: full.stopped }
 	}
 
 	## The widths HarfBuzz gives spaces the font lacks, drawn with the space

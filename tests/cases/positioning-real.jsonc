@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "about": "Real fonts exercising combining marks and existing substitutions/pairs under the full positioning engine.",
+  "cases": [
+    {
+      "id": "inter-0-ltr",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "inter-0-rtl",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "inter-1-ltr",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "inter-1-rtl",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "inter-2-ltr",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "inter-2-rtl",
+      "font": "../../package/fonts/Inter-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-0-ltr",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-0-rtl",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-1-ltr",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-1-rtl",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-2-ltr",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "merriweather-2-rtl",
+      "font": "../../package/fonts/Merriweather-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-0-ltr",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-0-rtl",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "ạ́ fí ä́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-1-ltr",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-1-rtl",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "x̄̇ ỵ́",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-2-ltr",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "firacode-2-rtl",
+      "font": "../../package/fonts/FiraCode-Variable.ttf",
+      "text": "office AVATAR",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    }
+  ]
+}

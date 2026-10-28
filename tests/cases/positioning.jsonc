@@ -1,0 +1,583 @@
+{
+  "schema": 1,
+  "about": "Original valid fixtures isolating full horizontal GPOS lookup families; regenerate with tests/fonts/positioning/generate.py.",
+  "cases": [
+    {
+      "id": "single-0-ltr",
+      "font": "../fonts/positioning/single.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "single-0-rtl",
+      "font": "../fonts/positioning/single.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "single-extension-0-ltr",
+      "font": "../fonts/positioning/single-extension.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "single-extension-0-rtl",
+      "font": "../fonts/positioning/single-extension.ttf",
+      "text": "aba",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-0-ltr",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "áb̀",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-0-rtl",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "áb̀",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-1-ltr",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "́á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-base-1-rtl",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "text": "́á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-0-ltr",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "á̀̇",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-0-rtl",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "á̀̇",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-1-ltr",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "à̇",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-mark-1-rtl",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "text": "à̇",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-0-ltr",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "f́ì",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-0-rtl",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "f́ì",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-1-ltr",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fí",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-1-rtl",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fí",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-2-ltr",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fí̀",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-ligature-2-rtl",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "text": "fí̀",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-0-ltr",
+      "font": "../fonts/positioning/cursive.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-0-rtl",
+      "font": "../fonts/positioning/cursive.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-1-ltr",
+      "font": "../fonts/positioning/cursive.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-1-rtl",
+      "font": "../fonts/positioning/cursive.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-rtl-flag-0-ltr",
+      "font": "../fonts/positioning/cursive-rtl-flag.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-rtl-flag-0-rtl",
+      "font": "../fonts/positioning/cursive-rtl-flag.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-rtl-flag-1-ltr",
+      "font": "../fonts/positioning/cursive-rtl-flag.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "cursive-rtl-flag-1-rtl",
+      "font": "../fonts/positioning/cursive-rtl-flag.ttf",
+      "text": "abca",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-1-0-ltr",
+      "font": "../fonts/positioning/context-1.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-1-0-rtl",
+      "font": "../fonts/positioning/context-1.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-2-0-ltr",
+      "font": "../fonts/positioning/context-2.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-2-0-rtl",
+      "font": "../fonts/positioning/context-2.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-3-0-ltr",
+      "font": "../fonts/positioning/context-3.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-3-0-rtl",
+      "font": "../fonts/positioning/context-3.ttf",
+      "text": "abac",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "chained-0-ltr",
+      "font": "../fonts/positioning/chained.ttf",
+      "text": "cabdab",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "chained-0-rtl",
+      "font": "../fonts/positioning/chained.ttf",
+      "text": "cabdab",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "chained-coverage-0-ltr",
+      "font": "../fonts/positioning/chained-coverage.ttf",
+      "text": "cabdac",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "chained-coverage-0-rtl",
+      "font": "../fonts/positioning/chained-coverage.ttf",
+      "text": "cabdac",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-propagation-0-ltr",
+      "font": "../fonts/positioning/mark-propagation.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-propagation-0-rtl",
+      "font": "../fonts/positioning/mark-propagation.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-filter-0-ltr",
+      "font": "../fonts/positioning/mark-filter.ttf",
+      "text": "á̀",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "mark-filter-0-rtl",
+      "font": "../fonts/positioning/mark-filter.ttf",
+      "text": "á̀",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-cursive-0-ltr",
+      "font": "../fonts/positioning/context-cursive.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "context-cursive-0-rtl",
+      "font": "../fonts/positioning/context-cursive.ttf",
+      "text": "abc",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-anchor-0-ltr",
+      "font": "../fonts/positioning/variable-anchor.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-anchor-0-rtl",
+      "font": "../fonts/positioning/variable-anchor.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "anchor-point-0-ltr",
+      "font": "../fonts/positioning/anchor-point.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "ltr"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "anchor-point-0-rtl",
+      "font": "../fonts/positioning/anchor-point.ttf",
+      "text": "á",
+      "options": {
+        "script": "Latn",
+        "direction": "rtl"
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "variable-anchor-bold",
+      "font": "../fonts/positioning/variable-anchor.ttf",
+      "text": "á",
+      "variations": {
+        "wght": 900
+      },
+      "expected": "oracle"
+    },
+    {
+      "id": "read-anchor-point",
+      "kind": "read",
+      "font": "../fonts/positioning/anchor-point.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-chained-coverage",
+      "kind": "read",
+      "font": "../fonts/positioning/chained-coverage.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-chained",
+      "kind": "read",
+      "font": "../fonts/positioning/chained.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-context-1",
+      "kind": "read",
+      "font": "../fonts/positioning/context-1.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-context-2",
+      "kind": "read",
+      "font": "../fonts/positioning/context-2.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-context-3",
+      "kind": "read",
+      "font": "../fonts/positioning/context-3.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-context-cursive",
+      "kind": "read",
+      "font": "../fonts/positioning/context-cursive.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-cursive-rtl-flag",
+      "kind": "read",
+      "font": "../fonts/positioning/cursive-rtl-flag.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-cursive",
+      "kind": "read",
+      "font": "../fonts/positioning/cursive.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-mark-base",
+      "kind": "read",
+      "font": "../fonts/positioning/mark-base.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-mark-filter",
+      "kind": "read",
+      "font": "../fonts/positioning/mark-filter.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-mark-ligature",
+      "kind": "read",
+      "font": "../fonts/positioning/mark-ligature.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-mark-mark",
+      "kind": "read",
+      "font": "../fonts/positioning/mark-mark.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-mark-propagation",
+      "kind": "read",
+      "font": "../fonts/positioning/mark-propagation.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-recursive",
+      "kind": "read",
+      "font": "../fonts/positioning/recursive.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-single-extension",
+      "kind": "read",
+      "font": "../fonts/positioning/single-extension.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-single",
+      "kind": "read",
+      "font": "../fonts/positioning/single.ttf",
+      "expected": "oracle"
+    },
+    {
+      "id": "read-variable-anchor",
+      "kind": "read",
+      "font": "../fonts/positioning/variable-anchor.ttf",
+      "expected": "oracle"
+    }
+  ]
+}

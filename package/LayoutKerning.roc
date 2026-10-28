@@ -4,11 +4,14 @@ import LayoutCommon
 import LayoutGsub
 import LayoutVar
 import LayoutGdef
+import LayoutPosition
 
-## Pair positioning: the pair adjustment lookups of `GPOS` (lookup type
+## Horizontal positioning. The pair adjustment lookups of `GPOS` (lookup type
 ## 2, directly or through an extension) that a shaping plan lists, and the
 ## horizontal format 0 subtables of a TrueType `kern` table, which HarfBuzz
 ## applies when the plan's `GPOS` language system has no `kern` feature.
+## Other positioning types and contextual execution use `LayoutPosition`;
+## the pair-only path remains available when no extra lookup can apply.
 ##
 ## Reading checks every offset and count a positioning step will follow
 ## and keeps the tables' bytes; positioning reads coverage, class
@@ -51,6 +54,7 @@ LayoutKerning := {
 	lv : LayoutVar,
 	loc : LayoutVar.Location,
 	gdef : LayoutGdef,
+	positioning : LayoutPosition,
 }.{
 
 	Pair : [
@@ -62,7 +66,7 @@ LayoutKerning := {
 	## The `GPOS` part of reading. `deltas` are the offsets (in the table) of
 	## device tables whose variation index names no row of the `GDEF` store:
 	## variation data the font cannot use, which OTS does not check.
-	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List({ end : U64, props : U64 }), digests : List({ a : U64, b : U64, c : U64 }), deltas : List(U64) }
+	Gpos : { data : List(U8), common : LayoutCommon, subtables : List(Pair), ends : List({ end : U64, props : U64 }), digests : List({ a : U64, b : U64, c : U64 }), deltas : List(U64), positioning : LayoutPosition }
 
 	## The `kern` part of reading.
 	Legacy : { data : List(U8), subtables : List(Pair), digests : List({ a : U64, b : U64, c : U64 }) }
@@ -81,7 +85,7 @@ LayoutKerning := {
 
 	## No positioning.
 	none : LayoutKerning
-	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False, lv: LayoutVar.none(0), loc: LayoutVar.default_location, gdef: LayoutGdef.none }
+	none = { data: [], common: LayoutCommon.none, subtables: [], ends: [], digests: [], kern_data: [], kern_subtables: [], kern_digests: [], has_gpos: False, has_kern: False, lv: LayoutVar.none(0), loc: LayoutVar.default_location, gdef: LayoutGdef.none, positioning: LayoutPosition.none }
 
 	## Put the two parts together; either may be absent (or dropped). `lv`
 	## is the `GDEF` store device deltas come from, `gdef` the glyph classes
@@ -90,7 +94,7 @@ LayoutKerning := {
 	combine = |gpos, legacy, lv, gdef| {
 		base = { ..LayoutKerning.none, lv, gdef }
 		with_gpos = match gpos {
-			Present(g) => { ..base, data: g.data, common: g.common, subtables: g.subtables, ends: g.ends, digests: g.digests, has_gpos: True }
+			Present(g) => { ..base, data: g.data, common: g.common, subtables: g.subtables, ends: g.ends, digests: g.digests, has_gpos: True, positioning: g.positioning }
 			Absent => base
 		}
 		match legacy {
@@ -122,6 +126,36 @@ LayoutKerning := {
 	no_value = { dx: 0, dy: 0, ax: 0 }
 
 	# ------------------------------------------------------------ applying
+
+	## Full positioning needs advances and direction to resolve attachments
+	## after every lookup. Pair-only fonts retain the original allocation
+	## and application path. Returned advances are deltas, as in `position`.
+	position_full : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64, List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64 }
+	position_full = |kerning, plan, legacy, items, glyph_count, base, backward, limits| {
+		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
+			{ positions: LayoutKerning.position(kerning, plan, legacy, items, glyph_count), stopped: 0 }
+		} else {
+			{ items: placed_items, ax, dx, dy, parents, attachments, stopped, operations } = LayoutPosition.position(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, items, base, backward, limits)
+			positions = { items: placed_items, ax, dx, dy }
+			# Legacy kerning follows GPOS when the selected language has no
+			# kern feature. It does not create attachment chains.
+			var $positions = positions
+			match legacy {
+				Kern(mask) => {
+					for k in 0..<kerning.kern_subtables.len() {
+						$positions = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, { mask, props: LayoutKerning.ignore_marks }, $positions, glyph_count, True)
+					}
+				}
+				NoKern => {}
+			}
+			resolved = LayoutPosition.resolve({ items: $positions.items, ax: $positions.ax, dx: $positions.dx, dy: $positions.dy, parents, attachments, stopped, operations }, backward)
+			var $ax = List.with_capacity(resolved.ax.len())
+			for i in 0..<resolved.ax.len() {
+				$ax = $ax.append((resolved.ax.get(i) ?? 0) - (base.get(i) ?? 0))
+			}
+			{ positions: { items: resolved.items, ax: $ax, dx: resolved.dx, dy: resolved.dy }, stopped }
+		}
+	}
 
 	## Position a run: the plan's `GPOS` pair lookups in order, each where
 	## both glyphs' masks share a bit with its mask, then, when `legacy` is
@@ -657,6 +691,7 @@ LayoutKerning := {
 		size = gpos.len()
 		read_common = LayoutCommon.read(gpos)?
 		common = read_common.common
+		needs_full = LayoutPosition.needed(gpos)
 		lookups = Bytes.u16(gpos, 8)
 		used = LayoutVar.variation_lookups(gpos, LayoutCommon.all_feature_lookups(common))
 		var $steps = read_common.steps
@@ -665,7 +700,7 @@ LayoutKerning := {
 		var $ends = List.with_capacity(common.lookup_count)
 		for index in 0..<common.lookup_count {
 			var $props = 0
-			if used.get(index) ?? False {
+			if needs_full or (used.get(index) ?? False) {
 				lookup = lookups + Bytes.u16(gpos, lookups + 2 + 2 * index)
 				kind = Bytes.u16(gpos, lookup)
 				flag = Bytes.u16(gpos, lookup + 2)
@@ -709,7 +744,8 @@ LayoutKerning := {
 			}
 			$ends = $ends.append({ end: $subtables.len(), props: $props })
 		}
-		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables), deltas: $deltas })
+		positioning = if (needs_full) LayoutPosition.read(gpos, glyph_count, lv)? else { value: LayoutPosition.none, deltas: [] }
+		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables), deltas: $deltas.concat(positioning.deltas), positioning: positioning.value })
 	}
 
 	read_pair : List(U8), U64, U64, U64 -> Try({ value : [Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })], steps : U64 }, [Bad(U64)])
