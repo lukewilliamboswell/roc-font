@@ -123,8 +123,9 @@ TableCffDict :: {}.{
 	# fontTools4.61.1 and HarfBuzz14.6 even though the current OpenType
 	# summary marks it nonblendable. Retain its finite checked operands;
 	# hint metadata does not influence these unhinted font-unit paths.
-	# Program selectors and offsets remain strictly nonblendable.
-	blendable = |op| op == 6 or op == 7 or op == 10 or op == 11 or op == 265 or op == 268 or op == 269
+	# Other finite hint entries receive the same treatment; none is used
+	# for font-unit paths. Program selectors/offsets remain nonblendable.
+	blendable = |op| (op >= 6 and op <= 11) or (op >= 265 and op <= 269) or op == 273 or op == 274
 
 	## DICT lookup follows decoding order; a later occurrence has the value
 	## the reference decoders retain. Every occurrence still has checked syntax.

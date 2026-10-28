@@ -43,10 +43,10 @@ TableCff := {
 		Absent => Ok(fallback)
 		Present(entry) => TableCffDict.nat(dict, entry, 0, maximum)
 	}
-	private : List(U8), TableCffDict.Parsed, Bool, TableVar.Store -> Try({ locals : TableCffIndex.Index, ivs : U64, seed : U32 }, [Bad(U64), OverLimit(Str)])
-	private = |data, font_dict, cff2, store| {
+	private : List(U8), TableCffDict.Parsed, Bool, TableVar.Store, U64 -> Try({ locals : TableCffIndex.Index, ivs : U64, seed : U32 }, [Bad(U64), OverLimit(Str)])
+	private = |data, font_dict, cff2, store, origin| {
 		match TableCffDict.find(font_dict, 18) {
-			Absent => Ok({ locals: TableCffIndex.empty, ivs: 0, seed: 987654321 })
+			Absent => if (cff2) Err(Bad(origin)) else Ok({ locals: TableCffIndex.empty, ivs: 0, seed: 987654321 })
 			Present(entry) => {
 				length = TableCffDict.nat(font_dict, entry, 0, data.len())?
 				offset = TableCffDict.nat(font_dict, entry, 1, data.len())?
@@ -168,8 +168,9 @@ TableCff := {
 			}
 			$fds = List.with_capacity(fd_array.count)
 			for i in 0..<fd_array.count {
-				dict = TableCffDict.read(data, TableCffIndex.span(data, fd_array, i), if (cff2) Font2 else Font1, $store)?
-				$fds = $fds.append(TableCff.private(data, dict, cff2, $store)?)
+				dict_span = TableCffIndex.span(data, fd_array, i)
+				dict = TableCffDict.read(data, dict_span, if (cff2) Font2 else Font1, $store)?
+				$fds = $fds.append(TableCff.private(data, dict, cff2, $store, dict_span.start)?)
 			}
 			selection = TableCff.entry_nat(top, 293, 0, data.len())?
 			if selection == 0 {
@@ -181,7 +182,7 @@ TableCff := {
 				$fd_for_glyph = TableCffTables.fd_select(data, selection, glyph_count, fd_array.count, cff2)?
 			}
 		} else {
-			$fds = [TableCff.private(data, top, False, $store)?]
+			$fds = [TableCff.private(data, top, False, $store, $top_span.start)?]
 			$fd_for_glyph = List.repeat(0, glyph_count)
 		}
 		var $charset = []
@@ -289,6 +290,17 @@ TableCff := {
 			return { commands: [], bounds: TableCffPath.empty_bounds }
 		}
 		regions = TableCffBlend.regions_of(prepared.store)
+		single_proof = prepared.proofs.get(glyph) ?? return { commands: [], bounds: TableCffPath.empty_bounds }
+		if single_proof.seac == Absent {
+			# Return the single proven, already-sized command buffer directly.
+			# No component worklist or second growing command list is needed.
+			fd_index = (prepared.fd_for_glyph.get(glyph) ?? 0).to_u64()
+			fd = prepared.fds.get(fd_index) ?? return { commands: [], bounds: TableCffPath.empty_bounds }
+			config = { cff2: prepared.cff2, globals: prepared.globals, locals: fd.locals, ivs: fd.ivs, seed: fd.seed, operation_limit: single_proof.operations, command_limit: single_proof.commands }
+			# Preparation proved these indices and this exact static program.
+			result = TableCffCharstring.run(prepared.data, TableCffIndex.span(prepared.data, prepared.glyphs, glyph), config, regions, scalars, False, draw, single_proof.commands) ?? return { commands: [], bounds: TableCffPath.empty_bounds }
+			return { commands: result.path.commands, bounds: result.path.bounds }
+		}
 		var $work = [{ glyph, dx: 0.F64, dy: 0.F64 }]
 		var $commands = []
 		var $bounds = TableCffPath.empty_bounds
@@ -355,7 +367,7 @@ test_cff1 : List(U8)
 test_cff1 = [1, 0, 4, 4, 0, 1, 1, 1, 2, 65, 0, 1, 1, 1, 3, 160, 17, 0, 0, 0, 0, 0, 1, 1, 1, 8, 139, 139, 21, 239, 139, 5, 14]
 
 test_cff2 : List(U8)
-test_cff2 = [2, 0, 5, 0, 5, 153, 17, 166, 12, 36, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 7, 139, 139, 21, 239, 139, 5, 0, 0, 0, 1, 1, 1, 1]
+test_cff2 = [2, 0, 5, 0, 5, 153, 17, 166, 12, 36, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 7, 139, 139, 21, 239, 139, 5, 0, 0, 0, 1, 1, 1, 4, 139, 139, 18]
 
 expect {
 	match TableCff.read(test_cff1, 1, 0, Cff1) {
@@ -377,3 +389,11 @@ expect {
 	}
 }
 expect TableCff.round_coordinate(-1.5) == -1 and TableCff.round_coordinate(1.5) == 2
+expect {
+	# CFF2 requires a PrivateDICT even when its length is zero.
+	missing = test_cff2.take_first(33).append(1)
+	match TableCff.read(missing, 1, 0, Cff2) {
+		Err(Bad({ offset, .. })) => offset == 34
+		_ => False
+	}
+}

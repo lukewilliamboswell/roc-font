@@ -22,6 +22,36 @@ TableCffCalc :: {}.{
 			Err(Bad)
 		}
 	}
+	# Exact remainder of a finite integral F64, without first narrowing it
+	# to I64. Type2 index clamps and roll reduces the shift modulo n, so
+	# a large calculator-produced integer is still a meaningful operand.
+	integer_mod : F64, U64 -> Try(U64, [Bad])
+	integer_mod = |v, modulus| {
+		if modulus == 0 or modulus > 48 or !TableCffNumber.within_limit(v) {
+			return Err(Bad)
+		}
+		if v == 0 {
+			return Ok(0)
+		}
+		bits = v.to_bits()
+		exponent = bits.shr_zf_wrap(52).bitwise_and(2047).to_i64_wrap() - 1075
+		var $significand = bits.bitwise_and(0xFFFFFFFFFFFFF).bitwise_or(0x10000000000000)
+		if exponent < 0 {
+			shift = (0 - exponent).to_u8_wrap()
+			if exponent < -52 or $significand.bitwise_and((1.U64).shl_wrap(shift) - 1) != 0 {
+				return Err(Bad)
+			}
+			$significand = $significand.shr_zf_wrap(shift)
+		}
+		var $remainder = $significand % modulus
+		if exponent >= 0 {
+			# |v|<=2^100 bounds this loop by48; intermediates<2*modulus.
+			for _ in 0..<exponent.to_u64_wrap() {
+				$remainder = ($remainder * 2) % modulus
+			}
+		}
+		Ok(if (v < 0 and $remainder != 0) modulus - $remainder else $remainder)
+	}
 	apply : State, U64 -> Try(State, [Bad, OverLimit])
 	apply = |state, op| {
 		{ args, transient, written, seed } = state
@@ -149,9 +179,10 @@ TableCffCalc :: {}.{
 			if n < 2 {
 				return Err(Bad)
 			}
-			index = TableCffCalc.integer(($args.last() ?? TableCffBlend.arg(0)).value)?
+			index = ($args.last() ?? TableCffBlend.arg(0)).value
+			_ = TableCffCalc.integer_mod(index, 1)?
 			# Type 2 defines clamping for index, unlike subroutine indices.
-			clamped = if (index < 0) 0 else if (index.to_u64_wrap() >= n - 1) n - 2 else index.to_u64_wrap()
+			clamped = if (index < 0) 0 else if (index >= (n - 1).to_f64()) n - 2 else index.to_u64_try() ?? 0
 			selected = $args.get(n - 2 - clamped) ?? TableCffBlend.arg(0)
 			$args = $args.set(n - 1, selected) ?? []
 		} else if op == 286 {
@@ -159,16 +190,16 @@ TableCffCalc :: {}.{
 				return Err(Bad)
 			}
 			count = TableCffCalc.integer(($args.get(n - 2) ?? TableCffBlend.arg(0)).value)?
-			shift = TableCffCalc.integer(($args.last() ?? TableCffBlend.arg(0)).value)?
+			shift = ($args.last() ?? TableCffBlend.arg(0)).value
 			if count < 0 or count.to_u64_wrap() > n - 2 {
 				return Err(Bad)
 			}
+			rotation = TableCffCalc.integer_mod(shift, count.to_u64_wrap().max(1))?
 			$args = $args.take_first(n - 2)
 			if count > 1 {
 				length = count.to_u64_wrap()
-				rotation = ((shift % count) + count) % count
 				# At most 48 operands, no input-sized or recursive permutation.
-				for _ in 0..<rotation.to_u64_wrap() {
+				for _ in 0..<rotation {
 					last = $args.last() ?? TableCffBlend.arg(0)
 					for j in 1..<length {
 						value = $args.get(n - 2 - 1 - j) ?? TableCffBlend.arg(0)
@@ -191,6 +222,16 @@ expect {
 	state = { ..TableCffCalc.init(987654321), args: [TableCffBlend.arg(7), TableCffBlend.arg(2)] }
 	match TableCffCalc.apply(state, 268) {
 		Ok(result) => result.args.map(|a| a.value) == [3.5]
+		Err(_) => False
+	}
+}
+expect TableCffCalc.integer_mod(1267650600228229401496703205376, 3) == Ok(1)
+expect TableCffCalc.integer_mod(-1267650600228229401496703205376, 3) == Ok(2)
+expect TableCffCalc.integer_mod(0.5, 3) == Err(Bad)
+expect {
+	state = { ..TableCffCalc.init(1), args: [7, 20, 1267650600228229401496703205376].map(TableCffBlend.arg) }
+	match TableCffCalc.apply(state, 285) {
+		Ok(result) => result.args.map(|a| a.value) == [7, 20, 7]
 		Err(_) => False
 	}
 }
