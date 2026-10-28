@@ -9,8 +9,8 @@ def sha(data):return hashlib.sha256(data).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--library',type=Path,default=Path('/private/tmp/graphite-geometry-reference/src/libgraphite2.dylib'));args=p.parse_args()
- cases=json.loads((HERE/'collision-cases.jsonc').read_text())['cases'];target=HERE/'collision-traces.json'
+ p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--cases',default='collision-cases.jsonc');p.add_argument('--output',default='collision-traces.json');p.add_argument('--library',type=Path,default=Path('/private/tmp/graphite-geometry-reference/src/libgraphite2.dylib'));args=p.parse_args()
+ cases=json.loads((HERE/args.cases).read_text())['cases'];target=HERE/args.output
  if args.check:
   saved=json.loads(target.read_text());records={r['id']:r for r in saved['records']};assert len(records)==len(cases)
   for case in cases:
