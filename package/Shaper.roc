@@ -1116,7 +1116,8 @@ Shaper :: {}.{
 		}
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
-		mirrored = if (p.vertical and !p.has_vert) Shaper.vertical_chars(face, ordered) else if (p.backward and !p.vertical) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		mirrored_base = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		mirrored = if (p.vertical and !p.has_vert) Shaper.vertical_chars(face, mirrored_base) else mirrored_base
 		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		{ chars: vowels, operations: pre_operations, stopped: pre_stopped } = match p.model {
@@ -1271,7 +1272,6 @@ Shaper :: {}.{
 			if ignorables and LayoutGsub.is_default_ignorable(item) {
 				$ax = $ax.set(i, 0) ?? []
 				$dx = $dx.set(i, 0) ?? []
-				$dy = $dy.set(i, 0) ?? []
 			}
 		}
 		fallback = if (p.fallback_marks and p.fallback_position) Shaper.position_marks_axis(face, location, { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }, backward, p.native == Rtl, Face.units_per_em(face).to_i64(), p.fallback_marks and !backward, True) else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
