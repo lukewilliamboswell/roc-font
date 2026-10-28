@@ -1,0 +1,156 @@
+= Shaping models and evidence
+
+This matrix separates model selection from evidence for particular fonts.
+Selection follows the pinned HarfBuzz 14.6.0 OpenType models; it does not
+promise agreement for every font using that script. Cached cases compare
+glyphs, advances, offsets, original clusters and, where requested, unsafe
+flags through the native driver importing the served package bundle.
+Record counts describe the checked-in matrices, including any read cases;
+the conformance gate establishes agreement for the current package build.
+
+== Model selection
+
+The caller supplies one script run, its script/language and direction.
+The selected font's OpenType script matters as well as the Unicode script.
+The implementation is in link:../package/Shaper.roc[Shaper] and
+link:../package/ShaperUse.roc[ShaperUse].
+
+[cols="1,3",options="header"]
+|===
+|Script/model |Selection and limits
+|Default |Other scripts use the default OpenType pipeline. This is not a
+claim that their script-specific requirements are implemented.
+|Hebrew (`Hebr`) |Default pipeline with Hebrew normalization/positioning
+rules. There is no dedicated two-family Hebrew oracle matrix here;
+public missing-glyph/direction tests do not establish Hebrew typography.
+|Arabic (`Arab`), Syriac (`Syrc`) |Arabic joining and staged features.
+Syriac selects this model unless the chosen font script is `DFLT`.
+Presentation-form fallback and `stch` have dedicated additional matrices;
+their presence alone is not evidence that their complete replay passes.
+|Hangul (`Hang`) |Jamo composition/decomposition, tone handling and Hangul
+feature masks, including missing-jamo/dotted-circle boundaries.
+|Thai (`Thai`), Lao (`Laoo`) |Script preprocessing; Thai also has legacy
+Windows/Macintosh shaping when the selected script is not `thai`.
+|Nine Indic scripts below |Indic model unless the selected script is
+`DFLT`, `latn` or a version-3 tag. Version-3 selection uses USE instead.
+Modern version-2 Noto fonts do not prove every legacy-tag path.
+|Khmer (`Khmr`) |Khmer syllables, coeng/matra reorder and staged features.
+|Myanmar (`Mymr`) |Modern Myanmar unless the selected script is `DFLT`,
+`latn` or legacy `mymr`. These use the default model. Zawgyi (`Qaag`) is
+not claimed by the modern Unicode Myanmar implementation.
+|USE |The 91 scripts listed below, plus Indic version-3 selection, unless
+the chosen font script is `DFLT` or `latn`. Joining scripts use the Arabic
+joining machine within USE's feature order; they are not the Arabic model.
+|===
+
+The generated link:../package/ShaperUseData.roc[USE selector table] contains
+these ISO script codes. Only the five USE rows in the next table have
+dedicated real-family matrices:
+
+[literal]
+Tibt Mong Sinh Buhd Hano Tglg Tagb Limb Tale Bugi Khar Sylo Tfng Bali Nkoo
+Phag Cham Kali Lepc Rjng Saur Sund Egyp Java Kthi Mtei Lana Tavt Batk Brah
+Mand Cakm Plrd Shrd Takr Dupl Gran Khoj Sind Mahj Mani Modi Hmng Phlp Sidd
+Tirh Ahom Mult Adlm Bhks Marc Newa Gonm Soyo Zanb Dogr Gong Rohg Maka Medf
+Sogo Sogd Elym Nand Hmnp Wcho Chrs Diak Kits Yezi Cpmn Ougr Tnsa Toto Vith
+Kawi Nagm Gara Gukh Krai Onao Sunu Todr Tutg Berf Sidt Tayo Tols Jurc Pcun Seal
+
+== Real-family matrices
+
+Font directories retain licences and source hashes. Renamed subsets are
+reproducible with the pinned preparation scripts. Original synthetic fonts
+exercise boundaries separately; they do not count as independent families.
+
+[cols="1,2,3",options="header"]
+|===
+|Script |Real families |Cached evidence
+|Arabic |Noto Sans Arabic, Noto Naskh Arabic
+|link:../tests/cases/arabic.jsonc[92 records] and
+link:../tests/cases/arabic-flags.jsonc[36 flag records].
+|Syriac; Nastaliq Arabic |Noto Sans Syriac 3.000, Eastern/Western 3.001;
+Noto Nastaliq Urdu 3.009
+|link:../tests/fonts/shaping/arabic-extra/extra-cases.jsonc[464 additional stress records].
+These require their own final agreement gate; they are not covered by the preceding Arabic result.
+|Hangul |Nanum Gothic, Nanum Myeongjo
+|link:../tests/cases/hangul.jsonc[220 records], also five boundary fixtures.
+|Thai, Lao |Noto Sans/Serif Thai; Noto Sans/Serif Lao
+|link:../tests/cases/thai-lao.jsonc[184 combined records], also three Thai legacy fixtures.
+|Devanagari (`Deva`) |Noto Sans/Serif Devanagari subsets
+|link:../tests/fonts/complex/indic-cases.jsonc[220 records].
+|Bengali (`Beng`) |Noto Sans/Serif Bengali subsets
+|link:../tests/fonts/shaping/indic-wide/cases.jsonc[140 records].
+|Gurmukhi (`Guru`) |Noto Sans/Serif Gurmukhi subsets |Same matrix, 132 records.
+|Gujarati (`Gujr`) |Noto Sans/Serif Gujarati subsets |Same matrix, 124 records.
+|Odia (`Orya`) |Noto Sans/Serif Oriya subsets |Same matrix, 128 records.
+|Tamil (`Taml`) |Noto Sans/Serif Tamil subsets |Same matrix, 132 records.
+|Telugu (`Telu`) |Noto Sans/Serif Telugu subsets |Same matrix, 128 records.
+|Kannada (`Knda`) |Noto Sans/Serif Kannada subsets |Same matrix, 128 records.
+|Malayalam (`Mlym`) |Noto Sans/Serif Malayalam subsets |Same matrix, 132 records.
+|Khmer |Noto Sans/Serif Khmer subsets
+|link:../tests/fonts/complex/khmer-cases.jsonc[280 records].
+|Myanmar |Noto Sans Myanmar 2.107, Noto Serif Myanmar 2.106
+|link:../tests/fonts/shaping/myanmar/myanmar.jsonc[682 records], also seven boundary/stress fixtures.
+|Tibetan (`Tibt`, USE) |Jomolhari, Noto Serif Tibetan
+|link:../tests/fonts/shaping/tibetan/tibetan-cases.jsonc[194 records].
+|Sinhala (`Sinh`, USE) |Noto Sans/Serif Sinhala subsets
+|link:../tests/fonts/shaping/use-sinhala/sinhala-cases.jsonc[400 records].
+|NKo (`Nkoo`, USE) |Noto Sans NKo, Noto Sans NKo Unjoined subsets
+|link:../tests/fonts/shaping/use-joining/joining-cases.jsonc[336 records].
+|Mongolian (`Mong`, USE) |Noto Sans Mongolian subset
+|Same joining matrix, 156 records. One family only; horizontal shaping only.
+|Adlam (`Adlm`, USE) |Noto Sans Adlam, ADLaM Display subsets
+|Same joining matrix, 296 records.
+|===
+
+link:../tests/fonts/complex/vowel-cases.jsonc[264 invalid-vowel records]
+and link:../tests/fonts/complex/long-cases.jsonc[208 long/serial-wrap records]
+add Devanagari/Khmer boundary evidence. Long cases retain the reference's
+64-glyph syllable-visit boundary and reused syllable serials.
+Arabic's original-fixture matrices separately cover
+link:../tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc[540 Unicode fallback records],
+link:../tests/fonts/shaping/arabic-fallback/windows-cases.jsonc[200 Windows fallback records]
+and link:../tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc[150 stretching records].
+Two successful Arabic families do not establish Nastaliq or Syriac coverage;
+cached stress expectations must pass replay before an agreement claim.
+
+== Measured cost
+
+These are historical optimized native cases on Roc nightly
+`2026-10-27-de79a0f`, excluding reading/planning, against same-run HarfBuzz
+14.6.0. They identify opportunities, not whole-package speed guarantees.
+Later shared engine changes require fresh measurements before claiming
+the same numbers for a release.
+
+[cols="1,1,1,2",options="header"]
+|===
+|Case |Scalars, three sizes |Roc/HarfBuzz time |Allocation calls
+|link:../tests/fonts/complex/optimized-measurements.json[Devanagari]
+|288 / 1152 / 4608 |6.49 / 6.56 / 6.45 |298 / 1114 / 4378
+|link:../tests/fonts/complex/khmer-after-measurements.json[Khmer]
+|272 / 1088 / 4352 |34.27 / 35.79 / 35.15 |334 / 1246 / 4894
+|link:../tests/fonts/complex/use-after-measurements.json[Tibetan USE]
+|208 / 832 / 3328 |4.42 / 4.29 / 4.29 |21 / 21 / 21
+|===
+
+All these runs reported zero leaked allocations. Requested bytes and peak
+live bytes are unavailable in roc-fuzz 0.4.3; RSS is not a substitute.
+The USE consumer checks script, UTF-8 length and an input checksum against
+the comparator. Its link:../tests/fonts/complex/use-before-checked-measurements.json[pre-model baseline]
+has incomplete shaping semantics and cannot establish an equivalent-output speedup.
+The separate link:../bench/records/scripts/default-queries.json[default-path record]
+uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
+
+== Practical boundaries
+
+* CFF/CFF2 fonts can supply shaping facts, but their paths/extents remain
+  explicitly unknown where the TrueType outline reader cannot expose them.
+  This blocks a consumer needing those paths, not ordinary glyph-id shaping.
+* Direction is horizontal LTR/RTL. Vertical shaping and Mongolian vertical
+  layout are not established by these matrices.
+* The shaping backend is OpenType; AAT and Graphite shaping are not implemented.
+* Bidi, script-run/grapheme segmentation, line breaking and font fallback
+  selection belong to downstream packages. A mixed paragraph needs those
+  steps before shaping its runs; these font-local models do not supply them.
+* MATH supplies font constants and stretch recipes. Expression parsing,
+  mathematical box layout and PDF/SVG output remain consumer work; font
+  support alone does not replace a LaTeX pipeline.
