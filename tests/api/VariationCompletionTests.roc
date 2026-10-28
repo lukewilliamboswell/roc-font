@@ -14,6 +14,8 @@ import "../fonts/variation-complete/avar-empty-map.ttf" as empty_file : List(U8)
 import "../fonts/variation-complete/duplicate-axes.ttf" as duplicate_file : List(U8)
 import "../fonts/variation-complete/Amstelvar-avar2.ttf" as real_file : List(U8)
 
+import "../fonts/variation-complete/axes-invalid-instance.ttf" as invalid_axes_file : List(U8)
+
 ## Public variable-font regressions; numerical facts are actual HB14.6
 ## outputs in variation-complete/cases.jsonc, replayed by its native driver.
 VariationCompletionTests :: {}.{}
@@ -134,3 +136,35 @@ expect {
 		Err(_) => False
 	}
 }
+
+# An axis count cannot exceed the byte-defined instance stride. Like OTS,
+# lenient mode drops malformed fvar; strict mode reports it.
+expect match (Font.from_bytes(invalid_axes_file, Font.ReadOptions.{}), Font.from_bytes(invalid_axes_file, Font.ReadOptions.{ strict: True })) {
+	(Ok(f), Err(ps)) => Font.axes(f).is_empty() and !Font.dropped(f).is_empty() and !ps.is_empty()
+	_ => False
+}
+
+simple_source : Font
+simple_source = read(simple_file)
+
+gvar_bytes : List(U8)
+gvar_bytes = table(simple_source, "gvar")
+
+gvar_tables : List({ tag : Str, data : List(U8) })
+gvar_tables = ["head", "hhea", "maxp", "hmtx", "cmap", "loca", "glyf", "fvar", "name", "OS/2", "post"].keep_oks(
+	|tag| match Font.table_bytes(simple_source, tag) {
+		Present(data) => Ok({ tag, data })
+		Absent => Err({})
+	},
+)
+
+broken_gvar : List(U8) -> Bool
+broken_gvar = |data| {
+	bytes = FontBuild.file(gvar_tables.append({ tag: "gvar", data }))
+	match (Font.from_bytes(bytes, Font.ReadOptions.{}), Font.from_bytes(bytes, Font.ReadOptions.{ strict: True })) {
+		(Ok(f), Err(ps)) => !Font.dropped(f).is_empty() and !ps.is_empty() and Font.advance(Font.at(f, Font.Variation.{ axes: [{ tag: "wght", value: 1 }] }), 1) == 510
+		_ => False
+	}
+}
+expect [1.U64, 19, gvar_bytes.len() - 1].all(|n| broken_gvar(gvar_bytes.take_first(n)))
+expect broken_gvar(FontBuild.patch(gvar_bytes, 16, [255, 255, 255, 255]))

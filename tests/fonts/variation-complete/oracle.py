@@ -47,6 +47,7 @@ def main():
  for value in [0,250,500,1000]:add('duplicate-axes.ttf',[['0001',value]],[2],'.')
  add('duplicate-axes.ttf',[['0001',1000],['0001',500]],[2],'.',label='last-wins')
  for font in ['phantom-sparse-4.ttf','phantom-sparse-64.ttf','phantom-sparse-512.ttf','phantom-all-4.ttf','phantom-all-64.ttf','phantom-all-512.ttf']:add(font,[['wght',1]])
+ for count in [8,32,128]:add(f'avar-regions-{count}.ttf',[['wght',.5],['wdth',.5]])
  for count in [8,32,128,16382]:add(f'axes-{count}.ttf',[['0000',.5]])
  for font in ['InterVariable.ttf','RocVariationCorpus-noHVAR.ttf']:
   f=TTFont(HERE/font);ids=[f.getGlyphID(f.getBestCmap()[ord(c)])for c in 'AV\u00e9\u00c5\u00fc']
@@ -58,7 +59,7 @@ def main():
   coords=normalizeLocation(dict(settings),{a.axisTag:(a.minValue,a.defaultValue,a.maxValue)for a in f['fvar'].axes})
   mapped=f['avar'].renormalizeLocation(coords,f)
   cases[-1]['fonttools_coords']=[round(mapped.get(a.axisTag,0)*16384)for a in f['fvar'].axes]
- tiny=TTFont(HERE/'avar-first-cache.ttf');loc={a.axisTag:v for a,(_,v)in zip(tiny['fvar'].axes,cases[100]['settings'])}if False else {'AX01':1/16384,'AX02':1/16384,'AX03':.0625}
+ tiny=TTFont(HERE/'avar-first-cache.ttf');loc={'AX01':1/16384,'AX02':1/16384,'AX03':.0625}
  mapped=tiny['avar'].renormalizeLocation(loc,tiny)
  next(c for c in cases if c['font']=='avar-first-cache.ttf')['fonttools_coords']=[round(mapped[t]*16384)for t in ['AX01','AX02','AX03']]
  out={'oracles':{'harfbuzz':hb.version_string(),'uharfbuzz':hb.__version__,'fontTools':fontTools.__version__,'FreeType':'.'.join(map(str,freetype.version()))},'cases':cases}

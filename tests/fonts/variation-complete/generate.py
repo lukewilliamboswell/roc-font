@@ -119,3 +119,9 @@ def inter_no_hvar():
    rec.string=value.encode(rec.getEncoding(),errors='replace')
  f.save(HERE/'RocVariationCorpus-noHVAR.ttf')
 if __name__=='__main__':many_axes();inter_no_hvar()
+
+def scaled_avar2():
+ for count in [8,32,128]:
+  f=axis_base([('wght',0,0,1,'Weight'),('wdth',0,0,1,'Width')]);regions=buildVarRegionList([{'wght':(0,1,1)}for _ in range(count)],['wght','wdth'])
+  store=buildVarStore(regions,[buildVarData(list(range(count)),[[32]*count,[0]*count],optimize=False)]);avar_table(f,store);f.save(HERE/f'avar-regions-{count}.ttf')
+if __name__=='__main__':scaled_avar2()

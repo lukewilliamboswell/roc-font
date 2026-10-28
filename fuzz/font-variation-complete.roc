@@ -19,6 +19,10 @@ import "../tests/fonts/variation-complete/phantom-last-metrics.ttf" as composite
 import "../tests/fonts/variation-complete/vertical-large.ttf" as vertical_file : List(U8)
 import "../tests/fonts/variation-complete/Amstelvar-avar2.ttf" as real_file : List(U8)
 
+import "../tests/fonts/variation-complete/avar-regions-8.ttf" as avar_8 : List(U8)
+import "../tests/fonts/variation-complete/avar-regions-32.ttf" as avar_32 : List(U8)
+import "../tests/fonts/variation-complete/avar-regions-128.ttf" as avar_128 : List(U8)
+
 ## Sparse phantom metrics at4/64/512 contour points allocate independently
 ## of contour size. Axis normalization at8/32/128 axes scales linearly.
 ## Real/corrupt bytes exercise complete validation before total queries
@@ -51,6 +55,19 @@ test! = |bytes| {
 	}
 	if aa.value.len() != 8 or bb.value.len() != 32 or cc.value.len() != 128 {
 		crash "axis output lost alignment"
+	}
+	avar_small = ready(avar_8)
+	avar_middle = ready(avar_32)
+	avar_large = ready(avar_128)
+	avar_settings = Font.Variation.{ axes: [{ tag: "wght", value: 0.5 }, { tag: "wdth", value: 0.5 }] }
+	avar_a = Fuzz.measure_allocs!(|{}| Font.coordinates(Font.at(avar_small, avar_settings)))
+	avar_b = Fuzz.measure_allocs!(|{}| Font.coordinates(Font.at(avar_middle, avar_settings)))
+	avar_c = Fuzz.measure_allocs!(|{}| Font.coordinates(Font.at(avar_large, avar_settings)))
+	if avar_a.value.map(|p| p.value) != [8320, 8192] or avar_b.value.map(|p| p.value) != [8704, 8192] or avar_c.value.map(|p| p.value) != [10240, 8192] {
+		crash "cross-axis region evaluation changed"
+	}
+	if avar_b.allocations > avar_a.allocations + 2 or avar_c.allocations > avar_a.allocations + 2 {
+		crash "avar2 region pool allocated per region"
 	}
 	Fuzz.expect_no_leaks!(|{}| Font.advance(Font.at(ready(large_file), Font.Variation.{ axes: [{ tag: "wght", value: 1 }] }), 1))
 	choice = (bytes.first() ?? 0).to_u64()

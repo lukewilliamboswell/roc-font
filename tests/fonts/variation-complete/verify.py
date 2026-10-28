@@ -23,6 +23,7 @@ def main():
  for c in cases:
   got=actual[c['id']]
   if got!=c['hb']:errors.append((c['id'],c['hb'],got))
+  if 'freetype_metrics'in c:assert got['metrics']==c['freetype_metrics'],(c['id'],'independent FreeType disagreement')
   n=len(got['glyphs']);assert all(len(got[k])==n for k in ['advances','offsets','clusters'])
  for id,expected,got in errors[:12]:
   differences={k:{'expected':expected[k][:12],'got':got[k][:12]}for k in expected if expected[k]!=got.get(k)}
