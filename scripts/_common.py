@@ -37,7 +37,7 @@ READ_OPTION = "--read-outcome"
 # The option that selects a Chrome width case (part of its record key).
 WIDTH_OPTION = "--width"
 # The options that select the font-fact kinds (part of their record keys).
-FACT_OPTIONS = {"coords": "--coords", "advances": "--advances", "metrics": "--metrics", "extents": "--extents"}
+FACT_OPTIONS = {"coords": "--coords", "advances": "--advances", "metrics": "--metrics", "extents": "--extents", "metadata": "--metadata"}
 
 
 # ----------------------------------------------------------------- commands
@@ -166,7 +166,7 @@ def load_jsonc(path: Path) -> object:
 # tools/oracle/extract.py; `width` by the Chrome oracle. Other lower-case
 # kinds parse (the format is extensible) and are reported as unsupported
 # until an oracle and the driver handle them.
-KNOWN_KINDS = ("shape", "read", "width", "coords", "advances", "metrics", "extents")
+KNOWN_KINDS = ("shape", "read", "width", "coords", "advances", "metrics", "extents", "metadata")
 # Kinds that take text (`text`/`unicodes`), and kinds that take glyph ids.
 TEXT_KINDS = ("shape", "width")
 GLYPH_KINDS = ("advances", "extents")

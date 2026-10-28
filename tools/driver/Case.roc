@@ -25,7 +25,7 @@ Case :: {}.{
 	Glyphs : [All, Listed(List(U32))]
 
 	## What a request asks for.
-	Kind : [Shape, Read, Width, Coords, Advances(Glyphs), Metrics, Extents(Glyphs)]
+	Kind : [Shape, Read, Width, Coords, Advances(Glyphs), Metrics, Metadata, Extents(Glyphs)]
 
 	## The output settings of a shaping request. `font_size` is 0 when not
 	## given.
@@ -81,6 +81,7 @@ Case :: {}.{
 					"read" => if (points.is_empty()) Ok((Read, [])) else Err(BadItems)
 					"coords" => if (points.is_empty()) Ok((Coords, [])) else Err(BadItems)
 					"metrics" => if (points.is_empty()) Ok((Metrics, [])) else Err(BadItems)
+					"metadata" => if (points.is_empty()) Ok((Metadata, [])) else Err(BadItems)
 					_ => Err(BadKind)
 				}
 				match (parsed, Case.flags(flag_text)) {

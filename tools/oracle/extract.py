@@ -56,7 +56,7 @@ from pathlib import Path
 # of its records: the result notation, the option handling, READ_TABLES, or
 # the choice of backend. shape 2: `--single-par` (a no-op), `--face-index`,
 # locations.
-EXTRACTOR_VERSIONS = {"shape": 2, "read": 1, "coords": 1, "advances": 1, "metrics": 1, "extents": 1}
+EXTRACTOR_VERSIONS = {"shape": 2, "read": 1, "coords": 1, "advances": 1, "metrics": 1, "extents": 1, "metadata": 1}
 HARFBUZZ_KINDS = ("shape", "coords", "advances", "metrics", "extents")
 
 HERE = Path(__file__).resolve().parent
@@ -94,6 +94,7 @@ def versions() -> dict:
     else:
         read_tools = {"fonttools": dist_version("fonttools")}
     tools = {kind: shape_tools for kind in HARFBUZZ_KINDS}
+    tools["metadata"] = {"fonttools": dist_version("fonttools")}
     tools["read"] = read_tools
     return {
         "extractor": EXTRACTOR_VERSIONS,
@@ -379,6 +380,41 @@ def facts(kind: str, font_path: str, options: list[str], glyphs, location: dict 
     raise Unsupported(f"kind={kind}")
 
 
+def metadata(font_path: str, face: int) -> str:
+    """Original sfnt facts, independently decoded by fontTools."""
+    from fontTools.ttLib import TTFont
+
+    with TTFont(font_path, fontNumber=face, lazy=True) as font:
+        def name(name_id):
+            if "name" not in font:
+                return "-"
+            table = font["name"]
+            record = table.getName(name_id, 3, 1, 0x409)
+            value = record.toUnicode() if record else table.getDebugName(name_id)
+            return ",".join(map(str, value.encode("utf-8"))) if value is not None else "-"
+
+        head, hhea = font["head"], font["hhea"]
+        bounds = ",".join(str(getattr(head, key)) for key in ("xMin", "yMin", "xMax", "yMax"))
+        header = ",".join(str(getattr(hhea, key)) for key in ("ascent", "descent", "lineGap"))
+        flags = str(font["OS/2"].fsType) if "OS/2" in font else "-"
+        metrics = font["hmtx"].metrics
+        bearings = ",".join(str(metrics[glyph][1]) for glyph in font.getGlyphOrder())
+        tables = []
+        # fontTools reorders its reader dictionary by payload offset.
+        # Preserve the original directory order for this public contract.
+        source = Path(font_path).read_bytes()
+        directory = struct.unpack_from(">I", source, 12 + 4 * face)[0] if source[:4] == b"ttcf" else 0
+        count = struct.unpack_from(">H", source, directory + 4)[0]
+        tags = [source[directory + 12 + 16 * i:directory + 16 + 16 * i].decode("latin-1") for i in range(count)]
+        for tag in tags:
+            entry = font.reader.tables[tag]
+            checksum = 14695981039346656037
+            for byte in font.reader[tag]:
+                checksum = ((checksum ^ byte) * 1099511628211) & 0xFFFFFFFFFFFFFFFF
+            tables.append(f"{int.from_bytes(tag.encode('latin-1'), 'big')},{entry.offset},{entry.length},{checksum}")
+        return "metadata:" + ";".join((name(1), name(4), name(6), flags, bounds, header, bearings, "|".join(tables)))
+
+
 # ------------------------------------------------------------------ reading
 
 
@@ -458,6 +494,9 @@ def answer(request: dict, ots: str | None) -> dict:
     kind = request["kind"]
     location = request.get("location")
     try:
+        if kind == "metadata":
+            result = metadata(request["font"], face_option(request["options"]))
+            return {"status": "ok", "result": result, "backend": "fontTools stored font facts", "detail": {}}
         if kind == "shape":
             result, detail = shape(request["font"], request["options"], request["unicodes"], location)
             return {"status": "ok", "result": result, "backend": "uharfbuzz (HarfBuzz ot font functions)", "detail": detail}

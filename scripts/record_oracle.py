@@ -90,7 +90,7 @@ CHROME_EXTRACT = CHROME_DIR / "width.mjs"
 
 # Case kinds and the oracle that answers each. The kind is a field of the
 # Case that scripts/_common.py parses; this script never reads case files.
-ORACLE_KINDS = ("shape", "read", "coords", "advances", "metrics", "extents")
+ORACLE_KINDS = ("shape", "read", "coords", "advances", "metrics", "extents", "metadata")
 CHROME_KINDS = ("width",)
 
 

@@ -9,6 +9,7 @@ import cli.Stdin
 import cli.Stdout
 import rf.Font
 import Case
+import Metadata
 
 ## Conformance driver. Reads requests on stdin, one per line, in the protocol
 ## of Case.roc (written by scripts/conformance.py from the JSONC case files),
@@ -127,6 +128,7 @@ run = |state, req|
 answer : Font, List(Str), Case.Request -> Str
 answer = |font, dropped, req|
 	match req.kind {
+		Metadata => Metadata.serialize(font)
 		Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
 		Width => Case.width(glyphs(font, req.settings, req.shaping, req.scalars))
 		Shape =>

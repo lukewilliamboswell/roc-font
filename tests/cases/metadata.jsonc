@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "about": "Original PDF font facts decoded independently by fontTools; table hashes cover exact original bytes, including padding-independent lengths.",
+  "defaults": {"kind": "metadata"},
+  "cases": [
+    {"id": "inter", "font": "../../package/fonts/Inter-Variable.ttf"},
+    {"id": "merriweather", "font": "../../package/fonts/Merriweather-Variable.ttf"},
+    {"id": "fira-code", "font": "../../package/fonts/FiraCode-Variable.ttf"},
+    {"id": "minimal", "font": "fixtures/tiny.ttf"}
+  ]
+}
