@@ -1,0 +1,27 @@
+{
+  "scope": "Exact saved timeout inputs replayed with final native served-bundle binaries; each replay completed successfully. Whole-workflow verification is recorded separately.",
+  "source": "03b23b3",
+  "source_sentinel": true,
+  "replays": [
+    {
+      "target": "font-read",
+      "bundle": "Gcuk51Q29169n6CqFgiNiqN6aALA6B3hv3v3fPGrVLsy.tar.zst",
+      "compiler": "nightly-2026-10-28-bad769b",
+      "binary_sha256": "6b3f43d1f4c197b9e9b2981df3020095ae41d55380697d405093badb625caaba",
+      "input_sha256": "867a26871e368748a8a1203a2571c0d84c8bd51c8951f604033d3f7b1fa0b564",
+      "exit_code": 0,
+      "elapsed_seconds": 0.48816541698761284,
+      "log_sha256": "2f4f1ffe01efc4f08cb8c7ad9ae0be8ba2ee3bbe60ecc5e374f956d509c44a02"
+    },
+    {
+      "target": "font-shape",
+      "bundle": "Gcuk51Q29169n6CqFgiNiqN6aALA6B3hv3v3fPGrVLsy.tar.zst",
+      "compiler": "nightly-2026-10-28-bad769b",
+      "binary_sha256": "b5f78ef21d6f5e8bb86c2f58f906d317b07e338dde5bf34af9d45b6cafaaa4d9",
+      "input_sha256": "edeb6ee6bfcf3f9bee378a8428294fc50a9eb5ba253d1402e04e6f741016bb8f",
+      "exit_code": 0,
+      "elapsed_seconds": 0.738518291967921,
+      "log_sha256": "c4214f4f07602645e679ef9a6167495def9e54d913e18af944a92ff4806e19b7"
+    }
+  ]
+}

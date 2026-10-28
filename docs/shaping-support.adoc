@@ -27,7 +27,7 @@ GDEF classifications. The 58 cases filed under `macos` are therefore not
 all AAT gaps. No unclassified GPOS lookup defect was identified in this
 replay; this does not prove that every font or lookup combination agrees.
 
-The subsequent link:../tests/verification/expanded-font-conformance.json[expanded
+The subsequent https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/verification/expanded-font-conformance.json[expanded
 general replay] records 13,943 gating cases: 13,924 agreements, 17 declared
 differences and two unsupported cases, with no unexpected failure. The
 in-house corpus improves to 4,998 agreements, 74 differences, 43 unsupported
@@ -39,8 +39,8 @@ under integration and are not included in those agreement counts.
 
 The caller supplies one script run, its script/language and direction.
 The selected font's OpenType script matters as well as the Unicode script.
-The implementation is in link:../package/Shaper.roc[Shaper] and
-link:../package/ShaperUse.roc[ShaperUse].
+The implementation is in https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/package/Shaper.roc[Shaper] and
+https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/package/ShaperUse.roc[ShaperUse].
 
 [cols="1,3",options="header"]
 |===
@@ -70,7 +70,7 @@ the chosen font script is `DFLT` or `latn`. Joining scripts use the Arabic
 joining machine within USE's feature order; they are not the Arabic model.
 |===
 
-The generated link:../package/ShaperUseData.roc[USE selector table] contains
+The generated https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/package/ShaperUseData.roc[USE selector table] contains
 these ISO script codes. Only the five USE rows in the next table have
 dedicated real-family matrices:
 
@@ -92,20 +92,20 @@ exercise boundaries separately; they do not count as independent families.
 |===
 |Script |Real families |Cached evidence
 |Arabic |Noto Sans Arabic, Noto Naskh Arabic
-|link:../tests/cases/arabic.jsonc[92 records] and
-link:../tests/cases/arabic-flags.jsonc[36 flag records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/cases/arabic.jsonc[92 records] and
+https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/cases/arabic-flags.jsonc[36 flag records].
 |Syriac; Nastaliq Arabic |Noto Sans Syriac 3.000, Eastern/Western 3.001;
 Noto Nastaliq Urdu 3.009
-|link:../tests/fonts/shaping/arabic-extra/extra-cases.jsonc[464 additional stress records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/arabic-extra/extra-cases.jsonc[464 additional stress records].
 These extend the two Arabic families with Syriac and Nastaliq stress cases.
 |Hangul |Nanum Gothic, Nanum Myeongjo
-|link:../tests/cases/hangul.jsonc[220 records], also five boundary fixtures.
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/cases/hangul.jsonc[220 records], also five boundary fixtures.
 |Thai, Lao |Noto Sans/Serif Thai; Noto Sans/Serif Lao
-|link:../tests/cases/thai-lao.jsonc[184 combined records], also three Thai legacy fixtures.
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/cases/thai-lao.jsonc[184 combined records], also three Thai legacy fixtures.
 |Devanagari (`Deva`) |Noto Sans/Serif Devanagari subsets
-|link:../tests/fonts/complex/indic-cases.jsonc[220 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/indic-cases.jsonc[220 records].
 |Bengali (`Beng`) |Noto Sans/Serif Bengali subsets
-|link:../tests/fonts/shaping/indic-wide/cases.jsonc[140 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/indic-wide/cases.jsonc[140 records].
 |Gurmukhi (`Guru`) |Noto Sans/Serif Gurmukhi subsets |Same matrix, 132 records.
 |Gujarati (`Gujr`) |Noto Sans/Serif Gujarati subsets |Same matrix, 124 records.
 |Odia (`Orya`) |Noto Sans/Serif Oriya subsets |Same matrix, 128 records.
@@ -114,15 +114,15 @@ These extend the two Arabic families with Syriac and Nastaliq stress cases.
 |Kannada (`Knda`) |Noto Sans/Serif Kannada subsets |Same matrix, 128 records.
 |Malayalam (`Mlym`) |Noto Sans/Serif Malayalam subsets |Same matrix, 132 records.
 |Khmer |Noto Sans/Serif Khmer subsets
-|link:../tests/fonts/complex/khmer-cases.jsonc[280 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/khmer-cases.jsonc[280 records].
 |Myanmar |Noto Sans Myanmar 2.107, Noto Serif Myanmar 2.106
-|link:../tests/fonts/shaping/myanmar/myanmar.jsonc[682 records], also seven boundary/stress fixtures.
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/myanmar/myanmar.jsonc[682 records], also seven boundary/stress fixtures.
 |Tibetan (`Tibt`, USE) |Jomolhari, Noto Serif Tibetan
-|link:../tests/fonts/shaping/tibetan/tibetan-cases.jsonc[194 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/tibetan/tibetan-cases.jsonc[194 records].
 |Sinhala (`Sinh`, USE) |Noto Sans/Serif Sinhala subsets
-|link:../tests/fonts/shaping/use-sinhala/sinhala-cases.jsonc[400 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/use-sinhala/sinhala-cases.jsonc[400 records].
 |NKo (`Nkoo`, USE) |Noto Sans NKo, Noto Sans NKo Unjoined subsets
-|link:../tests/fonts/shaping/use-joining/joining-cases.jsonc[336 records].
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/use-joining/joining-cases.jsonc[336 records].
 |Mongolian (`Mong`, USE) |Noto Sans Mongolian subset
 |Same joining matrix, 156 horizontal records. One family only; the additional
 vertical matrix is described below.
@@ -130,14 +130,14 @@ vertical matrix is described below.
 |Same joining matrix, 296 records.
 |===
 
-link:../tests/fonts/complex/vowel-cases.jsonc[264 invalid-vowel records]
-and link:../tests/fonts/complex/long-cases.jsonc[208 long/serial-wrap records]
+https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/vowel-cases.jsonc[264 invalid-vowel records]
+and https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/long-cases.jsonc[208 long/serial-wrap records]
 add Devanagari/Khmer boundary evidence. Long cases retain the reference's
 64-glyph syllable-visit boundary and reused syllable serials.
 Arabic's original-fixture matrices separately cover
-link:../tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc[540 Unicode fallback records],
-link:../tests/fonts/shaping/arabic-fallback/windows-cases.jsonc[200 Windows fallback records]
-and link:../tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc[150 stretching records].
+https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/arabic-fallback/fallback-cases.jsonc[540 Unicode fallback records],
+https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/arabic-fallback/windows-cases.jsonc[200 Windows fallback records]
+and https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/arabic-stretch/stretch-cases.jsonc[150 stretching records].
 The combined script-worker replay passed 6,525 cached cases, including all
 1,354 additional Arabic/Syriac records. The shared conformance gate replays
 these matrices for each integration build. This establishes the listed
@@ -154,26 +154,26 @@ the same numbers for a release.
 [cols="1,1,1,2",options="header"]
 |===
 |Case |Scalars, three sizes |Roc/HarfBuzz time |Allocation calls
-|link:../tests/fonts/complex/optimized-measurements.json[Devanagari]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/optimized-measurements.json[Devanagari]
 |288 / 1152 / 4608 |6.49 / 6.56 / 6.45 |298 / 1114 / 4378
-|link:../tests/fonts/complex/khmer-after-measurements.json[Khmer]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/khmer-after-measurements.json[Khmer]
 |272 / 1088 / 4352 |34.27 / 35.79 / 35.15 |334 / 1246 / 4894
-|link:../tests/fonts/complex/use-after-measurements.json[Tibetan USE]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/use-after-measurements.json[Tibetan USE]
 |208 / 832 / 3328 |4.42 / 4.29 / 4.29 |21 / 21 / 21
-|link:../bench/arabic/presentation-final.json[Arabic presentation fallback]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/bench/arabic/presentation-final.json[Arabic presentation fallback]
 |128 / 512 / 2048 |2.81 / 2.64 / 2.65 |23 / 23 / 23
-|link:../bench/arabic/windows-final.json[Windows Arabic fallback]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/bench/arabic/windows-final.json[Windows Arabic fallback]
 |128 / 512 / 2048 |3.49 / 2.82 / 2.84 |23 / 23 / 23
-|link:../bench/arabic/syriac-final.json[Real Noto Sans Syriac]
+|https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/bench/arabic/syriac-final.json[Real Noto Sans Syriac]
 |96 / 384 / 1536 |52.06 / 55.37 / 49.79 |261 / 936 / 3627
 |===
 
 All these runs reported zero leaked allocations. Requested bytes and peak
 live bytes are unavailable in roc-fuzz 0.4.3; RSS is not a substitute.
 The USE consumer checks script, UTF-8 length and an input checksum against
-the comparator. Its link:../tests/fonts/complex/use-before-checked-measurements.json[pre-model baseline]
+the comparator. Its https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/complex/use-before-checked-measurements.json[pre-model baseline]
 has incomplete shaping semantics and cannot establish an equivalent-output speedup.
-The separate link:../bench/records/scripts/default-queries.json[default-path record]
+The separate https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/bench/records/scripts/default-queries.json[default-path record]
 uses system HarfBuzz 13.2.1 and must not be mixed with the 14.6.0 ratios.
 
 == Practical boundaries
@@ -183,21 +183,21 @@ feature proofs are retained beside their fixtures; they do not replace the
 final shared integration gate.
 
 * CFF/CFF2 paths include cubic curves, subroutines, CID fonts and variable
-  blends. link:../tests/fonts/cff/README.md[The CFF proof] distinguishes
+  blends. https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/cff/README.md[The CFF proof] distinguishes
   normative and FreeType comparisons from three HarfBuzz draw discrepancies.
 * Variable metrics include `gvar` phantom points when `HVAR`/`VVAR` are
   absent; `avar` v2 cross-axis remapping is implemented. See
-  link:../tests/fonts/variation-complete/[the variation evidence].
+  https://github.com/lukewilliamboswell/roc-font/tree/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/variation-complete/[the variation evidence].
 * Vertical shaping includes top-to-bottom and bottom-to-top runs,
   substitutions, positioning, vertical metrics and origins. The
-  link:../tests/fonts/vertical/[vertical matrices] include Japanese and
+  https://github.com/lukewilliamboswell/roc-font/tree/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/vertical/[vertical matrices] include Japanese and
   Mongolian fonts and two declared VORG/TrueType policy differences.
 * Apple substitution programs include all five modern `morx` and legacy
   `mort` program types. Apple positioning covers `kerx` formats 0/1/2/4/6,
   legacy `kern` formats 0/1/2/3 and size-dependent tracking. Dedicated
-  link:../tests/fonts/aat/[modern morphing],
-  link:../tests/fonts/aat-mort/[legacy morphing] and
-  link:../tests/fonts/aat-position/[positioning] matrices establish those
+  https://github.com/lukewilliamboswell/roc-font/tree/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/aat/[modern morphing],
+  https://github.com/lukewilliamboswell/roc-font/tree/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/aat-mort/[legacy morphing] and
+  https://github.com/lukewilliamboswell/roc-font/tree/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/aat-position/[positioning] matrices establish those
   cases, with malformed-font, native fuzz and scaling evidence.
 * Graphite execution is experimental. The verified integration snapshot
   matches all 1,549 geometry cases in each reference mode and 100 deletion
@@ -220,12 +220,12 @@ final shared integration gate.
   selected by `Font.at`, following the reference adapter. Feat 2.1 aliases
   share the preceding feature's settings/value here; Graphite2 1.3.14
   treats them independently. The exact
-  link:../tests/fonts/graphite/feature-divergences.json[16 alias differences]
+  https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/graphite/feature-divergences.json[16 alias differences]
   retain both raw reference answers and table-derived expectations.
   Stored advances follow the font's final-short-metric fallback even at
   the exact end of `hmtx`. Graphite2 1.3.14 instead returns zero for that
   last advance without an unused padding byte; the
-  link:../tests/fonts/graphite-metrics/cache-proof.json[isolated cache proof]
+  https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/graphite-metrics/cache-proof.json[isolated cache proof]
   and public padding/no-padding tests preserve this narrow difference.
 * WOFF/WOFF2 data needs decompression before this sfnt reader can accept
   the font bytes; container unwrapping remains separate work.
@@ -236,7 +236,7 @@ final shared integration gate.
   supported runs require oracle agreement; experimental Graphite limits
   are recorded separately and do not count as agreements.
 * Legacy kerning follows the selected script's fallback policy. The
-  link:../tests/fonts/shaping/kern-policy/kern-cases.jsonc[93-case matrix]
+  https://github.com/lukewilliamboswell/roc-font/blob/03b23b335c1c00202cb24795ea3b9710cfce4da7/tests/fonts/shaping/kern-policy/kern-cases.jsonc[93-case matrix]
   covers suppression for scripts whose models disable it and retention
   for the default and Hangul models. Forced LTR runs of normally RTL
   scripts still have an observed legacy-kerning offset-side discrepancy.
