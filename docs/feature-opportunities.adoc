@@ -1,0 +1,431 @@
+= Font and mathematics opportunities
+:toc:
+:toclevels: 2
+
+Assessment date: 2026-10-28. This is a research assessment, not a commitment
+or an implementation support matrix. Current work stays in `../TODO.md`.
+Three parallel investigations covered mathematics, shaping, and downstream
+font access. Source and consumer inspection was read-only; no new native
+conformance or performance run was performed for this assessment.
+
+== Decision
+
+OpenType MATH is a strong opportunity to enable a new pure Roc capability:
+equation layout for PDF documents, diagrams, educational material and
+static publishing. The requested scope is the roc-font foundation, not
+LaTeX replacement or equation layout in this repository. Reading the
+table and exposing its font facts is a bounded addition to roc-font.
+Rendering equations requires a separate layout package and a consumer that
+can draw positioned glyphs and rules. A useful equation renderer is much
+smaller than a compatible replacement for LaTeX documents and packages.
+
+For existing text correctness, full GPOS mark positioning has the broadest
+benefit. For new capability, pursue MATH font queries alongside it, with a
+small external consumer proof to check the API's sufficiency.
+Neither project needs every other HarfBuzz feature to be finished first.
+
+== How to read the evaluation
+
+Importance distinguishes an observed consumer requirement from a plausible
+new application. An absent capability can block a use case without there
+being evidence of a current customer waiting for it.
+
+Effort is relative, not a calendar estimate:
+
+* Small: an existing reader or public query can supply most of the work.
+* Medium: a bounded new table or algorithm with reusable infrastructure.
+* Large: a new execution engine, several interacting stages, or a consumer
+  integration spanning packages.
+
+These labels include validation, hostile-input handling, public API,
+fixtures and oracle integration. A small parser is not automatically a
+small completed feature. Oracle availability means a reference exists;
+new case kinds, extraction and cached records are generally still needed.
+
+== Opportunities at a glance
+
+[cols="2,3,2,3",options="header"]
+|===
+|Direction |Use case and importance |Effort and smallest useful slice |Oracle readiness
+
+|MATH font queries
+|New equation-layout package; prerequisite for quality font-driven maths.
+|Medium. Constants and glyph corrections first; variants and assembly
+records complete the font-data foundation.
+|Excellent: HarfBuzz MATH API and independent fontTools table decoding.
+
+|Equation layout and bounded TeX-like input
+|High strategic opportunity: remove an external equation-generation step
+from PDF, SVG and diagram workflows. Demand is proposed, not demonstrated
+by an existing working Roc consumer.
+|Large overall. Structured expression tree to PDF first, then a documented
+syntax subset and standalone SVG.
+|Good: MathML Core algorithms, WPT synthetic fonts, pinned browser geometry;
+Typst/LuaTeX/MathJax are comparison systems with different layout choices.
+
+|GPOS single adjustment
+|Correct individual-glyph advances and offsets in fonts using it.
+|Small-to-medium; existing coverage, value-record and variation machinery
+make this one of the easiest complete positioning slices.
+|Excellent HarfBuzz differential oracle; valid synthetic fixtures needed.
+
+|GPOS mark attachment
+|Broad correctness blocker: decomposed accents, Hebrew points and many
+other scripts. Even default-shaper scripts need it.
+|Medium-to-large. Mark-to-base, then mark-to-mark and mark-to-ligature;
+anchor formats, ligature components and variation deltas matter.
+|Excellent HarfBuzz oracle; real fonts plus generated isolated anchors.
+
+|GPOS cursive and contextual positioning
+|Connected-script placement and fonts whose positioning depends on context.
+|Medium-to-large. Cursive attachment is useful with Arabic shaping;
+contextual/chained execution adds bounded nested application.
+|Excellent HarfBuzz oracle; existing GSUB infrastructure is evidence to
+reuse, not proof that GPOS attachment propagation is already solved.
+
+|Complex-script shapers
+|Hard blocker for correctly rendered Arabic, Indic and other affected
+writing systems. Important for international documents and interfaces.
+|Large as a whole. Per-script vertical slices; Arabic has high reach,
+Thai transformations and Tibetan feature staging may offer narrower wins.
+|Strong HarfBuzz oracle and source, but some imported fixture fonts fail
+our OTS-style validation and must be replaced before scores are useful.
+
+|TrueType outline listing
+|Unlock self-contained SVG glyph paths, pure Roc vector drawing and a
+portable equation-image backend.
+|Medium. Reuse validated glyf points, composites and gvar; expose resolved
+contours with off-curve points and deterministic traversal handled.
+|Strong: fontTools recording pens and FreeType/HarfBuzz draw operations.
+
+|CFF and CFF2 outlines
+|Bounds and paths for PostScript-flavoured OpenType fonts, including many
+math and publishing fonts. Their basic shaping already works.
+|Large. Static CFF first; bounded charstring execution and subroutines,
+then CFF2 blending/variations.
+|Strong fontTools/FreeType/HarfBuzz references. Coordinate, contour and
+rounding conventions must be made explicit.
+
+|PDF tables, names and embedding metadata
+|Observed roc-pdf needs: avoid duplicate parsing, enforce embedding policy,
+retain original font information and support its own subsetter.
+|Small-to-medium per query. Raw table access, full/PostScript names,
+fsType and stored metrics are independent of a new subsetter.
+|Strong fontTools decoding and existing roc-pdf validation/render tests.
+
+|Subsetting
+|Smaller embedded PDF fonts. Need proven in roc-pdf, where it already
+belongs under the current backlog.
+|Large for general layout-preserving subsetting. Do not move it into
+roc-font merely to match HarfBuzz's feature list.
+|HarfBuzz subset and fontTools subset; compare semantic behavior and glyph
+closure, not serialized font bytes from different subsetters.
+
+|Host glyph drawing
+|Observed roc-ray/terrocotta integration issue: shaped measurement must
+match what the host draws.
+|Medium-to-large across the platform boundary. Glyph-id atlas and positioned
+glyph drawing before replacing the current codepoint-based measurement.
+|Host integration captures plus HarfBuzz shaping; font-unit equality alone
+does not guarantee pixel equality with a hinted renderer.
+
+|Editor/layout queries
+|Ligature caret positions, script baselines and surrounding-run context
+help editors and advanced layout; no named current editor is demonstrated.
+|Small-to-medium for individual GDEF/BASE queries; more involved for
+context-bearing shaping and incremental reuse flags.
+|Strong HarfBuzz query/buffer API references and targeted fixtures.
+
+|Vertical text
+|Hard blocker for vertical East Asian publishing, not horizontal CJK text
+in general.
+|Large: vertical metrics/origins, direction, features and consumer layout.
+|Strong HarfBuzz and browser references; requires new driver controls.
+
+|Color glyph access
+|Color emoji and decorative fonts in PDF/SVG/UI output.
+|Small-to-medium for palette/layer queries; large for COLRv1 paint graphs
+and multiple bitmap/SVG formats. Choose a format before designing an API.
+|HarfBuzz data APIs, fontTools and browser/FreeType rendering comparisons.
+
+|avar version 2
+|Correct variation locations for affected fonts; current reader leaves out
+their variation space. Narrower reach than core positioning.
+|Medium: reuse the variation store and normalization pipeline, then verify
+exact arithmetic and coupling between axes.
+|Strong HarfBuzz coordinate/advance oracle; existing known-failure seed.
+
+|AAT and Graphite
+|Specific Apple or Graphite fonts; broad compatibility opportunity but no
+current named consumer requirement established.
+|Large new state-machine/rule engines. Let actual fonts establish priority.
+|HarfBuzz with the appropriate backend enabled; pin build capabilities.
+
+|WOFF and WOFF2
+|Convenient use of web-distributed fonts; callers can currently decompress
+externally.
+|WOFF may be a small companion feature if an inflater is available. WOFF2
+is larger: Brotli plus transformed-table reconstruction, not just inflation.
+|fontTools round trips and official WOFF2 decoder; compare decoded font
+facts and shaping where reconstructed bytes legitimately differ.
+|===
+
+== Mathematics: the actual package boundary
+
+The https://learn.microsoft.com/en-us/typography/opentype/spec/math[MATH
+specification] defines font data, not a complete equation layout engine.
+https://harfbuzz.github.io/harfbuzz-hb-ot-math.html[HarfBuzz's MATH API]
+provides constants, corrections, attachment positions, kern values,
+variants and construction parts. HarfBuzz does not turn a TeX expression
+into a two-dimensional equation layout.
+
+The proposed flow is:
+
+----
+structured expression or bounded TeX-like syntax
+    -> mathematical expression tree
+    -> equation box layout using roc-font queries
+    -> positioned glyphs, rules and bounds
+    -> PDF / SVG / host drawing
+----
+
+roc-font owns validated font facts, math glyph selection data and existing
+substitution machinery. A separate maths package owns atom classification,
+operator spacing, display/text/script styles, fraction/radical/script
+layout, limits, accents, matrices and bounded stretch construction.
+The output backend owns scaling, path serialization and PDF operations.
+Keep mathematical structure and source ranges alongside the visual output
+so future MathML, selection and accessibility do not have to recover them
+from glyphs.
+
+MATH's vertical stretch constructions do not require vertical paragraph
+shaping. A first equation engine does not depend on Arabic/Indic shapers,
+full GPOS or color fonts. Its embedded text nodes inherit the ordinary
+text shaper's coverage and limitations.
+
+=== Font facts to expose
+
+* Math-table presence and layout constants: axis height, rule thicknesses,
+  gaps, script percentages, fraction and radical parameters.
+* Per-glyph italic correction and top-accent attachment.
+* Four-corner height-dependent math kern information for script placement.
+* Extended-shape coverage, horizontal/vertical size variants and assembly
+  records: connector lengths, full advances, extender flags and minimum
+  connector overlap.
+* Explicit math-layout use of appropriate font substitutions, including
+  script-style alternates, dotless forms and flattened accents where the
+  font provides them. Inspect support in the chosen font rather than
+  assuming a feature tag exists.
+
+Units and absence need careful API design. Script percentages are not
+distances. A font without MATH is not damaged. Missing per-glyph data,
+format-defined defaults and synthetic fallbacks should remain distinct
+where the caller needs that distinction. Pixel device adjustments cannot
+be silently mistaken for font-unit data; define the design-unit query
+policy and record corresponding HarfBuzz settings.
+
+No fourth built-in font is required or proposed. A maths consumer supplies
+its font bytes and licence. A TrueType MATH font can avoid the CFF outline
+dependency.
+
+The investigation inspected an actual
+https://raw.githubusercontent.com/notofonts/math/53eb8eb200ed8fc73fa13d97d26a2c9c56428c17/fonts/NotoSansMath/unhinted/ttf/NotoSansMath-Regular.ttf[Noto
+Sans Math TrueType binary], pinned at commit
+`53eb8eb200ed8fc73fa13d97d26a2c9c56428c17`. Its SHA-256 is
+`1e351fb3ed563f4495eea3ce69c4698a3ae0b5b8800568006b9817383013087e`.
+An in-memory Python standard-library inspection found:
+
+* 657,464 bytes, TrueType `glyf` outlines, no CFF table;
+* a 20,280-byte MATH version 1.0 table;
+* 215 vertical construction glyphs with 1,149 variant records and 57
+  assemblies;
+* 29 horizontal construction glyphs with 132 variant records and 22
+  assemblies;
+* 13 prebuilt variants plus assembly for parentheses and braces, six plus
+  assembly for the radical, two for the sum, two plus assembly for the
+  integral, and an assembly for the right arrow.
+
+The source project supplies an OFL 1.1 licence. This confirms a real
+prototype candidate with useful constructions, not just a font whose name
+contains "Math". It does not prove that the current roc-font reader accepts
+this exact binary; that public-bundle consumer check is the first gate.
+
+=== Milestones with evidence of completion
+
+The font audit and MATH-query milestone below are the proposed roc-font
+scope. The remaining milestones describe what downstream packages could
+build on that foundation; they are not additions proposed for this repo.
+
+. *Audit fonts and establish references.* Pin licensed math-font bytes;
+  inspect outlines, MATH constants, covered glyphs, variants and assemblies.
+  Record at least one real-font example and one synthetic boundary case
+  for each query category. Confirm the chosen font reads through the
+  served roc-font bundle before designing around it.
+. *Land MATH queries.* Add the reader and public queries with cached
+  HarfBuzz answers, independent fontTools checks, malformed-table cases,
+  totality/determinism fuzzing and narrow scaling measurements. A query
+  demo printing the constants and a large delimiter's construction proves
+  the API without claiming equation rendering.
+. *Prove structured equations to PDF.* Use typed expressions before a
+  parser. Support rows, symbols, numerals, operators, fractions, scripts,
+  roots and growing delimiters. Add sums/integrals with limits and a
+  matrix as the next completion target. Return width, ascent and descent
+  so equations compose with a text baseline. Embed a caller-provided
+  TrueType font and draw glyphs by id plus filled rules.
+. *Prove standalone SVG.* Add the TrueType outline listing if required.
+  Use paths for glyphs and rules; SVG text is not a portable arbitrary
+  glyph-id drawing interface. This milestone enables equation images in
+  diagrams and static pages without installed fonts.
+. *Add a documented TeX-like subset.* Named symbols, braces, superscript
+  and subscript, fractions, roots, delimiters, accents, limits and matrices
+  lower to the same tree. Reject unsupported commands explicitly. Bound
+  input size, node count, nesting, assembly growth and output operations.
+  Macro expansion is a separate choice requiring its own limits.
+
+The first useful product claim is supported equation syntax to deterministic
+PDF/SVG without invoking TeX or JavaScript. Full LaTeX document compatibility
+also entails macros, package behavior, counters, references, bibliographies,
+floats, document layout and typography; MATH does not supply those.
+Even MathJax deliberately implements a math-focused subset rather than
+all LaTeX: https://docs.mathjax.org/en/latest/input/tex/differences.html[its
+documented scope] is a useful precedent.
+
+=== Tests that would make the proof convincing
+
+Font-data oracle::
+  Compare every constant, corrections and kern boundaries, both variant
+  directions, part lists and overlap values against HarfBuzz. Cross-check
+  raw structure with https://fonttools.readthedocs.io/en/latest/ttLib/tables/M_A_T_H_.html[fontTools].
+  Its https://fonttools.readthedocs.io/en/latest/otlLib/index.html[math table
+  builder] can create controlled fixtures. Test immediately below, at and
+  above each corner-kern height threshold. Extend the existing recorder
+  with explicit math query case kinds; no such records exist here yet.
+
+Layout oracle::
+  Use https://w3c.github.io/mathml-core/[MathML Core] algorithms and
+  https://github.com/web-platform-tests/wpt/tree/master/mathml[WPT's MathML
+  tests] with controlled fonts. Pin browser/font/version and extract
+  geometry for selected subexpressions plus visual reference images.
+  Browser CSS-pixel geometry has rounding and coordinate-system differences
+  from font-unit layout; declare tolerances instead of promising identical
+  screenshots. Pin the specification revision too.
+
+Independent comparison::
+  Compare representative equations with Typst, LuaTeX and/or MathJax.
+  They need not choose the same spacing, style or glyph construction, so
+  these are visual and invariant checks, not an unconditional exact oracle.
+  KaTeX's syntax support list is useful for scoping parser acceptance; its
+  HTML/CSS layout is not a direct oracle for generic MATH font queries.
+
+Acceptance corpus::
+  Exercise a quadratic formula; nested fractions; scripts beside slanted
+  glyphs; a radical covering a fraction; delimiters tall enough to require
+  extender assembly; display versus inline sums and integrals; accents
+  over italic variables; a matrix; and equations beside ordinary text.
+  Include at least two font designs before stabilizing the API so one
+  font's shortcuts do not define the architecture.
+
+Contract checks::
+  Reject bad offsets and counts during reading; test empty and absent
+  data, bad glyph references and malicious constructions. Bound layout
+  depth, repeated extenders, coordinate arithmetic and total output. Use
+  explicit work lists and flat data. Finite, deterministic geometry and
+  predictable allocation growth are part of success, not follow-up polish.
+
+=== PDF semantics are a separate completion criterion
+
+roc-pdf already has typed MathML-related structures in
+`../../roc-pdf/package/Semantics.roc`, but
+`KernelSemantics.validate_text_subset` rejects nonempty `mathml_subtrees`.
+Its `feature-roadmap.md` puts extended MathML accessibility in Gate 9.
+Therefore the existing types are an integration opportunity, not evidence
+that accessible mathematical PDF output is available now.
+
+Readable glyph output, searchable text, correct reading order and
+accessible mathematical structure are different deliverables. Preserve
+the expression tree early; do not label a path-only SVG or a glyph-only
+PDF as semantically accessible mathematics.
+
+== Correctness and consumer evidence
+
+`../package/LayoutKerning.roc` applies pair positioning and extensions of
+pair positioning. Other GPOS types are not executed. The fallback mark
+positioning in `../package/Shaper.roc` is conditional; it does not replace
+font-defined anchor positioning. This is why GPOS deserves priority even
+before expanding the advertised set of scripts.
+
+`../tests/scores.json` records agreement, not feature completeness.
+`../TODO.md` notes that AOTS-derived fonts can be rejected for malformed
+cmap fields. Recreate valid fixtures with the intended lookup before
+using their score as a projection of implementation benefit. A script
+milestone should pass feature-specific valid fixtures and ordinary real
+fonts, not merely improve one aggregate number.
+
+The existing consumer evidence is strongest for package-mermaid and
+roc-pdf. The repository backlog records successful branch integrations,
+not proof that every consumer's current main uses the latest API.
+The backlog points to roc-pdf's detailed font replacement study in the sibling worktree
+`../../roc-pdf-wt-roc-font-replace/development/roc-font-replacement.md`.
+
+The main roc-pdf checkout provides stronger implementation evidence:
+`../../roc-pdf/package/KernelFont.roc` already parses table directory facts,
+left side bearings, embedding rights, full/PostScript names and composite
+edges. `KernelFontSubset.roc` already rewrites a dense TrueType subset.
+`../../roc-pdf/scripts/check_fonts.py` and `check_font_renderers.py` check
+embedded font structures, extraction and rendering. These are concrete
+consolidation opportunities rather than a reason to introduce another
+subsetter.
+
+roc-ray's host currently draws codepoint-oriented text, and terrocotta
+delegates to that path. A shaped-width swap without positioned glyph-id
+drawing can produce measurement/drawing disagreement. Treat host drawing
+as its own consumer milestone. The relevant inspected paths are
+`../../roc-ray/platform/Font.roc`,
+`../../roc-ray/src/backend_raylib.zig`,
+`../../terrocotta/package/Text.roc` and
+`../../terrocotta/package/Renderer.roc`.
+
+Stored ligature caret queries are another smaller API opportunity:
+`../package/LayoutVar.roc` already validates GDEF caret lists, although the
+public API does not expose their positions. Do not synthesize equally
+spaced carets and present them as font facts.
+
+== Suggested order of investigation
+
+. Start the MATH font audit and query foundation. Validate the API with
+  a small external consumer or public bundle harness. A downstream
+  structured-equation-to-PDF experiment can follow without becoming
+  roc-font's responsibility.
+. Implement GPOS single adjustment as the smallest positioning slice;
+  pursue mark attachment for the broadest correctness gain.
+. Close independent PDF metadata/raw-table needs and prove host glyph-id
+  drawing. These have named consumers and bounded acceptance criteria.
+. Add TrueType outline listing for self-contained SVG, then choose whether
+  demand justifies CFF ahead of a script-specific shaping milestone.
+. Let actual documents and fonts determine priorities among Arabic/Indic,
+  vertical text, color formats, AAT/Graphite and webfont containers.
+
+For each item, require a public consumer proof, a declared reference and
+the existing bundle-based validation/fuzz/performance contract before
+calling it complete. This ordering is a recommendation, not a new TODO
+list or an implementation commitment.
+
+== Further primary references
+
+* https://harfbuzz.github.io/what-does-harfbuzz-do.html[HarfBuzz scope]
+* https://harfbuzz.github.io/harfbuzz-hb-ot-layout.html[HarfBuzz layout
+  queries: ligature carets, baselines and feature inspection]
+* https://harfbuzz.github.io/harfbuzz-hb-buffer.html[HarfBuzz context,
+  cluster levels and buffer controls]
+* https://katex.org/docs/support_table.html[KaTeX input compatibility list]
+* https://docs.mathjax.org/en/latest/output/svg.html[MathJax SVG output
+  and the loss of character copy/paste with glyph paths]
+* https://github.com/notofonts/math[Noto Math source and OFL licence]
+* https://learn.microsoft.com/en-us/typography/opentype/spec/gpos[OpenType GPOS]
+* https://fonttools.readthedocs.io/en/latest/pens/recordingPen.html[fontTools
+  outline recording and composite decomposition]
+* https://freetype.org/freetype2/docs/reference/ft2-outline_processing.html[FreeType
+  outline decomposition]
+* https://learn.microsoft.com/en-us/typography/opentype/spec/colr[COLR layers
+  and paint graphs]
+* https://www.w3.org/TR/WOFF/[WOFF 1] and https://www.w3.org/TR/WOFF2/[WOFF 2]

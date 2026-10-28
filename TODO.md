@@ -54,6 +54,48 @@ Chrome widths agree on package-mermaid's oracle texts.
 
 ## After 0.1.0
 
+### Font foundation integration
+
+Implementation branch: `integration/font-foundations`. Feature workers use
+isolated worktrees; the integrator owns `Font.roc`, `Face.roc`, package and
+test manifests, oracle/benchmark/fuzz registration and final validation.
+
+- [ ] MATH: constants, glyph corrections/attachments, corner kerning,
+  extended shapes, variants and construction parts, with licensed real
+  fonts and recorded HarfBuzz/fontTools oracles.
+- [ ] Text correctness: all GPOS positioning types, including attachment
+  propagation and bounded contextual application; script-specific shaping
+  and surrounding context where needed for end-to-end multilingual cases.
+- [ ] Color glyph facts for emoji: palettes/layers, COLRv1 paints, embedded
+  SVG and bitmap formats, with an explicit supported-format matrix and
+  real-font public consumers.
+- [ ] Ligature caret queries, including point/variation forms and absence.
+- [ ] PDF font facts: raw tables, full/PostScript/legacy family names,
+  embedding flags, stored metrics and side bearings.
+- [ ] TrueType outline output at static and variable locations, including
+  composites and implied on-curve points, through a public path consumer.
+- [ ] For every feature: public bundle tests, cached reference agreement,
+  narrow fuzz/scaling targets, examples, generated API docs and clean
+  focused commits; run the full integration checks and allocation ratchet.
+
+Shared internal contracts before feature fan-out:
+
+- New standalone table readers import only package internals and take
+  checked table bytes plus the glyph count (and any necessary explicit
+  variation inputs). Their offsets in failures are relative to that table;
+  `Face` translates them to file offsets and aggregates problems.
+- `TableMath` owns math reading/query data. `TableOutline` owns path
+  conversion, reusing `TableGlyfPoints`/`TableGvar`; `TableCaret` owns GDEF
+  caret reading/query data. Feature agents do not edit `Face` or `Font`.
+- GPOS extends `LayoutKerning` with its existing `read_gpos`, `combine`
+  and `position` entry points where possible; any necessary signature
+  changes are sent to the integrator before consumers are changed.
+- Font units, explicit absence, deterministic table order, flat prepared
+  data and eager hostile-byte validation apply to every new query.
+- Feature agents own only their assigned modules, dedicated test files,
+  fixtures, examples and fuzz targets. Shared registry edits are integrated
+  centrally; no worker changes another worker's files.
+
 - Re-source the AOTS-derived scored suites (`harfbuzz/aots`,
   `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
   they now read as rejected by design; regenerate valid fonts with the
