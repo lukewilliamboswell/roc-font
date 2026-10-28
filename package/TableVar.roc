@@ -1,5 +1,5 @@
 ## Font variations: the design axes a variable font offers and their named
-## instances (`fvar`), how the font bends those axes (`avar` version 1), and
+## instances (`fvar`), how the font bends those axes (`avar` versions 1/2), and
 ## the stored deltas that move a value between masters (the
 ## `ItemVariationStore` with its `VariationRegionList` and
 ## `ItemVariationData` subtables, and the `DeltaSetIndexMap`), with the two
@@ -35,7 +35,11 @@ TableVar := {
 	map_starts : List(U64),
 	map_from : List(I16),
 	map_to : List(I16),
+	avar2 : [Absent, Present(TableVar.Avar2)],
 }.{
+
+	Avar2 : { map : [Absent, Present(DeltaMap)], store : [Absent, Present(Store)] }
+	Avar : { starts : List(U64), from : List(I16), to : List(I16), v2 : [Absent, Present(Avar2)] }
 
 	## What was wrong, where. `offset` is from the start of `table`.
 	Problem : { table : Str, offset : U64, reason : Reason }
@@ -120,7 +124,7 @@ TableVar := {
 		match TableVar.read_fvar(fvar) {
 			Err(problems) =>
 				match avar {
-					Present(bytes) if bytes.len() >= 8 and TableVar.u16(bytes, 0) != 1 => Err(problems.append({ table: "avar", offset: 0, reason: UnsupportedVersion }))
+					Present(bytes) if bytes.len() >= 8 and TableVar.u16(bytes, 0) != 1 and TableVar.u16(bytes, 0) != 2 => Err(problems.append({ table: "avar", offset: 0, reason: UnsupportedVersion }))
 					_ => Err(problems)
 				}
 			Ok(axes) =>
@@ -129,7 +133,7 @@ TableVar := {
 					Present(bytes) =>
 						match TableVar.read_avar(bytes, axes.tags.len()) {
 							Err(problems) => Err(problems)
-							Ok(maps) => Ok({ tags: axes.tags, minimum: axes.minimum, default: axes.default, maximum: axes.maximum, flags: axes.flags, axis_names: axes.axis_names, instance_names: axes.instance_names, instance_postscript: axes.instance_postscript, instance_coords: axes.instance_coords, map_starts: maps.starts, map_from: maps.from, map_to: maps.to })
+							Ok(maps) => Ok(TableVar.with_avar(axes, maps))
 						}
 				}
 		}
@@ -227,21 +231,29 @@ TableVar := {
 			map_starts: [],
 			map_from: [],
 			map_to: [],
+			avar2: Absent,
 		})
 	}
 
 	# An avar version 1 segment map per axis. A map is empty (identity) or
 	# holds -1 -> -1, 0 -> 0 and 1 -> 1, with source coordinates strictly
 	# increasing, targets never decreasing, and every value in [-1, 1].
-	read_avar : List(U8), U64 -> Try({ starts : List(U64), from : List(I16), to : List(I16) }, List(Problem))
+	read_avar : List(U8), U64 -> Try(Avar, List(Problem))
 	read_avar = |bytes, axis_count| {
 		bad = |offset, reason| Err([{ table: "avar", offset, reason }])
 		size = bytes.len()
 		if size < 8 {
 			return bad(0, Truncated)
 		}
-		if TableVar.u16(bytes, 0) != 1 {
+		version = TableVar.u16(bytes, 0)
+		if version != 1 and version != 2 {
 			return bad(0, UnsupportedVersion)
+		}
+		if version == 2 and TableVar.u16(bytes, 2) != 0 {
+			return bad(2, UnsupportedVersion)
+		}
+		if version == 2 and TableVar.u16(bytes, 4) != 0 {
+			return bad(4, BadFormat)
 		}
 		if TableVar.u16(bytes, 6) != axis_count {
 			return bad(6, AxisCountMismatch)
@@ -294,7 +306,114 @@ TableVar := {
 			$at = map_at + 2 + 4 * count
 		}
 		$starts = $starts.append($from.len())
-		if ($problems.is_empty()) Ok({ starts: $starts, from: $from, to: $to }) else Err($problems)
+		v2 = if version == 2 {
+			match TableVar.read_avar2(bytes, $at, axis_count) {
+				Ok(v) => Present(v)
+				Err(ps) => {
+					$problems = $problems.concat(ps)
+					Absent
+				}
+			}
+		} else {
+			Absent
+		}
+		if ($problems.is_empty()) Ok({ starts: $starts, from: $from, to: $to, v2 }) else Err($problems)
+	}
+
+	## Attach checked axis remapping to a prepared fvar space.
+	with_avar : TableVar, Avar -> TableVar
+	with_avar = |axes, maps| { ..axes, map_starts: maps.starts, map_from: maps.from, map_to: maps.to, avar2: maps.v2 }
+
+	## A nullable avar2 map is identity; an empty map has the same meaning.
+	read_axis_map : List(U8), U64 -> Try(DeltaMap, List(Problem))
+	read_axis_map = |bytes, offset| {
+		bad = |at, reason| Err([{ table: "avar", offset: at, reason }])
+		if !TableVar.fits(offset, 4, bytes.len()) {
+			return bad(offset, Truncated)
+		}
+		format = TableVar.u8(bytes, offset)
+		entry = TableVar.u8(bytes, offset + 1)
+		if format > 1 or entry.bitwise_and(0xC0) != 0 {
+			return bad(offset, BadFormat)
+		}
+		header = if (format == 0) 4 else 6
+		if !TableVar.fits(offset, header, bytes.len()) {
+			return bad(offset, Truncated)
+		}
+		count = if (format == 0) TableVar.u16(bytes, offset + 2) else TableVar.u32(bytes, offset + 2)
+		size = entry.shr_zf_wrap(4).bitwise_and(3) + 1
+		start = offset + header
+		if !TableVar.fits(start, count * size, bytes.len()) {
+			return bad(start, Truncated)
+		}
+		Ok({ start, count, entry_size: size, inner_bits: (entry.bitwise_and(15) + 1).to_u8_wrap(), bytes })
+	}
+
+	axis_index : [Absent, Present(DeltaMap)], U64 -> { outer : U64, inner : U64 }
+	axis_index = |map, axis| match map {
+		Present(m) if m.count > 0 => TableVar.map_entry(m, axis)
+		_ => { outer: 0, inner: axis }
+	}
+
+	read_avar2 : List(U8), U64, U64 -> Try(Avar2, List(Problem))
+	read_avar2 = |bytes, at, axes| {
+		bad = |offset, reason| Err([{ table: "avar", offset, reason }])
+		if !TableVar.fits(at, 8, bytes.len()) {
+			return bad(at, Truncated)
+		}
+		map_at = TableVar.u32(bytes, at)
+		store_at = TableVar.u32(bytes, at + 4)
+		var $problems = []
+		map = if map_at == 0 {
+			Absent
+		} else if map_at < at + 8 {
+			$problems = $problems.append({ table: "avar", offset: at, reason: BadFormat })
+			Absent
+		} else {
+			match TableVar.read_axis_map(bytes, map_at) {
+				Ok(m) => Present(m)
+				Err(ps) => {
+					$problems = $problems.concat(ps)
+					Absent
+				}
+			}
+		}
+		store = if store_at == 0 {
+			Absent
+		} else if store_at < at + 8 {
+			$problems = $problems.append({ table: "avar", offset: at + 4, reason: BadFormat })
+			Absent
+		} else {
+			match TableVar.read_store(bytes, "avar", store_at, axes) {
+				Ok(s) => Present(s)
+				Err(ps) => {
+					$problems = $problems.concat(ps)
+					Absent
+				}
+			}
+		}
+		match store {
+			Present(s) => {
+				# Validate every explicit reference, even unused map entries.
+				match map {
+					Present(m) => for i in 0..<m.count {
+						index = TableVar.map_entry(m, i)
+						if !TableVar.valid_index(s, index.outer, index.inner) {
+							$problems = $problems.append({ table: "avar", offset: m.start + i * m.entry_size, reason: DeltaIndex })
+						}
+					}
+					Absent => {}
+				}
+				for axis in 0..<axes {
+					index = TableVar.axis_index(map, axis)
+					if !TableVar.valid_index(s, index.outer, index.inner) {
+						$problems = $problems.append({ table: "avar", offset: at, reason: DeltaIndex })
+					}
+				}
+			}
+			Absent => {}
+		}
+		if ($problems.is_empty()) Ok({ map, store }) else Err($problems)
 	}
 
 	axis_total : TableVar -> U64
@@ -337,7 +456,7 @@ TableVar := {
 	coords_of_instance = |tv, index| {
 		count = tv.tags.len()
 		if index >= tv.instance_names.len() {
-			return List.repeat(0, count)
+			return TableVar.coords_for(tv, [])
 		}
 		var $design = List.with_capacity(count)
 		for a in 0..<count {
@@ -373,9 +492,9 @@ TableVar := {
 			v = design.get(a) ?? middle
 			n16 = TableVar.normalize_16(v, low, middle, high)
 			mapped = TableVar.avar_16(tv, a, n16)
-			$out = $out.append((mapped + 2).shr_wrap(2).to_i16_wrap())
+			$out = $out.append(mapped)
 		}
-		$out
+		TableVar.avar2_coords(tv, $out).map(|v| (v + 2).shr_wrap(2).to_i16_wrap())
 	}
 
 	# HarfBuzz's `fvar` axis normalisation, in single precision, to 16.16.
@@ -426,6 +545,86 @@ TableVar := {
 				TableVar.f32_add(before_to, TableVar.f32_div(rise, denom))
 			}
 		TableVar.f32_round_half_up(TableVar.f32_mul(mapped, TableVar.f32_65536))
+	}
+
+	## One region evaluated before the reference cache quantizes it.
+	avar_region_scalar : Store, List(I16), U64 -> U32
+	avar_region_scalar = |store, coords, region| {
+		var $v = TableVar.f32_one
+		var $a = 0.U64
+		while $a < store.axis_count {
+			base = 3 * (region * store.axis_count + $a)
+			factor = TableVar.axis_scalar((coords.get($a) ?? 0).to_i64(), (store.regions.get(base) ?? 0).to_i64(), (store.regions.get(base + 1) ?? 0).to_i64(), (store.regions.get(base + 2) ?? 0).to_i64())
+			if factor == 0 {
+				return 0
+			}
+			$v = TableVar.f32_mul($v, factor)
+			$a = $a + 1
+		}
+		$v
+	}
+
+	## The fresh avar2 cache returns precise binary32 on first use of each
+	## region and its 2.30 representation thereafter, in row/column order.
+	avar_delta : Store, List(I16), List(U32), U64, U64 -> { value : U32, cache : List(U32) }
+	avar_delta = |store, coords, cache, outer, inner| {
+		if outer == 0xFFFF and inner == 0xFFFF {
+			return { value: 0, cache }
+		}
+		first = store.index_starts.get(outer) ?? 0
+		columns = (store.index_starts.get(outer + 1) ?? 0) - first
+		words = store.word_counts.get(outer) ?? 0
+		long = store.long_words.get(outer) ?? False
+		row = (store.row_starts.get(outer) ?? 0) + inner * (store.row_sizes.get(outer) ?? 0)
+		var $pool = cache
+		var $sum = 0.U32
+		for c in 0..<columns {
+			region = store.region_indexes.get(first + c) ?? 0
+			cached = $pool.get(region) ?? 0
+			scalar = if (cached == 0xFFFFFFFF) TableVar.avar_region_scalar(store, coords, region) else cached
+			if cached == 0xFFFFFFFF {
+				# Reading checked region against the pool's region_count.
+				$pool = $pool.set(region, TableVar.cache_scalar(scalar)) ?? []
+			}
+			if scalar != 0 {
+				d = if long {
+					if (c < words) TableVar.i32(store.bytes, row + 4 * c) else TableVar.i16(store.bytes, row + 4 * words + 2 * (c - words))
+				} else if c < words {
+					TableVar.i16(store.bytes, row + 2 * c)
+				} else {
+					TableVar.i8(store.bytes, row + 2 * words + (c - words))
+				}
+				$sum = TableVar.f32_add($sum, TableVar.f32_mul(scalar, TableVar.f32_from_int(d)))
+			}
+		}
+		{ value: $sum, cache: $pool }
+	}
+
+	## Apply all cross-axis deltas against the same complete v1-mapped
+	## coordinate vector. Clamping only the final coordinate is specified;
+	## bounding a delta to +/-2 merely keeps integer conversion finite.
+	avar2_coords : TableVar, List(I64) -> List(I64)
+	avar2_coords = |tv, mapped| match tv.avar2 {
+		Present(v2) => match v2.store {
+			Present(store) => {
+				coords = mapped.map(|v| (v + 2).shr_wrap(2).to_i16_wrap())
+				# The sentinel is a bit pattern, never passed to float math.
+				var $cache = List.repeat(0xFFFFFFFF.U32, store.region_count)
+				var $out = List.with_capacity(mapped.len())
+				for axis in 0..<mapped.len() {
+					index = TableVar.axis_index(v2.map, axis)
+					result = TableVar.avar_delta(store, coords, $cache, index.outer, index.inner)
+					$cache = result.cache
+					d16 = TableVar.f32_mul(result.value, TableVar.f32_from_int(4))
+					bounded = TableVar.f32_min(TableVar.f32_max(d16, TableVar.f32_from_int(-131072)), TableVar.f32_from_int(131072))
+					value = (mapped.get(axis) ?? 0) + TableVar.f32_round_half_up(bounded)
+					$out = $out.append(value.max(-65536).min(65536))
+				}
+				$out
+			}
+			Absent => mapped
+		}
+		Absent => mapped
 	}
 
 	# ------------------------------------------------------------ item variation store
@@ -1484,7 +1683,7 @@ expect
 
 expect TableVar.read_avar(avar_of([segment(identity)]), 2) == Err([{ table: "avar", offset: 6, reason: AxisCountMismatch }])
 expect TableVar.read_avar(avar_of([segment(identity)]).drop_last(1), 1) == Err([{ table: "avar", offset: 8, reason: Truncated }])
-expect TableVar.read_avar(u16(2).concat(avar_of([segment(identity)]).drop_first(2)), 1) == Err([{ table: "avar", offset: 0, reason: UnsupportedVersion }])
+expect TableVar.read_avar(u16(3).concat(avar_of([segment(identity)]).drop_first(2)), 1) == Err([{ table: "avar", offset: 0, reason: UnsupportedVersion }])
 
 # An ItemVariationStore at offset 0 of a buffer.
 Data : { indexes : List(U64), words : U64, long : Bool, rows : List(List(I64)) }
@@ -1734,6 +1933,20 @@ expect {
 			TableVar.f32_round_half_up(TableVar.delta(store, precise, 0, 0)) == 4 and
 				TableVar.f32_round_half_up(TableVar.delta(store, cached, 0, 0)) == 0
 		}
+		Err(_) => False
+	}
+}
+
+# avar2 may retain the complete v1 map with null optional offsets.
+expect {
+	bytes = u16(2).concat(avar_of([segment(identity)]).drop_first(2)).concat(u32(0)).concat(u32(0))
+	match TableVar.read(fvar_of([axis(wght, 0, 0, one)]), Present(bytes)) {
+		Ok(space) => TableVar.coords_for(space, [{ tag: wght, value: 0.5 }]) == [8192] and (
+			match space.avar2 {
+				Present(v) => v.map == Absent and v.store == Absent
+				Absent => False
+			}
+		)
 		Err(_) => False
 	}
 }
