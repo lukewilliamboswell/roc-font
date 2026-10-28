@@ -1,0 +1,177 @@
+{
+  "measurement_git": "74d5f9e9467bb4b131218e595cbf74254a7b8bb0",
+  "compiler": "Roc compiler version nightly-2026-10-27-de79a0f",
+  "compiler_sha256": "3fe3d91e227068c1dba3ec653138218fc562d1511b556693d48bfdbe5fd92d93",
+  "bundle": "http://127.0.0.1:53129/HwG6rUBZpmTiFqHRxjsKPwXmwFrVptLmjuHKe4BjLRue.tar.zst",
+  "binary_sha256": "4fa08cd8cd6506ca17756a23d7d94d52a38306611aa70408d6fa90e82b0c7a6a",
+  "allocation_binary_sha256": "31e6ca9198b63b0e40455896cc55d9c49fb7a42ac6b0ac58ad0b88b0e5a2e917",
+  "graphite2_library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+  "rows": [
+    {
+      "languages": 64,
+      "settings_each": 64,
+      "font_bytes": 2220,
+      "font_sha256": "a82174a15d85df8f5464f3738583b051feacd7066a7da3e83c6b74cc4037832e",
+      "allocations": 61,
+      "leaked": 0,
+      "samples": [
+        {
+          "after_ns": 53197.9375,
+          "before_ns": 84726.5625,
+          "graphite2_ns": 37750.0,
+          "after_ratio": 1.4092168874172186,
+          "before_ratio": 2.2444122516556293
+        },
+        {
+          "after_ns": 13736.9375,
+          "before_ns": 69385.4375,
+          "graphite2_ns": 16937.5,
+          "after_ratio": 0.8110369003690037,
+          "before_ratio": 4.096557195571956
+        },
+        {
+          "after_ns": 13533.875,
+          "before_ns": 68846.375,
+          "graphite2_ns": 16875.0,
+          "after_ratio": 0.8020074074074074,
+          "before_ratio": 4.079785185185186
+        },
+        {
+          "after_ns": 13151.0,
+          "before_ns": 71773.4375,
+          "graphite2_ns": 17375.0,
+          "after_ratio": 0.7568920863309353,
+          "before_ratio": 4.130845323741007
+        },
+        {
+          "after_ns": 13653.625,
+          "before_ns": 69239.5625,
+          "graphite2_ns": 15875.0,
+          "after_ratio": 0.8600708661417323,
+          "before_ratio": 4.3615472440944885
+        }
+      ],
+      "after_ratio": 0.8110369003690037,
+      "before_ratio": 4.096557195571956
+    },
+    {
+      "languages": 256,
+      "settings_each": 256,
+      "font_bytes": 5292,
+      "font_sha256": "605bc6af318fd89cd047256e4c5edb6677216bfab5cef294bb5e38e8af256560",
+      "allocations": 61,
+      "leaked": 0,
+      "samples": [
+        {
+          "after_ns": 21549.5,
+          "before_ns": 912906.25,
+          "graphite2_ns": 183625.0,
+          "after_ratio": 0.11735602450646698,
+          "before_ratio": 4.971579305650102
+        },
+        {
+          "after_ns": 20955.6875,
+          "before_ns": 907419.25,
+          "graphite2_ns": 190687.5,
+          "after_ratio": 0.10989544411668306,
+          "before_ratio": 4.758671910848902
+        },
+        {
+          "after_ns": 21351.5625,
+          "before_ns": 929276.0625,
+          "graphite2_ns": 182000.0,
+          "after_ratio": 0.11731627747252747,
+          "before_ratio": 5.105912431318681
+        },
+        {
+          "after_ns": 21244.75,
+          "before_ns": 920786.4375,
+          "graphite2_ns": 183625.0,
+          "after_ratio": 0.11569639210347175,
+          "before_ratio": 5.014493873383254
+        },
+        {
+          "after_ns": 21640.625,
+          "before_ns": 913552.125,
+          "graphite2_ns": 180250.0,
+          "after_ratio": 0.12005894590846047,
+          "before_ratio": 5.068250346740638
+        }
+      ],
+      "after_ratio": 0.11731627747252747,
+      "before_ratio": 5.014493873383254
+    },
+    {
+      "languages": 1024,
+      "settings_each": 1024,
+      "font_bytes": 17580,
+      "font_sha256": "c7230af371be1834ea0370d6f8f96c9873166f95bd75ea769b8e801d7d0ee074",
+      "allocations": 61,
+      "leaked": 0,
+      "samples": [
+        {
+          "after_ns": 51903.625,
+          "before_ns": 15118976.5625,
+          "graphite2_ns": 2748250.0,
+          "after_ratio": 0.01888606385881925,
+          "before_ratio": 5.501310493041026
+        },
+        {
+          "after_ns": 51403.625,
+          "before_ns": 15284372.4375,
+          "graphite2_ns": 2752437.5,
+          "after_ratio": 0.018675673834555734,
+          "before_ratio": 5.553031608347147
+        },
+        {
+          "after_ns": 51468.75,
+          "before_ns": 15317679.6875,
+          "graphite2_ns": 2746687.5,
+          "after_ratio": 0.018738480442351015,
+          "before_ratio": 5.576782829317132
+        },
+        {
+          "after_ns": 51419.25,
+          "before_ns": 15197690.125,
+          "graphite2_ns": 2754812.5,
+          "after_ratio": 0.018665244912312542,
+          "before_ratio": 5.516778410508882
+        },
+        {
+          "after_ns": 51359.375,
+          "before_ns": 15143908.8125,
+          "graphite2_ns": 2750062.5,
+          "after_ratio": 0.01867571191563828,
+          "before_ratio": 5.5067507783914005
+        }
+      ],
+      "after_ratio": 0.01867571191563828,
+      "before_ratio": 5.516778410508882
+    }
+  ],
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "notes": [
+    "Whole strict font preparation, including Graphite; input byte I/O excluded in both engines.",
+    "Five interleaved native samples,16 preparations each; cost and acceptance compared separately.",
+    "Pinned roc-fuzz0.4.3 exposes allocation/live call counts, not requested/peak bytes."
+  ],
+  "before_binary_sha256": "e1a340d63f164e56a39d601f15a2798a5eef5b3bc4ac4b2d41b974c448104484",
+  "before_bundle": "http://127.0.0.1:52868/ELs6RB3yyKWUmt8icrPatipeG6fR2XTZD34Dt2PQnjGG.tar.zst",
+  "before_allocations": [
+    61,
+    61,
+    61
+  ],
+  "before_leaked": [
+    0,
+    0,
+    0
+  ],
+  "public_bundle_expects": 7,
+  "source_modules_sha256": {
+    "GraphiteFeatures.roc": "b3a3b3268ff0791f7cb77fed8290baabf8e98d9ac5490c5ad0b2ea1f1b3c633f",
+    "GraphiteSettings.roc": "1e3a66684a0e839482e174bbd35dab6bdf639ca1a0467991a504ea67481aeb79",
+    "TableGraphite.roc": "0d4a8d95b374d413fee683e4e930fec550127576c358ccf52be019ff7f75b2ae"
+  }
+}

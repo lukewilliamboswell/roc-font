@@ -1,4 +1,5 @@
 import font.Font
+import "../fonts/graphite/overlap-1024.ttf" as shared_settings : List(U8)
 import "../fonts/graphite/stack-1024.ttf" as deep_stack : List(U8)
 import "../fonts/graphite/stack-unbalanced.ttf" as unbalanced_stack : List(U8)
 import "../fonts/graphite/Charis5_eursub.ttf" as charis : List(U8)
@@ -33,3 +34,5 @@ expect retained(awami)
 
 expect retained(deep_stack)
 expect retained(unbalanced_stack)
+
+expect retained(shared_settings)

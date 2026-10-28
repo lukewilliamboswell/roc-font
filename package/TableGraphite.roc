@@ -28,6 +28,17 @@ TableGraphite := {
 			Ok(value) => value
 			Err(Bad({ table, offset })) => {
 				$problems = $problems.append({ table, offset, reason: Malformed })
+				if table == "Feat" {
+					match tables.sill {
+						Present(data) => match GraphiteFeatures.sill_spans(data) {
+							Err(Bad(problem)) => {
+								$problems = $problems.append({ table: problem.table, offset: problem.offset, reason: Malformed })
+							}
+							Ok(_) => {}
+						}
+						Absent => {}
+					}
+				}
 				GraphiteFeatures.none
 			}
 		}
@@ -146,6 +157,13 @@ expect {
 	# eagerly; older glyph-attribute tables remain valid for ordinary passes.
 	match TableGraphite.read({ silf: inline_silf.set(84, 1) ?? [], gloc: inline_gloc, glat: inline_glat, feat: Present(inline_feat), sill: Absent, glyph_count: 3 }, 4096) {
 		Err(problems) => problems == [{ table: "Glat", offset: 0, reason: Malformed }]
+		Ok(_) => False
+	}
+}
+
+expect {
+	match TableGraphite.read({ silf: [], gloc: [], glat: [], feat: Present([]), sill: Present([]), glyph_count: 0 }, 1024) {
+		Err(problems) => problems.map(|p| p.table) == ["Feat", "Sill", "Gloc", "Glat", "Silf"]
 		Ok(_) => False
 	}
 }
