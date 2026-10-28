@@ -72,12 +72,32 @@ without the reference installed. All 755 public-C-API results also agree between
 this tracing build and the normal reference build, including floating-point
 origin bits and face/program rejection.
 
-The independent source components currently cover octabox decoding, projected
-forbidden regions, piecewise quadratic interval costs, and overlapping group
-boundaries. A complete collision pass additionally needs sequencing, exclusion
-glyphs, retry scheduling, and collision kerning. These components are not yet an
-end-to-end collision-stage support claim. Native public replay, fuzzing and
-performance measurements remain listed separately in `checks.json`.
+The original runtime now composes octabox decoding, ink and exclusion shapes,
+sequencing regions, piecewise quadratic interval costs, group-local retry rounds
+and cluster kerning. Independent audit directories retain 68 kerning, 67
+sequencing, 66 retry and nine floating-association controls. These implementation
+and reference checks are not an end-to-end collision-stage support claim. The
+full/missed broad-phase decision still has unresolved distinguishing witnesses;
+native public replay, fuzzing and performance measurements remain separate gates.
+
+`public_cases.py` selects 955 accepted reference faces from these matrices. Ten
+rejected reference faces remain explicitly listed as raw reader witnesses.
+`public-records.json` is a direct HarfBuzz 14.6 Graphite2-adapter glyph-run oracle,
+not a conversion guessed from raw slot positions. `public-oracle.json` pins both
+native reference libraries. Reproduce it with the generic reference extractor:
+
+```
+python tests/fonts/graphite/record_shapes.py --font-root tests/fonts/graphite-geometry --cases ../graphite-geometry/public-cases.jsonc --output ../graphite-geometry/public-records.json --oracle ../graphite-geometry/public-oracle.json
+python tests/fonts/graphite-geometry/verify.py --check
+```
+
+`verify.py` builds the generic public query with `--opt=speed` against the served
+bundle in a source-sentinel mirror, then compares glyphs, clusters, advances,
+offsets and unsafe-break flags. It also requires deterministic aligned results
+and an explicit Graphite plan. A NULL reference segment exposes no partial slot
+geometry; those cases compare explicit program abort while the query separately
+checks Roc's returned partial-work determinism. No native agreement is claimed
+until that replay has actually run.
 
 OTS accepts all 755 font containers and retains every Graphite table in 748.
 Its seven Glat2 controls are accepted only after the Graphite tables are
