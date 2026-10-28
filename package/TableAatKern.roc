@@ -66,6 +66,10 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 			# OT kern lengths can truncate a valid final format0 array at64KiB.
 			end = if (index + 1 == count) bytes.len() else $at + length
 			coverage = if (kerx) Bytes.u32(bytes, $at + 4) else if (apple) Bytes.u8(bytes, $at + 4) else Bytes.u8(bytes, $at + 5)
+			reserved = if (kerx) 0x0fffff00 else if (apple) 0x1f else 0xf0
+			if coverage.bitwise_and(reserved) != 0 {
+				$problems = $problems.append({ offset: $at + (if (kerx or apple) 4 else 5) })
+			}
 			kind = if (kerx) coverage.bitwise_and(255) else Bytes.u8(bytes, $at + 5 - (if (apple) 0 else 1))
 			vertical = if (kerx or apple) coverage.bitwise_and(if (kerx) 0x80000000 else 0x80) != 0 else coverage.bitwise_and(1) == 0
 			cross = coverage.bitwise_and(if (kerx) 0x40000000 else if (apple) 0x40 else 4) != 0
@@ -145,6 +149,14 @@ TableAatKern := { bytes : List(U8), subtables : List(Sub), lookups : List(AatLoo
 		start = at + size * 4
 		if !Bytes.fits(start, count * 6, s.end) {
 			return bad(at)
+		}
+		selector = if (s.extended) Bytes.u32(t.bytes, at + 2 * size) else Bytes.u16(t.bytes, at + 2 * size)
+		var $power = 0.U64
+		while (1.U64).shl_wrap(($power + 1).to_u8_wrap()) <= count {
+			$power = $power + 1
+		}
+		if selector != $power {
+			return bad(at + 2 * size)
 		}
 		var $pairs = t.pairs
 		var $last = 0
@@ -752,4 +764,23 @@ expect match TableAatKern.read_kerx(aat_pair_table, 3) {
 expect match TableAatKern.read_kerx(aat_pair_table, 3) {
 	Ok(t) => TableAatKern.apply(t, TableAatAnchor.none, aat_runtime_items, { advances: [510, 520], major: [0, 0], cross: [0, 0] }, { ..aat_runtime_context, budget: 0 }).stopped == 2
 	Err(_) => False
+}
+
+expect match TableAatKern.read_kern([0, 0, 0, 0], 3) {
+	Ok(t) => !TableAatKern.has_data(t)
+	Err(_) => False
+}
+expect {
+	bytes = aat_pair_table.take_first(12).concat([0, 0, 1, 0]).concat(aat_pair_table.drop_first(16))
+	match TableAatKern.read_kerx(bytes, 3) {
+		Err(ps) => ps.any(|p| p.offset == 12)
+		Ok(_) => False
+	}
+}
+expect {
+	bytes = aat_pair_table.take_first(28).concat([0, 0, 0, 1]).concat(aat_pair_table.drop_first(32))
+	match TableAatKern.read_kerx(bytes, 3) {
+		Err(ps) => ps.any(|p| p.offset == 28)
+		Ok(_) => False
+	}
 }
