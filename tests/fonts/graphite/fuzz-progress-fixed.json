@@ -1,0 +1,74 @@
+{
+  "note": "Intermediate native VM proof after rule-window progress fix; original allocation bound retained. Final shared workflow remains required.",
+  "bundle": "EjCUU8s2GFGVEq1SDRnAsXycDeGpe9smdn1TPox6NCyh.tar.zst",
+  "source_sentinel": true,
+  "fixed_regression_sha256": "4edafecf994d3955b28f5bec224b755bc4879764aa664763c55870423457a043",
+  "report_sha256": "4e927143bb79b04c54715081710c374a4611dc041f27d05cbcc6cdc345c1cad4",
+  "report": {
+    "schema_version": "roc-fuzz-ci/v1",
+    "target": "font-graphite",
+    "started_at_unix_ms": 1793187990435,
+    "finished_at_unix_ms": 1793188012683,
+    "duration_ms": 22247,
+    "outcome": "passed",
+    "finding_kind": null,
+    "provenance": {
+      "source_revision": "d73c19b4a7f4e58c4b90a24ef8b8893b41d047f3+dirty",
+      "roc_version": "Roc compiler version nightly-2026-10-27-de79a0f",
+      "platform_release": "0.4.3",
+      "platform_sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2"
+    },
+    "configuration": {
+      "corpus": "/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/fuzz/smoke-corpus/font-graphite",
+      "time_seconds": null,
+      "runs": "1000",
+      "max_input_size": "64",
+      "memory_limit_mb": "2048",
+      "timeout_seconds": "10",
+      "dictionary": "/Users/luke/Documents/GitHub/roc-font/fuzz/dictionaries/narrow.dict",
+      "seed": "1",
+      "leak_detection": true,
+      "command": [
+        "/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/fuzz/bin/font-graphite",
+        "run",
+        "/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/fuzz/smoke-corpus/font-graphite",
+        "--max-input-size=64",
+        "--timeout=10",
+        "--memory-limit=2048",
+        "--dictionary=/Users/luke/Documents/GitHub/roc-font/fuzz/dictionaries/narrow.dict",
+        "--runs=1000",
+        "--seed=1",
+        "--artifact-dir=/Users/luke/Documents/GitHub/roc-font/.roc-font-tmp/fuzz/runs/font-graphite/smoke/failures",
+        "--print-final-stats"
+      ]
+    },
+    "executable": {
+      "name": "font-graphite",
+      "sha256": "3219dc98c80938203889bbdbcd58020cbe16d0a9d0e12fe7f89ab6e99e7a14bc"
+    },
+    "termination": {
+      "exit_code": 0,
+      "signal": null
+    },
+    "libfuzzer": {
+      "coverage_kind": "sanitizer_edge_feedback",
+      "executed_units": 1000,
+      "average_exec_per_sec": 45,
+      "new_units_added": 306,
+      "slowest_unit_time_sec": 0,
+      "peak_rss_mb": 39,
+      "coverage_edges": 5495,
+      "coverage_features": 13747
+    },
+    "failures": [],
+    "log": {
+      "path": "run.log",
+      "size": 36971,
+      "sha256": "ad7eb5ed15c04dd2fa31cd42e2258eb74cee8f487931bfc4b87adad047ca1786"
+    },
+    "corpus_summary": {
+      "count": 398,
+      "manifest_sha256": "b58bb02d3582b74aa8570758548532ba4d84d61d11b8dfad526e6c66b6d8207e"
+    }
+  }
+}
