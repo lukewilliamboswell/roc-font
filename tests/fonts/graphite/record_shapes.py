@@ -6,10 +6,10 @@ no Graphite2 implementation code is linked into the Roc package.
 from pathlib import Path
 import argparse,ctypes as C,hashlib,json
 HERE=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--cases',default='shape-cases.jsonc');p.add_argument('--output',default='shape-records.json');p.add_argument('--library',type=Path,default=Path('/private/tmp/libroc-font-hb14-graphite.dylib'));p.add_argument('--graphite-library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--oracle',default='shape-oracle.json');p.add_argument('--cases',default='shape-cases.jsonc');p.add_argument('--output',default='shape-records.json');p.add_argument('--library',type=Path,default=Path('/private/tmp/libroc-font-hb14-graphite.dylib'));p.add_argument('--graphite-library',type=Path,default=Path('/opt/homebrew/lib/libgraphite2.dylib'));args=p.parse_args()
 def sha(data):return hashlib.sha256(data).hexdigest()
 def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()
-cases=json.loads((HERE/args.cases).read_text())['cases'];pin_path=HERE/'shape-oracle.json'
+cases=json.loads((HERE/args.cases).read_text())['cases'];pin_path=HERE/args.oracle
 if args.check:
  pin=json.loads(pin_path.read_text());records=json.loads((HERE/args.output).read_text())['records'];assert len(records)==len(cases)
  for case,record in zip(cases,records):
