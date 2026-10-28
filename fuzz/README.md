@@ -8,18 +8,27 @@ narrow targets. `scripts/run_fuzz.py` adds every real font found in
 `tests/fonts/` and `tests/corpus/` as a further seed of the targets that read
 whole fonts.
 
-The whole-pipeline targets are `font-read.roc` and `font-shape.roc`. The
-narrow targets each build fonts exercising one feature at two sizes and
-check its contract and allocation growth: `font-cmap.roc` (character map
-formats), `font-coverage.roc` (coverage and class definitions),
-`font-gsub.roc` (one substitution lookup type at a time), `font-gpos.roc`
-(pair kerning formats and `kern`), `font-var.roc` (variable fonts and
-`Font.at`), `font-gvar.roc` (glyph variations and `Font.extents`) and
-`font-layout-var.roc` (kerning device deltas and feature variations) and
-`font-ots.roc` (the checks reading shares with OTS, one damaged table at a
-time). All of them import the package through `package/main.roc`, exactly what ships, and the test-only
-byte builders (`FontBuild`) through `tests/support/main.roc`, which
-`package/main.roc` never reaches.
+The whole-pipeline targets are `font-read.roc` and `font-shape.roc`.
+Narrow targets exercise individual features at increasing sizes and check
+allocation growth, determinism and the feature's public contract:
+
+- Character maps, coverage/class tables, GSUB lookup types and pair kerning:
+  `font-cmap`, `font-coverage`, `font-gsub`, `font-gpos`.
+- Contextual and attachment positioning: `font-position` and
+  `font-position-context`, including nested order and work/depth limits.
+- Variation stores, glyph variations and font locations: `font-var`,
+  `font-gvar`, `font-layout-var`.
+- Font facts: `font-metadata`, `font-math`, `font-outlines`, `font-color`
+  and `font-color-images`.
+- Script stages with licensed real fonts: `font-arabic`, `font-thai-lao`,
+  `font-hangul`, `font-indic`, `font-khmer`, `font-myanmar`, `font-use`.
+- Reading checks shared with OTS, one damaged table at a time: `font-ots`.
+
+All targets import the served package bundle through `--replace-dep`,
+exactly as downstream consumers do. Those that construct test fonts import
+`FontBuild` through `tests/support/main.roc`; the package never imports
+test builders or test fonts. Contracts and reviewed seeds are registered in
+`scripts/run_fuzz.py`.
 
 Run every target briefly with the latest Roc nightly:
 
