@@ -1,0 +1,4890 @@
+{
+  "schema": 1,
+  "about": "Reference face modes are intentional semantic inputs; these are not a single package-output conformance gate.",
+  "cases": [
+    {
+      "id": "collision-preload-whole-only-mode0",
+      "font": "preload-audit/collision-preload-whole-only.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {},
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-whole-only-mode2",
+      "font": "preload-audit/collision-preload-whole-only.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {},
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-whole-only-mode4",
+      "font": "preload-audit/collision-preload-whole-only.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {},
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-whole-only-mode6",
+      "font": "preload-audit/collision-preload-whole-only.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {},
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-margin-mode0",
+      "font": "preload-audit/collision-preload-margin.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "margin": 50
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-margin-mode2",
+      "font": "preload-audit/collision-preload-margin.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "margin": 50
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-margin-mode4",
+      "font": "preload-audit/collision-preload-margin.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "margin": 50
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-margin-mode6",
+      "font": "preload-audit/collision-preload-margin.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "margin": 50
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attachment-mode0",
+      "font": "preload-audit/collision-preload-attachment.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "attachment": "forward"
+      },
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ]
+    },
+    {
+      "id": "collision-preload-attachment-mode2",
+      "font": "preload-audit/collision-preload-attachment.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "attachment": "forward"
+      },
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ]
+    },
+    {
+      "id": "collision-preload-attachment-mode4",
+      "font": "preload-audit/collision-preload-attachment.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "attachment": "forward"
+      },
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ]
+    },
+    {
+      "id": "collision-preload-attachment-mode6",
+      "font": "preload-audit/collision-preload-attachment.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "attachment": "forward"
+      },
+      "action": [
+        1,
+        1,
+        38,
+        2,
+        3,
+        0,
+        100,
+        35,
+        3,
+        3,
+        0,
+        20,
+        35,
+        8,
+        3,
+        0,
+        200,
+        35,
+        4,
+        3,
+        0,
+        30,
+        35,
+        9
+      ]
+    },
+    {
+      "id": "collision-preload-blank-target-mode0",
+      "font": "preload-audit/collision-preload-blank-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "blank": 2
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-target-mode2",
+      "font": "preload-audit/collision-preload-blank-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "blank": 2
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-target-mode4",
+      "font": "preload-audit/collision-preload-blank-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "blank": 2
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-target-mode6",
+      "font": "preload-audit/collision-preload-blank-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "blank": 2
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-obstacle-mode0",
+      "font": "preload-audit/collision-preload-blank-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "blank": 1
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-obstacle-mode2",
+      "font": "preload-audit/collision-preload-blank-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "blank": 1
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-obstacle-mode4",
+      "font": "preload-audit/collision-preload-blank-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "blank": 1
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-blank-obstacle-mode6",
+      "font": "preload-audit/collision-preload-blank-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "blank": 1
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-boxes-mode0",
+      "font": "preload-audit/collision-preload-without-boxes.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "no_boxes": true
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-boxes-mode2",
+      "font": "preload-audit/collision-preload-without-boxes.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "no_boxes": true
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-boxes-mode4",
+      "font": "preload-audit/collision-preload-without-boxes.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "no_boxes": true
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-boxes-mode6",
+      "font": "preload-audit/collision-preload-without-boxes.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "no_boxes": true
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-collision-mode0",
+      "font": "preload-audit/collision-preload-without-collision.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-collision-mode2",
+      "font": "preload-audit/collision-preload-without-collision.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-collision-mode4",
+      "font": "preload-audit/collision-preload-without-collision.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-collision-mode6",
+      "font": "preload-audit/collision-preload-without-collision.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-mode0",
+      "font": "preload-audit/collision-preload-without-glat.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "remove": [
+          "Glat"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-mode2",
+      "font": "preload-audit/collision-preload-without-glat.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "remove": [
+          "Glat"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-mode4",
+      "font": "preload-audit/collision-preload-without-glat.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "remove": [
+          "Glat"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-mode6",
+      "font": "preload-audit/collision-preload-without-glat.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "remove": [
+          "Glat"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-gloc-mode0",
+      "font": "preload-audit/collision-preload-without-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "remove": [
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-gloc-mode2",
+      "font": "preload-audit/collision-preload-without-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "remove": [
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-gloc-mode4",
+      "font": "preload-audit/collision-preload-without-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "remove": [
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-gloc-mode6",
+      "font": "preload-audit/collision-preload-without-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "remove": [
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-gloc-mode0",
+      "font": "preload-audit/collision-preload-without-glat-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "remove": [
+          "Glat",
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-gloc-mode2",
+      "font": "preload-audit/collision-preload-without-glat-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "remove": [
+          "Glat",
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-gloc-mode4",
+      "font": "preload-audit/collision-preload-without-glat-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "remove": [
+          "Glat",
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-without-glat-gloc-mode6",
+      "font": "preload-audit/collision-preload-without-glat-gloc.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "remove": [
+          "Glat",
+          "Gloc"
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-unused-mode0",
+      "font": "preload-audit/collision-preload-full-subbox-unused.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          0
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-unused-mode2",
+      "font": "preload-audit/collision-preload-full-subbox-unused.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          0
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-unused-mode4",
+      "font": "preload-audit/collision-preload-full-subbox-unused.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          0
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-unused-mode6",
+      "font": "preload-audit/collision-preload-full-subbox-unused.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          0
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-target-mode0",
+      "font": "preload-audit/collision-preload-full-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-target-mode2",
+      "font": "preload-audit/collision-preload-full-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-target-mode4",
+      "font": "preload-audit/collision-preload-full-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-target-mode6",
+      "font": "preload-audit/collision-preload-full-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-obstacle-mode0",
+      "font": "preload-audit/collision-preload-full-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-obstacle-mode2",
+      "font": "preload-audit/collision-preload-full-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-obstacle-mode4",
+      "font": "preload-audit/collision-preload-full-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-obstacle-mode6",
+      "font": "preload-audit/collision-preload-full-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-both-mode0",
+      "font": "preload-audit/collision-preload-full-subbox-both.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          1,
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-both-mode2",
+      "font": "preload-audit/collision-preload-full-subbox-both.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          1,
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-both-mode4",
+      "font": "preload-audit/collision-preload-full-subbox-both.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          1,
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-full-subbox-both-mode6",
+      "font": "preload-audit/collision-preload-full-subbox-both.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          1,
+          2
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-target-mode0",
+      "font": "preload-audit/collision-preload-half-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-target-mode2",
+      "font": "preload-audit/collision-preload-half-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-target-mode4",
+      "font": "preload-audit/collision-preload-half-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-target-mode6",
+      "font": "preload-audit/collision-preload-half-subbox-target.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          2
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-obstacle-mode0",
+      "font": "preload-audit/collision-preload-half-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-obstacle-mode2",
+      "font": "preload-audit/collision-preload-half-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-obstacle-mode4",
+      "font": "preload-audit/collision-preload-half-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-half-subbox-obstacle-mode6",
+      "font": "preload-audit/collision-preload-half-subbox-obstacle.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "box_glyphs": [
+          1
+        ],
+        "box_value": [
+          0,
+          127,
+          0,
+          127,
+          0,
+          255,
+          0,
+          255
+        ]
+      },
+      "action": [
+        3,
+        0,
+        100,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-0-mode0",
+      "font": "preload-audit/collision-preload-metric-0.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 0
+      },
+      "action": [
+        25,
+        42,
+        0,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-0-mode2",
+      "font": "preload-audit/collision-preload-metric-0.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 0
+      },
+      "action": [
+        25,
+        42,
+        0,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-0-mode4",
+      "font": "preload-audit/collision-preload-metric-0.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 0
+      },
+      "action": [
+        25,
+        42,
+        0,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-0-mode6",
+      "font": "preload-audit/collision-preload-metric-0.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 0
+      },
+      "action": [
+        25,
+        42,
+        0,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-1-mode0",
+      "font": "preload-audit/collision-preload-metric-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 1
+      },
+      "action": [
+        25,
+        42,
+        1,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-1-mode2",
+      "font": "preload-audit/collision-preload-metric-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 1
+      },
+      "action": [
+        25,
+        42,
+        1,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-1-mode4",
+      "font": "preload-audit/collision-preload-metric-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 1
+      },
+      "action": [
+        25,
+        42,
+        1,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-1-mode6",
+      "font": "preload-audit/collision-preload-metric-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 1
+      },
+      "action": [
+        25,
+        42,
+        1,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-2-mode0",
+      "font": "preload-audit/collision-preload-metric-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 2
+      },
+      "action": [
+        25,
+        42,
+        2,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-2-mode2",
+      "font": "preload-audit/collision-preload-metric-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 2
+      },
+      "action": [
+        25,
+        42,
+        2,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-2-mode4",
+      "font": "preload-audit/collision-preload-metric-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 2
+      },
+      "action": [
+        25,
+        42,
+        2,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-2-mode6",
+      "font": "preload-audit/collision-preload-metric-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 2
+      },
+      "action": [
+        25,
+        42,
+        2,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-3-mode0",
+      "font": "preload-audit/collision-preload-metric-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 3
+      },
+      "action": [
+        25,
+        42,
+        3,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-3-mode2",
+      "font": "preload-audit/collision-preload-metric-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 3
+      },
+      "action": [
+        25,
+        42,
+        3,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-3-mode4",
+      "font": "preload-audit/collision-preload-metric-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 3
+      },
+      "action": [
+        25,
+        42,
+        3,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-3-mode6",
+      "font": "preload-audit/collision-preload-metric-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 3
+      },
+      "action": [
+        25,
+        42,
+        3,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-4-mode0",
+      "font": "preload-audit/collision-preload-metric-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 4
+      },
+      "action": [
+        25,
+        42,
+        4,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-4-mode2",
+      "font": "preload-audit/collision-preload-metric-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 4
+      },
+      "action": [
+        25,
+        42,
+        4,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-4-mode4",
+      "font": "preload-audit/collision-preload-metric-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 4
+      },
+      "action": [
+        25,
+        42,
+        4,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-4-mode6",
+      "font": "preload-audit/collision-preload-metric-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 4
+      },
+      "action": [
+        25,
+        42,
+        4,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-5-mode0",
+      "font": "preload-audit/collision-preload-metric-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 5
+      },
+      "action": [
+        25,
+        42,
+        5,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-5-mode2",
+      "font": "preload-audit/collision-preload-metric-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 5
+      },
+      "action": [
+        25,
+        42,
+        5,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-5-mode4",
+      "font": "preload-audit/collision-preload-metric-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 5
+      },
+      "action": [
+        25,
+        42,
+        5,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-5-mode6",
+      "font": "preload-audit/collision-preload-metric-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 5
+      },
+      "action": [
+        25,
+        42,
+        5,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-6-mode0",
+      "font": "preload-audit/collision-preload-metric-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 6
+      },
+      "action": [
+        25,
+        42,
+        6,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-6-mode2",
+      "font": "preload-audit/collision-preload-metric-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 6
+      },
+      "action": [
+        25,
+        42,
+        6,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-6-mode4",
+      "font": "preload-audit/collision-preload-metric-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 6
+      },
+      "action": [
+        25,
+        42,
+        6,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-6-mode6",
+      "font": "preload-audit/collision-preload-metric-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 6
+      },
+      "action": [
+        25,
+        42,
+        6,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-7-mode0",
+      "font": "preload-audit/collision-preload-metric-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 7
+      },
+      "action": [
+        25,
+        42,
+        7,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-7-mode2",
+      "font": "preload-audit/collision-preload-metric-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 7
+      },
+      "action": [
+        25,
+        42,
+        7,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-7-mode4",
+      "font": "preload-audit/collision-preload-metric-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 7
+      },
+      "action": [
+        25,
+        42,
+        7,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-7-mode6",
+      "font": "preload-audit/collision-preload-metric-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 7
+      },
+      "action": [
+        25,
+        42,
+        7,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-8-mode0",
+      "font": "preload-audit/collision-preload-metric-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 8
+      },
+      "action": [
+        25,
+        42,
+        8,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-8-mode2",
+      "font": "preload-audit/collision-preload-metric-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 8
+      },
+      "action": [
+        25,
+        42,
+        8,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-8-mode4",
+      "font": "preload-audit/collision-preload-metric-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 8
+      },
+      "action": [
+        25,
+        42,
+        8,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-8-mode6",
+      "font": "preload-audit/collision-preload-metric-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 8
+      },
+      "action": [
+        25,
+        42,
+        8,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-9-mode0",
+      "font": "preload-audit/collision-preload-metric-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 9
+      },
+      "action": [
+        25,
+        42,
+        9,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-9-mode2",
+      "font": "preload-audit/collision-preload-metric-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 9
+      },
+      "action": [
+        25,
+        42,
+        9,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-9-mode4",
+      "font": "preload-audit/collision-preload-metric-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 9
+      },
+      "action": [
+        25,
+        42,
+        9,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-9-mode6",
+      "font": "preload-audit/collision-preload-metric-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 9
+      },
+      "action": [
+        25,
+        42,
+        9,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-10-mode0",
+      "font": "preload-audit/collision-preload-metric-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 10
+      },
+      "action": [
+        25,
+        42,
+        10,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-10-mode2",
+      "font": "preload-audit/collision-preload-metric-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 10
+      },
+      "action": [
+        25,
+        42,
+        10,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-10-mode4",
+      "font": "preload-audit/collision-preload-metric-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 10
+      },
+      "action": [
+        25,
+        42,
+        10,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-metric-10-mode6",
+      "font": "preload-audit/collision-preload-metric-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 0,
+        "flags_b": 0,
+        "metric": 10
+      },
+      "action": [
+        25,
+        42,
+        10,
+        0,
+        1,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-1-mode0",
+      "font": "preload-audit/collision-preload-attribute-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 1
+      },
+      "action": [
+        25,
+        41,
+        1,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-1-mode2",
+      "font": "preload-audit/collision-preload-attribute-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 1
+      },
+      "action": [
+        25,
+        41,
+        1,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-1-mode4",
+      "font": "preload-audit/collision-preload-attribute-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 1
+      },
+      "action": [
+        25,
+        41,
+        1,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-1-mode6",
+      "font": "preload-audit/collision-preload-attribute-1.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 1
+      },
+      "action": [
+        25,
+        41,
+        1,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-2-mode0",
+      "font": "preload-audit/collision-preload-attribute-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 2
+      },
+      "action": [
+        25,
+        41,
+        2,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-2-mode2",
+      "font": "preload-audit/collision-preload-attribute-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 2
+      },
+      "action": [
+        25,
+        41,
+        2,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-2-mode4",
+      "font": "preload-audit/collision-preload-attribute-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 2
+      },
+      "action": [
+        25,
+        41,
+        2,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-2-mode6",
+      "font": "preload-audit/collision-preload-attribute-2.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 2
+      },
+      "action": [
+        25,
+        41,
+        2,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-3-mode0",
+      "font": "preload-audit/collision-preload-attribute-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 3
+      },
+      "action": [
+        25,
+        41,
+        3,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-3-mode2",
+      "font": "preload-audit/collision-preload-attribute-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 3
+      },
+      "action": [
+        25,
+        41,
+        3,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-3-mode4",
+      "font": "preload-audit/collision-preload-attribute-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 3
+      },
+      "action": [
+        25,
+        41,
+        3,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-3-mode6",
+      "font": "preload-audit/collision-preload-attribute-3.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 3
+      },
+      "action": [
+        25,
+        41,
+        3,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-4-mode0",
+      "font": "preload-audit/collision-preload-attribute-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 4
+      },
+      "action": [
+        25,
+        41,
+        4,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-4-mode2",
+      "font": "preload-audit/collision-preload-attribute-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 4
+      },
+      "action": [
+        25,
+        41,
+        4,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-4-mode4",
+      "font": "preload-audit/collision-preload-attribute-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 4
+      },
+      "action": [
+        25,
+        41,
+        4,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-4-mode6",
+      "font": "preload-audit/collision-preload-attribute-4.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 4
+      },
+      "action": [
+        25,
+        41,
+        4,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-5-mode0",
+      "font": "preload-audit/collision-preload-attribute-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 5
+      },
+      "action": [
+        25,
+        41,
+        5,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-5-mode2",
+      "font": "preload-audit/collision-preload-attribute-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 5
+      },
+      "action": [
+        25,
+        41,
+        5,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-5-mode4",
+      "font": "preload-audit/collision-preload-attribute-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 5
+      },
+      "action": [
+        25,
+        41,
+        5,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-5-mode6",
+      "font": "preload-audit/collision-preload-attribute-5.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 5
+      },
+      "action": [
+        25,
+        41,
+        5,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-6-mode0",
+      "font": "preload-audit/collision-preload-attribute-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 6
+      },
+      "action": [
+        25,
+        41,
+        6,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-6-mode2",
+      "font": "preload-audit/collision-preload-attribute-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 6
+      },
+      "action": [
+        25,
+        41,
+        6,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-6-mode4",
+      "font": "preload-audit/collision-preload-attribute-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 6
+      },
+      "action": [
+        25,
+        41,
+        6,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-6-mode6",
+      "font": "preload-audit/collision-preload-attribute-6.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 6
+      },
+      "action": [
+        25,
+        41,
+        6,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-7-mode0",
+      "font": "preload-audit/collision-preload-attribute-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 7
+      },
+      "action": [
+        25,
+        41,
+        7,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-7-mode2",
+      "font": "preload-audit/collision-preload-attribute-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 7
+      },
+      "action": [
+        25,
+        41,
+        7,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-7-mode4",
+      "font": "preload-audit/collision-preload-attribute-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 7
+      },
+      "action": [
+        25,
+        41,
+        7,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-7-mode6",
+      "font": "preload-audit/collision-preload-attribute-7.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 7
+      },
+      "action": [
+        25,
+        41,
+        7,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-8-mode0",
+      "font": "preload-audit/collision-preload-attribute-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 8
+      },
+      "action": [
+        25,
+        41,
+        8,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-8-mode2",
+      "font": "preload-audit/collision-preload-attribute-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 8
+      },
+      "action": [
+        25,
+        41,
+        8,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-8-mode4",
+      "font": "preload-audit/collision-preload-attribute-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 8
+      },
+      "action": [
+        25,
+        41,
+        8,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-8-mode6",
+      "font": "preload-audit/collision-preload-attribute-8.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 8
+      },
+      "action": [
+        25,
+        41,
+        8,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-9-mode0",
+      "font": "preload-audit/collision-preload-attribute-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 9
+      },
+      "action": [
+        25,
+        41,
+        9,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-9-mode2",
+      "font": "preload-audit/collision-preload-attribute-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 9
+      },
+      "action": [
+        25,
+        41,
+        9,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-9-mode4",
+      "font": "preload-audit/collision-preload-attribute-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 9
+      },
+      "action": [
+        25,
+        41,
+        9,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-9-mode6",
+      "font": "preload-audit/collision-preload-attribute-9.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 9
+      },
+      "action": [
+        25,
+        41,
+        9,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-10-mode0",
+      "font": "preload-audit/collision-preload-attribute-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 10
+      },
+      "action": [
+        25,
+        41,
+        10,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-10-mode2",
+      "font": "preload-audit/collision-preload-attribute-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 10
+      },
+      "action": [
+        25,
+        41,
+        10,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-10-mode4",
+      "font": "preload-audit/collision-preload-attribute-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 10
+      },
+      "action": [
+        25,
+        41,
+        10,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-10-mode6",
+      "font": "preload-audit/collision-preload-attribute-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 10
+      },
+      "action": [
+        25,
+        41,
+        10,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-11-mode0",
+      "font": "preload-audit/collision-preload-attribute-11.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 11
+      },
+      "action": [
+        25,
+        41,
+        11,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-11-mode2",
+      "font": "preload-audit/collision-preload-attribute-11.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 11
+      },
+      "action": [
+        25,
+        41,
+        11,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-11-mode4",
+      "font": "preload-audit/collision-preload-attribute-11.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 11
+      },
+      "action": [
+        25,
+        41,
+        11,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-11-mode6",
+      "font": "preload-audit/collision-preload-attribute-11.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 11
+      },
+      "action": [
+        25,
+        41,
+        11,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-12-mode0",
+      "font": "preload-audit/collision-preload-attribute-12.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 12
+      },
+      "action": [
+        25,
+        41,
+        12,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-12-mode2",
+      "font": "preload-audit/collision-preload-attribute-12.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 12
+      },
+      "action": [
+        25,
+        41,
+        12,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-12-mode4",
+      "font": "preload-audit/collision-preload-attribute-12.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 12
+      },
+      "action": [
+        25,
+        41,
+        12,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-12-mode6",
+      "font": "preload-audit/collision-preload-attribute-12.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 12
+      },
+      "action": [
+        25,
+        41,
+        12,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-13-mode0",
+      "font": "preload-audit/collision-preload-attribute-13.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 13
+      },
+      "action": [
+        25,
+        41,
+        13,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-13-mode2",
+      "font": "preload-audit/collision-preload-attribute-13.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 13
+      },
+      "action": [
+        25,
+        41,
+        13,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-13-mode4",
+      "font": "preload-audit/collision-preload-attribute-13.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 13
+      },
+      "action": [
+        25,
+        41,
+        13,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-13-mode6",
+      "font": "preload-audit/collision-preload-attribute-13.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 13
+      },
+      "action": [
+        25,
+        41,
+        13,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-14-mode0",
+      "font": "preload-audit/collision-preload-attribute-14.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 14
+      },
+      "action": [
+        25,
+        41,
+        14,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-14-mode2",
+      "font": "preload-audit/collision-preload-attribute-14.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 14
+      },
+      "action": [
+        25,
+        41,
+        14,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-14-mode4",
+      "font": "preload-audit/collision-preload-attribute-14.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 14
+      },
+      "action": [
+        25,
+        41,
+        14,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-14-mode6",
+      "font": "preload-audit/collision-preload-attribute-14.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 14
+      },
+      "action": [
+        25,
+        41,
+        14,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-15-mode0",
+      "font": "preload-audit/collision-preload-attribute-15.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 15
+      },
+      "action": [
+        25,
+        41,
+        15,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-15-mode2",
+      "font": "preload-audit/collision-preload-attribute-15.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 15
+      },
+      "action": [
+        25,
+        41,
+        15,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-15-mode4",
+      "font": "preload-audit/collision-preload-attribute-15.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 15
+      },
+      "action": [
+        25,
+        41,
+        15,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-15-mode6",
+      "font": "preload-audit/collision-preload-attribute-15.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 15
+      },
+      "action": [
+        25,
+        41,
+        15,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-16-mode0",
+      "font": "preload-audit/collision-preload-attribute-16.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 0,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 16
+      },
+      "action": [
+        25,
+        41,
+        16,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-16-mode2",
+      "font": "preload-audit/collision-preload-attribute-16.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 2,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 16
+      },
+      "action": [
+        25,
+        41,
+        16,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-16-mode4",
+      "font": "preload-audit/collision-preload-attribute-16.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 4,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 16
+      },
+      "action": [
+        25,
+        41,
+        16,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-attribute-16-mode6",
+      "font": "preload-audit/collision-preload-attribute-16.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "face_options": 6,
+      "parameters": {
+        "pass_flags": 0,
+        "flags_a": 33,
+        "flags_b": 97,
+        "margin": 50,
+        "weight": 17,
+        "glat_attr": 16
+      },
+      "action": [
+        25,
+        41,
+        16,
+        0,
+        35,
+        21
+      ]
+    },
+    {
+      "id": "collision-preload-real-charis-text-5-ltr-clusters-0-mode0",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "charis/text-5/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-5-ltr-clusters-0-mode2",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "charis/text-5/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-5-ltr-clusters-0-mode4",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "charis/text-5/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-5-ltr-clusters-0-mode6",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "á",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "charis/text-5/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-19-ltr-clusters-0-mode0",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "charis/text-19/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-19-ltr-clusters-0-mode2",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "charis/text-19/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-19-ltr-clusters-0-mode4",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "charis/text-19/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-charis-text-19-ltr-clusters-0-mode6",
+      "font": "../graphite/Charis5_eursub.ttf",
+      "text": "ááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááááá",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "charis/text-19/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-ltr-clusters-0-mode0",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "padauk/text-4/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-ltr-clusters-0-mode2",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "padauk/text-4/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-ltr-clusters-0-mode4",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "padauk/text-4/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-ltr-clusters-0-mode6",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "padauk/text-4/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-rtl-clusters-0-mode0",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "rtl",
+      "face_options": 0,
+      "source_case": "padauk/text-4/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-rtl-clusters-0-mode2",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "rtl",
+      "face_options": 2,
+      "source_case": "padauk/text-4/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-rtl-clusters-0-mode4",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "rtl",
+      "face_options": 4,
+      "source_case": "padauk/text-4/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-4-rtl-clusters-0-mode6",
+      "font": "../graphite/Padauk.ttf",
+      "text": "မြန်မာ",
+      "direction": "rtl",
+      "face_options": 6,
+      "source_case": "padauk/text-4/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-6-ltr-clusters-0-mode0",
+      "font": "../graphite/Padauk.ttf",
+      "text": "ေက",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "padauk/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-6-ltr-clusters-0-mode2",
+      "font": "../graphite/Padauk.ttf",
+      "text": "ေက",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "padauk/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-6-ltr-clusters-0-mode4",
+      "font": "../graphite/Padauk.ttf",
+      "text": "ေက",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "padauk/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-padauk-text-6-ltr-clusters-0-mode6",
+      "font": "../graphite/Padauk.ttf",
+      "text": "ေက",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "padauk/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-6-rtl-clusters-0-mode0",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اللَّه",
+      "direction": "rtl",
+      "face_options": 0,
+      "source_case": "scheherazade/text-6/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-6-rtl-clusters-0-mode2",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اللَّه",
+      "direction": "rtl",
+      "face_options": 2,
+      "source_case": "scheherazade/text-6/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-6-rtl-clusters-0-mode4",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اللَّه",
+      "direction": "rtl",
+      "face_options": 4,
+      "source_case": "scheherazade/text-6/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-6-rtl-clusters-0-mode6",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اللَّه",
+      "direction": "rtl",
+      "face_options": 6,
+      "source_case": "scheherazade/text-6/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-12-ltr-clusters-0-mode0",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اَّ",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "scheherazade/text-12/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-12-ltr-clusters-0-mode2",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اَّ",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "scheherazade/text-12/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-12-ltr-clusters-0-mode4",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اَّ",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "scheherazade/text-12/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-12-ltr-clusters-0-mode6",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "اَّ",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "scheherazade/text-12/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-15-ltr-clusters-0-mode0",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "ؐبَّ",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "scheherazade/text-15/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-15-ltr-clusters-0-mode2",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "ؐبَّ",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "scheherazade/text-15/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-15-ltr-clusters-0-mode4",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "ؐبَّ",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "scheherazade/text-15/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-scheherazade-text-15-ltr-clusters-0-mode6",
+      "font": "../graphite/Scheherazadegr.ttf",
+      "text": "ؐبَّ",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "scheherazade/text-15/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-1-ltr-clusters-0-mode0",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "([])",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "awami/text-1/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-1-ltr-clusters-0-mode2",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "([])",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "awami/text-1/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-1-ltr-clusters-0-mode4",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "([])",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "awami/text-1/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-1-ltr-clusters-0-mode6",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "([])",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "awami/text-1/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-ltr-clusters-0-mode0",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "awami/text-3/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-ltr-clusters-0-mode2",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "awami/text-3/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-ltr-clusters-0-mode4",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "awami/text-3/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-ltr-clusters-0-mode6",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "awami/text-3/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-rtl-clusters-0-mode0",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "rtl",
+      "face_options": 0,
+      "source_case": "awami/text-3/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-rtl-clusters-0-mode2",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "rtl",
+      "face_options": 2,
+      "source_case": "awami/text-3/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-rtl-clusters-0-mode4",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "rtl",
+      "face_options": 4,
+      "source_case": "awami/text-3/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-3-rtl-clusters-0-mode6",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "سلام",
+      "direction": "rtl",
+      "face_options": 6,
+      "source_case": "awami/text-3/rtl/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-6-ltr-clusters-0-mode0",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "اللَّه",
+      "direction": "ltr",
+      "face_options": 0,
+      "source_case": "awami/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-6-ltr-clusters-0-mode2",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "اللَّه",
+      "direction": "ltr",
+      "face_options": 2,
+      "source_case": "awami/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-6-ltr-clusters-0-mode4",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "اللَّه",
+      "direction": "ltr",
+      "face_options": 4,
+      "source_case": "awami/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-text-6-ltr-clusters-0-mode6",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "اللَّه",
+      "direction": "ltr",
+      "face_options": 6,
+      "source_case": "awami/text-6/ltr/clusters-0",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-extra-long-mode0",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "بسم الله الرحمن الرحيم",
+      "direction": "rtl",
+      "face_options": 0,
+      "source_case": "awami/extra-long",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-extra-long-mode2",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "بسم الله الرحمن الرحيم",
+      "direction": "rtl",
+      "face_options": 2,
+      "source_case": "awami/extra-long",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-extra-long-mode4",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "بسم الله الرحمن الرحيم",
+      "direction": "rtl",
+      "face_options": 4,
+      "source_case": "awami/extra-long",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    },
+    {
+      "id": "collision-preload-real-awami-extra-long-mode6",
+      "font": "../graphite/AwamiNastaliq-Regular.ttf",
+      "text": "بسم الله الرحمن الرحيم",
+      "direction": "rtl",
+      "face_options": 6,
+      "source_case": "awami/extra-long",
+      "control": "Unmodified real SIL font; existing font and license, not redistributed again. Raw UTF32 direct C API, without the HB normalization/cluster adapter."
+    }
+  ]
+}
