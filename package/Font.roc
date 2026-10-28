@@ -814,14 +814,13 @@ Font :: { face : Face }.{
 	Feature := { tag : Str, value : U32 ?? 1, start : U64 ?? 0, end : U64 ?? 18_446_744_073_709_551_615 }
 
 	## Bounds on shaping work, per input character, never below 16384 in
-	## all: `growth` bounds how many glyphs the run may grow to (64 per
-	## character by default) and `operations` how many substitutions
-	## contextual rules may call (1024 per character by default); these are
-	## HarfBuzz's factors. The defaults never bind on a real font; only a
-	## font built to make shaping work without end reaches them. Past a
-	## bound, substitution stops where it is: `shape` and the other shaping
-	## calls return the run made so far (which still draws the whole text),
-	## and `shape_checked` says so (see `Budget`).
+	## all. `growth` bounds output glyphs (64 per character by default).
+	## `operations` bounds contextual lookup calls, script preprocessing,
+	## reordering and feature probes, and contextual positioning (1024 per
+	## character by default). The factors follow HarfBuzz's shaping budgets.
+	## Past a bound, the operation stops at a complete mutation boundary.
+	## Shaping returns the partial run, retaining the input text's glyphs;
+	## `shape_checked` also reports which bounds stopped work (see `Budget`).
 	ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }
 
 	## How to shape.
@@ -931,10 +930,10 @@ Font :: { face : Face }.{
 	## ligature joined.
 	GlyphOrigin : [Mapped, Substituted({ feature : Str }), Ligature({ feature : Str, components : U32 }), Multiple({ feature : Str }), Inserted({ feature : Str })]
 
-	## A bound that stopped substitution before it finished: `Growth` and
+	## A bound that stopped shaping before it finished: `Growth` and
 	## `Operations` are the `ShapeLimits` fields, and `Depth` is
-	## `Limits.max_depth`, how deeply contextual substitutions may call
-	## further substitutions (a reading option, because it guards the
+	## `Limits.max_depth`, how deeply contextual lookups may call further
+	## lookups (a reading option, because it guards the
 	## work a font file may ask for).
 	Budget : [Growth, Operations, Depth]
 

@@ -778,9 +778,13 @@ enough never to change a result on a legitimate font: output length at most
 `max(64 n, 16384)` glyphs and lookup applications at most
 `max(1024 n, 16384)`, following HarfBuzz, with nested lookup depth bounded
 by `Limits.max_depth` (default 64, walked with an explicit frame stack). Roc is efficient enough that a tight budget buys nothing but
-disagreement with the reference. Exceeding a budget stops substitution where it is: a multiple
-substitution that would outgrow the run is not made, and a contextual rule
-calls no further lookups. The run made so far is then finished as usual:
+disagreement with the reference. The same operations account also covers
+bounded script preprocessing, classification probes, reordering and GPOS
+contextual applications. Sessions retain spent work across script pauses.
+Exceeding a budget stops shaping at a complete mutation boundary: a
+multiple substitution that would outgrow the run is not made, a contextual
+rule calls no further lookups, and a reorder never leaves half a move or
+cluster merge behind. The run made so far is then finished as usual:
 total, finite, index-aligned, and still drawing the whole text. A partial
 run is never returned silently: `shape_checked` returns
 `Err(OverBudget({ run, budgets }))`, naming every bound that stopped work
