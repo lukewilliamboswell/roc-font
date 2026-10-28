@@ -3,6 +3,8 @@ import Bytes
 import LayoutGdef
 import LayoutGsub
 import LayoutVar
+import TableVar
+import PositionSum
 
 ## Full horizontal OpenType positioning. Prepared lookups and subtables are
 ## scalar spans into flat lists. Context matching shares the substitution
@@ -450,8 +452,13 @@ LayoutPosition := {
 		var $previous = List.with_capacity(count)
 		var $manual_previous = List.with_capacity(if (manual) count else 0)
 		var $manual_last = 0
+		var $initial = base
 		var $last = 0
 		for i in 0..<count {
+			advance = $initial.get(i) ?? 0
+			if advance < -2147483648 or advance > 2147483647 {
+				$initial = $initial.set(i, LayoutVar.position_clamp(advance)) ?? []
+			}
 			$previous = $previous.append($last)
 			if manual {
 				$manual_previous = $manual_previous.append($manual_last)
@@ -465,7 +472,7 @@ LayoutPosition := {
 			}
 		}
 
-		var $s = { items, ax: base, dx: List.repeat(0, count), dy: List.repeat(0, count), parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
+		var $s = { items, ax: $initial, dx: List.repeat(0, count), dy: List.repeat(0, count), parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
 		var $frames = []
 		var $positions = []
 		for step_index in 0..<plan.len() {
@@ -634,10 +641,11 @@ LayoutPosition := {
 
 	add_value : State, Ctx, List(U8), U64, U64, U64, U64 -> State
 	add_value = |state, ctx, data, base, record, format, i| {
-		v = LayoutVar.value(ctx.lv, ctx.loc, data, base, record, format)
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
-		# The caller's cursor is a glyph in the run; every list is aligned.
-		{ items, ax: ax.set(i, (ax.get(i) ?? 0) + v.x_advance) ?? [], dx: dx.set(i, (dx.get(i) ?? 0) + v.x_placement) ?? [], dy: dy.set(i, (dy.get(i) ?? 0) + v.y_placement) ?? [], parents, attachments, stopped, operations }
+		v = LayoutVar.apply_value(ctx.lv, ctx.loc, data, base, record, format, { x_advance: ax.get(i) ?? 0, x_placement: dx.get(i) ?? 0, y_placement: dy.get(i) ?? 0, y_advance: 0 })
+		# The caller's cursor is in the aligned run. Stored and device
+		# corrections saturate separately, preserving their application order.
+		{ items, ax: ax.set(i, v.x_advance) ?? [], dx: dx.set(i, v.x_placement) ?? [], dy: dy.set(i, v.y_placement) ?? [], parents, attachments, stopped, operations }
 	}
 
 	pair : LayoutPosition, Ctx, U64, U64, U64, U64, U64, State -> Match
@@ -716,13 +724,32 @@ LayoutPosition := {
 		False
 	}
 
+	# Anchors are integral at unit scale, but format3's integer device delta
+	# is added in binary32. Preserve that rounding before subtracting anchors.
+	anchor_coordinate : I64, I64 -> I64
+	anchor_coordinate = |stored, delta| if (delta == 0) stored else TableVar.f32_floor(TableVar.f32_add(TableVar.f32_from_int(stored), TableVar.f32_from_int(delta)))
+
+	# HarfBuzz also rounds the binary32 sum with 0.5 before storing a position.
+	# Large integral floats can change at this step; small coordinates cannot.
+	anchor_round : I64 -> I64
+	anchor_round = |value| {
+		rounded = if (value >= -8388608 and value <= 8388608) value else TableVar.f32_round_half_up(TableVar.f32_from_int(value))
+		LayoutVar.position_clamp(rounded)
+	}
+
+	anchor_difference : I64, I64 -> I64
+	anchor_difference = |a, b| LayoutPosition.anchor_round(a - b)
+
+	# A chain is stored as a signed 16-bit relative index by the reference.
+	attachable : U64, U64 -> Bool
+	attachable = |child, parent| if (parent >= child) parent - child <= 32767 else child - parent <= 32768
+
 	anchor : LayoutPosition, Ctx, U64 -> { x : I64, y : I64 }
 	anchor = |p, ctx, at| {
 		varied = Bytes.u16(p.data, at) == 3
-		x = Bytes.i16(p.data, at + 2) + (if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 6) else 0)
-		y = Bytes.i16(p.data, at + 4) + (if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 8) else 0)
-		# Anchor format 2 uses stored coordinates at the font-unit boundary:
-		# contour points apply only when grid fitting at a requested ppem.
+		x = LayoutPosition.anchor_coordinate(Bytes.i16(p.data, at + 2), if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 6) else 0)
+		y = LayoutPosition.anchor_coordinate(Bytes.i16(p.data, at + 4), if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 8) else 0)
+		# Format2 uses stored coordinates; contour points require ppem hinting.
 		{ x, y }
 	}
 
@@ -813,8 +840,12 @@ LayoutPosition := {
 		mark_anchor = LayoutPosition.anchor(p, ctx, marks + Bytes.u16(data, mark_record + 2))
 		base_cross = LayoutPosition.cross_offset(state, $j)
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
+		# Overflow detaches the old edge and keeps the offsets already present.
+		if !LayoutPosition.attachable(i, $j) {
+			return { state: { items: LayoutPosition.flag(items, $j, i + 1), ax, dx, dy, parents: parents.set(i, 0) ?? [], attachments, stopped, operations }, next: i + 1, applied: True, calls: NoCalls }
+		}
 		# Both indices are in the run and all arrays have its length.
-		s = { items: LayoutPosition.flag(items, $j, i + 1), ax, dx: dx.set(i, base_anchor.x - mark_anchor.x) ?? [], dy: dy.set(i, base_anchor.y - mark_anchor.y + base_cross) ?? [], parents: parents.set(i, $j + 1) ?? [], attachments: attachments.set(i, 1) ?? [], stopped, operations }
+		s = { items: LayoutPosition.flag(items, $j, i + 1), ax, dx: dx.set(i, LayoutPosition.anchor_difference(base_anchor.x, mark_anchor.x)) ?? [], dy: dy.set(i, LayoutVar.position_add(LayoutPosition.anchor_difference(base_anchor.y, mark_anchor.y), base_cross)) ?? [], parents: parents.set(i, $j + 1) ?? [], attachments: attachments.set(i, 1) ?? [], stopped, operations }
 		{ state: s, next: i + 1, applied: True, calls: NoCalls }
 	}
 
@@ -859,19 +890,19 @@ LayoutPosition := {
 		var $ax = ax
 		var $dx = dx
 		if !ctx.backward {
-			$ax = $ax.set(i, exit.x + ($dx.get(i) ?? 0)) ?? []
-			d = entry.x + ($dx.get(j) ?? 0)
-			$ax = $ax.set(j, ($ax.get(j) ?? 0) - d) ?? []
-			$dx = $dx.set(j, ($dx.get(j) ?? 0) - d) ?? []
+			$ax = $ax.set(i, LayoutVar.position_add(LayoutPosition.anchor_round(exit.x), $dx.get(i) ?? 0)) ?? []
+			d = LayoutVar.position_add(LayoutPosition.anchor_round(entry.x), $dx.get(j) ?? 0)
+			$ax = $ax.set(j, LayoutVar.position_sub($ax.get(j) ?? 0, d)) ?? []
+			$dx = $dx.set(j, LayoutVar.position_sub($dx.get(j) ?? 0, d)) ?? []
 		} else {
-			d = exit.x + ($dx.get(i) ?? 0)
-			$ax = $ax.set(i, ($ax.get(i) ?? 0) - d) ?? []
-			$dx = $dx.set(i, ($dx.get(i) ?? 0) - d) ?? []
-			$ax = $ax.set(j, entry.x + ($dx.get(j) ?? 0)) ?? []
+			d = LayoutVar.position_add(LayoutPosition.anchor_round(exit.x), $dx.get(i) ?? 0)
+			$ax = $ax.set(i, LayoutVar.position_sub($ax.get(i) ?? 0, d)) ?? []
+			$dx = $dx.set(i, LayoutVar.position_sub($dx.get(i) ?? 0, d)) ?? []
+			$ax = $ax.set(j, LayoutVar.position_add(LayoutPosition.anchor_round(entry.x), $dx.get(j) ?? 0)) ?? []
 		}
 		child = if (props.bitwise_and(1) != 0) i else j
 		parent = if (props.bitwise_and(1) != 0) j else i
-		cross = if (props.bitwise_and(1) != 0) entry.y - exit.y else exit.y - entry.y
+		cross = if (props.bitwise_and(1) != 0) LayoutPosition.anchor_difference(entry.y, exit.y) else LayoutVar.position_neg(LayoutPosition.anchor_difference(entry.y, exit.y))
 		# Re-root the old cursive chain iteratively before adding the edge.
 		var $parents = parents
 		var $attachments = attachments
@@ -888,7 +919,7 @@ LayoutPosition := {
 			}
 			else {
 				$parents = $parents.set($chain, 0) ?? []
-				if old_parent - 1 == parent {
+				if old_parent - 1 == parent or !LayoutPosition.attachable(old_parent - 1, $chain) {
 					$walking = False
 				}
 				else {
@@ -901,9 +932,12 @@ LayoutPosition := {
 		while $e > 0 {
 			$e = $e - 1
 			edge = $edges.get($e) ?? { child, parent }
-			$dy = $dy.set(edge.parent, -($dy.get(edge.child) ?? 0)) ?? []
+			$dy = $dy.set(edge.parent, LayoutVar.position_neg($dy.get(edge.child) ?? 0)) ?? []
 			$parents = $parents.set(edge.parent, edge.child + 1) ?? []
 			$attachments = $attachments.set(edge.parent, 2) ?? []
+		}
+		if !LayoutPosition.attachable(child, parent) {
+			return { state: { items: LayoutPosition.flag(items, i, j + 1), ax: $ax, dx: $dx, dy: $dy, parents: $parents.set(child, 0) ?? [], attachments: $attachments, stopped, operations }, next: j + 1, applied: True, calls: NoCalls }
 		}
 		$dy = $dy.set(child, cross) ?? []
 		$parents = $parents.set(child, parent + 1) ?? []
@@ -930,7 +964,7 @@ LayoutPosition := {
 			}
 			else {
 				$at = parent - 1
-				$offset = $offset + (state.dy.get($at) ?? 0)
+				$offset = LayoutVar.position_add($offset, state.dy.get($at) ?? 0)
 			}
 		}
 		$offset
@@ -944,19 +978,25 @@ LayoutPosition := {
 	resolve = |state, backward| {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
 		count = items.len()
-		var $prefix = List.with_capacity(count + 1).append(0.I64)
-		var $sum = 0.I64
+		var $prefix = List.with_capacity(count + 1).append(0.I128)
+		var $sum = 0.I128
+		var $positive = False
+		var $negative = False
 		for advance in ax {
-			$sum = $sum + advance
+			$sum = $sum + advance.to_i128()
+			$positive = $positive or advance > 0
+			$negative = $negative or advance < 0
 			$prefix = $prefix.append($sum)
 		}
+		mixed = $positive and $negative
+		ranges = if (mixed) PositionSum.make(ax) else PositionSum.make([])
 		var $parents = parents
 		var $dx = dx
 		var $dy = dy
 		var $path = List.with_capacity(count.min(64))
 		for index in 0..<count {
-			# HarfBuzz visits RTL buffers backwards. Each root gets64
-			# propagating frames; the65th call clears its edge and returns.
+			# HarfBuzz visits RTL buffers backwards. Each root gets 64
+			# propagating frames; the 65th call clears its edge and returns.
 			i = if (backward) count - 1 - index else index
 			$path = $path.clear()
 			var $at = i
@@ -980,11 +1020,21 @@ LayoutPosition := {
 				j = edge.child
 				k = edge.parent
 				if (attachments.get(j) ?? 0) == 2 {
-					$dy = $dy.set(j, ($dy.get(j) ?? 0) + ($dy.get(k) ?? 0)) ?? []
+					$dy = $dy.set(j, LayoutVar.position_add($dy.get(j) ?? 0, $dy.get(k) ?? 0)) ?? []
 				}
 				if (attachments.get(j) ?? 0) == 1 {
-					distance = if (backward) ($prefix.get(j + 1) ?? 0) - ($prefix.get(k + 1) ?? 0) else ($prefix.get(k) ?? 0) - ($prefix.get(j) ?? 0)
-					$dx = $dx.set(j, ($dx.get(j) ?? 0) + ($dx.get(k) ?? 0) + distance) ?? []
+					start = (j.min(k)) + (if (backward) 1 else 0)
+					end = (j.max(k)) + (if (backward) 1 else 0)
+					subtract = if (k < j) !backward else backward
+					initial = LayoutVar.position_add($dx.get(j) ?? 0, $dx.get(k) ?? 0)
+					resolved = if mixed {
+						PositionSum.apply(ranges, start, end, initial, subtract)
+					} else {
+						distance = ($prefix.get(end) ?? 0) - ($prefix.get(start) ?? 0)
+						total = initial.to_i128() + (if (subtract) -distance else distance)
+						total.max(-2147483648).min(2147483647).to_i64_wrap()
+					}
+					$dx = $dx.set(j, resolved) ?? []
 				}
 			}
 		}
@@ -1074,3 +1124,8 @@ expect {
 		},
 	)
 }
+
+# Binary32 anchor arithmetic precedes the half-up position conversion.
+expect LayoutPosition.anchor_coordinate(1, 16777216) == 16777216 and LayoutPosition.anchor_difference(LayoutPosition.anchor_coordinate(1, 16777216), LayoutPosition.anchor_coordinate(0, 16777216)) == 0
+expect LayoutPosition.anchor_round(8388609) == 8388610 and LayoutPosition.anchor_round(-8388609) == -8388608
+expect LayoutPosition.attachable(32768, 0) and !LayoutPosition.attachable(32769, 0) and LayoutPosition.attachable(0, 32767) and !LayoutPosition.attachable(0, 32768)
