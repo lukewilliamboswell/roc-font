@@ -35,3 +35,10 @@ checksums match a separate HarfBuzz shaping call at every measured size.
 These show bounded allocation cost and substantial remaining runtime work.
 They do not claim HarfBuzz performance parity. See the adjacent JSON records
 for exact source, bundle, runner and native binary identities.
+
+Both new native fuzz targets passed 1000 seeded inputs with leak detection:
+`fuzz-shaping.json` covers real Japanese fonts and explicit vertical pair/cursive
+positioning; `fuzz-tables.json` covers malformed vertical tables, active VVAR
+queries and 16-times larger metric arrays. Their package is immutable bundle
+`EohUtiz6VoHoLukQRBnEtvSw5Dzd6gYPDvUqjcx7Fvkw`; the CI source revision identifies
+the fuzz consumer. Later combined integration checks use the integrator's bundle.
