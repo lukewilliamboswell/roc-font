@@ -1,0 +1,519 @@
+{
+  "schema": 1,
+  "about": "Eight distinguishing F32 association observations plus one explicitly unresolved analytical witness; every cached output is normative.",
+  "cases": [
+    {
+      "id": "collision-association-left-sum--100-300-200-10",
+      "font": "association-audit/collision-association-left-sum--100-300-200-10.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        0,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 10,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            200,
+            255,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "left-sum",
+        "target_bbox": [
+          -100,
+          0,
+          200,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-left-sum--10-100-127-13",
+      "font": "association-audit/collision-association-left-sum--10-100-127-13.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        0,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 13,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            127,
+            255,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "left-sum",
+        "target_bbox": [
+          -10,
+          0,
+          90,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-left-sum--10-100-128-13",
+      "font": "association-audit/collision-association-left-sum--10-100-128-13.ttf",
+      "text": "ab",
+      "direction": "rtl",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        25,
+        3,
+        0,
+        0,
+        35,
+        0,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 13,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            128,
+            255,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "left-sum",
+        "target_bbox": [
+          -10,
+          0,
+          90,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-sum--1000-3-42-101",
+      "font": "association-audit/collision-association-right-sum--1000-3-42-101.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 101,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            42,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-sum",
+        "target_bbox": [
+          -1000,
+          0,
+          -997,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-sum--1000-200-1-101",
+      "font": "association-audit/collision-association-right-sum--1000-200-1-101.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 101,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            1,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-sum",
+        "target_bbox": [
+          -1000,
+          0,
+          -800,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-sum--1000-300-1-101",
+      "font": "association-audit/collision-association-right-sum--1000-300-1-101.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 101,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            1,
+            0,
+            255
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-sum",
+        "target_bbox": [
+          -1000,
+          0,
+          -700,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-diff--100-200-42-10",
+      "font": "association-audit/collision-association-right-diff--100-200-42-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 10,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            0,
+            42
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-diff",
+        "target_bbox": [
+          -100,
+          0,
+          100,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-diff--100-200-200-10",
+      "font": "association-audit/collision-association-right-diff--100-200-200-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 10,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            0,
+            200
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-diff",
+        "target_bbox": [
+          -100,
+          0,
+          100,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "facet_then_margin"
+      }
+    },
+    {
+      "id": "collision-association-right-diff--100-100-200-10",
+      "font": "association-audit/collision-association-right-diff--100-100-200-10.ttf",
+      "text": "ab",
+      "direction": "ltr",
+      "positioning": true,
+      "precontext": 0,
+      "action": [
+        3,
+        0,
+        0,
+        35,
+        0,
+        25,
+        3,
+        0,
+        0,
+        35,
+        20,
+        3,
+        0,
+        0,
+        35,
+        21
+      ],
+      "collision": {
+        "pass_flags": 9,
+        "flags_a": 17,
+        "flags_b": 0,
+        "margin": 10,
+        "distance": 0,
+        "diagonals": {
+          "1": [
+            0,
+            255,
+            0,
+            200
+          ]
+        }
+      },
+      "association": {
+        "branch": "right-diff",
+        "target_bbox": [
+          -100,
+          0,
+          0,
+          1
+        ],
+        "neighbor_bbox": [
+          0,
+          0,
+          3,
+          1
+        ],
+        "analytic_association": "unresolved"
+      }
+    }
+  ]
+}

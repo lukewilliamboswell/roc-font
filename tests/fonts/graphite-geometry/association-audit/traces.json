@@ -1,0 +1,886 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "109cfb300545f703f4f612d56c1b208963e65b292c1b3dc23a9363c2d92d746e",
+    "source_archive_sha256": "7a3b342c5681921ce2e0c2496509d30b5b078399d5a7bd2358f95166d57d91df",
+    "build": "Release AppleClang17, GRAPHITE2_NTRACING=OFF, file-face enabled, direct VM",
+    "api": "gr_start_logging public JSON trace",
+    "extractor": 1
+  },
+  "records": [
+    {
+      "id": "collision-association-left-sum--100-300-200-10",
+      "key": "e12c5dcff78978fc2bb3ef93e98b912144fc51e2f53770b1c5ae7e39ce891ba0",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -10,
+                "maxy": 11,
+                "slicewidth": 6.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -100,
+                    0,
+                    200,
+                    1
+                  ],
+                  "slantBox": [
+                    136.078,
+                    -101,
+                    201,
+                    200
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": 123.745,
+                    "neighbor": "slot-2",
+                    "nearEdge": 3
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": 117.078,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  }
+                ],
+                "xbound": 117.078,
+                "minGap": 120.745,
+                "needed": -120.745,
+                "result": -120.745,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-left-sum--10-100-127-13",
+      "key": "7c7705ac877c06e9acbe352e574e990dc1406100f385ccdf2c739b1cb85e548a",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -13,
+                "maxy": 14,
+                "slicewidth": 8.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -10,
+                    0,
+                    90,
+                    1
+                  ],
+                  "slantBox": [
+                    40.302,
+                    -11,
+                    91,
+                    90
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": 23.9686,
+                    "neighbor": "slot-2",
+                    "nearEdge": 3
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": 15.302,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  }
+                ],
+                "xbound": 15.302,
+                "minGap": 20.9686,
+                "needed": -20.9686,
+                "result": -20.9686,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-left-sum--10-100-128-13",
+      "key": "3ad0488831ea14a3656519fd55260634843f2410d50049382e4f36d00422d603",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -13,
+                "maxy": 14,
+                "slicewidth": 8.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -10,
+                    0,
+                    90,
+                    1
+                  ],
+                  "slantBox": [
+                    40.698,
+                    -11,
+                    91,
+                    90
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": 24.3647,
+                    "neighbor": "slot-2",
+                    "nearEdge": 3
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": 15.698,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": 1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": -1e+38
+                  }
+                ],
+                "xbound": 15.698,
+                "minGap": 21.3647,
+                "needed": -21.3647,
+                "result": -21.3647,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-sum--1000-3-42-101",
+      "key": "e3f86c41ca069779c6c23764e9e1bea95b04a3dd7d727b608697334595e4d4f1",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -101,
+                "maxy": 102,
+                "slicewidth": 67.3333,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -1000,
+                    0,
+                    -997,
+                    1
+                  ],
+                  "slantBox": [
+                    -1000,
+                    -1001,
+                    -999.341,
+                    -997
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": -931.008,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": -998.341,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": -931.008,
+                "minGap": 931.008,
+                "needed": 931.008,
+                "result": 931.008,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-sum--1000-200-1-101",
+      "key": "93aa4b6989d5ef3399c8fddac07f11e39d99fc4da9af63d3a41473a811ed6afe",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -101,
+                "maxy": 102,
+                "slicewidth": 67.3333,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -1000,
+                    0,
+                    -800,
+                    1
+                  ],
+                  "slantBox": [
+                    -1000,
+                    -1001,
+                    -999.212,
+                    -800
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": -930.878,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": -998.212,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": -930.878,
+                "minGap": 930.878,
+                "needed": 930.878,
+                "result": 930.878,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-sum--1000-300-1-101",
+      "key": "71611b581810632d671922342de60e8ce757b82caa70fafe30446c9e877f0af5",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -101,
+                "maxy": 102,
+                "slicewidth": 67.3333,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -1000,
+                    0,
+                    -700,
+                    1
+                  ],
+                  "slantBox": [
+                    -1000,
+                    -1001,
+                    -998.82,
+                    -700
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": -930.486,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": -997.82,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": -930.486,
+                "minGap": 930.486,
+                "needed": 930.486,
+                "result": 930.486,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-diff--100-200-42-10",
+      "key": "7d7d63e043f02c90cbcb616f2402dcb378d21eae594fc8803afd549451104672",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -10,
+                "maxy": 11,
+                "slicewidth": 6.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -100,
+                    0,
+                    100,
+                    1
+                  ],
+                  "slantBox": [
+                    -100,
+                    -101,
+                    101,
+                    -67.8941
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": -55.5608,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": -48.8941,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": -48.8941,
+                "minGap": 55.5608,
+                "needed": 55.5608,
+                "result": 55.5608,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-diff--100-200-200-10",
+      "key": "d26e3c293fde6f089f6a2898dabf4db011d4b8740fc470dfa0a60bbdf96a6d43",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -10,
+                "maxy": 11,
+                "slicewidth": 6.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -100,
+                    0,
+                    100,
+                    1
+                  ],
+                  "slantBox": [
+                    -100,
+                    -101,
+                    101,
+                    56.6471
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": 68.9804,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": 75.6471,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": 75.6471,
+                "minGap": -68.9804,
+                "needed": -68.9804,
+                "result": -68.9804,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "collision-association-right-diff--100-100-200-10",
+      "key": "77903ea555f6766ba40d55e5bbdfcf43696cad06880f22a4cddda490c6e5abed",
+      "collisions": [
+        [
+          {
+            "num-loops": 1
+          },
+          {
+            "phase": "1",
+            "moves": []
+          },
+          {
+            "phase": "3",
+            "moves": [
+              {
+                "slot": "slot-1",
+                "gid": 1,
+                "limit": [
+                  -1000,
+                  -1000,
+                  1000,
+                  1000
+                ],
+                "miny": -10,
+                "maxy": 11,
+                "slicewidth": 6.66667,
+                "target": {
+                  "origin": [
+                    0,
+                    0
+                  ],
+                  "offsetPrev": [
+                    0,
+                    0
+                  ],
+                  "bbox": [
+                    -100,
+                    0,
+                    0,
+                    1
+                  ],
+                  "slantBox": [
+                    -100,
+                    -101,
+                    1,
+                    -21.7843
+                  ],
+                  "fix": "kern"
+                },
+                "slices": [
+                  {
+                    "i": 0,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 1,
+                    "targetEdge": -9.45098,
+                    "neighbor": "slot-2",
+                    "nearEdge": 0
+                  },
+                  {
+                    "i": 2,
+                    "targetEdge": -2.78432,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 3,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 4,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  },
+                  {
+                    "i": 5,
+                    "targetEdge": -1e+38,
+                    "neighbor": "0000-00-0000",
+                    "nearEdge": 1e+38
+                  }
+                ],
+                "xbound": -2.78432,
+                "minGap": 9.45098,
+                "needed": 9.45098,
+                "result": 9.45098,
+                "stillBad": false
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}
