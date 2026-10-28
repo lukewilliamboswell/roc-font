@@ -590,7 +590,8 @@ GraphiteCollision :: {}.{
 			return []
 		}
 		order = GraphiteSlots.get_extra(state, id, 17)
-		diagonal = (neighbor_before and order == 1) or (!neighbor_before and order == 2)
+		left_down = (neighbor_before and order == 1) or (!neighbor_before and order == 2)
+		diagonal = order == 1 or order == 2
 		above = (neighbor_before and order == 4) or (!neighbor_before and order == 8)
 		below = (neighbor_before and order == 8) or (!neighbor_before and order == 4)
 		if !diagonal and !above and !below {
@@ -604,16 +605,16 @@ GraphiteCollision :: {}.{
 		outer = { x_min: sub(limits.x_min, t.half_width), y_min: sub(limits.y_min, t.half_height), x_max: add(limits.x_max, t.half_width), y_max: add(limits.y_max, t.half_height) }
 		if diagonal {
 			a = add(sub(add(dx, n.center_x), t.center_x), number(18))
-			b = sub(sub(add(dx, neighbor.x_min), target.x_max), number(20))
+			b = if (left_down) sub(sub(add(dx, neighbor.x_min), target.x_max), number(20)) else add(sub(add(dx, neighbor.x_max), target.x_min), number(20))
 			c = sub(add(dy, n.center_y), t.center_y)
-			e = sub(add(dx, neighbor.x_max), t.center_x)
+			e = sub(add(dx, if (left_down) neighbor.x_max else neighbor.x_min), t.center_x)
 			h = number(22)
 			[
-				{ bounds: { x_min: a, y_min: outer.y_min, x_max: outer.x_max, y_max: c }, penalty: SquareX({ weight: number(19), center: a }) },
-				{ bounds: { x_min: b, y_min: c, x_max: outer.x_max, y_max: outer.y_max }, penalty: Hard },
-				{ bounds: { x_min: outer.x_min, y_min: sub(c, h), x_max: b, y_max: outer.y_max }, penalty: Radial(number(21)) },
-				{ bounds: { x_min: outer.x_min, y_min: c, x_max: e, y_max: add(c, h) }, penalty: SquareY({ weight: number(23), center: add(c, h) }) },
-				{ bounds: { x_min: outer.x_min, y_min: sub(c, h), x_max: e, y_max: c }, penalty: RadialY({ radial: number(21), weight: number(23), center: sub(c, h) }) },
+				{ bounds: if (left_down) { x_min: a, y_min: outer.y_min, x_max: outer.x_max, y_max: c } else { x_min: outer.x_min, y_min: c, x_max: a, y_max: outer.y_max }, penalty: SquareX({ weight: number(19), center: a }) },
+				{ bounds: if (left_down) { x_min: b, y_min: c, x_max: outer.x_max, y_max: outer.y_max } else { x_min: outer.x_min, y_min: outer.y_min, x_max: b, y_max: c }, penalty: Hard },
+				{ bounds: if (left_down) { x_min: outer.x_min, y_min: sub(c, h), x_max: b, y_max: outer.y_max } else { x_min: b, y_min: outer.y_min, x_max: outer.x_max, y_max: add(c, h) }, penalty: Radial(number(21)) },
+				{ bounds: { x_min: if (left_down) outer.x_min else e, y_min: c, x_max: if (left_down) e else outer.x_max, y_max: add(c, h) }, penalty: SquareY({ weight: number(23), center: add(c, h) }) },
+				{ bounds: { x_min: if (left_down) outer.x_min else e, y_min: sub(c, h), x_max: if (left_down) e else outer.x_max, y_max: c }, penalty: RadialY({ radial: number(21), weight: number(23), center: sub(c, h) }) },
 			]
 		} else {
 			left = sub(sub(add(dx, neighbor.x_min), target.x_max), t.center_x)
@@ -1566,4 +1567,21 @@ expect {
 	neighbor = GraphiteCollision.translate_box(collision_square, n(100), 0)
 	result = GraphiteCollision.kern_gap(point, neighbor, n(10), n(-10), False, 100)
 	result.stopped == 0 and result.gap == n(90)
+}
+
+expect {
+	# Cached original RIGHTUP trace: the opposite diagonal order emits
+	# its own five regions, rather than disabling sequencing constraints.
+	n = TableVar.f32_from_int
+	var $state = GraphiteSlots.set_extra(GraphiteSlots.set_extra(collision_ink_state, 1, 15, 1), 2, 15, 1)
+	$state = GraphiteSlots.set_extra($state, 2, 17, 2)
+	for pair in [{ field: 18, value: 100 }, { field: 19, value: 300 }, { field: 20, value: -50 }, { field: 21, value: 100 }, { field: 22, value: 150 }, { field: 23, value: 500 }] {
+		$state = GraphiteSlots.set_extra($state, 1, pair.field, pair.value)
+	}
+	limits = { x_min: n(-1000), y_min: n(-1000), x_max: n(1000), y_max: n(1000) }
+	regions = GraphiteCollision.sequence_regions($state, 2, 1, collision_square, collision_square, n(80), n(170), limits, True)
+	frame = GraphiteCollision.sequence_frame(collision_square, 0, 0)
+	ink = GraphiteCollision.forbidden(collision_square, collision_square, n(-80), n(-170))
+	result = GraphiteCollision.solve_shift_regions(limits, 0, 0, [ink], 0, n(10), regions, frame, 10000)
+	regions.len() == 5 and result.feasible and result.x == n(380) and result.y == n(380)
 }
