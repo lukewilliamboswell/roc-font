@@ -12,16 +12,21 @@ def u16(value):return struct.pack('>H',value)
 def u32(value):return struct.pack('>L',value)
 def raw(font,tag,data):
  table=DefaultTable(tag);table.data=data;font[tag]=table
-def program(action,positioning=False):
- # One output class[gid2]; one rule matches gid1 in a two-state FSM.
+def program(action,positioning=False,match=(1,)):
+ # Original DFA for one exact glyph sequence and one output class [gid2].
  classes=u16(1)+u16(1)+u16(8)+u16(10)+u16(2)
  pass_start=58+len(classes)
- fsm=(u16(2)+u16(1)+u16(1)+u16(1)+u16(1)+u16(6)+u16(0)+u16(0)
-      +u16(1)+u16(1)+u16(0)+u16(0)+u16(1)+u16(0)+bytes([0,0])
-      +u16(0)+u16(1)+bytes([0,0])+u16(0)+u16(0)+u16(0)
-      +u16(0)+u16(len(action))+u16(1)+bytes([0]))
+ glyphs=sorted(set(match));columns={g:i for i,g in enumerate(glyphs)}
+ ranges=b''.join(u16(g)+u16(g)+u16(columns[g]) for g in glyphs)
+ count=len(glyphs);power=1<<(count.bit_length()-1)
+ transitions=b''.join(u16(i+1 if g==wanted else 0) for i,wanted in enumerate(match) for g in glyphs)
+ fsm=(u16(len(match)+1)+u16(len(match))+u16(1)+u16(count)+u16(count)
+      +u16(power*6)+u16(power.bit_length()-1)+u16(count*6-power*6)
+      +ranges+u16(0)+u16(1)+u16(0)+bytes([0,0])+u16(0)
+      +u16(len(match))+bytes([0,0])+u16(0)+u16(0)+u16(0)
+      +u16(0)+u16(len(action))+transitions+bytes([0]))
  code_at=pass_start+24+len(fsm)
- pass_data=bytes([0,10,1,0])+u16(1)+u16(24)+u32(code_at)*3+u32(0)+fsm+action
+ pass_data=bytes([0,10,len(match),0])+u16(1)+u16(24)+u32(code_at)*3+u32(0)+fsm+action
  sub=(u32(0x30000)+u16(42)+u16(50)+u16(2)+u16(0)+u16(0)
       +bytes([1,0,0 if positioning else 1,1,255,0,0,0,0,0,0,0,0,0])
       +u16(0)+bytes([0,1,1,0,0,0,0,0,0,0])+u16(0)
