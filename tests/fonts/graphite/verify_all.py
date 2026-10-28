@@ -29,12 +29,12 @@ def main():
  (work/'build-provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
  print(f'Graphite shared optimized query ready: {binary}',flush=True)
  commands=[]
- for name in ['shape','feature','direction','association','progress','width']:
+ for name in ['shape','feature','direction','association','progress','width','phase']:
   options=['--binary',str(binary),'--cases',str(HERE/f'{name}-cases.jsonc'),'--records',str(HERE/f'{name}-records.json'),'--oracle',str(HERE/f'{name}-oracle.json')]
   if name=='feature':options+=['--divergences',str(HERE/'feature-divergences.json')]
   commands.append((name,[sys.executable,str(HERE/'verify.py'),*options]))
  metrics=a.metrics_root.resolve()
- commands.append(('metrics',[sys.executable,str(HERE/'verify.py'),'--binary',str(binary),'--cases',str(metrics/'hb-cases.jsonc'),'--records',str(metrics/'hb-records.json'),'--oracle',str(metrics/'hb-oracle.json'),'--font-root',str(metrics)]))
+ commands.append(('metrics',[sys.executable,str(HERE/'verify.py'),'--binary',str(binary),'--cases',str(metrics/'package-cases.jsonc'),'--records',str(metrics/'package-records.json'),'--oracle',str(metrics/'package-oracle.json'),'--font-root',str(metrics),'--engine-expectations',str(metrics/'package-selection.json')]))
  commands.append(('large-conversion',[sys.executable,str(a.large_root.resolve()/'verify.py'),'--binary',str(binary)]))
  geometry=a.geometry_root.resolve()
  for name in ['geometry-default','geometry-face0']:

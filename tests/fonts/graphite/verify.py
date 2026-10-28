@@ -8,7 +8,7 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/'scripts'));import flight
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--divergences',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,default=HERE/'shape-cases.jsonc');p.add_argument('--records',type=Path,default=HERE/'shape-records.json');p.add_argument('--oracle',type=Path,default=HERE/'shape-oracle.json');p.add_argument('--font-root',type=Path,default=HERE);p.add_argument('--divergences',type=Path);p.add_argument('--engine-expectations',type=Path);p.add_argument('--binary',type=Path);p.add_argument('--bundle',type=Path);p.add_argument('--dev',action='store_true');p.add_argument('--only',default='');p.add_argument('--output',type=Path);args=p.parse_args()
  subprocess.run([sys.executable,str(HERE/'record_shapes.py'),'--check','--cases',str(args.cases.resolve()),'--output',str(args.records.resolve()),'--oracle',str(args.oracle.resolve()),'--font-root',str(args.font_root.resolve())],check=True)
  cases=json.loads(args.cases.read_text())['cases'];records={r['id']:r for r in json.loads(args.records.read_text())['records']}
  selected=[c for c in cases if args.only in c['id']];assert selected,'empty Graphite replay selection'
@@ -24,7 +24,8 @@ def main():
  provenance['binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
  grouped=collections.defaultdict(list)
  for case in selected:grouped[case['font']].append(case)
- actual={};reader_failures=[]
+ actual={};reader_failures=[];availability_probes={}
+ engine_expectations=json.loads(args.engine_expectations.read_text())['expected_primary_engines'] if args.engine_expectations else {}
  for font,items in grouped.items():
   requests=[]
   for case in items:
@@ -33,6 +34,9 @@ def main():
    if case.get('variations'):fields.append(','.join(f"{v['tag']}:{v['value']}" for v in case['variations']))
    assert all('\t' not in f and '\n' not in f for f in fields)
    requests.append('\t'.join(fields))
+  if any('graphite_face_available' in records[c['id']]['result'] for c in items):
+   probe='__availability_'+hashlib.sha256(font.encode()).hexdigest()[:16];assert probe not in records
+   availability_probes[font]=probe;requests.append('\t'.join([probe,'Latn','','ltr','0','','auto','0','0','']))
   run=subprocess.run([str(binary),str(args.font_root/font)],input='\n'.join(requests)+'\n',text=True,capture_output=True,cwd=ROOT,timeout=180)
   if run.returncode:reader_failures.append(font);print(font,run.stdout,run.stderr,file=sys.stderr);continue
   for line in run.stdout.splitlines():
@@ -44,7 +48,11 @@ def main():
   if key in divergences:
    divergence=divergences[key];assert divergence['reference_key']==records[key]['key'],key
    expected=divergence['expected'];assert expected!=raw,key
-  engine='OpenType' if case.get('engine')=='ot' else 'Graphite'
+  if case.get('engine')=='auto':assert key in engine_expectations,'auto requires an explicit primary-engine expectation: '+key
+  engine=engine_expectations.get(key,'OpenType' if case.get('engine')=='ot' else 'Graphite')
+  if got is not None and 'graphite_face_available' in raw:
+   probe=actual.get(availability_probes[case['font']]);assert probe is not None and not probe['budgets'] and not probe['glyphs']
+   got['graphite_face_available']=probe['engine']=='Graphite'
   if got is None or got.get('budgets') or got.get('engine')!=engine or {k:got.get(k) for k in expected}!=expected:
    failures.append(key);print('DIFFER',key,'expected',expected,'actual',got,file=sys.stderr)
   elif key in divergences:normative+=1
