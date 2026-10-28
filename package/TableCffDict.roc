@@ -19,6 +19,7 @@ TableCffDict :: {}.{
 		}
 		cff2 = kind == Top2 or kind == Font2 or kind == Private2
 		stack_limit = if (cff2) 513 else 48
+		regions = TableCffBlend.regions_of(store)
 		var $cursor = span.start
 		var $stack = []
 		var $entries = []
@@ -49,7 +50,7 @@ TableCffDict :: {}.{
 					$cursor = $cursor + 1
 				}
 				if kind == Private2 and $op == 23 {
-					$stack = match TableCffBlend.apply($stack, store, $ivs, []) {
+					$stack = match TableCffBlend.apply($stack, regions, $ivs, [], True) {
 						Ok(args) => args
 						Err(Bad) => return Err(Bad(at))
 						Err(OverLimit) => return Err(OverLimit("CFF blend operand envelope"))

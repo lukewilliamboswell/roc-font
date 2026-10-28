@@ -7,22 +7,25 @@ import TableCffNumber
 ## `variable` prevents blended values selecting a subroutine or vsindex.
 TableCffBlend :: {}.{
 	Arg : { value : F64, bound : F64, variable : Bool }
+	Regions : { starts : List(U64), indexes : List(U64) }
+	regions_of : TableVar.Store -> Regions
+	regions_of = |store| { starts: store.index_starts, indexes: store.region_indexes }
 	arg : F64 -> Arg
 	arg = |v| { value: v, bound: if (v < 0) 0 - v else v, variable: False }
 
-	region_count : TableVar.Store, U64 -> Try(U64, [Bad])
+	region_count : Regions, U64 -> Try(U64, [Bad])
 	region_count = |store, index| {
-		if index >= store.item_counts.len() {
+		if store.starts.len() < 2 or index >= store.starts.len() - 1 {
 			Err(Bad)
 		} else {
-			Ok((store.index_starts.get(index + 1) ?? 0) - (store.index_starts.get(index) ?? 0))
+			Ok((store.starts.get(index + 1) ?? 0) - (store.starts.get(index) ?? 0))
 		}
 	}
 
 	## No encoded-data allocation: values replace their defaults in the
 	## flat stack before its consumed delta suffix is removed.
-	apply : List(Arg), TableVar.Store, U64, List(U32) -> Try(List(Arg), [Bad, OverLimit])
-	apply = |args, store, index, scalars| {
+	apply : List(Arg), Regions, U64, List(U32), Bool -> Try(List(Arg), [Bad, OverLimit])
+	apply = |args, store, index, scalars, checking| {
 		if args.len() > 513 {
 			return Err(OverLimit)
 		}
@@ -41,7 +44,7 @@ TableCffBlend :: {}.{
 			return Err(Bad)
 		}
 		start = args.len() - consumed
-		first = store.index_starts.get(index) ?? 0
+		first = store.starts.get(index) ?? 0
 		var $args = args
 		for i in 0..<n {
 			original = $args.get(start + i) ?? TableCffBlend.arg(0)
@@ -49,17 +52,19 @@ TableCffBlend :: {}.{
 			var $bound = original.bound
 			for r in 0..<regions {
 				delta = $args.get(start + n + i * regions + r) ?? TableCffBlend.arg(0)
-				region = store.region_indexes.get(first + r) ?? 0
+				region = store.indexes.get(first + r) ?? 0
 				scalar = if (scalars.is_empty()) 0 else TableOutline.widen(scalars.get(region) ?? 0)
 				$sum = $sum + scalar * delta.value
-				$bound = TableCffNumber.add_bound($bound, delta.bound)
+				if checking {
+					$bound = TableCffNumber.add_bound($bound, delta.bound)
+				}
 			}
 			v = original.value + $sum
-			if !TableCffNumber.within_limit(v) or $bound > TableCffNumber.limit {
+			if checking and (!TableCffNumber.within_limit(v) or $bound > TableCffNumber.limit) {
 				return Err(OverLimit)
 			}
 			# All default/delta indices were checked against consumed above.
-			$args = $args.set(start + i, { value: v, bound: $bound, variable: original.variable or regions != 0 }) ?? []
+			$args = $args.set(start + i, { value: v, bound: if (checking) $bound else 0, variable: original.variable or regions != 0 }) ?? []
 		}
 		Ok($args.take_first(start + n))
 	}
@@ -72,19 +77,19 @@ test_store = { axis_count: 1, region_count: 2, regions: [0, 16384, 16384, 0, 163
 
 expect {
 	args = [99, 10, 20, 2, 4, 6, 8, 2].map(|v| TableCffBlend.arg(v))
-	match TableCffBlend.apply(args, test_store, 0, [0x3F000000, 0x3F800000]) {
+	match TableCffBlend.apply(args, TableCffBlend.regions_of(test_store), 0, [0x3F000000, 0x3F800000], True) {
 		Ok(out) => out.map(|a| a.value) == [99, 15, 31] and !(out.first() ?? TableCffBlend.arg(0)).variable and (out.get(1) ?? TableCffBlend.arg(0)).variable and (out.get(1) ?? TableCffBlend.arg(0)).bound >= 16 and (out.get(2) ?? TableCffBlend.arg(0)).bound >= 34
 		Err(_) => False
 	}
 }
 expect {
-	match TableCffBlend.apply([10, 2, 4, 1].map(TableCffBlend.arg), test_store, 0, [0x3F000000, 0x3F800000]) {
-		Ok(inner) => match TableCffBlend.apply(inner.concat([3, 5, 1].map(TableCffBlend.arg)), test_store, 0, [0x3F000000, 0x3F800000]) {
+	match TableCffBlend.apply([10, 2, 4, 1].map(TableCffBlend.arg), TableCffBlend.regions_of(test_store), 0, [0x3F000000, 0x3F800000], True) {
+		Ok(inner) => match TableCffBlend.apply(inner.concat([3, 5, 1].map(TableCffBlend.arg)), TableCffBlend.regions_of(test_store), 0, [0x3F000000, 0x3F800000], True) {
 			Ok(out) => out.map(|a| a.value) == [21.5] and (out.first() ?? TableCffBlend.arg(0)).variable
 			Err(_) => False
 		}
 		Err(_) => False
 	}
 }
-expect TableCffBlend.apply([10, 2, 1].map(TableCffBlend.arg), test_store, 0, []) == Err(Bad)
-expect TableCffBlend.apply([10, 2, 4, 1].map(TableCffBlend.arg), test_store, 1, []) == Err(Bad)
+expect TableCffBlend.apply([10, 2, 1].map(TableCffBlend.arg), TableCffBlend.regions_of(test_store), 0, [], True) == Err(Bad)
+expect TableCffBlend.apply([10, 2, 4, 1].map(TableCffBlend.arg), TableCffBlend.regions_of(test_store), 1, [], True) == Err(Bad)
