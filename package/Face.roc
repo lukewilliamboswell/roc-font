@@ -1019,7 +1019,10 @@ Face := {
 			}
 			Empty => match face.v_bearings.get(id) {
 				Ok(bearing) if face.has_glyf => bearing.to_i64()
-				_ => Face.metrics(face, loc).ascent.to_i64()
+				_ => {
+					metrics = Face.metrics(face, loc)
+					(metrics.ascent.to_i64() + metrics.descent.to_i64()).shr_wrap(1)
+				}
 			}
 			Unknown => Face.metrics(face, loc).ascent.to_i64()
 		}
