@@ -1,0 +1,146 @@
+{
+  "google_fonts_commit": "ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b",
+  "sources": [
+    {
+      "file": "notosansnko.ttf",
+      "family": "Noto Sans NKo",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansnko/NotoSansNKo-Regular.ttf",
+      "sha256": "97954444367ad6708c36e85a89aec2830720e34968398d9caf07e7c3307c7993",
+      "size": 79696
+    },
+    {
+      "file": "notosansnko-OFL.txt",
+      "family": "Noto Sans NKo",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansnko/OFL.txt",
+      "sha256": "ddddb5913f75b8f4af1e50386b5ecdfa909b58685994f120b116a3ae5a1c8c48",
+      "size": 4379
+    },
+    {
+      "file": "notosansnkounjoined.ttf",
+      "family": "Noto Sans NKo Unjoined",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansnkounjoined/NotoSansNKoUnjoined%5Bwght%5D.ttf",
+      "sha256": "9da7c2cd66449822e9b6014a9d59470c9a20fc4c4b831aebc72d308b93ebc4d4",
+      "size": 63800
+    },
+    {
+      "file": "notosansnkounjoined-OFL.txt",
+      "family": "Noto Sans NKo Unjoined",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansnkounjoined/OFL.txt",
+      "sha256": "ddddb5913f75b8f4af1e50386b5ecdfa909b58685994f120b116a3ae5a1c8c48",
+      "size": 4379
+    },
+    {
+      "file": "notosansmongolian.ttf",
+      "family": "Noto Sans Mongolian",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansmongolian/NotoSansMongolian-Regular.ttf",
+      "sha256": "caea465b44ff4a2c0ab7bc4a2da4abcb1cf10658d70c5e49f08c9e07ae589c3a",
+      "size": 388172
+    },
+    {
+      "file": "notosansmongolian-OFL.txt",
+      "family": "Noto Sans Mongolian",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansmongolian/OFL.txt",
+      "sha256": "dbaad9386f1579930e60139d1cf36913da6c45f032433798bb8bf2e5912c8467",
+      "size": 4385
+    },
+    {
+      "file": "notosansadlam.ttf",
+      "family": "Noto Sans Adlam",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansadlam/NotoSansAdlam%5Bwght%5D.ttf",
+      "sha256": "fda98eedbbad51d6c80319065bb193a1b3c9410a8309f09063082b768a54159f",
+      "size": 136472
+    },
+    {
+      "file": "notosansadlam-OFL.txt",
+      "family": "Noto Sans Adlam",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/notosansadlam/OFL.txt",
+      "sha256": "0e86b3990089b054d8e6a29520589ac7ff3926738e2868e20d1b7f137d337d14",
+      "size": 4381
+    },
+    {
+      "file": "adlamdisplay.ttf",
+      "family": "ADLaM Display",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/adlamdisplay/ADLaMDisplay-Regular.ttf",
+      "sha256": "cc36c3c6cba02522b86ef6c5ee7b062c5bf2a60b0f51f9b87a44c7d50d650899",
+      "size": 97228
+    },
+    {
+      "file": "adlamdisplay-OFL.txt",
+      "family": "ADLaM Display",
+      "url": "https://raw.githubusercontent.com/google/fonts/ddf386ba1b9fbc6b2c818f1ddcd9148f54ced94b/ofl/adlamdisplay/OFL.txt",
+      "sha256": "657961e80b42febe82f70a56a4ffe6bbd1dba06aec6338f002f729e637fdb902",
+      "size": 4357
+    }
+  ],
+  "subsets": [
+    {
+      "file": "UseNKoSans.ttf",
+      "source_file": "notosansnko.ttf",
+      "source_license": "notosansnko-OFL.txt",
+      "script": "Nkoo",
+      "range": [
+        1984,
+        2048
+      ],
+      "axes": {},
+      "sha256": "adb7cf548454cd69465f3567a7d3bc0bc8c73ac8ea930ab0b5674228a8730a80",
+      "size": 35112
+    },
+    {
+      "file": "UseNKoUnjoined.ttf",
+      "source_file": "notosansnkounjoined.ttf",
+      "source_license": "notosansnkounjoined-OFL.txt",
+      "script": "Nkoo",
+      "range": [
+        1984,
+        2048
+      ],
+      "axes": {
+        "wght": 400
+      },
+      "sha256": "bd77a080ddf9bcf816b9703b1f9918f9f2d5631b1b01828849fc643cb7a299eb",
+      "size": 10664
+    },
+    {
+      "file": "UseMongolianSans.ttf",
+      "source_file": "notosansmongolian.ttf",
+      "source_license": "notosansmongolian-OFL.txt",
+      "script": "Mong",
+      "range": [
+        6144,
+        6320
+      ],
+      "axes": {},
+      "sha256": "1a305e610143eecc4e254aec84a4f3b3918590695428eab0f95a69f04bb4d6e0",
+      "size": 272300
+    },
+    {
+      "file": "UseAdlamSans.ttf",
+      "source_file": "notosansadlam.ttf",
+      "source_license": "notosansadlam-OFL.txt",
+      "script": "Adlm",
+      "range": [
+        125184,
+        125280
+      ],
+      "axes": {
+        "wght": 400
+      },
+      "sha256": "a5edb4f075d96b0364252dbed2b525d4b4cead9aea354c9cc5fd2d5233f6fc41",
+      "size": 52876
+    },
+    {
+      "file": "UseAdlamDisplay.ttf",
+      "source_file": "adlamdisplay.ttf",
+      "source_license": "adlamdisplay-OFL.txt",
+      "script": "Adlm",
+      "range": [
+        125184,
+        125280
+      ],
+      "axes": {},
+      "sha256": "29f5dc8e51bc998f2d5b66eb5d84f2e8a987555c273cc8f9d5cf6f149adb2ee0",
+      "size": 38008
+    }
+  ]
+}
