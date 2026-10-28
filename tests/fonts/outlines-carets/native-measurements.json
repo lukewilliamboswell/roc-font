@@ -1,0 +1,117 @@
+{
+  "roc": "nightly-macos_apple_silicon-2026-10-27-de79a0f",
+  "native_optimized": true,
+  "bundle_imports": true,
+  "timing_note": "Median of3 independent process replays; includes libFuzzer process startup. Machine had concurrent native builds. No timing improvement claim; HB ratio not measured.",
+  "requested_bytes": null,
+  "peak_live_bytes": null,
+  "memory_note": "roc-fuzz0.4.3 exposes allocation calls and live allocation counts only.",
+  "runs": {
+    "baseline": {
+      "bundle": "7qA5TkCPrrbRcLUhvrrUiPhHvNJPjLVpK7scdDeoBf8J.tar.zst",
+      "measurements": [
+        {
+          "operation": "extents",
+          "size": 32,
+          "allocations": 2208,
+          "leaked": 0,
+          "checksum": 64640,
+          "seconds_including_process": 0.015570583054795861
+        },
+        {
+          "operation": "extents",
+          "size": 128,
+          "allocations": 8832,
+          "leaked": 0,
+          "checksum": 258560,
+          "seconds_including_process": 0.015764125040732324
+        },
+        {
+          "operation": "extents",
+          "size": 512,
+          "allocations": 35328,
+          "leaked": 0,
+          "checksum": 1034240,
+          "seconds_including_process": 0.024283249978907406
+        },
+        {
+          "operation": "read",
+          "size": 32,
+          "allocations": 30,
+          "leaked": null,
+          "checksum": 32,
+          "seconds_including_process": 0.016039625043049455
+        },
+        {
+          "operation": "read",
+          "size": 128,
+          "allocations": 30,
+          "leaked": null,
+          "checksum": 128,
+          "seconds_including_process": 0.013588542002253234
+        },
+        {
+          "operation": "read",
+          "size": 512,
+          "allocations": 30,
+          "leaked": null,
+          "checksum": 512,
+          "seconds_including_process": 0.012176208081655204
+        }
+      ]
+    },
+    "after": {
+      "bundle": "FcMZbFVgA5C5jzE8CWFyg6ebJjcADy2P7JMJpyfM1Qj5.tar.zst",
+      "measurements": [
+        {
+          "operation": "extents",
+          "size": 32,
+          "allocations": 2208,
+          "leaked": 0,
+          "checksum": 64640,
+          "seconds_including_process": 0.012487749918363988
+        },
+        {
+          "operation": "extents",
+          "size": 128,
+          "allocations": 8832,
+          "leaked": 0,
+          "checksum": 258560,
+          "seconds_including_process": 0.015181832946836948
+        },
+        {
+          "operation": "extents",
+          "size": 512,
+          "allocations": 35328,
+          "leaked": 0,
+          "checksum": 1034240,
+          "seconds_including_process": 0.01759604108519852
+        },
+        {
+          "operation": "read",
+          "size": 32,
+          "allocations": 27,
+          "leaked": null,
+          "checksum": 32,
+          "seconds_including_process": 0.015520000015385449
+        },
+        {
+          "operation": "read",
+          "size": 128,
+          "allocations": 27,
+          "leaked": null,
+          "checksum": 128,
+          "seconds_including_process": 0.015505457995459437
+        },
+        {
+          "operation": "read",
+          "size": 512,
+          "allocations": 27,
+          "leaked": null,
+          "checksum": 512,
+          "seconds_including_process": 0.01399245799984783
+        }
+      ]
+    }
+  }
+}
