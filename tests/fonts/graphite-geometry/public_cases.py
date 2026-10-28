@@ -18,6 +18,7 @@ SETS = [
     ('association-audit/cases.jsonc', 'association-audit/records.json'),
     ('broad-audit/cases.jsonc', 'broad-audit/records.json'),
     ('child-advance/cases.jsonc', 'child-advance/records.json'),
+    ('attachment-state/cases.jsonc', 'attachment-state/records.json'),
 ]
 
 
