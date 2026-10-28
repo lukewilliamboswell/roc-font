@@ -1,0 +1,1007 @@
+{
+  "oracle": {
+    "engine": "Graphite2",
+    "version": "1.3.14",
+    "library_sha256": "8e437c71ebb39e647b9d64c3baea3c4f02e1d3361b767e4a647d998b89d4f82a",
+    "extractor": 1
+  },
+  "records": [
+    {
+      "id": "divide-zero-a-0",
+      "font_sha256": "df79d16394f1456e5d42d2c3b39ce2c5804163e182046462cf9c98442ec66d15",
+      "key": "8ff44afce667dc724202594b1aa4bbda419e2132ee20b29fd5287f4713d3fef3",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-zero-b-0",
+      "font_sha256": "df79d16394f1456e5d42d2c3b39ce2c5804163e182046462cf9c98442ec66d15",
+      "key": "db4b0841ca53cb3cb476b4428652fa6371373a95ef9e6ba7cea3ca8c31f3648f",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "divide-zero-ba-0",
+      "font_sha256": "df79d16394f1456e5d42d2c3b39ce2c5804163e182046462cf9c98442ec66d15",
+      "key": "1d5a54c5166323ae27661638587612971582a5d11fa014eb5aa67cc3f51dbff7",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-zero-ab-0",
+      "font_sha256": "df79d16394f1456e5d42d2c3b39ce2c5804163e182046462cf9c98442ec66d15",
+      "key": "f3e3cb537d3a145f7a8b0aec54bad75d7809433e997168af8a4ee3ea25a181f4",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "mutate-then-divide-zero-a-0",
+      "font_sha256": "554ef0337dc124b08fa41b8c61fbe32d4e2e5fcbf3e0beb83764d7b238d2e7db",
+      "key": "f3e9c6c86f9f48a2369ace0e3855fec28d91159972357a91fd53c341dbbd9320",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "mutate-then-divide-zero-b-0",
+      "font_sha256": "554ef0337dc124b08fa41b8c61fbe32d4e2e5fcbf3e0beb83764d7b238d2e7db",
+      "key": "263ab8f6f5092cc7199cb09ea0b5597f7d3147e614e82da1c02244443742ca81",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "mutate-then-divide-zero-ba-0",
+      "font_sha256": "554ef0337dc124b08fa41b8c61fbe32d4e2e5fcbf3e0beb83764d7b238d2e7db",
+      "key": "b381473e82a8334909b66cb871b19f5de09afadf255b04d68419f058e298715a",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "mutate-then-divide-zero-ab-0",
+      "font_sha256": "554ef0337dc124b08fa41b8c61fbe32d4e2e5fcbf3e0beb83764d7b238d2e7db",
+      "key": "b503313d3c4e89440f2788fb660ae9ba3777b0a90b747b2c4f25bdeb76457d13",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-feature-a-0",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "030e550afae183f0c0b9bb3b2232be8ff5f9bdd2e1406cf860a6f7dfb20d7462",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-feature-a-1",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "64b909897440e72b81c615e3ce364a8e34a83001564ca35e2dc998f79ccd37f5",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 1,
+            "accepted": true,
+            "effective": 1
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 5.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 5.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "divide-feature-b-0",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "fe4d69b499ca04f789207bb59de9b136d4e14247a9501306d20d6b7dc7be859f",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "divide-feature-b-1",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "9022359e82313b57d930bdf998f43f25fce7da160b3b6215ea34b00f289d6abc",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 1,
+            "accepted": true,
+            "effective": 1
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "divide-feature-ba-0",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "be14168bce5f149ca93a94a9dd41014ef9d8ee62d8abe7d1d7179656596393f4",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-feature-ba-1",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "d91d7a40d33de71995e5e9f0a61d8226b27a3751b1fb13561d756e9e3e3ddc33",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 1,
+            "accepted": true,
+            "effective": 1
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 5.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 607.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "divide-feature-ab-0",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "2d019212631a330f07374da95d3ac5a38a885ae5d296dcd258989b6205066d30",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": false,
+        "slots": [],
+        "abort": "ProgramAbort"
+      }
+    },
+    {
+      "id": "divide-feature-ab-1",
+      "font_sha256": "da86c1c02cb7fe12d82d9dfa6a52b2301bab4093afb56d8641a0eeae5e53ef21",
+      "key": "92f85aa34769bc32a277b3079dcbb71ef488fe21cf6c5fb36c7895df5314623e",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 1,
+            "accepted": true,
+            "effective": 1
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 5.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 5.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 607.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "replace-a-0",
+      "font_sha256": "671be80236b4614ea0313a88538b4d3cc34456d4cdf0fb8f8c48446033f50e83",
+      "key": "d5db503b1dc9a78f61f7d40a0a606b6da2dcfa1b00c43941117c19b4b9165d9d",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "replace-b-0",
+      "font_sha256": "671be80236b4614ea0313a88538b4d3cc34456d4cdf0fb8f8c48446033f50e83",
+      "key": "00f4fcb4714614a584d2ea0db98cdfa9e5f8322d617eb7eadb08fe2e03a0aea1",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "replace-ba-0",
+      "font_sha256": "671be80236b4614ea0313a88538b4d3cc34456d4cdf0fb8f8c48446033f50e83",
+      "key": "aad48fcb312873705146eac402a37f4039e1d9c049f045c47b0aa16c8cba2cf1",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1204.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "replace-ab-0",
+      "font_sha256": "671be80236b4614ea0313a88538b4d3cc34456d4cdf0fb8f8c48446033f50e83",
+      "key": "af8a33f791e0c127e4ef4b24bbc1701c98c769cfb024f11f6bb805bda21262e6",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1204.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "set-advance-a-0",
+      "font_sha256": "98edac1b70d1653a3fb62ed1ce7df87103dc90956c7206dd5b3efe874dab5997",
+      "key": "065273006d2a4204adfba4e9b95a5982862c6de369657df0d1fde07e4f423275",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 17.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 17.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "set-advance-b-0",
+      "font_sha256": "98edac1b70d1653a3fb62ed1ce7df87103dc90956c7206dd5b3efe874dab5997",
+      "key": "b8b7b27c70e75c636e83e31b7865cc820650a610e84470dbc662516b0cba6d9a",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "set-advance-ba-0",
+      "font_sha256": "98edac1b70d1653a3fb62ed1ce7df87103dc90956c7206dd5b3efe874dab5997",
+      "key": "f3c27db1d271394c3ba2f9f9dccc6b12ee570d3908d304888669e6d3f0cabde0",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 17.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 619.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "set-advance-ab-0",
+      "font_sha256": "98edac1b70d1653a3fb62ed1ce7df87103dc90956c7206dd5b3efe874dab5997",
+      "key": "39f1c8b5663a1184cee7a3d97833d9a5fb1595fdb01d02a4db900bb1d46cea90",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 17.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 17.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 619.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-a-0",
+      "font_sha256": "9078a334ec08d4863cb4972b5671c5fabca0fe7031c529d44a77ffda737f4ff5",
+      "key": "de7087467e423105eefb1210fa420b2daf082a8c350c7d8d00c5fbe54cf9d2fb",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 0.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 0.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-b-0",
+      "font_sha256": "9078a334ec08d4863cb4972b5671c5fabca0fe7031c529d44a77ffda737f4ff5",
+      "key": "1b2dbfc35c165486f8fe995b191afccbaab3e98ba4d4dc4536b5a75263b22b34",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-ba-0",
+      "font_sha256": "9078a334ec08d4863cb4972b5671c5fabca0fe7031c529d44a77ffda737f4ff5",
+      "key": "3c6e9854f06f0c104319b8189c786e7a5c2783e3a0c22b4a3c2c699f4defbe9d",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 0.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-ab-0",
+      "font_sha256": "9078a334ec08d4863cb4972b5671c5fabca0fe7031c529d44a77ffda737f4ff5",
+      "key": "b12151fbe7851a6aaac2d84216fa05ab3fc7451f325a9665e45579c74582e134",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 0.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-shift-a-0",
+      "font_sha256": "f47912daeab68fa455aa789a387e031e33aea72591cd72efc3449c8179df5a54",
+      "key": "64648c5065fd5c944a8b0bb59369fb00cba25b4173077c2f396d161b67aaca0d",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 601.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-shift-b-0",
+      "font_sha256": "f47912daeab68fa455aa789a387e031e33aea72591cd72efc3449c8179df5a54",
+      "key": "816029f542be82ade81cfe1172b0703b584915887e88d684b78929b344210cda",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 602.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-shift-ba-0",
+      "font_sha256": "f47912daeab68fa455aa789a387e031e33aea72591cd72efc3449c8179df5a54",
+      "key": "07f3cd2df1690fa568c9fa75fc1adfd60be6a9945a805eeca7d47e054c26c1f1",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 2,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 1,
+            "before": 1,
+            "after": 1,
+            "x": 602.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "id": "version-shift-ab-0",
+      "font_sha256": "f47912daeab68fa455aa789a387e031e33aea72591cd72efc3449c8179df5a54",
+      "key": "840ee5b8a6ed26f085776881d8240c3addfe695117cfa0676b04c9e2c62a2246",
+      "result": {
+        "face_accepted": true,
+        "features": [
+          {
+            "id": 100,
+            "value": 0,
+            "accepted": true,
+            "effective": 0
+          }
+        ],
+        "segment": true,
+        "slots": [
+          {
+            "glyph": 1,
+            "before": 0,
+            "after": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "advance_x": 601.0,
+            "advance_y": 0.0
+          },
+          {
+            "glyph": 2,
+            "before": 1,
+            "after": 1,
+            "x": 601.0,
+            "y": 0.0,
+            "advance_x": 602.0,
+            "advance_y": 0.0
+          }
+        ],
+        "advance": {
+          "x": 1203.0,
+          "y": 0.0
+        }
+      }
+    }
+  ]
+}

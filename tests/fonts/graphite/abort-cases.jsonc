@@ -1,0 +1,358 @@
+{
+  "schema": 1,
+  "about": "Original documented-format font programs demonstrate text/feature-dependent aborts; accepted feature values and unaffected text controls.",
+  "cases": [
+    {
+      "id": "divide-zero-a-0",
+      "font": "divide-zero.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-zero-b-0",
+      "font": "divide-zero.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-zero-ba-0",
+      "font": "divide-zero.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-zero-ab-0",
+      "font": "divide-zero.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "mutate-then-divide-zero-a-0",
+      "font": "mutate-then-divide-zero.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "mutate-then-divide-zero-b-0",
+      "font": "mutate-then-divide-zero.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "mutate-then-divide-zero-ba-0",
+      "font": "mutate-then-divide-zero.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "mutate-then-divide-zero-ab-0",
+      "font": "mutate-then-divide-zero.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-a-0",
+      "font": "divide-feature.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-a-1",
+      "font": "divide-feature.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-b-0",
+      "font": "divide-feature.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-b-1",
+      "font": "divide-feature.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-ba-0",
+      "font": "divide-feature.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-ba-1",
+      "font": "divide-feature.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-ab-0",
+      "font": "divide-feature.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "divide-feature-ab-1",
+      "font": "divide-feature.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "replace-a-0",
+      "font": "replace.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "replace-b-0",
+      "font": "replace.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "replace-ba-0",
+      "font": "replace.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "replace-ab-0",
+      "font": "replace.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "set-advance-a-0",
+      "font": "set-advance.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "set-advance-b-0",
+      "font": "set-advance.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "set-advance-ba-0",
+      "font": "set-advance.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "set-advance-ab-0",
+      "font": "set-advance.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-a-0",
+      "font": "version.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-b-0",
+      "font": "version.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-ba-0",
+      "font": "version.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-ab-0",
+      "font": "version.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-shift-a-0",
+      "font": "version-shift.ttf",
+      "text": "a",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-shift-b-0",
+      "font": "version-shift.ttf",
+      "text": "b",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-shift-ba-0",
+      "font": "version-shift.ttf",
+      "text": "ba",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "version-shift-ab-0",
+      "font": "version-shift.ttf",
+      "text": "ab",
+      "features": [
+        {
+          "id": 100,
+          "value": 0
+        }
+      ]
+    }
+  ]
+}
