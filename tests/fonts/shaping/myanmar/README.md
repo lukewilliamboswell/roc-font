@@ -76,3 +76,22 @@ before changing glyph order, so exhaustion cannot duplicate or lose a glyph.
 The cached wrap cases and private exact-growth/budget regressions protect
 these behaviors. The benchmark records the native comparator's actual
 `--version` response and hashes both its binary and linked shared library.
+
+
+The first optimized run on Roc nightly2026-10-27-de79a0f and independently
+verified native HarfBuzz14.6.0 agreed on all six benchmark checksums. At
+8/64/256 repetitions, the real-font case used70/350/1310 allocation calls
+and ran4.77/4.74/4.78times the reference time; the CCMP/reorder stress case
+used51/275/1042 calls and ran1.45/1.46/1.46times the reference. No allocations
+leaked. These are measured cases, not a claim about every Myanmar font or
+string. Both cases scaled linearly. The dedicated C comparator explicitly
+uses Myanmar/Burmese; the repository's general C comparator uses Latin and
+must not be substituted for this comparison.
+
+Compile `bench/compare/c/myanmar.c` with the pinned HarfBuzz headers and
+library, then run `bench/myanmar.py --harfbuzz=/path/to/c-myanmar
+--harfbuzz-version=14.6.0 --harfbuzz-library=/path/to/libharfbuzz
+--output=/path/to/results.json`. Timing and allocation binaries persist
+under `.roc-font-tmp/bench/myanmar-native/bin` and can be passed back using
+`--binary`/`--alloc` to replay the same artifact. Font preparation and script
+planning happen outside both measured regions.

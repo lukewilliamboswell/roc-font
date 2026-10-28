@@ -10,7 +10,7 @@ MyanmarBench :: {}.{
 	prepare = |input| {
 		prepared = FontBench.prepare(input)?
 		match prepared.font {
-			Ready(font) => Ok({ ..prepared, plan: Planned(Font.plan(font, Font.ShapeOptions.{ script: "Mymr" })) })
+			Ready(font) => Ok({ ..prepared, plan: Planned(Font.plan(font, Font.ShapeOptions.{ script: "Mymr", language: "my" })) })
 			NotRead => Ok(prepared)
 		}
 	}

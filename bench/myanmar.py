@@ -2,7 +2,7 @@
 """Measure real Myanmar shaping and bounded CCMP/reorder stress at3sizes.
 
 Preparation is outside the timed/allocation region, and Myanmar is explicit
-in the Roc plan. Native HarfBuzz guesses Myanmar from the same input. Both
+in the Roc plan. Both native implementations explicitly select Myanmar and Burmese. Both
 consume identical font/text bytes, run in the same session, and must agree
 on full checksums. Requested/peak live bytes are unavailable in roc-fuzz0.4.3;
 allocation calls, timings and reference ratios are reported independently.
@@ -19,7 +19,7 @@ def main():
  actual_version=subprocess.check_output([str(args.harfbuzz),'--version'],text=True,timeout=5).strip()
  if args.harfbuzz_version:assert actual_version==args.harfbuzz_version,(actual_version,args.harfbuzz_version)
  with tempfile.TemporaryDirectory(prefix='myanmar-bench-') as directory:
-  work=Path(directory);binary=args.binary or work/'myanmar';alloc=args.alloc or work/'myanmar-alloc'
+  work=Path(directory);bin_dir=ROOT/'.roc-font-tmp/bench/myanmar-native/bin';bin_dir.mkdir(parents=True,exist_ok=True);binary=args.binary or bin_dir/'myanmar';alloc=args.alloc or bin_dir/'myanmar-alloc'
   if args.binary is None or args.alloc is None:
    with flight.flight(args.roc,work=work) as dep:
     if args.binary is None:subprocess.run([args.roc,'build','--opt=speed',str(ROOT/'bench/roc/myanmar.roc'),f'--output={binary}',*dep],cwd=ROOT,check=True)
