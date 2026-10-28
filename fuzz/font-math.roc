@@ -79,9 +79,9 @@ test! = |bytes| {
 			}
 			for value in [0.Dec, 1, 256, 16384] {
 				settings = Font.Variation.{ axes: [{ tag: "wght", value }, { tag: "AX02", value }, { tag: "AX03", value }] }
-				a = Font.at(font, settings)
-				b = Font.at(again, settings)
-				if query(a, 1) != query(b, 1) {
+				precise_moved = Font.at(font, settings)
+				precise_again = Font.at(again, settings)
+				if query(precise_moved, 1) != query(precise_again, 1) {
 					crash "precise/default MATH location is nondeterministic"
 				}
 			}
