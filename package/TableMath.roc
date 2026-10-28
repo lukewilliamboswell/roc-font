@@ -646,13 +646,8 @@ TableMath := {
 				if Bytes.u16(data, r) >= glyph_count {
 					return Err(Bad(r))
 				}
-				advance = Bytes.u16(data, r + 6)
-				if Bytes.u16(data, r + 2) > advance {
-					return Err(Bad(r + 2))
-				}
-				if Bytes.u16(data, r + 4) > advance {
-					return Err(Bad(r + 4))
-				}
+				# Connector lengths are font facts; the format does not bound
+				# them by fullAdvance (real Noto parts exceed it).
 				if Bytes.u16(data, r + 8) > 1 {
 					return Err(Bad(r + 8))
 				}
@@ -711,3 +706,18 @@ expect match TableMath.read(math_fixture_bytes, 0, LayoutVar.none(0)) {
 	Ok(_) => False
 }
 expect !TableMath.has_data(TableMath.none)
+
+## fuzz regression: connector lengths may exceed fullAdvance. Noto Sans
+## Math contains such parts; reading must expose them without repair.
+expect {
+	# Both fixture indices are proven in bounds.
+	bytes = math_fixture_bytes.set(418, 127) ?? []
+	changed = bytes.set(419, 255) ?? []
+	match TableMath.read(changed, 16, LayoutVar.none(0)) {
+		Ok(math) => match TableMath.assembly(math, 1, Vertical) {
+			Present(a) => (a.parts.first() ?? { glyph: 0, start_connector: 0, end_connector: 0, full_advance: 0, extender: False }).start_connector == 32767
+			Absent => False
+		}
+		Err(_) => False
+	}
+}
