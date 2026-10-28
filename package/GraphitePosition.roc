@@ -327,7 +327,7 @@ GraphitePosition :: {}.{
 			parent_slot = $nodes.get(parent) ?? GraphiteSlots.no_slot
 			$nodes = $nodes.set(parent, { ..parent_slot, last_child: id }) ?? []
 		}
-		$nodes = $nodes.set(id, { ..slot, parent, sibling: 0, insert_before: False }) ?? []
+		$nodes = $nodes.set(id, { ..slot, parent, sibling: 0 }) ?? []
 		{ state: { nodes: $nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: False, advance_x, advance_y }, operations: $operations, stopped: 0 }
 	}
 }
@@ -343,7 +343,7 @@ expect {
 	f = attachment_fixture
 	a = GraphitePosition.attach(f.state, f.a, f.b, 100)
 	b = GraphitePosition.attach(a.state, f.c, f.b, 100)
-	GraphiteSlots.get(b.state, f.b).child == f.a and GraphiteSlots.get(b.state, f.a).sibling == f.c and GraphiteSlots.get(b.state, f.c).parent == f.b and !GraphiteSlots.get(b.state, f.c).insert_before
+	GraphiteSlots.get(b.state, f.b).child == f.a and GraphiteSlots.get(b.state, f.a).sibling == f.c and GraphiteSlots.get(b.state, f.c).parent == f.b and GraphiteSlots.get(b.state, f.c).insert_before
 }
 expect {
 	f = attachment_fixture
@@ -510,4 +510,13 @@ expect {
 		}
 	}
 	$good
+}
+
+expect {
+	# Attachment preserves authored insertion boundaries in either state.
+	f = attachment_fixture
+	slot = GraphiteSlots.get(f.state, f.a)
+	input = GraphiteSlots.set(f.state, f.a, { ..slot, insert_before: False })
+	linked = GraphitePosition.attach(input, f.a, f.b, 100)
+	!GraphiteSlots.get(linked.state, f.a).insert_before
 }
