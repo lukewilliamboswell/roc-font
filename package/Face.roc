@@ -1000,7 +1000,11 @@ Face := {
 					box.y_max.to_i64() + remaining.shr_wrap(1)
 				}
 			}
-			Empty | Unknown => Face.metrics(face, loc).ascent.to_i64()
+			Empty => match face.v_bearings.get(id) {
+				Ok(bearing) if face.has_glyf => bearing.to_i64()
+				_ => Face.metrics(face, loc).ascent.to_i64()
+			}
+			Unknown => Face.metrics(face, loc).ascent.to_i64()
 		}
 		{ x, y: y.max(-2147483648).min(2147483647).to_i32_wrap() }
 	}
