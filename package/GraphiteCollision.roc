@@ -881,7 +881,8 @@ GraphiteCollision :: {}.{
 						# Promotion follows the scan. An already visited parent
 						# does not retroactively become a kerning target.
 						parent_flags = GraphiteSlots.get_extra($work.state, slot.parent, 3)
-						$work = { ..$work, state: GraphiteSlots.set_extra($work.state, slot.parent, 3, parent_flags.bitwise_or(17)) }
+						promoted = GraphiteSlots.set_extra($work.state, slot.parent, 3, parent_flags.bitwise_or(17))
+						$work = { ..$work, state: { ..promoted, positioned: promoted.positioned and parent_flags.bitwise_and(16) != 0 } }
 					} else {
 						result = GraphiteCollision.kern_cluster($work, context, $id, group, reverse, budget - $operations, base_metric)
 						$work = result.work
@@ -926,6 +927,9 @@ GraphiteCollision :: {}.{
 	# diagonal bounds do not. Translate the octabox before these operations.
 	kern_edge : Octabox, U32, U32, U32, Bool -> U32
 	kern_edge = |box, low_y, sample_y, margin, left| {
+		if box.x_min == box.x_max and box.y_min == box.y_max {
+			return if (left) TableVar.f32_sub(box.x_min, margin) else TableVar.f32_add(box.x_max, margin)
+		}
 		if left {
 			TableVar.f32_max(TableVar.f32_sub(box.x_min, margin), TableVar.f32_max(TableVar.f32_sub(TableVar.f32_sub(box.sum_min, sample_y), margin), TableVar.f32_add(box.diff_min, TableVar.f32_sub(low_y, margin))))
 		} else {
@@ -1552,4 +1556,14 @@ expect {
 			}
 		}
 	}
+}
+
+expect {
+	# Empty target ink is a margin-expanded point for cluster kerning;
+	# collapsed diagonal facets do not trim its occupied-bin edge.
+	n = TableVar.f32_from_int
+	point = { x_min: 0, y_min: 0, x_max: 0, y_max: 0, sum_min: 0, sum_max: 0, diff_min: 0, diff_max: 0 }
+	neighbor = GraphiteCollision.translate_box(collision_square, n(100), 0)
+	result = GraphiteCollision.kern_gap(point, neighbor, n(10), n(-10), False, 100)
+	result.stopped == 0 and result.gap == n(90)
 }
