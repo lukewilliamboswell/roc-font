@@ -17,6 +17,7 @@ GraphiteSlotAttributes :: {}.{
 		match attribute {
 			0 => when_float(s.advance_x)
 			1 => when_float(s.advance_y)
+			2 => if (s.parent != 0) 1 else 0
 			3 => when_float(s.attach_x)
 			4 => when_float(s.attach_y)
 			8 => when_float(s.with_x)
@@ -72,9 +73,13 @@ GraphiteSlotAttributes :: {}.{
 			55 => return GraphiteSlots.set_user(state, id, index, value)
 			_ if attribute >= 25 and attribute <= 28 => return GraphiteSlots.set_justification(state, id, index, attribute - 25, value)
 			54 => return GraphiteSlots.set_extra(state, id, 0, value.bitwise_and(3))
-			62 => return GraphiteSlots.set_extra({ ..state, positioned: False }, id, 8, float.to_i32_wrap())
-			63 => return GraphiteSlots.set_extra({ ..state, positioned: False }, id, 9, float.to_i32_wrap())
-			_ if attribute >= 57 and attribute <= 77 => return GraphiteSlots.set_extra(state, id, attribute - 54, value)
+			62 => return state
+			63 => return state
+			_ if attribute >= 57 and attribute <= 77 => {
+				unsigned = [57.U64, 64, 65, 66, 69, 70, 71, 73, 75, 76, 77].contains(attribute)
+				stored = if (unsigned) value.to_u16_wrap().to_i32() else value.to_i16_wrap().to_i32()
+				return GraphiteSlots.set_extra(state, id, attribute - 54, stored)
+			}
 			_ => return state
 		}
 		GraphiteSlots.set({ ..state, positioned: False }, id, updated)
@@ -100,8 +105,10 @@ expect {
 expect {
 	a = GraphiteSlots.append(GraphiteSlots.make(0, 1), GraphiteSlots.no_slot)
 	b = GraphiteSlotAttributes.set(a.state, a.id, 62, 0, 100)
-	c = GraphiteSlotAttributes.set(GraphiteSlots.set_extra(b, a.id, 31, 1), a.id, 62, 0, 100)
-	GraphiteSlotAttributes.get(b, a.id, 62, 0) == 0 and GraphiteSlotAttributes.get(c, a.id, 62, 0) == 100 and GraphiteSlots.get_extra(c, a.id, 8).to_u32_wrap() == TableVar.f32_from_int(100)
+	enabled = GraphiteSlots.set_extra(b, a.id, 31, 1)
+	c = GraphiteSlots.set_extra(enabled, a.id, 8, TableVar.f32_from_int(100).to_i32_wrap())
+	d = GraphiteSlotAttributes.set(c, a.id, 62, 0, 200)
+	GraphiteSlotAttributes.get(b, a.id, 62, 0) == 0 and GraphiteSlotAttributes.get(d, a.id, 62, 0) == 100 and GraphiteSlots.get_extra(c, a.id, 8).to_u32_wrap() == TableVar.f32_from_int(100)
 }
 
 expect {

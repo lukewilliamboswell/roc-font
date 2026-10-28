@@ -25,6 +25,7 @@ GraphiteSlots := {
 		child : U64,
 		last_child : U64,
 		sibling : U64,
+		# A stable original-character feature cell, shared by its copies.
 		feature : U64,
 		user_start : U64,
 		before : I64,
@@ -45,14 +46,15 @@ GraphiteSlots := {
 		position_x : U32,
 		position_y : U32,
 		justify_width : U32,
+		justification_defined : Bool,
 		break_weight : I32,
 		direction : I32,
 		bidi_level : I32,
 	}
-	FeatureChange : { previous : U64, feature : U64, value : U16 }
+	FeatureChange : [Cell(U64), Value({ previous : U64, feature : U64, value : U16 })]
 
 	no_slot : Slot
-	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, last_child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, missing: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, break_weight: 0, direction: 0, bidi_level: 0 }
+	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, last_child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, missing: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, justification_defined: False, break_weight: 0, direction: 0, bidi_level: 0 }
 
 	make : U64, U64 -> GraphiteSlots
 	make = |user_count, capacity| GraphiteSlots.make_with_levels(user_count, 1, capacity)
@@ -60,7 +62,7 @@ GraphiteSlots := {
 	make_with_levels : U64, U64, U64 -> GraphiteSlots
 	make_with_levels = |user_count, levels, capacity| {
 		justification_levels = levels.max(1)
-		{ nodes: List.with_capacity(capacity + 1).append(GraphiteSlots.no_slot), users: List.with_capacity(capacity * (user_count + 32 + 4 * (justification_levels - 1))), user_count, justification_levels, feature_changes: [{ previous: 0, feature: 0, value: 0 }], first: 0, last: 0, active: 0, positioned: False, advance_x: 0, advance_y: 0 }
+		{ nodes: List.with_capacity(capacity + 1).append(GraphiteSlots.no_slot), users: List.with_capacity(capacity * (user_count + 32 + 4 * (justification_levels - 1))), user_count, justification_levels, feature_changes: List.with_capacity(capacity + 1).append(Cell(0)), first: 0, last: 0, active: 0, positioned: False, advance_x: 0, advance_y: 0 }
 	}
 
 	get : GraphiteSlots, U64 -> Slot
@@ -174,15 +176,21 @@ GraphiteSlots := {
 	}
 
 	feature : GraphiteSlots, List(U16), U64, U64, U64 -> { value : U16, operations : U64, exhausted : Bool }
-	feature = |state, defaults, head, wanted, budget| {
-		var $head = head
+	feature = |state, defaults, cell, wanted, budget| {
+		var $head = match state.feature_changes.get(cell) {
+			Ok(Cell(head)) => head
+			_ => crash "slot feature names an allocated character cell"
+		}
 		var $operations = 0
 		while $head != 0 {
 			if $operations >= budget {
 				return { value: 0, operations: $operations, exhausted: True }
 			}
 			$operations = $operations + 1
-			change = state.feature_changes.get($head) ?? crash "feature history contains only previously appended indices"
+			change = match state.feature_changes.get($head) {
+				Ok(Value(value)) => value
+				_ => crash "feature history names previously appended value nodes"
+			}
 			if change.feature == wanted {
 				return { value: change.value, operations: $operations, exhausted: False }
 			}
@@ -191,12 +199,22 @@ GraphiteSlots := {
 		{ value: defaults.get(wanted) ?? 0, operations: $operations, exhausted: False }
 	}
 
+	new_feature : GraphiteSlots -> { state : GraphiteSlots, id : U64 }
+	new_feature = |state| {
+		id = state.feature_changes.len()
+		{ state: { ..state, feature_changes: state.feature_changes.append(Cell(0)) }, id }
+	}
+
 	set_feature : GraphiteSlots, U64, U64, U16 -> GraphiteSlots
 	set_feature = |state, id, wanted, value| {
 		slot = GraphiteSlots.get(state, id)
+		previous = match state.feature_changes.get(slot.feature) {
+			Ok(Cell(head)) => head
+			_ => crash "slot feature names an allocated character cell"
+		}
 		head = state.feature_changes.len()
-		changes = state.feature_changes.append({ previous: slot.feature, feature: wanted, value })
-		GraphiteSlots.set({ ..state, feature_changes: changes }, id, { ..slot, feature: head })
+		changes = state.feature_changes.append(Value({ previous, feature: wanted, value }))
+		{ ..state, feature_changes: changes.set(slot.feature, Cell(head)) ?? [] }
 	}
 
 	# Graphite's stack language converts float attributes by truncation,
@@ -222,3 +240,18 @@ expect {
 	GraphiteSlots.get_user(b, a.id, 0) == -17 and GraphiteSlots.get_user(b, a.id, 1) == 0
 }
 expect GraphiteSlots.integer(0xBF000000) == 0 and GraphiteSlots.integer(0xBFC00000) == -1 and GraphiteSlots.integer(0x4F000000) == 2147483647
+
+expect GraphiteSlots.integer(0x5F000000) == 2147483647 and GraphiteSlots.integer(0xDF000000) == -2147483648 and GraphiteSlots.integer(0x7F7FFFFF) == 2147483647 and GraphiteSlots.integer(0xFF7FFFFF) == -2147483648
+
+expect {
+	# Copies of one original character share its mutable feature cell;
+	# another original character retains independent global defaults.
+	initial = GraphiteSlots.make(0, 3)
+	a_cell = GraphiteSlots.new_feature(initial)
+	a = GraphiteSlots.append(a_cell.state, { ..GraphiteSlots.no_slot, feature: a_cell.id })
+	b_cell = GraphiteSlots.new_feature(a.state)
+	b = GraphiteSlots.append(b_cell.state, { ..GraphiteSlots.no_slot, feature: b_cell.id })
+	copied = GraphiteSlots.append(b.state, { ..GraphiteSlots.no_slot, feature: a_cell.id })
+	changed = GraphiteSlots.set_feature(copied.state, a.id, 0, 1)
+	GraphiteSlots.feature(changed, [0], a_cell.id, 0, 10).value == 1 and GraphiteSlots.feature(changed, [0], GraphiteSlots.get(changed, copied.id).feature, 0, 10).value == 1 and GraphiteSlots.feature(changed, [0], b_cell.id, 0, 10).value == 0
+}
