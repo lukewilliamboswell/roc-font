@@ -10,10 +10,16 @@ Hebrew RTL `סְ` yields glyphs `[7,1]`, advances `[0,700]` and offsets
 maps real base/mark pairs for eleven script tags. `fallback-nonzero-marks.ttf`
 uses the same mapping with mark advance 230 so retaining or zeroing that
 advance is observable independently of the mark's offset.
+`fallback-dflt-marks.ttf` additionally selects a GSUB DFLT script through an
+identity rule; `fallback-gdef-dflt-marks.ttf` also explicitly classifies g7 as
+a mark in GDEF. These distinguish the selected original default model from
+an Indic or Myanmar model even though the caller supplies the same script.
+HarfBuzz zeroes and positions the mark for Devanagari/Myanmar with DFLT here,
+but retains its 230 advance without that DFLT selection.
 
-`fallback-cases.jsonc` contains both advance variants across Hebrew, Arabic,
+`fallback-cases.jsonc` contains four preparation variants across Hebrew, Arabic,
 Syriac, Hangul, Thai, Lao, Devanagari, Khmer, Myanmar, Tibetan and Latin, each
-in all four directions: 88 cases. These are authored scripts and directions,
+in all four directions: 176 cases. These are authored scripts and directions,
 including deliberate direction overrides. The cached oracle controls the
 expected policy; the tests do not enable geometric fallback for every script.
 In particular Devanagari/Myanmar horizontal mark advance remains 230 in these
@@ -30,7 +36,7 @@ python3 scripts/record_oracle.py --check tests/fonts/aat/fallback-cases.jsonc
 
 The first command reproduces every font byte and case; the second validates
 cache keys without running an oracle. Recording uses the repository's pinned
-uharfbuzz 0.56.3/HarfBuzz 14.6.0 extractor with full output flags. All three
+uharfbuzz 0.56.3/HarfBuzz 14.6.0 extractor with full output flags. All five
 original fonts are accepted by pinned OTS 9.3.0. Native/public replay evidence
 is reported separately after the served-bundle check, rather than inferred
 from the reference records.
