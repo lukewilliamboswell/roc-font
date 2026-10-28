@@ -5,6 +5,7 @@ import LayoutGdef
 import LayoutGsub
 import LayoutKerning
 import LayoutVar
+import ShaperIndic
 import ShaperHangul
 import ShaperThai
 import ShaperArabic
@@ -53,6 +54,9 @@ Shaper :: {}.{
 		backward : Bool,
 		native : [Ltr, Rtl, Either],
 		gsub : List(LayoutGsub.Step),
+		gsub_stage_count : U64,
+		staged : Staged,
+		indic : [Indic(ShaperIndic), NoIndic],
 		gpos : List({ index : U64, mask : U64 }),
 		gpos_auto_zwj : List(Bool),
 		kern : [Kern(U64), NoKern],
@@ -157,6 +161,17 @@ Shaper :: {}.{
 	hangul_rtl_keys : List(U64)
 	hangul_rtl_keys = LayoutCommon.feature_keys(Shaper.hangul_rtl_merged.map(|f| f.tag))
 
+	indic_requests : [Ltr, Rtl] -> List(Request)
+	indic_requests = |direction| Shaper.default_requests(direction).map(|r| { ..r, stage: ShaperIndic.stage(r.tag) }).concat(ShaperIndic.features.map(|f| { tag: f.tag, max: f.default, default: if (f.global) f.default else 0, global: f.global, fallback: False, manual: f.manual_zwj, random: False, stage: f.stage })).append({ ..Shaper.request("liga", 0, True), stage: 14 })
+	indic_ltr_merged : List(Request)
+	indic_ltr_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.indic_requests(Ltr)))
+	indic_rtl_merged : List(Request)
+	indic_rtl_merged = Shaper.merge(Shaper.sort_by_tag(Shaper.indic_requests(Rtl)))
+	indic_ltr_keys : List(U64)
+	indic_ltr_keys = LayoutCommon.feature_keys(Shaper.indic_ltr_merged.map(|f| f.tag))
+	indic_rtl_keys : List(U64)
+	indic_rtl_keys = LayoutCommon.feature_keys(Shaper.indic_rtl_merged.map(|f| f.tag))
+
 	ltr_requests : List(Request)
 	ltr_requests = Shaper.default_requests(Ltr)
 
@@ -243,26 +258,27 @@ Shaper :: {}.{
 				}
 		}
 		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
+		indic = ShaperTags.script_of(options.script) == Shaper.tag("Deva")
 		hangul = ShaperTags.script_of(options.script) == Shaper.tag("Hang")
 		arabic = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.tag("Arab")
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => if (arabic) Shaper.arabic_ltr_merged else if (hangul) Shaper.hangul_ltr_merged else Shaper.ltr_merged
-					Rtl => if (arabic) Shaper.arabic_rtl_merged else if (hangul) Shaper.hangul_rtl_merged else Shaper.rtl_merged
+					Ltr => if (indic) Shaper.indic_ltr_merged else if (arabic) Shaper.arabic_ltr_merged else if (hangul) Shaper.hangul_ltr_merged else Shaper.ltr_merged
+					Rtl => if (indic) Shaper.indic_rtl_merged else if (arabic) Shaper.arabic_rtl_merged else if (hangul) Shaper.hangul_rtl_merged else Shaper.rtl_merged
 				}
 			} else {
 				defaults = match requested {
-					Ltr => if (arabic) Shaper.arabic_requests(Ltr) else if (hangul) Shaper.hangul_requests(Ltr) else Shaper.ltr_requests
-					Rtl => if (arabic) Shaper.arabic_requests(Rtl) else if (hangul) Shaper.hangul_requests(Rtl) else Shaper.rtl_requests
+					Ltr => if (indic) Shaper.indic_requests(Ltr) else if (arabic) Shaper.arabic_requests(Ltr) else if (hangul) Shaper.hangul_requests(Ltr) else Shaper.ltr_requests
+					Rtl => if (indic) Shaper.indic_requests(Rtl) else if (arabic) Shaper.arabic_requests(Rtl) else if (hangul) Shaper.hangul_requests(Rtl) else Shaper.rtl_requests
 				}
 				var $requests = List.with_capacity(defaults.len() + options.features.len())
 				$requests = $requests.concat(defaults)
 				for f in options.features {
 					global = f.start == 0 and f.end == Shaper.text_end
 					v = f.value.to_u64()
-					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: if (arabic) ShaperArabic.stage(Shaper.feature_tag(f.tag)) else 1 })
+					$requests = $requests.append({ tag: Shaper.feature_tag(f.tag), max: v, default: if (global) v else 0, global, fallback: False, manual: False, random: False, stage: if (indic) ShaperIndic.stage(Shaper.feature_tag(f.tag)) else if (arabic) ShaperArabic.stage(Shaper.feature_tag(f.tag)) else 1 })
 				}
 				# Hangul keeps calt in its own bit even after a global user setting.
 				if hangul {
@@ -273,8 +289,8 @@ Shaper :: {}.{
 		keys =
 			if options.features.is_empty() {
 				match requested {
-					Ltr => if (arabic) Shaper.arabic_ltr_keys else if (hangul) Shaper.hangul_ltr_keys else Shaper.ltr_keys
-					Rtl => if (arabic) Shaper.arabic_rtl_keys else if (hangul) Shaper.hangul_rtl_keys else Shaper.rtl_keys
+					Ltr => if (indic) Shaper.indic_ltr_keys else if (arabic) Shaper.arabic_ltr_keys else if (hangul) Shaper.hangul_ltr_keys else Shaper.ltr_keys
+					Rtl => if (indic) Shaper.indic_rtl_keys else if (arabic) Shaper.arabic_rtl_keys else if (hangul) Shaper.hangul_rtl_keys else Shaper.rtl_keys
 				}
 			} else {
 				LayoutCommon.feature_keys(merged.map(|f| f.tag))
@@ -343,7 +359,26 @@ Shaper :: {}.{
 		variations = Face.feature_variations(face)
 		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub, lookup_vars: LayoutVar.lookup_variations_at(variations.gsub, variations.lv, variations.coords) }
 		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos, lookup_vars: LayoutVar.lookup_variations_at(variations.gpos, variations.lv, variations.coords) }
-		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, if (arabic) 12 else 2, Gsub, gsub_varied, arabic)
+		stage_count = if (indic) 16 else if (arabic) 12 else 2
+		staged = if (indic) Shaper.staged_lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, stage_count, gsub_varied, ShaperIndic.features) else { steps: [], spans: [] }
+		gsub = if (indic) staged.steps.map(|step| step.step) else Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, stage_count, Gsub, gsub_varied, arabic)
+		indic_plan = if indic {
+			var $probe_lookups = []
+			var $probe_spans = []
+			for name in ["rphf", "pref", "blwf", "pstf", "vatu"] {
+				start = $probe_lookups.len()
+				match mapped.find_first(|m| m.tag == Shaper.tag(name)) {
+					Ok(m) if m.gsub != LayoutCommon.no_feature => {
+						$probe_lookups = $probe_lookups.concat(Shaper.varied_feature_lookups(gsub_common, gsub_varied, m.gsub))
+					}
+					_ => {}
+				}
+				$probe_spans = $probe_spans.append({ start, end: $probe_lookups.len() })
+			}
+			chosen = LayoutCommon.select_script_tag(gsub_common, script_tags)
+			script = ShaperTags.script_of(options.script)
+			Indic(ShaperIndic.make({ script, old_spec: chosen.bitwise_and(0xFF) != '2' and chosen.bitwise_and(0xFF) != '3', virama_glyph: Face.glyph(face, ShaperIndic.virama(script).to_u32_wrap()) ?? 0, masks: { rphf: one_mask_of(Shaper.tag("rphf")), pref: one_mask_of(Shaper.tag("pref")), blwf: one_mask_of(Shaper.tag("blwf")), abvf: one_mask_of(Shaper.tag("abvf")), half: one_mask_of(Shaper.tag("half")), pstf: one_mask_of(Shaper.tag("pstf")), init: one_mask_of(Shaper.tag("init")) }, probe_lookups: $probe_lookups, probe_spans: $probe_spans }))
+		} else NoIndic
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
@@ -380,6 +415,9 @@ Shaper :: {}.{
 			backward: requested == Rtl,
 			native,
 			gsub,
+			gsub_stage_count: stage_count,
+			staged,
+			indic: indic_plan,
 			gpos,
 			gpos_auto_zwj,
 			kern,
@@ -578,6 +616,123 @@ Shaper :: {}.{
 		$out
 	}
 
+	ModelFeature : { tag : U64, stage : U64, default : U64, global : Bool, manual_zwj : Bool, manual_zwnj : Bool, per_syllable : Bool }
+	Staged : { steps : List(LayoutGsub.StageStep), spans : List({ start : U64, end : U64 }) }
+	staged_lookups : LayoutCommon, U64, U64, List(Mapped), U64, Varied, List(ModelFeature) -> Staged
+	staged_lookups = |common, required, required_stage, mapped, stages, varied, model_features| {
+		count = common.lookup_count
+		# Every stage's lookups in one list: stage `s`, lookup `l` at
+		# `s * count + l` (a feature's stage is below `stages`), each entry
+		# the lookup's mask (bits 0 to 31) and its kind (bits 32 to 34). Bit
+		# 32: some feature asks; bit 33: some feature joins manually; bit 34:
+		# the first feature to list it is `rand`.
+		asks = 0x100000000.U64
+		joins = 0x200000000
+		zwnj = 0x800000000
+		syllable = 0x1000000000
+		random_first = 0x400000000
+		var $entries = List.repeat(0.U64, stages * count)
+		# Lookups are read where the font lists them unless feature
+		# variations are in force.
+		in_place = varied.subs.is_empty() and varied.lookup_vars.is_empty()
+		if required != LayoutCommon.no_feature and required_stage < stages {
+			base = required_stage * count
+			feature_lookups = if (in_place) LayoutCommon.feature_lookups(common, required) else Shaper.varied_feature_lookups(common, varied, required)
+			for lookup in feature_lookups {
+				# Feature lookups are below the lookup count.
+				$entries = $entries.set(base + lookup, ($entries.get(base + lookup) ?? 0).bitwise_or(Shaper.global_bit).bitwise_or(asks)) ?? []
+			}
+		}
+		for m in mapped {
+			index = m.gsub
+			feature_stage = m.stage.min(stages - 1)
+			if index != LayoutCommon.no_feature and feature_stage < stages {
+				base = feature_stage * count
+				flags = match model_features.find_first(|f| f.tag == m.tag) {
+					Ok(f) => { manual_zwnj: f.manual_zwnj, per_syllable: f.per_syllable }
+					Err(_) => { manual_zwnj: False, per_syllable: m.tag == Shaper.tag("locl") or m.tag == Shaper.tag("ccmp") }
+				}
+				added = m.mask.bitwise_and(0xFFFFFFFF).bitwise_or(asks).bitwise_or(if (m.manual) joins else 0).bitwise_or(if (flags.manual_zwnj) zwnj else 0).bitwise_or(if (flags.per_syllable) syllable else 0)
+				if in_place {
+					# `LayoutCommon.feature_lookups` without making the list.
+					data = common.data
+					offset = if (index >= common.feature_count) 0 else Bytes.u16(data, common.feature_list + 2 + 6 * index + 4)
+					if offset != 0 {
+						at = common.feature_list + offset
+						for k in 0..<Bytes.u16(data, at + 2) {
+							lookup = Bytes.u16(data, at + 4 + 2 * k)
+							if lookup < count {
+								entry = $entries.get(base + lookup) ?? 0
+								first = if (entry.bitwise_and(asks) == 0 and m.random) random_first else 0
+								# `lookup` is below the lookup count.
+								$entries = $entries.set(base + lookup, entry.bitwise_or(added).bitwise_or(first)) ?? []
+							}
+						}
+					}
+				} else {
+					for lookup in Shaper.varied_feature_lookups(common, varied, index) {
+						entry = $entries.get(base + lookup) ?? 0
+						first = if (entry.bitwise_and(asks) == 0 and m.random) random_first else 0
+						# Feature lookups are below the lookup count.
+						$entries = $entries.set(base + lookup, entry.bitwise_or(added).bitwise_or(first)) ?? []
+					}
+				}
+			}
+		}
+		var $steps = 0
+		for entry in $entries {
+			if entry.bitwise_and(0xFFFFFFFF) != 0 {
+				$steps = $steps + 1
+			}
+		}
+		var $out = List.with_capacity($steps)
+		var $spans = List.with_capacity(stages)
+		for stage in 0..<stages {
+			start = $out.len()
+			for index in 0..<count {
+				entry = $entries.get(stage * count + index) ?? 0
+				mask = entry.bitwise_and(0xFFFFFFFF)
+				if mask != 0 {
+					step = { index, mask, auto_zwnj: entry.bitwise_and(zwnj) == 0, auto_zwj: entry.bitwise_and(joins) == 0, random: entry.bitwise_and(random_first) != 0 }
+					$out = $out.append({ step, per_syllable: entry.bitwise_and(syllable) != 0 })
+				}
+			}
+			$spans = $spans.append({ start, end: $out.len() })
+		}
+		{ steps: $out, spans: $spans }
+	}
+
+	pause_indic : ShaperIndic, ShaperIndic.Event, LayoutGsub, LayoutGsub.Session, ShaperIndic.Dotted, LayoutGsub.Limits -> LayoutGsub.Session
+	pause_indic = |model, event, shape, session, dotted_circle, limits| {
+		{ items, serial, random, operations, stopped, step_offset, spare, work } = session
+		paused = ShaperIndic.pause(model, event, shape, items, { dotted_circle, limit: limits.limit, budget: limits.budget - operations })
+		{ items: paused.items, serial, random, operations: operations + paused.operations, stopped: stopped.bitwise_or(paused.stopped), step_offset, spare, work }
+	}
+
+	apply_indic : Face, ShaperIndic, Staged, LayoutGsub, List(LayoutGsub.Item), LayoutGsub.Limits -> LayoutGsub.Applied
+	apply_indic = |face, model, staged, shape, items, limits| {
+		gdef = Face.gdef(face)
+		dotted_circle = match Face.glyph(face, 0x25CC) {
+			Ok(glyph) => {
+				gprops = if (LayoutGdef.has_glyph_classes(gdef)) LayoutGdef.glyph_props(gdef, glyph) else LayoutGsub.base_glyph
+				Present({ glyph, props: ShaperUnicode.props(0x25CC).bitwise_and(0xFFFF).bitwise_or(gprops.shl_wrap(16)) })
+			}
+			Err(_) => Absent
+		}
+		var $session = LayoutGsub.begin(items)
+		for stage in 0..<staged.spans.len() {
+			for pause in ShaperIndic.pauses {
+				if pause.stage == stage {
+					$session = Shaper.pause_indic(model, pause.event, shape, $session, dotted_circle, limits)
+				}
+			}
+			span = staged.spans.get(stage) ?? { start: 0, end: 0 }
+			steps = staged.steps.sublist({ start: span.start, len: span.end - span.start })
+			$session = LayoutGsub.resume(shape, steps, $session, limits)
+		}
+		{ items: $session.items, stopped: $session.stopped, operations: $session.operations }
+	}
+
 	# ------------------------------------------------------------ shaping
 
 	## Text as scalars with the UTF-8 byte offset each starts at.
@@ -771,8 +926,12 @@ Shaper :: {}.{
 		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
-		{ chars: normalized, space_fallback } = if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else if (p.hangul) ShaperNormalize.normalize_short_circuit(ctx, legacy) else ShaperNormalize.normalize(ctx, legacy)
-		joined = if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else if (p.hangul) ShaperHangul.setup(normalized, p.hangul_masks) else normalized
+		is_indic = match p.indic {
+			Indic(_) => True
+			NoIndic => False
+		}
+		{ chars: normalized, space_fallback } = if (is_indic) ShaperNormalize.normalize_script(ctx, legacy, Indic) else if (p.arabic) ShaperNormalize.normalize_with_marks(ctx, legacy, ShaperArabic.reorder) else if (p.hangul) ShaperNormalize.normalize_short_circuit(ctx, legacy) else ShaperNormalize.normalize(ctx, legacy)
+		joined = if (is_indic) ShaperIndic.setup(normalized) else if (p.arabic) ShaperArabic.setup(normalized, p.arabic_masks, context) else if (p.hangul) ShaperHangul.setup(normalized, p.hangul_masks) else normalized
 		masked = Shaper.setup_masks(p, joined, found.fraction_slash, !backward)
 		gdef = Face.gdef(face)
 		classes = LayoutGdef.has_glyph_classes(gdef)
@@ -797,7 +956,10 @@ Shaper :: {}.{
 		}
 		limit = (p.growth * n).max(16384)
 		budget = (p.operations * n).max(16384)
-		applied = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+		applied = match p.indic {
+			NoIndic => LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+			Indic(model) => Shaper.apply_indic(face, model, p.staged, gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+		}
 		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - applied.operations)
 		placed = positioned.placed
 		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped.bitwise_or(positioned.stopped) }
@@ -834,7 +996,12 @@ Shaper :: {}.{
 		adjust = p.fallback_marks and !backward
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
-			if LayoutGsub.is_mark_item(item) and !p.hangul {
+			if LayoutGsub.is_mark_item(item) and !p.hangul and !(
+				match p.indic {
+					Indic(_) => True
+					NoIndic => False
+				}
+			) {
 				if adjust {
 					# `i < count`, the lists' length.
 					$dx = $dx.set(i, ($dx.get(i) ?? 0) - ($ax.get(i) ?? 0)) ?? []
@@ -850,7 +1017,12 @@ Shaper :: {}.{
 				}
 			}
 		}
-		if p.fallback_marks and !p.thai {
+		if p.fallback_marks and !p.thai and !(
+			match p.indic {
+				Indic(_) => True
+				NoIndic => False
+			}
+		) {
 			{ items: fallback_items, ax: fallback_ax, dx: fallback_dx, dy: fallback_dy } = Shaper.position_marks(face, location, { items: $items, ax: $ax, dx: $dx, dy: $dy }, backward, p.backward, upem, adjust)
 			$items = fallback_items
 			$ax = fallback_ax
@@ -1283,7 +1455,7 @@ Shaper :: {}.{
 		common = LayoutGsub.common_of(Face.gsub(face))
 		varied = { subs: p.gsub_subs, fv: Face.feature_variations(face).gsub, lookup_vars: p.gsub_lookup_vars }
 		feature_lookups = |index| Shaper.varied_feature_lookups(common, varied, index)
-		stages = 2
+		stages = p.gsub_stage_count
 		var $out = []
 		for stage in 0..<stages {
 			var $found = List.repeat([], common.lookup_count)
@@ -1387,4 +1559,15 @@ Shaper :: {}.{
 		}
 		$out
 	}
+}
+
+# The complete default Indic selection fits below the global bit and
+# leaves metadata bits 32..63 untouched, even when rand needs eight bits.
+expect {
+	[Shaper.indic_ltr_merged, Shaper.indic_rtl_merged].all(
+		|requests| {
+			bits = requests.fold(0.U64, |total, r| total + (if (r.global and r.max == 1) 0 else Shaper.bit_storage(r.max).min(8)))
+			Shaper.first_bit + bits < Shaper.global_shift
+		},
+	)
 }
