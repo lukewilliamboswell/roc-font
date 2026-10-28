@@ -441,9 +441,13 @@ LayoutPosition := {
 		$needed
 	}
 
-	Ctx : { lv : LayoutVar, loc : LayoutVar.Location, gdef : LayoutGdef, backward : Bool, previous : List(U64), auto_zwj : Bool, limits : Limits }
+	Ctx : { lv : LayoutVar, loc : LayoutVar.Location, gdef : LayoutGdef, backward : Bool, vertical : Bool, previous : List(U64), auto_zwj : Bool, limits : Limits }
 	position : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), Bool, List(LayoutGsub.Item), List(I64), Bool, Limits -> State
-	position = |p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits| {
+	position = |p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits| LayoutPosition.position_axis(p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits, False, [], [])
+
+	# ax/dx/dy are advance/major/cross coordinates; vertical swaps y/x.
+	position_axis : LayoutPosition, LayoutVar, LayoutVar.Location, LayoutGdef, List({ index : U64, mask : U64 }), List(Bool), Bool, List(LayoutGsub.Item), List(I64), Bool, Limits, Bool, List(I64), List(I64) -> State
+	position_axis = |p, lv, loc, gdef, plan, auto_zwj, zero_late, items, base, backward, limits, vertical, initial_major, initial_cross| {
 		count = items.len()
 		# Most plans automatically skip ZWJ. Build the second previous-base
 		# index only when a manual-ZWJ lookup can consume it. Missing flags
@@ -472,13 +476,13 @@ LayoutPosition := {
 			}
 		}
 
-		var $s = { items, ax: $initial, dx: List.repeat(0, count), dy: List.repeat(0, count), parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
+		var $s = { items, ax: $initial, dx: if (initial_major.is_empty()) List.repeat(0, count) else initial_major, dy: if (initial_cross.is_empty()) List.repeat(0, count) else initial_cross, parents: List.repeat(0, count), attachments: List.repeat(0, count), stopped: 0, operations: 0 }
 		var $frames = []
 		var $positions = []
 		for step_index in 0..<plan.len() {
 			step = plan.get(step_index) ?? { index: 0, mask: 0 }
 			automatic = auto_zwj.get(step_index) ?? True
-			ctx = { lv, loc, gdef, backward, previous: if (automatic) $previous else $manual_previous, auto_zwj: automatic, limits }
+			ctx = { lv, loc, gdef, backward, vertical, previous: if (automatic) $previous else $manual_previous, auto_zwj: automatic, limits }
 			var $i = 0
 			while $i < count {
 				{ state: after, next, applied: _, calls } = LayoutPosition.once(p, ctx, step.index, step.mask, $i, 0, $s)
@@ -642,7 +646,11 @@ LayoutPosition := {
 	add_value : State, Ctx, List(U8), U64, U64, U64, U64 -> State
 	add_value = |state, ctx, data, base, record, format, i| {
 		{ items, ax, dx, dy, parents, attachments, stopped, operations } = state
-		v = LayoutVar.apply_value(ctx.lv, ctx.loc, data, base, record, format, { x_advance: ax.get(i) ?? 0, x_placement: dx.get(i) ?? 0, y_placement: dy.get(i) ?? 0, y_advance: 0 })
+		v = if ctx.vertical {
+			v0 = { x_advance: 0, y_advance: ax.get(i) ?? 0, x_placement: dy.get(i) ?? 0, y_placement: dx.get(i) ?? 0 }
+			v1 = LayoutVar.apply_value_axis(ctx.lv, ctx.loc, data, base, record, format, v0, True)
+			{ x_advance: v1.y_advance, y_advance: 0, x_placement: v1.y_placement, y_placement: v1.x_placement }
+		} else LayoutVar.apply_value(ctx.lv, ctx.loc, data, base, record, format, { x_advance: ax.get(i) ?? 0, x_placement: dx.get(i) ?? 0, y_placement: dy.get(i) ?? 0, y_advance: 0 })
 		# The caller's cursor is in the aligned run. Stored and device
 		# corrections saturate separately, preserving their application order.
 		{ items, ax: ax.set(i, v.x_advance) ?? [], dx: dx.set(i, v.x_placement) ?? [], dy: dy.set(i, v.y_placement) ?? [], parents, attachments, stopped, operations }
@@ -697,7 +705,7 @@ LayoutPosition := {
 		}
 		s1 = LayoutPosition.add_value(state, ctx, data, $base, $record, vf1, i)
 		s2 = LayoutPosition.add_value(s1, ctx, data, $base, $record + size1, vf2, j)
-		worked = LayoutPosition.value_applies(data, $record, vf1, ctx.loc.active) or LayoutPosition.value_applies(data, $record + size1, vf2, ctx.loc.active)
+		worked = LayoutPosition.value_applies_axis(data, $record, vf1, ctx.loc.active, ctx.vertical) or LayoutPosition.value_applies_axis(data, $record + size1, vf2, ctx.loc.active, ctx.vertical)
 		flagged = if (worked) LayoutPosition.flag(s2.items, i, j + 1) else s2.items
 		# Any second value record consumes the second glyph, including an
 		# all-zero record: the following boundary is unsafe too (HB#3824).
@@ -709,12 +717,15 @@ LayoutPosition := {
 	## or a device reference when normalized coordinates are nonzero. A
 	## zero pair record still matches but must not mark a break unsafe.
 	value_applies : List(U8), U64, U64, Bool -> Bool
-	value_applies = |data, record, format, active| {
+	value_applies = |data, record, format, active| LayoutPosition.value_applies_axis(data, record, format, active, False)
+
+	value_applies_axis : List(U8), U64, U64, Bool, Bool -> Bool
+	value_applies_axis = |data, record, format, active, vertical| {
 		var $field = record
 		var $bit = 1.U64
-		while $bit <= 0x40 {
+		while $bit <= 0x80 {
 			if format.bitwise_and($bit) != 0 {
-				if ($bit <= 4 or (active and $bit >= 0x10 and $bit <= 0x40)) and Bytes.u16(data, $field) != 0 {
+				if ($bit <= 2 or $bit == (if (vertical) 8 else 4) or (active and ($bit == 0x10 or $bit == 0x20 or $bit == (if (vertical) 0x80 else 0x40)))) and Bytes.u16(data, $field) != 0 {
 					return True
 				}
 				$field = $field + 2
@@ -750,7 +761,7 @@ LayoutPosition := {
 		x = LayoutPosition.anchor_coordinate(Bytes.i16(p.data, at + 2), if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 6) else 0)
 		y = LayoutPosition.anchor_coordinate(Bytes.i16(p.data, at + 4), if (varied) LayoutVar.device_delta(ctx.lv, ctx.loc, p.data, at, at + 8) else 0)
 		# Format2 uses stored coordinates; contour points require ppem hinting.
-		{ x, y }
+		if (ctx.vertical) { x: y, y: x } else { x, y }
 	}
 
 	mark : LayoutPosition, Ctx, Sub, U64, U64, U64, State -> Match

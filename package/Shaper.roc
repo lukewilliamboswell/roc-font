@@ -40,7 +40,7 @@ Shaper :: {}.{
 	Options : {
 		script : Str,
 		language : Str,
-		direction : [FromScript, LeftToRight, RightToLeft],
+		direction : [FromScript, LeftToRight, RightToLeft, TopToBottom, BottomToTop],
 		features : List({ tag : Str, value : U32, start : U64, end : U64 }),
 		growth : U64,
 		operations : U64,
@@ -55,6 +55,8 @@ Shaper :: {}.{
 	## name the features of each step for traced shaping.
 	Plan : {
 		backward : Bool,
+		vertical : Bool,
+		has_vert : Bool,
 		script : U64,
 		native : [Ltr, Rtl, Either],
 		gsub : List(LayoutGsub.Step),
@@ -298,10 +300,11 @@ Shaper :: {}.{
 	## character keeps its own cluster, and only substitutions merge them).
 	plan_with_clusters : Face, Options, [Graphemes, Characters] -> Plan
 	plan_with_clusters = |face, options, clusters| {
+		vertical = options.direction == TopToBottom or options.direction == BottomToTop
 		native = ShaperTags.script_direction(options.script)
 		requested = match options.direction {
-			LeftToRight => Ltr
-			RightToLeft => Rtl
+			LeftToRight | TopToBottom => Ltr
+			RightToLeft | BottomToTop => Rtl
 			FromScript =>
 				match native {
 					Rtl => Rtl
@@ -328,7 +331,17 @@ Shaper :: {}.{
 		arabic = ShaperTags.script_of(options.script) == Shaper.tag("Arab") or (ShaperTags.script_of(options.script) == Shaper.tag("Syrc") and chosen_script != Shaper.tag("DFLT"))
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
-			if options.features.is_empty() {
+			if vertical {
+				model_defaults = if (use_model) Shaper.use_requests(Ltr) else if (myanmar) Shaper.myanmar_requests(Ltr) else if (khmer) Shaper.khmer_requests(Ltr) else if (indic) Shaper.indic_requests(Ltr) else if (arabic) Shaper.arabic_requests(Ltr) else if (hangul) Shaper.hangul_requests(Ltr) else Shaper.ltr_requests
+				removed = ["ltra", "ltrm", "rtla", "rtlm", "calt", "clig", "curs", "dist", "kern", "liga", "rclt"].map(Shaper.tag)
+				stage = if (use_model) 7 else if (myanmar) 7 else if (indic) 14 else if (khmer) 3 else if (arabic) 12 else 1
+				var $requests = model_defaults.keep_if(|r| !removed.contains(r.tag)).append({ ..Shaper.request("vert", 1, True), stage })
+				for f in options.features {
+					global = f.start == 0 and f.end == Shaper.text_end
+					$requests = $requests.append({ ..Shaper.request(f.tag, f.value.to_u64(), global), stage })
+				}
+				Shaper.merge(Shaper.sort_by_tag($requests))
+			} else if options.features.is_empty() and !vertical {
 				match requested {
 					Ltr => if (use_model) Shaper.use_ltr_merged else if (myanmar) Shaper.myanmar_ltr_merged else if (khmer) Shaper.khmer_ltr_merged else if (indic) Shaper.indic_ltr_merged else if (arabic) if (syriac) Shaper.syriac_ltr_merged else Shaper.arabic_ltr_merged else if (hangul) Shaper.hangul_ltr_merged else Shaper.ltr_merged
 					Rtl => if (use_model) Shaper.use_rtl_merged else if (myanmar) Shaper.myanmar_rtl_merged else if (khmer) Shaper.khmer_rtl_merged else if (indic) Shaper.indic_rtl_merged else if (arabic) if (syriac) Shaper.syriac_rtl_merged else Shaper.arabic_rtl_merged else if (hangul) Shaper.hangul_rtl_merged else Shaper.rtl_merged
@@ -352,7 +365,7 @@ Shaper :: {}.{
 				Shaper.merge(Shaper.sort_by_tag($requests))
 			}
 		keys =
-			if options.features.is_empty() {
+			if options.features.is_empty() and !vertical {
 				match requested {
 					Ltr => if (use_model) Shaper.use_ltr_keys else if (myanmar) Shaper.myanmar_ltr_keys else if (khmer) Shaper.khmer_ltr_keys else if (indic) Shaper.indic_ltr_keys else if (arabic) Shaper.arabic_ltr_keys else if (hangul) Shaper.hangul_ltr_keys else Shaper.ltr_keys
 					Rtl => if (use_model) Shaper.use_rtl_keys else if (myanmar) Shaper.myanmar_rtl_keys else if (khmer) Shaper.khmer_rtl_keys else if (indic) Shaper.indic_rtl_keys else if (arabic) Shaper.arabic_rtl_keys else if (hangul) Shaper.hangul_rtl_keys else Shaper.rtl_keys
@@ -381,7 +394,7 @@ Shaper :: {}.{
 				if gsub_required_tag == f.tag {
 					$gsub_required_stage = f.stage
 				}
-				gsub_index = gsub_found.get(k) ?? LayoutCommon.no_feature
+				gsub_index = if (vertical and f.tag == Shaper.tag("vert")) Shaper.global_feature(gsub_common, f.tag) else gsub_found.get(k) ?? LayoutCommon.no_feature
 				gpos_index = gpos_found.get(k) ?? LayoutCommon.no_feature
 				found = gsub_index != LayoutCommon.no_feature or gpos_index != LayoutCommon.no_feature
 				if found or f.fallback {
@@ -477,7 +490,7 @@ Shaper :: {}.{
 		fallback_position = !use_model and !myanmar and !indic and !khmer and ShaperTags.script_of(options.script) != Shaper.tag("Thai") and ShaperTags.script_of(options.script) != Shaper.tag("Laoo")
 		# Legacy kern follows the shaper's fallback positioning policy;
 		# prepared GPOS lookups above remain independent of this fallback.
-		apply_kern = fallback_position and (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
+		apply_kern = !vertical and fallback_position and (!has_gpos_kern or !apply_gpos) and LayoutKerning.has_kern(kerning)
 		kern = if (apply_kern and kern_mask != 0) Kern(kern_mask) else NoKern
 		# Ranges, in the caller's order: a later one wins where they overlap.
 		var $ranges = []
@@ -494,6 +507,8 @@ Shaper :: {}.{
 		}
 		{
 			backward: requested == Rtl,
+			vertical,
+			has_vert: mapped.any(|m| m.tag == Shaper.tag("vert") and m.gsub != LayoutCommon.no_feature and m.mask != 0),
 			script: ShaperTags.script_of(options.script),
 			native,
 			gsub,
@@ -1094,14 +1109,14 @@ Shaper :: {}.{
 			}
 		# Shape in the script's own direction (HarfBuzz's
 		# `hb_ensure_native_direction`).
-		reverse = match p.native {
+		reverse = if (p.vertical) p.backward else match p.native {
 			Rtl => !p.backward and !ShaperNormalize.numeric(clustered)
 			Ltr => p.backward
 			Either => False
 		}
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
-		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		mirrored = if (p.backward and !p.vertical) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
 		preprocessed = if (p.thai) ShaperThai.preprocess(mirrored, p.characters) else if (p.hangul) ShaperHangul.preprocess(face, location, mirrored, p.characters, p.hangul_masks) else mirrored
 		legacy = if (p.thai_legacy) ShaperThai.legacy(face, preprocessed) else preprocessed
 		{ chars: vowels, operations: pre_operations, stopped: pre_stopped } = match p.model {
@@ -1154,7 +1169,53 @@ Shaper :: {}.{
 		}
 		positioned = Shaper.position_checked(face, location, p, applied.items, backward, space_fallback, found.ignorables, budget - pre_operations - applied.operations, limit)
 		placed = positioned.placed
-		{ run: Shaper.finish(placed), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped) }
+		{ run: Shaper.finish_axis(placed, p.vertical), items: placed.items, stopped: pre_stopped.bitwise_or(applied.stopped).bitwise_or(positioned.stopped) }
+	}
+
+	global_feature : LayoutCommon, U64 -> U64
+	global_feature = |common, wanted_tag| {
+		for index in 0..<common.feature_count {
+			if LayoutCommon.feature_tag(common, index) == wanted_tag {
+				return index
+			}
+		}
+		LayoutCommon.no_feature
+	}
+
+	position_vertical : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, U64 -> { placed : Placed, stopped : U64 }
+	position_vertical = |face, location, p, items, backward, ignorables, budget| {
+		count = items.len()
+		var $base = List.with_capacity(count)
+		var $major = List.with_capacity(count)
+		var $cross = List.with_capacity(count)
+		for item in items {
+			origin = Face.vertical_origin(face, location, item.glyph)
+			zero = p.zero_marks == Early and LayoutGsub.is_mark_item(item)
+			$base = $base.append(if (zero) 0 else -(Face.vertical_advance(face, location, item.glyph).to_i64()))
+			$major = $major.append(-(origin.y.to_i64()))
+			$cross = $cross.append(-(origin.x.to_i64()))
+		}
+		full = LayoutKerning.position_vertical(Face.kerning(face), p.gpos, p.gpos_auto_zwj, p.zero_marks == Late, items, Face.glyph_count(face), $base, $major, $cross, backward, { budget, depth: Face.max_depth(face) })
+		{ items: positioned_items, ax, dx, dy } = full.positions
+		var $ax = ax
+		var $dx = dx
+		var $dy = dy
+		for i in 0..<count {
+			item = positioned_items.get(i) ?? LayoutGsub.no_item
+			if p.zero_marks == Late and LayoutGsub.is_mark_item(item) {
+				if p.fallback_marks and !backward {
+					$dx = $dx.set(i, LayoutVar.position_sub($dx.get(i) ?? 0, $ax.get(i) ?? 0)) ?? []
+				}
+				$ax = $ax.set(i, 0) ?? []
+			}
+			if ignorables and LayoutGsub.is_default_ignorable(item) {
+				$ax = $ax.set(i, 0) ?? []
+				$dx = $dx.set(i, 0) ?? []
+				$dy = $dy.set(i, 0) ?? []
+			}
+		}
+		placed = if (backward) { items: Shaper.reversed(positioned_items), ax: Shaper.reversed($ax), dx: Shaper.reversed($dx), dy: Shaper.reversed($dy) } else { items: positioned_items, ax: $ax, dx: $dx, dy: $dy }
+		{ placed: if (ignorables) Shaper.hide_ignorables(face, placed) else placed, stopped: full.stopped }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`
@@ -1164,6 +1225,9 @@ Shaper :: {}.{
 
 	position_checked : Face, Face.Location, Plan, List(LayoutGsub.Item), Bool, Bool, Bool, U64, U64 -> { placed : Placed, stopped : U64 }
 	position_checked = |face, location, p, substituted, backward, space_fallback, ignorables, remaining_budget, growth_limit| {
+		if p.vertical {
+			return Shaper.position_vertical(face, location, p, substituted, backward, ignorables, remaining_budget)
+		}
 		upem = Face.units_per_em(face).to_i64()
 		advance_of = |glyph| Face.advance(face, location, glyph).to_i64()
 		count = substituted.len()
@@ -1521,7 +1585,10 @@ Shaper :: {}.{
 	## The run in output order, with unsafe-to-break flags the same on every
 	## glyph of a cluster.
 	finish : Placed -> Run
-	finish = |placed| {
+	finish = |placed| Shaper.finish_axis(placed, False)
+
+	finish_axis : Placed, Bool -> Run
+	finish_axis = |placed, vertical| {
 		items = placed.items
 		count = items.len()
 		var $glyphs = List.with_capacity(count)
@@ -1531,8 +1598,8 @@ Shaper :: {}.{
 		for k in 0..<count {
 			item = items.get(k) ?? LayoutGsub.no_item
 			$glyphs = $glyphs.append(item.glyph.min(0xFFFFFFFF).to_u32_wrap())
-			$advances = $advances.append({ x: Shaper.clamp(placed.ax.get(k) ?? 0), y: 0 })
-			$offsets = $offsets.append({ x: Shaper.clamp(placed.dx.get(k) ?? 0), y: Shaper.clamp(placed.dy.get(k) ?? 0) })
+			$advances = $advances.append(if (vertical) { x: 0, y: Shaper.clamp(placed.ax.get(k) ?? 0) } else { x: Shaper.clamp(placed.ax.get(k) ?? 0), y: 0 })
+			$offsets = $offsets.append(if (vertical) { x: Shaper.clamp(placed.dy.get(k) ?? 0), y: Shaper.clamp(placed.dx.get(k) ?? 0) } else { x: Shaper.clamp(placed.dx.get(k) ?? 0), y: Shaper.clamp(placed.dy.get(k) ?? 0) })
 			$clusters = $clusters.append(item.cluster)
 		}
 		{ glyphs: $glyphs, advances: $advances, offsets: $offsets, clusters: $clusters, flags: Shaper.flags(items) }

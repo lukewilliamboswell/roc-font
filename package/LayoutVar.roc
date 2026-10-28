@@ -708,7 +708,10 @@ LayoutVar := {
 	## (ValueFormat.apply_value). The y advance is ignored horizontally.
 	## `value` remains the raw font-fact query and deliberately adds no clamp.
 	apply_value : LayoutVar, Location, List(U8), U64, U64, U64, Value -> Value
-	apply_value = |lv, loc, data, base, at, format, position| {
+	apply_value = |lv, loc, data, base, at, format, position| LayoutVar.apply_value_axis(lv, loc, data, base, at, format, position, False)
+
+	apply_value_axis : LayoutVar, Location, List(U8), U64, U64, U64, Value, Bool -> Value
+	apply_value_axis = |lv, loc, data, base, at, format, position, vertical| {
 		field = |bit| at + 2 * LayoutVar.bits(format, bit - 1)
 		var $out = position
 		if format.bitwise_and(1) != 0 {
@@ -717,8 +720,11 @@ LayoutVar := {
 		if format.bitwise_and(2) != 0 {
 			$out = { ..$out, y_placement: LayoutVar.position_add($out.y_placement, TableVar.i16(data, field(2))) }
 		}
-		if format.bitwise_and(4) != 0 {
+		if !vertical and format.bitwise_and(4) != 0 {
 			$out = { ..$out, x_advance: LayoutVar.position_add($out.x_advance, TableVar.i16(data, field(4))) }
+		}
+		if vertical and format.bitwise_and(8) != 0 {
+			$out = { ..$out, y_advance: LayoutVar.position_sub($out.y_advance, TableVar.i16(data, field(8))) }
 		}
 		if loc.active {
 			if format.bitwise_and(0x10) != 0 {
@@ -727,8 +733,11 @@ LayoutVar := {
 			if format.bitwise_and(0x20) != 0 {
 				$out = { ..$out, y_placement: LayoutVar.position_add($out.y_placement, LayoutVar.device_delta(lv, loc, data, base, field(0x20))) }
 			}
-			if format.bitwise_and(0x40) != 0 {
+			if !vertical and format.bitwise_and(0x40) != 0 {
 				$out = { ..$out, x_advance: LayoutVar.position_add($out.x_advance, LayoutVar.device_delta(lv, loc, data, base, field(0x40))) }
+			}
+			if vertical and format.bitwise_and(0x80) != 0 {
+				$out = { ..$out, y_advance: LayoutVar.position_sub($out.y_advance, LayoutVar.device_delta(lv, loc, data, base, field(0x80))) }
 			}
 		}
 		$out

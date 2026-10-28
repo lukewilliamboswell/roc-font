@@ -174,6 +174,36 @@ LayoutKerning := {
 		}
 	}
 
+	apply_value_axis : LayoutKerning, List(U8), U64, U64, U64, LayoutVar.Value, Bool -> LayoutVar.Value
+	apply_value_axis = |kerning, data, base, at, format, position, vertical| {
+		if vertical {
+			input = { x_placement: position.y_placement, y_placement: position.x_placement, x_advance: 0, y_advance: position.x_advance }
+			value = LayoutVar.apply_value_axis(kerning.lv, kerning.loc, data, base, at, format, input, True)
+			{ x_placement: value.y_placement, y_placement: value.x_placement, x_advance: value.y_advance, y_advance: 0 }
+		} else LayoutVar.apply_value(kerning.lv, kerning.loc, data, base, at, format, position)
+	}
+
+	# Vertical output is absolute: ax is y advance, dx y offset, dy x offset.
+	position_vertical : LayoutKerning, List({ index : U64, mask : U64 }), List(Bool), Bool, List(LayoutGsub.Item), U64, List(I64), List(I64), List(I64), Bool, { budget : U64, depth : U64 } -> { positions : Positions, stopped : U64, operations : U64 }
+	position_vertical = |kerning, plan, auto_zwj, zero_late, items, glyph_count, base, major, cross, backward, limits| {
+		if !LayoutPosition.needs_run(kerning.positioning, plan, items) {
+			var $out = { items, ax: base, dx: major, dy: cross }
+			for entry in plan {
+				start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end
+				lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
+				if lookup.end > start {
+					props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props)
+					$out = LayoutKerning.apply_lookup_axis(kerning, kerning.data, kerning.subtables, kerning.digests, start, lookup.end, { mask: entry.mask, props }, $out, glyph_count, False, True)
+				}
+			}
+			{ positions: $out, stopped: 0, operations: 0 }
+		} else {
+			state = LayoutPosition.position_axis(kerning.positioning, kerning.lv, kerning.loc, kerning.gdef, plan, auto_zwj, zero_late, items, base, backward, limits, True, major, cross)
+			resolved = LayoutPosition.resolve(state, backward)
+			{ positions: { items: resolved.items, ax: resolved.ax, dx: resolved.dx, dy: resolved.dy }, stopped: resolved.stopped, operations: resolved.operations }
+		}
+	}
+
 	## Position a run: the plan's `GPOS` pair lookups in order, each where
 	## both glyphs' masks share a bit with its mask, then, when `legacy` is
 	## `Kern(mask)`, each `kern` subtable in turn. Values add up. Glyphs
@@ -229,7 +259,10 @@ LayoutKerning := {
 	# offset. The lists are local variables, not fields of a record passed
 	# around, so each stays unique and is changed in place.
 	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, { mask : U64, props : U64 }, Positions, U64, Bool -> Positions
-	apply_lookup = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy| {
+	apply_lookup = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy| LayoutKerning.apply_lookup_axis(kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy, False)
+
+	apply_lookup_axis : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, { mask : U64, props : U64 }, Positions, U64, Bool, Bool -> Positions
+	apply_lookup_axis = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy, vertical| {
 		{ items, dx, dy, ax } = positions
 		count = items.len()
 		mask = ctx.mask
@@ -267,8 +300,8 @@ LayoutKerning := {
 								} else {
 									first_position = { x_placement: $dx.get($i) ?? 0, y_placement: $dy.get($i) ?? 0, x_advance: $ax.get($i) ?? 0, y_advance: 0 }
 									second_position = { x_placement: $dx.get(j) ?? 0, y_placement: $dy.get(j) ?? 0, x_advance: $ax.get(j) ?? 0, y_advance: 0 }
-									first_value = LayoutVar.apply_value(kerning.lv, kerning.loc, data, found.base, found.first_at, found.format1, first_position)
-									second_value = LayoutVar.apply_value(kerning.lv, kerning.loc, data, found.base, found.second_at, found.format2, second_position)
+									first_value = LayoutKerning.apply_value_axis(kerning, data, found.base, found.first_at, found.format1, first_position, vertical)
+									second_value = LayoutKerning.apply_value_axis(kerning, data, found.base, found.second_at, found.format2, second_position, vertical)
 									$dx = $dx.set($i, first_value.x_placement) ?? []
 									$dy = $dy.set($i, first_value.y_placement) ?? []
 									$ax = $ax.set($i, first_value.x_advance) ?? []
@@ -276,7 +309,7 @@ LayoutKerning := {
 									$dy = $dy.set(j, second_value.y_placement) ?? []
 									$ax = $ax.set(j, second_value.x_advance) ?? []
 								}
-								if found.nonzero {
+								if if (vertical) LayoutPosition.value_applies_axis(data, found.first_at, found.format1, kerning.loc.active, True) or LayoutPosition.value_applies_axis(data, found.second_at, found.format2, kerning.loc.active, True) else found.nonzero {
 									$items = LayoutKerning.unsafe_to_break($items, $i, j + 1)
 								}
 								if found.skips {
