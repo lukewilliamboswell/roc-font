@@ -75,12 +75,12 @@ origin bits and face/program rejection.
 The original runtime now composes octabox decoding, ink and exclusion shapes,
 sequencing regions, piecewise quadratic interval costs, group-local retry rounds
 and cluster kerning. Independent audit directories retain 68 kerning, 67
-sequencing, 66 retry and nine floating-association controls. These implementation
+sequencing, 66 retry nine floating-association controls and 84 broad-phase controls. These implementation
 and reference checks are not an end-to-end collision-stage support claim. The
 full/missed broad-phase decision still has unresolved distinguishing witnesses;
 native public replay, fuzzing and performance measurements remain separate gates.
 
-`public_cases.py` selects 955 accepted reference faces from these matrices. Ten
+`public_cases.py` selects 1039 accepted reference faces from these matrices. Ten
 rejected reference faces remain explicitly listed as raw reader witnesses.
 `public-records.json` is a direct HarfBuzz 14.6 Graphite2-adapter glyph-run oracle,
 not a conversion guessed from raw slot positions. `public-oracle.json` pins both

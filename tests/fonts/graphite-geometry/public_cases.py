@@ -16,6 +16,7 @@ SETS = [
     ('sequencing-audit/cases.jsonc', 'sequencing-audit/records.json'),
     ('retry-audit/cases.jsonc', 'retry-audit/records.json'),
     ('association-audit/cases.jsonc', 'association-audit/records.json'),
+    ('broad-audit/cases.jsonc', 'broad-audit/records.json'),
 ]
 
 
