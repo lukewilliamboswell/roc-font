@@ -107,7 +107,7 @@ GraphiteCode :: {}.{
 			if (op == 0x2B or op == 0x42) and $a.to_u64_wrap() >= env.features {
 				return Err(Bad($at))
 			}
-			if (op == 0x2A or op == 0x2D) and ($a < 0 or $a > 11) {
+			if (op == 0x2A or op == 0x2D) and ($a < 0 or $a > 10) {
 				return Err(Bad($at))
 			}
 			if GraphiteCode.slot_attribute(op) and ($a < 0 or $a >= 78) {
@@ -156,9 +156,6 @@ GraphiteCode :: {}.{
 				}
 				next_depth = depth - effect.pop + effect.push
 				$maximum = $maximum.max(next_depth.to_u64_wrap())
-				if $maximum > 1024 {
-					return Err(Bad(instruction.at))
-				}
 				if instruction.opcode == 0x22 {
 					$depths = GraphiteCode.flow($depths, $instruction.target, depth + 1, instruction.at)?
 				}
@@ -298,3 +295,5 @@ expect {
 	b = GraphiteCode.read(bad, 0, bad.len(), env) ?? crash "original stack-valid fixture"
 	GraphiteCode.check_references(good, a, 0, 1).is_ok() and GraphiteCode.check_references(bad, b, 0, 1).is_err()
 }
+
+expect GraphiteCode.read([0x2A, 11, 0, 0, 0x30], 0, 5, { classes: 0, attributes: 0, features: 0, users: 0, constraint: True }).is_err()

@@ -1,4 +1,6 @@
 import font.Font
+import "../fonts/graphite/stack-1024.ttf" as deep_stack : List(U8)
+import "../fonts/graphite/stack-unbalanced.ttf" as unbalanced_stack : List(U8)
 import "../fonts/graphite/Charis5_eursub.ttf" as charis : List(U8)
 import "../fonts/graphite/Padauk.ttf" as padauk : List(U8)
 import "../fonts/graphite/Scheherazadegr.ttf" as scheherazade : List(U8)
@@ -28,3 +30,6 @@ expect retained(charis)
 expect retained(padauk)
 expect retained(scheherazade)
 expect retained(awami)
+
+expect retained(deep_stack)
+expect retained(unbalanced_stack)

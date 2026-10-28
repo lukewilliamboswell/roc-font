@@ -60,3 +60,26 @@ Graphite table under OTS9.3.
 python tests/fonts/graphite/record_abort.py --cases semantics-cases.jsonc --output semantics-records.json
 python tests/fonts/graphite/record_abort.py --cases semantics-cases.jsonc --output semantics-records.json --check
 ```
+
+`shape-cases.jsonc` and `shape-records.json` are the public-run oracle matrix,
+recorded through HarfBuzz14.6.0's Graphite2 adapter linked to Graphite2 1.3.14.
+The pinned uharfbuzz wheel does not enable Graphite2; these records do not use it.
+`shape-oracle.json` records both reference binary hashes and the build command.
+The four unmodified families exercise Latin, Myanmar, Arabic and Nastaliq;
+all their declared feature values and Sill languages are included. Range cases
+select by original UTF8 character-start offsets. Vertical requests deliberately
+record the adapter's horizontal Graphite positions; no vertical-layout claim is
+inferred from those requests. The OpenType-only controls use fonts without
+Apple layout tables so they do not introduce a hybrid provider ambiguity.
+
+```
+python build_oracle.py --source /path/to/harfbuzz-14.6.0
+python cases.py --check
+python record_shapes.py
+python record_shapes.py --check
+```
+
+The additional original stack fonts distinguish accepted programs that succeed
+with peak depth1023, abort on matching text at depth1024, and abort on return
+with an unconsumed stack value. Empty and nonmatching controls succeed. These
+are text-dependent program aborts, not malformed font tables or work budgets.

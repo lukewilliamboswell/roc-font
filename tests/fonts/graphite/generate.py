@@ -7,12 +7,11 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib.tables.DefaultTable import DefaultTable
 HERE=Path(__file__).resolve().parent
-parser=argparse.ArgumentParser();parser.add_argument("--check",action="store_true");args=parser.parse_args()
 def u16(value):return struct.pack('>H',value)
 def u32(value):return struct.pack('>L',value)
 def raw(font,tag,data):
  table=DefaultTable(tag);table.data=data;font[tag]=table
-def program(action,positioning=False,match=(1,)):
+def program(action,positioning=False,match=(1,),constraint=b'',pass_constraint=b''):
  # Original DFA for one exact glyph sequence and one output class [gid2].
  classes=u16(1)+u16(1)+u16(8)+u16(10)+u16(2)
  pass_start=58+len(classes)
@@ -23,10 +22,13 @@ def program(action,positioning=False,match=(1,)):
  fsm=(u16(len(match)+1)+u16(len(match))+u16(1)+u16(count)+u16(count)
       +u16(power*6)+u16(power.bit_length()-1)+u16(count*6-power*6)
       +ranges+u16(0)+u16(1)+u16(0)+bytes([0,0])+u16(0)
-      +u16(len(match))+bytes([0,0])+u16(0)+u16(0)+u16(0)
+      +u16(len(match))+bytes([0,0])+u16(len(pass_constraint))+u16(1 if constraint else 0)+u16(1+len(constraint) if constraint else 0)
       +u16(0)+u16(len(action))+transitions+bytes([0]))
  code_at=pass_start+24+len(fsm)
- pass_data=bytes([0,10,len(match),0])+u16(1)+u16(24)+u32(code_at)*3+u32(0)+fsm+action
+ raw_constraint=(bytes([0])+constraint) if constraint else b''
+ pass_data=(bytes([0,10,len(match),0])+u16(1)+u16(24)+u32(code_at)
+            +u32(code_at+len(pass_constraint))+u32(code_at+len(pass_constraint)+len(raw_constraint))
+            +u32(0)+fsm+pass_constraint+raw_constraint+action)
  sub=(u32(0x30000)+u16(42)+u16(50)+u16(2)+u16(0)+u16(0)
       +bytes([1,0,0 if positioning else 1,1,255,0,0,0,0,0,0,0,0,0])
       +u16(0)+bytes([0,1,1,0,0,0,0,0,0,0])+u16(0)
@@ -34,6 +36,9 @@ def program(action,positioning=False,match=(1,)):
  assert len(sub)==pass_start+len(pass_data),(len(sub),pass_start,len(pass_data))
  return u32(0x30000)+u32(0x30000)+u16(1)+u16(0)+u32(16)+sub
 programs={
+ 'stack-1023':(bytes([1,1])*1023+bytes([6])*1022+bytes([0x30]),False),
+ 'stack-1024':(bytes([1,1])*1024+bytes([6])*1023+bytes([0x30]),False),
+ 'stack-unbalanced':(bytes([1,1,0x32]),False),
  'replace':(bytes([0x1c,0,0x19,0x31]),False),
  'copy-after-change':(bytes([0x1c,0,0x1e,0,0x19,0x31]),False),
  'metric-after-change':(bytes([0x1c,0,0x2a,8,0,0,0x23,0,0x19,0x31]),False),
@@ -46,16 +51,20 @@ programs={
  'divide-zero':(bytes([1,5,1,0,9,0x23,0,0x32]),True),
  'mutate-then-divide-zero':(bytes([1,17,0x23,0,1,5,1,0,9,0x23,0,0x32]),True),
 }
-for mode,(action,positioning) in programs.items():
- names=['.notdef','a','b'];fb=FontBuilder(1000,isTTF=True);fb.setupGlyphOrder(names);fb.setupCharacterMap({97:'a',98:'b'})
- glyphs={}
- for name in names:
-  p=TTGlyphPen(None);p.moveTo((0,0));p.lineTo((300,0));p.lineTo((300,600));p.lineTo((0,600));p.closePath();glyphs[name]=p.glyph()
- fb.setupGlyf(glyphs);fb.setupHorizontalMetrics({n:(600+i,0) for i,n in enumerate(names)});fb.setupHorizontalHeader(ascent=800,descent=-200)
- fb.setupNameTable({'familyName':'Roc Graphite '+mode,'styleName':'Regular','psName':'RocGraphite-'+mode});fb.setupOS2(sTypoAscender=800,sTypoDescender=-200,usWinAscent=800,usWinDescent=200);fb.setupPost();fb.setupMaxp()
- for name_id,label in [(256,'Test feature'),(257,'Off'),(258,'On')]:fb.font['name'].setName(label,name_id,3,1,0x409)
- raw(fb.font,'Silf',program(action,positioning));raw(fb.font,'Feat',u32(0x20000)+u16(1)+bytes(6)+u32(100)+u16(2)+u16(0)+u32(28)+u16(0x8000)+u16(256)+u16(0)+u16(257)+u16(1)+u16(258));raw(fb.font,'Gloc',u32(0x10000)+u16(0)+u16(1)+b''.join(u16(i) for i in [4,8,12,16]));raw(fb.font,'Glat',u32(0x10000)+bytes([0,1,0,0])*3)
- fb.font['head'].created=fb.font['head'].modified=3406620153;fb.font.recalcTimestamp=False
- out=io.BytesIO();fb.font.save(out,reorderTables=True);target=HERE/(mode+'.ttf')
- if args.check:assert target.read_bytes()==out.getvalue(),target
- else:target.write_bytes(out.getvalue())
+def main():
+ parser=argparse.ArgumentParser();parser.add_argument("--check",action="store_true");args=parser.parse_args()
+ for mode,(action,positioning) in programs.items():
+  names=['.notdef','a','b'];fb=FontBuilder(1000,isTTF=True);fb.setupGlyphOrder(names);fb.setupCharacterMap({97:'a',98:'b'})
+  glyphs={}
+  for name in names:
+   p=TTGlyphPen(None);p.moveTo((0,0));p.lineTo((300,0));p.lineTo((300,600));p.lineTo((0,600));p.closePath();glyphs[name]=p.glyph()
+  fb.setupGlyf(glyphs);fb.setupHorizontalMetrics({n:(600+i,0) for i,n in enumerate(names)});fb.setupHorizontalHeader(ascent=800,descent=-200)
+  fb.setupNameTable({'familyName':'Roc Graphite '+mode,'styleName':'Regular','psName':'RocGraphite-'+mode});fb.setupOS2(sTypoAscender=800,sTypoDescender=-200,usWinAscent=800,usWinDescent=200);fb.setupPost();fb.setupMaxp()
+  for name_id,label in [(256,'Test feature'),(257,'Off'),(258,'On')]:fb.font['name'].setName(label,name_id,3,1,0x409)
+  raw(fb.font,'Silf',program(action,positioning));raw(fb.font,'Feat',u32(0x20000)+u16(1)+bytes(6)+u32(100)+u16(2)+u16(0)+u32(28)+u16(0x8000)+u16(256)+u16(0)+u16(257)+u16(1)+u16(258));raw(fb.font,'Gloc',u32(0x10000)+u16(0)+u16(1)+b''.join(u16(i) for i in [4,8,12,16]));raw(fb.font,'Glat',u32(0x10000)+bytes([0,1,0,0])*3)
+  fb.font['head'].created=fb.font['head'].modified=3406620153;fb.font.recalcTimestamp=False
+  out=io.BytesIO();fb.font.save(out,reorderTables=True);target=HERE/(mode+'.ttf')
+  if args.check:assert target.read_bytes()==out.getvalue(),target
+  else:target.write_bytes(out.getvalue())
+
+if __name__=='__main__':main()
