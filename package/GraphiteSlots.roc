@@ -7,6 +7,7 @@ GraphiteSlots := {
 	nodes : List(Slot),
 	users : List(I32),
 	user_count : U64,
+	justification_levels : U64,
 	feature_changes : List(FeatureChange),
 	first : U64,
 	last : U64,
@@ -22,6 +23,7 @@ GraphiteSlots := {
 		next : U64,
 		parent : U64,
 		child : U64,
+		last_child : U64,
 		sibling : U64,
 		feature : U64,
 		user_start : U64,
@@ -50,10 +52,16 @@ GraphiteSlots := {
 	FeatureChange : { previous : U64, feature : U64, value : U16 }
 
 	no_slot : Slot
-	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, missing: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, break_weight: 0, direction: 0, bidi_level: 0 }
+	no_slot = { glyph: 0, previous: 0, next: 0, parent: 0, child: 0, last_child: 0, sibling: 0, feature: 0, user_start: 0, before: 0, after: 0, original: 0, deleted: False, missing: False, insert_before: True, trace: 0, advance_x: 0, advance_y: 0, shift_x: 0, shift_y: 0, attach_x: 0, attach_y: 0, with_x: 0, with_y: 0, position_x: 0, position_y: 0, justify_width: 0, break_weight: 0, direction: 0, bidi_level: 0 }
 
 	make : U64, U64 -> GraphiteSlots
-	make = |user_count, capacity| { nodes: List.with_capacity(capacity + 1).append(GraphiteSlots.no_slot), users: List.with_capacity(capacity * (user_count + 32)), user_count, feature_changes: [{ previous: 0, feature: 0, value: 0 }], first: 0, last: 0, active: 0, positioned: False, advance_x: 0, advance_y: 0 }
+	make = |user_count, capacity| GraphiteSlots.make_with_levels(user_count, 1, capacity)
+
+	make_with_levels : U64, U64, U64 -> GraphiteSlots
+	make_with_levels = |user_count, levels, capacity| {
+		justification_levels = levels.max(1)
+		{ nodes: List.with_capacity(capacity + 1).append(GraphiteSlots.no_slot), users: List.with_capacity(capacity * (user_count + 32 + 4 * (justification_levels - 1))), user_count, justification_levels, feature_changes: [{ previous: 0, feature: 0, value: 0 }], first: 0, last: 0, active: 0, positioned: False, advance_x: 0, advance_y: 0 }
+	}
 
 	get : GraphiteSlots, U64 -> Slot
 	get = |state, id| state.nodes.get(id) ?? GraphiteSlots.no_slot
@@ -72,7 +80,7 @@ GraphiteSlots := {
 
 	insert : GraphiteSlots, U64, Slot -> { state : GraphiteSlots, id : U64 }
 	insert = |state, before, slot| {
-		{ nodes, users, user_count, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = state
+		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = state
 		id = nodes.len()
 		previous = if (before == 0) last else (nodes.get(before) ?? GraphiteSlots.no_slot).previous
 		var $nodes = nodes
@@ -86,10 +94,10 @@ GraphiteSlots := {
 		}
 		$nodes = $nodes.append({ ..slot, previous, next: before, user_start: users.len(), deleted: False })
 		var $users = users
-		for _ in 0..<(user_count + 32) {
+		for _ in 0..<(user_count + 32 + 4 * (justification_levels - 1)) {
 			$users = $users.append(0)
 		}
-		{ id, state: { nodes: $nodes, users: $users, user_count, feature_changes, first: if (previous == 0) id else first, last: if (before == 0) id else last, active: active + 1, positioned: False, advance_x, advance_y } }
+		{ id, state: { nodes: $nodes, users: $users, user_count, justification_levels, feature_changes, first: if (previous == 0) id else first, last: if (before == 0) id else last, active: active + 1, positioned: False, advance_x, advance_y } }
 	}
 
 	delete : GraphiteSlots, U64 -> GraphiteSlots
@@ -97,10 +105,10 @@ GraphiteSlots := {
 		if !GraphiteSlots.valid(state, id) {
 			return state
 		}
-		{ nodes, users, user_count, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = state
+		{ nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: _, advance_x, advance_y } = state
 		slot = nodes.get(id) ?? GraphiteSlots.no_slot
 		if slot.deleted {
-			return { nodes, users, user_count, feature_changes, first, last, active, positioned: False, advance_x, advance_y }
+			return { nodes, users, user_count, justification_levels, feature_changes, first, last, active, positioned: False, advance_x, advance_y }
 		}
 		var $nodes = nodes
 		if slot.previous != 0 {
@@ -112,7 +120,7 @@ GraphiteSlots := {
 			$nodes = $nodes.set(slot.next, { ..old, previous: slot.previous }) ?? []
 		}
 		$nodes = $nodes.set(id, { ..slot, deleted: True }) ?? []
-		{ nodes: $nodes, users, user_count, feature_changes, first: if (first == id) slot.next else first, last: if (last == id) slot.previous else last, active: active - 1, positioned: False, advance_x, advance_y }
+		{ nodes: $nodes, users, user_count, justification_levels, feature_changes, first: if (first == id) slot.next else first, last: if (last == id) slot.previous else last, active: active - 1, positioned: False, advance_x, advance_y }
 	}
 
 	get_user : GraphiteSlots, U64, U64 -> I32
@@ -139,6 +147,30 @@ GraphiteSlots := {
 		}
 		at = GraphiteSlots.get(state, id).user_start + state.user_count + index
 		{ ..state, users: state.users.set(at, value) ?? [] }
+	}
+
+	get_justification : GraphiteSlots, U64, U64, U64 -> I32
+	get_justification = |state, id, level, component| {
+		if level >= state.justification_levels or component >= 4 or !GraphiteSlots.valid(state, id) {
+			return 0
+		}
+		if level == 0 {
+			return GraphiteSlots.get_extra(state, id, 24 + component)
+		}
+		at = GraphiteSlots.get(state, id).user_start + state.user_count + 32 + 4 * (level - 1) + component
+		state.users.get(at) ?? 0
+	}
+
+	set_justification : GraphiteSlots, U64, U64, U64, I32 -> GraphiteSlots
+	set_justification = |state, id, level, component, value| {
+		if level >= state.justification_levels or component >= 4 or !GraphiteSlots.valid(state, id) {
+			return state
+		}
+		if level == 0 {
+			return GraphiteSlots.set_extra(state, id, 24 + component, value.to_i16_wrap().to_i32())
+		}
+		at = GraphiteSlots.get(state, id).user_start + state.user_count + 32 + 4 * (level - 1) + component
+		{ ..state, users: state.users.set(at, value.to_i16_wrap().to_i32()) ?? [] }
 	}
 
 	feature : GraphiteSlots, List(U16), U64, U64, U64 -> { value : U16, operations : U64, exhausted : Bool }

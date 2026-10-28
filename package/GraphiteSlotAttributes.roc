@@ -37,7 +37,7 @@ GraphiteSlotAttributes :: {}.{
 			56 => 0
 			62 => GraphiteSlots.integer(GraphiteSlots.get_extra(state, id, 8).to_u32_wrap())
 			63 => GraphiteSlots.integer(GraphiteSlots.get_extra(state, id, 9).to_u32_wrap())
-			_ if attribute >= 25 and attribute <= 28 => GraphiteSlots.get_extra(state, id, attribute - 1)
+			_ if attribute >= 25 and attribute <= 28 => GraphiteSlots.get_justification(state, id, index, attribute - 25)
 			_ if attribute >= 54 and attribute <= 77 => GraphiteSlots.get_extra(state, id, attribute - 54)
 			_ => 0
 		}
@@ -70,7 +70,7 @@ GraphiteSlotAttributes :: {}.{
 			13 => return GraphiteSlots.set_extra(state, id, 28, value.to_u8_wrap().to_i32())
 			22 => return GraphiteSlots.set_user(state, id, 0, value)
 			55 => return GraphiteSlots.set_user(state, id, index, value)
-			_ if attribute >= 25 and attribute <= 28 => return GraphiteSlots.set_extra(state, id, attribute - 1, value.to_i16_wrap().to_i32())
+			_ if attribute >= 25 and attribute <= 28 => return GraphiteSlots.set_justification(state, id, index, attribute - 25, value)
 			54 => return GraphiteSlots.set_extra(state, id, 0, value.bitwise_and(3))
 			62 => return GraphiteSlots.set_extra({ ..state, positioned: False }, id, 8, float.to_i32_wrap())
 			63 => return GraphiteSlots.set_extra({ ..state, positioned: False }, id, 9, float.to_i32_wrap())
@@ -102,4 +102,13 @@ expect {
 	b = GraphiteSlotAttributes.set(a.state, a.id, 62, 0, 100)
 	c = GraphiteSlotAttributes.set(GraphiteSlots.set_extra(b, a.id, 31, 1), a.id, 62, 0, 100)
 	GraphiteSlotAttributes.get(b, a.id, 62, 0) == 0 and GraphiteSlotAttributes.get(c, a.id, 62, 0) == 100 and GraphiteSlots.get_extra(c, a.id, 8).to_u32_wrap() == TableVar.f32_from_int(100)
+}
+
+expect {
+	a = GraphiteSlots.append(GraphiteSlots.make_with_levels(2, 3, 2), GraphiteSlots.no_slot)
+	b = GraphiteSlots.append(a.state, GraphiteSlots.no_slot)
+	c = GraphiteSlotAttributes.set(b.state, a.id, 25, 2, 40000)
+	d = GraphiteSlotAttributes.set(c, b.id, 26, 1, 123)
+	e = GraphiteSlots.set_user(d, a.id, 1, -17)
+	GraphiteSlotAttributes.get(e, a.id, 25, 2) == -25536 and GraphiteSlotAttributes.get(e, b.id, 26, 1) == 123 and GraphiteSlotAttributes.get(e, a.id, 26, 1) == 0 and GraphiteSlots.get_user(e, a.id, 1) == -17 and GraphiteSlotAttributes.get(e, b.id, 25, 3) == 0
 }
