@@ -37,6 +37,10 @@ main! = |args| {
 	plan = Font.plan(font, Font.ShapeOptions.{ script })
 	run = match Font.shape_checked(font, plan, text) {
 		Ok(value) => value
+		Err(ProgramAborted(value)) => {
+			Stderr.line!("The font program stopped for this text.")?
+			value.run
+		}
 		Err(OverBudget(value)) => {
 			Stderr.line!("Work limit reached: ${Str.inspect(value.budgets)}")?
 			value.run

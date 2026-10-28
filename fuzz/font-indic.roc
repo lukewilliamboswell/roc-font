@@ -51,12 +51,14 @@ test! = |bytes| {
 			Ok(value) => if Str.inspect(run) != Str.inspect(value) {
 				crash "Indic checked result differs"
 			}
+			Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 			Err(OverBudget(value)) => if value.budgets.is_empty() or Str.inspect(run) != Str.inspect(value.run) {
 				crash "Indic budget result differs or omits reason"
 			}
 		}
 		traced = match Font.shape_traced(font, plan, text) {
 			Ok(value) => { run: value.run, origins: value.origins }
+			Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 			Err(OverBudget(value)) => { run: value.run, origins: value.origins }
 		}
 		if Str.inspect(traced.run) != Str.inspect(run) or traced.origins.len() != run.glyphs.len() {
@@ -69,6 +71,7 @@ test! = |bytes| {
 		}
 		limited_run = match limited {
 			Ok(value) => value
+			Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 			Err(OverBudget(value)) => value.run
 		}
 		check_run!(text.to_utf8().len(), limited_run, rtl)

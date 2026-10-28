@@ -23,6 +23,7 @@ expect {
 		Ok(font) => {
 			plan = Font.plan(font, Font.ShapeOptions.{})
 			match Font.shape_checked(font, plan, "ab") {
+				Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 				Err(OverBudget({ run, budgets })) => budgets.contains(Depth) and run.glyphs == [2, 3]
 				Ok(_) => False
 			}

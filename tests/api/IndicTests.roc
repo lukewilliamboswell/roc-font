@@ -73,6 +73,7 @@ expect {
 	plan = Font.plan(sans, Font.ShapeOptions.{ script: "Deva", limits: Font.ShapeLimits.{ operations: 0 } })
 	match Font.shape_checked(sans, plan, text) {
 		Ok(_) => False
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget(result)) => !result.budgets.is_empty() and result.run.glyphs.len() <= 65536
 	}
 }

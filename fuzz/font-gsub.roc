@@ -220,6 +220,7 @@ check! = |file, text, source| {
 	plan = Font.plan(font, Font.ShapeOptions.{})
 	traced = match Font.shape_traced(font, plan, text) {
 		Ok(t) => t
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget({ run: over_run, origins, budgets: _ })) => { run: over_run, origins }
 	}
 	if Str.inspect(traced.run) != Str.inspect(run) or traced.origins.len() != run.glyphs.len() {

@@ -60,6 +60,7 @@ expect {
 	text = Str.join_with(List.repeat("\u(070F)ܐܒܕܪ", 600), "")
 	plan = Font.plan(font, Font.ShapeOptions.{ script: "Syrc", limits: Font.ShapeLimits.{ growth: 0 } })
 	match Font.shape_checked(font, plan, text) {
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget(result)) => result.budgets.contains(Growth) and result.run == Font.shape_planned(font, plan, text) and result.run.glyphs.len() == result.run.clusters.len() and result.run.glyphs.len() <= 65536
 		Ok(_) => False
 	}
@@ -70,6 +71,7 @@ expect {
 	text = Str.join_with(List.repeat("\u(070F)ܐܒܕܪ", 600), "")
 	plan = Font.plan(font, Font.ShapeOptions.{ script: "Syrc", limits: Font.ShapeLimits.{ operations: 0 } })
 	match Font.shape_traced(font, plan, text) {
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget(result)) => result.budgets.contains(Operations) and result.run == Font.shape_planned(font, plan, text) and result.run.glyphs.len() == result.origins.len()
 		Ok(_) => False
 	}

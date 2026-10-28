@@ -48,10 +48,11 @@ traced = |gsub, glyphs, options| {
 }
 
 # The run and origins of a traced result, finished or not.
-run_and_origins : Try({ run : Font.Run, origins : List(Font.GlyphOrigin) }, [OverBudget({ run : Font.Run, origins : List(Font.GlyphOrigin), budgets : List(Font.Budget) })]) -> { run : Font.Run, origins : List(Font.GlyphOrigin) }
+run_and_origins : Try({ run : Font.Run, origins : List(Font.GlyphOrigin) }, [OverBudget({ run : Font.Run, origins : List(Font.GlyphOrigin), budgets : List(Font.Budget) }), ProgramAborted({ run : Font.Run, origins : List(Font.GlyphOrigin) })]) -> { run : Font.Run, origins : List(Font.GlyphOrigin) }
 run_and_origins = |result|
 	match result {
 		Ok(t) => t
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget({ run, origins, budgets: _ })) => { run, origins }
 	}
 
@@ -161,6 +162,7 @@ expect {
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
 	text = text_of(List.repeat(1, 700))
 	match Font.shape_checked(font, tight, text) {
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget({ run, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text)
 		Ok(_) => False
 	}
@@ -172,6 +174,7 @@ expect {
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ growth: 1 } })
 	text = text_of(List.repeat(1, 700))
 	match Font.shape_traced(font, tight, text) {
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget({ run, origins, budgets })) => budgets == [Growth] and run == Font.shape_planned(font, tight, text) and origins.len() == run.glyphs.len()
 		Ok(_) => False
 	}
@@ -208,6 +211,7 @@ expect {
 	tight = Font.plan(font, Font.ShapeOptions.{ limits: Font.ShapeLimits.{ operations: 1 } })
 	roomy = Font.plan(font, Font.ShapeOptions.{})
 	over = match Font.shape_checked(font, tight, text) {
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget({ run, budgets })) => budgets == [Operations] and run.glyphs.len() == 1000
 		Ok(_) => False
 	}
@@ -232,6 +236,7 @@ expect {
 			Ok(font) =>
 				match Font.shape_checked(font, Font.plan(font, Font.ShapeOptions.{}), "A") {
 					Ok(run) => Complete(run.glyphs)
+					Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 					Err(OverBudget({ run, budgets })) => Stopped(run.glyphs, budgets)
 				}
 			Err(_) => NotRead

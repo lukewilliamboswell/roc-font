@@ -62,6 +62,7 @@ test! = |bytes| {
 		Ok(result) => if result.run.glyphs.len() != result.origins.len() {
 			crash "stretch tracing lost index alignment"
 		}
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget(result)) => if result.run.glyphs.len() != result.origins.len() {
 			crash "budgeted stretch tracing lost index alignment"
 		}
@@ -71,6 +72,7 @@ test! = |bytes| {
 		Ok(run) => if run != Font.shape_planned(font, plan, large) {
 			crash "checked stretch changed a successful run"
 		}
+		Err(ProgramAborted(_)) => crash "OpenType fixture unexpectedly aborted"
 		Err(OverBudget(result)) => if result.run != Font.shape_planned(font, plan, large) {
 			crash "checked stretch changed a budgeted run"
 		}

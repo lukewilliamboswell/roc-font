@@ -53,8 +53,14 @@ test! = |bytes| {
 	}
 	traced_result = Font.shape_traced(font, plan, text)
 	traced = match traced_result {
-		Ok(t) => { run: t.run, origins: t.origins, budgets: [] }
-		Err(OverBudget(t)) => t
+		Ok(t) => { run: t.run, origins: t.origins, budgets: [], aborted: False }
+		Err(OverBudget(t)) => { run: t.run, origins: t.origins, budgets: t.budgets, aborted: False }
+		Err(ProgramAborted(t)) => {
+			if !t.run.glyphs.is_empty() or !t.origins.is_empty() {
+				crash "aborted program exposed a segment"
+			}
+			{ run: t.run, origins: t.origins, budgets: [], aborted: True }
+		}
 	}
 	if Str.inspect(traced.run) != Str.inspect(ltr) or traced.origins.len() != ltr.glyphs.len() {
 		crash "a traced run differs from the run, or its origins are not index-aligned"
@@ -62,21 +68,27 @@ test! = |bytes| {
 	if Str.inspect(Font.shape_traced(font, plan, text)) != Str.inspect(traced_result) {
 		crash "tracing the same text twice gave different results"
 	}
-	checked_budgets = match Font.shape_checked(font, plan, text) {
+	checked_status = match Font.shape_checked(font, plan, text) {
 		Ok(run) => {
 			if Str.inspect(run) != Str.inspect(ltr) {
 				crash "a checked run differs from the run"
 			}
-			[]
+			{ budgets: [], aborted: False }
 		}
 		Err(OverBudget({ run, budgets })) => {
 			if Str.inspect(run) != Str.inspect(ltr) or budgets.is_empty() {
 				crash "an over-budget run differs from the run, or names no bound"
 			}
-			budgets
+			{ budgets, aborted: False }
+		}
+		Err(ProgramAborted({ run })) => {
+			if !run.glyphs.is_empty() or Str.inspect(run) != Str.inspect(ltr) {
+				crash "checked abort differs from unchecked output"
+			}
+			{ budgets: [], aborted: True }
 		}
 	}
-	if Str.inspect(checked_budgets) != Str.inspect(traced.budgets) {
+	if Str.inspect(checked_status.budgets) != Str.inspect(traced.budgets) or checked_status.aborted != traced.aborted {
 		crash "traced and checked shaping name different bounds"
 	}
 	rtl = Font.shape(font, text, Font.ShapeOptions.{ direction: RightToLeft, script: "Hebr" })
