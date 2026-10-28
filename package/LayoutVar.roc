@@ -602,6 +602,11 @@ LayoutVar := {
 	valid_index : LayoutVar, U64, U64 -> Bool
 	valid_index = |lv, outer, inner| TableVar.valid_index(lv.store, outer, inner)
 
+	## Validate the device or variation index referenced by a checked
+	## positioning record. Offsets in the record are relative to `base`.
+	check_device_index : LayoutVar, List(U8), U64, U64 -> Bool
+	check_device_index = |lv, data, base, field| LayoutVar.check_device(lv.store.item_counts, data, base, field).is_ok()
+
 	## The delta of a `VariationIndex` (outer and inner index) at a
 	## location, rounded half up as HarfBuzz rounds it: `em_scalef`
 	## multiplies the single-precision sum by `x_scale / upem`, which is

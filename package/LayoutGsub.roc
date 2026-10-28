@@ -169,6 +169,11 @@ LayoutGsub := {
 	none : LayoutGsub
 	none = { common: LayoutCommon.none, lookups: [], subtables: [], ranges: [], values: [], rules: [], gdef: LayoutGdef.none }
 
+	## Contextual positioning uses the same checked matching grammar as
+	## substitutions. Keep the flat match pools without substitution lookups.
+	from_contexts : Built -> LayoutGsub
+	from_contexts = |built| { ..LayoutGsub.none, subtables: built.subtables, ranges: built.ranges, values: built.values, rules: built.rules }
+
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
 	unsafe = 0x8000000000000000
