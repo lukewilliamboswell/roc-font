@@ -1,0 +1,46 @@
+# Myanmar model fixtures
+
+The unmodified Noto Sans Myanmar2.107 and Noto Serif Myanmar2.106 regular
+TrueType fonts are pinned to official release archives in `sources.json`.
+Each ships its complete SIL OFL1.1 notice. They are test fonts, never
+package default fonts or bundle resources. Both expose the modern `mym2`
+script and pass OTS9.3.0.
+
+`generate_synthetic.py` creates the original UPL fixtures `modern.ttf`,
+`legacy.ttf` and `no-circle.ttf`. They distinguish modern script activation
+from the old `mymr` tag, prove feature stage ordering via an eight-step
+substitution chain, exercise GDEF-early zero-width marks without GPOS, and
+prove that a missing dotted-circle glyph does not substitute glyph zero.
+
+`generate_cases.py` authors the finite JSONC input matrix in
+`tests/cases/myanmar.jsonc`. It covers two real font families and the three
+original fonts, both directions, kinzi, stacks, medials, below-vowel mark
+classes, repeated pre-vowels and variation selectors, broken clusters,
+explicit/missing dotted circles, joiners, language selection and disabled
+features. Long syllables cross the255-item unsafe-flag and128-item indexing
+boundaries. The pinned standard HarfBuzz14.6.0 oracle records glyphs,
+clusters, advances, offsets and unsafe flags; replay uses the optimized
+native conformance driver importing the served package bundle, without
+HarfBuzz installed. No `.roc` test source is generated from an oracle.
+
+Reproduce the original fonts and matrix with fontTools4.61.1, then record:
+
+```
+python generate_synthetic.py
+python generate_cases.py
+ROC_FONT_ORACLE_VENV=/path/to/pinned/venv python scripts/record_oracle.py myanmar
+```
+
+The implementation follows the pinned Myanmar Ragel machine and reordering
+in HarfBuzz14.6.0. Generated categories and DFA arrays come from the shared
+pinned shaping-data generator. Its linear stable counting sort uses flat
+U64 origin/rank lists, and private exhaustive comparisons against HarfBuzz's
+insertion-sort cluster-merging algorithm cover729 position permutations
+and four monotone cluster patterns. Every phase shares the shaping budget;
+dotted-circle insertion also observes the output growth limit.
+
+Modern Myanmar has Unicode composition without the normalization short
+circuit, GDEF-based mark advance zeroing before GPOS, and no geometric
+fallback mark positioning. The `DFLT`, `latn` and old `mymr` selected script
+tags use the default model, matching HarfBuzz. The distinct `Qaag` Zawgyi
+encoding mode is not claimed by this modern Unicode model.
