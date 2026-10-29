@@ -69,7 +69,7 @@ script policy and structured document errors belong to the consumer.
 
 Known unsupported requirements and coordination are tracked in
 https://github.com/lukewilliamboswell/roc-font/issues/13[issue 13].
-Merriweather `⌘` remains explicitly unsupported. Mono italic is unavailable;
+Merriweather does not map U+2318 (the command key symbol). Mono italic is unavailable;
 see https://github.com/tonsky/FiraCode/issues/134[Fira Code's italic tracker].
 No cross-family substitution is implied by either limitation.
 

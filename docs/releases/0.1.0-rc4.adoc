@@ -65,7 +65,7 @@ are in the source manifest, `tools/default-fonts/pins.json`.
 
 == Boundaries and verification
 
-Merriweather still lacks U+2318 (`⌘`), and Fira Code has no genuine italic
+Merriweather still lacks U+2318 (the command key symbol), and Fira Code has no genuine italic
 face. Coverage can differ between upright and italic styles. There is no
 synthetic styling or automatic font fallback. Consumers requiring strict
 coverage must inspect missing-glyph flags and enforce their script/style
