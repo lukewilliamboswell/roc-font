@@ -1,8 +1,8 @@
 import Sfnt
 import Bytes
-import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
-import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
-import "fonts/FiraCode-Variable.ttf" as fira_file : List(U8)
+import "fonts/Inter-Regular.ttf" as inter_file : List(U8)
+import "fonts/Merriweather-Regular.ttf" as merriweather_file : List(U8)
+import "fonts/FiraCode-Regular.ttf" as fira_file : List(U8)
 
 ## The PostScript table (`post`): the underline's position and thickness,
 ## the italic angle, whether the font is monospaced, and the glyphs'

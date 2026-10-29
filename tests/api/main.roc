@@ -4,6 +4,7 @@ app [main!] {
 	font: "../../package/main.roc",
 }
 
+import DefaultFontsTests
 import FontTests
 import MathTests
 import SubstituteTests

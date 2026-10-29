@@ -4,44 +4,28 @@ app [main!] {
 }
 
 import cli.Stdout
+import cli.OsStr
 import font.Font
 
-# Measure the same text at several weights of a variable font.
-#
-#     roc examples/weights.roc
-#
-# A variable font holds a whole range of designs in one file: lighter and
-# bolder, narrower and wider. All three built-in fonts are variable. Bold
-# text is wider than regular text, so measure it at the weight you draw it.
-main! = |_args| {
+# Select genuine built-in static faces. Bytes match the font measured.
+main! = |args| {
 	text = "Hello, world!"
-
-	# The axes a font can vary along, by their four-letter tags: `wght` is
-	# weight, `wdth` width and `opsz` optical size.
-	axes = Font.axes(Font.sans).map(|axis| "${axis.tag} ${axis.min.to_str()} to ${axis.max.to_str()}")
-	Stdout.line!("Font.sans varies along: ${Str.join_with(axes, ", ")}")?
-	Stdout.line!("")?
-
-	# `Font.at` gives the font at another point of its range. It is cheap:
-	# the font's tables are shared, so there is no reading again. Weights
-	# follow CSS: `Light` is 300, `Regular` 400 and `Bold` 700, and
-	# `Weight(550)` is any value in between.
-	weights = [("Light", Light), ("Regular", Regular), ("Weight(550)", Weight(550)), ("Bold", Bold)]
-	for (name, weight) in weights {
-		font = Font.at(Font.sans, Font.Variation.{ weight })
-		Stdout.line!("${pad(name, 12)} \"${text}\" is ${Font.width(font, text).to_str()} font units wide")?
+	for (name, font, bytes) in [
+		("Regular", Font.sans, Font.sans_bytes),
+		("Bold", Font.sans_bold, Font.sans_bold_bytes),
+		("Italic", Font.sans_italic, Font.sans_italic_bytes),
+		("Bold Italic", Font.sans_bold_italic, Font.sans_bold_italic_bytes),
+	] {
+		Stdout.line!("${name}: ${Font.width(font, text).to_str()} font units; ${bytes.len().to_str()} font bytes")?
 	}
-
-	# Fira Code (`Font.mono`) is monospaced at every weight: weight changes
-	# how dark the letters are, never how much room they take.
-	Stdout.line!("")?
-	for (name, weight) in [("Light", Light), ("Bold", Bold)] {
-		font = Font.at(Font.mono, Font.Variation.{ weight })
-		Stdout.line!("Font.mono ${pad(name, 6)} \"${text}\" is ${Font.width(font, text).to_str()} font units wide")?
+	# A strict consumer checks the shaped run, then uses clusters to locate
+	# unsupported text before producing output. This serif lacks U+2318.
+	sample = match args.first() {
+		Ok(arg) => OsStr.display(arg)
+		Err(_) => "⌘K"
 	}
+	run = Font.shape(Font.serif, sample, Font.ShapeOptions.{})
+	missing = if (run.flags.any(Font.is_missing)) "yes" else "no"
+	Stdout.line!("Serif has missing glyphs: ${missing}")?
 	Ok({})
 }
-
-# Left-align a column by padding it with spaces.
-pad : Str, U64 -> Str
-pad = |str, width| Str.concat(str, Str.repeat(" ", width - str.count_utf8_bytes().min(width)))

@@ -16,7 +16,8 @@ and plans live in `TODO.md`, not here.
 - Do not add rendering, rasterisation, hinting emulation, pixel rounding,
   line wrapping, font fallback policy, font discovery, file I/O or UI
   concerns. These belong to consumers.
-- The package ships exactly three default fonts (sans, serif, mono),
+- The package ships three default families (sans, serif, mono), with Regular/Bold for
+  all three and genuine Italic/Bold Italic for sans and serif,
   unmodified, freely licensed, with their licence text, prepared at
   compile time so a bad file is a build error. Any other font is the
   caller's bytes. Test fonts live under `tests/fonts/` with their

@@ -21,7 +21,7 @@
           "name": "default",
           "args": [],
           "stdin": "",
-          "stdout": "Shaping \"Office fit\" gives 8 glyphs for 10 bytes of text:\n\nglyph  name       cluster  text  advance\n205    O          0        \"O\"   1440\n502    f          1        \"f\"   781\n801    fi         2        \"fi\"  1425\n439    c          4        \"c\"   999\n466    e          5        \"e\"   1043\n1858   space      6        \" \"   474\n801    fi         7        \"fi\"  1409\n689    t          9        \"t\"   780\n\nTotal advance: 8351 font units (2000 to the em).\n",
+          "stdout": "Shaping \"Office fit\" gives 8 glyphs for 10 bytes of text:\n\nglyph  name       cluster  text  advance\n206    O          0        \"O\"   1440\n503    f          1        \"f\"   781\n802    fi         2        \"fi\"  1425\n440    c          4        \"c\"   999\n467    e          5        \"e\"   1043\n1      space      6        \" \"   474\n802    fi         7        \"fi\"  1409\n690    t          9        \"t\"   780\n\nTotal advance: 8351 font units (2000 to the em).\n",
           "stderr": "",
           "exit_code": 0
         }
@@ -34,7 +34,7 @@
           "name": "built-in-font",
           "args": [],
           "stdin": "",
-          "stdout": "Checking the file of Font.sans\nFamily: Inter Variable\nGlyphs: 2937, 2048 units to the em\nCharacters mapped: 2852\nVariable along: opsz, wght\nNothing was left out.\nStrict reading accepts it too.\n",
+          "stdout": "Checking the file of Font.sans\nFamily: Inter\nGlyphs: 2937, 2048 units to the em\nCharacters mapped: 2852\nNothing was left out.\nStrict reading accepts it too.\n",
           "stderr": "",
           "exit_code": 0
         },
@@ -67,7 +67,7 @@
           "name": "default",
           "args": [],
           "stdin": "",
-          "stdout": "Font.sans varies along: opsz 14.0 to 32.0, wght 100.0 to 900.0\n\nLight        \"Hello, world!\" is 11918 font units wide\nRegular      \"Hello, world!\" is 12111 font units wide\nWeight(550)  \"Hello, world!\" is 12356 font units wide\nBold         \"Hello, world!\" is 12595 font units wide\n\nFont.mono Light  \"Hello, world!\" is 15600 font units wide\nFont.mono Bold   \"Hello, world!\" is 15600 font units wide\n",
+          "stdout": "Regular: 12111 font units; 411640 font bytes\nBold: 12595 font units; 420428 font bytes\nItalic: 12099 font units; 417388 font bytes\nBold Italic: 12585 font units; 425296 font bytes\nSerif has missing glyphs: yes\n",
           "stderr": "",
           "exit_code": 0
         }

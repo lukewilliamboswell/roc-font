@@ -10,9 +10,9 @@
   "schema": 1,
   "cases": [
     // The defaults, committed in package/fonts/ (the same bytes as the corpus entries).
-    { "id": "inter-variable-read", "kind": "read", "font": "../../package/fonts/Inter-Variable.ttf", "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf", "expected": "read:accept" },
-    { "id": "merriweather-read", "kind": "read", "font": "../../package/fonts/Merriweather-Variable.ttf", "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422", "expected": "read:accept" },
-    { "id": "fira-code-read", "kind": "read", "font": "../../package/fonts/FiraCode-Variable.ttf", "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26", "expected": "read:accept" },
+    { "id": "inter-variable-read", "kind": "read", "font": "../fonts/default-variable/Inter-Variable.ttf", "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf", "expected": "read:accept" },
+    { "id": "merriweather-read", "kind": "read", "font": "../fonts/default-variable/Merriweather-Variable.ttf", "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422", "expected": "read:accept" },
+    { "id": "fira-code-read", "kind": "read", "font": "../fonts/default-variable/FiraCode-Variable.ttf", "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26", "expected": "read:accept" },
     { "id": "merriweather-corpus-read", "kind": "read", "font": "../corpus/merriweather-4.009/Merriweather4-4.009/fonts/variable/Merriweather[opsz,wdth,wght].ttf", "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422", "expected": "read:accept" },
     { "id": "fira-code-corpus-read", "kind": "read", "font": "../corpus/fira-code-6.2/variable_ttf/FiraCode-VF.ttf", "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26", "expected": "read:accept" },
     // Noto Sans and Serif 2.015 (static; cmap formats 4 and 12).

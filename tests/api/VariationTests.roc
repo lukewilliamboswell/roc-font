@@ -585,34 +585,3 @@ expect {
 		and measured([{ tag: "wdth", value: 125 }]) == (490, 3)
 		and measured([{ tag: "wght", value: 812 }, { tag: "wdth", value: 81 }]) == (522, -13)
 }
-
-# ------------------------------------------------------------ built-in fonts
-
-expect Font.family_name(Font.sans) == Ok("Inter Variable") and Font.family_name(Font.serif) == Ok("Merriweather") and Font.family_name(Font.mono) == Ok("Fira Code")
-expect [Font.sans, Font.serif, Font.mono].map(Font.units_per_em) == [2048, 2000, 1950]
-expect [Font.sans, Font.serif, Font.mono].all(|f| Font.dropped(f).is_empty())
-
-# Each measures at Regular (wght 400), where HarfBuzz is told `wght` 400.
-expect ["Hello, world!", "AVATAR office", "Wave To -> 0xFF != 12:30"].map(|t| Font.width(Font.sans, t)) == [12111, 13764, 24564]
-expect ["Hello, world!", "AVATAR office", "Wave To -> 0xFF != 12:30"].map(|t| Font.width(Font.serif, t)) == [12032, 13618, 24156]
-expect ["Hello, world!", "AVATAR office", "Wave To -> 0xFF != 12:30"].map(|t| Font.width(Font.mono, t)) == [15600, 15600, 28800]
-expect [Font.sans, Font.serif, Font.mono].map(|f| Font.width(Font.at(f, Font.Variation.{ weight: Bold }), "AVATAR office")) == [14423, 14016, 15600]
-
-# Glyph boxes at Regular: Merriweather and Fira Code default to Light, so
-# theirs are measured on moved outlines.
-expect [1, 2, 3, 4].map(|g| Font.extents(Font.sans, g)) == [Empty, box(52, 0, 1361, 1490), box(52, 0, 1361, 1910), box(52, 0, 1361, 1897)]
-expect [1, 2, 3, 4].map(|g| Font.extents(Font.serif, g)) == [box(-14, 0, 1424, 1498), box(-14, 0, 1424, 1976), box(-14, 0, 1424, 1926), box(-14, 0, 1424, 2334)]
-expect [1, 2, 3, 4].map(|g| Font.extents(Font.mono, g)) == [box(41, 0, 1159, 1377), box(41, 0, 1159, 1812), box(41, 0, 1159, 1781), box(41, 0, 1159, 1821)]
-
-# The bytes are the files that were read, and each licence is the SIL Open
-# Font License with the face's copyright notice.
-expect Font.sans_bytes.len() == 879708 and Font.serif_bytes.len() == 4628080 and Font.mono_bytes.len() == 286320
-expect [Font.sans_licence, Font.serif_licence, Font.mono_licence].all(|l| l.contains("SIL OPEN FONT LICENSE Version 1.1"))
-expect Font.sans_licence.contains("The Inter Project Authors") and Font.serif_licence.contains("Merriweather") and Font.mono_licence.contains("The Fira Code Project Authors")
-
-# The route `Font.at` documents to a font's own default design puts every
-# axis at its default, whatever `Variation.{}` chose.
-at_design : Font -> Font
-at_design = |font| Font.at(font, Font.Variation.{ axes: Font.axes(font).map(|axis| { tag: axis.tag, value: axis.default }) })
-
-expect [Font.sans, Font.serif, Font.mono].map(|font| Font.coordinates(at_design(font)).map(|c| c.value)) == [[0, 0], [0, 0, 0], [0]]
