@@ -3,7 +3,7 @@
 Read font files and turn text into positioned glyphs, in pure Roc.
 
 Give roc-font the bytes of a TrueType or OpenType font, or use one of its
-three built-in fonts, and it tells you how wide text is and which glyphs to
+three built-in font families, and it tells you how wide text is and which glyphs to
 draw where: font facts (units per em, ascent and descent, the glyph for
 each character, advances and glyph boxes) and shaped runs (glyph ids,
 advances, offsets, and clusters pointing back into your text), all in font
@@ -16,7 +16,7 @@ lines and choosing fallback fonts stay with your program.
 
 ## Status
 
-**0.1.0-rc2, a release candidate for the first release.** Text is shaped as HarfBuzz's default shaper
+**0.1.0-rc4, a release candidate for the first release.** Text is shaped as HarfBuzz's default shaper
 shapes it, which covers Latin, Greek, Cyrillic and other scripts that need
 no script-specific shaper, plus HarfBuzz's Hebrew shaper. Variable fonts are
 measured at any weight, width or optical size. Scripts that need their own
@@ -24,7 +24,7 @@ shaper (Arabic joining, the Indic scripts, Thai, Khmer and others) are shaped
 by the default shaper for now, and mark attachment, cursive and contextual
 positioning are not applied yet. The API may still change before 1.0.
 
-Development also includes OpenType MATH font facts: layout constants,
+The package also includes OpenType MATH font facts: layout constants,
 glyph corrections, corner kerning and stretch recipes. Downstream Roc
 packages can use these to lay out mathematical expressions.
 
@@ -109,12 +109,18 @@ each release.
 
 ## What is included
 
-The package carries three variable fonts, ready to use as `Font.sans`,
+The package carries three families as ten unchanged static fonts, ready to use as `Font.sans`,
 `Font.serif` and `Font.mono` with no font file:
 
 - **Inter** 4.1, a sans for interfaces and diagrams;
 - **Merriweather** 4.009, a serif for running text;
 - **Fira Code** 6.2, a monospaced font with programming ligatures.
+
+Regular and Bold are available for each family; Inter and Merriweather also
+provide genuine Italic and Bold Italic (`Font.sans_italic`,
+`Font.serif_bold_italic`, and corresponding `_bytes` constants). Mono italic
+is unavailable. Select named styles; `Font.at` applies to caller-supplied
+variable fonts, not the static defaults.
 
 Each is unmodified and under the SIL Open Font License 1.1. Their exact
 bytes (`Font.sans_bytes`, ...) and licences (`Font.sans_licence`, ...) are

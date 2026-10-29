@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Print the HarfBuzz results the expects in tests/api/VariationTests.roc
 embed: kerning and glyph extents of variable fonts at several locations,
-named instances and normalised coordinates, and the built-in fonts at
-Regular.
+named instances and normalised coordinates, and the former variable defaults at
+Regular (now test-only fixtures).
 
 Run with the pinned oracle environment (HarfBuzz 14.6.0 through uharfbuzz
 0.56.3, fontTools 4.61.1, see tools/oracle/requirements.txt):
@@ -84,7 +84,7 @@ def main():
     print("built-in fonts at Regular (wght 400)")
     fonts = {"sans": "Inter-Variable.ttf", "serif": "Merriweather-Variable.ttf", "mono": "FiraCode-Variable.ttf"}
     for name, file in fonts.items():
-        path = ROOT / "package/fonts" / file
+        path = ROOT / "tests/fonts/default-variable" / file
         tt = TTFont(path)
         family = tt["name"].getBestFamilyName()
         print(" ", name, repr(family), "upem", tt["head"].unitsPerEm)

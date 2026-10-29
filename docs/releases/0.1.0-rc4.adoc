@@ -1,0 +1,88 @@
+= roc-font 0.1.0-rc4
+
+This release candidate adds genuine built-in styles and OpenType MATH font
+facts. It replaces the three variable default files with ten unchanged
+upstream static faces, so measurements and embedded bytes agree directly.
+This is a breaking change from rc3; recheck glyph ids and layout snapshots.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
+	font: "{package-url}",
+}
+
+import font.Font
+----
+
+Use the latest Roc nightly. The release attaches the tested package bundle,
+`roc-font-examples-0.1.0-rc4.zip`, the API reference and the manual PDF.
+The Compilers section records the nightly used for publication.
+
+== Changes since rc3
+
+* **Ten static default faces in the main package.** Inter 4.1 and
+  Merriweather 4.009 each provide Regular, Bold, Italic and Bold Italic;
+  Fira Code 6.2 provides Regular and Bold. Every file is unchanged from its
+  upstream release, with its licence and exact provenance pinned.
+* **Named styles with matching bytes.** `Font.sans`, `Font.serif` and
+  `Font.mono` remain Regular. Select `sans_bold`, `sans_italic`,
+  `sans_bold_italic`, the corresponding serif names, or `mono_bold`.
+  Append `_bytes` to a face name for its exact static font file. The three
+  existing family licence accessors cover all of their styles.
+* **Variable fonts remain supported for caller-supplied bytes.** Built-in
+  faces now have no variation axes. Replace `Font.at(Font.sans, ...)` with
+  a named static style; use your own variable font for arbitrary weights,
+  widths or optical sizes. The original variable files remain test-only
+  fixtures with their conformance evidence.
+* **OpenType MATH facts.** Query layout constants, italic corrections,
+  accent placement, corner kerning, size variants and assembly recipes.
+  Values follow variable-font locations. Mathematical layout stays with
+  downstream packages.
+* **Reproducible acquisition and coverage evidence.** The default-font
+  verifier streams and hashes each upstream archive once. `--install`
+  reproduces the pinned assets; `--fetch` checks provenance. Per-face
+  coverage counts, missing-character witnesses and 40 cached HarfBuzz
+  checkpoints cover the new defaults.
+
+== Default-file migration pins
+
+Upstream release numbers stay Inter 4.1, Merriweather 4.009 and Fira Code
+6.2. The Regular assets change as follows (SHA-256); all ten new face pins
+are in the source manifest, `tools/default-fonts/pins.json`.
+
+* **Inter**: `Inter-Variable.ttf` (Version 4.001;git-9221beed3)
+  `4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf` becomes `Inter-Regular.ttf` (Version 4.001;git-9221beed3)
+  `40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82`.
+* **Merriweather**: `Merriweather-Variable.ttf` (Version 2.100)
+  `22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422` becomes `Merriweather-Regular.ttf` (Version 2.100)
+  `0b59b4e18ba0b6b59aaf40753e2c839a9fcda43261006e3f08eef1ec03d99b39`.
+* **Fira Code**: `FiraCode-Variable.ttf` (Version 6.002)
+  `04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26` becomes `FiraCode-Regular.ttf` (Version 6.002)
+  `5992ab9640e2df491b2f609467b1de60e8bc39b2c28db184342a0592d98f6117`.
+
+== Boundaries and verification
+
+Merriweather still lacks U+2318 (`⌘`), and Fira Code has no genuine italic
+face. Coverage can differ between upright and italic styles. There is no
+synthetic styling or automatic font fallback. Consumers requiring strict
+coverage must inspect missing-glyph flags and enforce their script/style
+policy before producing output. These limits remain tracked in
+https://github.com/lukewilliamboswell/roc-font/issues/13[issue 13].
+
+Complex-script shapers beyond Hebrew, mark/cursive/contextual positioning,
+CFF outlines and WOFF decoding remain outside current support. MATH facts
+do not provide equation layout or a static-font exporter.
+
+Local validation on nightly-2026-10-28-bad769b passed 332 source expects,
+842 bundle-consumer expects, all eleven fuzz targets, cached conformance,
+the allocation ratchet, examples, generated API documentation and bundle
+checks. The allocation ratchet used the pinned fontTools environment to
+include its generated adversarial inputs. Optimised native apps exercised
+one and all default faces at three increasing text sizes.
+
+The bundle is approximately 8 MB uncompressed, below the default 10 MiB
+package limit, and contains exactly ten fonts and three licences. The
+release workflow independently builds and tests its publication artifacts.

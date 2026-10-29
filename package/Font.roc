@@ -1,12 +1,19 @@
 import Face
 import Shaper
 import TableMath
-import "fonts/Inter-Variable.ttf" as inter_file : List(U8)
-import "fonts/Merriweather-Variable.ttf" as merriweather_file : List(U8)
-import "fonts/FiraCode-Variable.ttf" as fira_code_file : List(U8)
-import "fonts/Inter-OFL.txt" as inter_licence : Str
-import "fonts/Merriweather-OFL.txt" as merriweather_licence : Str
-import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
+import "fonts/Inter-Regular.ttf" as sans_file : List(U8)
+import "fonts/Inter-Bold.ttf" as sans_bold_file : List(U8)
+import "fonts/Inter-Italic.ttf" as sans_italic_file : List(U8)
+import "fonts/Inter-BoldItalic.ttf" as sans_bold_italic_file : List(U8)
+import "fonts/Inter-OFL.txt" as sans_licence_file : Str
+import "fonts/Merriweather-Regular.ttf" as serif_file : List(U8)
+import "fonts/Merriweather-Bold.ttf" as serif_bold_file : List(U8)
+import "fonts/Merriweather-Italic.ttf" as serif_italic_file : List(U8)
+import "fonts/Merriweather-BoldItalic.ttf" as serif_bold_italic_file : List(U8)
+import "fonts/Merriweather-OFL.txt" as serif_licence_file : Str
+import "fonts/FiraCode-Regular.ttf" as mono_file : List(U8)
+import "fonts/FiraCode-Bold.ttf" as mono_bold_file : List(U8)
+import "fonts/FiraCode-OFL.txt" as mono_licence_file : Str
 
 ## A font read from TrueType or OpenType bytes, ready to measure and shape
 ## text. Read it once with `from_bytes`; every query and every shaping call
@@ -20,7 +27,9 @@ import "fonts/FiraCode-OFL.txt" as fira_code_licence : Str
 ## Glyph ids are `U32`. Text is a `Str`, and shaping reports which part of
 ## the text each glyph draws as UTF-8 byte offsets into it (clusters).
 ##
-## Three fonts are built in, ready to use: `sans`, `serif` and `mono`.
+## Three static font families are built in: `sans`, `serif` and `mono`.
+## Each has a genuine Bold face; sans and serif also have Italic and
+## Bold Italic faces. Use named constants such as `sans_bold` for styles.
 ## Any other font is read from its bytes with `from_bytes`. The bytes are
 ## never trusted; `from_bytes` reports everything wrong with a file it
 ## cannot use.
@@ -831,63 +840,148 @@ Font :: { face : Face }.{
 
 	# ------------------------------------------------------------ default fonts
 
-	## Inter 4.1, a sans for interfaces and diagrams, at Regular: ready to
-	## use with no font file. Variable in weight (100 to 900) and optical
-	## size; move it with `at`. Read when the program is compiled (a file
-	## that did not read would stop the compilation), so using it costs
-	## nothing at run time; a program that never names it carries none of
-	## it.
+	## Inter Regular, a static face for interfaces and diagrams. Prepared at compile time.
+	## Use `sans_bytes` to draw or embed exactly the font measured here.
 	sans : Font
 	sans =
-		match Font.from_bytes(inter_file, ReadOptions.{}) {
+		match Font.from_bytes(sans_file, ReadOptions.{}) {
 			Ok(font) => font
 			Err(_) => crash "a built-in font of roc-font could not be read"
 		}
 
-	## Merriweather 4.009, a serif for running text, at Regular. Variable in
-	## weight (300 to 900), width (87 to 112) and optical size.
+	## The unchanged upstream static file measured by `sans`.
+	sans_bytes : List(U8)
+	sans_bytes = sans_file
+
+	## Inter Bold, a static face for interfaces and diagrams. Prepared at compile time.
+	## Use `sans_bold_bytes` to draw or embed exactly the font measured here.
+	sans_bold : Font
+	sans_bold =
+		match Font.from_bytes(sans_bold_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `sans_bold`.
+	sans_bold_bytes : List(U8)
+	sans_bold_bytes = sans_bold_file
+
+	## Inter Italic, a static face for interfaces and diagrams. Prepared at compile time.
+	## Use `sans_italic_bytes` to draw or embed exactly the font measured here.
+	sans_italic : Font
+	sans_italic =
+		match Font.from_bytes(sans_italic_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `sans_italic`.
+	sans_italic_bytes : List(U8)
+	sans_italic_bytes = sans_italic_file
+
+	## Inter BoldItalic, a static face for interfaces and diagrams. Prepared at compile time.
+	## Use `sans_bold_italic_bytes` to draw or embed exactly the font measured here.
+	sans_bold_italic : Font
+	sans_bold_italic =
+		match Font.from_bytes(sans_bold_italic_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `sans_bold_italic`.
+	sans_bold_italic_bytes : List(U8)
+	sans_bold_italic_bytes = sans_bold_italic_file
+
+	## SIL Open Font License and copyright for all built-in sans faces.
+	## Keep this text with the font bytes when redistributing them.
+	sans_licence : Str
+	sans_licence = sans_licence_file
+
+	## Merriweather Regular, a static face for running text. Prepared at compile time.
+	## Use `serif_bytes` to draw or embed exactly the font measured here.
 	serif : Font
 	serif =
-		match Font.from_bytes(merriweather_file, ReadOptions.{}) {
+		match Font.from_bytes(serif_file, ReadOptions.{}) {
 			Ok(font) => font
 			Err(_) => crash "a built-in font of roc-font could not be read"
 		}
 
-	## Fira Code 6.2, a monospaced font with programming ligatures, at
-	## Regular. Variable in weight (300 to 700); every glyph is 1200 units
-	## wide at every weight.
+	## The unchanged upstream static file measured by `serif`.
+	serif_bytes : List(U8)
+	serif_bytes = serif_file
+
+	## Merriweather Bold, a static face for running text. Prepared at compile time.
+	## Use `serif_bold_bytes` to draw or embed exactly the font measured here.
+	serif_bold : Font
+	serif_bold =
+		match Font.from_bytes(serif_bold_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `serif_bold`.
+	serif_bold_bytes : List(U8)
+	serif_bold_bytes = serif_bold_file
+
+	## Merriweather Italic, a static face for running text. Prepared at compile time.
+	## Use `serif_italic_bytes` to draw or embed exactly the font measured here.
+	serif_italic : Font
+	serif_italic =
+		match Font.from_bytes(serif_italic_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `serif_italic`.
+	serif_italic_bytes : List(U8)
+	serif_italic_bytes = serif_italic_file
+
+	## Merriweather BoldItalic, a static face for running text. Prepared at compile time.
+	## Use `serif_bold_italic_bytes` to draw or embed exactly the font measured here.
+	serif_bold_italic : Font
+	serif_bold_italic =
+		match Font.from_bytes(serif_bold_italic_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
+
+	## The unchanged upstream static file measured by `serif_bold_italic`.
+	serif_bold_italic_bytes : List(U8)
+	serif_bold_italic_bytes = serif_bold_italic_file
+
+	## SIL Open Font License and copyright for all built-in serif faces.
+	## Keep this text with the font bytes when redistributing them.
+	serif_licence : Str
+	serif_licence = serif_licence_file
+
+	## FiraCode Regular, a static face for code. Prepared at compile time.
+	## Use `mono_bytes` to draw or embed exactly the font measured here.
 	mono : Font
 	mono =
-		match Font.from_bytes(fira_code_file, ReadOptions.{}) {
+		match Font.from_bytes(mono_file, ReadOptions.{}) {
 			Ok(font) => font
 			Err(_) => crash "a built-in font of roc-font could not be read"
 		}
 
-	## The exact font file `sans` was read from, for drawing or embedding
-	## (in a PDF, say) the font that was measured.
-	sans_bytes : List(U8)
-	sans_bytes = inter_file
-
-	## The exact font file `serif` was read from.
-	serif_bytes : List(U8)
-	serif_bytes = merriweather_file
-
-	## The exact font file `mono` was read from.
+	## The unchanged upstream static file measured by `mono`.
 	mono_bytes : List(U8)
-	mono_bytes = fira_code_file
+	mono_bytes = mono_file
 
-	## The licence of `sans` (the SIL Open Font License 1.1, with Inter's
-	## copyright notice). Keep it with the font when passing the bytes on.
-	sans_licence : Str
-	sans_licence = inter_licence
+	## FiraCode Bold, a static face for code. Prepared at compile time.
+	## Use `mono_bold_bytes` to draw or embed exactly the font measured here.
+	mono_bold : Font
+	mono_bold =
+		match Font.from_bytes(mono_bold_file, ReadOptions.{}) {
+			Ok(font) => font
+			Err(_) => crash "a built-in font of roc-font could not be read"
+		}
 
-	## The licence of `serif` (the SIL Open Font License 1.1, with
-	## Merriweather's copyright notice and Reserved Font Name).
-	serif_licence : Str
-	serif_licence = merriweather_licence
+	## The unchanged upstream static file measured by `mono_bold`.
+	mono_bold_bytes : List(U8)
+	mono_bold_bytes = mono_bold_file
 
-	## The licence of `mono` (the SIL Open Font License 1.1, with Fira
-	## Code's copyright notice).
+	## SIL Open Font License and copyright for all built-in mono faces.
+	## Keep this text with the font bytes when redistributing them.
 	mono_licence : Str
-	mono_licence = fira_code_licence
+	mono_licence = mono_licence_file
 }

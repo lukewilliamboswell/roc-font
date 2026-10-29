@@ -73,7 +73,7 @@ PLATFORM_RE = re.compile(r'platform\s+"([^"]+)"')
 
 # Real fonts used as seeds, from the committed fixtures and the fetched
 # corpus (tests/corpus/, created by scripts/fetch_corpus.py; may be absent).
-FONT_DIRS = (ROOT / "tests" / "fonts", ROOT / "tests" / "corpus")
+FONT_DIRS = (ROOT / "tests" / "fonts", ROOT / "tests" / "corpus", ROOT / "package" / "fonts")
 FONT_SUFFIXES = (".ttf", ".otf", ".ttc", ".otc")
 
 # Inputs per target in a smoke run, unless the target sets its own.
@@ -118,7 +118,7 @@ TARGETS: dict[str, TargetConfig] = {
         seeds=FUZZ_ROOT / "seeds" / "font-read.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix=b"",
-        max_input_size=262144,
+        max_input_size=2097152,
         timeout=10,
         contract=(
             "reading is total and deterministic; a rejection names a problem; "
@@ -132,7 +132,7 @@ TARGETS: dict[str, TargetConfig] = {
         seeds=FUZZ_ROOT / "seeds" / "font-shape.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix="office -> A*B fi".encode("utf-8") + b"\xff",
-        max_input_size=262144,
+        max_input_size=2097152,
         timeout=10,
         contract=(
             "substitution is deterministic, keeps clusters in range and "

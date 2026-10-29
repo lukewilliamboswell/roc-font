@@ -402,7 +402,7 @@ name_digest = |font, count| {
 # missing names), and a few names in full. Past the last glyph there is no
 # name.
 expect name_digest(Font.sans, 2937) == 0xb7b085b99b56c404
-expect name_digest(Font.serif, 2384) == 0x241538cea64013dd
+expect name_digest(Font.serif, 2384) == 0x59c17bc51a08f3a3
 expect name_digest(Font.mono, 2030) == 0xd2f4f7f08ede18b7
 expect Font.glyph_name(Font.sans, 1) == Ok(".null")
 expect Font.glyph_name(Font.sans, 1468) == Ok("uni204C")

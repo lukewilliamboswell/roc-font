@@ -7,7 +7,7 @@ package.
 
 ## Fonts in the package source
 
-Three unmodified upstream fonts live in `package/fonts/`, each beside its
+Ten unmodified upstream static faces live in `package/fonts/`, each beside its
 complete licence. Every file is pinned by SHA-256 and size, with its upstream
 release archive, in
 [`tools/default-fonts/pins.json`](tools/default-fonts/pins.json);
@@ -17,9 +17,9 @@ licence allows and the rule that a shipped file is never modified.
 
 | File | Family | Licence | Copyright | Reserved Font Name |
 | --- | --- | --- | --- | --- |
-| `package/fonts/Inter-Variable.ttf` | Inter 4.1 | SIL Open Font License 1.1, `package/fonts/Inter-OFL.txt` | Copyright (c) 2016 The Inter Project Authors | none |
-| `package/fonts/Merriweather-Variable.ttf` | Merriweather 4.009 | SIL Open Font License 1.1, `package/fonts/Merriweather-OFL.txt` | Copyright 2020 The Merriweather Project Authors | "Merriweather" |
-| `package/fonts/FiraCode-Variable.ttf` | Fira Code 6.2 | SIL Open Font License 1.1, `package/fonts/FiraCode-OFL.txt` | Copyright (c) 2014, The Fira Code Project Authors | none |
+| `package/fonts/Inter-{Regular,Bold,Italic,BoldItalic}.ttf` | Inter 4.1 | SIL Open Font License 1.1, `package/fonts/Inter-OFL.txt` | Copyright (c) 2016 The Inter Project Authors | none |
+| `package/fonts/Merriweather-{Regular,Bold,Italic,BoldItalic}.ttf` | Merriweather 4.009 | SIL Open Font License 1.1, `package/fonts/Merriweather-OFL.txt` | Copyright 2020 The Merriweather Project Authors | "Merriweather" |
+| `package/fonts/FiraCode-{Regular,Bold}.ttf` | Fira Code 6.2 | SIL Open Font License 1.1, `package/fonts/FiraCode-OFL.txt` | Copyright (c) 2014, The Fira Code Project Authors | none |
 
 The fonts' `name` tables carry these trademark notices: "Inter UI and Inter
 is a trademark of rsms.", "Merriweather is a trademark of Sorkin Type Co."
@@ -65,3 +65,12 @@ package:
 | basic-cli | the conformance driver, API tests and benchmarks | UPL-1.0 |
 | roc-fuzz | fuzz targets and the allocation benchmark | MIT |
 | roc-docs (roc-automation tools-0.2.0) | rendering the manual; pinned in `Blueprint.lock` | UPL-1.0; its embedded fonts are listed by `roc-docs --licenses` |
+
+The shipped defaults now use the unchanged static TTF faces from these same
+releases: four Inter, four Merriweather and two Fira Code faces. Exact current
+files and hashes are recorded in `tools/default-fonts/pins.json`; see
+`docs/default-fonts.adoc` for the style and coverage matrix.
+
+The unchanged Merriweather static files also retain their Copyright 2024
+notice in the font metadata; the upstream companion OFL text above carries
+the Copyright 2020 notice. Both are preserved.

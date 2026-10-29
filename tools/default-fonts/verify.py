@@ -7,13 +7,13 @@
                                                     committed bytes came from it
 
 Standard library only. Offline mode checks each font and licence file's size
-and SHA-256 and that package/fonts/ holds nothing unpinned. --fetch downloads
-each pinned release archive into memory, checks the archive's size and
+and SHA-256 and that package/fonts/ holds nothing unpinned. --fetch streams
+each distinct pinned release archive into temporary storage, checks its size and
 SHA-256, reads the pinned member (after checking its declared size, so a
 hostile archive cannot make us inflate more than the pin allows) and compares
-it with the committed file; it does the same for licence URLs, archive
-licence members and direct file URLs. Downloads are only hashed and read as
-zip data; nothing from them is executed or written to disk.
+it with the committed file. Licence URLs are checked separately. Nothing
+from a download is executed. Temporary downloads are removed. --install
+reproduces the pinned font and licence files after verifying their hashes.
 
 Exit status 0 when everything matches, 1 otherwise. Every mismatch is
 reported, not only the first.
@@ -21,10 +21,10 @@ reported, not only the first.
 
 import argparse
 import hashlib
-import io
 import json
 import os
 import sys
+import tempfile
 import urllib.request
 import zipfile
 
@@ -64,14 +64,6 @@ def check_bytes(problems, what, data, sha, size):
         problems.append(f"{what}: sha256 {sha256(data)}, pinned {sha}")
 
 
-def zip_member(archive, member, size):
-    with zipfile.ZipFile(io.BytesIO(archive)) as z:
-        info = z.getinfo(member)
-        if info.file_size != size:
-            raise ValueError(f"member {member} declares {info.file_size} bytes, pinned {size}")
-        return z.read(member)
-
-
 def check_offline(pins, problems):
     pinned = set()
     for face in pins["faces"]:
@@ -89,57 +81,89 @@ def check_offline(pins, problems):
                 problems.append(f"package/fonts/{name} is not pinned in tools/default-fonts/pins.json")
 
 
-def check_upstream(pins, problems):
-    for face in pins["faces"]:
-        family = face["family"]
-        up = face["upstream"]
-        lic = face["licence"]
-        committed = read(os.path.join(ROOT, face["file"]))
-        committed_licence = read(os.path.join(ROOT, lic["file"]))
-        archive = up.get("archive")
-        if archive:
-            print(f"fetching {archive['url']}", file=sys.stderr)
+def check_upstream(pins, problems, install=False):
+    # Stream each archive once to temporary storage, checking its complete digest
+    # before trusting members. The large upstream serif archive is not held in RAM.
+    with tempfile.TemporaryDirectory() as directory:
+        archives = {}
+        for face in pins["faces"]:
+            up = face["upstream"]
+            archive = up["archive"]
+            url = archive["url"]
+            if url not in archives:
+                path = os.path.join(directory, str(len(archives)))
+                try:
+                    digest = hashlib.sha256()
+                    count = 0
+                    with urllib.request.urlopen(url, timeout=120) as response, open(path, "wb") as output:
+                        while True:
+                            chunk = response.read(1024 * 1024)
+                            if not chunk:
+                                break
+                            count += len(chunk)
+                            if count > archive["size"]:
+                                raise ValueError("archive exceeds pinned size")
+                            digest.update(chunk)
+                            output.write(chunk)
+                    if count != archive["size"] or digest.hexdigest() != archive["sha256"]:
+                        raise ValueError("archive does not match its size and SHA-256")
+                    archives[url] = path
+                except Exception as error:
+                    problems.append(f"{url}: {error}")
+                    archives[url] = None
+            path = archives[url]
+            if path is None:
+                continue
             try:
-                data = fetch(archive["url"], archive["size"])
-                check_bytes(problems, f"{family} archive", data, archive["sha256"], archive["size"])
-                member = zip_member(data, archive["member"], face["size"])
-                if member != committed:
-                    problems.append(f"{family}: archive member {archive['member']} differs from {face['file']}")
-                if lic.get("archive_member"):
-                    text = zip_member(data, lic["archive_member"], lic["size"])
-                    if text != committed_licence:
-                        problems.append(f"{family}: archive member {lic['archive_member']} differs from {lic['file']}")
-            except Exception as error:  # report and continue with the next check
-                problems.append(f"{family} archive: {error}")
-        url = up.get("file_url")
-        if url:
-            print(f"fetching {url}", file=sys.stderr)
-            try:
-                if fetch(url, face["size"]) != committed:
-                    problems.append(f"{family}: {url} differs from {face['file']}")
+                with zipfile.ZipFile(path) as z:
+                    info = z.getinfo(archive["member"])
+                    if info.file_size != face["size"]:
+                        raise ValueError("member differs from pinned size")
+                    data = z.read(info)
+                    if sha256(data) != face["sha256"]:
+                        raise ValueError("member differs from pinned digest")
+                    target = os.path.join(ROOT, face["file"])
+                    if install:
+                        with open(target, "wb") as output:
+                            output.write(data)
+                    elif data != read(target):
+                        raise ValueError("member differs from committed font")
             except Exception as error:
-                problems.append(f"{family} file_url: {error}")
-        print(f"fetching {lic['url']}", file=sys.stderr)
-        try:
-            if fetch(lic["url"], lic["size"]) != committed_licence:
-                problems.append(f"{family}: {lic['url']} differs from {lic['file']}")
-        except Exception as error:
-            problems.append(f"{family} licence url: {error}")
+                problems.append(f"{face['id']}: {error}")
+        licences = {f["licence"]["file"]: f["licence"] for f in pins["faces"]}
+        for lic in licences.values():
+            try:
+                data = fetch(lic["url"], lic["size"])
+                if len(data) != lic["size"] or sha256(data) != lic["sha256"]:
+                    raise ValueError("licence differs from pin")
+                target = os.path.join(ROOT, lic["file"])
+                if install:
+                    with open(target, "wb") as output:
+                        output.write(data)
+                elif data != read(target):
+                    raise ValueError("licence differs from upstream")
+            except Exception as error:
+                problems.append(f"{lic['file']}: {error}")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--fetch", action="store_true", help="also download every upstream and compare")
+    parser.add_argument("--install", action="store_true", help="acquire exact pinned fonts and licences from upstream")
     args = parser.parse_args()
     with open(PINS, encoding="utf-8") as f:
         pins = json.load(f)
     problems = []
+    if args.install:
+        check_upstream(pins, problems, install=True)
     check_offline(pins, problems)
-    if args.fetch and not problems:
-        check_upstream(pins, problems)
-    elif args.fetch:
-        problems.append("skipped --fetch: committed files do not match their pins")
-    total = sum(face["size"] + face["licence"]["size"] for face in pins["faces"])
+    if args.fetch and not args.install:
+        if not problems:
+            check_upstream(pins, problems)
+        else:
+            problems.append("skipped --fetch: committed files do not match their pins")
+    entries = {e["file"]: e for f in pins["faces"] for e in (f, f["licence"])}
+    total = sum(e["size"] for e in entries.values())
     for problem in problems:
         print(f"MISMATCH {problem}")
     if problems:
