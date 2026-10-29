@@ -23,8 +23,9 @@ import TableVar
 ## arithmetic). A device delta is the store's single-precision sum rounded
 ## half up (`roundf` in HarfBuzz is `floor(x + 0.5)`), added to the value
 ## record's own value, each device separately. HarfBuzz applies no device
-## at the default location (every coordinate zero), even where a malformed
-## region would give a nonzero scalar there, so neither does this module.
+## at the default location (every coordinate zero), even where a constant
+## region would give a nonzero scalar there, so text positioning follows
+## that behavior. MATH facts use `math_location` instead.
 ## Hinting devices (delta formats 1 to 3) adjust by pixels per em, which a
 ## font-unit result never has, so they add nothing (HarfBuzz at a ppem of 0).
 ##
@@ -592,9 +593,20 @@ LayoutVar := {
 			LayoutVar.default_location
 		}
 
+	## MATH facts use the variation store at every location, including a
+	## default or zero-axis region, without a shaper-specific 2.30 cache.
+	math_location : LayoutVar, List(I16) -> Location
+	math_location = |lv, coords| if (lv.store.region_count == 0) LayoutVar.default_location else { active: True, scalars: TableVar.region_scalars_precise(lv.store, coords) }
+
 	## The default location: no device applies.
 	default_location : Location
 	default_location = { active: False, scalars: [] }
+
+	## Whether an outer/inner pair names a prepared variation-store row,
+	## including the format's no-variation sentinel. Readers use this
+	## before retaining variation indices in other font tables.
+	valid_index : LayoutVar, U64, U64 -> Bool
+	valid_index = |lv, outer, inner| TableVar.valid_index(lv.store, outer, inner)
 
 	## The delta of a `VariationIndex` (outer and inner index) at a
 	## location, rounded half up as HarfBuzz rounds it: `em_scalef`

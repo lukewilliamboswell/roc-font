@@ -24,6 +24,10 @@ shaper (Arabic joining, the Indic scripts, Thai, Khmer and others) are shaped
 by the default shaper for now, and mark attachment, cursive and contextual
 positioning are not applied yet. The API may still change before 1.0.
 
+Development also includes OpenType MATH font facts: layout constants,
+glyph corrections, corner kerning and stretch recipes. Downstream Roc
+packages can use these to lay out mathematical expressions.
+
 ## Example
 
 How wide is "Hello, world!" at 16 px? This is

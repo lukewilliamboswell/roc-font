@@ -1,0 +1,73 @@
+{
+  "about": "Narrow MATH controls, plus real and variable fonts for mutation; runner also supplies licensed font corpus files.",
+  "seeds": [
+    {
+      "why": "real Noto MATH, no patches",
+      "parts": [
+        {
+          "hex": "00 80"
+        }
+      ]
+    },
+    {
+      "why": "variable MATH, no patches",
+      "parts": [
+        {
+          "hex": "01 80"
+        }
+      ]
+    },
+    {
+      "why": "generated coverage format 1",
+      "parts": [
+        {
+          "hex": "02 00"
+        }
+      ]
+    },
+    {
+      "why": "empty raw input",
+      "parts": []
+    },
+    {
+      "why": "truncated raw directory",
+      "parts": [
+        {
+          "hex": "03 00 00 00"
+        }
+      ]
+    },
+    {
+      "why": "real Noto bytes drive corruption of real MATH",
+      "parts": [
+        {
+          "file": "tests/fonts/math/NotoSansMath-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "why": "variable font bytes drive corruption of variation devices",
+      "parts": [
+        {
+          "file": "tests/fonts/math/math-variable.ttf"
+        }
+      ]
+    },
+    {
+      "why": "three-axis sub2.30 scalar with whole-unit corrections",
+      "parts": [
+        {
+          "file": "tests/fonts/math/math-precise-variable.ttf"
+        }
+      ]
+    },
+    {
+      "why": "constant regions at the design default",
+      "parts": [
+        {
+          "file": "tests/fonts/math/math-constant-variable.ttf"
+        }
+      ]
+    }
+  ]
+}

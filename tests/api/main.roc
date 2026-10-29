@@ -5,6 +5,7 @@ app [main!] {
 }
 
 import FontTests
+import MathTests
 import SubstituteTests
 import ReadTests
 import ReadOtsTests

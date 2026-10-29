@@ -193,6 +193,21 @@ never changes a result on a legitimate font.
   and licence.
 - Examples use the real public API.
 
+## Keep code and evidence lean
+
+- Continuously review what belongs in the repository. Keep each change
+  focused and remove superseded code, fixtures and diagnostics.
+- Prefer `roc-fuzz` and property-based tests for broad coverage. Distil
+  discovered failures into small permanent regression witnesses.
+- Retain a compact set of independent oracle checkpoints for numerical
+  behavior that properties alone cannot establish. Select meaningful
+  boundaries and real-font examples, rather than exhaustive cross-products.
+- Keep exhaustive oracle dumps, generated test corpora and exploratory
+  reports local and ignored. Preserve deterministic generators and pinned
+  inputs so larger investigations can be reproduced when needed.
+- Ship only the generated runtime data the package needs, in a compact,
+  deterministic representation, with its generator, pins and licences.
+
 ## Verify the contract, not only the numbers
 
 `python3 scripts/all_tests.py` runs these checks with the latest Roc
@@ -225,7 +240,7 @@ shaping stage:
   the feature that causes it rather than found later in an end-to-end
   number;
 - check agreement with a reference implementation (HarfBuzz, fontTools,
-  FreeType, OTS, a pinned browser) through cached oracle records, replayed
+  FreeType, OTS, a pinned browser) through compact cached checkpoints, replayed
   by the native conformance driver, so agreement is enforced without the
   oracle installed; cases are JSONC data run by the Python driver through
   the Roc harness, never generated `.roc` files; list every deliberate

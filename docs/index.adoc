@@ -118,6 +118,12 @@ The other examples each show one task, and each runs as it is:
 |===
 |Example |What it shows
 
+|`math.roc`
+|Read a caller-supplied mathematical font and inspect its layout constants,
+larger symbol variants and stretchable glyph recipes. `Font.math_constants`,
+`Font.math_kern`, `Font.math_variants` and `Font.math_assembly` return font
+facts in font units; the consumer lays out the expression.
+
 |`shape.roc`
 |Shape text with `Font.shape` and print each glyph's id, name, cluster (the
 text it draws, as a UTF-8 byte offset) and advance; a ligature draws two

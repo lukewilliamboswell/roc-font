@@ -18,7 +18,7 @@ Modes:
     python3 scripts/bench.py --update-baseline    full run: record allocation
                                                   counts and time ratios
 
-Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz`
+Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz --opt=speed`
 (roc-fuzz's Fuzz.measure_allocs!). They are deterministic for one compiler
 and input, and are compared exactly with bench/baseline.json: any increase or
 decrease fails until --update-baseline records it. The baseline records its
@@ -482,7 +482,7 @@ class Builder:
     def alloc_binary(self) -> Path | None:
         self.roc_version()
         binary = self.out / "bin" / "roc-alloc"
-        if self.run("roc-alloc", [self.roc, "build", "--fuzz", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}", *self.dep]):
+        if self.run("roc-alloc", [self.roc, "build", "--fuzz", "--opt=speed", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}", *self.dep]):
             return binary
         return None
 
@@ -799,8 +799,8 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         "schema": SCHEMA_VERSION,
         "about": "Allocation ratchet for scripts/bench.py --check; see docs/benchmarks.adoc. Counts are "
                  "roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz "
-                 "Fuzz.measure_allocs! in a `roc build --fuzz` binary.",
-        "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz bench/roc/alloc.roc",
+                 "Fuzz.measure_allocs! in a `roc build --fuzz --opt=speed` binary.",
+        "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
                      "roc_fuzz": "0.4.3"},
         "generator": {"fonttools": versions.get("fonttools_generator") or baseline.get("generator", {}).get("fonttools")},
         "cases": new_cases,

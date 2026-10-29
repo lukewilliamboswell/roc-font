@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "about": "MATH checkpoints: all 56 constants and selected meaningful glyphs; all corners and each selected kern threshold with neighbours; both construction directions. All ten numerical/location cases remain. Use oracle.py --full and verify.py --full for exhaustive local replay.",
+  "cases": [
+    {
+      "id": "noto",
+      "font": "NotoSansMath-Regular.ttf",
+      "weight": 400,
+      "glyphs": [
+        0,
+        4,
+        87,
+        115,
+        1844,
+        1861,
+        1864,
+        2847,
+        2875,
+        3195,
+        4374,
+        4376,
+        4788
+      ]
+    },
+    {
+      "id": "synthetic",
+      "font": "math.ttf",
+      "weight": 400,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "empty",
+      "font": "math-empty.ttf",
+      "weight": 400,
+      "glyphs": [
+        2
+      ]
+    },
+    {
+      "id": "variable-default",
+      "font": "math-variable.ttf",
+      "weight": 400,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "variable-half",
+      "font": "math-variable.ttf",
+      "weight": 650,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "variable-max",
+      "font": "math-variable.ttf",
+      "weight": 900,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "large-variable-half",
+      "font": "math-large-variable.ttf",
+      "weight": 650,
+      "wide": true,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "large-variable-max",
+      "font": "math-large-variable.ttf",
+      "weight": 900,
+      "wide": true,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "precise-variable-tiny",
+      "font": "math-precise-variable.ttf",
+      "weight": 1,
+      "wide": true,
+      "axes": {
+        "wght": 1,
+        "AX02": 1,
+        "AX03": 256
+      },
+      "request": "tiny",
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "constant-variable-default",
+      "font": "math-constant-variable.ttf",
+      "weight": 0,
+      "wide": true,
+      "glyphs": [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}
