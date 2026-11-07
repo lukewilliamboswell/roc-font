@@ -162,7 +162,7 @@ jobs:
 
       - id: renderer
         if: env.BUILD_MANUAL == 'true'
-        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@60062e8909dcaf4bf449097132e440e9bc9c9ba6
         with:
           task: docs-path
           label: roc-docs tools-0.2.0
