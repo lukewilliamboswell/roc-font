@@ -289,7 +289,7 @@ jobs:
           name: release-candidate
           path: candidate
 
-      - uses: lukewilliamboswell/roc-automation/actions/publish-release@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+      - uses: lukewilliamboswell/roc-automation/actions/publish-release@60062e8909dcaf4bf449097132e440e9bc9c9ba6
         with:
           version: ${{ needs.build.outputs.version }}
           prerelease: ${{ needs.build.outputs.prerelease }}
