@@ -1,15 +1,15 @@
 = roc-font 0.1.0
 
-The first release of roc-font: read TrueType and OpenType fonts and turn
-text into positioned glyphs, in pure Roc, with three fonts built in. It
-needs no host, no system fonts and no file access.
+The first final release of roc-font reads TrueType and OpenType fonts and
+turns text into positioned glyphs in pure Roc. It includes three font
+families and needs no host, system fonts or file access.
 
 == Use this release
 
 [source,roc]
 ----
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.27.0/9yjxqdGTP4xSpSEmDazwTmRsehfRZzA19pwEKkR6fj1g.tar.zst",
 	font: "{package-url}",
 }
 
@@ -53,22 +53,24 @@ as a PDF.
   size or other axis, named as in CSS. Advances, metrics, kerning and glyph
   boxes follow. `Font.axes`, `Font.instances` and `Font.coordinates`
   describe the font's design space.
-* **Three built-in fonts.** `Font.sans` (Inter 4.1), `Font.serif`
-  (Merriweather 4.009) and `Font.mono` (Fira Code 6.2), all variable, all
-  under the SIL Open Font License 1.1, are read when your program is
-  compiled and cost nothing in a program that does not use them. Their
-  bytes and licence texts are exposed too, so you can embed the font you
-  measured with.
+* **Ten built-in faces.** Inter 4.1 (`Font.sans`), Merriweather 4.009
+  (`Font.serif`) and Fira Code 6.2 (`Font.mono`) each provide Regular and
+  Bold. Inter and Merriweather also provide Italic and Bold Italic. The
+  static faces are prepared at compile time and expose their exact bytes
+  and SIL Open Font License 1.1 texts for embedding.
+* **OpenType MATH facts.** Query layout constants, italic corrections,
+  accent placement, corner kerning, size variants and assembly recipes.
+  Values follow the font's variation coordinates.
 
 == How closely it matches the references
 
 roc-font is compared with reference implementations through recorded
 results, so every check runs without the references installed.
 
-* **Shaping matches HarfBuzz 14.6.0** on the cases every change must pass:
-  of 463 recorded cases (HarfBuzz shaping, Chrome widths, OTS reading and
-  font facts), 445 agree, 16 are documented differences, 2 use
-  options the test driver cannot express yet, and none fail.
+* **Shaping and font queries are checked against HarfBuzz 14.6.0, Chrome,
+  OTS and fontTools.** The test suite replays recorded results for shaping,
+  widths, reading and MATH queries. It records deliberate differences
+  alongside the relevant cases.
 * **On HarfBuzz's own test suites**, roc-font's glyphs and positions equal
   HarfBuzz's in 4,087 of the 4,961 in-house cases it runs (82 %); most of
   the 874 differences are in scripts HarfBuzz gives their own shaper
@@ -78,7 +80,7 @@ results, so every check runs without the references installed.
 * **Variable fonts are bit-identical with HarfBuzz.** roc-font repeats
   HarfBuzz's single-precision arithmetic on integers; normalised
   coordinates and advances differed in none of 11,920,275 advances
-  compared over grids and random locations of the three built-in fonts.
+  compared over grids and random locations of three variable test fonts.
 * **Reading follows OTS**, the font sanitiser Chrome and Firefox load fonts
   through: a font is accepted when OTS 9.3.0 would accept it, and only the
   parts OTS drops (the variation tables as one unit, an unsorted `kern`
@@ -122,17 +124,16 @@ Feedback from package-mermaid and roc-pdf on the release candidate:
   credited to one that is on for the glyph: `liga` first, then the other
   features shaping applies by default, then features the options turned
   on, each group in tag order. rc1 used tag order alone, which reported
-  such ligatures as `clig`. Origins carry no lookup index or input
-  glyphs; this is now documented on `Font.GlyphOrigin`.
+  such ligatures as `clig`. `Font.GlyphOrigin` documents what each origin
+  includes.
 * **Text as UTF-8 bytes** is documented: `Str.from_utf8` then
   `Font.shape_planned`, or decode yourself and pass each scalar with its
   byte offset to `Font.shape_scalars`.
-* **Planning is cheaper.** `Font.plan` (and so `Font.shape` and
-  `Font.width`, which plan per call) costs 9 allocations for Inter
-  instead of 121, and 14 instead of 767 with a language set, and about a
-  fifth of the instructions. Shaping short labels with a plan per label
-  takes about 7.5 µs per label instead of 17.7 µs on the machine the
-  benchmarks ran on; with one plan for all, about 3.4 µs.
+* **Reuse a plan for repeated shaping.** Call `Font.plan` once and
+  pass it to `Font.shape_planned` for text using the same font and options.
+
+Since rc4, the example apps and test tools have moved to basic-cli 0.27.0
+to build on the latest Roc nightly.
 
 == Known limits
 

@@ -16,7 +16,7 @@ lines and choosing fallback fonts stay with your program.
 
 ## Status
 
-**0.1.0-rc4, a release candidate for the first release.** Text is shaped as HarfBuzz's default shaper
+**0.1.0.** Text is shaped as HarfBuzz's default shaper
 shapes it, which covers Latin, Greek, Cyrillic and other scripts that need
 no script-specific shaper, plus HarfBuzz's Hebrew shaper. Variable fonts are
 measured at any weight, width or optical size. Scripts that need their own
@@ -35,7 +35,7 @@ How wide is "Hello, world!" at 16 px? This is
 
 ```roc
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.26.0/GddgvsGjiNXrHFW6au5i5dUDbTs8FinQdrgE2Gqmw53t.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.27.0/9yjxqdGTP4xSpSEmDazwTmRsehfRZzA19pwEKkR6fj1g.tar.zst",
 	font: "{package-url}",
 }
 

@@ -87,7 +87,8 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$DRY_RUN" = true ]; then
-            version="$(ls docs/releases/*.adoc | sed 's|.*/||; s|\.adoc$||' | sort -V | tail -n 1)"
+            # GNU version sort puts a tilde before the matching final version.
+            version="$(printf '%s\n' docs/releases/*.adoc | sed 's|.*/||; s|\.adoc$||; s|-rc|~rc|' | sort -V | tail -n 1 | sed 's|~rc|-rc|')"
           else
             version="$REQUESTED"
           fi
