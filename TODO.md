@@ -46,12 +46,6 @@ Chrome widths agree on package-mermaid's oracle texts.
   differences, 15 strings exact against HarfBuzz. Rebase on roc-pdf's
   `main`, switch to the 0.1.0-rc1 URL, and report API feedback.
 
-### Release
-
-- [ ] Re-check the figures in `docs/releases/0.1.0.adoc` if anything lands before tagging.
-- [ ] Gather 0.1.0-rc1 feedback (package-mermaid, roc-pdf), settle names,
-  then release 0.1.0 with every check in `AGENTS.md`.
-
 ## After 0.1.0
 
 - Re-source the AOTS-derived scored suites (`harfbuzz/aots`,

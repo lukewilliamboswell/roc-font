@@ -172,18 +172,19 @@ it in.
 A new nightly can change formatting and allocation counts. Run `roc fmt`
 on every directory the checks format; when the allocation ratchet reports
 `compiler-changed` (the baseline was recorded with another compiler),
-confirm the same counts change on `main` without your change, record them
-with `python3 scripts/bench.py --check --update-baseline` and explain the
-change; and review the compiler notes below.
+  confirm the same counts change on `main` without your change, record them
+  with `python3 scripts/bench.py --check --update-baseline` in the pinned
+  oracle Python environment, and explain the change. The generated layout
+  fonts use fontTools with uharfbuzz from `tools/oracle/requirements.txt`.
 
-## Compiler notes (last reviewed on nightly-2026-10-24)
+## Compiler notes
 
 - Booleans are `True`/`False`. Nested defaulted records work.
 - Avoid until fixed on the nightly: wrapping a record field in a tag and
   reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
   ARC pass; `Dict(k, {})` hangs native builds.
-- Some nightlies report type errors inside a cached basic-cli platform yet
-  build; the scripts tolerate only problems inside the cached platform.
-  basic-cli 0.26.0 reports none on nightly-2026-10-24.
+- basic-cli 0.27.0 builds with the iterator-based APIs in the November 2026
+  nightlies. The scripts tolerate type diagnostics only inside the cached
+  platform in the checks where the compiler can still build.
 - A local debug `roc` on `PATH` may panic on this code; use the latest
   nightly (`ROC=...`).
