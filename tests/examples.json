@@ -1,5 +1,5 @@
 {
-  "about": "The expected output of every example under examples/, read by scripts/examples.py: the arguments and standard input of each case, run from the repository root, and its exact standard output, standard error and exit status. Rewrite after an intended change with: python3 scripts/examples.py check --update. A release copies these cases into the spec.json of its examples archive.",
+  "about": "The expected output of every example under examples/, read by scripts/examples.py: the arguments and standard input of each case, run from the application's directory as in the shared nightly runner, and its exact standard output, standard error and exit status. Rewrite after an intended change with: python3 scripts/examples.py check --update. A release copies these cases into the spec.json of its examples archive.",
   "apps": [
     {
       "path": "examples/measure.roc",
@@ -41,10 +41,10 @@
         {
           "name": "not-a-font",
           "args": [
-            "examples/shape.roc"
+            "shape.roc"
           ],
           "stdin": "",
-          "stdout": "Checking examples/shape.roc\nThis font cannot be used:\n  - not a TrueType or OpenType font file\n",
+          "stdout": "Checking shape.roc\nThis font cannot be used:\n  - not a TrueType or OpenType font file\n",
           "stderr": "",
           "exit_code": 1
         },

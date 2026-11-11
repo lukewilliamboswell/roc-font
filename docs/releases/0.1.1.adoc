@@ -1,0 +1,22 @@
+= roc-font 0.1.1
+
+The release examples now run each recorded case from its application's
+own directory, matching the shared nightly compatibility runner. The
+file-reading example checks a sibling source file to exercise rejection
+of invalid font bytes.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.27.0/9yjxqdGTP4xSpSEmDazwTmRsehfRZzA19pwEKkR6fj1g.tar.zst",
+	font: "{package-url}",
+}
+
+import font.Font
+----
+
+Use the latest Roc nightly. The release attaches the package bundle,
+`roc-font-examples-0.1.1.zip`, the API reference and the PDF manual. The
+Compilers section records the compiler used to build and test them.

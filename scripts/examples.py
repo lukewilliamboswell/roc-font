@@ -10,7 +10,7 @@ attaches. Standard library only.
 bundle` makes from the working tree, served on loopback in place of
 `../package/main.roc` (scripts/flight.py; `--source` compiles package/
 directly instead, for quick local iteration only), and runs each case recorded for it in tests/examples.json (its arguments and
-standard input, from the repository root), comparing standard output,
+standard input, from the app's directory), comparing standard output,
 standard error and exit status exactly. Every example must have a case, and
 every recorded app must exist, so nothing is skipped silently. The example
 in README.md must be examples/measure.roc, with the release's
@@ -145,7 +145,7 @@ def run_suite(spec: dict, cwd: Path, work: Path, extra: list[str], env: dict[str
             failures += len(app["cases"])
             continue
         for case in app["cases"]:
-            actual = run_case(exe, case, cwd, env)
+            actual = run_case(exe, case, cwd / Path(app["path"]).parent, env)
             label = f"{app['path']} [{case['name']}]"
             if update:
                 if any(case[field] != actual[field] for field in actual):
