@@ -70,7 +70,7 @@ jobs:
       - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
 
       - name: Install that Roc nightly
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
           version: nightly-new-compiler
           nightly-tag: ${{ steps.nightly.outputs.tag }}
@@ -242,7 +242,7 @@ jobs:
           persist-credentials: false
 
       - name: Install the Roc nightly the build used
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
           version: nightly-new-compiler
           nightly-tag: ${{ needs.build.outputs.nightly }}
