@@ -9,7 +9,9 @@ import FontBench
 ## Allocation counter for scripts/bench.py; never a fuzz target. The input is
 ## one case file (see FontBench). The target prepares it, runs the operation
 ## once inside Fuzz.measure!, and then crashes on purpose to report
-## the counts, so exit code 77 is the expected result.
+## the counts. The harness uses the native runner's raw single-input mode
+## (no exploration), so large benchmark fonts are not limited by the quality
+## supervisor's 1 MiB corpus bound. Exit 77 and this exact marker are required.
 ##
 ## `allocations` counts every roc_alloc and roc_realloc the operation made.
 ## `leaked` is how many of them were still live after the operation's result
@@ -27,7 +29,7 @@ test! = |bytes| {
 				Ok(sum) => "ok checksum=${sum.to_str()}"
 				Err(sum) => "rejected checksum=${sum.to_str()}"
 			}
-			crash "ALLOCATION_DIAGNOSTIC allocations=${(measured.stats.allocs + measured.stats.reallocs).to_str()} leaked=${leaked.to_str()} result=${result}"
+			crash "ALLOCATION_DIAGNOSTIC allocations=${(measured.stats.allocs + measured.stats.reallocs).to_str()} leaked=${leaked.to_str()} requested_bytes=${measured.stats.requested_bytes.to_str()} peak_live_bytes=${measured.stats.peak_live_bytes.to_str()} result=${result}"
 		}
 	}
 }

@@ -25,7 +25,11 @@ first change; it applies to people as much as to agents.
   with the renderer pinned in `Blueprint.lock`. No Nix is needed.
 
 Oracles (HarfBuzz through uharfbuzz, fontTools, FreeType, Chrome) are
-needed only to record new reference results, never to run the checks.
+needed only to record new reference results. The full local allocation
+ratchet additionally uses pinned fontTools to generate adversarial fonts;
+run it with `tools/oracle/.venv/bin` first on `PATH` after the oracle setup
+in `docs/conformance.adoc`. CI smoke and cached conformance need no oracle
+libraries.
 
 The check and example orchestration is executable Roc under `scripts/`, run
 by `roc-stable`, pinned to `nightly-2026-11-18-a520eed` in Blueprint and each

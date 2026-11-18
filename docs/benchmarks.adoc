@@ -202,9 +202,14 @@ without the corpus keeps the corpus cases already recorded.
 
 roc-fuzz 0.6.2 exposes named measurement scopes with allocation and
 reallocation calls, requested bytes, live bytes and peak live bytes. The
-benchmark diagnostic retains the existing call-count ratchet by adding
-`stats.allocs` and `stats.reallocs`; the result checksum stays inside the
-measured operation. Narrow fuzz targets retain their allocation-growth
+benchmark diagnostic sums `stats.allocs` and `stats.reallocs` for the existing
+call-count ratchet, and separately ratchets `requested_bytes` and
+`peak_live_bytes`. The result checksum stays inside the measured operation.
+Measurements run one fixed input through the native runner's `raw` interface,
+without mutation, so the quality supervisor's 1 MiB limit does not exclude
+large benchmark fonts. Peak live bytes include inputs and prepared data
+retained at scope entry; requested bytes count only the measured operation.
+Narrow fuzz targets retain their allocation-growth
 assertions using the same counters.
 
 == Time ratios

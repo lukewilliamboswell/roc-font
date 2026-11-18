@@ -1185,14 +1185,15 @@ Shaper :: {}.{
 	## first: `liga` (0), then the features shaping applies by default
 	## (1), then the others (2); ties go by tag.
 	credit_rank : U64 -> U64
-	credit_rank = |t|
+	credit_rank = |t| {
 		if t == Shaper.liga_tag {
-			0
-		} else if Shaper.default_tags.contains(t) {
-			1
-		} else {
-			2
+			return 0
 		}
+		if Shaper.default_tags.contains(t) {
+			return 1
+		}
+		2
+	}
 
 	liga_tag : U64
 	liga_tag = Shaper.tag("liga")
