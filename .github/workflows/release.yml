@@ -199,7 +199,8 @@ jobs:
           set -euo pipefail
           bundle="$(basename "$(find release/assets -name '*.tar.zst')")"
           export PACKAGE_URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$VERSION/$bundle"
-          export COMPILER="$(roc version)"
+          COMPILER="$(roc version)"
+          export COMPILER
           blueprint run release-notes -- "docs/releases/$VERSION.adoc" release/notes.md
           cat release/notes.md
 
