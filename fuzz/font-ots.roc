@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -50,11 +50,11 @@ test! = |bytes| {
 	check_damaged!(large, tag)
 	small_file = FontBuild.file(small_clean)
 	large_file = FontBuild.file(large)
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small_file, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large_file, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large_file, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading a damaged font 8 times larger took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()} for the smaller font undamaged"
+	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small_file, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large_file, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large_file, Font.ReadOptions.{}))
+	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
+		crash "reading a damaged font 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()} for the smaller font undamaged"
 	}
 	Fuzz.keep
 }
@@ -352,6 +352,7 @@ check_run! = |text, run, rtl| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-ots",
 	generator: Fuzz.raw_bytes,
 	test!,

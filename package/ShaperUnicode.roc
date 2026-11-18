@@ -71,7 +71,7 @@ ShaperUnicode :: {}.{
 		var $n = 0
 		for k in 0..<width {
 			b = (table.get(at + k) ?? '0').to_u64()
-			digit = if (b >= 'A'.to_u64()) b - 'A'.to_u64() + 10 else b - '0'.to_u64()
+			digit = if (b >= 'A'.U64) b - 'A'.U64 + 10 else b - '0'.U64
 			$n = $n * 16 + digit
 		}
 		$n

@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -51,24 +51,24 @@ test! = |bytes| {
 			}
 		}
 	}
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small.file, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading a variable font 8 times larger took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
+	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
+	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
+		crash "reading a variable font 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
 	}
 	place = places.first() ?? Font.Variation.{ weight: Bold }
-	small_at = Fuzz.measure_allocs!(|{}| Font.at(small_font, place))
-	large_at = Fuzz.measure_allocs!(|{}| Font.at(large_font, place))
-	Fuzz.expect_no_leaks!(|{}| Font.at(large_font, place))
-	if large_at.allocations > small_at.allocations + 4 {
-		crash "moving a font with 8 times the regions took ${large_at.allocations.to_str()} allocations, against ${small_at.allocations.to_str()}"
+	small_at = Fuzz.measure!("allocations", || Font.at(small_font, place))
+	large_at = Fuzz.measure!("allocations", || Font.at(large_font, place))
+	Fuzz.expect_no_leaks!(|| Font.at(large_font, place))
+	if large_at.stats.allocs > small_at.stats.allocs + 4 {
+		crash "moving a font with 8 times the regions took ${large_at.stats.allocs.to_str()} allocations, against ${small_at.stats.allocs.to_str()}"
 	}
-	small_query = Fuzz.measure_allocs!(|{}| advances(small_at.value, small.glyphs))
-	large_query = Fuzz.measure_allocs!(|{}| advances(large_at.value, small.glyphs))
-	Fuzz.expect_no_leaks!(|{}| advances(large_at.value, small.glyphs))
-	if large_query.allocations > small_query.allocations + 4 {
-		crash "looking up ${small.glyphs.to_str()} advances took ${large_query.allocations.to_str()} allocations in a font 8 times larger, against ${small_query.allocations.to_str()}"
+	small_query = Fuzz.measure!("allocations", || advances(small_at.value, small.glyphs))
+	large_query = Fuzz.measure!("allocations", || advances(large_at.value, small.glyphs))
+	Fuzz.expect_no_leaks!(|| advances(large_at.value, small.glyphs))
+	if large_query.stats.allocs > small_query.stats.allocs + 4 {
+		crash "looking up ${small.glyphs.to_str()} advances took ${large_query.stats.allocs.to_str()} allocations in a font 8 times larger, against ${small_query.stats.allocs.to_str()}"
 	}
 	Fuzz.keep
 }
@@ -265,6 +265,7 @@ check! = |built, places| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-var",
 	generator: Fuzz.raw_bytes,
 	test!,

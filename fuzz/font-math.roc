@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import "../tests/fonts/math/math-precise-variable.ttf" as precise_file : List(U8)
@@ -30,20 +30,20 @@ test! = |bytes| {
 	small = check_generated(small_bytes, 8, delta)
 	middle = check_generated(middle_bytes, 64, delta)
 	large = check_generated(large_bytes, 256, delta)
-	a = Fuzz.measure_allocs!(|{}| Font.from_bytes(small_bytes, Font.ReadOptions.{}))
-	b = Fuzz.measure_allocs!(|{}| Font.from_bytes(middle_bytes, Font.ReadOptions.{}))
-	c = Fuzz.measure_allocs!(|{}| Font.from_bytes(large_bytes, Font.ReadOptions.{}))
-	if b.allocations > 10 * a.allocations + 128 or c.allocations > 5 * b.allocations + 128 {
+	a = Fuzz.measure!("allocations", || Font.from_bytes(small_bytes, Font.ReadOptions.{}))
+	b = Fuzz.measure!("allocations", || Font.from_bytes(middle_bytes, Font.ReadOptions.{}))
+	c = Fuzz.measure!("allocations", || Font.from_bytes(large_bytes, Font.ReadOptions.{}))
+	if b.stats.allocs > 10 * a.stats.allocs + 128 or c.stats.allocs > 5 * b.stats.allocs + 128 {
 		crash "MATH reading allocations grew faster than the generated table sizes"
 	}
-	qa = Fuzz.measure_allocs!(|{}| query(small, 1))
-	qb = Fuzz.measure_allocs!(|{}| query(middle, 1))
-	qc = Fuzz.measure_allocs!(|{}| query(large, 1))
-	if qb.allocations > qa.allocations + 2 or qc.allocations > qa.allocations + 2 {
+	qa = Fuzz.measure!("allocations", || query(small, 1))
+	qb = Fuzz.measure!("allocations", || query(middle, 1))
+	qc = Fuzz.measure!("allocations", || query(large, 1))
+	if qb.stats.allocs > qa.stats.allocs + 2 or qc.stats.allocs > qa.stats.allocs + 2 {
 		crash "one MATH glyph query allocates with unrelated glyph count"
 	}
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large_bytes, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| query(large, 1))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large_bytes, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| query(large, 1))
 	candidate = if bytes.take_first(4) == [0, 1, 0, 0] or bytes.take_first(4) == "OTTO".to_utf8() or bytes.take_first(4) == "ttcf".to_utf8() {
 		bytes
 	} else match choice % 6 {

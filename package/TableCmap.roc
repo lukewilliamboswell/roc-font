@@ -237,18 +237,18 @@ TableCmap := {
 		var $count = 0
 		for range in cmap.ranges {
 			first = range.first.to_u64()
-			glyph = range.glyph.to_u64()
-			if glyph < glyph_count {
-				last = if (cmap.same) range.last.to_u64() else range.last.to_u64().min(first + (glyph_count - 1 - glyph))
+			glyph_value = range.glyph.to_u64()
+			if glyph_value < glyph_count {
+				last = if (cmap.same) range.last.to_u64() else range.last.to_u64().min(first + (glyph_count - 1 - glyph_value))
 				$count = $count + (if (last >= first) last - first + 1 else 0)
 			}
 		}
 		var $out = List.with_capacity($count)
 		for range in cmap.ranges {
 			first = range.first.to_u64()
-			glyph = range.glyph.to_u64()
-			if glyph < glyph_count {
-				last = if (cmap.same) range.last.to_u64() else range.last.to_u64().min(first + (glyph_count - 1 - glyph))
+			glyph_value = range.glyph.to_u64()
+			if glyph_value < glyph_count {
+				last = if (cmap.same) range.last.to_u64() else range.last.to_u64().min(first + (glyph_count - 1 - glyph_value))
 				var $c = first
 				while $c <= last {
 					$out = $out.append($c.to_u32_wrap())
@@ -314,11 +314,11 @@ TableCmap := {
 			Ok(t) if Bytes.fits(t.offset, t.length, bytes.len()) and t.length >= 6 and Bytes.u16(bytes, t.offset + 4) != 0 => Present(Bytes.u16(bytes, t.offset + 4))
 			_ => Absent
 		}
-		read = match TableCmap.check(found.data, glyph_count) {
+		read_value = match TableCmap.check(found.data, glyph_count) {
 			Ok(_) => TableCmap.read(found.data, page)
 			Err(problem) => Err(problem)
 		}
-		match read {
+		match read_value {
 			Ok(map) => Ok(map)
 			Err(NoUnicodeMapping) => Err(NoUnicodeMapping)
 			Err(Bad(at)) => Err(Sfnt.bad("cmap", found.offset + at))
@@ -739,14 +739,14 @@ TableCmap := {
 			var $best = { rank: TableCmap.unranked, offset: 0, format: 0 }
 			for i in 0..<count {
 				at = 4 + 8 * i
-				rank = TableCmap.rank(Bytes.u16(cmap, at), Bytes.u16(cmap, at + 2))
+				rank_value = TableCmap.rank(Bytes.u16(cmap, at), Bytes.u16(cmap, at + 2))
 				offset = Bytes.u32(cmap, at + 4)
 				# An offset outside the table is kept as a candidate, so a
 				# broken subtable that would be chosen is reported.
 				format = if (Bytes.fits(offset, 2, cmap.len())) Bytes.u16(cmap, offset) else TableCmap.outside
 				usable = format == TableCmap.outside or format == 0 or format == 4 or format == 6 or format == 10 or format == 12 or format == 13
-				if usable and rank < $best.rank {
-					$best = { rank, offset, format }
+				if usable and rank_value < $best.rank {
+					$best = { rank: rank_value, offset, format }
 				}
 			}
 			best = $best

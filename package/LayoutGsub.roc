@@ -2566,16 +2566,16 @@ LayoutGsub := {
 			for l in 0..<langs {
 				lang = script + LayoutGsub.u16(data, script + 4 + 6 * l + 4)
 				required = LayoutGsub.u16(data, lang + 2)
-				indices = LayoutGsub.u16(data, lang + 4)
-				if !LayoutGsub.fits(lang, 6, size) or LayoutGsub.u16(data, lang) != 0 or (required != 0xFFFF and required >= features) or indices > features or !LayoutGsub.fits(lang + 6, 2 * indices, size) {
+				indices_value = LayoutGsub.u16(data, lang + 4)
+				if !LayoutGsub.fits(lang, 6, size) or LayoutGsub.u16(data, lang) != 0 or (required != 0xFFFF and required >= features) or indices_value > features or !LayoutGsub.fits(lang + 6, 2 * indices_value, size) {
 					return Err(Bad(lang))
 				}
-				for k in 0..<indices {
+				for k in 0..<indices_value {
 					if LayoutGsub.u16(data, lang + 6 + 2 * k) >= features {
 						return Err(Bad(lang + 6 + 2 * k))
 					}
 				}
-				$steps = LayoutGsub.ots_spend(ctx, $steps, indices, lang)?
+				$steps = LayoutGsub.ots_spend(ctx, $steps, indices_value, lang)?
 			}
 		}
 		Ok($steps)
@@ -3178,8 +3178,8 @@ mark_props = LayoutGsub.mark.shl_wrap(16)
 
 # Glyphs and clusters after applying the lookup to glyphs given with their
 # property words, one cluster each.
-ligated : U64, Bool, List({ glyph : U64, props : U64 }) -> { glyphs : List(U64), clusters : List(U64) }
-ligated = |flag, auto_zwj, input| match LayoutGsub.read(liga_gsub(flag)) {
+ligated_fixture : U64, Bool, List({ glyph : U64, props : U64 }) -> { glyphs : List(U64), clusters : List(U64) }
+ligated_fixture = |flag, auto_zwj, input| match LayoutGsub.read(liga_gsub(flag)) {
 	Ok(gsub) => {
 		items = input.map_with_index(|g, i| { glyph: g.glyph, cluster: i, mask: 1, props: g.props })
 		plan = [{ index: 0, mask: 1, auto_zwnj: True, auto_zwj, random: False }]
@@ -3194,26 +3194,26 @@ letters = |glyphs| glyphs.map(|glyph| { glyph, props: ShaperUnicode.lowercase_le
 
 # The first ligature of the set whose components follow, ligatures whose
 # second component is another glyph passed over, clusters merged.
-expect ligated(0, True, letters([10, 11])) == { glyphs: [102], clusters: [0] }
-expect ligated(0, True, letters([10, 11, 11])) == { glyphs: [101], clusters: [0] }
-expect ligated(0, True, letters([10, 12, 11])) == { glyphs: [100, 11], clusters: [0, 2] }
-expect ligated(0, True, letters([10, 11, 10, 12])) == { glyphs: [102, 100], clusters: [0, 2] }
+expect ligated_fixture(0, True, letters([10, 11])) == { glyphs: [102], clusters: [0] }
+expect ligated_fixture(0, True, letters([10, 11, 11])) == { glyphs: [101], clusters: [0] }
+expect ligated_fixture(0, True, letters([10, 12, 11])) == { glyphs: [100, 11], clusters: [0, 2] }
+expect ligated_fixture(0, True, letters([10, 11, 10, 12])) == { glyphs: [102, 100], clusters: [0, 2] }
 
 # At the end of the run, or before a glyph no ligature continues with, only
 # the one-glyph ligature applies.
-expect ligated(0, True, letters([10])) == { glyphs: [103], clusters: [0] }
-expect ligated(0, True, letters([11, 10])) == { glyphs: [11, 103], clusters: [0, 1] }
-expect ligated(0, True, letters([10, 13])) == { glyphs: [103, 13], clusters: [0, 1] }
+expect ligated_fixture(0, True, letters([10])) == { glyphs: [103], clusters: [0] }
+expect ligated_fixture(0, True, letters([11, 10])) == { glyphs: [11, 103], clusters: [0, 1] }
+expect ligated_fixture(0, True, letters([10, 13])) == { glyphs: [103, 13], clusters: [0, 1] }
 
 # A mark the lookup flag ignores is passed over, and stays after the
 # ligature; a mark it does not ignore stops the match.
-expect ligated(0x08, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }]).glyphs == [102, 30]
-expect ligated(0x08, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }, { glyph: 11, props: 0 }]).glyphs == [101, 30, 30]
-expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }]).glyphs == [103, 30, 11]
+expect ligated_fixture(0x08, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }]).glyphs == [102, 30]
+expect ligated_fixture(0x08, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }, { glyph: 11, props: 0 }]).glyphs == [101, 30, 30]
+expect ligated_fixture(0, True, [{ glyph: 10, props: 0 }, { glyph: 30, props: mark_props }, { glyph: 11, props: 0 }]).glyphs == [103, 30, 11]
 
 # A ZWJ between components is skipped when the feature skips joiners, and
 # stops the match when it does not; a ZWJ at the end leaves the
 # one-glyph ligature.
-expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [102, 20]
-expect ligated(0, False, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [103, 20, 11]
-expect ligated(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }]).glyphs == [103, 20]
+expect ligated_fixture(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [102, 20]
+expect ligated_fixture(0, False, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }, { glyph: 11, props: 0 }]).glyphs == [103, 20, 11]
+expect ligated_fixture(0, True, [{ glyph: 10, props: 0 }, { glyph: 20, props: zwj_props }]).glyphs == [103, 20]

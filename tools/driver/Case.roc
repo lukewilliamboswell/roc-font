@@ -84,8 +84,8 @@ Case :: {}.{
 					_ => Err(BadKind)
 				}
 				match (parsed, Case.flags(flag_text)) {
-					(Ok((kind, scalars)), Ok(f)) =>
-						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind, scalars, settings: f.settings, face: f.face, location: f.location, shaping: f.shaping })
+					(Ok((kind, scalars_value)), Ok(f)) =>
+						if (tag.is_empty() or font.is_empty()) Err(Malformed({ tag, why: "empty-field" })) else Ok({ tag, font, kind, scalars: scalars_value, settings: f.settings, face: f.face, location: f.location, shaping: f.shaping })
 					(Err(BadKind), _) => Err(Malformed({ tag, why: "kind" }))
 					(Err(BadUnicodes), _) => Err(Malformed({ tag, why: "code-points" }))
 					(Err(_), _) => Err(Malformed({ tag, why: "items" }))
@@ -421,8 +421,8 @@ Case :: {}.{
 		var $at = 0.U64
 		for s in code_points {
 			$out = $out.append($at)
-			width = if (s < 0x80) 1 else if (s < 0x800) 2 else if (s < 0x10000) 3 else 4
-			$at = $at + width
+			width_value = if (s < 0x80) 1 else if (s < 0x800) 2 else if (s < 0x10000) 3 else 4
+			$at = $at + width_value
 		}
 		$out.append($at)
 	}

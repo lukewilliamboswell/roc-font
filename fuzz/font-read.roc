@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -49,11 +49,11 @@ test! = |bytes| {
 	}
 	small = FontBuild.scaled(bytes, 2)
 	large = FontBuild.scaled(bytes, 16)
-	small_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(small, Font.ReadOptions.{}))
-	large_cost = Fuzz.measure_allocs!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
-	if large_cost.allocations > 10 * small_cost.allocations + 256 {
-		crash "reading a font 8 times larger took ${large_cost.allocations.to_str()} allocations, against ${small_cost.allocations.to_str()}"
+	small_cost = Fuzz.measure!("allocations", || Font.from_bytes(small, Font.ReadOptions.{}))
+	large_cost = Fuzz.measure!("allocations", || Font.from_bytes(large, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large, Font.ReadOptions.{}))
+	if large_cost.stats.allocs > 10 * small_cost.stats.allocs + 256 {
+		crash "reading a font 8 times larger took ${large_cost.stats.allocs.to_str()} allocations, against ${small_cost.stats.allocs.to_str()}"
 	}
 	match large_cost.value {
 		Ok(_) => Fuzz.keep
@@ -222,6 +222,7 @@ check_run! = |text, run, rtl| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-read",
 	generator: Fuzz.raw_bytes,
 	test!,

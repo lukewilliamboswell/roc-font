@@ -154,11 +154,11 @@ Face := {
 		head = TableHead.from_tables(bytes, tables)
 		hhea = TableHhea.from_tables(bytes, tables)
 		maxp = TableMaxp.from_tables(bytes, tables)
-		cmap = TableCmap.from_tables(bytes, tables)
+		cmap_value = TableCmap.from_tables(bytes, tables)
 		$required = Face.collect($required, head)
 		$required = Face.collect($required, hhea)
 		$required = Face.collect($required, maxp)
-		$required = Face.collect($required, cmap)
+		$required = Face.collect($required, cmap_value)
 		# OTS rejects a font with a broken `OS/2` or `name`.
 		os2 = TableOs2.from_tables(bytes, tables)
 		$required = Face.collect($required, os2)
@@ -166,9 +166,9 @@ Face := {
 		$required = Face.collect_all($required, name)
 		var $optional = []
 		match (head, hhea, maxp) {
-			(Ok(h), Ok(hh), Ok(glyph_count)) => {
-				advances = TableHmtx.from_tables(bytes, tables, hh.metric_count, glyph_count)
-				boxes = TableGlyf.from_tables(bytes, tables, h.long_offsets, glyph_count, hh.metric_count)
+			(Ok(h), Ok(hh), Ok(glyph_count_value)) => {
+				advances = TableHmtx.from_tables(bytes, tables, hh.metric_count, glyph_count_value)
+				boxes = TableGlyf.from_tables(bytes, tables, h.long_offsets, glyph_count_value, hh.metric_count)
 				$required = Face.collect($required, advances)
 				$required = Face.collect($required, boxes)
 				# Every glyph's outline is checked as OTS checks it (flags,
@@ -180,7 +180,7 @@ Face := {
 					if boxes.is_ok() {
 						match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
 							(Found(glyf), Found(loca), Found(hmtx)) => {
-								checked = TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count, hmtx.data, hh.metric_count)
+								checked = TableGlyfPoints.read(glyf.data, loca.data, h.long_offsets, glyph_count_value, hmtx.data, hh.metric_count)
 								match checked {
 									Ok(_) => {}
 									Err(problems) => {
@@ -194,12 +194,12 @@ Face := {
 					} else {
 						Unread
 					}
-				post = TablePost.from_tables(bytes, tables, glyph_count)
+				post = TablePost.from_tables(bytes, tables, glyph_count_value)
 				$required = Face.collect_all($required, post)
 				# A layout table over the lookup limit is dropped; a broken one
 				# rejects the font, as OTS rejects it.
-				gsub = LayoutGsub.from_tables(bytes, tables, options.max_lookups)
-				match gsub {
+				gsub_value = LayoutGsub.from_tables(bytes, tables, options.max_lookups)
+				match gsub_value {
 					Err(OverLimit(which)) => {
 						$optional = $optional.append(OverLimit(which))
 					}
@@ -208,13 +208,13 @@ Face := {
 					}
 					Ok(_) => {}
 				}
-				variations = Face.read_variations(bytes, tables, glyph_count, h.long_offsets, hh.metric_count, points)
+				variations = Face.read_variations(bytes, tables, glyph_count_value, h.long_offsets, hh.metric_count, points)
 				var $var_problems = variations.problems
-				axes = match variations.space {
+				axes_value = match variations.space {
 					Present(space) => Present(TableVar.axis_total(space))
 					Absent => Absent
 				}
-				axis_count = match axes {
+				axis_count = match axes_value {
 					Present(n) => n
 					Absent => 0
 				}
@@ -225,10 +225,10 @@ Face := {
 					Missing => Ok(Absent)
 					Bad(at) => Err(Required(Sfnt.bad("GDEF", at)))
 					Found(found) =>
-						match LayoutVar.check_gdef(found.data, glyph_count, fvar_axes) {
+						match LayoutVar.check_gdef(found.data, glyph_count_value, fvar_axes) {
 							Err(p) => Err(Required(Sfnt.bad("GDEF", found.offset + p.offset)))
 							Ok(_) =>
-								match axes {
+								match axes_value {
 									Absent => Ok(Absent)
 									Present(n) =>
 										match LayoutVar.read_gdef(found.data, n) {
@@ -250,7 +250,7 @@ Face := {
 						LayoutVar.none(axis_count)
 					}
 				}
-				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count, options.max_lookups, lv)
+				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count_value, options.max_lookups, lv)
 				match gpos {
 					Err(OverLimit(which)) => {
 						$optional = $optional.append(OverLimit(which))
@@ -258,7 +258,7 @@ Face := {
 					Err(BadTable(b)) => {
 						$required = $required.append(BadTable(b))
 					}
-					Ok(Present(g)) if axes != Absent => {
+					Ok(Present(g)) if axes_value != Absent => {
 						$var_problems = $var_problems.concat(g.deltas.map(|at| Sfnt.bad("GPOS", at)))
 					}
 					Ok(_) => {}
@@ -270,7 +270,7 @@ Face := {
 				cff_only = !tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x43464620 or t.tag == 0x43464632)
 				kern = match LayoutKerning.from_kern(bytes, tables) {
 					Ok(Present(_)) if cff_only => Err(Drop(Sfnt.bad("kern", Face.table_offset(tables, "kern"))))
-					read => read
+					read_value => read_value
 				}
 				match kern {
 					Err(Drop(problem)) => {
@@ -287,7 +287,7 @@ Face := {
 						$optional = $optional.append(Sfnt.bad("MATH", at))
 						TableMath.none
 					}
-					Found(found) => match TableMath.read(found.data, glyph_count, lv) {
+					Found(found) => match TableMath.read(found.data, glyph_count_value, lv) {
 						Ok(value) => value
 						Err(offsets) => {
 							$optional = $optional.concat(offsets.map(|at| Sfnt.bad("MATH", found.offset + at)))
@@ -296,7 +296,7 @@ Face := {
 					}
 				}
 				# `FeatureVariations` of the layout tables that are used.
-				gsub_fv = match (if (gsub.is_ok()) Face.read_feature_variations(bytes, tables, "GSUB", 0x47535542, axes, fvar_axes, lv) else Ok(LayoutVar.no_feature_variations)) {
+				gsub_fv = match (if (gsub_value.is_ok()) Face.read_feature_variations(bytes, tables, "GSUB", 0x47535542, axes_value, fvar_axes, lv) else Ok(LayoutVar.no_feature_variations)) {
 					Ok(fv) => fv
 					Err(Required(ps)) => {
 						$required = $required.concat(ps)
@@ -307,7 +307,7 @@ Face := {
 						LayoutVar.no_feature_variations
 					}
 				}
-				gpos_fv = match (if (gpos.is_ok()) Face.read_feature_variations(bytes, tables, "GPOS", 0x47504F53, axes, fvar_axes, lv) else Ok(LayoutVar.no_feature_variations)) {
+				gpos_fv = match (if (gpos.is_ok()) Face.read_feature_variations(bytes, tables, "GPOS", 0x47504F53, axes_value, fvar_axes, lv) else Ok(LayoutVar.no_feature_variations)) {
 					Ok(fv) => fv
 					Err(Required(ps)) => {
 						$required = $required.concat(ps)
@@ -327,16 +327,16 @@ Face := {
 				if !$required.is_empty() or (options.strict and !problems.is_empty()) {
 					Err(problems)
 				} else {
-					match (advances, boxes, cmap) {
+					match (advances, boxes, cmap_value) {
 						(Ok(a), Ok(b), Ok(c)) => {
 							no_lv = LayoutVar.none(0)
-							gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
+							gdef_value = match Face.located_tag(bytes, tables, 0x47444546, 12) {
 								Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
 								_ => LayoutGdef.none
 							}
 							Ok({
 								units_per_em: h.units_per_em,
-								glyph_count,
+								glyph_count: glyph_count_value,
 								advances: a,
 								boxes: b,
 								has_glyf: tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x6C6F6361),
@@ -345,9 +345,9 @@ Face := {
 								os2: os2 ?? Absent,
 								post: Face.present(post ?? Absent, TablePost.none),
 								name: Face.present(name ?? Absent, TableName.none),
-								gsub: LayoutGsub.with_gdef(gsub ?? LayoutGsub.none, gdef),
-								gdef,
-								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef),
+								gsub: LayoutGsub.with_gdef(gsub_value ?? LayoutGsub.none, gdef_value),
+								gdef: gdef_value,
+								kerning: LayoutKerning.combine(gpos ?? Absent, kern ?? Absent, if (keep_variations) lv else no_lv, gdef_value),
 								space: if (keep_variations) variations.space else Absent,
 								hvar: if (keep_variations) variations.hvar else Absent,
 								mvar: if (keep_variations) variations.mvar else Absent,
@@ -465,7 +465,7 @@ Face := {
 	## outline points already read from `glyf`, `loca` and `hmtx` as found
 	## here, or `Unread` when they were not.
 	read_variations : List(U8), List(Sfnt.Table), U64, Bool, U64, [Read(Try(TableGlyfPoints, List(TableGlyfPoints.Problem))), Unread] -> Variations
-	read_variations = |bytes, tables, glyph_count, long_offsets, metric_count, points_read| {
+	read_variations = |bytes, tables, glyph_count_value, long_offsets, metric_count, points_read| {
 		nothing = { space: Absent, hvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent }
 		# Each problem in the file: its table's offset plus its own.
 		placed = |ps| ps.map(|p| Sfnt.bad(p.table, Face.table_offset(tables, p.table) + p.offset))
@@ -478,11 +478,11 @@ Face := {
 				match TableVar.read_fvar(fvar.data) {
 					Err(problems) => { ..nothing, problems: placed(problems), fvar_axes: if (fvar.data.len() >= 10) Present(Bytes.u16(fvar.data, 8)) else Absent }
 					Ok(axes_only) => {
-						axes = TableVar.axis_total(axes_only)
+						axes_value = TableVar.axis_total(axes_only)
 						avar = match Sfnt.located(bytes, tables, "avar", 0) {
 							Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => Unusable(Sfnt.bad("avar", found.offset))
 							Found(found) =>
-								match TableVar.read_avar(found.data, axes) {
+								match TableVar.read_avar(found.data, axes_value) {
 									Ok(maps) => Maps(maps)
 									Err(problems) => Dropped(placed(problems))
 								}
@@ -500,23 +500,23 @@ Face := {
 						hvar = match Sfnt.located(bytes, tables, "HVAR", 0) {
 							Missing => Ok(Absent)
 							Bad(at) => Err([Sfnt.bad("HVAR", at)])
-							Found(found) => TableVar.read_hvar(found.data, axes, glyph_count).map_ok(|value| Present(value)).map_err(placed)
+							Found(found) => TableVar.read_hvar(found.data, axes_value, glyph_count_value).map_ok(|value| Present(value)).map_err(placed)
 						}
 						mvar = match Sfnt.located(bytes, tables, "MVAR", 0) {
 							Missing => Ok(Absent)
 							Bad(at) => Err([Sfnt.bad("MVAR", at)])
-							Found(found) => TableVar.read_mvar(found.data, axes).map_ok(|value| Present(value)).map_err(placed)
+							Found(found) => TableVar.read_mvar(found.data, axes_value).map_ok(|value| Present(value)).map_err(placed)
 						}
 						outlines = match (Sfnt.located(bytes, tables, "gvar", 0), Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
 							(Found(gvar), Found(glyf), Found(loca), Found(hmtx)) => {
 								checked = match points_read {
 									Read(already) => already
-									Unread => TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count)
+									Unread => TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count_value, hmtx.data, metric_count)
 								}
 								match checked {
 									Err(problems) => Err(placed(problems))
 									Ok(points) =>
-										match TableGvar.read(gvar.data, axes, points) {
+										match TableGvar.read(gvar.data, axes_value, points) {
 											Err(problems) => Err(placed(problems))
 											Ok(moves) => Ok(Present({ points, gvar: moves }))
 										}
@@ -530,7 +530,7 @@ Face := {
 						}
 						vvar = match Sfnt.located(bytes, tables, "VVAR", 0) {
 							Found(found) =>
-								match TableVar.check_vvar_ots(found.data, axes) {
+								match TableVar.check_vvar_ots(found.data, axes_value) {
 									Ok(_) => []
 									Err(at) => [Sfnt.bad("VVAR", found.offset + at)]
 								}
@@ -538,9 +538,9 @@ Face := {
 						}
 						problems = unusable.concat(vvar).concat(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), mvar), outlines))
 						if problems.is_empty() {
-							{ space: Present(space), hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
+							{ space: Present(space), hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes_value) }
 						} else {
-							{ ..nothing, problems: problems, avar_problems, fvar_axes: Present(axes) }
+							{ ..nothing, problems: problems, avar_problems, fvar_axes: Present(axes_value) }
 						}
 					}
 				}
@@ -552,33 +552,33 @@ Face := {
 	## other drops the variations (`Variation`). OTS also rejects feature
 	## variations in a font without `fvar`.
 	read_feature_variations : List(U8), List(Sfnt.Table), Str, U64, [Present(U64), Absent], [Present(U64), Absent], LayoutVar -> Try(LayoutVar.FeatureVariations, [Required(List(Problem)), Variation(List(Problem))])
-	read_feature_variations = |bytes, tables, tag, tag_value, axes, fvar_axes, lv|
-		match (Face.located_tag(bytes, tables, tag_value, 10), axes) {
+	read_feature_variations = |bytes, tables, tag_name, tag_value, axes_value, fvar_axes, lv|
+		match (Face.located_tag(bytes, tables, tag_value, 10), axes_value) {
 			(Found(found), Present(n)) =>
-				match LayoutVar.read_feature_variations(found.data, tag, lv, n) {
+				match LayoutVar.read_feature_variations(found.data, tag_name, lv, n) {
 					Ok(fv) => Ok(fv)
 					Err(ps) => {
 						structural = ps.keep_if(|p| p.reason == Truncated or p.reason == AxisIndex or p.reason == LookupIndex or p.reason == MapRange)
 						if structural.is_empty() {
-							Err(Variation(ps.map(|p| Sfnt.bad(tag, found.offset + p.offset))))
+							Err(Variation(ps.map(|p| Sfnt.bad(tag_name, found.offset + p.offset))))
 						} else {
-							Err(Required(structural.map(|p| Sfnt.bad(tag, found.offset + p.offset))))
+							Err(Required(structural.map(|p| Sfnt.bad(tag_name, found.offset + p.offset))))
 						}
 					}
 				}
-			(Found(found), Absent) if fvar_axes == Absent and Bytes.u16(found.data, 2) >= 1 and found.data.len() >= 14 and Bytes.u32(found.data, 10) != 0 => Err(Required([Sfnt.bad(tag, found.offset + 10)]))
+			(Found(found), Absent) if fvar_axes == Absent and Bytes.u16(found.data, 2) >= 1 and found.data.len() >= 14 and Bytes.u32(found.data, 10) != 0 => Err(Required([Sfnt.bad(tag_name, found.offset + 10)]))
 			_ => Ok(LayoutVar.no_feature_variations)
 		}
 
 	## `Sfnt.located` for a tag given as its number, without converting a
 	## string or allocating: the tables reading adds to every font use it.
 	located_tag : List(U8), List(Sfnt.Table), U64, U64 -> [Found({ data : List(U8), offset : U64 }), Missing, Bad(U64)]
-	located_tag = |bytes, tables, tag, minimum| {
+	located_tag = |bytes, tables, tag_value, minimum| {
 		var $result = Missing
 		var $i = 0
 		while $i < tables.len() {
 			t = tables.get($i) ?? { tag: 0, offset: 0, length: 0 }
-			if t.tag == tag {
+			if t.tag == tag_value {
 				$result = if (Bytes.fits(t.offset, t.length, bytes.len()) and t.length >= minimum) Found({ data: bytes.sublist({ start: t.offset, len: t.length }), offset: t.offset }) else Bad(t.offset)
 				$i = tables.len()
 			} else {
@@ -602,7 +602,7 @@ Face := {
 	## values on `wght` and `wdth`, the optical size on `opsz` when given,
 	## then the caller's axes whose tags are four bytes.
 	settings : [Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)], [UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded, Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)], [FontDefault, Size(Dec)], List({ tag : Str, value : Dec }) -> List({ tag : U32, value : Dec })
-	settings = |weight_name, width_name, optical_size, axes| {
+	settings = |weight_name, width_name, optical_size, axes_value| {
 		weight = match weight_name {
 			Thin => 100
 			ExtraLight => 200
@@ -631,7 +631,7 @@ Face := {
 			FontDefault => []
 			Size(px) => [{ tag: Face.tag("opsz"), value: px }]
 		}
-		extra = axes.keep_if(|a| a.tag.to_utf8().len() == 4).map(|a| { tag: Face.tag(a.tag), value: a.value })
+		extra = axes_value.keep_if(|a| a.tag.to_utf8().len() == 4).map(|a| { tag: Face.tag(a.tag), value: a.value })
 		[{ tag: Face.tag("wght"), value: weight }, { tag: Face.tag("wdth"), value: width }].concat(size).concat(extra)
 	}
 
@@ -648,21 +648,21 @@ Face := {
 
 	## The location state at normalised coordinates.
 	location_at : Face, List(I16) -> Location
-	location_at = |face, coords| {
-		varied = coords.any(|c| c != 0)
+	location_at = |face, coords_value| {
+		varied_value = coords_value.any(|c| c != 0)
 		hvar = match face.hvar {
-			Present(h) if varied => TableVar.region_scalars(h.store, coords)
+			Present(h) if varied_value => TableVar.region_scalars(h.store, coords_value)
 			_ => []
 		}
 		mvar = match face.mvar {
-			Present(m) if varied => TableVar.region_scalars(m.store, coords)
+			Present(m) if varied_value => TableVar.region_scalars(m.store, coords_value)
 			_ => []
 		}
 		gvar = match face.outlines {
-			Present(o) if varied => TableGvar.location(o.gvar, coords)
+			Present(o) if varied_value => TableGvar.location(o.gvar, coords_value)
 			_ => Face.default_location.gvar
 		}
-		{ coords, hvar, mvar, varied, gvar }
+		{ coords: coords_value, hvar, mvar, varied: varied_value, gvar }
 	}
 
 	## The face moved to a location: every query, and shaping (kerning and
@@ -678,10 +678,10 @@ Face := {
 	## The face moved to a `Font.Variation`'s location (see `settings`). A
 	## static face is returned as it is, without building any settings.
 	moved_to : Face, [Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black, Weight(U16)], [UltraCondensed, ExtraCondensed, Condensed, SemiCondensed, Normal, SemiExpanded, Expanded, ExtraExpanded, UltraExpanded, Percent(Dec)], [FontDefault, Size(Dec)], List({ tag : Str, value : Dec }) -> Face
-	moved_to = |face, weight, width, optical_size, axes|
+	moved_to = |face, weight, width, optical_size, axes_value|
 		match face.space {
 			Absent => face
-			Present(_) => Face.moved(face, Face.settings(weight, width, optical_size, axes))
+			Present(_) => Face.moved(face, Face.settings(weight, width, optical_size, axes_value))
 		}
 
 	## The face's location.
@@ -746,10 +746,10 @@ Face := {
 
 	## Whether the face has an axis with this tag.
 	has_axis : Face, U32 -> Bool
-	has_axis = |face, tag|
+	has_axis = |face, tag_value|
 		match face.space {
 			Absent => False
-			Present(space) => space.tags.contains(tag)
+			Present(space) => space.tags.contains(tag_value)
 		}
 
 	# ------------------------------------------------------------ queries
@@ -890,11 +890,11 @@ Face := {
 	## reading (over `max_lookups`) names none.
 	feature_tags : Face -> List(U64)
 	feature_tags = |face| {
-		gsub = LayoutGsub.common_of(face.gsub)
+		gsub_value = LayoutGsub.common_of(face.gsub)
 		gpos = LayoutKerning.common_of(face.kerning)
-		var $tags = List.with_capacity(gsub.feature_count + gpos.feature_count + 1)
-		for i in 0..<gsub.feature_count {
-			$tags = $tags.append(LayoutCommon.feature_tag(gsub, i))
+		var $tags = List.with_capacity(gsub_value.feature_count + gpos.feature_count + 1)
+		for i in 0..<gsub_value.feature_count {
+			$tags = $tags.append(LayoutCommon.feature_tag(gsub_value, i))
 		}
 		for i in 0..<gpos.feature_count {
 			$tags = $tags.append(LayoutCommon.feature_tag(gpos, i))

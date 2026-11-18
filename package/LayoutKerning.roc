@@ -144,9 +144,9 @@ LayoutKerning := {
 			}
 		}
 		match legacy {
-			Kern(mask) => {
+			Kern(mask_value) => {
 				for k in 0..<kerning.kern_subtables.len() {
-					$out = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, { mask, props: LayoutKerning.ignore_marks }, $out, glyph_count, True)
+					$out = LayoutKerning.apply_lookup(kerning, kerning.kern_data, kerning.kern_subtables, kerning.kern_digests, k, k + 1, { mask: mask_value, props: LayoutKerning.ignore_marks }, $out, glyph_count, True)
 				}
 			}
 			NoKern => {}
@@ -171,10 +171,10 @@ LayoutKerning := {
 	# offset. The lists are local variables, not fields of a record passed
 	# around, so each stays unique and is changed in place.
 	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, { mask : U64, props : U64 }, Positions, U64, Bool -> Positions
-	apply_lookup = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy| {
+	apply_lookup = |kerning, data, subtables, digests_value, start, end, ctx, positions, glyph_count, legacy| {
 		{ items, dx, dy, ax } = positions
 		count = items.len()
-		mask = ctx.mask
+		mask_value = ctx.mask
 		props = ctx.props
 		var $items = items
 		var $dx = dx
@@ -185,26 +185,26 @@ LayoutKerning := {
 			first = $items.get($i) ?? LayoutGsub.no_item
 			# The first subtable that may cover the first glyph (`end` for
 			# none); a `kern` table looks for the second glyph regardless.
-			from = if (LayoutGsub.applies(first.mask, mask) and (legacy or LayoutKerning.sees(kerning.gdef, first, props))) LayoutKerning.first_candidate(digests, start, end, first.glyph) else end
-			if from == end and !(legacy and LayoutGsub.applies(first.mask, mask)) {
+			from = if (LayoutGsub.applies(first.mask, mask_value) and (legacy or LayoutKerning.sees(kerning.gdef, first, props))) LayoutKerning.first_candidate(digests_value, start, end, first.glyph) else end
+			if from == end and !(legacy and LayoutGsub.applies(first.mask, mask_value)) {
 				$i = $i + 1
 			} else {
-				match LayoutKerning.next($items, $i, mask, props, kerning.gdef) {
+				match LayoutKerning.next($items, $i, mask_value, props, kerning.gdef) {
 					Stopped(after) => {
 						$i = if (legacy) after else $i + 1
 					}
 					Found(j) => {
 						second = $items.get(j) ?? LayoutGsub.no_item
-						match LayoutKerning.pair(kerning, data, subtables, digests, from, end, first.glyph, second.glyph, glyph_count) {
-							Applied(found) => {
+						match LayoutKerning.pair(kerning, data, subtables, digests_value, from, end, first.glyph, second.glyph, glyph_count) {
+							Applied(found_value) => {
 								values =
 									if legacy {
-										kern = found.first.ax
+										kern = found_value.first.ax
 										kern1 = kern.shr_wrap(1)
 										kern2 = kern - kern1
 										{ first: { dx: 0, dy: 0, ax: kern1 }, second: { dx: kern2, dy: 0, ax: kern2 } }
 									} else {
-										{ first: found.first, second: found.second }
+										{ first: found_value.first, second: found_value.second }
 									}
 								# `$i < j < count`, the length of every list.
 								$dx = $dx.set($i, ($dx.get($i) ?? 0) + values.first.dx) ?? []
@@ -213,13 +213,13 @@ LayoutKerning := {
 								$dx = $dx.set(j, ($dx.get(j) ?? 0) + values.second.dx) ?? []
 								$dy = $dy.set(j, ($dy.get(j) ?? 0) + values.second.dy) ?? []
 								$ax = $ax.set(j, ($ax.get(j) ?? 0) + values.second.ax) ?? []
-								if found.nonzero {
+								if found_value.nonzero {
 									$items = LayoutKerning.unsafe_to_break($items, $i, j + 1)
 								}
-								if found.skips {
+								if found_value.skips {
 									$items = LayoutKerning.unsafe_to_break($items, $i, j + 2)
 								}
-								$i = if (found.skips) j + 1 else j
+								$i = if (found_value.skips) j + 1 else j
 							}
 							NotApplied => {
 								$i = if (legacy) j else $i + 1
@@ -240,9 +240,9 @@ LayoutKerning := {
 	# The first of subtables `start ..< end` that may cover a first glyph
 	# (its digest does not rule the glyph out), or `end`.
 	first_candidate : List({ a : U64, b : U64, c : U64 }), U64, U64, U64 -> U64
-	first_candidate = |digests, start, end, glyph| {
+	first_candidate = |digests_value, start, end, glyph| {
 		var $k = start
-		while $k < end and !LayoutKerning.may_have(digests.get($k) ?? LayoutKerning.full, glyph) {
+		while $k < end and !LayoutKerning.may_have(digests_value.get($k) ?? LayoutKerning.full, glyph) {
 			$k = $k + 1
 		}
 		$k
@@ -258,7 +258,7 @@ LayoutKerning := {
 	## HarfBuzz's `unsafe_to` points: after the glyph that stopped it, or
 	## the end of the run.
 	next : List(LayoutGsub.Item), U64, U64, U64, LayoutGdef -> [Found(U64), Stopped(U64)]
-	next = |items, i, mask, props, gdef| {
+	next = |items, i, mask_value, props, gdef| {
 		count = items.len()
 		var $k = i + 1
 		var $result = Stopped(count)
@@ -270,7 +270,7 @@ LayoutKerning := {
 				# `SKIP_MAYBE`: with no match function a maybe-skippable glyph
 				# is never a match, whatever its mask.
 				$k = $k + 1
-			} else if LayoutGsub.applies(item.mask, mask) {
+			} else if LayoutGsub.applies(item.mask, mask_value) {
 				$result = Found($k)
 				$k = count
 			} else {
@@ -294,12 +294,12 @@ LayoutKerning := {
 
 	# The first subtable of a lookup that has the pair decides it.
 	pair : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, U64, U64, U64 -> [Applied(Found), NotApplied]
-	pair = |kerning, data, subtables, digests, start, end, left, right, glyph_count| {
+	pair = |kerning, data, subtables, digests_value, start, end, left, right, glyph_count| {
 		var $result = NotApplied
 		var $k = start
 		while $k < end {
 			# The digest rules out most first glyphs without a search.
-			may = LayoutKerning.may_have(digests.get($k) ?? LayoutKerning.full, left)
+			may = LayoutKerning.may_have(digests_value.get($k) ?? LayoutKerning.full, left)
 			outcome = if !may {
 				NotApplied
 			} else match subtables.get($k) {
@@ -309,8 +309,8 @@ LayoutKerning := {
 				_ => NotApplied
 			}
 			match outcome {
-				Applied(found) => {
-					$result = Applied(found)
+				Applied(found_value) => {
+					$result = Applied(found_value)
 					$k = end
 				}
 				NotApplied => {
@@ -339,9 +339,9 @@ LayoutKerning := {
 				} else if key > probe {
 					$low = mid + 1
 				} else {
-					value = Bytes.i16(data, r + 4)
+					value_value = Bytes.i16(data, r + 4)
 					# A zero value is no kerning (HarfBuzz skips the pair).
-					$result = if (value == 0) NotApplied else Applied({ first: { dx: 0, dy: 0, ax: value }, second: LayoutKerning.no_value, skips: False, nonzero: True })
+					$result = if (value_value == 0) NotApplied else Applied({ first: { dx: 0, dy: 0, ax: value_value }, second: LayoutKerning.no_value, skips: False, nonzero: True })
 					$low = $high
 				}
 			}

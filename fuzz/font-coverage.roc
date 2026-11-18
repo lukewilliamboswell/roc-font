@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -38,19 +38,19 @@ test! = |bytes| {
 	text = text_of(small, picks)
 	small_font = check!(small, text)
 	large_font = check!(large, text)
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small.file, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading coverage 8 times larger took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
+	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
+	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
+		crash "reading coverage 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
 	}
 	small_plan = Font.plan(small_font, Font.ShapeOptions.{})
 	large_plan = Font.plan(large_font, Font.ShapeOptions.{})
-	small_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(small_font, small_plan, text))
-	large_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(large_font, large_plan, text))
-	Fuzz.expect_no_leaks!(|{}| Font.shape_planned(large_font, large_plan, text))
-	if large_shape.allocations > small_shape.allocations + 8 {
-		crash "shaping one text with coverage 8 times larger took ${large_shape.allocations.to_str()} allocations, against ${small_shape.allocations.to_str()}"
+	small_shape = Fuzz.measure!("allocations", || Font.shape_planned(small_font, small_plan, text))
+	large_shape = Fuzz.measure!("allocations", || Font.shape_planned(large_font, large_plan, text))
+	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_font, large_plan, text))
+	if large_shape.stats.allocs > small_shape.stats.allocs + 8 {
+		crash "shaping one text with coverage 8 times larger took ${large_shape.stats.allocs.to_str()} allocations, against ${small_shape.stats.allocs.to_str()}"
 	}
 	Fuzz.keep
 }
@@ -260,6 +260,7 @@ check_run! = |bytes, run| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-coverage",
 	generator: Fuzz.raw_bytes,
 	test!,

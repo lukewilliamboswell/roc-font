@@ -154,9 +154,9 @@ FontBuild :: {}.{
 	## A `cmap` table with the given encoding records (platform as `system`, encoding,
 	## subtable).
 	cmap : List({ system : U64, encoding : U64, subtable : List(U8) }) -> List(U8)
-	cmap = |records|
+	cmap = |records_value|
 		FontBuild.pack(
-			[U16(0), U16(records.len())].concat(records.join_map(|r| [U16(r.system), U16(r.encoding), Ref32(r.subtable)])),
+			[U16(0), U16(records_value.len())].concat(records_value.join_map(|r| [U16(r.system), U16(r.encoding), Ref32(r.subtable)])),
 		)
 
 	## A format 4 subtable. Each segment maps by `delta`, or, when `glyphs` is
@@ -1211,7 +1211,7 @@ FontBuild :: {}.{
 		i32 = |v| FontBuild.u32((if (v < 0) v + 4294967296 else v).to_u64_wrap())
 		data =
 			FontBuild.u16(rows.len())
-				.concat(FontBuild.u16((0x8000).bitwise_or(columns)))
+				.concat(FontBuild.u16((0x8000.U64).bitwise_or(columns)))
 				.concat(FontBuild.u16(columns))
 				.concat(FontBuild.counting(columns).join_map(FontBuild.u16))
 				.concat(rows.join_map(|row| row.concat(List.repeat(0, columns)).take_first(columns).join_map(i32)))

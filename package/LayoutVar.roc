@@ -230,13 +230,13 @@ LayoutVar := {
 			return bad(0, Truncated)
 		}
 		# An offset to a part: inside the table and after the header.
-		part = |field, value|
-			if value == 0 {
+		part = |field, value_value|
+			if value_value == 0 {
 				Ok(Absent)
-			} else if value >= size or value < header_end {
+			} else if value_value >= size or value_value < header_end {
 				Err({ table: "GDEF", offset: field, reason: Truncated })
 			} else {
-				Ok(Present(value))
+				Ok(Present(value_value))
 			}
 		var $steps = 0
 		match part(4, TableVar.u16(gdef, 4))? {

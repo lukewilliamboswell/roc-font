@@ -79,9 +79,9 @@ TableName := {
 		for i in 0..<name.count {
 			at = 6 + 12 * i
 			if Bytes.u16(name.bytes, at + 6) == id {
-				rank = TableName.rank(name, at)
-				if rank < $best {
-					$best = rank
+				rank_value = TableName.rank(name, at)
+				if rank_value < $best {
+					$best = rank_value
 					$at = at
 				}
 			}
@@ -112,8 +112,8 @@ TableName := {
 		platform_id = Bytes.u16(name.bytes, at)
 		encoding = Bytes.u16(name.bytes, at + 2)
 		language = Bytes.u16(name.bytes, at + 4)
-		utf16 = TableName.utf16_encoding(platform_id, encoding)
-		usable = TableName.kept(name, at) and (!utf16 or TableName.well_formed(name.bytes, name.storage + Bytes.u16(name.bytes, at + 10), Bytes.u16(name.bytes, at + 8)))
+		utf16_value = TableName.utf16_encoding(platform_id, encoding)
+		usable = TableName.kept(name, at) and (!utf16_value or TableName.well_formed(name.bytes, name.storage + Bytes.u16(name.bytes, at + 10), Bytes.u16(name.bytes, at + 8)))
 		if !usable {
 			TableName.unranked
 		} else if platform_id == 3 and TableName.utf16_encoding(platform_id, encoding) {
@@ -263,7 +263,7 @@ TableName := {
 		# record, a Macintosh copy and a Windows copy of twice the length.
 		var $kept = 0
 		var $string_bytes = 0
-		var $standard = 0
+		var $standard = 0.U64
 		for i in 0..<count {
 			at = 6 + 12 * i
 			if TableName.kept(name, at) {
@@ -454,8 +454,8 @@ u16 : U64 -> List(U8)
 u16 = |v| [v.shr_zf_wrap(8).bitwise_and(0xFF).to_u8_wrap(), v.bitwise_and(0xFF).to_u8_wrap()]
 
 # ASCII text as UTF-16BE.
-utf16 : Str -> List(U8)
-utf16 = |text| text.to_utf8().join_map(|b| [0, b])
+utf16_fixture : Str -> List(U8)
+utf16_fixture = |text| text.to_utf8().join_map(|b| [0, b])
 
 Record : { pid : U64, encoding : U64, language : U64, id : U64, text : List(U8) }
 
@@ -482,7 +482,7 @@ build = |format, records, tags| {
 }
 
 win : U64, U64, Str -> Record
-win = |language, id, text| { pid: 3, encoding: 1, language, id, text: utf16(text) }
+win = |language, id, text| { pid: 3, encoding: 1, language, id, text: utf16_fixture(text) }
 
 family : List(U8) -> Try(Str, [Missing, Rejected])
 family = |table|
@@ -502,8 +502,8 @@ problems = |table, base|
 put : List(U8), U64, U8 -> List(U8)
 put = |list, at, value| list.set(at, value) ?? []
 
-bad : U32 -> [BadTable({ table : Str, offset : U32 })]
-bad = |offset| BadTable({ table: "name", offset })
+bad_fixture : U32 -> [BadTable({ table : Str, offset : U32 })]
+bad_fixture = |offset| BadTable({ table: "name", offset })
 
 from_file : List(U8) -> Try(Str, [Missing, Absent, Rejected])
 from_file = |bytes|
@@ -585,7 +585,7 @@ expect family(format1_name) == Ok("English Tag")
 # Each rank beats the next, whatever the record order.
 expect {
 	mac = { pid: 1, encoding: 0, language: 0, id: 1, text: "Mac".to_utf8() }
-	unicode = { pid: 0, encoding: 3, language: 0, id: 1, text: utf16("Unicode") }
+	unicode = { pid: 0, encoding: 3, language: 0, id: 1, text: utf16_fixture("Unicode") }
 	other = win(0x407, 1, "Other")
 	english = win(0x0C09, 1, "Australian")
 	us = win(0x409, 1, "US")
@@ -604,7 +604,7 @@ expect {
 expect family(build(0, [win(0x409, 1, "Family"), win(0x407, 16, "First"), win(0x407, 16, "Second")], [])) == Ok("First")
 
 # Windows symbol and full-repertoire encodings are UTF-16 too.
-expect family(build(0, [{ pid: 3, encoding: 0, language: 0x409, id: 1, text: utf16("Symbol") }], [])) == Ok("Symbol")
+expect family(build(0, [{ pid: 3, encoding: 0, language: 0x409, id: 1, text: utf16_fixture("Symbol") }], [])) == Ok("Symbol")
 expect family(build(0, [{ pid: 3, encoding: 10, language: 0x409, id: 1, text: [0xD8, 0x3D, 0xDE, 0x00] }], [])) == Ok("\u(1F600)")
 
 # Strings in encodings this module does not decode are never chosen:
@@ -615,7 +615,7 @@ expect {
 		{ pid: 3, encoding: 2, language: 0x411, id: 1, text: [0x93, 0xFA] },
 		{ pid: 1, encoding: 1, language: 11, id: 1, text: [0x93] },
 		{ pid: 1, encoding: 0, language: 1, id: 1, text: "Fran".to_utf8() },
-		{ pid: 0, encoding: 5, language: 0, id: 1, text: utf16("Variation") },
+		{ pid: 0, encoding: 5, language: 0, id: 1, text: utf16_fixture("Variation") },
 	]
 	family(build(0, records, [])) == Err(Missing)
 }
@@ -623,13 +623,13 @@ expect {
 # A Windows record with an English language tag ranks as English.
 expect {
 	records = [win(0x407, 1, "German"), win(0x8000, 1, "Tagged")]
-	family(build(1, records, [utf16("en-AU")])) == Ok("Tagged")
+	family(build(1, records, [utf16_fixture("en-AU")])) == Ok("Tagged")
 }
 
 # `eng` and `enx` are not English tags.
 expect {
-	records = [{ pid: 0, encoding: 4, language: 0x8000, id: 1, text: utf16("First") }, { pid: 0, encoding: 4, language: 0x8001, id: 1, text: utf16("Second") }]
-	family(build(1, records, [utf16("de"), utf16("eng")])) == Ok("First")
+	records = [{ pid: 0, encoding: 4, language: 0x8000, id: 1, text: utf16_fixture("First") }, { pid: 0, encoding: 4, language: 0x8001, id: 1, text: utf16_fixture("Second") }]
+	family(build(1, records, [utf16_fixture("de"), utf16_fixture("eng")])) == Ok("First")
 }
 
 # ------------------------------------------------------------ degenerate tables
@@ -648,14 +648,14 @@ expect family(build(0, [win(0x409, 2, "Regular")], [])) == Err(Missing)
 
 # Too short for the header, an unknown format, records past the end, string
 # storage past the end. Offsets are in the file (the table is at 1000).
-expect problems([0, 0, 0], 1000) == [bad(1000)]
-expect problems(build(2, [], []), 1000) == [bad(1000)]
-expect problems(u16(0).concat(u16(2)).concat(u16(26)).concat(List.repeat(0, 20)), 1000) == [bad(1002)]
-expect problems(u16(0).concat(u16(0)).concat(u16(7)), 1000) == [bad(1004)]
+expect problems([0, 0, 0], 1000) == [bad_fixture(1000)]
+expect problems(build(2, [], []), 1000) == [bad_fixture(1000)]
+expect problems(u16(0).concat(u16(2)).concat(u16(26)).concat(List.repeat(0, 20)), 1000) == [bad_fixture(1002)]
+expect problems(u16(0).concat(u16(0)).concat(u16(7)), 1000) == [bad_fixture(1004)]
 
 # A format 1 table too short for its language-tag count, or for its tags.
-expect problems(u16(1).concat(u16(0)).concat(u16(6)), 0) == [bad(6)]
-expect problems(u16(1).concat(u16(0)).concat(u16(8)).concat(u16(1)), 0) == [bad(6)]
+expect problems(u16(1).concat(u16(0)).concat(u16(6)), 0) == [bad_fixture(6)]
+expect problems(u16(1).concat(u16(0)).concat(u16(8)).concat(u16(1)), 0) == [bad_fixture(6)]
 
 # OTS keeps a table whose records are unusable, and so does reading; a
 # query never chooses them: a string past the end, an odd-length UTF-16
@@ -687,7 +687,7 @@ expect {
 expect {
 	records = [
 		{ pid: 5, encoding: 0, language: 0, id: 1, text: "Five".to_utf8() },
-		{ pid: 3, encoding: 7, language: 0x409, id: 1, text: utf16("Seven") },
+		{ pid: 3, encoding: 7, language: 0x409, id: 1, text: utf16_fixture("Seven") },
 		{ pid: 3, encoding: 1, language: 0x409, id: 6, text: [0x01, 0x41] },
 	]
 	table = build(0, records, [])
@@ -715,26 +715,26 @@ expect {
 # not well-formed UTF-16, or a language ID past the tags, is accepted (as
 # OTS accepts it) and is not English.
 expect {
-	records = [{ pid: 0, encoding: 4, language: 0x8002, id: 1, text: utf16("A") }]
-	table = build(1, records, [utf16("en"), [0xDC, 0x00]])
+	records = [{ pid: 0, encoding: 4, language: 0x8002, id: 1, text: utf16_fixture("A") }]
+	table = build(1, records, [utf16_fixture("en"), [0xDC, 0x00]])
 	broken = put(table, 6 + 12 + 2 + 2, 0xFF)
-	problems(broken, 0) == [bad(20)] and family(table) == Ok("A")
+	problems(broken, 0) == [bad_fixture(20)] and family(table) == Ok("A")
 }
 
 # A language tag longer than 200 bytes (name.cc lines 188-190).
 expect {
 	records = [win(0x409, 1, "A")]
-	problems(build(1, records, [List.repeat(0x41, 200)]), 0) == [] and problems(build(1, records, [List.repeat(0x41, 202)]), 0) == [bad(20)]
+	problems(build(1, records, [List.repeat(0x41, 200)]), 0) == [] and problems(build(1, records, [List.repeat(0x41, 202)]), 0) == [bad_fixture(20)]
 }
 
 # String storage that starts inside the name records (lines 196-200),
 # placed at the string offset; both tag problems and this are reported.
-expect problems(u16(0).concat(u16(1)).concat(u16(6)).concat(List.repeat(0, 12)), 0) == [bad(4)]
+expect problems(u16(0).concat(u16(1)).concat(u16(6)).concat(List.repeat(0, 12)), 0) == [bad_fixture(4)]
 expect {
-	table = build(1, [], [utf16("en")])
+	table = build(1, [], [utf16_fixture("en")])
 	# Storage moved back to 8, inside the tag record; the tag (at 4 from
 	# there) still fits.
-	problems(put(table, 5, 8), 0) == [bad(4)]
+	problems(put(table, 5, 8), 0) == [bad_fixture(4)]
 }
 
 # A table OTS cannot write back: more than 5460 records once it adds its
@@ -752,14 +752,14 @@ shared = |lengths, id| {
 	$out.concat(List.repeat(0x41, longest))
 }
 expect problems(shared(List.repeat(0, 5450), 0), 0) == []
-expect problems(shared(List.repeat(0, 5451), 0), 0) == [bad(2)]
+expect problems(shared(List.repeat(0, 5451), 0), 0) == [bad_fixture(2)]
 expect problems(shared(List.repeat(250, 261).append(93), 0), 0) == []
-expect problems(shared(List.repeat(250, 261).append(94), 0), 0) == [bad(4)]
+expect problems(shared(List.repeat(250, 261).append(94), 0), 0) == [bad_fixture(4)]
 
 # Kept Windows names for IDs 1, 2, 4, 5 and 6 mean OTS adds none, so the
 # same strings fit with 192 bytes more.
 expect {
-	standard = [1, 2, 4, 5, 6].map(|id| { pid: 3, encoding: 1, language: 0x409, id, text: utf16("A") })
+	standard = [1, 2, 4, 5, 6].map(|id| { pid: 3, encoding: 1, language: 0x409, id, text: utf16_fixture("A") })
 	table = build(0, standard, [])
 	problems(table, 0) == []
 }
@@ -768,7 +768,7 @@ expect {
 expect {
 	tables = [{ tag: Sfnt.tag_of("name"), offset: 100, length: 50 }]
 	match TableName.from_tables(List.repeat(0, 120), tables) {
-		Err(found) => found == [bad(100)]
+		Err(found) => found == [bad_fixture(100)]
 		Ok(_) => Bool.False
 	}
 }

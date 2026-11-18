@@ -354,9 +354,9 @@ TableGlyfPoints := {
 		var $depth = List.with_capacity(count)
 		var $work = List.with_capacity(count)
 		for g in 0..<count {
-			kind = t.kinds.get(g) ?? 0
+			kind_value = t.kinds.get(g) ?? 0
 			n = t.counts.get(g) ?? 0
-			own = if (kind == 1) n else 0
+			own = if (kind_value == 1) n else 0
 			tuple_work = (tuples.get(g) ?? 0) * (n + 4)
 			$points = $points.append(own)
 			$visits = $visits.append(1)

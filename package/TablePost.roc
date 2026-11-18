@@ -312,8 +312,8 @@ ids = |n| {
 	$out
 }
 
-read : List(U8), U64 -> Try(TablePost, [Rejected])
-read = |table, glyph_count| TablePost.read(table, 0, glyph_count).map_err(|_| Rejected)
+read_fixture : List(U8), U64 -> Try(TablePost, [Rejected])
+read_fixture = |table, glyph_count| TablePost.read(table, 0, glyph_count).map_err(|_| Rejected)
 
 names : List(U8), U64, U64 -> List(Try(Str, [Missing, Rejected]))
 names = |table, glyph_count, upto|
@@ -329,8 +329,8 @@ problems = |table, base, glyph_count|
 		Err(found) => found
 	}
 
-bad : U32 -> [BadTable({ table : Str, offset : U32 })]
-bad = |offset| BadTable({ table: "post", offset })
+bad_fixture : U32 -> [BadTable({ table : Str, offset : U32 })]
+bad_fixture = |offset| BadTable({ table: "post", offset })
 
 from_file : List(U8) -> Try(TablePost, [Absent, Rejected])
 from_file = |bytes|
@@ -356,7 +356,7 @@ facts : List(U8) -> Try({ underline : { position : I32, thickness : I32 }, angle
 facts = |bytes| from_file(bytes).map_ok(post_facts)
 
 facts_of : List(U8), U64 -> Try({ underline : { position : I32, thickness : I32 }, angle : I32, fixed : Bool }, [Rejected])
-facts_of = |table, glyph_count| read(table, glyph_count).map_ok(post_facts)
+facts_of = |table, glyph_count| read_fixture(table, glyph_count).map_ok(post_facts)
 
 # ------------------------------------------------------------ real fonts
 
@@ -450,7 +450,7 @@ expect facts_of(japanese_post, japanese_glyph_count) == Ok({ underline: { positi
 
 # The header: a negative italic angle and underline position.
 expect
-	match read(header(0x00030000), 10) {
+	match read_fixture(header(0x00030000), 10) {
 		Ok(post) => TablePost.italic_angle(post) == -98304 and TablePost.underline(post) == { position: -100, thickness: 50 } and TablePost.fixed_pitch(post)
 		Err(_) => Bool.False
 	}
@@ -468,10 +468,10 @@ expect names(v2([259], ["a", "b", "c"]).concat([0, 0]), 1, 1) == [Ok("b")]
 # A table listing no glyphs gives no names; OTS allows it for fonts of up
 # to 258 glyphs (post.cc lines 59-68).
 expect names(header(0x00020000).concat(u16(0)), 258, 2) == [Err(Missing), Err(Missing)]
-expect problems(header(0x00020000).concat(u16(0)), 500, 259) == [bad(532)]
+expect problems(header(0x00020000).concat(u16(0)), 500, 259) == [bad_fixture(532)]
 
 expect
-	match read(header(0x00020000).concat(u16(0)), 0) {
+	match read_fixture(header(0x00020000).concat(u16(0)), 0) {
 		Ok(post) => TablePost.glyph_name(post, 0) == Err(Missing)
 		Err(_) => Bool.False
 	}
@@ -481,35 +481,35 @@ expect TablePost.underline(TablePost.none) == { position: 0, thickness: 0 }
 
 # ------------------------------------------------------------ problems
 
-# Too short for the header, and versions OTS does not read (4.0, 2.0 spelt
+# Too short for the header, and versions OTS does not read_fixture (4.0, 2.0 spelt
 # wrongly, the deprecated 2.5). Offsets are in the file (the table is at 500).
-expect problems(List.repeat(0, 31), 500, 1) == [bad(500)]
-expect problems(header(0x00040000), 500, 1) == [bad(500)]
-expect problems(header(0x00000002), 500, 1) == [bad(500)]
-expect problems(v25([0, 127, -2]), 500, 3) == [bad(500)]
+expect problems(List.repeat(0, 31), 500, 1) == [bad_fixture(500)]
+expect problems(header(0x00040000), 500, 1) == [bad_fixture(500)]
+expect problems(header(0x00000002), 500, 1) == [bad_fixture(500)]
+expect problems(v25([0, 127, -2]), 500, 3) == [bad_fixture(500)]
 
 # Version 2.0: indices past the end of the table (placed at the count).
-expect problems(header(0x00020000).concat(u16(3)).concat(u16(0)), 500, 3) == [bad(532)]
+expect problems(header(0x00020000).concat(u16(3)).concat(u16(0)), 500, 3) == [bad_fixture(532)]
 
 # Version 2.0: each glyph that refers to a stored name that is not there
 # (placed at its index); a stored name that runs past the end of the table
 # or holds a zero byte (placed at its length byte, post.cc lines 91-103).
-expect problems(v2([258, 260], ["a", "b"]), 500, 2) == [bad(500 + 36)]
-expect problems(v2([0xFFFF, 0, 0xFFFF], ["a"]), 500, 3) == [bad(500 + 34), bad(500 + 38)]
-expect problems(v2([258], []).concat([5, 0x41]), 500, 1) == [bad(500 + 36)]
-expect problems(v2([258], ["a"]).concat([5, 0x41]), 500, 1) == [bad(500 + 38)]
-expect problems(v2([258], ["a\u(0)b"]), 500, 1) == [bad(500 + 36)]
+expect problems(v2([258, 260], ["a", "b"]), 500, 2) == [bad_fixture(500 + 36)]
+expect problems(v2([0xFFFF, 0, 0xFFFF], ["a"]), 500, 3) == [bad_fixture(500 + 34), bad_fixture(500 + 38)]
+expect problems(v2([258], []).concat([5, 0x41]), 500, 1) == [bad_fixture(500 + 36)]
+expect problems(v2([258], ["a"]).concat([5, 0x41]), 500, 1) == [bad_fixture(500 + 38)]
+expect problems(v2([258], ["a\u(0)b"]), 500, 1) == [bad_fixture(500 + 36)]
 
 # A count other than the font's glyph count (post.cc lines 70-73), reported
-# with any bad index.
-expect problems(v2([0, 0xFFFF], []), 500, 1) == [bad(532), bad(536)]
-expect problems(v2([3], []), 500, 2) == [bad(532)]
+# with any bad_fixture index.
+expect problems(v2([0, 0xFFFF], []), 500, 1) == [bad_fixture(532), bad_fixture(536)]
+expect problems(v2([3], []), 500, 2) == [bad_fixture(532)]
 
 # A table that lies outside the file is placed at its offset.
 expect {
 	tables = [{ tag: Sfnt.tag_of("post"), offset: 40, length: 32 }]
 	match TablePost.from_tables(List.repeat(0, 60), tables, 1) {
-		Err(found) => found == [bad(40)]
+		Err(found) => found == [bad_fixture(40)]
 		Ok(_) => Bool.False
 	}
 }

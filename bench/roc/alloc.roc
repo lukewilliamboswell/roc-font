@@ -1,6 +1,6 @@
 app [target] {
 	font: "../../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -20,19 +20,20 @@ test! = |bytes| {
 		Err(message) => crash "ALLOCATION_DIAGNOSTIC error=${message}"
 		Ok(prepared) => {
 			live_before = Fuzz.live_alloc_count!()
-			measured = Fuzz.measure_allocs!(|{}| FontBench.run(prepared))
+			measured = Fuzz.measure!("allocations", || FontBench.run(prepared))
 			live_after = Fuzz.live_alloc_count!()
 			leaked = if (live_after > live_before) live_after - live_before else 0
 			result = match measured.value {
 				Ok(sum) => "ok checksum=${sum.to_str()}"
 				Err(sum) => "rejected checksum=${sum.to_str()}"
 			}
-			crash "ALLOCATION_DIAGNOSTIC allocations=${measured.allocations.to_str()} leaked=${leaked.to_str()} result=${result}"
+			crash "ALLOCATION_DIAGNOSTIC allocations=${measured.stats.allocs.to_str()} leaked=${leaked.to_str()} result=${result}"
 		}
 	}
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "bench-alloc-diagnostic",
 	generator: Fuzz.raw_bytes,
 	test!,

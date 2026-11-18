@@ -98,13 +98,13 @@ TableGvar := {
 				$problems = $problems.append({ table: "gvar", offset: data_at + start, reason: TooShort })
 				$tuples = $tuples.append(0)
 			} else {
-				points = TableGlyfPoints.point_count(glyf, g) + 4
-				match TableGvar.check_glyph(gvar, data_at + start, data_at + end, points) {
+				points_value = TableGlyfPoints.point_count(glyf, g) + 4
+				match TableGvar.check_glyph(gvar, data_at + start, data_at + end, points_value) {
 					Ok(n) => {
 						$tuples = $tuples.append(n)
 					}
-					Err((offset, reason)) => {
-						$problems = $problems.append({ table: "gvar", offset, reason })
+					Err((offset_value, reason)) => {
+						$problems = $problems.append({ table: "gvar", offset: offset_value, reason })
 						$tuples = $tuples.append(0)
 					}
 				}
@@ -132,7 +132,7 @@ TableGvar := {
 	# Check one glyph's variation data in bytes[start, end) for a glyph of
 	# `points` points (phantom points included), giving its tuple count.
 	check_glyph : TableGvar, U64, U64, U64 -> Try(U64, (U64, TableGlyfPoints.Reason))
-	check_glyph = |gvar, start, end, points| {
+	check_glyph = |gvar, start, end, points_value| {
 		bytes = gvar.bytes
 		field = TableVar.u16(bytes, start)
 		count = field.bitwise_and(0x0FFF)
@@ -145,7 +145,7 @@ TableGvar := {
 		}
 		data_start =
 			if field.bitwise_and(0x8000) != 0 {
-				match TableGvar.check_points(bytes, serial, end, points) {
+				match TableGvar.check_points(bytes, serial, end, points_value) {
 					Ok(next) => next
 					Err(e) => return Err(e)
 				}
@@ -187,7 +187,7 @@ TableGvar := {
 			tuple_end = $data + data_size
 			deltas_at =
 				if index.bitwise_and(0x2000) != 0 {
-					match TableGvar.check_points(bytes, $data, tuple_end, points) {
+					match TableGvar.check_points(bytes, $data, tuple_end, points_value) {
 						Ok(next) => next
 						Err(e) => return Err(e)
 					}
@@ -196,7 +196,7 @@ TableGvar := {
 				}
 			# A private point list of no points, like no list, means all.
 			named = if (index.bitwise_and(0x2000) != 0) TableGvar.point_total(bytes, $data) else if (field.bitwise_and(0x8000) != 0) TableGvar.point_total(bytes, serial) else 0
-			n = if (named == 0) points else named
+			n = if (named == 0) points_value else named
 			match TableGvar.check_values(bytes, deltas_at, tuple_end, n) {
 				Ok(next) =>
 					match TableGvar.check_values(bytes, next, tuple_end, n) {
@@ -221,7 +221,7 @@ TableGvar := {
 	# Check packed point numbers in bytes[at, end), each below `points`,
 	# giving the offset after them.
 	check_points : List(U8), U64, U64, U64 -> Try(U64, (U64, TableGlyfPoints.Reason))
-	check_points = |bytes, at, end, points| {
+	check_points = |bytes, at, end, points_value| {
 		if at >= end {
 			return Err((at, Truncated))
 		}
@@ -250,7 +250,7 @@ TableGvar := {
 			}
 			for k in 0..<run {
 				$n = $n + (if (words) TableVar.u16(bytes, $p + 1 + 2 * k) else TableVar.u8(bytes, $p + 1 + k))
-				if $n >= points {
+				if $n >= points_value {
 					return Err(($p + 1 + width * k, PointIndex))
 				}
 			}
@@ -660,9 +660,9 @@ TableGvar := {
 		if !loc.nonzero {
 			return TableGlyfPoints.extents_default(glyf, g)
 		}
-		points = TableGvar.points(glyf, gvar, loc, g)
-		xs = points.xs
-		ys = points.ys
+		points_value = TableGvar.points(glyf, gvar, loc, g)
+		xs = points_value.xs
+		ys = points_value.ys
 		n = xs.len() - 4
 		shift = xs.get(n) ?? 0
 		var $min_x = 0x7F7FFFFF
@@ -894,7 +894,7 @@ TableGvar := {
 		}
 		kept = if (drop >= 128) 0 else sig.shr_zf_wrap(drop.to_u8_wrap())
 		rest = sig - kept.shl_wrap(drop.to_u8_wrap())
-		half = (1).shl_wrap((drop - 1).to_u8_wrap())
+		half = (1.U128).shl_wrap((drop - 1).to_u8_wrap())
 		rounded = if (rest > half or (rest == half and kept.bitwise_and(1) == 1)) kept + 1 else kept
 		if top >= -1022 {
 			carry = rounded == 0x20000000000000

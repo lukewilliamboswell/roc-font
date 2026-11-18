@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -39,11 +39,11 @@ test! = |bytes| {
 	picks = bytes.drop_first(1).take_first(32)
 	small = recipe(choice, picks, 2)
 	large = recipe(choice, picks, 16)
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small.file, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading a character map 8 times larger took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
+	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
+	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
+		crash "reading a character map 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
 	}
 	if small.past {
 		refused!(small)
@@ -52,17 +52,17 @@ test! = |bytes| {
 	}
 	small_font = check!(small)
 	large_font = check!(large)
-	small_look = Fuzz.measure_allocs!(|{}| lookups(small_font))
-	large_look = Fuzz.measure_allocs!(|{}| lookups(large_font))
-	Fuzz.expect_no_leaks!(|{}| lookups(large_font))
-	if large_look.allocations > small_look.allocations + 8 {
-		crash "looking up ${probes.len().to_str()} characters took ${large_look.allocations.to_str()} allocations in a map 8 times larger, against ${small_look.allocations.to_str()}"
+	small_look = Fuzz.measure!("allocations", || lookups(small_font))
+	large_look = Fuzz.measure!("allocations", || lookups(large_font))
+	Fuzz.expect_no_leaks!(|| lookups(large_font))
+	if large_look.stats.allocs > small_look.stats.allocs + 8 {
+		crash "looking up ${probes.len().to_str()} characters took ${large_look.stats.allocs.to_str()} allocations in a map 8 times larger, against ${small_look.stats.allocs.to_str()}"
 	}
-	small_list = Fuzz.measure_allocs!(|{}| Font.code_points(small_font))
-	large_list = Fuzz.measure_allocs!(|{}| Font.code_points(large_font))
-	Fuzz.expect_no_leaks!(|{}| Font.code_points(large_font))
-	if large_list.allocations > 10 * small_list.allocations + 64 {
-		crash "listing code points of a map 8 times larger took ${large_list.allocations.to_str()} allocations, against ${small_list.allocations.to_str()}"
+	small_list = Fuzz.measure!("allocations", || Font.code_points(small_font))
+	large_list = Fuzz.measure!("allocations", || Font.code_points(large_font))
+	Fuzz.expect_no_leaks!(|| Font.code_points(large_font))
+	if large_list.stats.allocs > 10 * small_list.stats.allocs + 64 {
+		crash "listing code points of a map 8 times larger took ${large_list.stats.allocs.to_str()} allocations, against ${small_list.stats.allocs.to_str()}"
 	}
 	Fuzz.keep
 }
@@ -238,6 +238,7 @@ check! = |built| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-cmap",
 	generator: Fuzz.raw_bytes,
 	test!,
