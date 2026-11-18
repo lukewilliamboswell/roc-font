@@ -74,8 +74,8 @@ Case :: {}.{
 		match line.split_on("\t") {
 			[tag, font, kind_text, points, flag_text] => {
 				parsed = match kind_text {
-					"shape" => Case.scalars(points).map_ok(|s| (Shape, s))
-					"width" => Case.scalars(points).map_ok(|s| (Width, s))
+					"shape" => Case.parse_scalars(points).map_ok(|s| (Shape, s))
+					"width" => Case.parse_scalars(points).map_ok(|s| (Width, s))
 					"advances" => Case.glyph_ids(points).map_ok(|g| (Advances(g), []))
 					"extents" => Case.glyph_ids(points).map_ok(|g| (Extents(g), []))
 					"read" => if (points.is_empty()) Ok((Read, [])) else Err(BadItems)
@@ -357,8 +357,8 @@ Case :: {}.{
 
 	## Code points from the request field: lower- or upper-case hexadecimal
 	## numbers without prefix, separated by commas. Empty means empty text.
-	scalars : Str -> Try(List(U32), [BadUnicodes])
-	scalars = |field| {
+	parse_scalars : Str -> Try(List(U32), [BadUnicodes])
+	parse_scalars = |field| {
 		var $out = []
 		var $ok = True
 		if !field.is_empty() {
@@ -456,8 +456,8 @@ Case :: {}.{
 	}
 
 	## The total horizontal advance of a run, as a width result.
-	width : List(Glyph) -> Str
-	width = |glyphs| {
+	glyph_width : List(Glyph) -> Str
+	glyph_width = |glyphs| {
 		var $sum = 0.I64
 		for g in glyphs {
 			$sum = $sum + g.ax
@@ -514,11 +514,11 @@ expect Case.request("t\tf.ttf\tdraw\t41\t") == Err(Malformed({ tag: "t", why: "k
 expect Case.request("t\tf.ttf\tshape\td800\t") == Err(Malformed({ tag: "t", why: "code-points" }))
 expect Case.request("t\tf.ttf\tshape\t41\tbold") == Err(Malformed({ tag: "t", why: "flag-bold" }))
 expect Case.request("t\t\tshape\t41\t") == Err(Malformed({ tag: "t", why: "empty-field" }))
-expect Case.scalars("41,1F600") == Ok([0x41, 0x1F600])
-expect Case.scalars("") == Ok([])
-expect Case.scalars("41,,42") == Err(BadUnicodes)
-expect Case.scalars("110000") == Err(BadUnicodes)
-expect Case.scalars("U+0041") == Err(BadUnicodes)
+expect Case.parse_scalars("41,1F600") == Ok([0x41, 0x1F600])
+expect Case.parse_scalars("") == Ok([])
+expect Case.parse_scalars("41,,42") == Err(BadUnicodes)
+expect Case.parse_scalars("110000") == Err(BadUnicodes)
+expect Case.parse_scalars("U+0041") == Err(BadUnicodes)
 expect Case.flags("font-size=0") == Err("font-size=0")
 expect Case.request("t\tf.ttf\tcoords\t41\t") == Err(Malformed({ tag: "t", why: "items" }))
 expect Case.request("t\tf.ttf\tadvances\t0,zz\t") == Err(Malformed({ tag: "t", why: "items" }))
@@ -567,8 +567,8 @@ expect {
 	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0 }]) == "[1|2@100,0]"
 }
 
-expect Case.width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
-expect Case.width([]) == "width:0"
+expect Case.glyph_width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
+expect Case.glyph_width([]) == "width:0"
 
 expect {
 	parsed = Case.flags("utf8-clusters,direction=rtl,script=Arab,language=ar,cluster-level=1,feature=liga:0:0:*,feature=kern:2:3:5")

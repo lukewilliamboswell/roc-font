@@ -19,7 +19,7 @@ Modes:
                                                   counts and time ratios
 
 Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz --opt=speed`
-(roc-fuzz's Fuzz.measure_allocs!). They are deterministic for one compiler
+(roc-fuzz's Fuzz.measure!). They are deterministic for one compiler
 and input, and are compared exactly with bench/baseline.json: any increase or
 decrease fails until --update-baseline records it. The baseline records its
 compiler; nothing pins the compiler (work uses the latest nightly), so after a
@@ -799,9 +799,9 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         "schema": SCHEMA_VERSION,
         "about": "Allocation ratchet for scripts/bench.py --check; see docs/benchmarks.adoc. Counts are "
                  "roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz "
-                 "Fuzz.measure_allocs! in a `roc build --fuzz --opt=speed` binary.",
+                 "Fuzz.measure! in a `roc build --fuzz --opt=speed` binary.",
         "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
-                     "roc_fuzz": "0.4.3"},
+                     "roc_fuzz": "0.6.2"},
         "generator": {"fonttools": versions.get("fonttools_generator") or baseline.get("generator", {}).get("fonttools")},
         "cases": new_cases,
     }

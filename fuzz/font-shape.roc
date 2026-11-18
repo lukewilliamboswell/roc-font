@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -184,15 +184,16 @@ repeated = |text, copies| {
 ## them all.
 scaling! : Font, Str, Str => {}
 scaling! = |font, small, large| {
-	small_cost = Fuzz.measure_allocs!(|{}| Font.width(font, small))
-	large_cost = Fuzz.measure_allocs!(|{}| Font.width(font, large))
-	Fuzz.expect_no_leaks!(|{}| Font.width(font, large))
-	if large_cost.allocations > 10 * small_cost.allocations + 256 {
-		crash "shaping 8 times the text took ${large_cost.allocations.to_str()} allocations, against ${small_cost.allocations.to_str()}"
+	small_cost = Fuzz.measure!("small-cost", || Font.width(font, small))
+	large_cost = Fuzz.measure!("large-cost", || Font.width(font, large))
+	Fuzz.expect_no_leaks!(|| Font.width(font, large))
+	if (large_cost.stats.allocs + large_cost.stats.reallocs) > 10 * (small_cost.stats.allocs + small_cost.stats.reallocs) + 256 {
+		crash "shaping 8 times the text took ${(large_cost.stats.allocs + large_cost.stats.reallocs).to_str()} allocations, against ${(small_cost.stats.allocs + small_cost.stats.reallocs).to_str()}"
 	}
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-shape",
 	generator: Fuzz.raw_bytes,
 	test!,

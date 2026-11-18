@@ -586,7 +586,7 @@ The driver is a consumer like any other, so it is tested as shipped:
 `conformance.py` runs `roc bundle package/main.roc`, serves the bundle from
 a loopback address (`scripts/flight.py`) and builds the driver with
 `--replace-dep ./package/main.roc <url>`, never from the package's
-sources (under `all_tests.py`, from a mirror of the checkout where those
+sources (under `scripts/check.roc`, from a mirror of the checkout where those
 sources are absent). It rebuilds the binary into
 `.roc-font-tmp/conformance/` (or `$ROC_FONT_TMPDIR/conformance/`) whenever
 a driver source is newer or the bundle differs from the one it was built

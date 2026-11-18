@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -66,29 +66,29 @@ test! = |bytes| {
 			crash "the fonts shape the text differently at ${Str.inspect(Font.coordinates(Font.at(small_font, place)))}: ${Str.inspect(a.glyphs)} and ${Str.inspect(b.glyphs)}"
 		}
 	}
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small.file, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading 8 times the varied layout took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
+	small_read = Fuzz.measure!("small-read", || Font.from_bytes(small.file, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("large-read", || Font.from_bytes(large.file, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
+	if (large_read.stats.allocs + large_read.stats.reallocs) > 10 * (small_read.stats.allocs + small_read.stats.reallocs) + 256 {
+		crash "reading 8 times the varied layout took ${(large_read.stats.allocs + large_read.stats.reallocs).to_str()} allocations, against ${(small_read.stats.allocs + small_read.stats.reallocs).to_str()}"
 	}
 	place = places.first() ?? Font.Variation.{}
 	small_at = Font.at(small_font, place)
 	large_at = Font.at(large_font, place)
-	small_plan = Fuzz.measure_allocs!(|{}| Font.plan(small_at, Font.ShapeOptions.{}))
-	large_plan = Fuzz.measure_allocs!(|{}| Font.plan(large_at, Font.ShapeOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.plan(large_at, Font.ShapeOptions.{}))
+	small_plan = Fuzz.measure!("small-plan", || Font.plan(small_at, Font.ShapeOptions.{}))
+	large_plan = Fuzz.measure!("large-plan", || Font.plan(large_at, Font.ShapeOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.plan(large_at, Font.ShapeOptions.{}))
 	# Planning evaluates every feature variation record before the one
 	# that matches, the larger font's 7 extra records among them, on one
 	# reused stack, so extra records cost no allocations.
-	if large_plan.allocations > small_plan.allocations + 8 {
-		crash "planning with 8 times the lookups and records took ${large_plan.allocations.to_str()} allocations, against ${small_plan.allocations.to_str()}"
+	if (large_plan.stats.allocs + large_plan.stats.reallocs) > (small_plan.stats.allocs + small_plan.stats.reallocs) + 8 {
+		crash "planning with 8 times the lookups and records took ${(large_plan.stats.allocs + large_plan.stats.reallocs).to_str()} allocations, against ${(small_plan.stats.allocs + small_plan.stats.reallocs).to_str()}"
 	}
-	small_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(small_at, small_plan.value, text))
-	large_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(large_at, large_plan.value, text))
-	Fuzz.expect_no_leaks!(|{}| Font.shape_planned(large_at, large_plan.value, text))
-	if large_shape.allocations > small_shape.allocations + 8 {
-		crash "shaping one text with 8 times the varied layout took ${large_shape.allocations.to_str()} allocations, against ${small_shape.allocations.to_str()}"
+	small_shape = Fuzz.measure!("small-shape", || Font.shape_planned(small_at, small_plan.value, text))
+	large_shape = Fuzz.measure!("large-shape", || Font.shape_planned(large_at, large_plan.value, text))
+	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_at, large_plan.value, text))
+	if (large_shape.stats.allocs + large_shape.stats.reallocs) > (small_shape.stats.allocs + small_shape.stats.reallocs) + 8 {
+		crash "shaping one text with 8 times the varied layout took ${(large_shape.stats.allocs + large_shape.stats.reallocs).to_str()} allocations, against ${(small_shape.stats.allocs + small_shape.stats.reallocs).to_str()}"
 	}
 	Fuzz.keep
 }
@@ -538,6 +538,7 @@ check! = |built, places, glyphs, text| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-layout-var",
 	generator: Fuzz.raw_bytes,
 	test!,

@@ -274,10 +274,14 @@ runs 4000 inputs (1500 for `font-gvar`, `font-layout-var` and
 `font-ots`, whose every input builds, reads and checks several fonts; `smoke_runs` in
 `TargetConfig`, overridden by `--runs`) and passes a fixed libFuzzer seed, so its result depends only on the sources,
 seeds, fonts present and compiler. It is the CI check and runs as a step of
-`scripts/all_tests.py`. `campaign` and `nightly` grow one persistent corpus
+`scripts/check.roc`. `campaign` and `nightly` grow one persistent corpus
 per target and are for finding new failures.
 
-Each run uses the target binary's supervised `ci` command, which records
+roc-fuzz 0.6.2 bounds framed inputs to 1 MiB. The seed builder reports
+files above that bound instead of silently including unusable inputs; larger
+real fonts remain covered by conformance and benchmarks.
+
+Each run uses the target binary's supervised `run` command, which records
 provenance (commit, compiler version, roc-fuzz release and bundle digest)
 and keeps evidence even when the target crashes. Working state goes under
 the ignored `.roc-font-tmp/fuzz/` (or `$ROC_FONT_TMPDIR/fuzz/`):

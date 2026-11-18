@@ -702,15 +702,16 @@ source tree. `roc bundle package/main.roc` makes the bundle once per run;
 (the API tests, the conformance driver, fuzz targets, benchmark programs
 and examples) is compiled with `--replace-dep ./package/main.roc <url>`,
 so its `../package/main.roc` dependency resolves to the served bundle,
-fetched and hash-checked as a user's download is. `scripts/all_tests.py`
+fetched and hash-checked as a user's download is. `scripts/check.roc`
 runs those steps in a mirror of the checkout whose `package/main.roc` is
 a sentinel that does not compile, so a step that compiled the sources
 would fail. The only source-level tests are the package's own top-level
 expects, run by `roc test package/main.roc` for internals the public API
 cannot observe; `roc check`, `roc docs` and `roc bundle` of
 `package/main.roc` naturally read the sources because they build the
-artifact. The release workflow runs the same consumer checks against the
-exact bundle it publishes (`all_tests.py --bundle`).
+artifact. `blueprint run check -- --bundle FILE` can test a candidate asset
+through the same consumer checks. The release workflow also tests the archived examples against the exact
+bundle it publishes with a fresh package cache.
 
 [cols="1,2,2",options="header"]
 |===
@@ -869,7 +870,7 @@ cost is the kind of problem these isolate early.
 A differential target shapes fuzzed text on corpus
 fonts and compares with recorded HarfBuzz output. Every crash is distilled
 into a permanent `## fuzz regression:` expect. The smoke run (fixed seed,
-seeds-only corpus) is deterministic and part of `all_tests.py`; the
+seeds-only corpus) is deterministic and part of `scripts/check.roc`; the
 roc-fuzz release is pinned by URL and asset SHA-256 in `run_fuzz.py`.
 Details are in `docs/fuzzing.adoc`.
 
@@ -987,9 +988,9 @@ bench/
   roc/                   Roc benchmark programs
   compare/               HarfBuzz, Rust and Python comparison programs
   baseline.json          allocation ratchet
-scripts/                 all_tests.py, flight.py, fetch_corpus.py,
+scripts/                 check.roc, examples.roc, flight.py, fetch_corpus.py,
                          record_oracle.py, conformance.py, run_fuzz.py,
-                         bench.py, examples.py
+                         bench.py
 docs/                    this document and contributor chapters
 ----
 
@@ -1006,14 +1007,14 @@ A symlinked or second package root was rejected: the compiler refuses
 symlinks outside a package's source root, and a second root exposing test
 builders would mean testing a package no consumer imports.
 
-`python3 scripts/all_tests.py` runs every check in §7 and §9, the consumer
+`blueprint run check` runs every check in §7 and §9, the consumer
 steps against the served bundle in a mirror without the package's sources;
 `scripts/public_api.json` lists the items `roc docs` may show; the generated
 docs must show exactly its `public` list.
 
 No compiler version is pinned. The package targets the latest Roc nightly,
 the compiler its consumers have: pull-request CI and local work use it, and
-`all_tests.py` reports which one ran. A pin would let the package drift from
+`scripts/check.roc` reports which one ran. A pin would let the package drift from
 what consumers compile with; release 0.1.0-rc1, checked only on its pinned
 nightly, failed for consumers on the next one. Instead, `ci.yml` also runs
 the checks on `main` daily against that day's nightly, so `main` and the

@@ -654,8 +654,8 @@ LayoutVar := {
 	## All four values of a checked value record at a location; see
 	## `x_advance`. A y advance applies only to vertical text and the
 	## placements only once glyph offsets are positioned; the caller picks.
-	value : LayoutVar, Location, List(U8), U64, U64, U64 -> Value
-	value = |lv, loc, data, base, at, format| {
+	read_value : LayoutVar, Location, List(U8), U64, U64, U64 -> Value
+	read_value = |lv, loc, data, base, at, format| {
 		field = |bit| at + 2 * LayoutVar.bits(format, bit - 1)
 		stored = |bit| if (format.bitwise_and(bit) == 0) 0 else TableVar.i16(data, field(bit))
 		varied = |bit| if (loc.active and format.bitwise_and(bit) != 0) LayoutVar.device_delta(lv, loc, data, base, field(bit)) else 0
@@ -1866,7 +1866,7 @@ expect
 					for right in 1..<8 {
 						for found in pair_records(f.gpos, left, right) {
 							r = found.first
-							if LayoutVar.x_advance(f.lv, loc, f.gpos, r.base, r.at, r.format) != LayoutVar.value(f.lv, loc, f.gpos, r.base, r.at, r.format).x_advance {
+							if LayoutVar.x_advance(f.lv, loc, f.gpos, r.base, r.at, r.format) != LayoutVar.read_value(f.lv, loc, f.gpos, r.base, r.at, r.format).x_advance {
 								$ok = False
 							}
 						}
@@ -2084,7 +2084,7 @@ expect {
 	# The pair record is at 40 + 2; its value record at 44.
 	loc = LayoutVar.location(device_store, [16384])
 	LayoutVar.x_advance(device_store, loc, gpos, 40, 44, 0x44) == -95
-		and LayoutVar.value(device_store, loc, gpos, 40, 44, 0x44) == { x_placement: 0, y_placement: 0, x_advance: -95, y_advance: 0 }
+		and LayoutVar.read_value(device_store, loc, gpos, 40, 44, 0x44) == { x_placement: 0, y_placement: 0, x_advance: -95, y_advance: 0 }
 		and LayoutVar.x_advance(device_store, LayoutVar.default_location, gpos, 40, 44, 0x44) == -20
 }
 
@@ -2324,7 +2324,7 @@ expect {
 		for coords in locations {
 			loc = LayoutVar.location(lv, coords)
 			for found in records {
-				v = LayoutVar.value(lv, loc, g, found.first.base, found.first.at, found.first.format)
+				v = LayoutVar.read_value(lv, loc, g, found.first.base, found.first.at, found.first.format)
 				$sum = $sum + v.x_advance + v.x_placement + v.y_placement + LayoutVar.x_advance(lv, loc, g, found.second.base, found.second.at, found.second.format)
 			}
 		}

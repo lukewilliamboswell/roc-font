@@ -13,26 +13,39 @@ first change; it applies to people as much as to agents.
 
 - **The latest Roc nightly.** Download it from
   [roc-lang/nightlies](https://github.com/roc-lang/nightlies/releases)
-  and put its `roc` first on `PATH`, or set `ROC` to its path. Nothing pins
+  and put its `roc` first on `PATH`. Nothing pins
   the compiler: CI uses the latest nightly too, and the checks report which
   compiler ran. They warn on a local debug build, because formatting and
   code generation differ from a nightly's.
-- **Python 3.10 or later.** The check scripts under `scripts/` use the
-  standard library only. `zstd` (or Python 3.14) lets the bundle check look
-  inside the bundle; without it that step is skipped.
-- **Optionally, [Blueprint](https://github.com/lukewilliamboswell/roc-blueprint)
-  0.8.0**, to run the named tasks below as CI does, and to render the manual
+- **Python 3.10 or later.** Independent oracle, fuzz-supervision, benchmark
+  and artifact-inspection harnesses use the standard library. Install `zstd`
+  too, or use Python 3.14, so the bundle inspection can decompress its archive.
+- **[Blueprint](https://github.com/lukewilliamboswell/roc-blueprint)
+  0.12.0**, to run the named tasks below as CI does, and to render the manual
   with the renderer pinned in `Blueprint.lock`. No Nix is needed.
 
 Oracles (HarfBuzz through uharfbuzz, fontTools, FreeType, Chrome) are
 needed only to record new reference results, never to run the checks.
+
+The check and example orchestration is executable Roc under `scripts/`, run
+by `roc-stable`, pinned to `nightly-2026-11-18-a520eed` in Blueprint and each
+script header. Product code and consumers use bare `roc` on PATH. Blueprint
+keeps its configuration compiler separate; do not set `ROC` when invoking
+Blueprint to select a different product compiler. Direct harness commands
+accept `ROC` as before. Format scripts with `roc-stable fmt scripts/`.
+
+Release assembly keeps the package-specific asset inventory and archive
+construction in pinned Roc scripts. Archive testing uses the locked
+`release-package` utility from roc-automation tools-0.10.1. Python remains only for the
+loopback server, archive inspection, corpus/oracle tooling, and independent
+fuzz and benchmark harnesses; it does not select the repository check steps.
 
 ## Run the checks
 
 One command runs everything a pull request must pass:
 
 ```sh
-blueprint run check            # or: python3 scripts/all_tests.py
+blueprint run check
 ```
 
 It runs, in order and reporting each step: the compiler in use, `roc fmt
@@ -47,25 +60,25 @@ and list them with `--list`:
 
 ```sh
 blueprint run check -- --only fmt,check,test
-python3 scripts/all_tests.py --skip fuzz-smoke
+blueprint run check -- --skip fuzz-smoke
 ```
 
 ### Test what you fly
 
 The checks test the bundle users import, never the source tree. Before
-the steps, `scripts/all_tests.py` runs `roc bundle package/main.roc` once,
+the steps, `scripts/check.roc` runs `roc bundle package/main.roc` once,
 serves the bundle from a loopback address (`scripts/flight.py`) and
 compiles every consumer of the package (the API tests in `tests/api/`, the
 fuzz targets, the conformance driver, the benchmark programs and the
 examples) with `--replace-dep ./package/main.roc <url>`. Those steps run in
-a hard-linked mirror of the checkout under `.roc-font-tmp/all-tests/mirror`
+a hard-linked mirror of the checkout under `.roc-font-tmp/checks/run-*/mirror`
 whose `package/main.roc` is a sentinel that does not compile, so a step
 that compiled the sources fails. The package's own top-level `expect`s,
 run by `roc test package/main.roc`, are the only source-level tests.
 
-`scripts/run_fuzz.py`, `conformance.py`, `bench.py` and `examples.py check`
+`scripts/run_fuzz.py`, `conformance.py`, `bench.py` and `scripts/examples.roc`
 also serve a fresh bundle when run on their own. For quick local iteration
-each takes `--source` (as does `all_tests.py`) to compile `package/`
+each takes `--source` (as does `scripts/check.roc`) to compile `package/`
 directly; never use it to decide that a change is ready. To run any other
 command against a served bundle:
 
@@ -74,7 +87,7 @@ python3 -I scripts/flight.py -- sh -c \
   'roc test --replace-dep ./package/main.roc "$ROC_FONT_BUNDLE_URL" tests/api/main.roc'
 ```
 
-`all_tests.py --bundle FILE` serves a given
+`blueprint run check -- --bundle FILE` serves a given
 bundle instead, which is how the release workflow tests the exact asset it
 publishes.
 

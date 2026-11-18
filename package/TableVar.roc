@@ -1070,7 +1070,7 @@ TableVar := {
 		}
 		kept = if (drop >= 128) 0 else sig.shr_zf_wrap(drop.to_u8_wrap())
 		rest = sig - kept.shl_wrap(drop.to_u8_wrap())
-		half = (1).shl_wrap((drop - 1).to_u8_wrap())
+		half = (1.U128).shl_wrap((drop - 1).to_u8_wrap())
 		rounded = if (rest > half or (rest == half and kept.bitwise_and(1) == 1)) kept + 1 else kept
 		if top >= -126 {
 			# A normal result: 24 significant bits, or 25 after rounding up.
@@ -1295,14 +1295,14 @@ xhgt = 0x78686774
 undo : U32
 undo = 0x756E646F
 
-u16 : U64 -> List(U8)
-u16 = |v| [v.shr_zf_wrap(8).bitwise_and(0xFF).to_u8_wrap(), v.bitwise_and(0xFF).to_u8_wrap()]
+be_u16 : U64 -> List(U8)
+be_u16 = |v| [v.shr_zf_wrap(8).bitwise_and(0xFF).to_u8_wrap(), v.bitwise_and(0xFF).to_u8_wrap()]
 
-i16 : I64 -> List(U8)
-i16 = |v| u16(v.to_u64_wrap().bitwise_and(0xFFFF))
+be_i16 : I64 -> List(U8)
+be_i16 = |v| be_u16(v.to_u64_wrap().bitwise_and(0xFFFF))
 
-u32 : U64 -> List(U8)
-u32 = |v| u16(v.shr_zf_wrap(16).bitwise_and(0xFFFF)).concat(u16(v.bitwise_and(0xFFFF)))
+be_u32 : U64 -> List(U8)
+be_u32 = |v| be_u16(v.shr_zf_wrap(16).bitwise_and(0xFFFF)).concat(be_u16(v.bitwise_and(0xFFFF)))
 
 # The tables of the fixture `var-mapped.ttf` (two axes, an `avar` map, 7
 # glyphs), for the expects below that call the readers directly.
@@ -1374,10 +1374,10 @@ fvar_problems = |bytes|
 	}
 
 axis : U32, I64, I64, I64 -> List(U8)
-axis = |tag, low, middle, high| u32(tag.to_u64()).concat(u32(low.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(u32(middle.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(u32(high.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(u16(0)).concat(u16(256))
+axis = |tag, low, middle, high| be_u32(tag.to_u64()).concat(be_u32(low.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(be_u32(middle.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(be_u32(high.to_u64_wrap().bitwise_and(0xFFFFFFFF))).concat(be_u16(0)).concat(be_u16(256))
 
 fvar_of : List(List(U8)) -> List(U8)
-fvar_of = |axes| u16(1).concat(u16(0)).concat(u16(16)).concat(u16(2)).concat(u16(axes.len())).concat(u16(20)).concat(u16(0)).concat(u16(4 * axes.len() + 4)).concat(axes.join_map(|a| a))
+fvar_of = |axes| be_u16(1).concat(be_u16(0)).concat(be_u16(16)).concat(be_u16(2)).concat(be_u16(axes.len())).concat(be_u16(20)).concat(be_u16(0)).concat(be_u16(4 * axes.len() + 4)).concat(axes.join_map(|a| a))
 
 one : I64
 one = 0x10000
@@ -1397,7 +1397,7 @@ expect
 
 expect fvar_problems([]) == ([{ table: "fvar", offset: 0, reason: Truncated }])
 expect fvar_problems(fvar_of([axis(wght, 1, 2, 3)]).drop_last(1)) == ([{ table: "fvar", offset: 16, reason: Truncated }])
-expect fvar_problems(u16(2).concat(fvar_of([]).drop_first(2))) == ([{ table: "fvar", offset: 0, reason: UnsupportedVersion }])
+expect fvar_problems(be_u16(2).concat(fvar_of([]).drop_first(2))) == ([{ table: "fvar", offset: 0, reason: UnsupportedVersion }])
 
 # A font may declare any default within its range, even at an end.
 expect
@@ -1407,10 +1407,10 @@ expect
 	}
 
 segment : List((I64, I64)) -> List(U8)
-segment = |pairs| u16(pairs.len()).concat(pairs.join_map(|(from, to)| i16(from).concat(i16(to))))
+segment = |pairs| be_u16(pairs.len()).concat(pairs.join_map(|(from, to)| be_i16(from).concat(be_i16(to))))
 
 avar_of : List(List(U8)) -> List(U8)
-avar_of = |maps| u16(1).concat(u16(0)).concat(u16(0)).concat(u16(maps.len())).concat(maps.join_map(|m| m))
+avar_of = |maps| be_u16(1).concat(be_u16(0)).concat(be_u16(0)).concat(be_u16(maps.len())).concat(maps.join_map(|m| m))
 
 identity : List((I64, I64))
 identity = [(-16384, -16384), (0, 0), (16384, 16384)]
@@ -1429,7 +1429,7 @@ expect
 
 expect TableVar.read_avar(avar_of([segment(identity)]), 2) == Err([{ table: "avar", offset: 6, reason: AxisCountMismatch }])
 expect TableVar.read_avar(avar_of([segment(identity)]).drop_last(1), 1) == Err([{ table: "avar", offset: 8, reason: Truncated }])
-expect TableVar.read_avar(u16(2).concat(avar_of([segment(identity)]).drop_first(2)), 1) == Err([{ table: "avar", offset: 0, reason: UnsupportedVersion }])
+expect TableVar.read_avar(be_u16(2).concat(avar_of([segment(identity)]).drop_first(2)), 1) == Err([{ table: "avar", offset: 0, reason: UnsupportedVersion }])
 
 # An ItemVariationStore at offset 0 of a buffer.
 Data : { indexes : List(U64), words : U64, long : Bool, rows : List(List(I64)) }
@@ -1437,15 +1437,15 @@ Data : { indexes : List(U64), words : U64, long : Bool, rows : List(List(I64)) }
 data_bytes : Data -> List(U8)
 data_bytes = |d| {
 	word_field = d.words + (if (d.long) 0x8000 else 0)
-	head = u16(d.rows.len()).concat(u16(word_field)).concat(u16(d.indexes.len())).concat(d.indexes.join_map(u16))
+	head = be_u16(d.rows.len()).concat(be_u16(word_field)).concat(be_u16(d.indexes.len())).concat(d.indexes.join_map(be_u16))
 	body = d.rows.join_map(
 		|row|
 			row.map_with_index(
 				|v, k|
 					if d.long {
-						if (k < d.words) u32(v.to_u64_wrap().bitwise_and(0xFFFFFFFF)) else i16(v)
+						if (k < d.words) be_u32(v.to_u64_wrap().bitwise_and(0xFFFFFFFF)) else be_i16(v)
 					} else if k < d.words {
-						i16(v)
+						be_i16(v)
 					} else {
 						[v.to_u64_wrap().bitwise_and(0xFF).to_u8_wrap()]
 					},
@@ -1457,7 +1457,7 @@ data_bytes = |d| {
 
 store_of : U64, List(List((I64, I64, I64))), List(Data) -> List(U8)
 store_of = |axis_count, regions, datas| {
-	list = u16(axis_count).concat(u16(regions.len())).concat(regions.join_map(|r| r.join_map(|(s, p, e)| i16(s).concat(i16(p)).concat(i16(e)))))
+	list = be_u16(axis_count).concat(be_u16(regions.len())).concat(regions.join_map(|r| r.join_map(|(s, p, e)| be_i16(s).concat(be_i16(p)).concat(be_i16(e)))))
 	header_size = 8 + 4 * datas.len()
 	blobs = datas.map(data_bytes)
 	var $offsets = []
@@ -1466,7 +1466,7 @@ store_of = |axis_count, regions, datas| {
 		$offsets = $offsets.append($at)
 		$at = $at + blob.len()
 	}
-	u16(1).concat(u32(header_size)).concat(u16(datas.len())).concat($offsets.join_map(u32)).concat(list).concat(blobs.join_map(|b| b))
+	be_u16(1).concat(be_u32(header_size)).concat(be_u16(datas.len())).concat($offsets.join_map(be_u32)).concat(list).concat(blobs.join_map(|b| b))
 }
 
 two_regions : List(List((I64, I64, I64)))
@@ -1507,7 +1507,7 @@ expect TableVar.read_store(good_store, "HVAR", good_store.len(), 1) == Err([{ ta
 map_of : U64, U64, U64, List(U64) -> List(U8)
 map_of = |format, entry_size, inner_bits, entries| {
 	entry_format = (entry_size - 1) * 16 + (inner_bits - 1)
-	head = if (format == 0) [0, entry_format.to_u8_wrap()].concat(u16(entries.len())) else [1, entry_format.to_u8_wrap()].concat(u32(entries.len()))
+	head = if (format == 0) [0, entry_format.to_u8_wrap()].concat(be_u16(entries.len())) else [1, entry_format.to_u8_wrap()].concat(be_u32(entries.len()))
 	head.concat(entries.join_map(|u| entry_bytes(u, entry_size)))
 }
 
@@ -1542,7 +1542,7 @@ expect with_map(map_of(0, 2, 8, [0, 1]).drop_last(1), 0) == Err([{ table: "HVAR"
 
 # HVAR without a map needs a row for every glyph.
 hvar_of : List(U8), List(U8) -> List(U8)
-hvar_of = |store, map| u16(1).concat(u16(0)).concat(u32(20)).concat(u32(if (map.is_empty()) 0 else 20 + store.len())).concat(u32(0)).concat(u32(0)).concat(store).concat(map)
+hvar_of = |store, map| be_u16(1).concat(be_u16(0)).concat(be_u32(20)).concat(be_u32(if (map.is_empty()) 0 else 20 + store.len())).concat(be_u32(0)).concat(be_u32(0)).concat(store).concat(map)
 
 expect TableVar.read_hvar(hvar_of(good_store, []), 1, 2).is_ok()
 expect TableVar.read_hvar(hvar_of(good_store, []), 1, 3) == Err([{ table: "HVAR", offset: 20, reason: ItemCount }])
@@ -1550,11 +1550,11 @@ expect TableVar.read_hvar(hvar_of(good_store, map_of(0, 1, 4, [0, 1, 0x10])), 1,
 
 # MVAR records must be sorted by tag, and name rows of the store.
 mvar_of : List((U32, U64, U64)) -> List(U8)
-mvar_of = |records| u16(1).concat(u16(0)).concat(u16(0)).concat(u16(8)).concat(u16(records.len())).concat(u16(12 + 8 * records.len())).concat(records.join_map(|(tag, o, n)| u32(tag.to_u64()).concat(u16(o)).concat(u16(n)))).concat(good_store)
+mvar_of = |records| be_u16(1).concat(be_u16(0)).concat(be_u16(0)).concat(be_u16(8)).concat(be_u16(records.len())).concat(be_u16(12 + 8 * records.len())).concat(records.join_map(|(tag, o, n)| be_u32(tag.to_u64()).concat(be_u16(o)).concat(be_u16(n)))).concat(good_store)
 
 expect TableVar.read_mvar(mvar_of([(undo, 0, 1), (xhgt, 1, 0)]), 1).is_ok()
 expect TableVar.read_mvar(mvar_of([(xhgt, 0, 1), (undo, 0, 2)]), 1) == Err([{ table: "MVAR", offset: 20, reason: TagOrder }, { table: "MVAR", offset: 24, reason: DeltaIndex }])
-expect TableVar.read_mvar(u16(1).concat(u16(0)).concat(u16(0)).concat(u16(8)).concat(u16(0)).concat(u16(0)), 1).is_ok()
+expect TableVar.read_mvar(be_u16(1).concat(be_u16(0)).concat(be_u16(0)).concat(be_u16(8)).concat(be_u16(0)).concat(be_u16(0)), 1).is_ok()
 
 # ------------------------------------------------------------ totality and determinism
 

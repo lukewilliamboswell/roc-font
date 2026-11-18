@@ -410,8 +410,8 @@ TableGlyfPoints := {
 	glyph_total = |t| t.kinds.len()
 
 	## 0 for an empty glyph (or one past the font), 1 simple, 2 composite.
-	kind : TableGlyfPoints, U64 -> U8
-	kind = |t, g| t.kinds.get(g) ?? 0
+	kind_of : TableGlyfPoints, U64 -> U8
+	kind_of = |t, g| t.kinds.get(g) ?? 0
 
 	## The points a glyph's variation data addresses, before its four
 	## phantom points: a simple glyph's points, or a composite's components.

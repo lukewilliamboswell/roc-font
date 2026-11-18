@@ -29,7 +29,7 @@ mirror (`make_mirror`) is a hard-linked copy of the checkout without the
 package's .roc files, whose package/main.roc is a sentinel that does not
 compile, so a consumer step run there fails unless it took the served
 bundle. (roc needs --replace-dep's OLD file to exist, hence a sentinel
-rather than nothing.) scripts/all_tests.py runs every consumer step there.
+rather than nothing.) scripts/check.roc runs every consumer step there.
 
 `roc test` of an app that imports the package by path also runs the
 package's expects; through the bundle it does not, so consumer expect
@@ -228,12 +228,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--roc", default=os.environ.get("ROC", "roc"), help="compiler (default: $ROC or roc)")
     parser.add_argument("--bundle", type=Path, help="serve this bundle instead of building one from package/")
+    parser.add_argument("--mirror", type=Path, help="run in a source-free consumer mirror")
     parser.add_argument("command", nargs="+", help="the command to run with ROC_FONT_BUNDLE_URL set")
     args = parser.parse_args(argv)
     roc = str(Path(args.roc).expanduser().resolve()) if "/" in args.roc else args.roc
     with flight(roc, bundle=args.bundle) as dep:
         env = dict(os.environ, **{URL_ENV: dep[-1]})
-        return subprocess.run(args.command, env=env, check=False).returncode
+        if args.mirror:
+            env[CHECKOUT_ENV] = str(ROOT)
+            env["ROC_FONT_RUN_WORK"] = str(args.mirror.resolve().parent)
+            env["ROC_FONT_TMPDIR"] = str(TMP_ROOT)
+        cwd = make_mirror(args.mirror) if args.mirror else ROOT
+        return subprocess.run(args.command, cwd=cwd, env=env, check=False).returncode
 
 
 if __name__ == "__main__":

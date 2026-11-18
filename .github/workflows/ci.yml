@@ -1,7 +1,7 @@
 name: CI
 
 # Checks the working tree with the same task a contributor runs locally:
-# `blueprint run check`, which is scripts/all_tests.py. The package compiler
+# `blueprint run check`, which is scripts/check.roc. The package compiler
 # is the latest Roc nightly; nothing pins it, and the check's compiler step
 # reports which one ran. A new nightly can break an untouched pull request:
 # compare with the latest scheduled run on main before treating a failure as
@@ -38,12 +38,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
 
       - name: Install the latest Roc nightly
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
-          version: nightly-new-compiler
+          version: nightly
 
       - run: blueprint check
 

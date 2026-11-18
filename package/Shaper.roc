@@ -235,7 +235,7 @@ Shaper :: {}.{
 			Given(t) => [t]
 			NotGiven => ShaperTags.script_tags(options.script)
 		}
-		gsub_table = Face.gsub(face)
+		gsub_table = Face.gsub_of(face)
 		gsub_common = LayoutGsub.common_of(gsub_table)
 		kerning = Face.kerning(face)
 		gpos_common = LayoutKerning.common_of(kerning)
@@ -686,7 +686,7 @@ Shaper :: {}.{
 		if n == 0 {
 			return { run: Shaper.empty_run, items: [], stopped: 0 }
 		}
-		gsub = Face.gsub(face)
+		gsub = Face.gsub_of(face)
 		{ chars: prepared, found } = ShaperNormalize.prepare(scalars, p.global_mask)
 		clustered =
 			if !found.continuations {
@@ -707,10 +707,10 @@ Shaper :: {}.{
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
-		ctx = { face, variants: TableCmap.variants_of(Face.cmap(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
+		ctx = { face, variants: TableCmap.variants_of(Face.cmap_of(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
 		masked = Shaper.setup_masks(p, normalized, found.fraction_slash, !backward)
-		gdef = Face.gdef(face)
+		gdef = Face.gdef_of(face)
 		classes = LayoutGdef.has_glyph_classes(gdef)
 		count0 = masked.len()
 		var $items = List.with_capacity(count0)
@@ -752,7 +752,7 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_count(face))
+		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_total(face))
 		var $items = positioned.items
 		var $ax = List.with_capacity(count)
 		var $dx = positioned.dx
@@ -1211,7 +1211,7 @@ Shaper :: {}.{
 	## align with `p.gsub`. Only traced shaping calls it.
 	step_features : Face, Plan -> List(List({ rank : U64, tag : U64, mask : U64, text : Str }))
 	step_features = |face, p| {
-		common = LayoutGsub.common_of(Face.gsub(face))
+		common = LayoutGsub.common_of(Face.gsub_of(face))
 		varied = { subs: p.gsub_subs, fv: Face.feature_variations(face).gsub, lookup_vars: p.gsub_lookup_vars }
 		feature_lookups = |index| Shaper.varied_feature_lookups(common, varied, index)
 		stages = 2

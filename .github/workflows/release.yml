@@ -67,12 +67,12 @@ jobs:
             *) echo "::error::the latest roc-lang/nightlies release is not a nightly: $tag"; exit 1 ;;
           esac
 
-      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
 
       - name: Install that Roc nightly
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
-          version: nightly-new-compiler
+          version: nightly
           nightly-tag: ${{ steps.nightly.outputs.tag }}
 
       # A release needs its notes, a well-formed version and an unused tag.
@@ -150,7 +150,7 @@ jobs:
           VERSION: ${{ steps.validate.outputs.version }}
         run: |
           set -euo pipefail
-          python3 scripts/examples.py package --version "$VERSION" \
+          blueprint run release-examples -- package --version "$VERSION" \
             --bundle "$(find release/assets -name '*.tar.zst')" --output-dir release/assets
 
       - name: Package the API reference
@@ -163,14 +163,14 @@ jobs:
 
       - id: renderer
         if: env.BUILD_MANUAL == 'true'
-        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@e12512e2605608588782edb044dd766137e34869
         with:
           task: docs-path
-          label: roc-docs tools-0.2.0
+          label: roc-docs tools-0.10.1
 
       - id: docs
         if: env.BUILD_MANUAL == 'true'
-        uses: lukewilliamboswell/roc-automation/actions/build-docs@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        uses: lukewilliamboswell/roc-automation/actions/build-docs@e12512e2605608588782edb044dd766137e34869
         with:
           renderer-binary: ${{ steps.renderer.outputs.binary }}
           pdf-filename: roc-font-${{ steps.validate.outputs.version }}.pdf
@@ -194,31 +194,7 @@ jobs:
           bundle="$(basename "$(find release/assets -name '*.tar.zst')")"
           export PACKAGE_URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$VERSION/$bundle"
           export COMPILER="$(roc version)"
-          python3 -I - "docs/releases/$VERSION.adoc" release/notes.md <<'PY'
-          import os, re, sys
-          source, target = sys.argv[1], sys.argv[2]
-          text = open(source, encoding="utf-8").read()
-          if "{package-url}" not in text:
-              sys.exit(f"{source} never uses {{package-url}}")
-          text = text.replace("{package-url}", os.environ["PACKAGE_URL"])
-          left = re.findall(r"\{[a-z-]+-url\}", text)
-          if left:
-              sys.exit(f"{source} leaves placeholders: {', '.join(sorted(set(left)))}")
-          out, in_source, language = [], False, ""
-          for line in text.splitlines():
-              block = re.fullmatch(r"\[source,\s*([A-Za-z0-9_+-]+)\]", line.strip())
-              if block:
-                  language = block.group(1)
-                  continue
-              if line.strip() == "----":
-                  out.append("```" + language if not in_source else "```")
-                  in_source, language = not in_source, ""
-                  continue
-              heading = re.match(r"^(=+) (.*)$", line) if not in_source else None
-              out.append("#" * len(heading.group(1)) + " " + heading.group(2) if heading else line)
-          out += ["", "## Compilers", "", "```", os.environ["COMPILER"], "```", ""]
-          open(target, "w", encoding="utf-8").write("\n".join(out))
-          PY
+          blueprint run release-notes -- "docs/releases/$VERSION.adoc" release/notes.md
           cat release/notes.md
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -242,10 +218,12 @@ jobs:
           persist-credentials: false
 
       - name: Install the Roc nightly the build used
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
-          version: nightly-new-compiler
+          version: nightly
           nightly-tag: ${{ needs.build.outputs.nightly }}
+
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
 
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -260,18 +238,19 @@ jobs:
       - name: Run the API tests and examples against the bundle
         run: |
           set -euo pipefail
-          python3 -I scripts/all_tests.py --only check,test,examples \
+          blueprint run check -- --only check,test,examples \
             --bundle "$(find candidate/assets -name '*.tar.zst')"
 
       # The archive names the bundle's release URL, which does not exist
       # yet: the bundle is served from a loopback address in its place, with
       # an empty package cache, and every recorded case must match.
       - name: Test the examples archive, unchanged, against the bundle
+        env:
+          RP_OUTPUT: candidate/assets
         run: |
           set -euo pipefail
-          python3 scripts/examples.py test-archive \
-            --archive "$(find candidate/assets -name 'roc-font-examples-*.zip')" \
-            --bundle "$(find candidate/assets -name '*.tar.zst')"
+          blueprint run release-test -- test-archive
+
 
   # Holds the write token, checks out nothing and runs no repository code:
   # it publishes the files the jobs above built and tested.
@@ -290,7 +269,7 @@ jobs:
           name: release-candidate
           path: candidate
 
-      - uses: lukewilliamboswell/roc-automation/actions/publish-release@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+      - uses: lukewilliamboswell/roc-automation/actions/publish-release@e12512e2605608588782edb044dd766137e34869
         with:
           version: ${{ needs.build.outputs.version }}
           prerelease: ${{ needs.build.outputs.prerelease }}

@@ -182,7 +182,7 @@ themselves say anything about the change being checked. Confirm the same
 differences appear on `main` without the change, then re-baseline with the
 new compiler (below) in its own commit, saying which nightly moved the
 counts. Expect to re-baseline after every compiler change that touches code
-generation. Pull-request CI runs `scripts/all_tests.py --smoke`, whose
+generation. Pull-request CI runs `scripts/check.roc --smoke`, whose
 benchmark step builds and runs one Roc-only pass with no ratchet, so a new
 nightly never fails CI through allocation counts; the ratchet is a local
 check, run before pushing a change to a hot path.
@@ -200,11 +200,12 @@ shows exactly which counts moved; explain them in the review. Updating with
 `--only` or `--ops` changes only the cases measured. Updating in a checkout
 without the corpus keeps the corpus cases already recorded.
 
-roc-fuzz 0.4.3 exposes only the number of allocations served and the number
-still live (`Fuzz.alloc_count!`, `Fuzz.live_alloc_count!`). Requested bytes
-and peak live bytes, which architecture §9.2 also calls for, need counters
-in the roc-fuzz host; the native binaries are statically linked, so they
-cannot be measured by interposing `malloc` either.
+roc-fuzz 0.6.2 exposes named measurement scopes with allocation and
+reallocation calls, requested bytes, live bytes and peak live bytes. The
+benchmark diagnostic retains the existing call-count ratchet by adding
+`stats.allocs` and `stats.reallocs`; the result checksum stays inside the
+measured operation. Narrow fuzz targets retain their allocation-growth
+assertions using the same counters.
 
 == Time ratios
 

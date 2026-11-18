@@ -1,0 +1,28 @@
+= roc-font 0.1.2
+
+Update the package and applications for Roc nightly-2026-11-18-a520eed.
+Applications use basic-cli 0.28.1. Public font operations, default assets and
+recorded example output are unchanged.
+
+Repository checks and example orchestration now run as Roc scripts on a
+separately pinned `roc-stable`. Package checks still use the latest nightly.
+Roc scripts build the release archives and a locked automation utility
+tests their recorded examples; the
+bundle-only consumer checks, oracle replay and allocation ratchet remain
+part of the repository checks.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.28.1/7brgwR8YUqfeGrkdfF1V4GPPN7DnP7ftqub9KcrTEZtr.tar.zst",
+	font: "{package-url}",
+}
+
+import font.Font
+----
+
+The release attaches the package bundle, `roc-font-examples-0.1.2.zip`, the
+API reference and the PDF manual. The Compilers section records the compiler
+used to build and test them.

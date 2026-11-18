@@ -103,7 +103,7 @@ ShaperTags :: {}.{
 			newer = match ShaperTags.new_script_tags.find_first(|(iso, _)| iso == script) {
 				Ok((iso, two)) if iso == ShaperTags.myanmar => [two]
 				# The `3` versions replace the last byte.
-				Ok((_, two)) => [two.bitwise_and(0xFFFFFF00).bitwise_or('3'.to_u64()), two]
+				Ok((_, two)) => [two.bitwise_and(0xFFFFFF00).bitwise_or(0x33.U64), two]
 				Err(_) => []
 			}
 			old = match ShaperTags.old_script_tags.find_first(|(iso, _)| iso == script) {
@@ -345,7 +345,7 @@ ShaperTags :: {}.{
 					} else {
 						t = ShaperTags.tag_from_bytes($chars)
 						# `DFLT` in any case is the default script tag.
-						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.default_script) t.bitwise_xor((0xFFFFFFFF).bitwise_xor(0xDFDFDFDF)) else t)
+						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.default_script) t.bitwise_xor((0xFFFFFFFF.U64).bitwise_xor(0xDFDFDFDF)) else t)
 					}
 				}
 			}
@@ -383,7 +383,7 @@ ShaperTags :: {}.{
 								[]
 							} else {
 								# Assumed to be ISO 639-3, upper-cased.
-								[key.bitwise_and((0xFFFFFFFF).bitwise_xor(0x20202000))]
+								[key.bitwise_and((0xFFFFFFFF.U64).bitwise_xor(0x20202000))]
 							}
 					}
 			}

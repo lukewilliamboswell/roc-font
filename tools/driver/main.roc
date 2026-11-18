@@ -1,5 +1,5 @@
 app [main!] {
-	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.27.0/9yjxqdGTP4xSpSEmDazwTmRsehfRZzA19pwEKkR6fj1g.tar.zst",
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.28.1/7brgwR8YUqfeGrkdfF1V4GPPN7DnP7ftqub9KcrTEZtr.tar.zst",
 	rf: "../../package/main.roc",
 }
 
@@ -128,7 +128,7 @@ answer : Font, List(Str), Case.Request -> Str
 answer = |font, dropped, req|
 	match req.kind {
 		Read => if (dropped.is_empty()) "read:accept" else "read:drop=${Str.join_with(dropped, ",")}"
-		Width => Case.width(glyphs(font, req.settings, req.shaping, req.scalars))
+		Width => Case.glyph_width(glyphs(font, req.settings, req.shaping, req.scalars))
 		Shape =>
 			if req.settings.font_size != 0 and req.settings.font_size != Font.units_per_em(font).to_u64() {
 				"unsupported:--font-size=${req.settings.font_size.to_str()}"

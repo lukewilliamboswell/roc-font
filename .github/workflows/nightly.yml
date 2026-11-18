@@ -6,7 +6,7 @@ name: Nightly compatibility
 # tracking issue. It never commits, merges or publishes.
 #
 # Every release attaches roc-font-examples-<tag>.zip (built and tested by
-# release.yml with scripts/examples.py): the examples, their recorded
+# release.yml with scripts/release_examples.roc): the examples, their recorded
 # output in spec.json, and the release's bundle URL. Before the first final
 # release there is nothing to test, and selection fails saying so. The job
 # is the canonical single call, so the downstream dashboard can verify it.
@@ -35,7 +35,7 @@ jobs:
     permissions:
       contents: read
       issues: write
-    uses: lukewilliamboswell/roc-automation/.github/workflows/nightly-compatibility.yml@34f02e509b71efa462f891d8cdc8a8cff2eb1693
+    uses: lukewilliamboswell/roc-automation/.github/workflows/nightly-compatibility.yml@e12512e2605608588782edb044dd766137e34869
     with:
       nightly-tag: ${{ inputs.nightly-tag || '' }}
       release-tag: ${{ inputs.release-tag || '' }}

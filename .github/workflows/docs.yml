@@ -30,25 +30,25 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
         with:
           cache: 'true'
           cache-workload: docs
 
       # Only the API reference needs a compiler.
       - name: Install the latest Roc nightly
-        uses: roc-lang/setup-roc@f5a74bf90aa694b43ab4a7cbfdb19273bc6aa697
+        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
         with:
-          version: nightly-new-compiler
+          version: nightly
 
       - id: renderer
-        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@e12512e2605608588782edb044dd766137e34869
         with:
           task: docs-path
-          label: roc-docs tools-0.2.0
+          label: roc-docs tools-0.10.1
 
       - id: docs
-        uses: lukewilliamboswell/roc-automation/actions/build-docs@1f3bc71102cf2d07c324b6009a41823efd21c9aa
+        uses: lukewilliamboswell/roc-automation/actions/build-docs@e12512e2605608588782edb044dd766137e34869
         with:
           renderer-binary: ${{ steps.renderer.outputs.binary }}
           pdf-filename: roc-font.pdf

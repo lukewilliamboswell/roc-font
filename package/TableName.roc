@@ -79,7 +79,7 @@ TableName := {
 		for i in 0..<name.count {
 			at = 6 + 12 * i
 			if Bytes.u16(name.bytes, at + 6) == id {
-				rank = TableName.rank(name, at)
+				rank = TableName.record_rank(name, at)
 				if rank < $best {
 					$best = rank
 					$at = at
@@ -95,7 +95,7 @@ TableName := {
 			if platform_id == 1 {
 				Ok(TableName.mac_roman(name.bytes, start, length))
 			} else {
-				Ok(TableName.utf16(name.bytes, start, length))
+				Ok(TableName.decode_utf16(name.bytes, start, length))
 			}
 		}
 	}
@@ -107,8 +107,8 @@ TableName := {
 	# record OTS discards (`kept`), in an encoding this module does not
 	# decode, or whose UTF-16BE string is not well-formed is unranked, so
 	# a chosen string always decodes.
-	rank : TableName, U64 -> U64
-	rank = |name, at| {
+	record_rank : TableName, U64 -> U64
+	record_rank = |name, at| {
 		platform_id = Bytes.u16(name.bytes, at)
 		encoding = Bytes.u16(name.bytes, at + 2)
 		language = Bytes.u16(name.bytes, at + 4)
@@ -263,7 +263,7 @@ TableName := {
 		# record, a Macintosh copy and a Windows copy of twice the length.
 		var $kept = 0
 		var $string_bytes = 0
-		var $standard = 0
+		var $standard = 0.U64
 		for i in 0..<count {
 			at = 6 + 12 * i
 			if TableName.kept(name, at) {
@@ -376,8 +376,8 @@ TableName := {
 
 	# Decode UTF-16BE that `well_formed` accepted. The fallback of
 	# `Str.from_utf8` is unreachable: every scalar encoded is a valid one.
-	utf16 : List(U8), U64, U64 -> Str
-	utf16 = |data, start, length| {
+	decode_utf16 : List(U8), U64, U64 -> Str
+	decode_utf16 = |data, start, length| {
 		var $out = List.with_capacity(length // 2 * 3)
 		var $i = 0
 		while $i + 1 < length {
@@ -502,8 +502,8 @@ problems = |table, base|
 put : List(U8), U64, U8 -> List(U8)
 put = |list, at, value| list.set(at, value) ?? []
 
-bad : U32 -> [BadTable({ table : Str, offset : U32 })]
-bad = |offset| BadTable({ table: "name", offset })
+bad_name : U32 -> [BadTable({ table : Str, offset : U32 })]
+bad_name = |offset| BadTable({ table: "name", offset })
 
 from_file : List(U8) -> Try(Str, [Missing, Absent, Rejected])
 from_file = |bytes|
@@ -648,14 +648,14 @@ expect family(build(0, [win(0x409, 2, "Regular")], [])) == Err(Missing)
 
 # Too short for the header, an unknown format, records past the end, string
 # storage past the end. Offsets are in the file (the table is at 1000).
-expect problems([0, 0, 0], 1000) == [bad(1000)]
-expect problems(build(2, [], []), 1000) == [bad(1000)]
-expect problems(u16(0).concat(u16(2)).concat(u16(26)).concat(List.repeat(0, 20)), 1000) == [bad(1002)]
-expect problems(u16(0).concat(u16(0)).concat(u16(7)), 1000) == [bad(1004)]
+expect problems([0, 0, 0], 1000) == [bad_name(1000)]
+expect problems(build(2, [], []), 1000) == [bad_name(1000)]
+expect problems(u16(0).concat(u16(2)).concat(u16(26)).concat(List.repeat(0, 20)), 1000) == [bad_name(1002)]
+expect problems(u16(0).concat(u16(0)).concat(u16(7)), 1000) == [bad_name(1004)]
 
 # A format 1 table too short for its language-tag count, or for its tags.
-expect problems(u16(1).concat(u16(0)).concat(u16(6)), 0) == [bad(6)]
-expect problems(u16(1).concat(u16(0)).concat(u16(8)).concat(u16(1)), 0) == [bad(6)]
+expect problems(u16(1).concat(u16(0)).concat(u16(6)), 0) == [bad_name(6)]
+expect problems(u16(1).concat(u16(0)).concat(u16(8)).concat(u16(1)), 0) == [bad_name(6)]
 
 # OTS keeps a table whose records are unusable, and so does reading; a
 # query never chooses them: a string past the end, an odd-length UTF-16
@@ -718,23 +718,23 @@ expect {
 	records = [{ pid: 0, encoding: 4, language: 0x8002, id: 1, text: utf16("A") }]
 	table = build(1, records, [utf16("en"), [0xDC, 0x00]])
 	broken = put(table, 6 + 12 + 2 + 2, 0xFF)
-	problems(broken, 0) == [bad(20)] and family(table) == Ok("A")
+	problems(broken, 0) == [bad_name(20)] and family(table) == Ok("A")
 }
 
 # A language tag longer than 200 bytes (name.cc lines 188-190).
 expect {
 	records = [win(0x409, 1, "A")]
-	problems(build(1, records, [List.repeat(0x41, 200)]), 0) == [] and problems(build(1, records, [List.repeat(0x41, 202)]), 0) == [bad(20)]
+	problems(build(1, records, [List.repeat(0x41, 200)]), 0) == [] and problems(build(1, records, [List.repeat(0x41, 202)]), 0) == [bad_name(20)]
 }
 
 # String storage that starts inside the name records (lines 196-200),
 # placed at the string offset; both tag problems and this are reported.
-expect problems(u16(0).concat(u16(1)).concat(u16(6)).concat(List.repeat(0, 12)), 0) == [bad(4)]
+expect problems(u16(0).concat(u16(1)).concat(u16(6)).concat(List.repeat(0, 12)), 0) == [bad_name(4)]
 expect {
 	table = build(1, [], [utf16("en")])
 	# Storage moved back to 8, inside the tag record; the tag (at 4 from
 	# there) still fits.
-	problems(put(table, 5, 8), 0) == [bad(4)]
+	problems(put(table, 5, 8), 0) == [bad_name(4)]
 }
 
 # A table OTS cannot write back: more than 5460 records once it adds its
@@ -752,9 +752,9 @@ shared = |lengths, id| {
 	$out.concat(List.repeat(0x41, longest))
 }
 expect problems(shared(List.repeat(0, 5450), 0), 0) == []
-expect problems(shared(List.repeat(0, 5451), 0), 0) == [bad(2)]
+expect problems(shared(List.repeat(0, 5451), 0), 0) == [bad_name(2)]
 expect problems(shared(List.repeat(250, 261).append(93), 0), 0) == []
-expect problems(shared(List.repeat(250, 261).append(94), 0), 0) == [bad(4)]
+expect problems(shared(List.repeat(250, 261).append(94), 0), 0) == [bad_name(4)]
 
 # Kept Windows names for IDs 1, 2, 4, 5 and 6 mean OTS adds none, so the
 # same strings fit with 192 bytes more.
@@ -768,7 +768,7 @@ expect {
 expect {
 	tables = [{ tag: Sfnt.tag_of("name"), offset: 100, length: 50 }]
 	match TableName.from_tables(List.repeat(0, 120), tables) {
-		Err(found) => found == [bad(100)]
+		Err(found) => found == [bad_name(100)]
 		Ok(_) => Bool.False
 	}
 }
