@@ -195,4 +195,4 @@ generated = |n, choice, delta| {
 	])
 }
 
-target = Fuzz.target_with!({ name: "font-math", generator: Fuzz.raw_bytes, test!, show: |bytes| Str.inspect(bytes.take_first(32)) })
+target = Fuzz.target_with!({ examples: [], name: "font-math", generator: Fuzz.raw_bytes, test!, show: |bytes| Str.inspect(bytes.take_first(32)) })
