@@ -428,7 +428,7 @@ Face := {
 	unique = |problems| {
 		var $out = []
 		for p in problems {
-			if !$out.contains(p) {
+			if !$out.any(|known| known == p) {
 				$out = $out.append(p)
 			}
 		}

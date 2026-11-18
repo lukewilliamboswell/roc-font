@@ -1189,7 +1189,7 @@ Shaper :: {}.{
 		if t == Shaper.liga_tag {
 			return 0
 		}
-		if Shaper.default_tags.contains(t) {
+		if Shaper.default_tags.any(|known| known == t) {
 			return 1
 		}
 		2

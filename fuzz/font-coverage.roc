@@ -227,7 +227,7 @@ check! = |built, text| {
 	for k in 0..<source.len() {
 		g = (source.get(k) ?? 0).to_u64()
 		$width = $width + 100 + (g % 400).to_i64_wrap()
-		if k + 1 < source.len() and built.covered.contains(g) {
+		if k + 1 < source.len() and built.covered.any(|covered| covered == g) {
 			next = (source.get(k + 1) ?? 0).to_u64()
 			$width = $width + (built.values.get(class_of(built.first, g) * built.width + class_of(built.second, next)) ?? 0)
 		}

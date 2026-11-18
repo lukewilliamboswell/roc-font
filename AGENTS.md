@@ -216,6 +216,10 @@ nightly; nothing pins the product compiler, and the script reports which one ran
 Repository orchestration runs on the separate `roc-stable` pinned in
 `Blueprint.roc` and every script header. Format scripts with that compiler;
 format and test package code and consumers with bare `roc`.
+When a new compiler cannot compile an older published bundle for API
+comparison, use a separately locked compatible compiler for that explicit
+release boundary only; keep `roc bump --expect` and all candidate validation
+on their intended compilers. Document the boundary and the evidence.
 CI runs it with `--smoke` (fuzzing and benchmarks only build and run
 briefly) on every pull request and daily on `main`; the allocation ratchet
 and fuzz campaigns are local, so run the full script before pushing

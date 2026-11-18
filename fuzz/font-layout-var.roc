@@ -441,7 +441,7 @@ model_run : Built, List(U64), List(I64) -> { glyphs : List(U64), width : I64 }
 model_run = |built, text, coords| {
 	gsub = feature_lookups(built.gsub_records, built.gsub_lookup_records, 0, built.calt, coords).concat(feature_lookups(built.gsub_records, built.gsub_lookup_records, 1, built.rvrn, coords))
 	gpos = feature_lookups(built.gpos_records, [], 0, built.kern, coords)
-	glyphs = text.map(|g| if (g >= 1 and g <= triggers and gsub.contains(g - 1)) replaced + g - 1 else g)
+	glyphs = text.map(|g| if (g >= 1 and g <= triggers and gsub.any(|lookup| lookup == g - 1)) replaced + g - 1 else g)
 	var $width = 0
 	for k in 0..<glyphs.len() {
 		g = glyphs.get(k) ?? 0
@@ -449,7 +449,7 @@ model_run = |built, text, coords| {
 		if k + 1 < glyphs.len() {
 			right = glyphs.get(k + 1) ?? 0
 			for lookup in 0..<3 {
-				if gpos.contains(lookup) {
+				if gpos.any(|active| active == lookup) {
 					$width = $width + lookup_kerning(built, lookup, g, right, coords)
 				}
 			}

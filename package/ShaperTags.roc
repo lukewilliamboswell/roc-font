@@ -129,10 +129,10 @@ ShaperTags :: {}.{
 			return Either
 		}
 		script = ShaperTags.script_of(code)
-		if ShaperTags.rtl_scripts.contains(script) {
+		if ShaperTags.rtl_scripts.any(|known| known == script) {
 			return Rtl
 		}
-		if ShaperTags.either_scripts.contains(script) {
+		if ShaperTags.either_scripts.any(|known| known == script) {
 			return Either
 		}
 		Ltr

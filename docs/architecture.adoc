@@ -1012,7 +1012,9 @@ steps against the served bundle in a mirror without the package's sources;
 `scripts/public_api.json` lists the items `roc docs` may show; the generated
 docs must show exactly its `public` list.
 
-No compiler version is pinned. The package targets the latest Roc nightly,
+The product compiler is not pinned. Repository orchestration uses a separate,
+locked `roc-stable`; it invokes the product compiler on `PATH`. The package
+targets the latest Roc nightly,
 the compiler its consumers have: pull-request CI and local work use it, and
 `scripts/check.roc` reports which one ran. A pin would let the package drift from
 what consumers compile with; release 0.1.0-rc1, checked only on its pinned
@@ -1025,6 +1027,12 @@ the latest final release's examples archive, unchanged, on every new
 nightly. The cost is that a new nightly can fail an unrelated pull request,
 and that compiler-specific results (formatting, allocation counts, §9) are
 re-recorded when the compiler changes them.
+
+The release API comparison can need a compatible older compiler when the
+current compiler rejects the old published bundle. The 0.1.1-to-0.1.2 boundary
+uses separately locked November 7 for `roc bump --expect 0.1.2`; builds and
+consumer checks of the candidate still use the latest nightly. The exception
+is explicit to that release pair, rather than a fallback for other failures.
 
 [#references]
 == 11 Lessons taken from mature libraries

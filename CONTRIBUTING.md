@@ -134,6 +134,12 @@ skips release candidates. A failure there calls for a patch release.
 A release is cut only when the checks pass on the latest nightly; the
 release notes record the compiler it was tested with.
 
+The 0.1.1-to-0.1.2 API comparison alone uses the separately locked November 7
+compiler: November 18 cannot compile the published 0.1.1 bundle. It runs the
+real `roc bump --expect 0.1.2` comparison against that unchanged bundle;
+all candidate checks and builds still use the latest nightly. Other release
+comparisons use that latest compiler.
+
 ## Where things live
 
 | Path | Contents |
@@ -200,8 +206,10 @@ on every directory the checks format; when the allocation ratchet reports
 - Avoid until fixed on the nightly: wrapping a record field in a tag and
   reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
   ARC pass; `Dict(k, {})` hangs native builds.
-- basic-cli 0.27.0 builds with the iterator-based APIs in the November 2026
-  nightlies. The scripts tolerate type diagnostics only inside the cached
-  platform in the checks where the compiler can still build.
+- The November 18 compiler needs basic-cli 0.28.1. Script-direction selection
+  and feature-credit ranking use equivalent early returns to avoid its
+  optimized specialization crash on nested conditionals. Explicit equality
+  predicates also avoid a `List.contains` specialization crash in focused
+  fuzz builds; their membership behavior is unchanged.
 - A local debug `roc` on `PATH` may panic on this code; use the latest
-  nightly (`ROC=...`).
+  nightly first on `PATH`.

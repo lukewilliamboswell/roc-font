@@ -2,7 +2,10 @@
 
 Update the package and applications for Roc nightly-2026-11-18-a520eed.
 Applications use basic-cli 0.28.1. Public font operations, default assets and
-recorded example output are unchanged.
+recorded example output are unchanged. The unchanged public API is
+checked against 0.1.1 with pinned nightly-2026-11-07-ad3a5d2, because the
+new compiler cannot compile the old published bundle. Candidate builds and
+tests use the current nightly.
 
 Repository checks and example orchestration now run as Roc scripts on a
 separately pinned `roc-stable`. Package checks still use the latest nightly.

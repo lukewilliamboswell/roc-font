@@ -122,7 +122,13 @@ jobs:
           fi
           bundle="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$previous" \
             --jq '[.assets[] | select(.name | endswith(".tar.zst"))] | if length == 1 then .[0].browser_download_url else error("expected one bundle") end')"
-          if [ "$DRY_RUN" = true ] && [ "$previous" = "$VERSION" ]; then
+          if [ "$previous" = 0.1.1 ] && [ "$VERSION" = 0.1.2 ]; then
+            # Only API comparison uses this compatibility compiler. The old
+            # published bundle cannot compile on November 18; all candidate
+            # builds and tests below still use the latest nightly.
+            echo "Comparing 0.1.1 -> 0.1.2 with pinned nightly-2026-11-07-ad3a5d2"
+            blueprint run api-compare-0-1-1 -- --old "$bundle" --expect "$VERSION" package/main.roc
+          elif [ "$DRY_RUN" = true ] && [ "$previous" = "$VERSION" ]; then
             roc bump --old "$bundle" package/main.roc
           else
             roc bump --old "$bundle" --expect "$VERSION" package/main.roc

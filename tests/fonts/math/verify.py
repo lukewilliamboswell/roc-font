@@ -3,7 +3,7 @@
 Run: ROC=/path/to/roc python3 tests/fonts/math/verify.py
 No HarfBuzz, fontTools or network access is needed beyond the served bundle
 and compiler platform cache. Case data and oracle records are never used to
-generate Roc source. In all_tests.py's mirror, the bundle remains mandatory.
+generate Roc source. In check.roc's mirror, the bundle remains mandatory.
 """
 from pathlib import Path
 import argparse, difflib, hashlib, json, os, subprocess, sys, tempfile
