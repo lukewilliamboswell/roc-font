@@ -17,7 +17,7 @@ Suite : { schema_version : U64, release : Str, dependencies : List(Str), apps : 
 main! : List(OsStr) => Try({}, _)
 main! = |native_args| {
 	args = native_args.map(OsStr.display).keep_if(|arg| arg != "--")
-	if args.first() != Ok("package") {
+	if args.len() != 7 or args.first() != Ok("package") {
 		return Err(Usage("package --version VERSION --bundle FILE --output-dir DIR"))
 	}
 	version = option(args, "--version").map_err(|message| InvalidArguments(message))?
