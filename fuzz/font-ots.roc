@@ -53,8 +53,8 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small_file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large_file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large_file, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading a damaged font 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()} for the smaller font undamaged"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading a damaged font 8 times larger took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()} for the smaller font undamaged"
 	}
 	Fuzz.keep
 }
@@ -358,3 +358,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(64)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

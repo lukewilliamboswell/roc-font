@@ -69,8 +69,8 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading 8 times the varied layout took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading 8 times the varied layout took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()}"
 	}
 	place = places.first() ?? Font.Variation.{}
 	small_at = Font.at(small_font, place)
@@ -81,14 +81,14 @@ test! = |bytes| {
 	# Planning evaluates every feature variation record before the one
 	# that matches, the larger font's 7 extra records among them, on one
 	# reused stack, so extra records cost no allocations.
-	if large_plan.stats.allocs > small_plan.stats.allocs + 8 {
-		crash "planning with 8 times the lookups and records took ${large_plan.stats.allocs.to_str()} allocations, against ${small_plan.stats.allocs.to_str()}"
+	if allocation_calls(large_plan.stats) > allocation_calls(small_plan.stats) + 8 {
+		crash "planning with 8 times the lookups and records took ${allocation_calls(large_plan.stats).to_str()} allocations, against ${allocation_calls(small_plan.stats).to_str()}"
 	}
 	small_shape = Fuzz.measure!("allocations", || Font.shape_planned(small_at, small_plan.value, text))
 	large_shape = Fuzz.measure!("allocations", || Font.shape_planned(large_at, large_plan.value, text))
 	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_at, large_plan.value, text))
-	if large_shape.stats.allocs > small_shape.stats.allocs + 8 {
-		crash "shaping one text with 8 times the varied layout took ${large_shape.stats.allocs.to_str()} allocations, against ${small_shape.stats.allocs.to_str()}"
+	if allocation_calls(large_shape.stats) > allocation_calls(small_shape.stats) + 8 {
+		crash "shaping one text with 8 times the varied layout took ${allocation_calls(large_shape.stats).to_str()} allocations, against ${allocation_calls(small_shape.stats).to_str()}"
 	}
 	Fuzz.keep
 }
@@ -544,3 +544,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(49)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

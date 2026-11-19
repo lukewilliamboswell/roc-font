@@ -853,7 +853,7 @@ The same corpus seeds the fuzz targets.
 Every reading or shaping stage has a roc-fuzz target asserting its
 contract: totality, determinism, finite output, bounded growth, index
 alignment and clusters in range. Allocation is checked with
-`Fuzz.measure_allocs!` at two sizes against a linear bound, and leaks with
+`Fuzz.measure!` at two sizes against a linear bound, and leaks with
 `Fuzz.expect_no_leaks!`.
 
 Whole-pipeline targets say *that* reading or shaping scales badly; they

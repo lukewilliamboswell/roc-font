@@ -149,8 +149,8 @@ time and allocations (architecture §9.4).
 == Allocation ratchet
 
 `bench/roc/alloc.roc` is a roc-fuzz app built with `roc build --fuzz`. It
-replays one case file, runs the operation once inside
-`Fuzz.measure_allocs!`, and crashes on purpose to print its counts, so exit
+uses raw single-file replay for one case file, runs the operation once inside
+`Fuzz.measure!`, and crashes on purpose to print its counts, so exit
 code 77 is the expected result:
 
 ----
@@ -200,11 +200,11 @@ shows exactly which counts moved; explain them in the review. Updating with
 `--only` or `--ops` changes only the cases measured. Updating in a checkout
 without the corpus keeps the corpus cases already recorded.
 
-roc-fuzz 0.4.3 exposes only the number of allocations served and the number
-still live (`Fuzz.alloc_count!`, `Fuzz.live_alloc_count!`). Requested bytes
-and peak live bytes, which architecture §9.2 also calls for, need counters
-in the roc-fuzz host; the native binaries are statically linked, so they
-cannot be measured by interposing `malloc` either.
+The diagnostic preserves the original counters: allocation plus reallocation
+calls from `Fuzz.measure!` and live allocations from `Fuzz.live_alloc_count!`.
+roc-fuzz 0.6.2 also exposes requested bytes and peak live bytes in `Fuzz.Stats`;
+this ratchet currently compares only the two existing fields above. Neither
+compiler migration nor a change of measurement API accepts a new baseline.
 
 == Time ratios
 

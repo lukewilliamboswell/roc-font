@@ -174,7 +174,7 @@ their seeds, and they use `fuzz/dictionaries/narrow.dict`.
 
 Every target also checks *cost*:
 
-* *Allocation linearity.* `Fuzz.measure_allocs!` counts the allocations of
+* *Allocation linearity.* `Fuzz.measure!` records separate allocation and reallocation counts for
   the operation at two sizes: reading `FontBuild.scaled` fonts built from 2
   and 16 copies of the input's choices, and shaping the text repeated 2 and
   16 times. The larger may take at most `10 × small + 256` allocations: an
@@ -277,16 +277,17 @@ seeds, fonts present and compiler. It is the CI check and runs as a step of
 `scripts/all_tests.py`. `campaign` and `nightly` grow one persistent corpus
 per target and are for finding new failures.
 
-Each run uses the target binary's supervised `ci` command, which records
-provenance (commit, compiler version, roc-fuzz release and bundle digest)
-and keeps evidence even when the target crashes. Working state goes under
+Each run uses the target binary's supervised `run` command, which keeps original-run evidence when a property fails.
+The Python harness saves `invocation.json` with the command, commit, dirty state,
+compiler version, roc-fuzz release and bundle digest, and `runner-output.log`
+even when option validation stops the runner before it creates a report. Working state goes under
 the ignored `.roc-font-tmp/fuzz/` (or `$ROC_FONT_TMPDIR/fuzz/`):
 
 ----
 bin/<target>              built binaries
 corpus/<target>/          campaign corpus
 smoke-corpus/<target>/    recreated for each smoke run
-runs/<target>/<mode>/     report.json, summary.md, run.log, failures/
+runs/<target>/<mode>/     report.json, summary.md, run.log, invocation.json, runner-output.log
 crashes/<target>/<sha256> harvested failure inputs
 ----
 

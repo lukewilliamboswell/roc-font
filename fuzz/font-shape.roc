@@ -187,8 +187,8 @@ scaling! = |font, small, large| {
 	small_cost = Fuzz.measure!("allocations", || Font.width(font, small))
 	large_cost = Fuzz.measure!("allocations", || Font.width(font, large))
 	Fuzz.expect_no_leaks!(|| Font.width(font, large))
-	if large_cost.stats.allocs > 10 * small_cost.stats.allocs + 256 {
-		crash "shaping 8 times the text took ${large_cost.stats.allocs.to_str()} allocations, against ${small_cost.stats.allocs.to_str()}"
+	if allocation_calls(large_cost.stats) > 10 * allocation_calls(small_cost.stats) + 256 {
+		crash "shaping 8 times the text took ${allocation_calls(large_cost.stats).to_str()} allocations, against ${allocation_calls(small_cost.stats).to_str()}"
 	}
 }
 
@@ -199,3 +199,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(Str.from_utf8_lossy(split_at_marker(bytes).text)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

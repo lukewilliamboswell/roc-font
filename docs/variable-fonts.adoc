@@ -537,7 +537,7 @@ fixtures and corpus variable fonts, splitting the input into `fvar`,
 * monotonicity: for a successfully read `avar`, coordinates are
   non-decreasing in the design value along each axis (each single-precision
   operation in the pipeline is monotone in the varying input);
-* allocation linear in input size (`Fuzz.measure_allocs!`), no leaks.
+* allocation linear in input size (`Fuzz.measure!`), no leaks.
 
 Phase 2 adds a differential target (kerned widths at fuzzed locations
 against recorded HarfBuzz output); phase 3 a `gvar` target (totality,

@@ -2,8 +2,9 @@
 """Build and run the roc-font roc-fuzz targets.
 
 Every target is built natively with `roc build --fuzz` and run through the
-binary's supervised `ci` command, which writes a report, a log and any
-reproducing failure inputs. Working state lives under `.roc-font-tmp/fuzz/`
+binary's supervised `run` command, which writes a report, a log and any
+reproducing failure inputs. The harness also retains invocation provenance and
+runner output when argument validation prevents report creation. Working state lives under `.roc-font-tmp/fuzz/`
 (or `$ROC_FONT_TMPDIR/fuzz/`):
 
     bin/<target>                 built target binaries
@@ -485,7 +486,10 @@ def build_target(name: str, args: argparse.Namespace) -> int:
             return 2
         return 0
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = [args.roc, "build", "--fuzz", display(TARGETS[name].source()), f"--output={output}", *args.dep]
+    # roc-lang/roc#13207: font-shape aborts in lambda_solve on a520eed.
+    # Keep instrumentation and every property; use the Boxy specialization path.
+    specialization = ["--specialize=no"] if name == "font-shape" else []
+    command = [args.roc, "build", "--fuzz", *specialization, display(TARGETS[name].source()), f"--output={output}", *args.dep]
     print(f"+ {shlex.join(command)}", flush=True)
     try:
         return subprocess.run(command, cwd=ROOT, check=False).returncode
@@ -499,12 +503,19 @@ def build_target(name: str, args: argparse.Namespace) -> int:
 
 def harvest(name: str, report_dir: Path) -> list[Path]:
     failures = report_dir / "failures"
-    if not failures.is_dir():
-        return []
+    candidates = list(failures.rglob("*")) if failures.is_dir() else []
+    report_path = report_dir / "report.json"
+    if report_path.is_file():
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        exploration = report.get("exploration") or {}
+        if exploration.get("finding_kind") and exploration.get("original_input"):
+            candidates.append(Path(exploration["original_input"]))
+        candidates += [Path(example["input_path"]) for example in report.get("examples", [])
+                       if example.get("outcome") != "passed" and example.get("input_path")]
     destination = WORK_ROOT / "crashes" / name
     destination.mkdir(parents=True, exist_ok=True)
     kept: list[Path] = []
-    for failure in sorted(failures.rglob("*")):
+    for failure in sorted(set(candidates)):
         if failure.is_file():
             data = failure.read_bytes()
             path = destination / sha256_bytes(data)
@@ -578,18 +589,27 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
         print(f"error: could not run {name}: {problem}", file=sys.stderr)
         return result
 
+    # Keep diagnostics and provenance even when option validation fails before
+    # roc-fuzz can create its quality report (for example its 1 MiB input cap).
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir / "runner-output.log").write_text(output, encoding="utf-8")
+    (report_dir / "invocation.json").write_text(json.dumps({
+        "command": command,
+        "source_revision": git_revision(),
+        "roc_version": command_output([args.roc, "version"]),
+        "platform": ROC_FUZZ_RELEASE,
+    }, indent=2) + "\n", encoding="utf-8")
     report_path = report_dir / "report.json"
     report: dict[str, object] = {}
     if report_path.is_file():
         report = json.loads(report_path.read_text(encoding="utf-8"))
-    libfuzzer = report.get("libfuzzer") or {}
+    exploration = report.get("exploration") or {}
     result.update(
         outcome=report.get("outcome") or f"exit {return_code}",
-        finding=report.get("finding_kind"),
-        units=(libfuzzer or {}).get("executed_units"),
-        edges=(libfuzzer or {}).get("coverage_edges"),
-        rss=(libfuzzer or {}).get("peak_rss_mb"),
-        duration_ms=report.get("duration_ms"),
+        finding=exploration.get("finding_kind"),
+        units=exploration.get("attempted"),
+        accepted=exploration.get("accepted"),
+        rejected=exploration.get("rejected"),
         report=display(report_dir),
         return_code=return_code,
     )
@@ -612,8 +632,8 @@ def run_mode(args: argparse.Namespace) -> int:
     for result in results:
         print(
             f"  {result['target']:<12} {str(result['outcome']):<14}"
-            f" units={result.get('units')} edges={result.get('edges')}"
-            f" peak_rss_mb={result.get('rss')} ms={result.get('duration_ms')}"
+            f" units={result.get('units')} accepted={result.get('accepted')}"
+            f" rejected={result.get('rejected')}"
             + (f" finding={result.get('finding')}" if result.get("finding") else "")
             + (f" report={result.get('report')}" if result.get("report") else "")
         )

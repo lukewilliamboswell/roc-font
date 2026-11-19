@@ -38,16 +38,16 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading 8 times the kerning pairs took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading 8 times the kerning pairs took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()}"
 	}
 	small_plan = Font.plan(small_font, Font.ShapeOptions.{})
 	large_plan = Font.plan(large_font, Font.ShapeOptions.{})
 	small_shape = Fuzz.measure!("allocations", || Font.shape_planned(small_font, small_plan, text))
 	large_shape = Fuzz.measure!("allocations", || Font.shape_planned(large_font, large_plan, text))
 	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_font, large_plan, text))
-	if large_shape.stats.allocs > small_shape.stats.allocs + 8 {
-		crash "kerning one text with 8 times the pairs took ${large_shape.stats.allocs.to_str()} allocations, against ${small_shape.stats.allocs.to_str()}"
+	if allocation_calls(large_shape.stats) > allocation_calls(small_shape.stats) + 8 {
+		crash "kerning one text with 8 times the pairs took ${allocation_calls(large_shape.stats).to_str()} allocations, against ${allocation_calls(small_shape.stats).to_str()}"
 	}
 	if Str.inspect(small_shape.value) != Str.inspect(large_shape.value) {
 		crash "pairs the text does not use changed its run"
@@ -215,3 +215,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(33)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

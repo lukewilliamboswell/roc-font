@@ -42,8 +42,8 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading a character map 8 times larger took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading a character map 8 times larger took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()}"
 	}
 	if small.past {
 		refused!(small)
@@ -55,14 +55,14 @@ test! = |bytes| {
 	small_look = Fuzz.measure!("allocations", || lookups(small_font))
 	large_look = Fuzz.measure!("allocations", || lookups(large_font))
 	Fuzz.expect_no_leaks!(|| lookups(large_font))
-	if large_look.stats.allocs > small_look.stats.allocs + 8 {
-		crash "looking up ${probes.len().to_str()} characters took ${large_look.stats.allocs.to_str()} allocations in a map 8 times larger, against ${small_look.stats.allocs.to_str()}"
+	if allocation_calls(large_look.stats) > allocation_calls(small_look.stats) + 8 {
+		crash "looking up ${probes.len().to_str()} characters took ${allocation_calls(large_look.stats).to_str()} allocations in a map 8 times larger, against ${allocation_calls(small_look.stats).to_str()}"
 	}
 	small_list = Fuzz.measure!("allocations", || Font.code_points(small_font))
 	large_list = Fuzz.measure!("allocations", || Font.code_points(large_font))
 	Fuzz.expect_no_leaks!(|| Font.code_points(large_font))
-	if large_list.stats.allocs > 10 * small_list.stats.allocs + 64 {
-		crash "listing code points of a map 8 times larger took ${large_list.stats.allocs.to_str()} allocations, against ${small_list.stats.allocs.to_str()}"
+	if allocation_calls(large_list.stats) > 10 * allocation_calls(small_list.stats) + 64 {
+		crash "listing code points of a map 8 times larger took ${allocation_calls(large_list.stats).to_str()} allocations, against ${allocation_calls(small_list.stats).to_str()}"
 	}
 	Fuzz.keep
 }
@@ -244,3 +244,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(33)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

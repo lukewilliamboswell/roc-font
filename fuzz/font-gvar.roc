@@ -65,21 +65,21 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small.file, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large.file, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large.file, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading a font with 8 times the outlines and variations took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading a font with 8 times the outlines and variations took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()}"
 	}
 	place = places.first() ?? Font.Variation.{}
 	small_at = Fuzz.measure!("allocations", || Font.at(small_font, place))
 	large_at = Fuzz.measure!("allocations", || Font.at(large_font, place))
 	Fuzz.expect_no_leaks!(|| Font.at(large_font, place))
-	if large_at.stats.allocs > small_at.stats.allocs + 4 {
-		crash "moving a font with 8 times the shared tuples took ${large_at.stats.allocs.to_str()} allocations, against ${small_at.stats.allocs.to_str()}"
+	if allocation_calls(large_at.stats) > allocation_calls(small_at.stats) + 4 {
+		crash "moving a font with 8 times the shared tuples took ${allocation_calls(large_at.stats).to_str()} allocations, against ${allocation_calls(small_at.stats).to_str()}"
 	}
 	small_query = Fuzz.measure!("allocations", || box_sum(small_at.value))
 	large_query = Fuzz.measure!("allocations", || box_sum(large_at.value))
 	Fuzz.expect_no_leaks!(|| box_sum(large_at.value))
-	if large_query.stats.allocs > small_query.stats.allocs + 4 {
-		crash "measuring ${own_glyphs.to_str()} glyphs took ${large_query.stats.allocs.to_str()} allocations in a font 8 times larger, against ${small_query.stats.allocs.to_str()}"
+	if allocation_calls(large_query.stats) > allocation_calls(small_query.stats) + 4 {
+		crash "measuring ${own_glyphs.to_str()} glyphs took ${allocation_calls(large_query.stats).to_str()} allocations in a font 8 times larger, against ${allocation_calls(small_query.stats).to_str()}"
 	}
 	Fuzz.keep
 }
@@ -591,3 +591,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(49)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

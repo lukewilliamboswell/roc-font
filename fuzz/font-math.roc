@@ -33,13 +33,13 @@ test! = |bytes| {
 	a = Fuzz.measure!("allocations", || Font.from_bytes(small_bytes, Font.ReadOptions.{}))
 	b = Fuzz.measure!("allocations", || Font.from_bytes(middle_bytes, Font.ReadOptions.{}))
 	c = Fuzz.measure!("allocations", || Font.from_bytes(large_bytes, Font.ReadOptions.{}))
-	if b.stats.allocs > 10 * a.stats.allocs + 128 or c.stats.allocs > 5 * b.stats.allocs + 128 {
+	if allocation_calls(b.stats) > 10 * allocation_calls(a.stats) + 128 or allocation_calls(c.stats) > 5 * allocation_calls(b.stats) + 128 {
 		crash "MATH reading allocations grew faster than the generated table sizes"
 	}
 	qa = Fuzz.measure!("allocations", || query(small, 1))
 	qb = Fuzz.measure!("allocations", || query(middle, 1))
 	qc = Fuzz.measure!("allocations", || query(large, 1))
-	if qb.stats.allocs > qa.stats.allocs + 2 or qc.stats.allocs > qa.stats.allocs + 2 {
+	if allocation_calls(qb.stats) > allocation_calls(qa.stats) + 2 or allocation_calls(qc.stats) > allocation_calls(qa.stats) + 2 {
 		crash "one MATH glyph query allocates with unrelated glyph count"
 	}
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large_bytes, Font.ReadOptions.{}))
@@ -196,3 +196,8 @@ generated = |n, choice, delta| {
 }
 
 target = Fuzz.target_with!({ examples: [], name: "font-math", generator: Fuzz.raw_bytes, test!, show: |bytes| Str.inspect(bytes.take_first(32)) })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

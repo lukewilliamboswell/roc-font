@@ -44,20 +44,20 @@ test! = |bytes| {
 	small_read = Fuzz.measure!("allocations", || Font.from_bytes(small, Font.ReadOptions.{}))
 	large_read = Fuzz.measure!("allocations", || Font.from_bytes(large, Font.ReadOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.from_bytes(large, Font.ReadOptions.{}))
-	if large_read.stats.allocs > 10 * small_read.stats.allocs + 256 {
-		crash "reading 8 times the lookups took ${large_read.stats.allocs.to_str()} allocations, against ${small_read.stats.allocs.to_str()}"
+	if allocation_calls(large_read.stats) > 10 * allocation_calls(small_read.stats) + 256 {
+		crash "reading 8 times the lookups took ${allocation_calls(large_read.stats).to_str()} allocations, against ${allocation_calls(small_read.stats).to_str()}"
 	}
 	small_plan = Fuzz.measure!("allocations", || Font.plan(small_font, Font.ShapeOptions.{}))
 	large_plan = Fuzz.measure!("allocations", || Font.plan(large_font, Font.ShapeOptions.{}))
 	Fuzz.expect_no_leaks!(|| Font.plan(large_font, Font.ShapeOptions.{}))
-	if large_plan.stats.allocs > 10 * small_plan.stats.allocs + 256 {
-		crash "planning 8 times the lookups took ${large_plan.stats.allocs.to_str()} allocations, against ${small_plan.stats.allocs.to_str()}"
+	if allocation_calls(large_plan.stats) > 10 * allocation_calls(small_plan.stats) + 256 {
+		crash "planning 8 times the lookups took ${allocation_calls(large_plan.stats).to_str()} allocations, against ${allocation_calls(small_plan.stats).to_str()}"
 	}
 	small_shape = Fuzz.measure!("allocations", || Font.shape_planned(small_font, small_plan.value, text))
 	large_shape = Fuzz.measure!("allocations", || Font.shape_planned(large_font, large_plan.value, text))
 	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_font, large_plan.value, text))
-	if large_shape.stats.allocs > small_shape.stats.allocs + 8 {
-		crash "shaping one text with 8 times the lookups took ${large_shape.stats.allocs.to_str()} allocations, against ${small_shape.stats.allocs.to_str()}"
+	if allocation_calls(large_shape.stats) > allocation_calls(small_shape.stats) + 8 {
+		crash "shaping one text with 8 times the lookups took ${allocation_calls(large_shape.stats).to_str()} allocations, against ${allocation_calls(small_shape.stats).to_str()}"
 	}
 	if Str.inspect(small_shape.value) != Str.inspect(large_shape.value) {
 		crash "lookups that never match the text changed its run: ${Str.inspect(small_shape.value.glyphs)} against ${Str.inspect(large_shape.value.glyphs)}"
@@ -278,3 +278,8 @@ target = Fuzz.target_with!({
 	test!,
 	show: |bytes| Str.inspect(bytes.take_first(65)),
 })
+
+# The previous counter included both allocation and reallocation calls.
+# Keep the existing growth bounds on that same quantity.
+allocation_calls : Fuzz.Stats -> U64
+allocation_calls = |stats| stats.allocs + stats.reallocs

@@ -18,8 +18,8 @@ Modes:
     python3 scripts/bench.py --update-baseline    full run: record allocation
                                                   counts and time ratios
 
-Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz --opt=speed`
-(roc-fuzz's Fuzz.measure_allocs!). They are deterministic for one compiler
+Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz --opt=speed --specialize=no`
+(roc-fuzz's Fuzz.measure!("allocations", ...)). They are deterministic for one compiler
 and input, and are compared exactly with bench/baseline.json: any increase or
 decrease fails until --update-baseline records it. The baseline records its
 compiler; nothing pins the compiler (work uses the latest nightly), so after a
@@ -471,18 +471,20 @@ class Builder:
                          "set ROC to a release nightly for representative timings")
         return str(self.versions["roc"])
 
+    # roc-lang/roc#13207: a520eed lambda_solve aborts with specialization.
+    # Retain LLVM optimization and record the workaround in benchmark provenance.
     def roc_impls(self) -> list[Impl]:
         self.roc_version()
         binary = self.out / "bin" / "roc-font"
-        if not self.run("roc", [self.roc, "build", "--opt=speed", str(BENCH / "roc" / "font.roc"),
+        if not self.run("roc", [self.roc, "build", "--opt=speed", "--specialize=no", str(BENCH / "roc" / "font.roc"),
                                 f"--output={binary}", *self.dep]):
             return []
-        return [Impl("roc/roc-font", "roc", [str(binary)], OPS, "roc build --opt=speed")]
+        return [Impl("roc/roc-font", "roc", [str(binary)], OPS, "roc build --opt=speed --specialize=no")]
 
     def alloc_binary(self) -> Path | None:
         self.roc_version()
         binary = self.out / "bin" / "roc-alloc"
-        if self.run("roc-alloc", [self.roc, "build", "--fuzz", "--opt=speed", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}", *self.dep]):
+        if self.run("roc-alloc", [self.roc, "build", "--fuzz", "--opt=speed", "--specialize=no", str(BENCH / "roc" / "alloc.roc"), f"--output={binary}", *self.dep]):
             return binary
         return None
 
@@ -669,8 +671,11 @@ ALLOC_PATTERN = re.compile(r"ALLOCATION_DIAGNOSTIC allocations=(\d+) leaked=(\d+
 
 
 def count_allocations(binary: Path, path: Path, timeout: float) -> dict:
+    # This diagnostic deliberately crashes to print counters. Raw single-file
+    # replay preserves its native exit 77 and message; supervised replay wraps
+    # that expected crash as a quality finding and hides the diagnostic output.
     try:
-        result = subprocess.run([str(binary), "replay", str(path)], capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run([str(binary), "raw", str(path)], capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return {"error": "allocation diagnostic timed out"}
     output = result.stdout + result.stderr
@@ -799,9 +804,9 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         "schema": SCHEMA_VERSION,
         "about": "Allocation ratchet for scripts/bench.py --check; see docs/benchmarks.adoc. Counts are "
                  "roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz "
-                 "Fuzz.measure_allocs! in a `roc build --fuzz --opt=speed` binary.",
-        "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
-                     "roc_fuzz": "0.4.3"},
+                 "Fuzz.measure!('allocations', ...) in a `roc build --fuzz --opt=speed --specialize=no` binary.",
+        "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed --specialize=no bench/roc/alloc.roc",
+                     "roc_fuzz": "0.6.2"},
         "generator": {"fonttools": versions.get("fonttools_generator") or baseline.get("generator", {}).get("fonttools")},
         "cases": new_cases,
     }
