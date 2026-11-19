@@ -1,6 +1,6 @@
 app [target] {
 	font: "../../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -8,8 +8,10 @@ import FontBench
 
 ## Allocation counter for scripts/bench.py; never a fuzz target. The input is
 ## one case file (see FontBench). The target prepares it, runs the operation
-## once inside Fuzz.measure_allocs!, and then crashes on purpose to report
-## the counts, so exit code 77 is the expected result.
+## once inside Fuzz.measure!, and then crashes on purpose to report
+## the counts. The harness uses the native runner's raw single-input mode
+## (no exploration), so large benchmark fonts are not limited by the quality
+## supervisor's 1 MiB corpus bound. Exit 77 and this exact marker are required.
 ##
 ## `allocations` counts every roc_alloc and roc_realloc the operation made.
 ## `leaked` is how many of them were still live after the operation's result
@@ -20,19 +22,20 @@ test! = |bytes| {
 		Err(message) => crash "ALLOCATION_DIAGNOSTIC error=${message}"
 		Ok(prepared) => {
 			live_before = Fuzz.live_alloc_count!()
-			measured = Fuzz.measure_allocs!(|{}| FontBench.run(prepared))
+			measured = Fuzz.measure!("measured", || FontBench.run(prepared))
 			live_after = Fuzz.live_alloc_count!()
 			leaked = if (live_after > live_before) live_after - live_before else 0
 			result = match measured.value {
 				Ok(sum) => "ok checksum=${sum.to_str()}"
 				Err(sum) => "rejected checksum=${sum.to_str()}"
 			}
-			crash "ALLOCATION_DIAGNOSTIC allocations=${measured.allocations.to_str()} leaked=${leaked.to_str()} result=${result}"
+			crash "ALLOCATION_DIAGNOSTIC allocations=${(measured.stats.allocs + measured.stats.reallocs).to_str()} leaked=${leaked.to_str()} requested_bytes=${measured.stats.requested_bytes.to_str()} peak_live_bytes=${measured.stats.peak_live_bytes.to_str()} result=${result}"
 		}
 	}
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "bench-alloc-diagnostic",
 	generator: Fuzz.raw_bytes,
 	test!,

@@ -1,7 +1,7 @@
 app [target] {
 	build: "../tests/support/main.roc",
 	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.4.3/41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
+	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.6.2/3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
 }
 
 import fuzz.Fuzz
@@ -41,23 +41,23 @@ test! = |bytes| {
 	text = text_of(picks)
 	small_font = check!(small, text, text_glyphs(picks))
 	large_font = check!(large, text, text_glyphs(picks))
-	small_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(small, Font.ReadOptions.{}))
-	large_read = Fuzz.measure_allocs!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.from_bytes(large, Font.ReadOptions.{}))
-	if large_read.allocations > 10 * small_read.allocations + 256 {
-		crash "reading 8 times the lookups took ${large_read.allocations.to_str()} allocations, against ${small_read.allocations.to_str()}"
+	small_read = Fuzz.measure!("small-read", || Font.from_bytes(small, Font.ReadOptions.{}))
+	large_read = Fuzz.measure!("large-read", || Font.from_bytes(large, Font.ReadOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.from_bytes(large, Font.ReadOptions.{}))
+	if (large_read.stats.allocs + large_read.stats.reallocs) > 10 * (small_read.stats.allocs + small_read.stats.reallocs) + 256 {
+		crash "reading 8 times the lookups took ${(large_read.stats.allocs + large_read.stats.reallocs).to_str()} allocations, against ${(small_read.stats.allocs + small_read.stats.reallocs).to_str()}"
 	}
-	small_plan = Fuzz.measure_allocs!(|{}| Font.plan(small_font, Font.ShapeOptions.{}))
-	large_plan = Fuzz.measure_allocs!(|{}| Font.plan(large_font, Font.ShapeOptions.{}))
-	Fuzz.expect_no_leaks!(|{}| Font.plan(large_font, Font.ShapeOptions.{}))
-	if large_plan.allocations > 10 * small_plan.allocations + 256 {
-		crash "planning 8 times the lookups took ${large_plan.allocations.to_str()} allocations, against ${small_plan.allocations.to_str()}"
+	small_plan = Fuzz.measure!("small-plan", || Font.plan(small_font, Font.ShapeOptions.{}))
+	large_plan = Fuzz.measure!("large-plan", || Font.plan(large_font, Font.ShapeOptions.{}))
+	Fuzz.expect_no_leaks!(|| Font.plan(large_font, Font.ShapeOptions.{}))
+	if (large_plan.stats.allocs + large_plan.stats.reallocs) > 10 * (small_plan.stats.allocs + small_plan.stats.reallocs) + 256 {
+		crash "planning 8 times the lookups took ${(large_plan.stats.allocs + large_plan.stats.reallocs).to_str()} allocations, against ${(small_plan.stats.allocs + small_plan.stats.reallocs).to_str()}"
 	}
-	small_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(small_font, small_plan.value, text))
-	large_shape = Fuzz.measure_allocs!(|{}| Font.shape_planned(large_font, large_plan.value, text))
-	Fuzz.expect_no_leaks!(|{}| Font.shape_planned(large_font, large_plan.value, text))
-	if large_shape.allocations > small_shape.allocations + 8 {
-		crash "shaping one text with 8 times the lookups took ${large_shape.allocations.to_str()} allocations, against ${small_shape.allocations.to_str()}"
+	small_shape = Fuzz.measure!("small-shape", || Font.shape_planned(small_font, small_plan.value, text))
+	large_shape = Fuzz.measure!("large-shape", || Font.shape_planned(large_font, large_plan.value, text))
+	Fuzz.expect_no_leaks!(|| Font.shape_planned(large_font, large_plan.value, text))
+	if (large_shape.stats.allocs + large_shape.stats.reallocs) > (small_shape.stats.allocs + small_shape.stats.reallocs) + 8 {
+		crash "shaping one text with 8 times the lookups took ${(large_shape.stats.allocs + large_shape.stats.reallocs).to_str()} allocations, against ${(small_shape.stats.allocs + small_shape.stats.reallocs).to_str()}"
 	}
 	if Str.inspect(small_shape.value) != Str.inspect(large_shape.value) {
 		crash "lookups that never match the text changed its run: ${Str.inspect(small_shape.value.glyphs)} against ${Str.inspect(large_shape.value.glyphs)}"
@@ -272,6 +272,7 @@ check_run! = |bytes, run, rtl| {
 }
 
 target = Fuzz.target_with!({
+	examples: [],
 	name: "font-gsub",
 	generator: Fuzz.raw_bytes,
 	test!,

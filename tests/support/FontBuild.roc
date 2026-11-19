@@ -404,13 +404,13 @@ FontBuild :: {}.{
 		FontBuild.pack([U16(1), Ref(FontBuild.coverage1(glyphs)), U16(sets.len())].concat(set_tables))
 	}
 
-	records : List({ at : U64, lookup : U64 }) -> List(Field)
-	records = |list| list.join_map(|r| [U16(r.at), U16(r.lookup)])
+	encode_lookup_records : List({ at : U64, lookup : U64 }) -> List(Field)
+	encode_lookup_records = |list| list.join_map(|r| [U16(r.at), U16(r.lookup)])
 
 	# A context rule of format 1 or 2: input after the first glyph (glyphs or
 	# classes) and its lookup records.
 	rule : List(U64), List({ at : U64, lookup : U64 }) -> List(U8)
-	rule = |input, calls| FontBuild.pack([U16(input.len() + 1), U16(calls.len())].concat(input.map(|g| U16(g))).concat(FontBuild.records(calls)))
+	rule = |input, calls| FontBuild.pack([U16(input.len() + 1), U16(calls.len())].concat(input.map(|g| U16(g))).concat(FontBuild.encode_lookup_records(calls)))
 
 	# A chained rule of format 1 or 2.
 	chain_rule : List(U64), List(U64), List(U64), List({ at : U64, lookup : U64 }) -> List(U8)
@@ -423,7 +423,7 @@ FontBuild :: {}.{
 				.concat([U16(ahead.len())])
 				.concat(ahead.map(|g| U16(g)))
 				.concat([U16(calls.len())])
-				.concat(FontBuild.records(calls)),
+				.concat(FontBuild.encode_lookup_records(calls)),
 		)
 
 	# A rule set (offsets to rules), or a null offset for a missing set.
@@ -440,7 +440,7 @@ FontBuild :: {}.{
 
 	# Context substitution, format 3: a coverage per input position.
 	context3 : List(List(U64)), List({ at : U64, lookup : U64 }) -> List(U8)
-	context3 = |input, calls| FontBuild.pack([U16(3), U16(input.len()), U16(calls.len())].concat(input.map(|glyphs| Ref(FontBuild.coverage1(glyphs)))).concat(FontBuild.records(calls)))
+	context3 = |input, calls| FontBuild.pack([U16(3), U16(input.len()), U16(calls.len())].concat(input.map(|glyphs| Ref(FontBuild.coverage1(glyphs)))).concat(FontBuild.encode_lookup_records(calls)))
 
 	chain1 : List(U64), List(List(List(U8))) -> List(U8)
 	chain1 = |glyphs, sets| FontBuild.pack([U16(1), Ref(FontBuild.coverage1(glyphs)), U16(sets.len())].concat(sets.map(FontBuild.rule_set)))
@@ -451,7 +451,7 @@ FontBuild :: {}.{
 	chain3 : List(List(U64)), List(List(U64)), List(List(U64)), List({ at : U64, lookup : U64 }) -> List(U8)
 	chain3 = |back, input, ahead, calls| {
 		coverages = |list| [U16(list.len())].concat(list.map(|glyphs| Ref(FontBuild.coverage1(glyphs))))
-		FontBuild.pack([U16(3)].concat(coverages(back)).concat(coverages(input)).concat(coverages(ahead)).concat([U16(calls.len())]).concat(FontBuild.records(calls)))
+		FontBuild.pack([U16(3)].concat(coverages(back)).concat(coverages(input)).concat(coverages(ahead)).concat([U16(calls.len())]).concat(FontBuild.encode_lookup_records(calls)))
 	}
 
 	# ------------------------------------------------------------ whole fonts
@@ -1211,7 +1211,7 @@ FontBuild :: {}.{
 		i32 = |v| FontBuild.u32((if (v < 0) v + 4294967296 else v).to_u64_wrap())
 		data =
 			FontBuild.u16(rows.len())
-				.concat(FontBuild.u16((0x8000).bitwise_or(columns)))
+				.concat(FontBuild.u16((0x8000.U64).bitwise_or(columns)))
 				.concat(FontBuild.u16(columns))
 				.concat(FontBuild.counting(columns).join_map(FontBuild.u16))
 				.concat(rows.join_map(|row| row.concat(List.repeat(0, columns)).take_first(columns).join_map(i32)))

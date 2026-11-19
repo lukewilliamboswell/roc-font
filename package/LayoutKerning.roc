@@ -368,7 +368,7 @@ LayoutKerning := {
 					} else if right > probe {
 						$low = mid + 1
 					} else {
-						$result = Applied(LayoutKerning.found(kerning, data, set, r + 2, s.format1, r + 2 + s.size1, s.format2))
+						$result = Applied(LayoutKerning.find_pair(kerning, data, set, r + 2, s.format1, r + 2 + s.size1, s.format2))
 						$low = $high
 					}
 				}
@@ -390,18 +390,18 @@ LayoutKerning := {
 				NotApplied
 			} else {
 				r = c.at + 16 + (c.size1 + c.size2) * (row * c.width + column)
-				Applied(LayoutKerning.found(kerning, data, c.at, r, c.format1, r + c.size1, c.format2))
+				Applied(LayoutKerning.find_pair(kerning, data, c.at, r, c.format1, r + c.size1, c.format2))
 			}
 		}
 
 	# Device offsets count from `base`: the pair set (format 1) or the
 	# subtable (format 2). Away from the default location, a value record
 	# with devices takes their deltas; otherwise the stored values.
-	found : LayoutKerning, List(U8), U64, U64, U64, U64, U64 -> Found
-	found = |kerning, data, base, first_at, format1, second_at, format2| {
+	find_pair : LayoutKerning, List(U8), U64, U64, U64, U64, U64 -> Found
+	find_pair = |kerning, data, base, first_at, format1, second_at, format2| {
 		varied = kerning.loc.active and format1.bitwise_or(format2).bitwise_and(0xF0) != 0
-		first = if (varied) LayoutKerning.varied_value(kerning, data, base, first_at, format1) else LayoutKerning.value(data, first_at, format1)
-		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.value(data, second_at, format2)
+		first = if (varied) LayoutKerning.varied_value(kerning, data, base, first_at, format1) else LayoutKerning.read_value(data, first_at, format1)
+		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.read_value(data, second_at, format2)
 		nonzero = first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
 		{ first, second, skips: format2 != 0, nonzero }
 	}
@@ -479,8 +479,8 @@ LayoutKerning := {
 
 	## A value record's x placement, y placement and x advance; fields it
 	## lacks are 0. The y advance only matters to vertical text.
-	value : List(U8), U64, U64 -> Value
-	value = |data, at, format| {
+	read_value : List(U8), U64, U64 -> Value
+	read_value = |data, at, format| {
 		dx = if (format.bitwise_and(1) == 0) 0 else Bytes.i16(data, at)
 		y_at = at + 2 * format.bitwise_and(1)
 		dy = if (format.bitwise_and(2) == 0) 0 else Bytes.i16(data, y_at)
@@ -493,7 +493,7 @@ LayoutKerning := {
 	## deltas at the kerning's location.
 	varied_value : LayoutKerning, List(U8), U64, U64, U64 -> Value
 	varied_value = |kerning, data, base, at, format| {
-		v = LayoutVar.value(kerning.lv, kerning.loc, data, base, at, format)
+		v = LayoutVar.read_value(kerning.lv, kerning.loc, data, base, at, format)
 		{ dx: v.x_placement, dy: v.y_placement, ax: v.x_advance }
 	}
 
@@ -506,8 +506,8 @@ LayoutKerning := {
 	## may be covered and is searched. Built in one pass over each coverage
 	## table (or `kern` pair list) when reading. On Inter's kerning bench this
 	## skips most coverage searches (see `scripts/bench.py --ops kerning`).
-	digests : List(U8), List([Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })]) -> List({ a : U64, b : U64, c : U64 })
-	digests = |data, subtables| {
+	read_digests : List(U8), List([Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })]) -> List({ a : U64, b : U64, c : U64 })
+	read_digests = |data, subtables| {
 		var $out = List.with_capacity(subtables.len())
 		for subtable in subtables {
 			var $d = LayoutKerning.empty_digest
@@ -560,14 +560,14 @@ LayoutKerning := {
 
 	add_range : { a : U64, b : U64, c : U64 }, U64, U64 -> { a : U64, b : U64, c : U64 }
 	add_range = |d, first, last| {
-		a: d.a.bitwise_or(LayoutKerning.mask(first, last, 0)),
-		b: d.b.bitwise_or(LayoutKerning.mask(first, last, 4)),
-		c: d.c.bitwise_or(LayoutKerning.mask(first, last, 9)),
+		a: d.a.bitwise_or(LayoutKerning.range_mask(first, last, 0)),
+		b: d.b.bitwise_or(LayoutKerning.range_mask(first, last, 4)),
+		c: d.c.bitwise_or(LayoutKerning.range_mask(first, last, 9)),
 	}
 
 	# The bits of `first >> shift` up to `last >> shift`, modulo 64.
-	mask : U64, U64, U8 -> U64
-	mask = |first, last, shift| {
+	range_mask : U64, U64, U8 -> U64
+	range_mask = |first, last, shift| {
 		low = first.shr_zf_wrap(shift)
 		high = last.shr_zf_wrap(shift)
 		one : U64
@@ -709,7 +709,7 @@ LayoutKerning := {
 			}
 			$ends = $ends.append({ end: $subtables.len(), props: $props })
 		}
-		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.digests(gpos, $subtables), deltas: $deltas })
+		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.read_digests(gpos, $subtables), deltas: $deltas })
 	}
 
 	read_pair : List(U8), U64, U64, U64 -> Try({ value : [Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })], steps : U64 }, [Bad(U64)])
@@ -906,7 +906,7 @@ LayoutKerning := {
 		if $kept == 0 {
 			return Err(Dropped(4))
 		}
-		Ok({ data: kern, subtables: $subtables, digests: LayoutKerning.digests(kern, $subtables) })
+		Ok({ data: kern, subtables: $subtables, digests: LayoutKerning.read_digests(kern, $subtables) })
 	}
 
 	# Pairs at `at` in strictly increasing order of their first and second

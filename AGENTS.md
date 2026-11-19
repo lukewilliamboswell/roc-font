@@ -98,7 +98,7 @@ and plans live in `TODO.md`, not here.
   and examples) is checked against the artifact users import: the
   `roc bundle` output, served from a loopback address and imported by URL
   through `--replace-dep ./package/main.roc <url>` (`scripts/flight.py`),
-  never the source tree. They use only the public API. `all_tests.py`
+  never the source tree. They use only the public API. `scripts/check.roc`
   runs them in a mirror of the checkout whose `package/main.roc` does not
   compile, so a step that slipped back to source fails. The test-only byte
   builders live in their own package, `tests/support/` (`FontBuild`),
@@ -211,8 +211,15 @@ never changes a result on a legitimate font.
 
 ## Verify the contract, not only the numbers
 
-`python3 scripts/all_tests.py` runs these checks with the latest Roc
-nightly; nothing pins the compiler, and the script reports which one ran.
+`blueprint run check` runs these checks with the latest Roc
+nightly; nothing pins the product compiler, and the script reports which one ran.
+Repository orchestration runs on the separate `roc-stable` pinned in
+`Blueprint.roc` and every script header. Format scripts with that compiler;
+format and test package code and consumers with bare `roc`.
+When a new compiler cannot compile an older published bundle for API
+comparison, use a separately locked compatible compiler for that explicit
+release boundary only; keep `roc bump --expect` and all candidate validation
+on their intended compilers. Document the boundary and the evidence.
 CI runs it with `--smoke` (fuzzing and benchmarks only build and run
 briefly) on every pull request and daily on `main`; the allocation ratchet
 and fuzz campaigns are local, so run the full script before pushing
@@ -225,7 +232,7 @@ shaping stage:
 
 - format every changed Roc file (`roc fmt --check package/`);
 - run `roc check package/main.roc` and the tests on the default (dev)
-  backend, the consumers against the served bundle (`all_tests.py` does
+  backend, the consumers against the served bundle (`scripts/check.roc` does
   both; never weaken a consumer step to compile `package/` directly); benchmarks build with `--opt=speed`. The interpreter is not
   used;
 - build and run at least one optimised native binary exercising the

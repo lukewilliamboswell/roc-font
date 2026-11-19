@@ -126,8 +126,8 @@ Face := {
 	face_count : List(U8) -> Try(U64, [NotAFont])
 	face_count = |bytes| Sfnt.face_count(bytes)
 
-	read : List(U8), Options -> Try(Face, List(Problem))
-	read = |bytes, options| {
+	read_font : List(U8), Options -> Try(Face, List(Problem))
+	read_font = |bytes, options| {
 		if bytes.len() > options.max_bytes {
 			return Err([OverLimit("max_bytes")])
 		}
@@ -428,7 +428,7 @@ Face := {
 	unique = |problems| {
 		var $out = []
 		for p in problems {
-			if !$out.contains(p) {
+			if !$out.any(|known| known == p) {
 				$out = $out.append(p)
 			}
 		}
@@ -591,7 +591,7 @@ Face := {
 	## The offset in the file of a table, by its tag (0 if absent).
 	table_offset : List(Sfnt.Table), Str -> U64
 	table_offset = |tables, name| {
-		wanted = Face.tag(name).to_u64()
+		wanted = Face.tag_from_name(name).to_u64()
 		match tables.find_first(|t| t.tag == wanted) {
 			Ok(t) => t.offset
 			Err(_) => 0
@@ -629,10 +629,10 @@ Face := {
 		}
 		size = match optical_size {
 			FontDefault => []
-			Size(px) => [{ tag: Face.tag("opsz"), value: px }]
+			Size(px) => [{ tag: Face.tag_from_name("opsz"), value: px }]
 		}
-		extra = axes.keep_if(|a| a.tag.to_utf8().len() == 4).map(|a| { tag: Face.tag(a.tag), value: a.value })
-		[{ tag: Face.tag("wght"), value: weight }, { tag: Face.tag("wdth"), value: width }].concat(size).concat(extra)
+		extra = axes.keep_if(|a| a.tag.to_utf8().len() == 4).map(|a| { tag: Face.tag_from_name(a.tag), value: a.value })
+		[{ tag: Face.tag_from_name("wght"), value: weight }, { tag: Face.tag_from_name("wdth"), value: width }].concat(size).concat(extra)
 	}
 
 	# ------------------------------------------------------------ locations
@@ -690,8 +690,8 @@ Face := {
 
 	## The normalised coordinates of the face's location, one per axis in
 	## `fvar` order (F2Dot14, after `avar`); empty for a static font.
-	coords : Face -> List(I16)
-	coords = |face| face.location.coords
+	coords_of : Face -> List(I16)
+	coords_of = |face| face.location.coords
 
 	## What feature variations need: the `FeatureVariations` of `GSUB` and
 	## `GPOS` (each `LayoutVar.no_feature_variations` when absent or
@@ -708,7 +708,7 @@ Face := {
 		match face.space {
 			Absent => []
 			Present(space) => {
-				tags = Face.axes(face).map(|a| a.tag)
+				tags = Face.axes_of(face).map(|a| a.tag)
 				count = tags.len()
 				var $out = List.with_capacity(space.instance_names.len())
 				for i in 0..<space.instance_names.len() {
@@ -727,8 +727,8 @@ Face := {
 
 	## The axes of the variation space, in `fvar` order: tag, minimum,
 	## default and maximum in design units.
-	axes : Face -> List({ tag : Str, min : Dec, default : Dec, max : Dec })
-	axes = |face|
+	axes_of : Face -> List({ tag : Str, min : Dec, default : Dec, max : Dec })
+	axes_of = |face|
 		match face.space {
 			Absent => []
 			Present(space) => {
@@ -757,14 +757,14 @@ Face := {
 	units_per_em : Face -> U16
 	units_per_em = |face| face.units_per_em
 
-	glyph_count : Face -> U64
-	glyph_count = |face| face.glyph_count
+	glyph_total : Face -> U64
+	glyph_total = |face| face.glyph_count
 
 	dropped : Face -> List(Problem)
 	dropped = |face| face.dropped
 
 	glyph : Face, U32 -> Try(U64, [Missing])
-	glyph = |face, code_point| TableCmap.glyph(face.cmap, code_point, face.glyph_count)
+	glyph = |face, code_point| TableCmap.glyph_for(face.cmap, code_point, face.glyph_count)
 
 	code_points : Face -> List(U32)
 	code_points = |face| TableCmap.code_points(face.cmap, face.glyph_count)
@@ -809,21 +809,21 @@ Face := {
 				}
 		}
 
-	tag : Str -> U32
-	tag = |name| name.to_utf8().fold(0, |acc, b| acc * 256 + b.to_u32())
+	tag_from_name : Str -> U32
+	tag_from_name = |name| name.to_utf8().fold(0, |acc, b| acc * 256 + b.to_u32())
 
 	# A metric at a location: `MVAR`'s delta for `tag` added to the stored
 	# value, rounded as HarfBuzz rounds it.
-	varied : Face, Location, Str, I32 -> I32
-	varied = |face, loc, name, value|
+	varied_value : Face, Location, Str, I32 -> I32
+	varied_value = |face, loc, name, value|
 		match face.mvar {
-			Present(mvar) if loc.varied => TableVar.metric(mvar, loc.mvar, Face.tag(name), value.to_i64()).to_i32_wrap()
+			Present(mvar) if loc.varied => TableVar.metric(mvar, loc.mvar, Face.tag_from_name(name), value.to_i64()).to_i32_wrap()
 			_ => value
 		}
 
 	metrics : Face, Location -> Metrics
 	metrics = |face, loc| {
-		v = |name, value| Face.varied(face, loc, name, value)
+		v = |name, value| Face.varied_value(face, loc, name, value)
 		hh = face.hhea
 		upem = face.units_per_em.to_i32()
 		vertical = match face.os2 {
@@ -900,23 +900,23 @@ Face := {
 			$tags = $tags.append(LayoutCommon.feature_tag(gpos, i))
 		}
 		if LayoutKerning.has_kern(face.kerning) {
-			$tags = $tags.append(Face.tag("kern").to_u64())
+			$tags = $tags.append(Face.tag_from_name("kern").to_u64())
 		}
 		Sorted.unique($tags)
 	}
 
-	gsub : Face -> LayoutGsub
-	gsub = |face| face.gsub
+	gsub_of : Face -> LayoutGsub
+	gsub_of = |face| face.gsub
 
 	## The face's character map, checked when the face was read.
-	cmap : Face -> TableCmap
-	cmap = |face| face.cmap
+	cmap_of : Face -> TableCmap
+	cmap_of = |face| face.cmap
 
 	## The face's `GDEF` glyph classes, mark attachment classes and mark
 	## glyph sets, as lookup flags use them (`LayoutGdef.none` without a
 	## `GDEF`, or for one HarfBuzz would drop).
-	gdef : Face -> LayoutGdef
-	gdef = |face| face.gdef
+	gdef_of : Face -> LayoutGdef
+	gdef_of = |face| face.gdef
 
 	kerning : Face -> LayoutKerning
 	kerning = |face| face.kerning

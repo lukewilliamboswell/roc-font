@@ -83,8 +83,8 @@ TableGvar := {
 		var $problems = []
 		var $tuples = List.with_capacity(glyph_count)
 		for g in 0..<glyph_count {
-			start = TableGvar.offset(gvar, g)
-			end = TableGvar.offset(gvar, g + 1)
+			start = TableGvar.glyph_offset(gvar, g)
+			end = TableGvar.glyph_offset(gvar, g + 1)
 			at = 20 + entry * (g + 1)
 			if end < start {
 				$problems = $problems.append({ table: "gvar", offset: at, reason: OffsetOrder })
@@ -118,8 +118,8 @@ TableGvar := {
 	}
 
 	# The offset of glyph g's variation data from the start of the data.
-	offset : TableGvar, U64 -> U64
-	offset = |gvar, g| if (gvar.long_offsets) TableVar.u32(gvar.bytes, 20 + 4 * g) else 2 * TableVar.u16(gvar.bytes, 20 + 2 * g)
+	glyph_offset : TableGvar, U64 -> U64
+	glyph_offset = |gvar, g| if (gvar.long_offsets) TableVar.u32(gvar.bytes, 20 + 4 * g) else 2 * TableVar.u16(gvar.bytes, 20 + 2 * g)
 
 	# The size of the tuple variation header at `at`.
 	header_size : TableGvar, U64 -> U64
@@ -421,8 +421,8 @@ TableGvar := {
 			return { xs: xs_in, ys: ys_in }
 		}
 		bytes = gvar.bytes
-		start = gvar.data_at + TableGvar.offset(gvar, g)
-		if TableGvar.offset(gvar, g + 1) == TableGvar.offset(gvar, g) {
+		start = gvar.data_at + TableGvar.glyph_offset(gvar, g)
+		if TableGvar.glyph_offset(gvar, g + 1) == TableGvar.glyph_offset(gvar, g) {
 			return { xs: xs_in, ys: ys_in }
 		}
 		field = TableVar.u16(bytes, start)
@@ -660,7 +660,7 @@ TableGvar := {
 		if !loc.nonzero {
 			return TableGlyfPoints.extents_default(glyf, g)
 		}
-		points = TableGvar.points(glyf, gvar, loc, g)
+		points = TableGvar.varied_points(glyf, gvar, loc, g)
 		xs = points.xs
 		ys = points.ys
 		n = xs.len() - 4
@@ -697,8 +697,8 @@ TableGvar := {
 	## `Glyph::get_points` step for step, with an explicit stack of
 	## composite glyphs instead of recursion; reading bounded the depth and
 	## the size.
-	points : TableGlyfPoints, TableGvar, Location, U64 -> { xs : List(U32), ys : List(U32) }
-	points = |glyf, gvar, loc, root| {
+	varied_points : TableGlyfPoints, TableGvar, Location, U64 -> { xs : List(U32), ys : List(U32) }
+	varied_points = |glyf, gvar, loc, root| {
 		# HarfBuzz's all_points (contour points so far, and the phantom
 		# points of the glyph just finished) and comp_points (each composite
 		# on the stack: its component offsets, then its phantom points).
@@ -725,7 +725,7 @@ TableGvar := {
 			$steps = $steps + 1
 			if $mode == 0 {
 				g = $next
-				kind = TableGlyfPoints.kind(glyf, g)
+				kind = TableGlyfPoints.kind_of(glyf, g)
 				phantom_x = TableGlyfPoints.phantom_xs(glyf, g)
 				if kind == 1 {
 					p = TableGlyfPoints.simple_points(glyf, g)
@@ -894,7 +894,7 @@ TableGvar := {
 		}
 		kept = if (drop >= 128) 0 else sig.shr_zf_wrap(drop.to_u8_wrap())
 		rest = sig - kept.shl_wrap(drop.to_u8_wrap())
-		half = (1).shl_wrap((drop - 1).to_u8_wrap())
+		half = (1.U128).shl_wrap((drop - 1).to_u8_wrap())
 		rounded = if (rest > half or (rest == half and kept.bitwise_and(1) == 1)) kept + 1 else kept
 		if top >= -1022 {
 			carry = rounded == 0x20000000000000
@@ -1086,7 +1086,7 @@ expect
 			p.ends == [False, False, True, False, False, False, False, True]
 				and p.xs.map(|x| TableVar.f32_round_half_up(x)) == [50, 450, 250, 120, 200, 300, 380, 250]
 				and TableGlyfPoints.point_count(glyf, 3) == 3
-				and TableGlyfPoints.kind(glyf, 6) == 0
+				and TableGlyfPoints.kind_of(glyf, 6) == 0
 		}
 		Err(_) => False
 	}
@@ -1283,7 +1283,7 @@ expect
 	match (small_glyf({}), small_gvar(gvar_of(1, [16384], [[], square_data]), 1)) {
 		(Ok(glyf), Ok(gvar)) => {
 			loc = TableGvar.location(gvar, [16384])
-			p = TableGvar.points(glyf, gvar, loc, 1)
+			p = TableGvar.varied_points(glyf, gvar, loc, 1)
 			p.xs.take_first(4).map(TableVar.f32_round_half_up) == [10, 120, 120, 10]
 				and p.ys.take_first(4).map(TableVar.f32_round_half_up) == [30, 30, 140, 140]
 				and TableGvar.extents(glyf, gvar, loc, 1) == { x_bearing: 10, y_bearing: 140, width: 110, height: -110 }

@@ -19,7 +19,7 @@ Modes:
                                                   counts and time ratios
 
 Allocation counts come from bench/roc/alloc.roc built with `roc build --fuzz --opt=speed`
-(roc-fuzz's Fuzz.measure_allocs!). They are deterministic for one compiler
+(roc-fuzz's Fuzz.measure!). They are deterministic for one compiler
 and input, and are compared exactly with bench/baseline.json: any increase or
 decrease fails until --update-baseline records it. The baseline records its
 compiler; nothing pins the compiler (work uses the latest nightly), so after a
@@ -665,31 +665,35 @@ def measure(impl: Impl, case: Case, args) -> dict:
 
 
 FONT_REJECTED = "the font could not be read"
-ALLOC_PATTERN = re.compile(r"ALLOCATION_DIAGNOSTIC allocations=(\d+) leaked=(\d+) result=(\w+) checksum=(\d+)")
+ALLOC_PATTERN = re.compile(r"ALLOCATION_DIAGNOSTIC allocations=(\d+) leaked=(\d+) requested_bytes=(\d+) peak_live_bytes=(\d+) result=(\w+) checksum=(\d+)")
 
 
 def count_allocations(binary: Path, path: Path, timeout: float) -> dict:
+    # Raw single-input execution performs no mutation and admits large fonts;
+    # the supervised quality commands intentionally cap corpus inputs at 1 MiB.
     try:
-        result = subprocess.run([str(binary), "replay", str(path)], capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run([str(binary), "raw", "-seed=1", "-runs=1", str(path)],
+                                capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return {"error": "allocation diagnostic timed out"}
     output = result.stdout + result.stderr
-    match = ALLOC_PATTERN.search(output)
-    if result.returncode != 77 or not match:
+    matches = list(ALLOC_PATTERN.finditer(output))
+    if result.returncode != 77 or len(matches) != 1:
         error = re.search(r"ALLOCATION_DIAGNOSTIC error=(.*)", output)
-        if error and error[1].startswith(FONT_REJECTED):
-            # roc-font does not read this font, so the query cannot run; the
-            # ratchet records that, and notices when it changes.
-            return {"allocations": None, "leaked": None, "result": "font-rejected", "detail": error[1].strip()}
+        if result.returncode == 77 and error and error[1].startswith(FONT_REJECTED):
+            return {"allocations": None, "leaked": None, "requested_bytes": None,
+                    "peak_live_bytes": None, "result": "font-rejected", "detail": error[1].strip()}
         detail = error[1] if error else output[-300:]
         return {"error": f"allocation diagnostic exit {result.returncode}: {detail}"}
-    return {"allocations": int(match[1]), "leaked": int(match[2]), "result": match[3], "checksum": int(match[4])}
+    match = matches[0]
+    return {"allocations": int(match[1]), "leaked": int(match[2]), "requested_bytes": int(match[3]),
+            "peak_live_bytes": int(match[4]), "result": match[5], "checksum": int(match[6])}
 
 
 # ---------------------------------------------------------------------------
 # The ratchet
 
-RATCHETED = ("allocations", "leaked")
+RATCHETED = ("allocations", "leaked", "requested_bytes", "peak_live_bytes")
 
 
 def load_baseline() -> dict:
@@ -743,6 +747,10 @@ def ratchet(baseline: dict, measured: dict[str, dict], all_ids: set[str], compil
         for key in RATCHETED:
             if old.get(key) == new[key]:
                 continue
+            if key not in old:
+                findings.append({"case": case_id, "status": "new-metric", "fail": True, "metric": key,
+                                 "measured": new[key], "message": f"record the newly available {key} metric"})
+                continue
             worse = new[key] > old.get(key, 0)
             findings.append({"case": case_id, "status": "regression" if worse else "improvement", "fail": True,
                              "metric": key, "baseline": old.get(key), "measured": new[key],
@@ -790,6 +798,8 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         new_cases[case_id] = {
             "allocations": record["allocations"],
             "leaked": record["leaked"],
+            "requested_bytes": record["requested_bytes"],
+            "peak_live_bytes": record["peak_live_bytes"],
             **({"font_rejected": True} if record["allocations"] is None else {}),
             "case_sha256": record["case_sha256"],
             "font_sha256": sha256(case.font.data),
@@ -799,9 +809,9 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
         "schema": SCHEMA_VERSION,
         "about": "Allocation ratchet for scripts/bench.py --check; see docs/benchmarks.adoc. Counts are "
                  "roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz "
-                 "Fuzz.measure_allocs! in a `roc build --fuzz --opt=speed` binary.",
+                 "Fuzz.measure! in a `roc build --fuzz --opt=speed` binary.",
         "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
-                     "roc_fuzz": "0.4.3"},
+                     "roc_fuzz": "0.6.2"},
         "generator": {"fonttools": versions.get("fonttools_generator") or baseline.get("generator", {}).get("fonttools")},
         "cases": new_cases,
     }

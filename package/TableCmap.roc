@@ -265,8 +265,8 @@ TableCmap := {
 
 	## The glyph of a code point, if the map has one that is not glyph 0 and
 	## is below `glyph_count`.
-	glyph : TableCmap, U32, U64 -> Try(U64, [Missing])
-	glyph = |cmap, code_point, glyph_count| {
+	glyph_for : TableCmap, U32, U64 -> Try(U64, [Missing])
+	glyph_for = |cmap, code_point, glyph_count| {
 		found = TableCmap.range_glyph(cmap.ranges, cmap.same, code_point.to_u64())
 		if (found == 0 or found >= glyph_count) Err(Missing) else Ok(found)
 	}
@@ -315,7 +315,7 @@ TableCmap := {
 			_ => Absent
 		}
 		read = match TableCmap.check(found.data, glyph_count) {
-			Ok(_) => TableCmap.read(found.data, page)
+			Ok(_) => TableCmap.read_encoding(found.data, page)
 			Err(problem) => Err(problem)
 		}
 		match read {
@@ -730,8 +730,8 @@ TableCmap := {
 	## `OS/2` table's Windows 3.1 font page (0 for none).
 	## A bad table gives the offset (in the table) of the header or of the
 	## chosen subtable.
-	read : List(U8), U64 -> Try(TableCmap, [Bad(U64), NoUnicodeMapping])
-	read = |cmap, font_page| {
+	read_encoding : List(U8), U64 -> Try(TableCmap, [Bad(U64), NoUnicodeMapping])
+	read_encoding = |cmap, font_page| {
 		count = Bytes.u16(cmap, 2)
 		if !Bytes.fits(0, 4, cmap.len()) or !Bytes.fits(4, 8 * count, cmap.len()) {
 			Err(Bad(0))
@@ -739,7 +739,7 @@ TableCmap := {
 			var $best = { rank: TableCmap.unranked, offset: 0, format: 0 }
 			for i in 0..<count {
 				at = 4 + 8 * i
-				rank = TableCmap.rank(Bytes.u16(cmap, at), Bytes.u16(cmap, at + 2))
+				rank = TableCmap.encoding_rank(Bytes.u16(cmap, at), Bytes.u16(cmap, at + 2))
 				offset = Bytes.u32(cmap, at + 4)
 				# An offset outside the table is kept as a candidate, so a
 				# broken subtable that would be chosen is reported.
@@ -877,8 +877,8 @@ TableCmap := {
 	outside = 0x10000
 
 	# HarfBuzz's preference among (platform, encoding) pairs, lowest first.
-	rank : U64, U64 -> U64
-	rank = |system, encoding|
+	encoding_rank : U64, U64 -> U64
+	encoding_rank = |system, encoding|
 		if system == 3 {
 			if encoding == 0 {
 				0

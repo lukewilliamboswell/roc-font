@@ -1,45 +1,28 @@
-# Development environment and named tasks for roc-font, realised by
-# roc-blueprint without Nix (roc-automation's pure-package guide).
-#
-#     blueprint run check          # everything a pull request must pass
-#     blueprint run check -- --only fmt,test
-#     blueprint run examples       # build and run examples/, compare with tests/examples.json
-#     blueprint run docs           # the manual as a site, Markdown and PDF in .docs-out/
-#     blueprint update             # refresh Blueprint.lock after changing a recipe
-#
-# The package compiler is the bare `roc` on PATH, never a fetched program:
-# the latest Roc nightly, as in CI (nothing pins it; scripts/all_tests.py's
-# compiler step reports which one ran). Set ROC to its path when another
-# `roc` comes first on PATH. The checks are Python 3 scripts using
-# the standard library only, so no tooling compiler is fetched.
-app [config] { pf: platform "https://github.com/lukewilliamboswell/roc-blueprint/releases/download/0.8.0/FbJymjYdCxx9vqMcau7r4tQfeAbnVGqqJoYrLGqPCqKu.tar.zst" }
+# Product checks use the current nightly on PATH. Released automation tools
+# and the compiler that runs scripts have independent, reviewed lock entries.
+app [config] { pf: platform "https://github.com/lukewilliamboswell/roc-blueprint/releases/download/0.12.0/GSb71LxYHqLohZz8jMfawWEwQcyev9ZdVC26sfsDwfq8.tar.zst" }
 
 import pf.Recipes
 
 config = [
 	Name("roc-font"),
 	Systems(["x86_64-linux", "aarch64-linux", "aarch64-darwin"]),
-	# The released documentation renderer; its bytes are pinned in Blueprint.lock.
-	Environment("docs", [Programs([Fetch("roc-docs", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.2.0/roc-docs-{system}"))]), Expect(["realpath", "sh"])]),
-	# The package compiler and Python for the check scripts come from the machine.
-	Environment("package", [Expect(["roc", "python3", "git"])]),
-	# Every check, in order: fmt, check, tests (dev backend), fuzz
-	# smoke, conformance replay, allocation ratchet, API docs, bundle and
-	# whitespace. Extra arguments go to scripts/all_tests.py (--only, --skip, --list).
-	Task("check", [Use("package"), Run(["python3", "scripts/all_tests.py"])]),
-	# The unit and API tests alone, on the dev backend.
-	Task("test", [Use("package"), Run(["python3", "scripts/all_tests.py", "--only", "compiler,test"])]),
-	# Build every fuzz target natively and replay its seeds briefly.
+	Environment("package", [Programs([Fetch("roc-stable", Recipes.roc_nightly("nightly-2026-11-18-a520eed")), Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/release-package-{system}"))]), Expect(["roc", "python3", "git", "zip", "touch"])]),
+	# Only compares 0.1.1 with 0.1.2: November 18 cannot compile the old bundle.
+	Environment("api-compare-0-1-1", [Programs([Fetch("roc-api", Recipes.roc_nightly("nightly-2026-11-07-ad3a5d2"))])]),
+	Environment("release-test", [Programs([Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/release-package-{system}"))]), Expect(["roc"])]),
+	Environment("docs", [Programs([Fetch("roc-docs", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/roc-docs-{system}"))]), Expect(["sh", "realpath", "roc"])]),
+	Task("check", [Use("package"), Run(["roc-stable", "scripts/check.roc"])]),
+	Task("examples", [Use("package"), Run(["roc-stable", "scripts/examples.roc"])]),
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
-	# Replay the recorded HarfBuzz, Chrome and reading oracle results.
 	Task("conformance", [Use("package"), Run(["python3", "scripts/conformance.py"])]),
-	# Build and run every example under examples/ and compare its output with
-	# tests/examples.json. After an intended change: blueprint run examples -- --update
-	Task("examples", [Use("package"), Run(["python3", "scripts/examples.py", "check"])]),
-	# Timing smoke run against the comparison implementations that are present.
 	Task("bench-quick", [Use("package"), Run(["python3", "scripts/bench.py", "--quick"])]),
-	# The manual: docs/index.adoc rendered as a site, static Markdown and a PDF.
-	Task("docs", [Use("docs"), Run(["roc-docs", "build", "--workspace", ".", "--pdf-filename", "roc-font.pdf"])]),
-	# The renderer's real path, for actions/blueprint-tool and actions/build-docs.
+	Task("api-docs", [Use("package"), Run(["roc", "docs", "package/main.roc", "--output=generated-docs"])]),
+	Task("test", [Use("package"), Run(["roc-stable", "scripts/check.roc", "--", "--only", "compiler,test"])]),
+	Task("release-examples", [Use("package"), Run(["roc-stable", "scripts/release_examples.roc"])]),
+	Task("release-notes", [Use("package"), Run(["roc-stable", "scripts/release_notes.roc"])]),
+	Task("api-compare-0-1-1", [Use("api-compare-0-1-1"), Run(["roc-api", "bump"])]),
+	Task("release-test", [Use("release-test"), Run(["release-package"])]),
+	Task("docs", [Use("docs"), Run(["roc-docs", "build", "--workspace", ".", "--pdf-filename", "roc-font.pdf", "--api-entrypoint", "package/main.roc", "--roc-command", "roc", "--site-url", "https://lukewilliamboswell.github.io/roc-font/"])]),
 	Task("docs-path", [Use("docs"), Run(["sh", "-c", "realpath \"$(command -v roc-docs)\""])]),
 ]

@@ -128,7 +128,7 @@ Font :: { face : Face }.{
 	from_bytes : List(U8), ReadOptions -> Try(Font, List(Problem))
 	from_bytes = |bytes, options| {
 		limits = options.limits
-		read = Face.read(bytes, { face: options.face.to_u64(), strict: options.strict, max_bytes: limits.max_bytes, max_faces: limits.max_faces.to_u64(), max_lookups: limits.max_lookups.to_u64(), max_depth: limits.max_depth.to_u64() })
+		read = Face.read_font(bytes, { face: options.face.to_u64(), strict: options.strict, max_bytes: limits.max_bytes, max_faces: limits.max_faces.to_u64(), max_lookups: limits.max_lookups.to_u64(), max_depth: limits.max_depth.to_u64() })
 		match read {
 			Ok(face) => Ok({ face: Face.moved_to(face, Regular, Normal, FontDefault, []) })
 			Err(problems) => Err(problems)
@@ -214,7 +214,7 @@ Font :: { face : Face }.{
 
 	## How many glyphs the font has; glyph ids run below this.
 	glyph_count : Font -> U32
-	glyph_count = |font| Face.glyph_count(font.face).min(0xFFFFFFFF).to_u32_wrap()
+	glyph_count = |font| Face.glyph_total(font.face).min(0xFFFFFFFF).to_u32_wrap()
 
 	## The glyph that draws a Unicode code point, if the font has one. Fonts
 	## whose character map is not in Unicode (old symbol fonts and Macintosh
@@ -486,7 +486,7 @@ Font :: { face : Face }.{
 	## The axes of a variable font, in the font's order; empty for a static
 	## font.
 	axes : Font -> List(Axis)
-	axes = |font| Face.axes(font.face)
+	axes = |font| Face.axes_of(font.face)
 
 	## The designs a variable font names (such as `Bold` or `Condensed
 	## Light`), in the font's order, each with its value on every axis;
@@ -503,8 +503,8 @@ Font :: { face : Face }.{
 	## HarfBuzz reports as the normalised coordinates.
 	coordinates : Font -> List({ tag : Str, value : I16 })
 	coordinates = |font| {
-		coords = Face.coords(font.face)
-		Face.axes(font.face).map_with_index(|a, i| { tag: a.tag, value: coords.get(i) ?? 0 })
+		coords = Face.coords_of(font.face)
+		Face.axes_of(font.face).map_with_index(|a, i| { tag: a.tag, value: coords.get(i) ?? 0 })
 	}
 
 	# ------------------------------------------------------------ shaping

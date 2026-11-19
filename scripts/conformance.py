@@ -147,7 +147,7 @@ def build_driver(roc: str, force: bool, dep: list[str]) -> int:
     for stale in (DRIVER_BIN, DRIVER_PACKAGE):
         if stale.exists():
             stale.unlink()
-    command = [roc, "build", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}", *dep]
+    command = [roc, "build", "--opt=dev", str(DRIVER_DIR / "main.roc"), f"--output={DRIVER_BIN}", *dep]
     print("+ " + " ".join(command), flush=True)
     completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
     output = completed.stdout + completed.stderr

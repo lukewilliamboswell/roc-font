@@ -2,7 +2,7 @@
 """Build and run the roc-font roc-fuzz targets.
 
 Every target is built natively with `roc build --fuzz` and run through the
-binary's supervised `ci` command, which writes a report, a log and any
+binary's supervised `run` command, which writes a report, a log and any
 reproducing failure inputs. Working state lives under `.roc-font-tmp/fuzz/`
 (or `$ROC_FONT_TMPDIR/fuzz/`):
 
@@ -57,13 +57,13 @@ WORK_ROOT = TMP_ROOT / "fuzz"
 
 # The roc-fuzz platform every target must declare. The bundle name is the
 # content hash roc checks on download; sha256 is the release asset's digest
-# (verified against `gh release view 0.4.3 --repo lukewilliamboswell/roc-fuzz`
+# (verified against `gh release view 0.6.2 --repo lukewilliamboswell/roc-fuzz`
 # and the cached download), and commit is the tag's commit.
 ROC_FUZZ_RELEASE = {
-    "version": "0.4.3",
-    "commit": "1abb6f0f76fc3ed6016cdf5da4e16e8ed1cfdfc4",
-    "bundle": "41NK5FShyGC9Z8HNpUdUeXMWwLmLNfFxsfmLvdPL4Fxb.tar.zst",
-    "sha256": "d9bae1e93e6e94f3fafb4040861402dbab90af247023461d8e5451db4a3ae0f2",
+    "version": "0.6.2",
+    "commit": "b4505e2cdc19a74a2abf271f506c14478abdb7c2",
+    "bundle": "3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
+    "sha256": "89fc0b22cd1f30c01208a29eea55dbbdcdbac2a37d059e80b3a18c62bc2f275c",
 }
 ROC_FUZZ_URL = (
     "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/"
@@ -118,7 +118,7 @@ TARGETS: dict[str, TargetConfig] = {
         seeds=FUZZ_ROOT / "seeds" / "font-read.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix=b"",
-        max_input_size=2097152,
+        max_input_size=1048576,
         timeout=10,
         contract=(
             "reading is total and deterministic; a rejection names a problem; "
@@ -132,7 +132,7 @@ TARGETS: dict[str, TargetConfig] = {
         seeds=FUZZ_ROOT / "seeds" / "font-shape.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix="office -> A*B fi".encode("utf-8") + b"\xff",
-        max_input_size=2097152,
+        max_input_size=1048576,
         timeout=10,
         contract=(
             "substitution is deterministic, keeps clusters in range and "
@@ -553,8 +553,8 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
     report_dir.parent.mkdir(parents=True, exist_ok=True)
     command = [
         str(binary_path(name)),
-        "ci",
-        str(report_dir),
+        "run",
+        f"--report-dir={report_dir}",
         str(corpus),
         f"--max-input-size={max_input_size}",
         f"--timeout={args.timeout or config.timeout}",
@@ -587,14 +587,13 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
     report: dict[str, object] = {}
     if report_path.is_file():
         report = json.loads(report_path.read_text(encoding="utf-8"))
-    libfuzzer = report.get("libfuzzer") or {}
+    exploration = report.get("exploration") or {}
     result.update(
         outcome=report.get("outcome") or f"exit {return_code}",
         finding=report.get("finding_kind"),
-        units=(libfuzzer or {}).get("executed_units"),
-        edges=(libfuzzer or {}).get("coverage_edges"),
-        rss=(libfuzzer or {}).get("peak_rss_mb"),
-        duration_ms=report.get("duration_ms"),
+        units=exploration.get("attempted"),
+        accepted=exploration.get("accepted"),
+        rejected=exploration.get("rejected"),
         report=display(report_dir),
         return_code=return_code,
     )
@@ -617,8 +616,7 @@ def run_mode(args: argparse.Namespace) -> int:
     for result in results:
         print(
             f"  {result['target']:<12} {str(result['outcome']):<14}"
-            f" units={result.get('units')} edges={result.get('edges')}"
-            f" peak_rss_mb={result.get('rss')} ms={result.get('duration_ms')}"
+            f" units={result.get('units')} accepted={result.get('accepted')} rejected={result.get('rejected')}"
             + (f" finding={result.get('finding')}" if result.get("finding") else "")
             + (f" report={result.get('report')}" if result.get("report") else "")
         )

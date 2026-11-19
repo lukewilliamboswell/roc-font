@@ -103,7 +103,7 @@ ShaperTags :: {}.{
 			newer = match ShaperTags.new_script_tags.find_first(|(iso, _)| iso == script) {
 				Ok((iso, two)) if iso == ShaperTags.myanmar => [two]
 				# The `3` versions replace the last byte.
-				Ok((_, two)) => [two.bitwise_and(0xFFFFFF00).bitwise_or('3'.to_u64()), two]
+				Ok((_, two)) => [two.bitwise_and(0xFFFFFF00).bitwise_or(0x33.U64), two]
 				Err(_) => []
 			}
 			old = match ShaperTags.old_script_tags.find_first(|(iso, _)| iso == script) {
@@ -124,19 +124,19 @@ ShaperTags :: {}.{
 	## A script's natural horizontal direction: `Rtl`, `Ltr`, or `Either`
 	## for scripts written both ways and for an empty code.
 	script_direction : Str -> [Ltr, Rtl, Either]
-	script_direction = |code|
+	script_direction = |code| {
 		if code.is_empty() {
-			Either
-		} else {
-			script = ShaperTags.script_of(code)
-			if ShaperTags.rtl_scripts.contains(script) {
-				Rtl
-			} else if ShaperTags.either_scripts.contains(script) {
-				Either
-			} else {
-				Ltr
-			}
+			return Either
 		}
+		script = ShaperTags.script_of(code)
+		if ShaperTags.rtl_scripts.any(|known| known == script) {
+			return Rtl
+		}
+		if ShaperTags.either_scripts.any(|known| known == script) {
+			return Either
+		}
+		Ltr
+	}
 
 	## A language tag in lower case with `_` as `-`, as HarfBuzz keeps one.
 	normalize : Str -> List(U8)
@@ -345,7 +345,7 @@ ShaperTags :: {}.{
 					} else {
 						t = ShaperTags.tag_from_bytes($chars)
 						# `DFLT` in any case is the default script tag.
-						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.default_script) t.bitwise_xor((0xFFFFFFFF).bitwise_xor(0xDFDFDFDF)) else t)
+						Ok(if (t.bitwise_and(0xDFDFDFDF) == ShaperTags.default_script) t.bitwise_xor((0xFFFFFFFF.U64).bitwise_xor(0xDFDFDFDF)) else t)
 					}
 				}
 			}
@@ -383,7 +383,7 @@ ShaperTags :: {}.{
 								[]
 							} else {
 								# Assumed to be ISO 639-3, upper-cased.
-								[key.bitwise_and((0xFFFFFFFF).bitwise_xor(0x20202000))]
+								[key.bitwise_and((0xFFFFFFFF.U64).bitwise_xor(0x20202000))]
 							}
 					}
 			}
