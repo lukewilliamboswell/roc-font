@@ -7,11 +7,11 @@ import pf.Recipes
 config = [
 	Name("roc-font"),
 	Systems(["x86_64-linux", "aarch64-linux", "aarch64-darwin"]),
-	Environment("package", [Programs([Fetch("roc-stable", Recipes.roc_nightly("nightly-2026-11-18-a520eed")), Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/release-package-{system}"))]), Expect(["roc", "python3", "git", "zip", "touch"])]),
+	Environment("package", [Programs([Fetch("roc-stable", Recipes.roc_nightly("nightly-2026-11-18-a520eed")), Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.12.0/release-package-{system}"))]), Expect(["roc", "python3", "git", "zip", "touch"])]),
 	# Only compares 0.1.1 with 0.1.2: November 18 cannot compile the old bundle.
 	Environment("api-compare-0-1-1", [Programs([Fetch("roc-api", Recipes.roc_nightly("nightly-2026-11-07-ad3a5d2"))])]),
-	Environment("release-test", [Programs([Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/release-package-{system}"))]), Expect(["roc"])]),
-	Environment("docs", [Programs([Fetch("roc-docs", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.10.1/roc-docs-{system}"))]), Expect(["sh", "realpath", "roc"])]),
+	Environment("release-test", [Programs([Fetch("release-package", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.12.0/release-package-{system}"))]), Expect(["roc"])]),
+	Environment("docs", [Programs([Fetch("roc-docs", Recipes.file("https://github.com/lukewilliamboswell/roc-automation/releases/download/tools-0.12.0/roc-docs-{system}"))]), Expect(["sh", "realpath", "roc"])]),
 	Task("check", [Use("package"), Run(["roc-stable", "scripts/check.roc"])]),
 	Task("examples", [Use("package"), Run(["roc-stable", "scripts/examples.roc"])]),
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
