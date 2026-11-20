@@ -40,7 +40,7 @@ accept `ROC` as before. Format scripts with `roc-stable fmt scripts/`.
 
 Release assembly keeps the package-specific asset inventory and archive
 construction in pinned Roc scripts. Archive testing uses the locked
-`release-package` utility from roc-automation tools-0.10.1. Python remains only for the
+`release-package` utility from roc-automation tools-0.12.0. Python remains only for the
 loopback server, archive inspection, corpus/oracle tooling, and independent
 fuzz and benchmark harnesses; it does not select the repository check steps.
 
@@ -133,6 +133,10 @@ skips release candidates. A failure there calls for a patch release.
 
 A release is cut only when the checks pass on the latest nightly; the
 release notes record the compiler it was tested with.
+
+The hosted checks reuse the selected compiler archive by SHA-256 and verify
+the restored bytes. Blueprint separately verifies cached artifacts for each
+job's locked tool set before running its tasks.
 
 The 0.1.1-to-0.1.2 API comparison alone uses the separately locked November 7
 compiler: November 18 cannot compile the published 0.1.1 bundle. It runs the

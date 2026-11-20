@@ -67,12 +67,14 @@ jobs:
             *) echo "::error::the latest roc-lang/nightlies release is not a nightly: $tag"; exit 1 ;;
           esac
 
-      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@dd30a5dd576973b6e224db70d96e3e12c96bcc95
+        with:
+          cache: 'true'
+          cache-workload: release-build
 
       - name: Install that Roc nightly
-        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
+        uses: lukewilliamboswell/roc-automation/actions/setup-roc-nightly@dd30a5dd576973b6e224db70d96e3e12c96bcc95
         with:
-          version: nightly
           nightly-tag: ${{ steps.nightly.outputs.tag }}
 
       # A release needs its notes, a well-formed version and an unused tag.
@@ -169,14 +171,14 @@ jobs:
 
       - id: renderer
         if: env.BUILD_MANUAL == 'true'
-        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@e12512e2605608588782edb044dd766137e34869
+        uses: lukewilliamboswell/roc-automation/actions/blueprint-tool@dd30a5dd576973b6e224db70d96e3e12c96bcc95
         with:
           task: docs-path
-          label: roc-docs tools-0.10.1
+          label: roc-docs tools-0.12.0
 
       - id: docs
         if: env.BUILD_MANUAL == 'true'
-        uses: lukewilliamboswell/roc-automation/actions/build-docs@e12512e2605608588782edb044dd766137e34869
+        uses: lukewilliamboswell/roc-automation/actions/build-docs@dd30a5dd576973b6e224db70d96e3e12c96bcc95
         with:
           renderer-binary: ${{ steps.renderer.outputs.binary }}
           pdf-filename: roc-font-${{ steps.validate.outputs.version }}.pdf
@@ -225,12 +227,14 @@ jobs:
           persist-credentials: false
 
       - name: Install the Roc nightly the build used
-        uses: roc-lang/setup-roc@dd81390553b0a1236aedb61cdd4c0ed7cf7eaec4
+        uses: lukewilliamboswell/roc-automation/actions/setup-roc-nightly@dd30a5dd576973b6e224db70d96e3e12c96bcc95
         with:
-          version: nightly
           nightly-tag: ${{ needs.build.outputs.nightly }}
 
-      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@e12512e2605608588782edb044dd766137e34869
+      - uses: lukewilliamboswell/roc-automation/actions/setup-blueprint@dd30a5dd576973b6e224db70d96e3e12c96bcc95
+        with:
+          cache: 'true'
+          cache-workload: release-test
 
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -276,7 +280,7 @@ jobs:
           name: release-candidate
           path: candidate
 
-      - uses: lukewilliamboswell/roc-automation/actions/publish-release@e12512e2605608588782edb044dd766137e34869
+      - uses: lukewilliamboswell/roc-automation/actions/publish-release@dd30a5dd576973b6e224db70d96e3e12c96bcc95
         with:
           version: ${{ needs.build.outputs.version }}
           prerelease: ${{ needs.build.outputs.prerelease }}
