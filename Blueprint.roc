@@ -18,7 +18,7 @@ config = [
 	Task("conformance", [Use("package"), Run(["python3", "scripts/conformance.py"])]),
 	Task("bench-quick", [Use("package"), Run(["python3", "scripts/bench.py", "--quick"])]),
 	Task("api-docs", [Use("package"), Run(["roc", "docs", "package/main.roc", "--output=generated-docs"])]),
-	Task("test", [Use("package"), Run(["roc-stable", "scripts/check.roc", "--", "--only", "compiler,test"])]),
+	Task("test", [Use("package"), Run(["roc-stable", "scripts/check.roc", "--only", "compiler,test"])]),
 	Task("release-examples", [Use("package"), Run(["roc-stable", "scripts/release_examples.roc"])]),
 	Task("release-notes", [Use("package"), Run(["roc-stable", "scripts/release_notes.roc"])]),
 	Task("api-compare-0-1-1", [Use("api-compare-0-1-1"), Run(["roc-api", "bump"])]),
