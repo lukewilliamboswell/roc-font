@@ -32,7 +32,7 @@ in `docs/conformance.adoc`. CI smoke and cached conformance need no oracle
 libraries.
 
 The check and example orchestration is executable Roc under `scripts/`, run
-by `roc-stable`, pinned to `nightly-2026-11-23-b5c77fc` in Blueprint and each
+by `roc-stable`, pinned to `nightly-2026-11-24-ff5e544` in Blueprint and each
 script header. Product code and consumers use bare `roc` on PATH. Blueprint
 keeps its configuration compiler separate; do not set `ROC` when invoking
 Blueprint to select a different product compiler. Direct harness commands
