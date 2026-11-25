@@ -7,9 +7,11 @@ app [target] {
 import fuzz.Fuzz
 import Budgets
 import Cmap
+import Collection
 import Composite
 import Context
 import DeltaMap
+import FeatureVariations
 import Features
 import Gpos
 import Gsub
@@ -22,8 +24,10 @@ import Reverse
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
 expect Budgets.check({})
+expect Collection.check({})
 expect Composite.check({})
 expect DeltaMap.check({})
+expect FeatureVariations.check({})
 expect Features.check({})
 expect Math.check({})
 expect MathVariants.check({})
