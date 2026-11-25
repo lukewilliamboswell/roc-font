@@ -29,6 +29,7 @@ import LookupFiltering
 import Math
 import MathLocations
 import MathVariants
+import MarkAttachment
 import MetricVariations
 import Metrics
 import Names
@@ -38,10 +39,11 @@ import ScalarBreaks
 import ScalarShaping
 import SpaceWidths
 import Tracing
+import Thai
 import VariationReading
 import WidthBounds
 
-target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
+target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Thai.target, Thai.growth_target])
 
 expect AlternateRanges.check({})
 expect AxisMapping.check({})
@@ -63,6 +65,7 @@ expect LookupFiltering.check({})
 expect Math.check({})
 expect MathLocations.check({})
 expect MathVariants.check({})
+expect MarkAttachment.check({})
 expect MetricVariations.check({})
 expect MetricVariations.wide_check({})
 expect Metrics.check({})
@@ -73,5 +76,6 @@ expect ScalarBreaks.check({})
 expect ScalarShaping.check({})
 expect SpaceWidths.check({})
 expect Tracing.check({})
+expect Thai.check({})
 expect VariationReading.check({})
 expect WidthBounds.check({})

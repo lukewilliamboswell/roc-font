@@ -575,13 +575,12 @@ Font :: { face : Face }.{
 	##   contextual forms and kerning, among others) unless a `Feature`
 	##   turns one off; `features` lists only the changes.
 	##
-	## Text is shaped as HarfBuzz's default shaper shapes it (and its Hebrew
-	## shaper for Hebrew): characters compose or decompose to what the font
-	## maps, brackets mirror in right-to-left text, default-ignorable
-	## characters draw with no width, and spaces the font lacks take widths
-	## from its space. Scripts that need their own shaper (Arabic joining,
-	## Indic, Khmer, Myanmar, the Universal Shaping Engine, Thai, Hangul)
-	## shape as the default shaper shapes them.
+	## HarfBuzz's default shaping rules select canonical forms the font
+	## maps, mirror brackets in right-to-left text, hide default-ignorable
+	## characters and derive missing space widths. Hebrew and horizontal
+	## Thai use script-specific shaping. In Thai, each SARA AM can split
+	## into a spacing vowel and a mark before shaping applies the font's
+	## positioning rules.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left

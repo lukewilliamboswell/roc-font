@@ -219,6 +219,29 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-mark-read": TargetConfig(
+        sources=(FUZZ_ROOT / "font-mark-read.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-mark-read.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=32,
+        timeout=10,
+        contract="valid mark tables read strictly; damaged offsets, counts and classes identify GPOS",
+        font_files=False,
+    ),
+    "font-marks": TargetConfig(
+        sources=(FUZZ_ROOT / "font-marks.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-marks.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=512,
+        timeout=10,
+        contract=(
+            "mark-to-base, mark-to-ligature and mark-to-mark agree with "
+            "the generated anchors; work grows with the run"
+        ),
+        font_files=False,
+    ),
     "font-var": TargetConfig(
         sources=(FUZZ_ROOT / "font-var.roc",),
         seeds=FUZZ_ROOT / "seeds" / "font-var.json",

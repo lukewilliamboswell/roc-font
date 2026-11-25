@@ -1,0 +1,10 @@
+// David Libre Regular 1.100. The vowels exercise mark-to-base. The
+// combining accents exercise mark-to-mark in the same Hebrew run.
+{
+  "schema": 1,
+  "cases": [
+    {"id": "david-libre-hebrew", "font": "../fonts/mark-attachment/DavidLibre-Regular.ttf", "font_sha256": "923f06e0f6dc84e1649d8cc5d5e12a8d663adf6aba83ba15baa5d559fb47b86e", "text": "הֲבֵל א̀́", "options": {"script": "Hebr", "language": "he", "direction": "rtl", "utf8_clusters": true, "output": ["show-flags"]}, "expected": "[786=11@110,360+0|785=11+0|570=11+1307|666=10+420|598=8+1020|770=4@144,0+0|574=4+1013|767=0@307,0+0|581=0+1299]"},
+    {"id": "david-libre-no-mark", "font": "../fonts/mark-attachment/DavidLibre-Regular.ttf", "font_sha256": "923f06e0f6dc84e1649d8cc5d5e12a8d663adf6aba83ba15baa5d559fb47b86e", "text": "הֲבֵל א̀́", "options": {"script": "Hebr", "language": "he", "direction": "rtl", "utf8_clusters": true, "output": ["show-flags"], "features": ["mark=0"]}, "expected": "[786=11@110,360+0|785=11+0|570=11+1307|666=10+420|598=8+1020|770=4+0|574=4+1013|767=0+0|581=0+1299]"},
+    {"id": "david-libre-no-mkmk", "font": "../fonts/mark-attachment/DavidLibre-Regular.ttf", "font_sha256": "923f06e0f6dc84e1649d8cc5d5e12a8d663adf6aba83ba15baa5d559fb47b86e", "text": "הֲבֵל א̀́", "options": {"script": "Hebr", "language": "he", "direction": "rtl", "utf8_clusters": true, "output": ["show-flags"], "features": ["mkmk=0"]}, "expected": "[786=11+0|785=11+0|570=11+1307|666=10+420|598=8+1020|770=4@144,0+0|574=4+1013|767=0@307,0+0|581=0+1299]"}
+  ]
+}

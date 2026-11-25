@@ -16,13 +16,11 @@ lines and choosing fallback fonts stay with your program.
 
 ## Status
 
-**0.1.1.** Text is shaped as HarfBuzz's default shaper
-shapes it, which covers Latin, Greek, Cyrillic and other scripts that need
-no script-specific shaper, plus HarfBuzz's Hebrew shaper. Variable fonts are
-measured at any weight, width or optical size. Scripts that need their own
-shaper (Arabic joining, the Indic scripts, Thai, Khmer and others) are shaped
-by the default shaper for now, and mark attachment, cursive and contextual
-positioning are not applied yet. The API may still change before 1.0.
+The default shaping pipeline covers Latin, Greek and Cyrillic. Hebrew and
+[horizontal Thai](docs/thai.adoc) have script-specific shaping. Horizontal
+positioning supports pair adjustment and mark attachment to bases,
+ligatures and other marks. Variable fonts can be measured at any weight,
+width or optical size. The API may still change before 1.0.
 
 The package also includes OpenType MATH font facts: layout constants,
 glyph corrections, corner kerning and stretch recipes. Downstream Roc

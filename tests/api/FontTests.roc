@@ -868,7 +868,7 @@ expect kerning_of(basic_with("GPOS", gpos([{ kind: 9, subtables: [FontBuild.exte
 # positioning. Pair lookups of any default feature apply, as in HarfBuzz
 # (here `mark`); those of other features do not (here `cpsp`, capital
 # spacing, which is off by default).
-expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontBuild.extension(4, simple_pairs)] }])), [1, 2]) == [0, 0]
+expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontBuild.extension(7, simple_pairs)] }])), [1, 2]) == [0, 0]
 expect kerning_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "mark", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [-50, 0]
 expect kerning_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "cpsp", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [0, 0]
 

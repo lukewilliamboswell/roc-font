@@ -647,11 +647,12 @@ bound:
 
 . *Map*: decode the text to scalars with byte offsets; map each to a glyph
   through the cmap (formats 4, 12, 14 and the rest), with the fallbacks in
-  §6.2.
+  §6.2. Horizontal Thai preprocesses SARA AM before glyph selection.
 . *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
   and mark filtering sets from `GDEF`.
-. *Position*: take advances from `hmtx` (and later `HVAR`); apply GPOS
-  lookups, or the `kern` table when the font has no GPOS kerning.
+. *Position*: take advances from `hmtx` and `HVAR`; apply GPOS pair
+  adjustments and mark attachments, with the `kern` table as a kerning
+  fallback.
 . *Finish*: merge clusters at the configured level, compute unsafe-to-break
   flags, reverse for right-to-left output order.
 

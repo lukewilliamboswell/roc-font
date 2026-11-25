@@ -140,6 +140,13 @@ text. Two valid slices can still split glyphs that share one cluster.
 For cluster flags, include a boundary that normalization merges and
 one that survives. Compare the flags together with glyph IDs and byte
 offsets so stale flags are visible even when the glyphs are correct.
+For mark attachment, calculate the final pen and anchor coordinates from
+signed advances and independent anchors. Give each ligature component a
+distinct anchor, and keep the placement of a stacked mark sensitive to
+its parent's displacement.
+For Thai preprocessing, pair an authored nikhahit with one produced by
+SARA AM. Give them the same glyph and different expected orders so the
+model detects reordering even when output glyphs and counts still agree.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
