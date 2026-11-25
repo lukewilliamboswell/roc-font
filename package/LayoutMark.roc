@@ -5,16 +5,15 @@ import LayoutVar
 
 ## GPOS mark-to-base, mark-to-ligature and mark-to-mark format 1 subtables. Read validates
 ## the coverage, class and anchor references once. The prepared subtable
-## keeps offsets, so applying a lookup reads only the selected anchors.
+## decodes the validated offsets only after a coverage hit.
 LayoutMark := {
-	mark_coverage : U64,
 	target_coverage : U64,
 	classes : U64,
 	marks : U64,
 	target_array : U64,
 }.{
 
-	read : List(U8), U64, U64, U64, Bool, LayoutVar, List(U64) -> Try({ value : LayoutMark, steps : U64, deltas : List(U64) }, [Bad(U64)])
+	read : List(U8), U64, U64, U64, Bool, LayoutVar, List(U64) -> Try({ steps : U64, deltas : List(U64) }, [Bad(U64)])
 	read = |data, at, glyph_count, steps, ligatures, lv, deltas| {
 		if !Bytes.fits(at, 12, data.len()) or Bytes.u16(data, at) != 1 {
 			return Err(Bad(at))
@@ -47,7 +46,7 @@ LayoutMark := {
 		} else {
 			LayoutMark.check_matrix(data, target_array, target_index.count, classes, spent, lv, $deltas)?
 		}
-		Ok({ value: { mark_coverage, target_coverage, classes, marks, target_array }, steps: checked.steps, deltas: checked.deltas })
+		Ok(checked)
 	}
 
 	required : List(U8), U64, U64, U64 -> Try(U64, [Bad(U64)])
@@ -96,9 +95,18 @@ LayoutMark := {
 		Ok({ steps: spent, deltas: $deltas })
 	}
 
+	## These references were checked by `read`.
+	table_at : List(U8), U64 -> LayoutMark
+	table_at = |data, at| {
+		target_coverage: at + Bytes.u16(data, at + 4),
+		classes: Bytes.u16(data, at + 6),
+		marks: at + Bytes.u16(data, at + 8),
+		target_array: at + Bytes.u16(data, at + 10),
+	}
+
 	## The mark's stored record or a coverage miss.
-	mark_index : LayoutMark, List(U8), U64 -> Try(U64, [NotCovered])
-	mark_index = |shape, data, glyph| LayoutCoverage.index(data, shape.mark_coverage, glyph)
+	mark_index : List(U8), U64, U64 -> Try(U64, [NotCovered])
+	mark_index = |data, at, glyph| LayoutCoverage.index(data, at + Bytes.u16(data, at + 2), glyph)
 
 	covers_target : LayoutMark, List(U8), U64 -> Bool
 	covers_target = |shape, data, glyph| LayoutCoverage.index(data, shape.target_coverage, glyph).is_ok()
