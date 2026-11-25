@@ -7,10 +7,12 @@ app [target] {
 import fuzz.Fuzz
 import AxisMapping
 import Budgets
+import ClassPairs
 import Cmap
 import Collection
 import Composite
 import Context
+import ContextEncodings
 import DeltaMap
 import Direction
 import FeatureVariations
@@ -25,13 +27,16 @@ import Metrics
 import Names
 import Outlines
 import Reverse
+import Tracing
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
 expect AxisMapping.check({})
 expect Budgets.check({})
+expect ClassPairs.check({})
 expect Collection.check({})
 expect Composite.check({})
+expect ContextEncodings.check({})
 expect DeltaMap.check({})
 expect Direction.check({})
 expect FeatureVariations.check({})
@@ -45,3 +50,4 @@ expect Metrics.check({})
 expect Names.check({})
 expect Outlines.check({})
 expect Reverse.check({})
+expect Tracing.check({})

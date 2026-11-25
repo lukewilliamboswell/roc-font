@@ -96,6 +96,9 @@ metrics table across faces on either side of its storage location.
 For reverse chaining, give adjacent context positions distinct coverages
 and use a substitution that enables the next candidate in scan order.
 Compare direct and extension encodings of the same lookup.
+When several formats can encode the same rule, write one expected run
+from the rule and compare every encoding with it. For class zero, include
+both covered and uncovered glyphs to check the coverage gate.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
@@ -103,6 +106,9 @@ For coordinate remapping, bend two axes differently and give each axis
 its own observable advance. Put CSS Regular at a different point from
 the font's declared weight so an omitted setting identifies the default
 the caller actually gets.
+For traced shaping, compare each glyph with its cluster and origin.
+Repeat a phrase in different feature ranges so reordering exposes any
+origin that changed its position or lost its structural kind.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
