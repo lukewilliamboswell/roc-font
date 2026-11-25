@@ -196,6 +196,35 @@ expect {
 	rejects(lenient(bytes), [BadUnitsPerEm, bad("maxp", table_offset(bytes, "maxp") + 4), bad("OS/2", table_offset(bytes, "OS/2"))])
 }
 
+# A failed header does not hide independent problems. With maxp
+# available, post and GSUB can be checked. hmtx also needs hhea.
+expect {
+	tables = basic_with("hmtx", [0, 1]).concat([{ tag: "post", data: [0] }, { tag: "GSUB", data: [0, 1] }])
+	missing = FontBuild.file(tables.drop_if(|t| t.tag == "hhea"))
+	bad_head = FontBuild.file(FontBuild.replace(tables, "head", FontBuild.head(5, False)))
+	tail_problems = |bytes| [bad("post", table_offset(bytes, "post")), bad("GSUB", table_offset(bytes, "GSUB"))]
+	missing_problems = [MissingTable("hhea")].concat(tail_problems(missing))
+	head_problems = [BadUnitsPerEm, bad("hmtx", table_offset(bad_head, "hmtx"))].concat(tail_problems(bad_head))
+	rejects(lenient(missing), missing_problems) and rejects(strict(missing), missing_problems)
+		and rejects(lenient(bad_head), head_problems) and rejects(strict(bad_head), head_problems)
+}
+
+# Glyph references in a well-formed GSUB depend on maxp. A lookup limit
+# is still reported alongside a missing hhea when maxp is usable.
+expect {
+	lookup = { kind: 1, subtables: [FontBuild.single2([1], [2])] }
+	gsub = { tag: "GSUB", data: FontBuild.layout("latn", [{ tag: "liga", lookups: [0, 1] }], [lookup, lookup]) }
+	tables = FontBuild.basic.drop_if(|t| t.tag == "hhea").append(gsub)
+	missing = FontBuild.file(tables)
+	bad_count = FontBuild.file(FontBuild.replace(tables, "maxp", FontBuild.maxp(0)))
+	count_problems = [MissingTable("hhea"), bad("maxp", table_offset(bad_count, "maxp") + 4)]
+	limits = Font.Limits.{ max_lookups: 1 }
+	limit_problems = [MissingTable("hhea"), OverLimit("max_lookups")]
+	rejects(lenient(bad_count), count_problems) and rejects(strict(bad_count), count_problems)
+		and rejects(Font.from_bytes(missing, Font.ReadOptions.{ limits }), limit_problems)
+		and rejects(Font.from_bytes(missing, Font.ReadOptions.{ strict: True, limits }), limit_problems)
+}
+
 # A table whose record runs past the end of the file rejects the font,
 # even an optional table, as OTS (and so browsers) reject it.
 expect {

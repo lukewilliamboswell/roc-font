@@ -367,7 +367,21 @@ Face := {
 				}
 			}
 			_ => {
-				required = Face.unique($required)
+				# These readers can still report problems when head or
+				# hhea prevents preparation. hmtx needs both counts,
+				# while post and GSUB need only the glyph count.
+				checked = match maxp {
+					Ok(glyph_count) => {
+						with_metrics = match hhea {
+							Ok(hh) => Face.collect($required, TableHmtx.from_tables(bytes, tables, hh.metric_count, glyph_count))
+							Err(_) => $required
+						}
+						with_names = Face.collect_all(with_metrics, TablePost.from_tables(bytes, tables, glyph_count))
+						Face.collect(with_names, LayoutGsub.from_tables(bytes, tables, options.max_lookups))
+					}
+					Err(_) => $required
+				}
+				required = Face.unique(checked)
 				Err(required.concat(Face.unique($optional).drop_if(|p| required.contains(p))))
 			}
 		}
