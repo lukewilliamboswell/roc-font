@@ -5,6 +5,12 @@ roc-font itself is under the Universal Permissive License 1.0
 others made, under which licence, and whether it reaches the published
 package.
 
+## Unicode properties
+
+The shaping tables use Unicode Character Database 18.0.0 data under
+the [Unicode License v3](tools/ucd/UNICODE-LICENSE.txt).
+The full notice also ships in the generated `ShaperUnicodeData.roc` module.
+
 ## Fonts in the package source
 
 Ten unmodified upstream static faces live in `package/fonts/`, each beside its
