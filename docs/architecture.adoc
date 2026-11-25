@@ -634,7 +634,7 @@ act on a problem match on it.
 
 The public `shape` operation returns clusters and positions.
 `shape_scalars_checked` serves callers that do their own itemisation.
-See link:scalar-shaping.adoc[shaping a run with paragraph offsets] for
+See xref:scalar-shaping.adoc#shape-a-run-with-paragraph-offsets[shaping a run with paragraph offsets] for
 input validation, cluster ranges and per-glyph tracing.
 
 [#shaping]

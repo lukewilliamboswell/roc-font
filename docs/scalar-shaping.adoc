@@ -13,7 +13,8 @@ characters to mirror. The right-to-left shape plan applies mirroring.
 Use the plan's direction for shaping and your paragraph and line analysis
 to place the resulting runs.
 
-This run is the middle of `"abc אבג tail"`. It starts at byte 4 and ends
+This paragraph has an ASCII prefix `abc `, three Hebrew letters and the
+ASCII suffix ` tail`. The Hebrew run starts at byte 4 and ends
 just before byte 10. The glyphs come back in visual order. Their ranges
 still address the original paragraph.
 
