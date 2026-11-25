@@ -4,6 +4,7 @@ import LayoutCommon
 import LayoutGdef
 import LayoutGsub
 import LayoutKerning
+import LayoutAttachment
 import LayoutVar
 import ShaperNormalize
 import ShaperTags
@@ -796,6 +797,9 @@ Shaper :: {}.{
 					$dx = $dx.set(i, 0) ?? []
 				}
 			}
+		}
+		if !positioned.parents.is_empty() {
+			$dx = LayoutAttachment.mark_x(positioned.parents, $ax, $dx, backward)
 		}
 		if p.fallback_marks {
 			{ items: fallback_items, ax: fallback_ax, dx: fallback_dx, dy: fallback_dy } = Shaper.position_marks(face, location, { items: $items, ax: $ax, dx: $dx, dy: $dy }, backward, p.backward, upem, adjust)
