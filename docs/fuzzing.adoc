@@ -137,10 +137,10 @@ The first command runs deterministic models and proofs in
 `fuzz/spec/main.roc` through the served package bundle. The second builds
 that app with `roc build --fuzz --opt=speed`, checks each model's declared
 examples and runs a short bounded search. Give each required goal a named
-example that reaches it. Check the native report for those witnesses so a
-short smoke run does not depend on mutation luck. Both commands also run
-as part of `blueprint run check`. To diagnose a native failure, use the
-replay command printed by the runner.
+example that reaches it. The smoke runner verifies these witnesses in the
+native report even when exploration reaches the same goals. Both commands
+also run as part of `blueprint run check`. To diagnose a native failure,
+use the replay command printed by the runner.
 
 == Targets and their contracts
 

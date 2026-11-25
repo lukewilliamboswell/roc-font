@@ -674,6 +674,20 @@ def spec_smoke(args: argparse.Namespace) -> int:
             for crash in harvest(name, report_dir):
                 replay = [str(binary), f"--target={name}", "replay", str(crash)]
                 print(f"Reproduce with {shlex.join(replay)}", file=sys.stderr)
+            continue
+        report_path = report_dir / "report.json"
+        if not report_path.is_file():
+            print(f"{name}: missing native report at {display(report_path)}", file=sys.stderr)
+            status = 1
+            continue
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        goals = report.get("goals") or {}
+        if goals.get("required"):
+            for goal in goals["inventory"]:
+                witness = goal.get("first") or {}
+                if witness.get("source") != "example":
+                    print(f"{name}: goal {goal['name']!r} needs a named example", file=sys.stderr)
+                    status = 1
     return status
 
 
