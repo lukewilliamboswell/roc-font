@@ -34,6 +34,10 @@ composition, swapping two marks of equal combining class checks both
 stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
 and a case where several limits are reported together.
+For table directories, move the same record between early and late
+positions while keeping the advertised byte range fixed. Combine its
+one-byte overrun with an independently damaged required table to check
+that both diagnostics survive, including their file offsets.
 For localized names, use distinct records that share a priority rank.
 Give each instance a different name identifier so a lookup by position
 would return a visibly different result.
@@ -144,6 +148,16 @@ For mark attachment, calculate the final pen and anchor coordinates from
 signed advances and independent anchors. Give each ligature component a
 distinct anchor, and keep the placement of a stacked mark sensitive to
 its parent's displacement.
+For variable mark anchors, vary the source and target independently and
+include positive and negative half-unit deltas. Reverse the order of
+static and variable writers so the final coordinates identify the last
+lookup. Check axis replacement, then reset the same prepared face.
+For mark lookup coverage, put a nonmark at the end of a later subtable's
+range and give shared glyphs distinct anchors in each subtable. Check that
+disabling the feature at one cluster leaves the other clusters active.
+When feature variations select the lookup, assert the face's normalized
+coordinates. Loading a font can apply CSS Regular to a weight axis whose
+design default differs.
 For Thai preprocessing, pair an authored nikhahit with one produced by
 SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.

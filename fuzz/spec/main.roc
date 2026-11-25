@@ -33,6 +33,7 @@ import Math
 import MathLocations
 import MathVariants
 import MarkAttachment
+import MarkCertification
 import MetricVariations
 import Metrics
 import Names
@@ -41,8 +42,10 @@ import Reverse
 import ScalarBreaks
 import ScalarShaping
 import SpaceWidths
-import Tracing
+import TableDirectory
 import Thai
+import Tracing
+import VariedAnchors
 import VariationReading
 import WidthBounds
 
@@ -72,6 +75,7 @@ expect Math.check({})
 expect MathLocations.check({})
 expect MathVariants.check({})
 expect MarkAttachment.check({})
+expect MarkCertification.check({})
 expect MetricVariations.check({})
 expect MetricVariations.wide_check({})
 expect Metrics.check({})
@@ -81,7 +85,9 @@ expect Reverse.check({})
 expect ScalarBreaks.check({})
 expect ScalarShaping.check({})
 expect SpaceWidths.check({})
-expect Tracing.check({})
+expect TableDirectory.check({})
 expect Thai.check({})
+expect Tracing.check({})
+expect VariedAnchors.check({})
 expect VariationReading.check({})
 expect WidthBounds.check({})
