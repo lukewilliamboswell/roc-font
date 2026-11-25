@@ -5,6 +5,7 @@ app [target] {
 }
 
 import fuzz.Fuzz
+import AlternateRanges
 import AxisMapping
 import Budgets
 import ClassPairs
@@ -23,6 +24,7 @@ import Features
 import Fractions
 import Gpos
 import Gsub
+import LegacyCmap
 import LookupFiltering
 import Math
 import MathLocations
@@ -35,10 +37,12 @@ import Reverse
 import ScalarBreaks
 import SpaceWidths
 import Tracing
+import VariationReading
 import WidthBounds
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
+expect AlternateRanges.check({})
 expect AxisMapping.check({})
 expect Budgets.check({})
 expect ClassPairs.check({})
@@ -53,6 +57,7 @@ expect FallbackMarks.check({})
 expect FeatureVariations.check({})
 expect Features.check({})
 expect Fractions.check({})
+expect LegacyCmap.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
 expect MathLocations.check({})
@@ -66,4 +71,5 @@ expect Reverse.check({})
 expect ScalarBreaks.check({})
 expect SpaceWidths.check({})
 expect Tracing.check({})
+expect VariationReading.check({})
 expect WidthBounds.check({})

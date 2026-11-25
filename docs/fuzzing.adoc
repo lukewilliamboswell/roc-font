@@ -83,6 +83,8 @@ pair and a second lookup to observe that boundary. Compare each glyph's
 advance and offset when the same total width can come from different
 placements. For variation records, give each table a different preference
 at a shared inclusive endpoint and probe one normalized unit on each side.
+For optional variation tables, keep two independently observable deltas
+so a dropped axis map can be distinguished from a dropped variation group.
 For feature selection,
 use a shared lookup that changes its own output on a second application,
 and scope the once-only rule to one shaping stage. For nested
@@ -99,12 +101,18 @@ metrics table across faces on either side of its storage location.
 For reverse chaining, give adjacent context positions distinct coverages
 and use a substitution that enables the next candidate in scan order.
 Compare direct and extension encodings of the same lookup.
+For alternate substitutions, put a shorter alternate set before a longer
+one for the same glyph. Request a choice only the longer set can supply,
+and use multibyte text to check the feature's byte range in both directions.
 When several formats can encode the same rule, write one expected run
 from the rule and compare every encoding with it. For class zero, include
 both covered and uncovered glyphs to check the coverage gate.
 For relative offsets, place the same glyph words near the start and at
 the last valid position. Sharing those words across segments with
 different deltas makes each segment's offset origin observable.
+For symbol aliases, include a direct mapping that wins, a zero entry
+that permits fallback, and two aliases for the same glyph. Check both
+nominal lookup and sorted, unique enumeration.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.

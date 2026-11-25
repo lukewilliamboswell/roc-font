@@ -101,9 +101,8 @@ Font :: { face : Face }.{
 	##   the part that is wrong (a count, an offset or a record that does not
 	##   fit, or a value the format does not allow).
 	## - `BadUnitsPerEm`: units per em outside 16 to 16384.
-	## - `NoUnicodeMapping`: no character map this reader can use (one for
-	##   Unicode, a Windows symbol map or a Macintosh map, in format 0, 4, 6,
-	##   10, 12 or 13).
+	## - `NoUnicodeMapping`: no usable Unicode or Windows symbol character map
+	##   that passes validation.
 	##
 	## `describe_problem` puts any of them into words.
 	Problem : [
@@ -217,9 +216,8 @@ Font :: { face : Face }.{
 	glyph_count : Font -> U32
 	glyph_count = |font| Face.glyph_total(font.face).min(0xFFFFFFFF).to_u32_wrap()
 
-	## The glyph that draws a Unicode code point, if the font has one. Fonts
-	## whose character map is not in Unicode (old symbol fonts and Macintosh
-	## fonts) are translated to Unicode the way HarfBuzz does.
+	## The glyph that draws a Unicode code point, if the font has one. Windows
+	## symbol maps also resolve their translated Unicode aliases.
 	glyph : Font, U32 -> Try(U32, [Missing])
 	glyph = |font, code_point|
 		match Face.glyph(font.face, code_point) {
