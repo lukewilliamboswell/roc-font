@@ -147,7 +147,7 @@ LayoutKerning := {
 				# `sanitize_lookup_props`).
 				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props.bitwise_and(0xFFFFFFFF))
 				kind = lookup.props.shr_zf_wrap(32)
-				if kind == 4 or kind == 6 {
+				if kind == 4 or kind == 5 or kind == 6 {
 					$out = LayoutKerning.apply_mark_lookup(kerning, start, end, { mask: entry.mask, props, kind }, $out)
 				} else {
 					$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
@@ -243,13 +243,14 @@ LayoutKerning := {
 		{ items: $items, dx: $dx, dy: $dy, ax: $ax, parents }
 	}
 
-	# Every mark lookup scans forward. Type 4 caches the target and the
+	# Every mark lookup scans forward. Types 4 and 5 cache the target and the
 	# start of the next backward search, so each item is visited at most
 	# once by the target search. Type 6 keeps the previous visible mark.
 	apply_mark_lookup : LayoutKerning, U64, U64, { mask : U64, props : U64, kind : U64 }, Positions -> Positions
 	apply_mark_lookup = |kerning, start, end, ctx, positions| {
 		{ items, dx, dy, ax, parents } = positions
 		no_parent = LayoutAttachment.none
+		count = items.len()
 		var $items = items
 		var $dx = dx
 		var $dy = dy
@@ -257,7 +258,7 @@ LayoutKerning := {
 		var $last_base = no_parent
 		var $base_until = 0
 		var $last_mark = no_parent
-		for i in 0..<items.len() {
+		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
 			masked = LayoutGsub.applies(item.mask, ctx.mask)
 			if masked and LayoutKerning.sees(kerning.gdef, item, ctx.props) {
@@ -268,20 +269,27 @@ LayoutKerning := {
 							match LayoutMark.mark_index(table, kerning.data, item.glyph) {
 								Err(_) => {}
 								Ok(mark_index) => {
-									if ctx.kind == 4 and $base_until < i {
-										$last_base = LayoutKerning.mark_base(kerning.data, table, $items, i, $base_until, $last_base, ctx.mask)
+									if ctx.kind != 6 and $base_until < i {
+										$last_base = LayoutKerning.mark_base(kerning.data, table, $items, i, $base_until, $last_base, ctx.mask, ctx.kind == 5)
 										$base_until = i
 									}
 									parent = if (ctx.kind == 6) $last_mark else $last_base
 									if parent < i {
 										target = $items.get(parent) ?? LayoutGsub.no_item
 										if ctx.kind != 6 or LayoutKerning.same_mark_base(item, target) {
-											match LayoutMark.anchors(table, kerning.data, mark_index, target.glyph) {
+											rows = if ctx.kind == 5 {
+												id = LayoutGsub.lig_id(target)
+												component = if (id != 0 and id == LayoutGsub.lig_id(item)) LayoutGsub.lig_comp(item) else 0
+												Ligature(component)
+											} else {
+												Flat
+											}
+											match LayoutMark.anchors(table, kerning.data, mark_index, target.glyph, rows) {
 												Err(_) => {}
 												Ok(anchors) => {
 													$items = LayoutKerning.unsafe_to_break($items, parent, i + 1)
 													if $parents.is_empty() {
-														$parents = List.repeat(no_parent, items.len())
+														$parents = List.repeat(no_parent, count)
 													}
 													# HarfBuzz stores the relative attachment index as signed 16-bit.
 													if i - parent <= 32768 {
@@ -318,14 +326,19 @@ LayoutKerning := {
 	# A mark-to-base lookup skips marks and default-ignorables. For the
 	# output of a multiple substitution, noninitial pieces count as
 	# targets only when the subtable explicitly covers them.
-	mark_base : List(U8), LayoutMark, List(LayoutGsub.Item), U64, U64, U64, U64 -> U64
-	mark_base = |data, table, items, i, from, previous, mask| {
+	mark_base : List(U8), LayoutMark, List(LayoutGsub.Item), U64, U64, U64, U64, Bool -> U64
+	mark_base = |data, table, items, i, from, previous, mask, ligatures| {
 		var $j = i
 		while $j > from {
 			$j = $j - 1
 			item = items.get($j) ?? LayoutGsub.no_item
 			if LayoutGsub.applies(item.mask, mask) and !LayoutGsub.is_mark_item(item) and !LayoutGsub.is_default_ignorable(item) {
-				if LayoutKerning.first_multiple_piece(items, $j, item) or LayoutMark.covers_target(table, data, item.glyph) {
+				accept = if ligatures {
+					LayoutGsub.gprops(item).bitwise_and(LayoutGsub.multiplied) == 0 or LayoutGsub.lig_comp(item) == 0
+				} else {
+					LayoutKerning.first_multiple_piece(items, $j, item)
+				}
+				if accept or LayoutMark.covers_target(table, data, item.glyph) {
 					return $j
 				}
 			}
@@ -762,7 +775,7 @@ LayoutKerning := {
 					return Err(Bad(lookup))
 				}
 				$props = if (filtering) flag + Bytes.u16(gpos, lookup + 6 + 2 * count) * 65536 else flag
-				if kind == 2 or kind == 4 or kind == 6 or kind == 9 {
+				if kind == 2 or kind == 4 or kind == 5 or kind == 6 or kind == 9 {
 					$steps = LayoutKerning.spend(gpos, $steps, count)?
 					var $supported_kind = 0
 					for s in 0..<count {
@@ -770,7 +783,7 @@ LayoutKerning := {
 						extended = kind == 9 and Bytes.fits(at, 8, size)
 						subkind = if (extended) Bytes.u16(gpos, at + 2) else kind
 						target = if (extended) at + Bytes.u32(gpos, at + 4) else at
-						if subkind == 2 or subkind == 4 or subkind == 6 {
+						if subkind == 2 or subkind == 4 or subkind == 5 or subkind == 6 {
 							if $supported_kind != 0 and $supported_kind != subkind {
 								return Err(Bad(at))
 							}
@@ -789,11 +802,11 @@ LayoutKerning := {
 								Err(Exhausted(problem)) => return Err(Bad(problem.offset))
 							}
 							$subtables = $subtables.append(done.value)
-						} else if subkind == 4 or subkind == 6 {
+						} else if subkind == 4 or subkind == 5 or subkind == 6 {
 							if extended and (Bytes.u16(gpos, at) != 1 or Bytes.u32(gpos, at + 4) == 0) {
 								return Err(Bad(at))
 							}
-							done = LayoutMark.read(gpos, target, glyph_count, $steps, lv, $deltas)?
+							done = LayoutMark.read(gpos, target, glyph_count, $steps, subkind == 5, lv, $deltas)?
 							$deltas = done.deltas
 							$steps = done.steps
 							$subtables = $subtables.append(Mark(done.value))

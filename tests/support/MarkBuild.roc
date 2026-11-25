@@ -31,6 +31,16 @@ MarkBuild :: {}.{
 		MarkBuild.subtable(marks, classes, rows.map(|row| row.glyph), array)
 	}
 
+	## Format 1 mark-to-ligature subtables. A target has one row per component.
+	ligatures : List(Mark), U64, List({ glyph : U64, components : List(List(List(U8))) }) -> List(U8)
+	ligatures = |marks, classes, ligature_rows| {
+		attachments = ligature_rows.map(
+			|target| Ref(FontBuild.pack([U16(target.components.len())].concat(target.components.join_map(|row| row.map(MarkBuild.optional))))),
+		)
+		array = FontBuild.pack([U16(ligature_rows.len())].concat(attachments))
+		MarkBuild.subtable(marks, classes, ligature_rows.map(|target| target.glyph), array)
+	}
+
 	subtable : List(Mark), U64, List(U64), List(U8) -> List(U8)
 	subtable = |marks, classes, glyphs, parent_array| FontBuild.pack(
 		[U16(1), Ref(FontBuild.coverage1(marks.map(|m| m.glyph))), Ref(FontBuild.coverage1(glyphs)), U16(classes), Ref(MarkBuild.mark_array(marks)), Ref(parent_array)],

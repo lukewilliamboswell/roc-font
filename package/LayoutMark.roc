@@ -3,7 +3,7 @@ import LayoutAnchor
 import LayoutCoverage
 import LayoutVar
 
-## GPOS mark-to-base and mark-to-mark format 1 subtables. Read validates
+## GPOS mark-to-base, mark-to-ligature and mark-to-mark format 1 subtables. Read validates
 ## the coverage, class and anchor references once. The prepared subtable
 ## keeps offsets, so applying a lookup reads only the selected anchors.
 LayoutMark := {
@@ -14,8 +14,8 @@ LayoutMark := {
 	target_array : U64,
 }.{
 
-	read : List(U8), U64, U64, U64, LayoutVar, List(U64) -> Try({ value : LayoutMark, steps : U64, deltas : List(U64) }, [Bad(U64)])
-	read = |data, at, glyph_count, steps, lv, deltas| {
+	read : List(U8), U64, U64, U64, Bool, LayoutVar, List(U64) -> Try({ value : LayoutMark, steps : U64, deltas : List(U64) }, [Bad(U64)])
+	read = |data, at, glyph_count, steps, ligatures, lv, deltas| {
 		if !Bytes.fits(at, 12, data.len()) or Bytes.u16(data, at) != 1 {
 			return Err(Bad(at))
 		}
@@ -42,7 +42,11 @@ LayoutMark := {
 			anchor = LayoutMark.required(data, marks, record + 2, 6)?
 			$deltas = LayoutAnchor.check(data, anchor, lv, $deltas)?
 		}
-		checked = LayoutMark.check_matrix(data, target_array, target_index.count, classes, spent, lv, $deltas)?
+		checked = if ligatures {
+			LayoutMark.check_ligatures(data, target_array, target_index.count, classes, spent, lv, $deltas)?
+		} else {
+			LayoutMark.check_matrix(data, target_array, target_index.count, classes, spent, lv, $deltas)?
+		}
 		Ok({ value: { mark_coverage, target_coverage, classes, marks, target_array }, steps: checked.steps, deltas: checked.deltas })
 	}
 
@@ -51,6 +55,22 @@ LayoutMark := {
 		offset = Bytes.u16(data, field)
 		target = base + offset
 		if (offset != 0 and Bytes.fits(target, size, data.len())) Ok(target) else Err(Bad(field))
+	}
+
+	check_ligatures : List(U8), U64, U64, U64, U64, LayoutVar, List(U64) -> Try({ steps : U64, deltas : List(U64) }, [Bad(U64)])
+	check_ligatures = |data, at, count, classes, steps, lv, deltas| {
+		if !Bytes.fits(at + 2, 2 * count, data.len()) {
+			return Err(Bad(at))
+		}
+		var $spent = LayoutVar.spend(data, steps, count).map_err(|_| Bad(at))?
+		var $deltas = deltas
+		for index in 0..<count {
+			attach = LayoutMark.required(data, at, at + 2 + 2 * index, 2)?
+			checked = LayoutMark.check_matrix(data, attach, Bytes.u16(data, attach), classes, $spent, lv, $deltas)?
+			$spent = checked.steps
+			$deltas = checked.deltas
+		}
+		Ok({ steps: $spent, deltas: $deltas })
 	}
 
 	## A base, mark2, or ligature component anchor matrix, with nullable
@@ -84,16 +104,30 @@ LayoutMark := {
 	covers_target = |shape, data, glyph| LayoutCoverage.index(data, shape.target_coverage, glyph).is_ok()
 
 	## The two anchors selected by the mark class and target glyph.
-	anchors : LayoutMark, List(U8), U64, U64 -> Try({ mark : U64, target : U64 }, [NotCovered])
-	anchors = |shape, data, mark_number, glyph| {
+	anchors : LayoutMark, List(U8), U64, U64, [Flat, Ligature(U64)] -> Try({ mark : U64, target : U64 }, [NotCovered])
+	anchors = |shape, data, mark_number, glyph, rows| {
 		index = LayoutCoverage.index(data, shape.target_coverage, glyph)?
 		record = shape.marks + 2 + 4 * mark_number
 		class = Bytes.u16(data, record)
-		target_offset = Bytes.u16(data, shape.target_array + 2 + 2 * (index * shape.classes + class))
+		(matrix, row) = match rows {
+			Flat => (shape.target_array, index)
+			Ligature(component) => {
+				attach = shape.target_array + Bytes.u16(data, shape.target_array + 2 + 2 * index)
+				count = Bytes.u16(data, attach)
+				if count == 0 {
+					return Err(NotCovered)
+				}
+				# A component number from GSUB is one-based. A mark without
+				# matching provenance belongs to the last component.
+				selected = if (component == 0 or component > count) count else component
+				(attach, selected - 1)
+			}
+		}
+		target_offset = Bytes.u16(data, matrix + 2 + 2 * (row * shape.classes + class))
 		if target_offset == 0 {
 			Err(NotCovered)
 		} else {
-			Ok({ mark: shape.marks + Bytes.u16(data, record + 2), target: shape.target_array + target_offset })
+			Ok({ mark: shape.marks + Bytes.u16(data, record + 2), target: matrix + target_offset })
 		}
 	}
 }
