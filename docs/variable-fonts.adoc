@@ -241,6 +241,13 @@ disagree after rounding.
 |`HVAR`, as HarfBuzz and browsers. fontTools static instances are not an
 advance oracle.
 
+|Extreme horizontal advances
+|HarfBuzz 14.6.0 adds the base and rounded delta in single precision.
+A result near or above 2^31 can become negative when converted to its
+signed position type. https://github.com/harfbuzz/harfbuzz/blob/14.6.0/src/hb-ot-hmtx-table.hh#L440[HarfBuzz advance calculation]
+|roc-font adds the rounded delta to the base in integer font units and
+holds individual horizontal advances in the range 0 through `I32.highest`.
+
 |Region axis with `start < 0 < end` and `peak != 0`, at coordinate 0
 |The specification and fontTools ignore the axis (scalar 1); HarfBuzz
 tests `coord == 0` first and gives 0.

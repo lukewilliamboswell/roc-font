@@ -926,10 +926,19 @@ TableVar := {
 	}
 
 	## A glyph's advance at a location: the default advance plus its rounded
-	## delta, never below zero (as HarfBuzz; `hmtx` advances are unsigned).
+	## delta, bounded by the nonnegative part of the public I32 range.
 	advance : Hvar, List(U32), U64, I64 -> I64
-	advance = |hvar, scalars, glyph, default_advance|
-		(default_advance + TableVar.advance_delta(hvar, scalars, glyph)).max(0)
+	advance = |hvar, scalars, glyph, default_advance| {
+		total = default_advance + TableVar.advance_delta(hvar, scalars, glyph)
+		# One unsigned comparison handles both limits before narrowing.
+		if total.to_u64_wrap() <= 2147483647 {
+			total
+		} else if total < 0 {
+			0
+		} else {
+			2147483647
+		}
+	}
 
 	## Read `MVAR` for a font with `axis_count` axes.
 	read_mvar : List(U8), U64 -> Try(Mvar, List(Problem))

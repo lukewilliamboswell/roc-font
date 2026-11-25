@@ -226,8 +226,9 @@ Font :: { face : Face }.{
 			Err(Missing) => Err(Missing)
 		}
 
-	## A glyph's advance width, at the font's location. A glyph id past the
-	## font has an advance of 0, as in HarfBuzz.
+	## A glyph's advance width at the font's location. Advances above
+	## the range of `I32` are held at its upper limit. A glyph id past
+	## the font has an advance of 0.
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
@@ -779,8 +780,7 @@ Font :: { face : Face }.{
 	## units = Font.width(Font.sans, "Hello, world!") # 12111, at 2048 units to the em
 	## ```
 	##
-	## A total beyond the range of `I32` (only possible for text of tens of
-	## thousands of glyphs at the largest advances) is held at its limit.
+	## A total beyond the range of `I32` is held at its limit.
 	width : Font, Str -> I32
 	width = |font, text| Font.width_planned(font, Font.plan(font, ShapeOptions.{}), text)
 
