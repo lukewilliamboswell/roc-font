@@ -7,6 +7,7 @@ import LayoutKerning
 import LayoutAttachment
 import LayoutVar
 import ShaperArabic
+import ShaperIndic
 import ShaperNormalize
 import ShaperTags
 import ShaperThai
@@ -50,6 +51,8 @@ Shaper :: {}.{
 		backward : Bool,
 		native : [Ltr, Rtl, Either],
 		gsub : List(LayoutGsub.Step),
+		gsub_stages : U64,
+		indic : [Indic(ShaperIndic.Plan), Default],
 		gpos : List({ index : U64, mask : U64 }),
 		kern : [Kern(U64), NoKern],
 		global_mask : U64,
@@ -61,7 +64,6 @@ Shaper :: {}.{
 		hebrew : Bool,
 		thai : Bool,
 		arabic : [None, Joining({ masks : ShaperArabic.Masks, context : ShaperArabic.Context })],
-		gsub_stages : U64,
 		characters : Bool,
 		has_gpos_mark : Bool,
 		fallback_marks : Bool,
@@ -200,6 +202,30 @@ Shaper :: {}.{
 	mark_tag : U64
 	mark_tag = Shaper.tag("mark")
 
+	## Modern Indic runs apply composition and localized forms first, then
+	## the basic forms in their own stages, then the presentation features.
+	indic_requests : List(Request)
+	indic_requests = {
+		early = Shaper.ltr_requests.keep_if(|f| f.tag != Shaper.tag("liga")).map(
+			|f| if (f.stage == 0 or f.tag == Shaper.tag("locl") or f.tag == Shaper.tag("ccmp")) f else { ..f, stage: ShaperIndic.final_stage },
+		)
+		basic = [("nukt", True), ("akhn", True), ("rphf", False), ("rkrf", True), ("pref", False), ("blwf", False), ("abvf", False), ("half", False), ("pstf", False), ("vatu", True), ("cjct", True)]
+		presentation = ["pres", "abvs", "blws", "psts", "haln"]
+		early.concat(basic.map_with_index(|(name, global), i| { ..Shaper.request(name, 1, global), stage: i + 2, manual: True }))
+			.append({ ..Shaper.request("init", 1, False), stage: ShaperIndic.final_stage, manual: True })
+			.concat(presentation.map(|name| { ..Shaper.request(name, 1, True), stage: ShaperIndic.final_stage, manual: True }))
+	}
+
+	indic_merged : List(Request)
+	indic_merged = Shaper.merge(Shaper.indic_requests)
+
+	indic_keys : List(U64)
+	indic_keys = LayoutCommon.feature_keys(Shaper.indic_merged.map(|f| f.tag))
+
+	indic_only : U64, U64 -> Bool
+	indic_only = |stage, wanted|
+		stage > 0 and (stage < ShaperIndic.final_stage or ["init", "pres", "abvs", "blws", "psts", "haln"].any(|name| Shaper.tag(name) == wanted))
+
 	plan : Face, Options -> Plan
 	plan = |face, options| Shaper.plan_with_clusters(face, options, Graphemes)
 
@@ -232,11 +258,16 @@ Shaper :: {}.{
 		gsub_common = LayoutGsub.common_of(gsub_table)
 		kerning = Face.kerning(face)
 		gpos_common = LayoutKerning.common_of(kerning)
+		indic = requested == Ltr and script == Shaper.tag("Deva")
+			and lang.languages.first() == Ok(Shaper.tag("HIN "))
+			and LayoutCommon.select_script_tag(gsub_common, script_tags) == Shaper.tag("dev2")
 		gsub_langsys = LayoutCommon.select_langsys(gsub_common, LayoutCommon.select_script(gsub_common, script_tags), lang.languages)
 		gpos_langsys = LayoutCommon.select_langsys(gpos_common, LayoutCommon.select_script(gpos_common, script_tags), lang.languages)
 		# rclt removes the pause after calt when either layout table
 		# declares it in the selected language system.
-		final_stage = if !arabic {
+		final_stage = if indic {
+			ShaperIndic.final_stage
+		} else if !arabic {
 			1
 		} else {
 			rclt = LayoutCommon.feature_keys([Shaper.tag("rclt")])
@@ -246,7 +277,9 @@ Shaper :: {}.{
 		gsub_stages = final_stage + 1
 		# The features HarfBuzz's shaper asks for, then the caller's.
 		merged =
-			if !arabic and options.features.is_empty() {
+			if indic and options.features.is_empty() {
+				Shaper.indic_merged
+			} else if !arabic and options.features.is_empty() {
 				match requested {
 					Ltr => Shaper.ltr_merged
 					Rtl => Shaper.rtl_merged
@@ -254,6 +287,8 @@ Shaper :: {}.{
 			} else {
 				defaults = if arabic {
 					Shaper.arabic_requests(requested, final_stage)
+				} else if indic {
+					Shaper.indic_requests
 				} else {
 					match requested {
 						Ltr => Shaper.ltr_requests
@@ -270,7 +305,9 @@ Shaper :: {}.{
 				Shaper.merge(Shaper.sort_by_tag($requests))
 			}
 		keys =
-			if !arabic and options.features.is_empty() {
+			if indic and options.features.is_empty() {
+				Shaper.indic_keys
+			} else if !arabic and options.features.is_empty() {
 				match requested {
 					Ltr => Shaper.ltr_keys
 					Rtl => Shaper.rtl_keys
@@ -331,14 +368,34 @@ Shaper :: {}.{
 		variations = Face.feature_variations(face)
 		gsub_varied = { subs: LayoutVar.substitutions_at(variations.gsub, variations.lv, variations.coords), fv: variations.gsub, lookup_vars: LayoutVar.lookup_variations_at(variations.gsub, variations.lv, variations.coords) }
 		gpos_varied = { subs: LayoutVar.substitutions_at(variations.gpos, variations.lv, variations.coords), fv: variations.gpos, lookup_vars: LayoutVar.lookup_variations_at(variations.gpos, variations.lv, variations.coords) }
-		gsub = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, gsub_stages, Gsub, gsub_varied)
+		gsub_lookups = Shaper.lookups(gsub_common, gsub_required, $gsub_required_stage, mapped, gsub_stages, Gsub, gsub_varied, indic)
+		gsub = gsub_lookups.steps
+		indic_plan = if indic {
+			ra = Face.glyph(face, 0x0930) ?? U64.highest
+			halant = Face.glyph(face, 0x094D) ?? U64.highest
+			ends = gsub_lookups.ends
+			reph_allowed = LayoutGsub.would_ligate(gsub_table, gsub, ends.get(3) ?? 0, ends.get(4) ?? 0, ra, halant)
+			ra_below = LayoutGsub.would_ligate(gsub_table, gsub, ends.get(6) ?? 0, ends.get(7) ?? 0, halant, ra)
+				or LayoutGsub.would_ligate(gsub_table, gsub, ends.get(6) ?? 0, ends.get(7) ?? 0, ra, halant)
+			dotted = match Face.glyph(face, 0x25CC) {
+				Err(_) => Absent
+				Ok(glyph) => {
+					gdef = Face.gdef_of(face)
+					props = if (LayoutGdef.has_glyph_classes(gdef)) LayoutGdef.glyph_props(gdef, glyph) else LayoutGsub.base_glyph
+					Present({ glyph, cluster: 0, mask: $global_mask, props: ShaperUnicode.props(0x25CC).bitwise_or(props.shl_wrap(16)) })
+				}
+			}
+			Indic({ ends, reph: if (reph_allowed) one_mask_of(Shaper.tag("rphf")) else 0, half: one_mask_of(Shaper.tag("half")), below: one_mask_of(Shaper.tag("blwf")), above: one_mask_of(Shaper.tag("abvf")), post: one_mask_of(Shaper.tag("pstf")), init: one_mask_of(Shaper.tag("init")), ra_below, dotted })
+		} else {
+			Default
+		}
 		# HarfBuzz's Hebrew shaper uses `GPOS` only when it has the `hebr`
 		# script.
 		disable_gpos = hebrew and LayoutCommon.select_script_tag(gpos_common, script_tags) != Shaper.hebrew_tag
 		apply_gpos = LayoutKerning.has_gpos(kerning) and !disable_gpos
 		gpos =
 			if apply_gpos {
-				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied).map(|s| { index: s.index, mask: s.mask })
+				Shaper.lookups(gpos_common, gpos_required, 0, mapped, 1, Gpos, gpos_varied, False).steps.map(|s| { index: s.index, mask: s.mask })
 			} else {
 				[]
 			}
@@ -377,6 +434,8 @@ Shaper :: {}.{
 			backward: requested == Rtl,
 			native,
 			gsub,
+			gsub_stages,
+			indic: indic_plan,
 			gpos,
 			kern,
 			global_mask: $global_mask,
@@ -388,13 +447,12 @@ Shaper :: {}.{
 			hebrew,
 			thai,
 			arabic: arabic_plan,
-			gsub_stages,
 			characters: clusters == Characters,
 			has_gpos_mark: one_mask_of(Shaper.mark_tag) != 0,
 			# HarfBuzz positions marks itself when nothing else does: no
 			# `GPOS` and no `kern` with cross-stream kerning (which
 			# roc-font does not read).
-			fallback_marks: !thai and !apply_gpos,
+			fallback_marks: !thai and !indic and !apply_gpos,
 			growth: options.growth,
 			operations: options.operations,
 			mapped,
@@ -492,18 +550,20 @@ Shaper :: {}.{
 	## both do). The language system's required feature applies everywhere,
 	## in `required_stage`. A feature's lookups are as feature variations
 	## have them at the face's location (`varied_feature_lookups`).
-	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied -> List(LayoutGsub.Step)
-	lookups = |common, required, required_stage, mapped, stages, table, varied| {
+	lookups : LayoutCommon, U64, U64, List(Mapped), U64, [Gsub, Gpos], Varied, Bool -> { steps : List(LayoutGsub.Step), ends : List(U64) }
+	lookups = |common, required, required_stage, mapped, stages, table, varied, indic| {
 		count = common.lookup_count
 		# Every stage's lookups in one list: stage `s`, lookup `l` at
 		# `s * count + l` (a feature's stage is below `stages`), each entry
 		# the lookup's mask (bits 0 to 31) and its kind (bits 32 to 34). Bit
 		# 32: some feature asks; bit 33: ZWNJ is matched manually; bit 34:
-		# the first feature is `rand`; bit 35: ZWJ is matched manually.
+		# the first feature is `rand`; bit 35: ZWJ is matched manually;
+		# bit 36: matches stay within the current syllable.
 		asks = 0x100000000.U64
 		zwnj = 0x200000000
 		zwj = 0x800000000
 		random_first = 0x400000000
+		syllable = 0x1000000000
 		var $entries = List.repeat(0.U64, stages * count)
 		# Lookups are read where the font lists them unless feature
 		# variations are in force.
@@ -527,7 +587,10 @@ Shaper :: {}.{
 			}
 			if index != LayoutCommon.no_feature and feature_stage < stages {
 				base = feature_stage * count
-				added = m.mask.bitwise_and(0xFFFFFFFF).bitwise_or(asks).bitwise_or(if (m.manual) zwnj else 0).bitwise_or(if (m.manual or m.manual_zwj) zwj else 0)
+				added = m.mask.bitwise_and(0xFFFFFFFF).bitwise_or(asks)
+					.bitwise_or(if (m.manual) zwnj else 0)
+					.bitwise_or(if (m.manual or m.manual_zwj) zwj else 0)
+					.bitwise_or(if (indic and Shaper.indic_only(feature_stage, m.tag)) syllable else 0)
 				if in_place {
 					# `LayoutCommon.feature_lookups` without making the list.
 					data = common.data
@@ -561,14 +624,22 @@ Shaper :: {}.{
 			}
 		}
 		var $out = List.with_capacity($steps)
-		for at in 0..<(stages * count) {
-			entry = $entries.get(at) ?? 0
-			mask = entry.bitwise_and(0xFFFFFFFF)
-			if mask != 0 {
-				$out = $out.append({ index: at % count, mask, auto_zwnj: entry.bitwise_and(zwnj) == 0, auto_zwj: entry.bitwise_and(zwj) == 0, random: entry.bitwise_and(random_first) != 0 })
+		var $ends = if (indic) List.with_capacity(stages) else []
+		for stage in 0..<stages {
+			base = stage * count
+			for lookup in 0..<count {
+				entry = $entries.get(base + lookup) ?? 0
+				mask = entry.bitwise_and(0xFFFFFFFF)
+				if mask != 0 {
+					step_mask = if (entry.bitwise_and(syllable) != 0) mask.bitwise_or(LayoutGsub.per_syllable) else mask
+					$out = $out.append({ index: lookup, mask: step_mask, auto_zwnj: entry.bitwise_and(zwnj) == 0, auto_zwj: entry.bitwise_and(zwj) == 0, random: entry.bitwise_and(random_first) != 0 })
+				}
+			}
+			if indic {
+				$ends = $ends.append($out.len())
 			}
 		}
-		$out
+		{ steps: $out, ends: $ends }
 	}
 
 	# ------------------------------------------------------------ shaping
@@ -836,10 +907,20 @@ Shaper :: {}.{
 				} else {
 					LayoutGsub.base_glyph
 				}
-			$items = $items.append({ glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) })
+			item = { glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) }
+			$items = $items.append(
+				match p.indic {
+					Indic(_) => ShaperIndic.set_properties(item, c.cp)
+					Default => item
+				},
+			)
 		}
 		budget = (p.operations * n).max(16384)
-		applied = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
+		limits = { limit, budget, depth: Face.max_depth(face) }
+		applied = match p.indic {
+			Indic(indic_run) => ShaperIndic.apply(gsub, p.gsub, $items, limits, indic_run)
+			Default => LayoutGsub.apply(gsub, p.gsub, $items, limits)
+		}
 		placed = Shaper.position(face, location, p, applied.items, backward, space_fallback, found.ignorables)
 		stopped = if (thai_stopped) applied.stopped.bitwise_or(LayoutGsub.stopped_growth) else applied.stopped
 		{ run: Shaper.finish(placed), items: placed.items, stopped }
@@ -867,14 +948,16 @@ Shaper :: {}.{
 		# Marks take no advance (HarfBuzz zeroes them after `GPOS`); without
 		# `GPOS`, in forward text a mark keeps hanging over the glyph before.
 		adjust = p.fallback_marks and !backward
-		for i in 0..<count {
-			item = $items.get(i) ?? LayoutGsub.no_item
-			if LayoutGsub.is_mark_item(item) {
-				if adjust {
-					# `i < count`, the lists' length.
-					$dx = $dx.set(i, ($dx.get(i) ?? 0) - ($ax.get(i) ?? 0)) ?? []
+		if p.indic == Default {
+			for i in 0..<count {
+				item = $items.get(i) ?? LayoutGsub.no_item
+				if LayoutGsub.is_mark_item(item) {
+					if adjust {
+						# `i < count`, the lists' length.
+						$dx = $dx.set(i, ($dx.get(i) ?? 0) - ($ax.get(i) ?? 0)) ?? []
+					}
+					$ax = $ax.set(i, 0) ?? []
 				}
-				$ax = $ax.set(i, 0) ?? []
 			}
 		}
 		if ignorables {

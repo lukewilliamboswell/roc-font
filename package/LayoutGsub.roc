@@ -771,6 +771,35 @@ LayoutGsub := {
 			$n
 		}
 
+	## Test the exact two-glyph input of a direct ligature lookup. Modern
+	## Devanagari uses this during planning, before actual substitutions.
+	would_ligate : LayoutGsub, List(Step), U64, U64, U64, U64 -> Bool
+	would_ligate = |shape, steps, start, end, left, right| {
+		for i in start..<end {
+			lookup = shape.lookups.get((steps.get(i) ?? { index: U64.highest, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }).index) ?? LayoutGsub.no_lookup
+			for j in lookup.start..<(lookup.start + lookup.count) {
+				sub = shape.subtables.get(j) ?? LayoutGsub.no_sub
+				if sub.kind == 4 {
+					match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, left) {
+						Ok(at) if at < sub.data_len => {
+							last = shape.values.get(sub.data + at + 1) ?? 0
+							var $p = shape.values.get(sub.data + at) ?? 0
+							while $p < last {
+								count = shape.values.get($p + 1) ?? 0
+								if count == 1 and (shape.values.get($p + 2) ?? U64.highest) == right {
+									return True
+								}
+								$p = $p + 2 + count
+							}
+						}
+						_ => {}
+					}
+				}
+			}
+		}
+		False
+	}
+
 	# Ligature substitution (HarfBuzz's `LigatureSet::apply`): the first
 	# ligature of the set whose components match, skipping what the lookup
 	# flags skip.
