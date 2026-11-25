@@ -757,7 +757,8 @@ def ratchet(baseline: dict, measured: dict[str, dict], all_ids: set[str], compil
                              "message": (f"{key} rose from {old.get(key)} to {new[key]}" if worse else
                                          f"{key} fell from {old.get(key)} to {new[key]}; lock it in with "
                                          "--update-baseline")})
-    if any(f["fail"] for f in findings) and compiler_changed(baseline, compiler):
+    counts_changed = any(f["status"] in ("regression", "improvement") for f in findings)
+    if counts_changed and compiler_changed(baseline, compiler):
         # Listed first: after a compiler change, differing counts are expected.
         findings.insert(0, {"case": "-", "status": "compiler-changed", "fail": False,
                             "message": compiler_change_note(baseline, compiler)})
@@ -1147,10 +1148,11 @@ def run(args, dep: list[str]) -> int:
         failed = True
     if measured:
         ratchet_failed = any(f["fail"] for f in findings)
+        compiler_note = any(f["status"] == "compiler-changed" for f in findings)
         log("ratchet: " + ("FAILED" if ratchet_failed else "passed")
             + ("" if baseline else " (no baseline yet; run --update-baseline)")
             + (" with a different compiler than the baseline's; see compiler-changed above"
-               if ratchet_failed and compiler_changed(baseline, compiler) else ""))
+               if compiler_note else ""))
     if not baseline and measured:
         failed = True
     return 1 if failed else 0
