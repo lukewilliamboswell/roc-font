@@ -6,7 +6,7 @@ app [target] {
 
 import font.Font
 import fuzz.Fuzz
-import MarkFixture
+import src/MarkFixture
 import "../tests/fonts/mark-attachment/DavidLibre-Regular.ttf" as david : List(U8)
 
 ## Mark subtables with a class beyond the anchor matrix, a coverage

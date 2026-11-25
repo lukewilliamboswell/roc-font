@@ -7,7 +7,7 @@ app [target] {
 import build.FontBuild
 import font.Font
 import fuzz.Fuzz
-import MarkFixture
+import src/MarkFixture
 import "../tests/fonts/mark-attachment/DavidLibre-Regular.ttf" as david : List(U8)
 
 ## Mark-to-base, mark-to-ligature and mark-to-mark. Generated fonts share
