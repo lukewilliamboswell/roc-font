@@ -40,6 +40,9 @@ would return a visibly different result.
 For font-wide metric variation, give each fallback source distinct
 values. Include signed half-unit ties so the result shows whether
 rounding happened after the regional contributions were added.
+For signed width bounds, use runs with prefixes that exceed opposite
+limits and cancel to the same representable total. Check cancellation
+within one glyph separately so clipping at each lookup is observable.
 
 * Use `Model` when action order or interactions between choices matter.
   State the action alphabet, bounds and facts that distinguish states.
@@ -105,6 +108,12 @@ different deltas makes each segment's offset origin observable.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
+For automatic fractions, map a decimal digit and a superscript to the
+same glyph. Use a separate form for a digit between two fraction slashes
+so the result exposes both sets of feature masks.
+For fallback spaces, let an explicit mapping share the space glyph
+with a fallback. Vary the donor's advance so the widths expose which
+characters required fallback.
 For coordinate remapping, bend two axes differently and give each axis
 its own observable advance. Put CSS Regular at a different point from
 the font's declared weight so an omitted setting identifies the default

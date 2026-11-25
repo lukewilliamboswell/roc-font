@@ -19,6 +19,7 @@ import DeltaMap
 import Direction
 import FeatureVariations
 import Features
+import Fractions
 import Gpos
 import Gsub
 import LookupFiltering
@@ -29,7 +30,9 @@ import Metrics
 import Names
 import Outlines
 import Reverse
+import SpaceWidths
 import Tracing
+import WidthBounds
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
@@ -45,6 +48,7 @@ expect DeltaMap.check({})
 expect Direction.check({})
 expect FeatureVariations.check({})
 expect Features.check({})
+expect Fractions.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
 expect MathVariants.check({})
@@ -54,4 +58,6 @@ expect Metrics.check({})
 expect Names.check({})
 expect Outlines.check({})
 expect Reverse.check({})
+expect SpaceWidths.check({})
 expect Tracing.check({})
+expect WidthBounds.check({})
