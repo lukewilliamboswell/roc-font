@@ -29,8 +29,8 @@ vertical offset includes the target's vertical position at that step.
 The horizontal offset is resolved from the final advances and the
 target's final horizontal offset before the run is put in visual
 order. Attachment links have the signed 16-bit distance limit used
-by HarfBuzz. Break flags currently use the existing GPOS flagging
-bound of 255 items per span.
+by HarfBuzz. Each lookup flags overlapping unsplittable spans together
+so a long stack of marks can share one base with linear work.
 
 The public checkpoint uses David Libre Regular with script `Hebr`,
 language `he` and right-to-left direction. Hebrew vowels show `mark`

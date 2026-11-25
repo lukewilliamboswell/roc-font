@@ -285,6 +285,8 @@ LayoutKerning := {
 		var $last_base = no_parent
 		var $base_until = 0
 		var $last_mark = no_parent
+		var $span_start = 0
+		var $span_end = 0
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
 			masked = LayoutGsub.applies(item.mask, ctx.mask)
@@ -315,7 +317,15 @@ LayoutKerning := {
 											match LayoutMark.anchors(table, kerning.data, mark_index, target.glyph, rows) {
 												Err(_) => {}
 												Ok(anchors) => {
-													$items = LayoutKerning.unsafe_to_break($items, parent, i + 1)
+													# Targets and applications advance through the run.
+													# With monotone clusters, overlapping spans flag the
+													# same boundaries as their union. Finish each span
+													# once, even if many marks attach to the same target.
+													if parent >= $span_end {
+														$items = LayoutKerning.flag_mark_span($items, $span_start, $span_end)
+														$span_start = parent
+													}
+													$span_end = i + 1
 													if $parents.is_empty() {
 														$parents = List.repeat(no_parent, count)
 													}
@@ -348,7 +358,13 @@ LayoutKerning := {
 				$last_mark = if (masked and LayoutGsub.is_mark_item(item)) i else no_parent
 			}
 		}
-		{ items: $items, dx: $dx, dy: $dy, ax, parents: $parents }
+		{ items: LayoutKerning.flag_mark_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax, parents: $parents }
+	}
+
+	flag_mark_span : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
+	flag_mark_span = |items, first, last| {
+		cluster = LayoutGsub.end_cluster(items, first, last, 0xFFFFFFFFFFFFFFFF)
+		LayoutGsub.flag_range(items, first, last, cluster)
 	}
 
 	# A mark-to-base lookup skips marks and default-ignorables. For the

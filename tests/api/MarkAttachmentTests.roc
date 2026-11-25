@@ -43,3 +43,16 @@ expect {
 	run = Font.shape(font, "AB", Font.ShapeOptions.{ script: "Latn" })
 	run.glyphs == [1, 2] and run.advances == [{ x: 612, y: 0 }, { x: 390, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: -533, y: 288 }]
 }
+
+expect {
+	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 'A', last: 'A', glyph: 1 }, { first: 0x0300, last: 0x0301, glyph: 2 }]) }])
+	gdef = MarkBuild.gdef([{ first: 1, last: 1, class: 1 }, { first: 2, last: 3, class: 3 }], [])
+	subtable = MarkBuild.position([{ glyph: 3, class: 0, anchor: MarkBuild.anchor(21, 12) }], 1, [{ glyph: 1, anchors: [MarkBuild.anchor(100, 300)] }])
+	gpos = MarkBuild.layout("latn", [{ tag: "mark", lookups: [0] }], [MarkBuild.Lookup.{ kind: 4, subtables: [subtable] }])
+	raw = FontBuild.glyphs_font([500, 612, 0, 0], cmap, [{ tag: "GDEF", data: gdef }, { tag: "GPOS", data: gpos }])
+	font = Font.from_bytes(raw, Font.ReadOptions.{ strict: True }) ?? crash "checked synthetic GPOS layout was rejected"
+	run = Font.shape(font, "A".concat(Str.repeat("\u(300)", 300)).concat("\u(301)\u(301)"), Font.ShapeOptions.{ script: "Latn", clusters: Characters })
+	run.glyphs.take_first(2) == [1, 2] and run.glyphs.drop_first(301) == [3, 3]
+		and run.offsets.drop_first(301) == [{ x: -533, y: 288 }, { x: -533, y: 288 }]
+		and run.flags == [0].concat(List.repeat(1, 302))
+}
