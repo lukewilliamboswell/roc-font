@@ -43,6 +43,8 @@ and a case where several limits are reported together.
   `Model.walk_target` for wider histories when they add coverage. Prefer a
   key made from the choices and input history. An immutable prepared font
   can be held alongside the key if those choices determine it completely.
+  Use `EveryStep` when different histories reach the same key and each
+  arrival needs checking, as with repeated changes to a font's location.
 * Use `Solve` for fixed-width integer laws. State the width, valid domain
   and the preconditions a caller establishes. Tie the proof to production
   with concrete public API checks at the relevant boundary. For horizontal
@@ -52,7 +54,9 @@ and a case where several limits are reported together.
   proving one law at a time and choosing the narrowest width that holds
   every intermediate in the declared domain. Check that the assumptions
   admit real inputs and that the property fails when the decision it
-  protects is deliberately changed.
+  protects is deliberately changed. For a packed subtable, put the last
+  required word at the enclosing table's end. Extra bytes can hide an
+  off-by-one calculation in a fixture with trailing data.
 * Use a scratch worktree for a small, plausible production mutation.
   Compare the new model or proof with the existing tests on the same
   mutation and discard the change after the check. If an existing test
@@ -72,6 +76,11 @@ and scope the once-only rule to one shaping stage. For nested
 substitutions, address a position while the child has changed the length
 so a later edit cannot conceal a stale parent match. For outline
 variation, make the affected point an observable bound of the outline.
+For composite glyphs, give each component a distinct metric contribution
+and reverse their order to observe which component supplies the metrics.
+For reverse chaining, give adjacent context positions distinct coverages
+and use a substitution that enables the next candidate in scan order.
+Compare direct and extension encodings of the same lookup.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
