@@ -21,9 +21,10 @@ Chrome widths agree on package-mermaid's oracle texts.
   work was done: a code-generation effect of the nightly; re-check on the
   next nightly.
 - [ ] Use `gvar` phantom points for horizontal advances when `HVAR` is
-  absent. In `var-outlines.ttf` at weight 900, HarfBuzz 14.6 gives
-  advances of 602, 550, 602 and 318 for `abcf`. Direct queries and
-  shaping both return the base `hmtx` widths.
+  absent. `tests/cases/gvar-advances.jsonc` records HarfBuzz 14.6 advances
+  at the default, midpoint and peak locations, including the shaped run
+  for `abcf` at the peak. The known failures track the current use of
+  base `hmtx` widths away from the default.
 
 ### 0.1.0 polish from rc1 consumers
 

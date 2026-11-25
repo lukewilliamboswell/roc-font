@@ -18,6 +18,18 @@
       "reason": "HarfBuzz applies Apple-style `kern` tables (version 1.0, formats 0 and 2) and splits each value into an advance and an offset. OTS drops every `kern` table but version 0, so a browser never applies this one; roc-font drops it as OTS does (architecture §4.4, `corpus-fonts/jellee-kern-read` agrees), so the pairs are not kerned. Deliberate: browser parity over HarfBuzz parity for legacy tables."
     },
     {
+      "id": "gvar-advances/midpoint-advances",
+      "reason": "With no `HVAR`, `Font.advance` uses the base `hmtx` width. HarfBuzz derives the width from the varied `gvar` phantom points, including the inherited metrics of the composite glyph."
+    },
+    {
+      "id": "gvar-advances/peak-advances",
+      "reason": "With no `HVAR`, `Font.advance` uses the base `hmtx` width. HarfBuzz derives the width from the varied `gvar` phantom points at the peak location."
+    },
+    {
+      "id": "gvar-advances/peak-shape",
+      "reason": "With no `HVAR`, shaping uses the base `hmtx` widths. HarfBuzz applies the `gvar` phantom advances to the run."
+    },
+    {
       "id": "hb-curated/in-house/ih-rand-3",
       "reason": "OTS 9.3.0 rejects the font: its `GSUB` has a `DFLT` script without a default language system (ots/src/layout.cc lines 98-102), so a browser cannot draw it. roc-font refuses it as OTS does (architecture §4.4), where HarfBuzz shapes it anyway."
     },

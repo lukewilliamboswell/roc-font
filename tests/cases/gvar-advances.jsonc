@@ -1,0 +1,11 @@
+// The fixture has gvar and no HVAR. Glyph 3 is a composite that takes
+// its metrics from glyph 1 away from the default location in HarfBuzz.
+{
+  "schema": 1,
+  "cases": [
+    { "id": "default-advances", "kind": "advances", "font": "../fonts/variable/var-outlines.ttf", "font_sha256": "47a354c5f04aad9070d09dded1fe7ca6005be244ec48baa737eb04fb5d377b4b", "glyphs": [1, 2, 3, 6], "expected": "advances:600,520,1500,250" },
+    { "id": "midpoint-advances", "kind": "advances", "font": "../fonts/variable/var-outlines.ttf", "font_sha256": "47a354c5f04aad9070d09dded1fe7ca6005be244ec48baa737eb04fb5d377b4b", "glyphs": [1, 2, 3, 6], "variations": { "wght": 650 }, "expected": "advances:610,535,610,284" },
+    { "id": "peak-advances", "kind": "advances", "font": "../fonts/variable/var-outlines.ttf", "font_sha256": "47a354c5f04aad9070d09dded1fe7ca6005be244ec48baa737eb04fb5d377b4b", "glyphs": [1, 2, 3, 6], "variations": { "wght": 900 }, "expected": "advances:602,550,602,318" },
+    { "id": "peak-shape", "font": "../fonts/variable/var-outlines.ttf", "font_sha256": "47a354c5f04aad9070d09dded1fe7ca6005be244ec48baa737eb04fb5d377b4b", "text": "abcf", "options": { "variations": ["wght=900"] }, "expected": "[1=0+602|2=1+550|3=2+602|6=3+318]" }
+  ]
+}
