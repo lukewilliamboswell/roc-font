@@ -20,19 +20,21 @@ LayoutAnchor := {}.{
 		}
 		var $out = deltas
 		if format == 3 {
-			for field in [at + 6, at + 8] {
-				offset = Bytes.u16(data, field)
+			var $field = at + 6
+			while $field < at + 10 {
+				offset = Bytes.u16(data, $field)
 				if offset != 0 {
 					device = at + offset
 					match LayoutVar.check_device_ots(data, device) {
 						Ok(_) => {}
-						Err(Truncated) => return Err(Bad(field))
+						Err(Truncated) => return Err(Bad($field))
 						Err(_) => return Err(Bad(device + 4))
 					}
 					if Bytes.u16(data, device + 4) == 0x8000 and !LayoutVar.valid_index(lv, Bytes.u16(data, device), Bytes.u16(data, device + 2)) {
 						$out = $out.append(device)
 					}
 				}
+				$field = $field + 2
 			}
 		}
 		Ok($out)
