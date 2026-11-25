@@ -84,7 +84,9 @@ For feature selection,
 use a shared lookup that changes its own output on a second application,
 and scope the once-only rule to one shaping stage. For nested
 substitutions, address a position while the child has changed the length
-so a later edit cannot conceal a stale parent match. For outline
+so a later edit cannot conceal a stale parent match. To check lookup
+filters, let a nested lookup consume a glyph the parent skipped, and use
+a second substitution to show when the parent matched. For outline
 variation, make the affected point an observable bound of the outline.
 For composite glyphs, give each component a distinct metric contribution
 and reverse their order to observe which component supplies the metrics.
@@ -97,12 +99,20 @@ Compare direct and extension encodings of the same lookup.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
+For coordinate remapping, bend two axes differently and give each axis
+its own observable advance. Put CSS Regular at a different point from
+the font's declared weight so an omitted setting identifies the default
+the caller actually gets.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
-Stop a pass once the interaction has independent coverage and further
-cases would repeat the same evidence. Keep larger input spaces, resource
-scaling and reference implementation agreement in their existing checks.
+When an existing check appears to cover the rule, try the mutation there
+before building a new fixture. Skipping interpolation across the start of
+a contour, for example, already fails the outline model's exact bounds
+check. Stop a pass once the interaction has independent coverage and
+further cases would repeat the same evidence. Keep larger input spaces,
+resource scaling and reference implementation agreement in their existing
+checks.
 The roc-pdf contributor guide describes the approach that inspired these
 passes. https://github.com/lukewilliamboswell/roc-pdf/blob/75a9b4880838dd7cab7a4a55d4a655bc890b8a74/docs/testing.adoc[Designing correctness oracles]
 

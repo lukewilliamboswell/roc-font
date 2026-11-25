@@ -5,6 +5,7 @@ app [target] {
 }
 
 import fuzz.Fuzz
+import AxisMapping
 import Budgets
 import Cmap
 import Collection
@@ -16,6 +17,7 @@ import FeatureVariations
 import Features
 import Gpos
 import Gsub
+import LookupFiltering
 import Math
 import MathVariants
 import MetricVariations
@@ -26,6 +28,7 @@ import Reverse
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
+expect AxisMapping.check({})
 expect Budgets.check({})
 expect Collection.check({})
 expect Composite.check({})
@@ -33,6 +36,7 @@ expect DeltaMap.check({})
 expect Direction.check({})
 expect FeatureVariations.check({})
 expect Features.check({})
+expect LookupFiltering.check({})
 expect Math.check({})
 expect MathVariants.check({})
 expect MetricVariations.check({})
