@@ -1,7 +1,7 @@
 #!/usr/bin/env roc-stable
 app [main!] {
 	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.28.1/7brgwR8YUqfeGrkdfF1V4GPPN7DnP7ftqub9KcrTEZtr.tar.zst",
-	roc: "nightly-2026-11-24-ff5e544",
+	roc: "nightly-2026-11-25-d5a4f1e",
 }
 
 import cli.Env
@@ -60,8 +60,8 @@ main! = |native_args| {
 			return Err(DuplicateExampleCase(example.path))
 		}
 		executable = work.join(example.path.drop_prefix("examples/").drop_suffix(".roc"))
-		Run.call!(compiler, ["check", example.path, "--no-cache"].concat(dep), cwd)?
-		Run.call!(compiler, ["build", example.path, "--no-cache", "--opt=dev", "--output=${executable.display()}"].concat(dep), cwd)?
+		Run.call!(compiler, ["check", example.path].concat(dep), cwd)?
+		Run.call!(compiler, ["build", example.path, "--opt=dev", "--output=${executable.display()}"].concat(dep), cwd)?
 		for case in example.cases {
 			output = Run.command(executable.display(), case.args, cwd.join("examples"))
 				.stdin(Bytes(case.stdin.to_utf8())).run!()?
