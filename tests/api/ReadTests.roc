@@ -220,9 +220,38 @@ expect {
 	count_problems = [MissingTable("hhea"), bad("maxp", table_offset(bad_count, "maxp") + 4)]
 	limits = Font.Limits.{ max_lookups: 1 }
 	limit_problems = [MissingTable("hhea"), OverLimit("max_lookups")]
+	short_kern = FontBuild.file(tables.append({ tag: "kern", data: [0, 0] }))
+	mixed_problems = [MissingTable("hhea"), bad("kern", table_offset(short_kern, "kern")), OverLimit("max_lookups")]
 	rejects(lenient(bad_count), count_problems) and rejects(strict(bad_count), count_problems)
 		and rejects(Font.from_bytes(missing, Font.ReadOptions.{ limits }), limit_problems)
 		and rejects(Font.from_bytes(missing, Font.ReadOptions.{ strict: True, limits }), limit_problems)
+		and rejects(Font.from_bytes(short_kern, Font.ReadOptions.{ limits }), mixed_problems)
+		and rejects(Font.from_bytes(short_kern, Font.ReadOptions.{ strict: True, limits }), mixed_problems)
+}
+
+# A missing hhea and unusable maxp do not prevent reading kern or fvar.
+# A short kern rejects the font, an unsorted kern would be dropped, and
+# an incorrect axis record size would drop the variations.
+expect {
+	pair = { left: 1, right: 2, value: -50 }
+	sorted = FontBuild.kern([{ coverage: 1, pairs: [pair] }])
+	unsorted = FontBuild.kern([{ coverage: 1, pairs: [{ left: 2, right: 3, value: -10 }, pair] }])
+	axes = FontBuild.fvar([{ tag: "wght", min: 100, default: 400, max: 900 }])
+	bad_axes = FontBuild.patch(axes, 10, FontBuild.u16(19))
+	tables = FontBuild.replace(FontBuild.basic, "maxp", FontBuild.maxp(0)).drop_if(|t| t.tag == "hhea")
+	[
+		{ kern: sorted, fvar: axes, kern_errors: [], fvar_errors: [] },
+		{ kern: sorted.drop_last(1), fvar: bad_axes, kern_errors: [4], fvar_errors: [10] },
+		{ kern: unsorted, fvar: bad_axes, kern_errors: [24], fvar_errors: [10] },
+	].all(
+		|case| {
+			bytes = FontBuild.file(tables.concat([{ tag: "kern", data: case.kern }, { tag: "fvar", data: case.fvar }]))
+			problems = [MissingTable("hhea"), bad("maxp", table_offset(bytes, "maxp") + 4)]
+				.concat(case.kern_errors.map(|at| bad("kern", table_offset(bytes, "kern") + at)))
+				.concat(case.fvar_errors.map(|at| bad("fvar", table_offset(bytes, "fvar") + at)))
+			rejects(lenient(bytes), problems) and rejects(strict(bytes), problems)
+		},
+	)
 }
 
 # A table whose record runs past the end of the file rejects the font,
