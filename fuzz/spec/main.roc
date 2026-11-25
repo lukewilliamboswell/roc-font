@@ -35,6 +35,7 @@ import Names
 import Outlines
 import Reverse
 import ScalarBreaks
+import ScalarShaping
 import SpaceWidths
 import Tracing
 import VariationReading
@@ -69,6 +70,7 @@ expect Names.check({})
 expect Outlines.check({})
 expect Reverse.check({})
 expect ScalarBreaks.check({})
+expect ScalarShaping.check({})
 expect SpaceWidths.check({})
 expect Tracing.check({})
 expect VariationReading.check({})

@@ -632,9 +632,10 @@ with the glyphs in either direction and total for any cluster order.
 `describe_problem` words a `Problem` for messages and logs; programs that
 act on a problem match on it.
 
-The seed's low-level `substitute` and `kerning` are removed: `shape`
-covers them with clusters and positions, and `shape_scalars` serves callers
-that do their own itemisation.
+The public `shape` operation returns clusters and positions.
+`shape_scalars_checked` serves callers that do their own itemisation.
+See link:scalar-shaping.adoc[shaping a run with paragraph offsets] for
+input validation, cluster ranges and per-glyph tracing.
 
 [#shaping]
 == 6 Shaping

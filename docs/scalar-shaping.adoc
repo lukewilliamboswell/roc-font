@@ -1,0 +1,67 @@
+= Shape a run with paragraph offsets
+
+Use `Font.shape_scalars_checked` after choosing the font, script, language,
+direction and features for one run. Keep the paragraph text and analysis
+with the caller. Pass the run's code points in logical order with
+nondecreasing `U64` starts, typically absolute UTF-8 byte offsets into the
+paragraph. Several scalars may share a start. Shaping can merge starts
+when, for example, two glyphs form a ligature. Supply any ranged feature
+settings in the same coordinates as the starts.
+
+Pass the original code points even if paragraph analysis identifies
+characters to mirror. The right-to-left shape plan applies mirroring.
+Use the plan's direction for shaping and your paragraph and line analysis
+to place the resulting runs.
+
+This run is the middle of `"abc אבג tail"`. It starts at byte 4 and ends
+just before byte 10. The glyphs come back in visual order. Their ranges
+still address the original paragraph.
+
+[source,roc]
+----
+plan = Font.plan(font, Font.ShapeOptions.{ script: "Hebr", direction: RightToLeft })
+input = [{ scalar: 0x05D0, offset: 4 }, { scalar: 0x05D1, offset: 6 }, { scalar: 0x05D2, offset: 8 }]
+result = Font.shape_scalars_checked(font, plan, input)
+match result {
+    Ok(run) => {
+        ranges = Font.cluster_ranges(run, 10)
+        # Each range addresses the paragraph in the same order as run.glyphs.
+        Ok({ run, ranges })
+    }
+    Err(problem) => Err(problem)
+}
+----
+
+Pass the absolute exclusive end of the run to `Font.cluster_ranges`,
+including for right-to-left output. To slice a run-local byte buffer,
+subtract the run's absolute start from each returned endpoint. The
+exclusive end must be representable and greater than the last start for
+the last range to contain bytes.
+
+Empty input succeeds. A surrogate, a value above U+10FFFF, or a decreasing
+start produces `InvalidInput` with the first offending zero-based list
+index. The scalar is checked first when both fields of an entry are
+invalid. U+FFFD is a valid scalar and can represent an earlier decoding
+error according to the caller's policy. A well-formed run can produce
+missing glyphs or spans unsafe to break. Read those flags with
+`Font.is_missing` and `Font.is_unsafe_to_break`.
+
+`OverBudget` carries the partial run and the bounds that stopped
+substitution. Call `Font.shape_scalars_traced` when you need an aligned
+substitution origin for each glyph. Its complete and partial results
+both carry origins.
+
+== Unicode data versions
+
+roc-font's shaping properties use UCD 18.0.0, the data embedded by
+HarfBuzz 14.6.0. These include combining classes, canonical normalization,
+mirroring and mark and ignorable properties. A caller using
+roc-lang/unicode 4.3.3 for paragraph analysis uses Unicode 17.0.0 data
+there. Pin both versions for reproducible output and account for the
+difference when admitting characters or sequences whose behavior changed.
+The shaping functions consume the caller's chosen run settings and
+source offsets.
+
+https://github.com/lukewilliamboswell/roc-font/blob/0.1.2/package/ShaperUnicode.roc[Shaping property provenance]
+· https://github.com/roc-lang/unicode/releases/tag/4.3.3[Paragraph-analysis package]
+· https://harfbuzz.github.io/working-with-harfbuzz-clusters.html[HarfBuzz cluster conventions]

@@ -144,6 +144,20 @@ TARGETS: dict[str, TargetConfig] = {
             "cost grows linearly (2 vs 16 copies) and leaks nothing"
         ),
     ),
+    "font-scalars": TargetConfig(
+        sources=(FUZZ_ROOT / "font-scalars.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-scalars.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65,
+        timeout=10,
+        contract=(
+            "checked and traced scalar shaping agree; invalid scalars and "
+            "decreasing offsets identify the first error; valid offsets stay "
+            "aligned and ordered, including repeated and wide offsets"
+        ),
+        font_files=False,
+    ),
     # Narrow targets (architecture §7.3): the input chooses the contents of
     # a font exercising one feature, built at two sizes. Real fonts are not
     # seeds (font_files=False): their bytes would only be read as choices.

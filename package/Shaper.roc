@@ -678,6 +678,25 @@ Shaper :: {}.{
 	shape : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Run
 	shape = |face, location, p, scalars| Shaper.shape_items(face, location, p, scalars).run
 
+	## The first invalid entry in a caller-itemized run. The string and
+	## existing scalar adapters already have their own input contracts.
+	check_scalars : List({ scalar : U32, offset : U64 }) -> Try({}, { index : U64, reason : [InvalidScalar(U32), DecreasingOffset({ previous : U64, offset : U64 })] })
+	check_scalars = |scalars| {
+		var $index = 0
+		var $previous = 0
+		for { scalar, offset } in scalars {
+			if scalar > 0x10FFFF or (scalar >= 0xD800 and scalar <= 0xDFFF) {
+				return Err({ index: $index, reason: InvalidScalar(scalar) })
+			}
+			if offset < $previous {
+				return Err({ index: $index, reason: DecreasingOffset({ previous: $previous, offset }) })
+			}
+			$previous = offset
+			$index = $index + 1
+		}
+		Ok({})
+	}
+
 	## Shape, keeping the finished items and the bounds that stopped
 	## substitution (see `Shaped`).
 	shape_items : Face, Face.Location, Plan, List({ scalar : U32, offset : U64 }) -> Shaped

@@ -739,10 +739,64 @@ Font :: { face : Face }.{
 	## paragraph), so runs of one paragraph report offsets into it. It also
 	## shapes text a caller decoded itself, such as UTF-8 bytes that may be
 	## invalid, with clusters pointing into the bytes.
-	## Scalars sharing an offset form one cluster. Clusters in the run are
-	## these offsets, unchanged.
+	## Sharing an offset puts scalars in one cluster. Shaping can coalesce
+	## clusters at a supplied start. For input validation and budget status,
+	## use `shape_scalars_checked`.
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
+
+	## Why a scalar entry was rejected. `InvalidScalar` gives the value
+	## outside Unicode scalar space, such as a surrogate. `DecreasingOffset`
+	## gives the preceding and current starts in the caller's coordinates.
+	ScalarInputProblem : [InvalidScalar(U32), DecreasingOffset({ previous : U64, offset : U64 })]
+
+	## Shape a caller-itemized run and report whether shaping finished.
+	## Pass Unicode scalar values in logical order with nondecreasing `U64`
+	## starts. Starts can be shared and can be absolute paragraph byte
+	## offsets. Shaping may coalesce clusters at a supplied start.
+	## `InvalidInput` identifies the first bad entry by its zero-based list
+	## index, checking its scalar before its offset. Empty input is valid.
+	##
+	## The caller chooses the script, direction, font and feature ranges.
+	## Use the same coordinates for feature ranges and scalar starts.
+	## Pass original characters even when the paragraph analysis provides
+	## mirror facts. Shaping applies right-to-left mirroring for the plan.
+	##
+	## `Ok` holds the run, including missing-glyph and unsafe-break flags.
+	## `OverBudget` holds the partial run and the bounds that stopped it.
+	## For absolute starts, pass the absolute exclusive end of this run to
+	## `cluster_ranges`, including when the glyphs are in right-to-left order.
+	shape_scalars_checked : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try(Run, [InvalidInput({ index : U64, reason : ScalarInputProblem }), OverBudget({ run : Run, budgets : List(Budget) })])
+	shape_scalars_checked = |font, shape_plan, scalars| {
+		match Shaper.check_scalars(scalars) {
+			Err(problem) => return Err(InvalidInput(problem))
+			Ok(_) => {}
+		}
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+		if shaped.stopped == 0 {
+			Ok(shaped.run)
+		} else {
+			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
+
+	## Shape a caller-itemized run as `shape_scalars_checked` does and
+	## report each glyph's substitution origin as `shape_traced` does.
+	## Origins align with the run's glyphs in `Ok` and `OverBudget`.
+	shape_scalars_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try({ run : Run, origins : List(GlyphOrigin) }, [InvalidInput({ index : U64, reason : ScalarInputProblem }), OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
+	shape_scalars_traced = |font, shape_plan, scalars| {
+		match Shaper.check_scalars(scalars) {
+			Err(problem) => return Err(InvalidInput(problem))
+			Ok(_) => {}
+		}
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
+		if shaped.stopped == 0 {
+			Ok({ run: shaped.run, origins })
+		} else {
+			Err(OverBudget({ run: shaped.run, origins, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
 
 	## Shape text as `shape_planned` does, and also say which substitution
 	## produced each glyph (see `GlyphOrigin`) and whether shaping
@@ -823,7 +877,9 @@ Font :: { face : Face }.{
 	## The part of the text each glyph of a run draws, as UTF-8 byte ranges
 	## `start ..< end`, one per glyph in the run's order (so in
 	## right-to-left text, too, entry `i` is glyph `i`'s). `length` is the
-	## text's length in bytes (`text.count_utf8_bytes()`).
+	## text's length in bytes (`text.count_utf8_bytes()`) for text shaped
+	## from a string. For absolute scalar offsets, use the run's absolute
+	## exclusive end, in the same coordinates as the supplied starts.
 	##
 	## ```
 	## bytes = text.to_utf8()

@@ -1,0 +1,13 @@
+{
+  "about": "Caller scalar records. The first byte selects direction, whether starts are above 32 bits, and whether to keep all input valid. Each remaining byte selects a scalar and an offset change.",
+  "seeds": [
+    {"why": "empty run", "parts": [{"hex": "00"}]},
+    {"why": "LTR kerning with letter starts", "parts": [{"hex": "00 00 05"}]},
+    {"why": "RTL brackets and a shared start above 32 bits", "parts": [{"hex": "01 08 00 05 0c"}]},
+    {"why": "combining mark shares a start", "parts": [{"hex": "02 00 18 05"}]},
+    {"why": "first invalid entry is a surrogate", "parts": [{"hex": "02 01 2c 05"}]},
+    {"why": "out of range scalar and decreasing offset at one entry", "parts": [{"hex": "01 01 3f"}]},
+    {"why": "decreasing valid scalar offsets", "parts": [{"hex": "03 01 07"}]},
+    {"why": "valid longer RTL sequence with wide, shared and increasing offsets", "parts": [{"hex": "05 08 00 05 18 0c 1d 21 24 10 15 19 2c 30 34 38 3c 08 00 05 18 0c 1d 21 24 10 15 19 2c 30 34 38 3c 08 00 05 18 0c 1d 21 24 10 15 19 2c 30 34 38 3c"}]}
+  ]
+}

@@ -16,6 +16,7 @@ import VariationTests
 import FuzzRegressionTests
 import GposFlagTests
 import TraceTests
+import ScalarShapingTests
 import QueryTests
 import ParityTests
 
