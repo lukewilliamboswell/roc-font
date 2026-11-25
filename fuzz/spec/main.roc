@@ -5,6 +5,7 @@ app [target] {
 }
 
 import fuzz.Fuzz
+import Budgets
 import Cmap
 import Context
 import DeltaMap
@@ -17,6 +18,7 @@ import Outlines
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 
+expect Budgets.check({})
 expect DeltaMap.check({})
 expect Features.check({})
 expect Math.check({})

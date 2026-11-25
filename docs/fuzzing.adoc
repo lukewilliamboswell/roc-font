@@ -26,6 +26,15 @@ that operation on a font built through `FontBuild` and loaded from bytes by
 the public API. Write the expected answer from the recipe's meaning before
 choosing the bytes or reading the production implementation.
 
+Use a small matrix when each case starts from the same input and exercises
+one distinct boundary. For diagnostics, list the facts each reader needs.
+Remove a prerequisite in one case and retain it in another, then check
+both read modes and the order of the returned problems. For Unicode
+composition, swapping two marks of equal combining class checks both
+stable ordering and the rule for blocking a composition. For shaping
+budgets, check the final allowed operation, the first refused operation,
+and a case where several limits are reported together.
+
 * Use `Model` when action order or interactions between choices matter.
   State the action alphabet, bounds and facts that distinguish states.
   Require exhaustion for the declared small domain and name goals that
