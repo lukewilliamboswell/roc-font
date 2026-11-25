@@ -731,7 +731,13 @@ Shaper :: {}.{
 		}
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
-		preprocessed = if (p.thai) ShaperThai.preprocess(ordered, p.characters) else ordered
+		limit = (p.growth * n).max(16384)
+		{ chars: preprocessed, stopped: thai_stopped } =
+			if p.thai {
+				ShaperThai.preprocess(ordered, p.characters, limit.max(n) - n)
+			} else {
+				{ chars: ordered, stopped: False }
+			}
 		mirrored = if (p.backward) ShaperNormalize.mirror(face, preprocessed, p.rtlm_mask) else preprocessed
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap_of(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
@@ -757,11 +763,11 @@ Shaper :: {}.{
 				}
 			$items = $items.append({ glyph: c.glyph, cluster: c.cluster, mask: c.mask, props: props.bitwise_and(0xFFFF).bitwise_or(glyph_props.shl_wrap(16)).bitwise_or(props.bitwise_and(ShaperNormalize.missing)) })
 		}
-		limit = (p.growth * n).max(16384)
 		budget = (p.operations * n).max(16384)
 		applied = LayoutGsub.apply(gsub, p.gsub, $items, { limit, budget, depth: Face.max_depth(face) })
 		placed = Shaper.position(face, location, p, applied.items, backward, space_fallback, found.ignorables)
-		{ run: Shaper.finish(placed), items: placed.items, stopped: applied.stopped }
+		stopped = if (thai_stopped) applied.stopped.bitwise_or(LayoutGsub.stopped_growth) else applied.stopped
+		{ run: Shaper.finish(placed), items: placed.items, stopped }
 	}
 
 	## Position a substituted run and finish it (HarfBuzz's `hb_ot_position`

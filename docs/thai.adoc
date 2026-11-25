@@ -12,6 +12,8 @@ glyphs share the source cluster, and the grapheme cluster level also
 joins the preceding cluster. This phase produces at most two scalars
 per input scalar and preserves the supplied byte offsets as cluster
 labels. The positioning tables then select and stack the mark anchors.
+When a caller sets a smaller growth budget, further SARA AM characters
+stay intact and checked shaping reports `Growth` alongside the partial run.
 
 This slice covers modern OpenType Thai. Marks without a base are shaped
 as supplied and remain zero width when the font or inferred glyph class

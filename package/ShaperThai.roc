@@ -17,30 +17,38 @@ ShaperThai :: {}.{
 	## their order. Preallocate the exact output so the move and the
 	## cluster merges can work in place, including at a repeated offset
 	## that extends into the unread input.
-	preprocess : List(ShaperNormalize.Char), Bool -> List(ShaperNormalize.Char)
-	preprocess = |chars, characters| {
-		var $added = 0
+	preprocess : List(ShaperNormalize.Char), Bool, U64 -> { chars : List(ShaperNormalize.Char), stopped : Bool }
+	preprocess = |chars, characters, room| {
+		var $splits = 0
 		for c in chars {
 			if c.cp == ShaperThai.sara_am {
-				$added = $added + 1
+				$splits = $splits + 1
 			}
 		}
-		if $added == 0 {
-			return chars
+		added = $splits.min(room)
+		stopped = added < $splits
+		if added == 0 {
+			return { chars, stopped }
 		}
 
 		props = ShaperUnicode.props(ShaperThai.nikhahit).bitwise_or(ShaperUnicode.continuation)
-		var $out = List.with_capacity(chars.len() + $added)
+		var $out = List.with_capacity(chars.len() + added)
+		var $left = added
 		for c in chars {
-			if c.cp == ShaperThai.sara_am {
+			if c.cp == ShaperThai.sara_am and $left > 0 {
 				$out = $out.append({ ..c, cp: ShaperThai.nikhahit, props })
+				$left = $left - 1
 			}
 			# Keep the source SARA AM here until its new NIKHAHIT moves.
 			$out = $out.append(c)
 		}
-		for i in 1..<$out.len() {
+		$left = added
+		var $i = 1
+		while $i < $out.len() and $left > 0 {
+			i = $i
 			c = $out.get(i) ?? ShaperNormalize.no_char
 			if c.cp == ShaperThai.sara_am {
+				$left = $left - 1
 				# Both this slot and the inserted one before it exist.
 				$out = $out.set(i, { ..c, cp: ShaperThai.sara_aa, props: ShaperUnicode.props(ShaperThai.sara_aa) }) ?? []
 				mark = i - 1
@@ -63,8 +71,9 @@ ShaperThai :: {}.{
 					$out = $out.set($start, moved) ?? []
 				}
 			}
+			$i = $i + 1
 		}
-		$out
+		{ chars: $out, stopped }
 	}
 
 	## The Thai above-base marks that a split NIKHAHIT crosses in the

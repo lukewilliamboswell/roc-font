@@ -1,6 +1,8 @@
 import build.FontBuild
 import font.Font
 
+ThaiShapeTests := {}.{}
+
 # In font units, the base's anchors are (340,350) for tone and
 # (210,250) for nikhahit. Its advance is 500.
 face : Font
@@ -97,6 +99,19 @@ expect {
 	run = Font.shape(face, "๋", opts)
 	run.glyphs == [3] and run.clusters == [0] and run.flags == [0]
 		and run.advances == xy([(0, 0)]) and run.offsets == xy([(0, 0)])
+}
+
+expect {
+	limited = Font.plan(face, Font.ShapeOptions.{ script: "Thai", language: "th", limits: Font.ShapeLimits.{ growth: 1 } })
+	fits = Font.shape_checked(face, limited, Str.repeat("ำ", 8192))
+	stops = Font.shape_checked(face, limited, Str.repeat("ำ", 8193))
+	match (fits, stops) {
+		(Ok(complete), Err(OverBudget({ run, budgets: [Growth] }))) =>
+			complete.glyphs.len() == 16384 and run.glyphs.len() == 16384
+				and complete.glyphs.last() == Ok(6)
+				and run.glyphs.drop_first(16382) == [4, 4]
+		_ => False
+	}
 }
 
 xy : List((I32, I32)) -> List({ x : I32, y : I32 })
