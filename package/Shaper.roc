@@ -752,14 +752,11 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, Face.glyph_total(face))
+		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, $base, Face.glyph_total(face))
 		var $items = positioned.items
-		var $ax = List.with_capacity(count)
+		var $ax = positioned.ax
 		var $dx = positioned.dx
 		var $dy = positioned.dy
-		for i in 0..<count {
-			$ax = $ax.append(($base.get(i) ?? 0) + (positioned.ax.get(i) ?? 0))
-		}
 		# Marks take no advance (HarfBuzz zeroes them after `GPOS`); without
 		# `GPOS`, in forward text a mark keeps hanging over the glyph before.
 		adjust = p.fallback_marks and !backward

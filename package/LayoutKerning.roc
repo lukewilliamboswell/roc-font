@@ -125,13 +125,14 @@ LayoutKerning := {
 
 	## Position a run: the plan's `GPOS` pair lookups in order, each where
 	## both glyphs' masks share a bit with its mask, then, when `legacy` is
-	## `Kern(mask)`, each `kern` subtable in turn. Values add up. Glyphs
+	## `Kern(mask)`, each `kern` subtable in turn. Advance adjustments are
+	## added to the supplied base advance for each item. Glyphs
 	## at or past `glyph_count` are never a first glyph of `GPOS` pair
 	## formats; as a second glyph they are in class 0.
-	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64 -> Positions
-	position = |kerning, plan, legacy, items, glyph_count| {
+	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), List(I64), U64 -> Positions
+	position = |kerning, plan, legacy, items, advances, glyph_count| {
 		count = items.len()
-		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: List.repeat(0, count) }
+		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: advances }
 		for entry in plan {
 			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end
 			lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
@@ -959,7 +960,7 @@ expect {
 		Ok(read) => {
 			kerning = LayoutKerning.combine(Present(read), Absent, LayoutVar.none(0), LayoutGdef.none)
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
-			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, n)
+			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, List.repeat(0, items.len()), n)
 			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]
 		}
 		Err(_) => False
