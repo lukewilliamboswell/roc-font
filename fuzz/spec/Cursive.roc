@@ -242,7 +242,11 @@ harfbuzz_checkpoints = |_| {
 	font = prepared(long, Direct)
 	run = Font.shape(font, "A".repeat(130), options(long))
 	indices = [0, 1, 64, 65, 129]
+	skipping = { backward: False, last_root: False, skip_mark: True }
+	skipped = Font.shape(prepared(skipping, Direct), "A".concat("E".repeat(300)).concat("B"), options(skipping))
 	indices.map(|i| (run.offsets.get(i) ?? { x: 0, y: 0 }).y) == [-585, -576, -9, -576, 0]
+		and skipped.flags == [0].concat(List.repeat(1, 301))
+		and skipped.offsets.last() == Ok({ x: -13, y: 17 })
 }
 
 long_chain : Font, Config, U64 -> Bool

@@ -288,6 +288,8 @@ LayoutKerning := {
 		var $ax = ax
 		var $parents = parents
 		var $previous = LayoutAttachment.none
+		var $span_start = 0
+		var $span_end = 0
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
 			if LayoutKerning.sees(kerning.gdef, item, ctx.props) {
@@ -299,7 +301,11 @@ LayoutKerning := {
 						match LayoutKerning.position_subtable(kerning.data, lookup, extended, 3, $subtable) {
 							Ok(table) => match LayoutCursive.pair(kerning.data, table, prior.glyph, item.glyph) {
 								Ok({ entry, exit }) => {
-									$items = LayoutKerning.unsafe_to_break($items, $previous, i + 1)
+									if $previous >= $span_end {
+										$items = LayoutKerning.flag_attachment_span($items, $span_start, $span_end)
+										$span_start = $previous
+									}
+									$span_end = i + 1
 									if ctx.backward {
 										delta = exit.x + ($dx.get($previous) ?? 0)
 										$ax = $ax.set($previous, ($ax.get($previous) ?? 0) - delta) ?? []
@@ -337,7 +343,7 @@ LayoutKerning := {
 				}
 			}
 		}
-		{ items: $items, dx: $dx, dy: $dy, ax: $ax, parents: $parents }
+		{ items: LayoutKerning.flag_attachment_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax: $ax, parents: $parents }
 	}
 
 	# Every mark lookup scans forward. Types 4 and 5 cache the target and the
@@ -394,7 +400,7 @@ LayoutKerning := {
 													# same boundaries as their union. Finish each span
 													# once, even if many marks attach to the same target.
 													if parent >= $span_end {
-														$items = LayoutKerning.flag_mark_span($items, $span_start, $span_end)
+														$items = LayoutKerning.flag_attachment_span($items, $span_start, $span_end)
 														$span_start = parent
 													}
 													$span_end = i + 1
@@ -430,11 +436,11 @@ LayoutKerning := {
 				$last_mark = if (masked and LayoutGsub.is_mark_item(item)) i else no_parent
 			}
 		}
-		{ items: LayoutKerning.flag_mark_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax, parents: $parents }
+		{ items: LayoutKerning.flag_attachment_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax, parents: $parents }
 	}
 
-	flag_mark_span : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
-	flag_mark_span = |items, first, last| {
+	flag_attachment_span : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
+	flag_attachment_span = |items, first, last| {
 		cluster = LayoutGsub.end_cluster(items, first, last, 0xFFFFFFFFFFFFFFFF)
 		LayoutGsub.flag_range(items, first, last, cluster)
 	}
