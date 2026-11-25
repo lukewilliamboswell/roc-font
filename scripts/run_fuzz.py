@@ -43,6 +43,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
@@ -662,10 +663,13 @@ def spec_smoke(args: argparse.Namespace) -> int:
         if report_dir.exists():
             shutil.rmtree(report_dir)
         report_dir.parent.mkdir(parents=True, exist_ok=True)
-        command = [str(binary), f"--target={name}", "run", f"--report-dir={report_dir}",
-                   f"--runs={args.runs}", f"--seed={args.seed}", *provenance]
-        print(f"+ {shlex.join(command)}", flush=True)
-        if subprocess.run(command, cwd=report_dir.parent, check=False).returncode:
+        # roc-fuzz seeds this fresh corpus from the target's named examples.
+        with tempfile.TemporaryDirectory(prefix="corpus-", dir=report_dir.parent) as corpus:
+            command = [str(binary), f"--target={name}", "run", corpus, f"--report-dir={report_dir}",
+                       f"--runs={args.runs}", f"--seed={args.seed}", *provenance]
+            print(f"+ {shlex.join(command)}", flush=True)
+            result = subprocess.run(command, cwd=report_dir.parent, check=False)
+        if result.returncode:
             status = 1
             for crash in harvest(name, report_dir):
                 replay = [str(binary), f"--target={name}", "replay", str(crash)]

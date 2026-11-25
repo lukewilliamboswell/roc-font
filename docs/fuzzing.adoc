@@ -59,8 +59,12 @@ left by an unsupported selector. A positioning record that is present
 and all zeroes can change where the lookup resumes. Include an overlapping
 pair and a second lookup to observe that boundary. For feature selection,
 use a shared lookup that changes its own output on a second application,
-and scope the once-only rule to one shaping stage. Use `Model.witness`
-or `Model.explain` to inspect a shortest failing history when debugging.
+and scope the once-only rule to one shaping stage. For nested
+substitutions, address a position while the child has changed the length
+so a later edit cannot conceal a stale parent match. For outline
+variation, make the affected point an observable bound of the outline.
+Use `Model.witness` or `Model.explain` to inspect a shortest failing
+history when debugging.
 
 Stop a pass once the interaction has independent coverage and further
 cases would repeat the same evidence. Keep larger input spaces, resource
