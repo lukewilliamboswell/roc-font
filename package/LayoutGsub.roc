@@ -422,6 +422,9 @@ LayoutGsub := {
 	## ranges of the same plan so every origin still names a unique step.
 	apply_steps : LayoutGsub, List(Step), U64, U64, List(Item), Limits, Progress -> { items : List(Item), progress : Progress }
 	apply_steps = |shape, plan, first, end, items, limits, progress| {
+		if first == end {
+			return { items, progress }
+		}
 		var $run = items
 		# The previous run of a general lookup, whose allocation the next one
 		# writes into.
