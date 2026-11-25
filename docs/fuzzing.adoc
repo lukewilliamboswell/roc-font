@@ -17,6 +17,72 @@ that recurse, runs that grow. A successfully read font must make every
 later query and shaping call total (architecture §3), and only generated
 input tests that claim at scale.
 
+== Start from the format contract
+
+Start with the applicable specification clause, format and version. State
+what a font is allowed to encode and what the affected public operation must
+return. Record any roc-font policy the specification leaves open. Exercise
+that operation on a font built through `FontBuild` and loaded from bytes by
+the public API. Write the expected answer from the recipe's meaning before
+choosing the bytes or reading the production implementation.
+
+* Use `Model` when action order or interactions between choices matter.
+  State the action alphabet, bounds and facts that distinguish states.
+  Require exhaustion for the declared small domain and name goals that
+  exercise the interactions under test. If two histories share a key,
+  all subsequent actions and observations must agree. Use
+  `Model.walk_target` for wider histories when they add coverage. Prefer a
+  key made from the choices and input history. An immutable prepared font
+  can be held alongside the key if those choices determine it completely.
+* Use `Solve` for fixed-width integer laws. State the width, valid domain
+  and the preconditions a caller establishes. Tie the proof to production
+  with concrete public API checks at the relevant boundary. For horizontal
+  metrics, the proof covers the full valid uint16 count domain. The concrete
+  fonts exercise all splits of a four-glyph table with distinct bearings
+  and an advance stored past byte 65,535. Keep proof budgets small by
+  proving one law at a time and choosing the narrowest width that holds
+  every intermediate in the declared domain. Check that the assumptions
+  admit real inputs and that the property fails when the decision it
+  protects is deliberately changed.
+* Use a scratch worktree for a small, plausible production mutation.
+  Compare the new model or proof with the existing tests on the same
+  mutation and discard the change after the check. If an existing test
+  already detects it, explain what additional contract the new check
+  covers. Keep a small regression witness for a real defect.
+
+Choose fixtures that make the difference visible through the public API.
+For competing ligatures, encode both preference orders and compare glyphs
+and clusters. For a default variation sequence, the selected glyph may be
+identical to the nominal fallback. A fixture with a space glyph lets the
+check distinguish a consumed selector from the zero-width placeholder
+left by an unsupported selector. A positioning record that is present
+and all zeroes can change where the lookup resumes. Include an overlapping
+pair and a second lookup to observe that boundary. For feature selection,
+use a shared lookup that changes its own output on a second application,
+and scope the once-only rule to one shaping stage. Use `Model.witness`
+or `Model.explain` to inspect a shortest failing history when debugging.
+
+Stop a pass once the interaction has independent coverage and further
+cases would repeat the same evidence. Keep larger input spaces, resource
+scaling and reference implementation agreement in their existing checks.
+The roc-pdf contributor guide describes the approach that inspired these
+passes. https://github.com/lukewilliamboswell/roc-pdf/blob/75a9b4880838dd7cab7a4a55d4a655bc890b8a74/docs/testing.adoc[Designing correctness oracles]
+
+[source,sh]
+----
+blueprint run test
+blueprint run spec-smoke
+----
+
+The first command runs deterministic models and proofs in
+`fuzz/spec/main.roc` through the served package bundle. The second builds
+that app with `roc build --fuzz --opt=speed`, checks each model's declared
+examples and runs a short bounded search. Give each required goal a named
+example that reaches it. Check the native report for those witnesses so a
+short smoke run does not depend on mutation luck. Both commands also run
+as part of `blueprint run check`. To diagnose a native failure, use the
+replay command printed by the runner.
+
 == Targets and their contracts
 
 Each target is a roc-fuzz app built natively with `roc build --fuzz`. Its
@@ -277,7 +343,7 @@ seeds, fonts present and compiler. It is the CI check and runs as a step of
 `scripts/check.roc`. `campaign` and `nightly` grow one persistent corpus
 per target and are for finding new failures.
 
-roc-fuzz 0.6.2 bounds framed inputs to 1 MiB. The seed builder reports
+roc-fuzz 0.8.0 bounds framed inputs to 1 MiB. The seed builder reports
 files above that bound instead of silently including unusable inputs; larger
 real fonts remain covered by conformance and benchmarks.
 
@@ -291,6 +357,7 @@ bin/<target>              built binaries
 corpus/<target>/          campaign corpus
 smoke-corpus/<target>/    recreated for each smoke run
 runs/<target>/<mode>/     report.json, summary.md, run.log, failures/
+runs/spec/<target>/       native reports for spec model targets
 crashes/<target>/<sha256> harvested failure inputs
 ----
 

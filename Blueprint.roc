@@ -15,6 +15,7 @@ config = [
 	Task("check", [Use("package"), Run(["roc-stable", "scripts/check.roc"])]),
 	Task("examples", [Use("package"), Run(["roc-stable", "scripts/examples.roc"])]),
 	Task("fuzz-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "smoke"])]),
+	Task("spec-smoke", [Use("package"), Run(["python3", "scripts/run_fuzz.py", "spec-smoke"])]),
 	Task("conformance", [Use("package"), Run(["python3", "scripts/conformance.py"])]),
 	Task("bench-quick", [Use("package"), Run(["python3", "scripts/bench.py", "--quick"])]),
 	Task("api-docs", [Use("package"), Run(["roc", "docs", "package/main.roc", "--output=generated-docs"])]),

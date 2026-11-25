@@ -15,6 +15,7 @@ reproducing failure inputs. Working state lives under `.roc-font-tmp/fuzz/`
 Typical use:
 
     python3 scripts/run_fuzz.py smoke              # every target, short, seeded
+    python3 scripts/run_fuzz.py spec-smoke         # optimized model histories
     python3 scripts/run_fuzz.py campaign font-read --seconds=1800
     python3 scripts/run_fuzz.py show font-read .roc-font-tmp/fuzz/crashes/font-read/<sha>
     python3 scripts/run_fuzz.py minimize font-read <input> <output>
@@ -52,18 +53,19 @@ import flight  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 FUZZ_ROOT = ROOT / "fuzz"
+SPEC_APP = FUZZ_ROOT / "spec" / "main.roc"
 TMP_ROOT = Path(os.environ.get("ROC_FONT_TMPDIR", ROOT / ".roc-font-tmp")).resolve()
 WORK_ROOT = TMP_ROOT / "fuzz"
 
 # The roc-fuzz platform every target must declare. The bundle name is the
 # content hash roc checks on download; sha256 is the release asset's digest
-# (verified against `gh release view 0.6.2 --repo lukewilliamboswell/roc-fuzz`
+# (verified against `gh release view 0.8.0 --repo lukewilliamboswell/roc-fuzz`
 # and the cached download), and commit is the tag's commit.
 ROC_FUZZ_RELEASE = {
-    "version": "0.6.2",
-    "commit": "b4505e2cdc19a74a2abf271f506c14478abdb7c2",
-    "bundle": "3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
-    "sha256": "89fc0b22cd1f30c01208a29eea55dbbdcdbac2a37d059e80b3a18c62bc2f275c",
+    "version": "0.8.0",
+    "commit": "f06ab8dbfd9a49604cb9d612b0a6fc7205af09a0",
+    "bundle": "BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
+    "sha256": "8d7a2df0c33658e33968e774f9b62669a290fbbf05d477982458a382b89fa664",
 }
 ROC_FUZZ_URL = (
     "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/"
@@ -360,11 +362,15 @@ def check_pin(quiet: bool = False) -> list[str]:
     """Problems with the roc-fuzz pin: a target declaring another platform,
     or a cached download whose digest differs from the release's."""
     problems: list[str] = []
+    sources = [SPEC_APP, ROOT / "bench" / "roc" / "alloc.roc"]
     for name in TARGET_ORDER:
         try:
-            source = TARGETS[name].source()
+            sources.append(TARGETS[name].source())
         except ValueError as problem:
             problems.append(f"{name}: {problem}")
+    for source in sources:
+        if not source.is_file():
+            problems.append(f"missing {display(source)}")
             continue
         urls = PLATFORM_RE.findall(source.read_text(encoding="utf-8"))
         if urls != [ROC_FUZZ_URL]:
@@ -478,14 +484,20 @@ def binary_path(name: str) -> Path:
 
 
 def build_target(name: str, args: argparse.Namespace) -> int:
-    output = binary_path(name)
+    return build_app(TARGETS[name].source(), binary_path(name), args)
+
+
+def build_app(source: Path, output: Path, args: argparse.Namespace, *, speed: bool = False) -> int:
     if args.no_build:
         if not output.is_file():
             print(f"error: --no-build given but {display(output)} does not exist", file=sys.stderr)
             return 2
         return 0
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = [args.roc, "build", "--fuzz", display(TARGETS[name].source()), f"--output={output}", *args.dep]
+    command = [args.roc, "build", "--fuzz"]
+    if speed:
+        command.append("--opt=speed")
+    command += [display(source), f"--output={output}", *args.dep]
     print(f"+ {shlex.join(command)}", flush=True)
     try:
         return subprocess.run(command, cwd=ROOT, check=False).returncode
@@ -623,6 +635,44 @@ def run_mode(args: argparse.Namespace) -> int:
     return 0 if all(result["outcome"] == "passed" for result in results) else 1
 
 
+def spec_smoke(args: argparse.Namespace) -> int:
+    problems = check_pin(quiet=True)
+    for problem in problems:
+        print(f"error: {problem}", file=sys.stderr)
+    if problems:
+        return 2
+
+    binary = binary_path("spec")
+    if status := build_app(SPEC_APP, binary, args, speed=True):
+        return status
+
+    inventory = subprocess.run([str(binary), "--list-targets"], cwd=ROOT, check=False,
+                               capture_output=True, text=True)
+    if inventory.returncode:
+        print(inventory.stderr, file=sys.stderr)
+        return inventory.returncode
+
+    provenance = [f"--source-revision={git_revision()}",
+                  f"--roc-version={command_output([args.roc, 'version'])}",
+                  f"--platform-release={ROC_FUZZ_RELEASE['version']}",
+                  f"--platform-sha256={ROC_FUZZ_RELEASE['sha256']}"]
+    status = 0
+    for name in inventory.stdout.splitlines():
+        report_dir = WORK_ROOT / "runs" / "spec" / name
+        if report_dir.exists():
+            shutil.rmtree(report_dir)
+        report_dir.parent.mkdir(parents=True, exist_ok=True)
+        command = [str(binary), f"--target={name}", "run", f"--report-dir={report_dir}",
+                   f"--runs={args.runs}", f"--seed={args.seed}", *provenance]
+        print(f"+ {shlex.join(command)}", flush=True)
+        if subprocess.run(command, cwd=report_dir.parent, check=False).returncode:
+            status = 1
+            for crash in harvest(name, report_dir):
+                replay = [str(binary), f"--target={name}", "replay", str(crash)]
+                print(f"Reproduce with {shlex.join(replay)}", file=sys.stderr)
+    return status
+
+
 def run_artifact_command(args: argparse.Namespace) -> int:
     input_path = Path(args.input).expanduser().resolve()
     if not input_path.is_file():
@@ -698,6 +748,11 @@ def make_parser() -> argparse.ArgumentParser:
                        help=f"inputs per target (default: the target's smoke_runs, {SMOKE_RUNS} for most)")
     smoke.add_argument("--seed", type=int, default=SMOKE_SEED, help=f"libFuzzer seed (default {SMOKE_SEED})")
 
+    spec = sub.add_parser("spec-smoke", help="build and run the optimized spec model targets")
+    add_build_options(spec)
+    spec.add_argument("--runs", type=positive_int, default=200)
+    spec.add_argument("--seed", type=int, default=SMOKE_SEED)
+
     campaign = sub.add_parser("campaign", help="time-bounded run (default 600 s per target)")
     add_run_options(campaign)
     campaign.add_argument("--seconds", type=positive_int, default=600)
@@ -727,6 +782,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = make_parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "spec-smoke":
+            with flight.flight(args.roc, source=args.source or args.no_build) as args.dep:
+                return spec_smoke(args)
         if args.command in ("smoke", "campaign", "nightly", "show", "replay", "minimize"):
             command = run_mode if args.command in ("smoke", "campaign", "nightly") else run_artifact_command
             # No bundle is needed to reuse binaries already built.

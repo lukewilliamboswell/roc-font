@@ -253,6 +253,11 @@ shaping stage:
   oracle installed; cases are JSONC data run by the Python driver through
   the Roc harness, never generated `.roc` files; list every deliberate
   divergence with its reason;
+- where ordering, interacting choices or integer boundaries leave a gap in
+  those checks, derive an independent expectation from the format contract.
+  Use roc-fuzz `Model` for bounded histories and `Solve` for integer laws.
+  Check a plausible decision mutation in a scratch worktree. See
+  `docs/fuzzing.adoc` for the suite and contributor workflow;
 - test aggregated problems, truncated and corrupted files, and empty and
   degenerate inputs;
 - generate `roc docs` and confirm internal helpers do not appear;
@@ -269,6 +274,9 @@ If a check cannot run, run the others and report which were skipped and why.
   is the isolation boundary between workers.
 - Land shared contracts (types, module APIs) before fanning out consumers;
   the integrator alone edits shared manifests.
+- Give each worker its own worktree and build outputs. For simultaneous
+  bundle checks, share a served bundle or use independent Roc package
+  caches so one check cannot prune an entry another check still uses.
 
 ## Evolve from evidence
 

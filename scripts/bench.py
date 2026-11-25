@@ -811,7 +811,7 @@ def updated_baseline(baseline: dict, measured: dict[str, dict], cases: list[Case
                  "roc_alloc plus roc_realloc calls made by one operation, measured with roc-fuzz "
                  "Fuzz.measure! in a `roc build --fuzz --opt=speed` binary.",
         "compiler": {"version": versions.get("roc", "unknown"), "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
-                     "roc_fuzz": "0.6.2"},
+                     "roc_fuzz": "0.8.0"},
         "generator": {"fonttools": versions.get("fonttools_generator") or baseline.get("generator", {}).get("fonttools")},
         "cases": new_cases,
     }

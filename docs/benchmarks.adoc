@@ -200,7 +200,7 @@ shows exactly which counts moved; explain them in the review. Updating with
 `--only` or `--ops` changes only the cases measured. Updating in a checkout
 without the corpus keeps the corpus cases already recorded.
 
-roc-fuzz 0.6.2 exposes named measurement scopes with allocation and
+roc-fuzz 0.8.0 exposes named measurement scopes with allocation and
 reallocation calls, requested bytes, live bytes and peak live bytes. The
 benchmark diagnostic sums `stats.allocs` and `stats.reallocs` for the existing
 call-count ratchet, and separately ratchets `requested_bytes` and

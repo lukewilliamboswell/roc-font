@@ -112,7 +112,7 @@ step! = |name, ctx| {
 			Run.call!("roc-stable", ["test", "scripts/check.roc"], root)?
 			Run.call!("roc-stable", ["test", "scripts/release_notes.roc"], root)?
 			Run.call!(compiler, ["test", "--opt=dev", "package/main.roc"].concat(cache), root)?
-			for module_path in ["tests/api/main.roc", "tools/driver/Case.roc"] {
+			for module_path in ["tests/api/main.roc", "tools/driver/Case.roc", "fuzz/spec/main.roc"] {
 				Run.call!(compiler, ["test", "--opt=dev", module_path].concat(cache).concat(dep), consumer)?
 			}
 			Ok({})
@@ -120,7 +120,9 @@ step! = |name, ctx| {
 		"fuzz-smoke" => {
 			target_names = if (options.smoke) ["font-read", "font-shape", "font-math"] else []
 			runs = if (options.fuzz_runs != "") ["--runs=${options.fuzz_runs}"] else if (options.smoke) ["--runs=200"] else []
-			adapter!("run_fuzz.py", ["smoke"].concat(target_names).concat(runs), ctx)
+			adapter!("run_fuzz.py", ["smoke"].concat(target_names).concat(runs), ctx)?
+			spec_runs = if (options.fuzz_runs == "") [] else ["--runs=${options.fuzz_runs}"]
+			adapter!("run_fuzz.py", ["spec-smoke"].concat(spec_runs), ctx)
 		}
 		"examples" => Run.call!("roc-stable", ["scripts/examples.roc"].concat(if (options.source) ["--", "--source"] else []), consumer)
 		"conformance" => {
@@ -163,6 +165,6 @@ adapter! = |script, args, ctx| {
 
 consumer_apps! : Path => Try(List(Str), _)
 consumer_apps! = |directory| {
-	fuzz = Run.files!(directory.join("fuzz"))?
-	Ok(["tests/api/main.roc", "tools/driver/main.roc", "bench/roc/font.roc", "bench/roc/alloc.roc"].concat(fuzz.keep_if(|p| p.display().ends_with(".roc")).map(|p| "fuzz/${p.filename().map_ok(Path.display) ?? ""}")))
+	fuzz = directory.join("fuzz").list!()?
+	Ok(["tests/api/main.roc", "tools/driver/main.roc", "bench/roc/font.roc", "bench/roc/alloc.roc", "fuzz/spec/main.roc"].concat(fuzz.keep_if(|p| p.display().ends_with(".roc")).map(|p| "fuzz/${p.filename().map_ok(Path.display) ?? ""}")))
 }

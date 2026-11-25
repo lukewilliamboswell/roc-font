@@ -20,8 +20,6 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] `adv-huge-cmap/read` got slower (188 to 222 µs) when strictly less
   work was done: a code-generation effect of the nightly; re-check on the
   next nightly.
-- [ ] When roc-fuzz releases `measure_memory!` (PR #82): switch
-  `bench/roc/alloc.roc`, ratchet `requested_bytes` and `peak_live_bytes`.
 
 ### 0.1.0 polish from rc1 consumers
 
