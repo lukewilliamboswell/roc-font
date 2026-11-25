@@ -134,6 +134,14 @@ LayoutGsub := {
 	## when none did, so the run is complete).
 	Applied : { items : List(Item), stopped : U64 }
 
+	## State shared by the lookup ranges on either side of a script's
+	## reordering pass. A pause keeps consumed budget, ligature identity
+	## and the random sequence, along with recyclable lookup buffers.
+	Progress : { serial : U64, random : U64, ops : U64, stopped : U64, spare : List(Item), work : Work }
+
+	initial_progress : Progress
+	initial_progress = { serial: 0, random: 1, ops: 0, stopped: 0, spare: [], work: { scratch: [], frames: [], positions: [] } }
+
 	## What a lookup is applied with: its mask and properties, the joiner
 	## rules, `rand`, and the index in the plan of the step being applied
 	## (recorded in the origin of every glyph it substitutes, also through
@@ -319,12 +327,11 @@ LayoutGsub := {
 
 	## Which substitution produced a glyph, for `Font.shape_traced`. Kept
 	## in bits no other part of an item uses: the kind in props bits 41-43,
-	## the plan step that made the substitution in props bits 44-60, and a
-	## ligature's component count in mask bits 32-38. A plan has fewer
-	## than 2^17 steps (two stages of at most 65535 lookups, the format's
-	## count), and a ligature at most `max_context` (64) components.
-	## Writing the bits costs no allocation, so untraced shaping pays
-	## nothing measurable for them.
+	## the plan step that made the substitution in props bits 44-60
+	## (low 17 bits) and mask bits 39-41 (high 3 bits), and a ligature's
+	## component count in mask bits 32-38. This holds 16 stages of up to
+	## 65535 lookups each, and a ligature of at most `max_context` (64)
+	## components, without extra allocations.
 	##
 	## Kinds: `origin_mapped` (0, from the character map, never
 	## substituted), `origin_substituted` (one glyph for one), and the
@@ -353,7 +360,7 @@ LayoutGsub := {
 	origin_kind = |item| item.props.shr_zf_wrap(41).bitwise_and(0x7)
 
 	origin_step : Item -> U64
-	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0x1FFFF)
+	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0x1FFFF).bitwise_or(item.mask.shr_zf_wrap(22).bitwise_and(0xE0000))
 
 	origin_components : Item -> U64
 	origin_components = |item| item.mask.shr_zf_wrap(32).bitwise_and(0x7F)
@@ -362,7 +369,7 @@ LayoutGsub := {
 	with_origin : Item, U64, U64, U64 -> Item
 	with_origin = |item, kind, step, components| {
 		props = item.props.bitwise_and(0xE00001FFFFFFFFFF).bitwise_or(kind.bitwise_and(0x7).shl_wrap(41)).bitwise_or(step.bitwise_and(0x1FFFF).shl_wrap(44))
-		mask = item.mask.bitwise_and(0xFFFFFF80FFFFFFFF).bitwise_or(components.bitwise_and(0x7F).shl_wrap(32))
+		mask = item.mask.bitwise_and(0xFFFFFC00FFFFFFFF).bitwise_or(components.bitwise_and(0x7F).shl_wrap(32)).bitwise_or(step.bitwise_and(0xE0000).shl_wrap(22))
 		{ ..item, props, mask }
 	}
 
@@ -387,20 +394,28 @@ LayoutGsub := {
 	## lookups; the run stays total and finite.
 	apply : LayoutGsub, List(Step), List(Item), Limits -> Applied
 	apply = |shape, plan, items, limits| {
+		result = LayoutGsub.apply_steps(shape, plan, 0, plan.len(), items, limits, LayoutGsub.initial_progress)
+		{ items: result.items, stopped: result.progress.stopped }
+	}
+
+	## Apply the planned steps in [first, end). Script stages use adjacent
+	## ranges of the same plan so every origin still names a unique step.
+	apply_steps : LayoutGsub, List(Step), U64, U64, List(Item), Limits, Progress -> { items : List(Item), progress : Progress }
+	apply_steps = |shape, plan, first, end, items, limits, progress| {
 		var $run = items
 		# The previous run of a general lookup, whose allocation the next one
 		# writes into.
-		var $spare = []
-		var $serial = 0
-		var $random = 1
-		var $ops = 0
-		var $stopped = 0
-		var $work = { scratch: [], frames: [], positions: [] }
+		var $spare = progress.spare
+		var $serial = progress.serial
+		var $random = progress.random
+		var $ops = progress.ops
+		var $stopped = progress.stopped
+		var $work = progress.work
 		# A digest of the run's glyphs, made again after each lookup that
 		# runs: a lookup whose digest misses it cannot start anywhere, so
 		# it is passed over without visiting the run.
 		var $digest = LayoutGsub.run_digest($run)
-		for step_index in 0..<plan.len() {
+		for step_index in first..<end {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
 			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
@@ -431,7 +446,7 @@ LayoutGsub := {
 				$digest = LayoutGsub.run_digest($run)
 			}
 		}
-		{ items: $run, stopped: $stopped }
+		{ items: $run, progress: { serial: $serial, random: $random, ops: $ops, stopped: $stopped, spare: $spare, work: $work } }
 	}
 
 	## The digest of every glyph of a run, in the form of a lookup's (see
@@ -3198,6 +3213,22 @@ expect test_ligated(0, True, letters([10, 11])) == { glyphs: [102], clusters: [0
 expect test_ligated(0, True, letters([10, 11, 11])) == { glyphs: [101], clusters: [0] }
 expect test_ligated(0, True, letters([10, 12, 11])) == { glyphs: [100, 11], clusters: [0, 2] }
 expect test_ligated(0, True, letters([10, 11, 10, 12])) == { glyphs: [102, 100], clusters: [0, 2] }
+
+# A reordering pause keeps ligature numbering and credits each result to
+# its absolute plan step, including steps beyond the first two stages.
+expect {
+	gsub = LayoutGsub.read(liga_gsub(0))?
+	items = [10, 11, 10, 12].map_with_index(|glyph, i| { glyph, cluster: i, mask: if (i < 2) 1 else 2, props: 0 })
+	step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+	last = 0x20000
+	plan = [step].concat(List.repeat({ ..step, mask: 0 }, last - 1)).append({ ..step, mask: 2 })
+	limits = { limit: 64, budget: 64, depth: 8 }
+	first = LayoutGsub.apply_steps(gsub, plan, 0, 1, items, limits, LayoutGsub.initial_progress)
+	second = LayoutGsub.apply_steps(gsub, plan, last, last + 1, first.items, limits, first.progress)
+	second.items.map(|item| item.glyph) == [102, 100]
+		and second.items.map(LayoutGsub.lig_id) == [1, 2]
+		and second.items.map(LayoutGsub.origin_step) == [0, last]
+}
 
 # At the end of the run, or before a glyph no ligature continues with, only
 # the one-glyph ligature applies.
