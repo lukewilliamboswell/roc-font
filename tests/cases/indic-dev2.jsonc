@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "defaults": {
+    "font": "../corpus/noto-sans-devanagari-2.007/NotoSansDevanagari/unhinted/ttf/NotoSansDevanagari-Regular.ttf",
+    "font_sha256": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd",
+    "options": {"direction": "ltr", "script": "Deva", "language": "hi", "utf8_clusters": true, "output": ["show-flags"]},
+    "expected": "oracle"
+  },
+  "cases": [
+    {"id": "prebase-matra", "text": "किताब", "reason": "The sign for short i precedes its consonant visually. The three input syllables start at UTF-8 bytes 0, 6 and 12."},
+    {"id": "prebase-matra-characters", "text": "किताब", "options": {"cluster_level": 1}, "reason": "Character clusters still merge across the visual change of order and retain original UTF-8 coordinates."},
+    {"id": "half-form", "text": "क्त", "reason": "Half ka survives before the base ta, with the break between them flagged."},
+    {"id": "half-form-without-dist", "text": "क्त", "options": {"features": ["dist=0"]}, "reason": "The same glyphs keep their unadjusted advances when pair positioning is disabled."},
+    {"id": "reph", "text": "र्क", "reason": "The initial ra and halant form reph, which moves after ka and receives its abvm offset."},
+    {"id": "reph-without-abvm", "text": "र्क", "options": {"features": ["abvm=0"]}, "reason": "Disabling above-base mark positioning removes the signed reph x offset."},
+    {"id": "dotted-circle-left", "text": "ि", "reason": "The broken syllable takes the cmap dotted-circle glyph, following the visually pre-base vowel sign at the same cluster."},
+    {"id": "dotted-circle-right", "text": "ा", "reason": "The dotted circle comes before a post-base vowel sign."},
+    {"id": "zwj", "text": "क्‍त", "reason": "ZWJ retains the half-form request and is shown as a zero-width invisible glyph at the original cluster."},
+    {"id": "zwj-before-matra", "text": "क्‍ति", "reason": "The left matra stays before the half form. Pair positioning still pairs the half form with the base across ZWJ."},
+    {"id": "zwnj", "text": "क्‌त", "reason": "ZWNJ inhibits the half form. The visible halant remains after ka, and ta starts its own syllable."},
+    {"id": "zwnj-before-matra", "text": "क्‌ति", "reason": "After the join control, the next syllable gets the pre-base matra and preserves the boundary break flag."},
+    {"id": "half-form-and-matra", "text": "हिन्दी", "reason": "Adjacent syllables combine pre-base and post-base vowel signs with a half form."},
+    {"id": "matra-and-reph", "text": "र्कि", "reason": "One syllable combines both directions of reordering, then selects the final presentation forms."},
+    {"id": "matra-and-rakar", "text": "क्त्रि", "reason": "The left matra precedes the half form and the ta with subjoined ra."}
+  ]
+}
