@@ -8,7 +8,9 @@ import fuzz.Fuzz
 import AxisMapping
 import Budgets
 import ClassPairs
+import ClusterRanges
 import Cmap
+import CmapSpan
 import Collection
 import Composite
 import Context
@@ -34,6 +36,8 @@ target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target])
 expect AxisMapping.check({})
 expect Budgets.check({})
 expect ClassPairs.check({})
+expect ClusterRanges.check({})
+expect CmapSpan.check({})
 expect Collection.check({})
 expect Composite.check({})
 expect ContextEncodings.check({})

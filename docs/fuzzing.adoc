@@ -99,6 +99,9 @@ Compare direct and extension encodings of the same lookup.
 When several formats can encode the same rule, write one expected run
 from the rule and compare every encoding with it. For class zero, include
 both covered and uncovered glyphs to check the coverage gate.
+For relative offsets, place the same glyph words near the start and at
+the last valid position. Sharing those words across segments with
+different deltas makes each segment's offset origin observable.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
@@ -109,6 +112,8 @@ the caller actually gets.
 For traced shaping, compare each glyph with its cluster and origin.
 Repeat a phrase in different feature ranges so reordering exposes any
 origin that changed its position or lost its structural kind.
+For cluster ranges, slice the original UTF-8 bytes and compare the exact
+text. Two valid slices can still split glyphs that share one cluster.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
