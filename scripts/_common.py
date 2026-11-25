@@ -185,7 +185,7 @@ OPTION_FIELDS = (
     "remove_default_ignorables",
     "hb_options",
 )
-OUTPUT_FLAGS = ("ned", "no-clusters", "no-positions", "no-advances")
+OUTPUT_FLAGS = ("ned", "no-clusters", "no-positions", "no-advances", "show-flags")
 DIRECTIONS = {"l": "ltr", "r": "rtl", "t": "ttb", "b": "btt"}
 CASE_FIELDS = {
     "id", "kind", "font", "font_sha256", "unicodes", "text", "options", "expected",
@@ -906,7 +906,7 @@ def has_glyph_names(expected: str) -> bool:
 # from protocol 2 coords, advances, metrics or extents; items: the code
 # points (shape, width) or glyph ids (advances, extents, or `all`), lower-case
 # hex without prefix, comma-separated, empty for none; flags:
-# comma-separated, from no-clusters, no-positions, no-advances,
+# comma-separated, from no-clusters, no-positions, no-advances, show-flags,
 # utf8-clusters and font-size=<n>, and from protocol 2 face=<n>,
 # instance=<n>, weight=<name or n>, width=<name or percent>,
 # optical-size=<FontDefault or px> and axis=<tag>:<value> (repeatable, in
