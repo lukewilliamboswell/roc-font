@@ -26,6 +26,7 @@ import Features
 import Fractions
 import Gpos
 import Gsub
+import Indic
 import LegacyCmap
 import LookupFiltering
 import Math
@@ -45,7 +46,7 @@ import Thai
 import VariationReading
 import WidthBounds
 
-target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Cursive.target, Arabic.target, Arabic.growth_target, Thai.target, Thai.growth_target])
+target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Cursive.target, Arabic.target, Arabic.growth_target, Indic.target, Indic.growth_target, Thai.target, Thai.growth_target])
 
 expect AlternateRanges.check({})
 expect Arabic.check({})
@@ -64,6 +65,7 @@ expect FallbackMarks.check({})
 expect FeatureVariations.check({})
 expect Features.check({})
 expect Fractions.check({})
+expect Indic.check({})
 expect LegacyCmap.check({})
 expect LookupFiltering.check({})
 expect Math.check({})

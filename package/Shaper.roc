@@ -16,9 +16,9 @@ import Sorted
 import TablePost
 import TableCmap
 
-## Shaping follows HarfBuzz 14.6.0's default, Hebrew, Arabic and Thai paths.
-## It chooses
-## lookups for a script, language, direction and features (a plan, as
+## Shaping follows HarfBuzz 14.6.0's default, Hebrew, Arabic, Thai and
+## modern Devanagari Hindi paths. It chooses lookups for a script, language,
+## direction and features (a plan, as
 ## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
 ## (Unicode properties, grapheme clusters, the script's own direction,
 ## Thai SARA AM, mirroring, normalisation by what the font maps and automatic fractions),

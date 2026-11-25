@@ -651,6 +651,9 @@ bound:
 . *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
   and mark filtering sets from `GDEF`. The Arabic shaper assigns joining
   masks and orders the stages for contextual forms and required ligatures.
+  The modern Devanagari Hindi shaper identifies syllables and pauses
+  between feature stages to reorder matras and reph. Pauses preserve
+  the substitution budget, lookup origin indices and ligature identity.
 . *Position*: take advances from `hmtx` and `HVAR`; apply GPOS pair
   adjustments, cursive and mark attachments, with the `kern` table as a kerning
   fallback.

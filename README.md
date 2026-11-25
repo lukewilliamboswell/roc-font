@@ -19,6 +19,8 @@ lines and choosing fallback fonts stay with your program.
 The default shaping pipeline covers Latin, Greek and Cyrillic. Hebrew,
 [modern horizontal Arabic](docs/arabic.adoc) and
 [horizontal Thai](docs/thai.adoc) have script-specific shaping.
+[Modern Devanagari Hindi](docs/indic-dev2.adoc) uses OpenType dev2
+features for syllable reordering and conjuncts.
 Horizontal positioning supports pair adjustment, cursive attachment and
 mark attachment to bases, ligatures and other marks. Variable fonts can
 be measured at any weight, width or optical size. The API may still

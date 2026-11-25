@@ -589,9 +589,10 @@ Font :: { face : Face }.{
 	## HarfBuzz's default shaping rules select canonical forms the font
 	## maps, mirror brackets in right-to-left text, hide default-ignorable
 	## characters and derive missing space widths. Hebrew, modern horizontal
-	## Arabic and horizontal Thai use script-specific shaping. In Thai, each SARA AM can split
-	## into a spacing vowel and a mark before shaping applies the font's
-	## positioning rules.
+	## Arabic, horizontal Thai and modern Devanagari Hindi use script-specific
+	## shaping. For Hindi select `Deva` and `hi` with a font that has
+	## OpenType `dev2` layout. In Thai, SARA AM can split into a spacing
+	## vowel and a mark before the font's positioning rules apply.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{}, arabic_context : ArabicContext ?? ArabicContext.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left

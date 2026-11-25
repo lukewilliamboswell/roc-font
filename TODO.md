@@ -74,9 +74,10 @@ Chrome widths agree on package-mermaid's oracle texts.
 3. GPOS single and contextual positioning. Add evidence for variation
    and point-based cursive anchors before expanding that scope.
 4. Outlines as a listing; CFF and CFF2.
-5. Expand the script support matrix beyond the documented Arabic and Thai
-   cases. Add Indic, USE, Hangul and Tibetan shaping with independent
-   witnesses. The 109 in-house Tibetan cases exercise `abvs` and `blws`.
+5. Expand the script support matrix beyond the documented Arabic, Thai
+   and modern Devanagari Hindi cases. Add further Indic configurations,
+   USE, Hangul and Tibetan shaping with independent witnesses. The 109
+   in-house Tibetan cases exercise `abvs` and `blws`.
 6. WOFF/WOFF2 unwrapping outside the core.
 
 ## Open questions

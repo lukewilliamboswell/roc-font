@@ -152,6 +152,10 @@ lookup flag. Use asymmetric signed anchors and compare which endpoint
 keeps its baseline. For Arabic joining, vary context across the same
 first or last letter and model transparent marks, join controls and true
 line boundaries before applying the font's substitutions.
+For Indic stage boundaries, use one lookup that detects the pre-base
+matra in an early stage and a second lookup that detects the reph after
+final reordering. Use distinct glyphs for both observations and check
+what changes when a join control keeps a visible halant.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 

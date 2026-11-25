@@ -158,6 +158,18 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-indic": TargetConfig(
+        sources=(FUZZ_ROOT / "font-indic.roc",),
+        seeds=FUZZ_ROOT / "seeds" / "font-indic.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
+        font_prefix="र्कि क्ति र्‍क र्‌क ि।".encode("utf-8") + b"\xff",
+        max_input_size=1048576,
+        timeout=10,
+        contract=(
+            "Hindi dev2 shaping is deterministic, keeps UTF-8 cluster "
+            "boundaries aligned, and shares growth limits across its stages"
+        ),
+    ),
     # Narrow targets (architecture §7.3): the input chooses the contents of
     # a font exercising one feature, built at two sizes. Real fonts are not
     # seeds (font_files=False): their bytes would only be read as choices.
