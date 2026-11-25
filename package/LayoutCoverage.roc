@@ -37,6 +37,24 @@ LayoutCoverage := {}.{
 		Ok({ count: $index, steps: spent })
 	}
 
+	## Inspect the checked glyphs without materializing coverage ranges.
+	every : List(U8), U64, (U64 -> Bool) -> Bool
+	every = |data, at, check_glyph| {
+		format = Bytes.u16(data, at)
+		count = Bytes.u16(data, at + 2)
+		for i in 0..<count {
+			entry = at + 4 + (if (format == 1) 2 else 6) * i
+			first = Bytes.u16(data, entry)
+			last = if (format == 1) first else Bytes.u16(data, entry + 2)
+			for glyph in first..=last {
+				if !check_glyph(glyph) {
+					return False
+				}
+			}
+		}
+		True
+	}
+
 	## The coverage index of a glyph in a checked coverage table: a sorted
 	## glyph array (format 1) or ranges with their first index (format 2).
 	## Ranges are searched as stored; one whose last glyph comes before its

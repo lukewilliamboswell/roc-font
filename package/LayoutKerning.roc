@@ -137,6 +137,7 @@ LayoutKerning := {
 	position = |kerning, plan, legacy, items, advances, glyph_count| {
 		count = items.len()
 		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: advances, parents: [] }
+		var $run_marks = Unchecked
 		for entry in plan {
 			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end.bitwise_and(0xFFFFFFFF)
 			lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
@@ -148,8 +149,14 @@ LayoutKerning := {
 				# `sanitize_lookup_props`).
 				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props.bitwise_and(0xFFFFFFFF))
 				if locator != 0 {
-					kind = lookup.props.shr_zf_wrap(32)
-					$out = LayoutKerning.apply_mark_lookup(kerning, locator, { mask: entry.mask, props, kind }, $out)
+					kind = lookup.props.shr_zf_wrap(32).bitwise_and(0x0F)
+					marks_only = lookup.props.bitwise_and(LayoutKerning.mark_coverage_class) != 0
+					if marks_only and $run_marks == Unchecked {
+						$run_marks = if ($out.items.any(LayoutGsub.is_mark_item)) Present else Absent
+					}
+					if !marks_only or $run_marks == Present {
+						$out = LayoutKerning.apply_mark_lookup(kerning, locator, { mask: entry.mask, props, kind, marks_only }, $out)
+					}
 				} else {
 					$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
 				}
@@ -165,6 +172,10 @@ LayoutKerning := {
 		}
 		$out
 	}
+
+	## Lookup metadata above the raw flags and four-bit dispatch kind.
+	mark_coverage_class : U64
+	mark_coverage_class = 0x1000000000
 
 	## The lookup flag HarfBuzz applies a `kern` table with.
 	ignore_marks : U64
@@ -260,7 +271,7 @@ LayoutKerning := {
 	# Every mark lookup scans forward. Types 4 and 5 cache the target and the
 	# start of the next backward search, so each item is visited at most
 	# once by the target search. Type 6 keeps the previous visible mark.
-	apply_mark_lookup : LayoutKerning, U64, { mask : U64, props : U64, kind : U64 }, Positions -> Positions
+	apply_mark_lookup : LayoutKerning, U64, { mask : U64, props : U64, kind : U64, marks_only : Bool }, Positions -> Positions
 	apply_mark_lookup = |kerning, lookup, ctx, positions| {
 		{ items, dx, dy, ax, parents } = positions
 		end = Bytes.u16(kerning.data, lookup + 4)
@@ -277,7 +288,7 @@ LayoutKerning := {
 		for i in 0..<count {
 			item = $items.get(i) ?? LayoutGsub.no_item
 			masked = LayoutGsub.applies(item.mask, ctx.mask)
-			if masked and LayoutKerning.sees(kerning.gdef, item, ctx.props) {
+			if masked and (!ctx.marks_only or LayoutGsub.is_mark_item(item)) and LayoutKerning.sees(kerning.gdef, item, ctx.props) {
 				var $k = 0
 				while $k < end {
 					match LayoutKerning.position_subtable(kerning.data, lookup, extended, ctx.kind, $k) {
@@ -726,8 +737,8 @@ LayoutKerning := {
 	## The pair adjustment lookups of a font file's `GPOS` that features
 	## reach. A table listing more than `max_lookups` lookups is over the
 	## limit.
-	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
-	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv|
+	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar, LayoutGdef -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv, gdef|
 		match Sfnt.located(bytes, tables, "GPOS", 10) {
 			Missing => Ok(Absent)
 			Bad(at) => Err(Sfnt.bad("GPOS", at))
@@ -735,7 +746,7 @@ LayoutKerning := {
 				if Bytes.u16(data, Bytes.u16(data, 8)) > max_lookups {
 					Err(OverLimit("max_lookups"))
 				} else {
-					match LayoutKerning.read_gpos(data, count_of_glyphs, lv) {
+					match LayoutKerning.read_gpos(data, count_of_glyphs, lv, gdef) {
 						Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
 						Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
 					}
@@ -768,8 +779,8 @@ LayoutKerning := {
 	## table. A device outside the table or of an unknown
 	## format breaks the table (OTS rejects it); a variation index outside
 	## the store is listed in `deltas`.
-	read_gpos : List(U8), U64, LayoutVar -> Try(Gpos, [Bad(U64)])
-	read_gpos = |gpos, glyph_count, lv| {
+	read_gpos : List(U8), U64, LayoutVar, LayoutGdef -> Try(Gpos, [Bad(U64)])
+	read_gpos = |gpos, glyph_count, lv, gdef| {
 		size = gpos.len()
 		read_common = LayoutCommon.read(gpos)?
 		common = read_common.common
@@ -795,6 +806,7 @@ LayoutKerning := {
 				if kind == 2 or kind == 4 or kind == 5 or kind == 6 or kind == 9 {
 					$steps = LayoutKerning.spend(gpos, $steps, count)?
 					var $supported_kind = 0
+					var $marks_only = True
 					for s in 0..<count {
 						at = lookup + Bytes.u16(gpos, lookup + 6 + 2 * s)
 						extended = kind == 9 and Bytes.fits(at, 8, size)
@@ -827,11 +839,17 @@ LayoutKerning := {
 							$deltas = done.deltas
 							$steps = done.steps
 							$locator = lookup
+							if $marks_only {
+								$marks_only = LayoutMark.gdef_marks(gpos, target, gdef)
+							}
 						}
 					}
 					# Bits 32 and above are unused by flags and filtering set IDs.
-					if $supported_kind != 2 {
+					if $locator != 0 {
 						$props = $props.bitwise_or($supported_kind.shl_wrap(32))
+						if $marks_only {
+							$props = $props.bitwise_or(LayoutKerning.mark_coverage_class)
+						}
 					}
 				}
 			}
@@ -1083,7 +1101,7 @@ expect {
 		$set = $set.concat(be16(g)).concat(be16(65535))
 	}
 	gpos = header.concat(scripts).concat(language).concat(features).concat(lookups).concat(fields).concat(offsets).concat(coverage).concat($set)
-	match LayoutKerning.read_gpos(gpos, n, LayoutVar.none(0)) {
+	match LayoutKerning.read_gpos(gpos, n, LayoutVar.none(0), LayoutGdef.none) {
 		Ok(read) => {
 			kerning = LayoutKerning.combine(Present(read), Absent, LayoutVar.none(0), LayoutGdef.none)
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })

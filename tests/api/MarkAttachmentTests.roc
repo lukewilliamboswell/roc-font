@@ -1,3 +1,5 @@
+import build.FontBuild
+import build.MarkBuild
 import font.Font
 import "../../tests/fonts/mark-attachment/DavidLibre-Regular.ttf" as david : List(U8)
 
@@ -27,4 +29,17 @@ expect {
 			}
 		},
 	)
+}
+
+# Positioning uses the input coverage even when a GDEF class does not mark
+# that glyph. This keeps the mark-only fast path conditional on certification.
+expect {
+	cmap = FontBuild.cmap([{ system: 3, encoding: 10, subtable: FontBuild.cmap12([{ first: 'A', last: 'B', glyph: 1 }]) }])
+	gdef = MarkBuild.gdef([{ first: 1, last: 2, class: 1 }], [])
+	subtable = MarkBuild.position([{ glyph: 2, class: 0, anchor: MarkBuild.anchor(21, 12) }], 1, [{ glyph: 1, anchors: [MarkBuild.anchor(100, 300)] }])
+	gpos = MarkBuild.layout("latn", [{ tag: "mark", lookups: [0] }], [MarkBuild.Lookup.{ kind: 4, subtables: [subtable] }])
+	raw = FontBuild.glyphs_font([500, 612, 390], cmap, [{ tag: "GDEF", data: gdef }, { tag: "GPOS", data: gpos }])
+	font = Font.from_bytes(raw, Font.ReadOptions.{ strict: True }) ?? crash "checked synthetic GPOS layout was rejected"
+	run = Font.shape(font, "AB", Font.ShapeOptions.{ script: "Latn" })
+	run.glyphs == [1, 2] and run.advances == [{ x: 612, y: 0 }, { x: 390, y: 0 }] and run.offsets == [{ x: 0, y: 0 }, { x: -533, y: 288 }]
 }

@@ -1,6 +1,7 @@
 import Bytes
 import LayoutAnchor
 import LayoutCoverage
+import LayoutGdef
 import LayoutVar
 
 ## GPOS mark-to-base, mark-to-ligature and mark-to-mark format 1 subtables. Read validates
@@ -102,6 +103,17 @@ LayoutMark := {
 		classes: Bytes.u16(data, at + 6),
 		marks: at + Bytes.u16(data, at + 8),
 		target_array: at + Bytes.u16(data, at + 10),
+	}
+
+	## A checked lookup's input coverage contains only explicit GDEF marks.
+	## A disagreement leaves the lookup eligible for any glyph.
+	gdef_marks : List(U8), U64, LayoutGdef -> Bool
+	gdef_marks = |data, at, gdef| {
+		if !LayoutGdef.has_glyph_classes(gdef) {
+			return False
+		}
+		coverage = at + Bytes.u16(data, at + 2)
+		LayoutCoverage.every(data, coverage, |glyph| LayoutGdef.glyph_props(gdef, glyph).bitwise_and(LayoutGdef.mark) != 0)
 	}
 
 	## The mark's stored record or a coverage miss.

@@ -250,7 +250,11 @@ Face := {
 						LayoutVar.none(axis_count)
 					}
 				}
-				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count, options.max_lookups, lv)
+				gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
+					Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
+					_ => LayoutGdef.none
+				}
+				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count, options.max_lookups, lv, gdef)
 				match gpos {
 					Err(OverLimit(which)) => {
 						$optional = $optional.append(OverLimit(which))
@@ -322,10 +326,6 @@ Face := {
 					match (advances, boxes, cmap) {
 						(Ok(a), Ok(b), Ok(c)) => {
 							no_lv = LayoutVar.none(0)
-							gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
-								Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
-								_ => LayoutGdef.none
-							}
 							Ok({
 								units_per_em: h.units_per_em,
 								glyph_count,
