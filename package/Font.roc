@@ -560,6 +560,16 @@ Font :: { face : Face }.{
 	## and `shape_checked` says so (see `Budget`).
 	ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }
 
+	## Adjacent logical text used when shaping an Arabic item inside a
+	## line. `before` ends immediately before the item and `after`
+	## begins immediately after it. The five nearest scalars on each
+	## side can affect joining. These characters do not contribute
+	## glyphs, clusters or substitutions to the item.
+	##
+	## Leave a side empty at a line edge. Supply the adjacent text
+	## across a style or font boundary within the same line.
+	ArabicContext := { before : Str ?? "", after : Str ?? "" }
+
 	## How to shape.
 	##
 	## - `script`: the text's ISO 15924 script code, such as `Latn`, `Grek`,
@@ -570,18 +580,19 @@ Font :: { face : Face }.{
 	##   which can select the font's language-specific forms. Empty is none.
 	##   `-x-hbot` and `-x-hbsc` private-use subtags give raw OpenType
 	##   language and script tags, as in HarfBuzz.
-	## - `direction`, `features`, `clusters` and `limits`: see their types.
+	## - `direction`, `features`, `clusters`, `limits` and
+	##   `arabic_context`: see their types.
 	##   The browser defaults for the direction always apply (ligatures,
 	##   contextual forms and kerning, among others) unless a `Feature`
 	##   turns one off; `features` lists only the changes.
 	##
 	## HarfBuzz's default shaping rules select canonical forms the font
 	## maps, mirror brackets in right-to-left text, hide default-ignorable
-	## characters and derive missing space widths. Hebrew and horizontal
-	## Thai use script-specific shaping. In Thai, each SARA AM can split
+	## characters and derive missing space widths. Hebrew, modern horizontal
+	## Arabic and horizontal Thai use script-specific shaping. In Thai, each SARA AM can split
 	## into a spacing vowel and a mark before shaping applies the font's
 	## positioning rules.
-	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{}, arabic_context : ArabicContext ?? ArabicContext.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left
 	## to right, also for right-to-left text):
@@ -688,7 +699,8 @@ Font :: { face : Face }.{
 	plan = |font, options| {
 		limits = options.limits
 		chosen = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
+		context = options.arabic_context
+		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64(), arabic_context: { before: context.before, after: context.after } }, options.clusters) }
 	}
 
 	## Shape text: the glyphs that draw it, where, and which part of the
