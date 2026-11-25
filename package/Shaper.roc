@@ -8,23 +8,24 @@ import LayoutAttachment
 import LayoutVar
 import ShaperNormalize
 import ShaperTags
+import ShaperThai
 import ShaperUnicode
 import Sorted
 import TablePost
 import TableCmap
 
-## Shaping as HarfBuzz 14.6.0's default and Hebrew shapers shape: choosing
+## Shaping as HarfBuzz 14.6.0's default, Hebrew and Thai shapers shape: choosing
 ## lookups for a script, language, direction and features (a plan, as
 ## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
 ## (Unicode properties, grapheme clusters, the script's own direction,
-## mirroring, normalisation by what the font maps, automatic fractions),
+## Thai SARA AM, mirroring, normalisation by what the font maps, automatic fractions),
 ## substituting, positioning (with HarfBuzz's fallbacks for spaces and
 ## for marks in fonts without `GPOS`) and finishing the run (hiding
 ## default-ignorable characters, unsafe-to-break flags).
 ##
 ## Internal. Not done, each a documented difference from HarfBuzz: the
 ## shapers of complex scripts (Arabic joining, Indic, Khmer, Myanmar, the
-## Universal Shaping Engine, Thai, Hangul; their text shapes as the
+## Universal Shaping Engine, Hangul; their text shapes as the
 ## default shaper shapes it), vertical text, GPOS lookups other than pair
 ## adjustment and the character cluster level. Features beyond the 27
 ## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
@@ -59,6 +60,7 @@ Shaper :: {}.{
 		dnom_mask : U64,
 		rtlm_mask : U64,
 		hebrew : Bool,
+		thai : Bool,
 		characters : Bool,
 		has_gpos_mark : Bool,
 		fallback_marks : Bool,
@@ -200,7 +202,9 @@ Shaper :: {}.{
 					_ => Ltr
 				}
 		}
-		hebrew = !options.script.is_empty() and ShaperTags.script_of(options.script) == Shaper.hebrew_script
+		script = if (options.script.is_empty()) 0 else ShaperTags.script_of(options.script)
+		hebrew = script == Shaper.hebrew_script
+		thai = script == Shaper.tag("Thai")
 		# The features HarfBuzz's default shaper asks for, then the caller's.
 		merged =
 			if options.features.is_empty() {
@@ -339,12 +343,13 @@ Shaper :: {}.{
 			dnom_mask: one_mask_of(Shaper.dnom_tag),
 			rtlm_mask: one_mask_of(Shaper.rtlm_tag),
 			hebrew,
+			thai,
 			characters: clusters == Characters,
 			has_gpos_mark: one_mask_of(Shaper.mark_tag) != 0,
 			# HarfBuzz positions marks itself when nothing else does: no
 			# `GPOS` and no `kern` with cross-stream kerning (which
 			# roc-font does not read).
-			fallback_marks: !apply_gpos,
+			fallback_marks: !thai and !apply_gpos,
 			growth: options.growth,
 			operations: options.operations,
 			mapped,
@@ -726,7 +731,8 @@ Shaper :: {}.{
 		}
 		ordered = if (reverse) ShaperNormalize.reverse_graphemes(clustered, p.characters) else clustered
 		backward = if (reverse) !p.backward else p.backward
-		mirrored = if (p.backward) ShaperNormalize.mirror(face, ordered, p.rtlm_mask) else ordered
+		preprocessed = if (p.thai) ShaperThai.preprocess(ordered, p.characters) else ordered
+		mirrored = if (p.backward) ShaperNormalize.mirror(face, preprocessed, p.rtlm_mask) else preprocessed
 		ctx = { face, variants: TableCmap.variants_of(Face.cmap_of(face)), hebrew: p.hebrew, hebrew_forms: p.hebrew and !p.has_gpos_mark }
 		{ chars: normalized, space_fallback } = ShaperNormalize.normalize(ctx, mirrored)
 		masked = Shaper.setup_masks(p, normalized, found.fraction_slash, !backward)
