@@ -122,6 +122,7 @@ LayoutGsub := {
 
 	## One lookup of a plan: its index, its feature mask, whether ZWJ and
 	## ZWNJ are skipped automatically, and whether it is the `rand` feature's.
+	## The mask can carry `per_syllable` in addition to its feature bits.
 	Step : { index : U64, mask : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool }
 
 	## The bounds of one application: a run never grows past `limit`
@@ -146,7 +147,7 @@ LayoutGsub := {
 	## rules, `rand`, and the index in the plan of the step being applied
 	## (recorded in the origin of every glyph it substitutes, also through
 	## nested lookups).
-	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64 }
+	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, per_syllable : Bool, step : U64 }
 
 	## HarfBuzz's buffer while a lookup applies: the input `info` read from
 	## `idx`, and, when `output`, the output written so far. `serial`
@@ -180,6 +181,25 @@ LayoutGsub := {
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
 	unsafe = 0x8000000000000000
+
+	## A lookup step's input and context matches stay within its Indic
+	## syllable. This flag is only set on a step, outside the feature bits.
+	per_syllable : U64
+	per_syllable = 0x4000000000000000
+
+	## Indic syllable identity and kind, packed in item mask bits 42–49.
+	## Zero means there is no syllable restriction.
+	syllable : Item -> U64
+	syllable = |item| item.mask.shr_zf_wrap(42).bitwise_and(0xFF)
+
+	with_syllable : Item, U64 -> Item
+	with_syllable = |item, identity| {
+		mask = item.mask.bitwise_and(0xFFFC03FFFFFFFFFF).bitwise_or(identity.bitwise_and(0xFF).shl_wrap(42))
+		{ ..item, mask }
+	}
+
+	match_syllable : Ctx, Item -> U64
+	match_syllable = |ctx, item| if (ctx.per_syllable) LayoutGsub.syllable(item) else 0
 
 	## The bounds that can stop work, as bits of `stopped`: a substitution
 	## not made because the run would outgrow `Limits.limit`, a rule's
@@ -418,8 +438,9 @@ LayoutGsub := {
 		for step_index in first..<end {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
-			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
-				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index }
+			feature_mask = step.mask.bitwise_and(0xFFFFFFFF)
+			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, feature_mask) {
+				ctx = { mask: feature_mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, per_syllable: step.mask.bitwise_and(LayoutGsub.per_syllable) != 0, step: step_index }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
 					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
@@ -1071,14 +1092,14 @@ LayoutGsub := {
 	## HarfBuzz's skipping iterator deciding about one item: `Skip` it,
 	## it is a `Match`, or `NoMatch` (stop). `context` for backtrack and
 	## lookahead, which ignore masks and skip ZWJ always.
-	step_item : LayoutGsub, Ctx, Item, Bool, Bool -> [Match, NoMatch, Skip]
-	step_item = |shape, ctx, item, context, matched| {
+	step_item : LayoutGsub, Ctx, Item, Bool, U64, Bool -> [Match, NoMatch, Skip]
+	step_item = |shape, ctx, item, context, expected_syllable, matched| {
 		skip = LayoutGsub.skip_of(shape, ctx, item, context)
 		match skip {
 			SkipYes => Skip
 			_ => {
 				masked = context or LayoutGsub.applies(item.mask, ctx.mask)
-				if masked and matched {
+				if masked and matched and (expected_syllable == 0 or LayoutGsub.syllable(item) == expected_syllable) {
 					Match
 				} else {
 					match skip {
@@ -1168,6 +1189,7 @@ LayoutGsub := {
 		} else {
 			first_id = LayoutGsub.lig_id(cur)
 			first_comp = LayoutGsub.lig_comp(cur)
+			expected_syllable = LayoutGsub.match_syllable(ctx, cur)
 			n = info.len()
 			var $total = 0
 			var $at = idx
@@ -1187,7 +1209,7 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, False, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, False, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1253,6 +1275,7 @@ LayoutGsub := {
 		if count == 0 {
 			{ ok: True, start: len }
 		} else {
+			expected_syllable = LayoutGsub.match_syllable(ctx, buf.info.get(buf.idx) ?? LayoutGsub.no_item)
 			var $at = len
 			var $ok = True
 			var $start = len
@@ -1267,7 +1290,7 @@ LayoutGsub := {
 					} else {
 						$at = $at - 1
 						item = before.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, True, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1295,6 +1318,7 @@ LayoutGsub := {
 		} else {
 			info = buf.info
 			n = info.len()
+			expected_syllable = LayoutGsub.match_syllable(ctx, info.get(buf.idx) ?? LayoutGsub.no_item)
 			var $at = start - 1
 			var $ok = True
 			var $end = start
@@ -1309,7 +1333,7 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, True, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -3235,6 +3259,16 @@ expect {
 expect test_ligated(0, True, letters([10])) == { glyphs: [103], clusters: [0] }
 expect test_ligated(0, True, letters([11, 10])) == { glyphs: [11, 103], clusters: [0, 1] }
 expect test_ligated(0, True, letters([10, 13])) == { glyphs: [103, 13], clusters: [0, 1] }
+
+expect {
+	gsub = LayoutGsub.read(liga_gsub(0))?
+	items = [10, 11].map_with_index(|glyph, i| LayoutGsub.with_syllable({ glyph, cluster: i, mask: 1, props: 0 }, i + 1))
+	step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+	limits = { limit: 64, budget: 64, depth: 8 }
+	limited = LayoutGsub.apply(gsub, [{ ..step, mask: step.mask.bitwise_or(LayoutGsub.per_syllable) }], items, limits)
+	unrestricted = LayoutGsub.apply(gsub, [step], items, limits)
+	limited.items.map(|item| item.glyph) == [103, 11] and unrestricted.items.map(|item| item.glyph) == [102]
+}
 
 # A mark the lookup flag ignores is passed over, and stays after the
 # ligature; a mark it does not ignore stops the match.
