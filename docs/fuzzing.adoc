@@ -147,6 +147,11 @@ its parent's displacement.
 For Thai preprocessing, pair an authored nikhahit with one produced by
 SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.
+For cursive attachment, hold the text direction fixed and change only the
+lookup flag. Use asymmetric signed anchors and compare which endpoint
+keeps its baseline. For Arabic joining, vary context across the same
+first or last letter and model transparent marks, join controls and true
+line boundaries before applying the font's substitutions.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 

@@ -6,6 +6,7 @@ app [target] {
 
 import fuzz.Fuzz
 import AlternateRanges
+import Arabic
 import AxisMapping
 import Budgets
 import ClassPairs
@@ -16,6 +17,7 @@ import Collection
 import Composite
 import Context
 import ContextEncodings
+import Cursive
 import DeltaMap
 import Direction
 import FallbackMarks
@@ -43,9 +45,10 @@ import Thai
 import VariationReading
 import WidthBounds
 
-target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Thai.target, Thai.growth_target])
+target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Cursive.target, Arabic.target, Arabic.growth_target, Thai.target, Thai.growth_target])
 
 expect AlternateRanges.check({})
+expect Arabic.check({})
 expect AxisMapping.check({})
 expect Budgets.check({})
 expect ClassPairs.check({})
@@ -54,6 +57,7 @@ expect CmapSpan.check({})
 expect Collection.check({})
 expect Composite.check({})
 expect ContextEncodings.check({})
+expect Cursive.check({})
 expect DeltaMap.check({})
 expect Direction.check({})
 expect FallbackMarks.check({})

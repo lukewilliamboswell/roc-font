@@ -15,21 +15,18 @@ import Sorted
 import TablePost
 import TableCmap
 
-## Shaping as HarfBuzz 14.6.0's default, Hebrew and Thai shapers shape: choosing
+## Shaping follows HarfBuzz 14.6.0's default, Hebrew, Arabic and Thai paths.
+## It chooses
 ## lookups for a script, language, direction and features (a plan, as
 ## `hb-ot-map.cc` and `hb-ot-shape.cc` build one), then preparing the text
 ## (Unicode properties, grapheme clusters, the script's own direction,
-## Thai SARA AM, mirroring, normalisation by what the font maps, automatic fractions),
+## Thai SARA AM, mirroring, normalisation by what the font maps and automatic fractions),
 ## substituting, positioning (with HarfBuzz's fallbacks for spaces and
 ## for marks in fonts without `GPOS`) and finishing the run (hiding
 ## default-ignorable characters, unsafe-to-break flags).
 ##
-## Internal. Not done, each a documented difference from HarfBuzz: the
-## shapers of complex scripts (Arabic joining, Indic, Khmer, Myanmar, the
-## Universal Shaping Engine, Hangul; their text shapes as the
-## default shaper shapes it), vertical text, GPOS lookups other than pair
-## adjustment and the character cluster level. Features beyond the 27
-## mask bits HarfBuzz has are dropped, as HarfBuzz drops them.
+## Internal. The horizontal layout plan uses HarfBuzz's two monotone
+## cluster levels and its limit of 27 bits for non-global feature masks.
 Shaper :: {}.{
 
 	Options : {

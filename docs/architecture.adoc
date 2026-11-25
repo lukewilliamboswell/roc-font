@@ -649,9 +649,10 @@ bound:
   through the cmap (formats 4, 12, 14 and the rest), with the fallbacks in
   §6.2. Horizontal Thai preprocesses SARA AM before glyph selection.
 . *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
-  and mark filtering sets from `GDEF`.
+  and mark filtering sets from `GDEF`. The Arabic shaper assigns joining
+  masks and orders the stages for contextual forms and required ligatures.
 . *Position*: take advances from `hmtx` and `HVAR`; apply GPOS pair
-  adjustments and mark attachments, with the `kern` table as a kerning
+  adjustments, cursive and mark attachments, with the `kern` table as a kerning
   fallback.
 . *Finish*: merge clusters at the configured level, compute unsafe-to-break
   flags, reverse for right-to-left output order.

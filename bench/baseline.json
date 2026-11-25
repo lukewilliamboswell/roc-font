@@ -100,6 +100,33 @@
       "peak_live_bytes": 4698601,
       "requested_bytes": 95666
     },
+    "corpus-amiri-1.003/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "60dc20b310d151bccba59647d8d8abffaec492afa66d6697cf394b27a76b2112",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 957719,
+      "requested_bytes": 0
+    },
+    "corpus-amiri-1.003/read": {
+      "allocations": 141,
+      "case_sha256": "0f010c380114857a0557f11d4fc05725bfa094b551bd66fa68c1ec8f0abea7bf",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 1055321,
+      "requested_bytes": 1408952
+    },
+    "corpus-amiri-1.003/shape/words-medium": {
+      "allocations": 14,
+      "case_sha256": "6c8caf28016e5150b102e6cd305474fcf4843080f204aa6ce10e8558cea73f63",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 1206733,
+      "requested_bytes": 812679
+    },
     "corpus-fira-code-6.2/cmap/bmp-sweep": {
       "allocations": 0,
       "case_sha256": "b10bfcf4b3c746c49f7dd4e8d21e30e914d68b77079a41e22b5dc6572e56ed6b",

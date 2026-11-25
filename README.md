@@ -16,11 +16,13 @@ lines and choosing fallback fonts stay with your program.
 
 ## Status
 
-The default shaping pipeline covers Latin, Greek and Cyrillic. Hebrew and
-[horizontal Thai](docs/thai.adoc) have script-specific shaping. Horizontal
-positioning supports pair adjustment and mark attachment to bases,
-ligatures and other marks. Variable fonts can be measured at any weight,
-width or optical size. The API may still change before 1.0.
+The default shaping pipeline covers Latin, Greek and Cyrillic. Hebrew,
+[modern horizontal Arabic](docs/arabic.adoc) and
+[horizontal Thai](docs/thai.adoc) have script-specific shaping.
+Horizontal positioning supports pair adjustment, cursive attachment and
+mark attachment to bases, ligatures and other marks. Variable fonts can
+be measured at any weight, width or optical size. The API may still
+change before 1.0.
 
 The package also includes OpenType MATH font facts: layout constants,
 glyph corrections, corner kerning and stretch recipes. Downstream Roc
