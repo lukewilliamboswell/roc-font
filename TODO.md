@@ -55,8 +55,8 @@ Chrome widths agree on package-mermaid's oracle texts.
   `hb-pending/*`): OTS refuses their fonts' format 4 `cmap` fields, so
   they now read as rejected by design; regenerate valid fonts with the
   same lookups.
-- Optional speed-up: U64 fast paths for TableVar's single-precision
-  multiply and add (85 % of gvar extents time).
+- Optional speed-up: evaluate U64 alignment for TableVar's
+  single-precision addition before falling back to wide arithmetic.
 - Reading cost: about 150x HarfBuzz (geometric mean; HarfBuzz checks
   lazily, roc-font validates everything up front as OTS does, every glyph
   outline included). Profile the OTS checks and the outline walk; the

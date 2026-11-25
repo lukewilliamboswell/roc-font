@@ -45,9 +45,11 @@ TableGlyf :: {}.{
 					offset = |g| if (long_offsets) Bytes.u32(loca, 4 * g) else 2 * Bytes.u16(loca, 2 * g)
 					var $boxes = List.with_capacity(count_of_glyphs)
 					var $bad_at = 0
+					var $next_start = offset(0)
 					for g in 0..<count_of_glyphs {
-						start = offset(g)
+						start = $next_start
 						end = offset(g + 1)
+						$next_start = end
 						if end < start or end > glyf.len() {
 							if $bad_at == 0 {
 								$bad_at = loca_found.offset + size * (g + 1)
