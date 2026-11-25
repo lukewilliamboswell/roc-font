@@ -1,0 +1,9 @@
+{
+  "about": "UTF-8 Hindi text followed by FF and an optional font. Text-only seeds exercise the built dev2 face. The runner appends real fonts to a Hindi prefix and the FF separator.",
+  "seeds": [
+    {"why": "empty input after selecting the dev2 layout", "parts": [{"hex": "ff"}]},
+    {"why": "prebase matra and formed reph", "parts": [{"text": "र्कि कि"}, {"hex": "ff"}]},
+    {"why": "joiner, nonjoiner and orphan matra", "parts": [{"text": "ि। र्‍क र्‌क"}, {"hex": "ff"}]},
+    {"why": "a mixed Hindi item with punctuation and digits", "parts": [{"text": "र्कि कि, १२३।"}, {"hex": "ff"}]}
+  ]
+}
