@@ -484,8 +484,10 @@ that axis; `axes` entries apply last and override them, like CSS
 Axis values are `Dec` because valid locations are fractional (`wdth` 87.5
 is CSS semi-condensed). Malformed variation data the reference silently
 accepts (an empty delta-set map, out-of-range indices, an axis default
-outside its range) is a reading problem here; under lenient reading a bad
-`fvar` or `avar` drops the whole variation space.
+outside its range) is a reading problem here. A version 2 `avar` or a
+problem elsewhere in the variation data drops the whole variation space
+under lenient reading. Other unreadable `avar` tables are dropped alone,
+with coordinates normalized directly from `fvar`.
 
 Reading
 validates `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`, the `GDEF` item variation

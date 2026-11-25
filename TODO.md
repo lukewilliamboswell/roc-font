@@ -20,6 +20,10 @@ Chrome widths agree on package-mermaid's oracle texts.
 - [ ] `adv-huge-cmap/read` got slower (188 to 222 µs) when strictly less
   work was done: a code-generation effect of the nightly; re-check on the
   next nightly.
+- [ ] Use `gvar` phantom points for horizontal advances when `HVAR` is
+  absent. In `var-outlines.ttf` at weight 900, HarfBuzz 14.6 gives
+  advances of 602, 550, 602 and 318 for `abcf`. Direct queries and
+  shaping both return the base `hmtx` widths.
 
 ### 0.1.0 polish from rc1 consumers
 

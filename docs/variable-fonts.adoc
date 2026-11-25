@@ -47,8 +47,9 @@ column beside each adjustment, a delta per applied adjustment.
 |`gvar` (shared tuples, tuple variation headers, intermediate regions,
 packed point numbers and deltas); `glyf` simple and composite points with
 the four phantom points; inferred deltas for untouched points (IUP);
-component offsets that vary; the bounding box. Also the advance fallback
-from phantom points when a font has no `HVAR` (no default needs it).
+component offsets that vary; the bounding box. Horizontal advances
+currently use `hmtx` and `HVAR`. The planned fallback for a font with
+`gvar` and no `HVAR` uses the horizontal phantom points.
 |1200-1800 lines, the largest phase, plus binary64 emulation for the tuple
 scalar (§3.5).
 |===
@@ -463,14 +464,13 @@ and the byte offset in it. Independent problems are reported together
   table and sorted by tag; every record names a row or is
   `NO_VARIATION_INDEX`; a null store only with no records.
 
-Lenient reading (architecture §4.4) drops tables as units, never repairing
-one: a bad `fvar` or `avar` drops the whole variation space (`fvar`,
-`avar`, and with it every delta: the font reads as its default instance);
-a bad `HVAR` drops it (advances then come from `gvar` phantom points in
-phase 3, or are the defaults before it); a bad `MVAR` drops it (metrics are
-the defaults); a bad `GDEF` store drops `GDEF`, as HarfBuzz treats a table
-that fails to sanitise. `Font.dropped` names each. Strict reading rejects
-the font.
+Lenient reading (architecture §4.4) drops all variations together for
+an `avar` declared as version 2, a bad `fvar`, or a problem in `HVAR`,
+`MVAR`, `gvar`, the `GDEF` variation store, or layout variation records.
+Queries then use the font's default values. Other unreadable `avar`
+tables are dropped alone, with coordinates normalized directly from
+`fvar`. `Font.dropped` names the problems. Strict reading rejects the
+font.
 
 Work bounds: every loop runs over a count checked against the data. The
 location state costs regions × axes per store (bounded by the table size);
