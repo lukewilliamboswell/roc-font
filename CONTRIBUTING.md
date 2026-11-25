@@ -210,8 +210,5 @@ on every directory the checks format; when the allocation ratchet reports
 - Avoid until fixed on the nightly: wrapping a record field in a tag and
   reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
   ARC pass; `Dict(k, {})` hangs native builds.
-- Script-direction selection and feature-credit ranking use early returns.
-  The November 18 compiler's optimized specialization crashed on the nested
-  forms.
 - A local debug `roc` on `PATH` may panic on this code; use the latest
   nightly first on `PATH`.
