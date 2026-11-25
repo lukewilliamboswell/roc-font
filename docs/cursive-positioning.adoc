@@ -1,0 +1,37 @@
+= Cursive positioning
+
+Horizontal shaping applies OpenType GPOS cursive attachment (lookup type 3,
+format 1, directly or through a format 1 extension). A successful pair
+aligns the preceding visible glyph's exit anchor to the current glyph's
+entry anchor. The lookup's flags and feature range determine which
+glyphs it sees. A visible glyph with a missing anchor ends the chain.
+Use `Font.Feature.{ tag: "curs", value: 0 }` to disable the default
+cursive feature for a shaping plan.
+
+The shaping direction controls the horizontal pen adjustments and final
+visual order. The lookup's RightToLeft flag independently chooses the
+baseline endpoint. With the flag clear, the first glyph of the chain
+keeps its cross-axis offset. With the flag set, the last glyph keeps it.
+Glyphs between the endpoints inherit the resulting vertical shifts.
+
+The font-unit API uses stored coordinates from anchor formats 1, 2,
+and 3. Cursive attachment uses static coordinates. A point index in format
+2 and device or variation corrections in format 3 do not move them.
+Anchor and coverage references are checked when reading. A corrupt
+cursive subtable used by a feature rejects the GPOS table under the
+same read policy as other supported positioning lookups.
+
+A mark attachment takes the target's vertical position when the mark
+lookup applies, including any cursive shift already linked to the
+target. Its horizontal position uses the final advances and offsets.
+A subsequent cursive lookup can change the target's vertical position
+while leaving the earlier mark attachment's vertical position intact.
+
+Like HarfBuzz 14.6.0, propagation visits the output in visual order and
+uses a 64-link path bound. A processed edge is cleared so each edge is
+visited at most once during final vertical propagation. Joining a new
+pair can reverse an existing path and detaches the edge that would
+close a cycle. Relative distances follow the signed 16-bit link limits.
+
+https://learn.microsoft.com/en-us/typography/opentype/spec/gpos#lookup-type-3-subtable-cursive-attachment-positioning[OpenType cursive positioning]
+· https://github.com/harfbuzz/harfbuzz/blob/14.6.0/src/OT/Layout/GPOS/CursivePosFormat1.hh[HarfBuzz 14.6.0]

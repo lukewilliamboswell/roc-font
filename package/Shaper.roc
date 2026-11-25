@@ -784,7 +784,7 @@ Shaper :: {}.{
 		if space_fallback {
 			$base = Shaper.space_widths(face, substituted, $base, upem, advance_of)
 		}
-		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, $base, Face.glyph_total(face))
+		positioned = LayoutKerning.position(Face.kerning(face), p.gpos, p.kern, substituted, $base, Face.glyph_total(face), backward)
 		var $items = positioned.items
 		var $ax = positioned.ax
 		var $dx = positioned.dx
@@ -812,6 +812,7 @@ Shaper :: {}.{
 		}
 		if !positioned.parents.is_empty() {
 			$dx = LayoutAttachment.mark_x(positioned.parents, $ax, $dx, backward)
+			$dy = LayoutAttachment.cursive_y(positioned.parents, $dy, backward)
 		}
 		if p.fallback_marks {
 			{ items: fallback_items, ax: fallback_ax, dx: fallback_dx, dy: fallback_dy } = Shaper.position_marks(face, location, { items: $items, ax: $ax, dx: $dx, dy: $dy }, backward, p.backward, upem, adjust)

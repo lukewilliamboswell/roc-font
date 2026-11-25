@@ -8,6 +8,7 @@ import LayoutCoverage
 import LayoutMark
 import LayoutAnchor
 import LayoutAttachment
+import LayoutCursive
 
 ## Pair positioning: the pair adjustment lookups of `GPOS` (lookup type
 ## 2, directly or through an extension) that a shaping plan lists, and the
@@ -133,8 +134,8 @@ LayoutKerning := {
 	## added to the supplied base advance for each item. Glyphs
 	## at or past `glyph_count` are never a first glyph of `GPOS` pair
 	## formats; as a second glyph they are in class 0.
-	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), List(I64), U64 -> Positions
-	position = |kerning, plan, legacy, items, advances, glyph_count| {
+	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), List(I64), U64, Bool -> Positions
+	position = |kerning, plan, legacy, items, advances, glyph_count, backward| {
 		count = items.len()
 		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: advances, parents: [] }
 		var $run_marks = Unchecked
@@ -150,12 +151,16 @@ LayoutKerning := {
 				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props.bitwise_and(0xFFFFFFFF))
 				if locator != 0 {
 					kind = lookup.props.shr_zf_wrap(32).bitwise_and(0x0F)
-					marks_only = lookup.props.bitwise_and(LayoutKerning.mark_coverage_class) != 0
-					if marks_only and $run_marks == Unchecked {
-						$run_marks = if ($out.items.any(LayoutGsub.is_mark_item)) Present else Absent
-					}
-					if !marks_only or $run_marks == Present {
-						$out = LayoutKerning.apply_mark_lookup(kerning, locator, { mask: entry.mask, props, kind, marks_only }, $out)
+					if kind == 3 {
+						$out = LayoutKerning.apply_cursive_lookup(kerning, locator, { mask: entry.mask, props, backward }, $out)
+					} else {
+						marks_only = lookup.props.bitwise_and(LayoutKerning.mark_coverage_class) != 0
+						if marks_only and $run_marks == Unchecked {
+							$run_marks = if ($out.items.any(LayoutGsub.is_mark_item)) Present else Absent
+						}
+						if !marks_only or $run_marks == Present {
+							$out = LayoutKerning.apply_mark_lookup(kerning, locator, { mask: entry.mask, props, kind, marks_only }, $out)
+						}
 					}
 				} else {
 					$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
@@ -268,6 +273,73 @@ LayoutKerning := {
 		}
 	}
 
+	# Cursive positioning finds the previous visible glyph, regardless of
+	# coverage. A glyph that lacks an exit anchor can therefore end a
+	# chain. Keep that previous index so skipped spans are visited once.
+	apply_cursive_lookup : LayoutKerning, U64, { mask : U64, props : U64, backward : Bool }, Positions -> Positions
+	apply_cursive_lookup = |kerning, lookup, ctx, positions| {
+		{ items, dx, dy, ax, parents } = positions
+		count = items.len()
+		end = Bytes.u16(kerning.data, lookup + 4)
+		extended = Bytes.u16(kerning.data, lookup) == 9
+		var $items = items
+		var $dx = dx
+		var $dy = dy
+		var $ax = ax
+		var $parents = parents
+		var $previous = LayoutAttachment.none
+		for i in 0..<count {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			if LayoutKerning.sees(kerning.gdef, item, ctx.props) {
+				masked = LayoutGsub.applies(item.mask, ctx.mask)
+				if masked and $previous < i {
+					prior = $items.get($previous) ?? LayoutGsub.no_item
+					var $subtable = 0
+					while $subtable < end {
+						match LayoutKerning.position_subtable(kerning.data, lookup, extended, 3, $subtable) {
+							Ok(table) => match LayoutCursive.pair(kerning.data, table, prior.glyph, item.glyph) {
+								Ok({ entry, exit }) => {
+									$items = LayoutKerning.unsafe_to_break($items, $previous, i + 1)
+									if ctx.backward {
+										delta = exit.x + ($dx.get($previous) ?? 0)
+										$ax = $ax.set($previous, ($ax.get($previous) ?? 0) - delta) ?? []
+										$dx = $dx.set($previous, -exit.x) ?? []
+										$ax = $ax.set(i, entry.x + ($dx.get(i) ?? 0)) ?? []
+									} else {
+										$ax = $ax.set($previous, exit.x + ($dx.get($previous) ?? 0)) ?? []
+										delta = entry.x + ($dx.get(i) ?? 0)
+										$ax = $ax.set(i, ($ax.get(i) ?? 0) - delta) ?? []
+										$dx = $dx.set(i, -entry.x) ?? []
+									}
+									if $parents.is_empty() {
+										$parents = List.repeat(LayoutAttachment.none, count)
+									}
+									# The lookup flag chooses which glyph stays on the
+									# baseline, independently of the run direction.
+									(child, parent, y) = if (ctx.props.bitwise_and(1) != 0) ($previous, i, entry.y - exit.y) else (i, $previous, exit.y - entry.y)
+									linked = LayoutAttachment.link($parents, $dy, child, parent, y)
+									$parents = linked.parents
+									$dy = linked.dy
+									$subtable = end
+								}
+								Err(_) => {
+									$subtable = $subtable + 1
+								}
+							}
+							_ => {
+								$subtable = $subtable + 1
+							}
+						}
+					}
+				}
+				if !LayoutGsub.is_default_ignorable(item) {
+					$previous = if (masked) i else LayoutAttachment.none
+				}
+			}
+		}
+		{ items: $items, dx: $dx, dy: $dy, ax: $ax, parents: $parents }
+	}
+
 	# Every mark lookup scans forward. Types 4 and 5 cache the target and the
 	# start of the next backward search, so each item is visited at most
 	# once by the target search. Type 6 keeps the previous visible mark.
@@ -332,7 +404,7 @@ LayoutKerning := {
 													# HarfBuzz stores the relative attachment index as signed 16-bit.
 													if i - parent <= 32768 {
 														delta = LayoutAnchor.displacement(kerning.data, anchors.target, anchors.mark, kerning.lv, kerning.loc)
-														parent_y = $dy.get(parent) ?? 0
+														parent_y = LayoutAttachment.cross_at($parents, $dy, parent)
 														$dx = $dx.set(i, delta.x) ?? []
 														$dy = $dy.set(i, delta.y + parent_y) ?? []
 														$parents = $parents.set(i, parent) ?? []
@@ -819,7 +891,7 @@ LayoutKerning := {
 					return Err(Bad(lookup))
 				}
 				$props = if (filtering) flag + Bytes.u16(gpos, lookup + 6 + 2 * count) * 65536 else flag
-				if kind == 2 or kind == 4 or kind == 5 or kind == 6 or kind == 9 {
+				if kind == 2 or kind == 3 or kind == 4 or kind == 5 or kind == 6 or kind == 9 {
 					$steps = LayoutKerning.spend(gpos, $steps, count)?
 					var $supported_kind = 0
 					var $marks_only = True
@@ -828,7 +900,7 @@ LayoutKerning := {
 						extended = kind == 9 and Bytes.fits(at, 8, size)
 						subkind = if (extended) Bytes.u16(gpos, at + 2) else kind
 						target = if (extended) at + Bytes.u32(gpos, at + 4) else at
-						if subkind == 2 or subkind == 4 or subkind == 5 or subkind == 6 {
+						if subkind == 2 or subkind == 3 or subkind == 4 or subkind == 5 or subkind == 6 {
 							if $supported_kind != 0 and $supported_kind != subkind {
 								return Err(Bad(at))
 							}
@@ -847,6 +919,14 @@ LayoutKerning := {
 								Err(Exhausted(problem)) => return Err(Bad(problem.offset))
 							}
 							$subtables = $subtables.append(done.value)
+						} else if subkind == 3 {
+							if extended and (Bytes.u16(gpos, at) != 1 or Bytes.u32(gpos, at + 4) == 0) {
+								return Err(Bad(at))
+							}
+							done = LayoutCursive.read(gpos, target, glyph_count, $steps, lv, $deltas)?
+							$deltas = done.deltas
+							$steps = done.steps
+							$locator = lookup
 						} else if subkind == 4 or subkind == 5 or subkind == 6 {
 							if extended and (Bytes.u16(gpos, at) != 1 or Bytes.u32(gpos, at + 4) == 0) {
 								return Err(Bad(at))
@@ -863,7 +943,7 @@ LayoutKerning := {
 					# Bits 32 and above are unused by flags and filtering set IDs.
 					if $locator != 0 {
 						$props = $props.bitwise_or($supported_kind.shl_wrap(32))
-						if $marks_only {
+						if $supported_kind != 3 and $marks_only {
 							$props = $props.bitwise_or(LayoutKerning.mark_coverage_class)
 						}
 					}
@@ -1121,7 +1201,7 @@ expect {
 		Ok(read) => {
 			kerning = LayoutKerning.combine(Present(read), Absent, LayoutVar.none(0), LayoutGdef.none)
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
-			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, List.repeat(0, items.len()), n)
+			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, List.repeat(0, items.len()), n, False)
 			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]
 		}
 		Err(_) => False
