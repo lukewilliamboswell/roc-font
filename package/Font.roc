@@ -208,7 +208,8 @@ Font :: { face : Face }.{
 	units_per_em = |font| Face.units_per_em(font.face)
 
 	## The font's vertical measures; see `Metrics`. In a variable font they
-	## follow the font's location.
+	## follow the font's location. Variation-adjusted values outside the
+	## range of `I32` are held at the corresponding limit.
 	metrics : Font -> Metrics
 	metrics = |font| Face.metrics(font.face, Face.current(font.face))
 

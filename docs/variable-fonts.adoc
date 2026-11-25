@@ -248,6 +248,12 @@ signed position type. https://github.com/harfbuzz/harfbuzz/blob/14.6.0/src/hb-ot
 |roc-font adds the rounded delta to the base in integer font units and
 holds individual horizontal advances in the range 0 through `I32.highest`.
 
+|Extreme font-wide metrics
+|A positive `MVAR` sum beyond 2^31 returned `I32.lowest` when queried
+through HarfBuzz 14.6.0.
+|roc-font rounds the varied value in single precision, converts the stored
+descender to depth, and holds the result at the limits of `I32`.
+
 |Region axis with `start < 0 < end` and `peak != 0`, at coordinate 0
 |The specification and fontTools ignore the axis (scalar 1); HarfBuzz
 tests `coord == 0` first and gives 0.

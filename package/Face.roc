@@ -868,22 +868,30 @@ Face := {
 
 	# A metric at a location: `MVAR`'s delta for `tag` added to the stored
 	# value, rounded as HarfBuzz rounds it.
-	varied_value : Face, Location, Str, I32 -> I32
-	varied_value = |face, loc, name, value|
+	varied_value : Face, Location, Str, I32, Bool -> I32
+	varied_value = |face, loc, name, value, invert|
 		match face.mvar {
-			Present(mvar) if loc.varied => TableVar.metric(mvar, loc.mvar, Face.tag_from_name(name), value.to_i64()).to_i32_wrap()
-			_ => value
+			Present(mvar) if loc.varied => {
+				rounded = TableVar.metric(mvar, loc.mvar, Face.tag_from_name(name), value.to_i64())
+				# Convert the stored descender to depth in I64
+				# before applying the public signed bound.
+				signed = if (invert) -rounded else rounded
+				signed.max(-2147483648).min(2147483647).to_i32_wrap()
+			}
+			# Base metrics come from 16-bit fields.
+			_ => if (invert) -value else value
 		}
 
 	metrics : Face, Location -> Metrics
 	metrics = |face, loc| {
-		v = |name, value| Face.varied_value(face, loc, name, value)
+		v = |name, value| Face.varied_value(face, loc, name, value, False)
+		depth = |value| Face.varied_value(face, loc, "hdsc", value, True)
 		hh = face.hhea
 		upem = face.units_per_em.to_i32()
 		vertical = match face.os2 {
-			Present(o) if o.use_typo => { ascent: v("hasc", o.typo_ascent), descent: -v("hdsc", o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
-			_ if hh.ascent != 0 or hh.descent != 0 => { ascent: v("hasc", hh.ascent), descent: -v("hdsc", hh.descent), line_gap: v("hlgp", hh.line_gap) }
-			Present(o) if o.typo_ascent != 0 or o.typo_descent != 0 => { ascent: v("hasc", o.typo_ascent), descent: -v("hdsc", o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
+			Present(o) if o.use_typo => { ascent: v("hasc", o.typo_ascent), descent: depth(o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
+			_ if hh.ascent != 0 or hh.descent != 0 => { ascent: v("hasc", hh.ascent), descent: depth(hh.descent), line_gap: v("hlgp", hh.line_gap) }
+			Present(o) if o.typo_ascent != 0 or o.typo_descent != 0 => { ascent: v("hasc", o.typo_ascent), descent: depth(o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
 			Present(o) => { ascent: v("hcla", o.win_ascent), descent: v("hcld", o.win_descent), line_gap: 0 }
 			Absent => { ascent: 0, descent: 0, line_gap: 0 }
 		}

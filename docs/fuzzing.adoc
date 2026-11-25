@@ -34,6 +34,12 @@ composition, swapping two marks of equal combining class checks both
 stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
 and a case where several limits are reported together.
+For localized names, use distinct records that share a priority rank.
+Give each instance a different name identifier so a lookup by position
+would return a visibly different result.
+For font-wide metric variation, give each fallback source distinct
+values. Include signed half-unit ties so the result shows whether
+rounding happened after the regional contributions were added.
 
 * Use `Model` when action order or interactions between choices matter.
   State the action alphabet, bounds and facts that distinguish states.
@@ -88,6 +94,9 @@ metrics table across faces on either side of its storage location.
 For reverse chaining, give adjacent context positions distinct coverages
 and use a substitution that enables the next candidate in scan order.
 Compare direct and extension encodings of the same lookup.
+For mirroring, map different characters to the same input glyph. Give
+only one of them a mapped Unicode mirror so the result shows whether
+shaping chose that mirror or the glyph alternate.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
