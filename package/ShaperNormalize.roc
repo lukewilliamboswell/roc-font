@@ -122,6 +122,17 @@ ShaperNormalize :: {}.{
 		$chars
 	}
 
+	# When a character moves to a different cluster, its old
+	# unsafe-to-break flag belongs to the old boundary.
+	set_cluster_at : List(Char), U64, Char, U64 -> List(Char)
+	set_cluster_at = |chars, index, c, cluster|
+		if c.cluster == cluster {
+			chars
+		} else {
+			# The caller walks an index known to be in bounds.
+			chars.set(index, { ..c, cluster, mask: c.mask.bitwise_and(0x7FFFFFFFFFFFFFFF) }) ?? []
+		}
+
 	## HarfBuzz's `merge_clusters` on a list without an output: the
 	## characters of `start ..< end`, and their neighbours sharing the
 	## clusters at either end, take the smallest cluster.
@@ -153,7 +164,7 @@ ShaperNormalize :: {}.{
 			for i in $start..<$end {
 				c = $chars.get(i) ?? ShaperNormalize.no_char
 				# `i < $end <= n`.
-				$chars = $chars.set(i, { ..c, cluster }) ?? []
+				$chars = ShaperNormalize.set_cluster_at($chars, i, c, cluster)
 			}
 			$chars
 		}
@@ -700,14 +711,14 @@ ShaperNormalize :: {}.{
 			while $k < $rest.len() and ($rest.get($k) ?? ShaperNormalize.no_char).cluster == last {
 				c = $rest.get($k) ?? ShaperNormalize.no_char
 				# `$k` is below the input's length.
-				$rest = $rest.set($k, { ..c, cluster }) ?? []
+				$rest = ShaperNormalize.set_cluster_at($rest, $k, c, cluster)
 				$k = $k + 1
 			}
 			var $out = out
 			for i in $start..<end {
 				c = $out.get(i) ?? ShaperNormalize.no_char
 				# `i < end`, the output's length.
-				$out = $out.set(i, { ..c, cluster }) ?? []
+				$out = ShaperNormalize.set_cluster_at($out, i, c, cluster)
 			}
 			{ out: $out, rest: $rest }
 		}

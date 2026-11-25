@@ -114,6 +114,12 @@ so the result exposes both sets of feature masks.
 For fallback spaces, let an explicit mapping share the space glyph
 with a fallback. Vary the donor's advance so the widths expose which
 characters required fallback.
+For fallback mark placement, stack two differently sized marks of the
+same class, then switch classes on the same side of the base. That
+checks when positioning starts from the base's bounds again.
+For varied MATH kerning, let formerly distinct heights meet at a
+three-way tie with different values in the tied slots. Move back by
+omitting one axis so the model also checks that the corner resets.
 For coordinate remapping, bend two axes differently and give each axis
 its own observable advance. Put CSS Regular at a different point from
 the font's declared weight so an omitted setting identifies the default
@@ -123,6 +129,9 @@ Repeat a phrase in different feature ranges so reordering exposes any
 origin that changed its position or lost its structural kind.
 For cluster ranges, slice the original UTF-8 bytes and compare the exact
 text. Two valid slices can still split glyphs that share one cluster.
+For cluster flags, include a boundary that normalization merges and
+one that survives. Compare the flags together with glyph IDs and byte
+offsets so stale flags are visible even when the glyphs are correct.
 Use `Model.witness` or `Model.explain` to inspect a shortest failing
 history when debugging.
 
