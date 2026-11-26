@@ -92,6 +92,9 @@ TableMath := {
 	at_location : TableMath, LayoutVar.Location -> TableMath
 	at_location = |math, loc| { ..math, loc }
 
+	without_variations : TableMath -> TableMath
+	without_variations = |math| { ..math, lv: LayoutVar.none(0), loc: LayoutVar.default_location }
+
 	constants : TableMath -> [Present(Constants), Absent]
 	constants = |math| {
 		if !TableMath.has_data(math) {

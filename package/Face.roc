@@ -345,7 +345,7 @@ Face := {
 								mvar: if (keep_variations) variations.mvar else Absent,
 								outlines: if (keep_variations) variations.outlines else Absent,
 								layout_var: if (keep_variations) lv else no_lv,
-								math,
+								math: if (keep_variations) math else TableMath.without_variations(math),
 								gsub_variations: if (keep_variations) gsub_fv else LayoutVar.no_feature_variations,
 								gpos_variations: if (keep_variations) gpos_fv else LayoutVar.no_feature_variations,
 								location: Face.default_location,
@@ -595,7 +595,10 @@ Face := {
 				if problems.is_empty() {
 					{ space: Present(space), hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
 				} else {
-					{ ..nothing, problems: problems, avar_problems, fvar_axes: Present(axes) }
+					# Other tables still need the validated axis count to check
+					# their references. Face publishes the space only after all
+					# variation checks succeed.
+					{ ..nothing, space: Present(space), problems: problems, avar_problems, fvar_axes: Present(axes) }
 				}
 			}
 		}
