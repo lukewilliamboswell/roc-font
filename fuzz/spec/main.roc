@@ -17,6 +17,7 @@ import Collection
 import Composite
 import Context
 import ContextEncodings
+import CssAxes
 import Cursive
 import DeltaMap
 import Direction
@@ -40,6 +41,7 @@ import NameScalars
 import Names
 import Outlines
 import PointCursive
+import PostNames
 import Reverse
 import ScalarBreaks
 import ScalarShaping
@@ -63,6 +65,7 @@ expect CmapSpan.check({})
 expect Collection.check({})
 expect Composite.check({})
 expect ContextEncodings.check({})
+expect CssAxes.check({})
 expect Cursive.check({})
 expect DeltaMap.check({})
 expect Direction.check({})
@@ -85,6 +88,7 @@ expect NameScalars.check({})
 expect Names.check({})
 expect Outlines.check({})
 expect PointCursive.check({})
+expect PostNames.check({})
 expect Reverse.check({})
 expect ScalarBreaks.check({})
 expect ScalarShaping.check({})

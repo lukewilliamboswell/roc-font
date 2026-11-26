@@ -45,6 +45,9 @@ For UTF-16 names, put distinct BMP characters around the endpoint pairs
 so the query also checks where decoding resumes. Give the preferred
 record a valid pair followed by a lone surrogate and check that a
 lower-priority record supplies the whole name.
+For glyph names in `post`, place a custom Pascal string beyond byte
+65,535 and reference it twice with a standard name between the two
+references. Include the final standard index and the first custom index.
 For font-wide metric variation, give each fallback source distinct
 values. Include signed half-unit ties so the result shows whether
 rounding happened after the regional contributions were added.
@@ -140,6 +143,9 @@ For coordinate remapping, bend two axes differently and give each axis
 its own observable advance. Put CSS Regular at a different point from
 the font's declared weight so an omitted setting identifies the default
 the caller actually gets.
+For explicit axis settings, assign distinct advances to legal tags that
+differ only by case. Give an omitted axis a nonzero default so the run
+reveals whether omission restored that default.
 For traced shaping, compare each glyph with its cluster and origin.
 Repeat a phrase in different feature ranges so reordering exposes any
 origin that changed its position or lost its structural kind.
