@@ -368,6 +368,12 @@ Face := {
 							}
 							Err(_) => {}
 						}
+						match head {
+							Ok(h) => {
+								$required = Face.collect($required, TableGlyf.check_locations(bytes, tables, h.long_offsets, glyph_count))
+							}
+							Err(_) => {}
+						}
 						$required = Face.collect_all($required, TablePost.from_tables(bytes, tables, glyph_count))
 						match LayoutGsub.from_tables(bytes, tables, options.max_lookups) {
 							Err(OverLimit(which)) => {

@@ -36,11 +36,13 @@ import GposHeaderDiagnostics
 import Gsub
 import GsubHeaderDiagnostics
 import HeaderDiagnostics
+import IgnorableSubstitution
 import Indic
 import LanguageSelection
 import LegacyCmap
 import LegacyKern
 import LigatureProvenance
+import LocaHeaderDiagnostics
 import LookupFiltering
 import Math
 import MathConstructionSizes
@@ -62,6 +64,7 @@ import PlanLocations
 import PointComposites
 import PointCursive
 import PostNames
+import PostSubstitutionFiltering
 import Reverse
 import ScalarBreaks
 import ScalarShaping
@@ -106,11 +109,13 @@ expect GdefHeaderDiagnostics.check({})
 expect GposHeaderDiagnostics.check({})
 expect GsubHeaderDiagnostics.check({})
 expect HeaderDiagnostics.check({})
+expect IgnorableSubstitution.check({})
 expect Indic.check({})
 expect LanguageSelection.check({})
 expect LegacyCmap.check({})
 expect LegacyKern.check({})
 expect LigatureProvenance.check({})
+expect LocaHeaderDiagnostics.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
 expect MathConstructionSizes.check({})
@@ -133,6 +138,7 @@ expect PlanLocations.check({})
 expect PointComposites.check({})
 expect PointCursive.check({})
 expect PostNames.check({})
+expect PostSubstitutionFiltering.check({})
 expect Reverse.check({})
 expect ScalarBreaks.check({})
 expect ScalarShaping.check({})

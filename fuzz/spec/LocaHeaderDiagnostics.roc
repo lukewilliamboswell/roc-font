@@ -7,21 +7,27 @@ import font.Font
 LocaHeaderDiagnostics := {}.{
 	check : {} -> Bool
 	check = |_| [Healthy, MissingHhea, BadHhea, MissingHead, MissingMaxp].all(
-		|header| [False, True].all(|long| [False, True].all(|reversed| agrees(header, long, reversed))),
+		|header| [False, True].all(|long| [InOrder, Reversed, MissingEnd].all(|fault| agrees(header, long, fault))),
 	)
 }
 
 Header : [Healthy, MissingHhea, BadHhea, MissingHead, MissingMaxp]
 
-agrees : Header, Bool, Bool -> Bool
-agrees = |header, long, reversed| {
+Fault : [InOrder, Reversed, MissingEnd]
+
+agrees : Header, Bool, Fault -> Bool
+agrees = |header, long, fault| {
 	glyphs = [[], FontBuild.outline(10, 30), FontBuild.outline(5, 45), []]
 	outlines = FontBuild.outlines(glyphs, long)
 	size = if (long) 4 else 2
 	# Glyph 2 starts after the first nonempty glyph. Moving its end
 	# back to zero keeps both offsets in glyf but reverses their order.
 	later = 3 * size
-	loca = if (reversed) FontBuild.patch(outlines.loca, later, List.repeat(0, size)) else outlines.loca
+	loca = match fault {
+		InOrder => outlines.loca
+		Reversed => FontBuild.patch(outlines.loca, later, List.repeat(0, size))
+		MissingEnd => outlines.loca.drop_last(size)
+	}
 	core = FontBuild.replace(FontBuild.basic, "head", FontBuild.head(1000, long)).drop_if(
 		|table| table.tag == "hhea" or (header == MissingHead and table.tag == "head") or (header == MissingMaxp and table.tag == "maxp"),
 	)
@@ -38,7 +44,11 @@ agrees = |header, long, reversed| {
 		MissingMaxp => [MissingTable("maxp")]
 	}
 	known_offsets = header != MissingHead and header != MissingMaxp
-	expected = if (known_offsets and reversed) required.append(bad("loca", loca_at + later)) else required
+	expected = match fault {
+		Reversed if known_offsets => required.append(bad("loca", loca_at + later))
+		MissingEnd if known_offsets => required.append(bad("loca", loca_at))
+		_ => required
+	}
 	bytes = FontBuild.file(tables)
 	[False, True].all(
 		|strict| match Font.from_bytes(bytes, Font.ReadOptions.{ strict }) {

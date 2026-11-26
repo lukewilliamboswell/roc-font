@@ -20,6 +20,34 @@ TableGlyf :: {}.{
 	none : Bounds
 	none = { x_min: 1, y_min: 0, x_max: 0, y_max: 0 }
 
+	offset_at : List(U8), Bool, U64 -> U64
+	offset_at = |loca, long_offsets, glyph| if (long_offsets) Bytes.u32(loca, 4 * glyph) else 2 * Bytes.u16(loca, 2 * glyph)
+
+	## Check locations without reading bearings when hhea is unavailable.
+	check_locations : List(U8), List(Sfnt.Table), Bool, U64 -> Try({}, [BadTable({ table : Str, offset : U32 })])
+	check_locations = |bytes, tables, long_offsets, glyph_count| {
+		match (Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "glyf", 0)) {
+			(Bad(at), _) => Err(Sfnt.bad("loca", at))
+			(_, Bad(at)) => Err(Sfnt.bad("glyf", at))
+			(Found(loca), Found(glyf)) => {
+				size = if (long_offsets) 4 else 2
+				if !Bytes.fits(0, size * (glyph_count + 1), loca.data.len()) {
+					return Err(Sfnt.bad("loca", loca.offset))
+				}
+				var $start = TableGlyf.offset_at(loca.data, long_offsets, 0)
+				for index in 1..=glyph_count {
+					end = TableGlyf.offset_at(loca.data, long_offsets, index)
+					if end < $start or end > glyf.data.len() {
+						return Err(Sfnt.bad("loca", loca.offset + size * index))
+					}
+					$start = end
+				}
+				Ok({})
+			}
+			_ => Ok({})
+		}
+	}
+
 	## The boxes of `count_of_glyphs` glyphs, with `metric_count` long
 	## metrics in `hmtx` (from `hhea`).
 	from_tables : List(U8), List(Sfnt.Table), Bool, U64, U64 -> Try(List(Bounds), [BadTable({ table : Str, offset : U32 })])
@@ -42,7 +70,7 @@ TableGlyf :: {}.{
 				if !Bytes.fits(0, size * (count_of_glyphs + 1), loca.len()) {
 					Err(Sfnt.bad("loca", loca_found.offset))
 				} else {
-					offset = |g| if (long_offsets) Bytes.u32(loca, 4 * g) else 2 * Bytes.u16(loca, 2 * g)
+					offset = |g| TableGlyf.offset_at(loca, long_offsets, g)
 					var $boxes = List.with_capacity(count_of_glyphs)
 					var $bad_at = 0
 					var $next_start = offset(0)

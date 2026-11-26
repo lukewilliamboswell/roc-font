@@ -677,7 +677,8 @@ them results disagree with Chrome. They are in scope for the default path:
 * compose or decompose a character depending on what the cmap maps
   (`é` absent: `e` plus combining acute, and the reverse);
 * hide default-ignorable characters (ZWJ, ZWNJ, soft hyphen, variation
-  selectors) as zero-width;
+  selectors) as zero-width by default. A font substitution can make a
+  mapped default-ignorable character visible to positioning and output.
 * give U+2000–U+200A and other spaces widths derived from the space glyph
   when the font lacks them;
 * apply variation sequences through cmap format 14;

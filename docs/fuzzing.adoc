@@ -39,6 +39,9 @@ check that the reader waits for the count before judging the reference.
 For variation tables, hold the store bytes fixed and change the
 axis count in `fvar`. Remove `maxp` separately so an `avar` fault
 survives while an implicit `HVAR` row-count judgment is deferred.
+For outline locations, remove the offset width and glyph count
+prerequisites separately from the metrics header. Check both offset
+widths and distinguish a reversed entry from a missing final entry.
 For Unicode composition, swapping two marks of equal combining class
 checks stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
@@ -227,10 +230,18 @@ For a mark after a nested ligature, arrange for a directly mapped
 intermediate to produce the same final glyph. Give each component a
 distinct anchor so the visible placement identifies which earlier
 input supplied the mark.
+For mark filtering after substitution, compare a replacement with the
+same glyph reached directly. Give the source and replacement different
+attachment classes. Vary the filtering set independently of those
+classes to check which lookup flag controls positioning.
 For glyph deletion, put the same multibyte character on either side of a
 survivor and set a feature range that covers just one of its original
 byte positions. Check the merged cluster and whether the later
 positioning uses the survivor's feature mask.
+For default-ignorables, make a font map and substitute a soft hyphen.
+Give the replacement distinct kerning on each side. Mask the
+substitution to check that kerning can instead reach across the
+unchanged soft hyphen.
 For MATH constructions, give tied advances distinct glyphs in an order
 that differs from glyph-ID order. Use measurements on both sides of the
 signed 16-bit boundary to catch a signed read of an unsigned field.

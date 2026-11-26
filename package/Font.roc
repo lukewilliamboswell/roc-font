@@ -587,11 +587,11 @@ Font :: { face : Face }.{
 	##   turns one off; `features` lists only the changes.
 	##
 	## HarfBuzz's default shaping rules select canonical forms the font
-	## maps, mirror brackets in right-to-left text, hide default-ignorable
-	## characters and derive missing space widths. Hebrew, modern horizontal
-	## Arabic, horizontal Thai and modern Devanagari Hindi use script-specific
-	## shaping. For Hindi select `Deva` and `hi` with a font that has
-	## OpenType `dev2` layout. In Thai, SARA AM can split into a spacing
+	## maps, mirror brackets in right-to-left text, usually hide
+	## default-ignorable characters and derive missing space widths. Hebrew,
+	## modern horizontal Arabic, horizontal Thai and modern Devanagari Hindi
+	## use script-specific shaping. For Hindi select `Deva` and `hi` with
+	## a font that has OpenType `dev2` layout. In Thai, SARA AM can split into a spacing
 	## vowel and a mark before the font's positioning rules apply.
 	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{}, arabic_context : ArabicContext ?? ArabicContext.{} }
 
@@ -624,14 +624,14 @@ Font :: { face : Face }.{
 	## - Every cluster is the offset of a character of the text. A character
 	##   with no glyph of its own (joined into a ligature, or removed by a
 	##   substitution) is drawn by the cluster it was merged into.
-	## - A character the font does not map is drawn with glyph 0, never left
-	##   out, and the glyph is missing (`is_missing`); only a substitution in the font
-	##   may replace that glyph. The exceptions are default-ignorable
-	##   characters (such as a zero-width joiner, a soft hyphen or a
-	##   variation selector), which draw nothing visible: the font's space
-	##   glyph with no advance, or no glyph when the font has no space. A
-	##   glyph 0 the font itself gives (by its character map or a
-	##   substitution) is not missing.
+	## - An ordinary character the font does not map is drawn with glyph 0
+	##   and marked missing (`is_missing`). A font substitution can replace
+	##   that glyph. Default-ignorable characters such as the soft hyphen
+	##   usually produce a zero-advance space glyph, or no glyph when the
+	##   font has no space. A font substitution for a mapped
+	##   default-ignorable character can produce a visible glyph that
+	##   participates in positioning. A glyph 0 supplied by the font's
+	##   character map or a substitution is treated as present.
 	## - Empty text gives a run of empty lists; glyph ids past the font have
 	##   an advance of 0.
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
