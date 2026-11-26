@@ -43,6 +43,7 @@ import NameScalars
 import Names
 import Outlines
 import PairDevices
+import PointComposites
 import PointCursive
 import PostNames
 import Reverse
@@ -52,8 +53,10 @@ import SpaceWidths
 import TableDirectory
 import Thai
 import Tracing
+import TypoMetrics
 import VariedAnchors
 import VariationReading
+import VariationSequences
 import WidthBounds
 
 target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Cursive.target, Arabic.target, Arabic.growth_target, Indic.target, Indic.growth_target, Thai.target, Thai.growth_target])
@@ -93,6 +96,7 @@ expect NameScalars.check({})
 expect Names.check({})
 expect Outlines.check({})
 expect PairDevices.check({})
+expect PointComposites.check({})
 expect PointCursive.check({})
 expect PostNames.check({})
 expect Reverse.check({})
@@ -102,6 +106,8 @@ expect SpaceWidths.check({})
 expect TableDirectory.check({})
 expect Thai.check({})
 expect Tracing.check({})
+expect TypoMetrics.check({})
 expect VariedAnchors.check({})
 expect VariationReading.check({})
+expect VariationSequences.check({})
 expect WidthBounds.check({})

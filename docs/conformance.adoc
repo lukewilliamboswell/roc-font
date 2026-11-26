@@ -836,6 +836,14 @@ id. The policy, as in roc-parser:
 * An entry names one case. There are no patterns.
 * Scored cases are never listed; promote a case to gating first.
 
+At non-default variation locations, Roc follows HarfBuzz 14.6 when a
+point-attached composite is itself nested after a sibling. The parent
+point is indexed in the accumulated outline. FontTools indexes within
+the enclosing composite, as the `glyf` specification describes, so the
+same input can yield different extents.
+https://github.com/harfbuzz/harfbuzz/blob/14.6.0/src/OT/glyf/Glyph.hh#L449-L458[HarfBuzz point placement]
+https://learn.microsoft.com/en-us/typography/opentype/spec/glyf#composite-glyph-description[OpenType composite glyphs]
+
 == Fonts
 
 === Committed fixtures

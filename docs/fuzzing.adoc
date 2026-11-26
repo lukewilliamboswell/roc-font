@@ -51,6 +51,9 @@ references. Include the final standard index and the first custom index.
 For font-wide metric variation, give each fallback source distinct
 values. Include signed half-unit ties so the result shows whether
 rounding happened after the regional contributions were added.
+For font-wide metric selection, give each source a distinct ascent,
+descent and gap. Set only one extent to zero so the result shows whether
+the whole tuple was selected. Check both extents zero separately.
 For signed width bounds, use runs with prefixes that exceed opposite
 limits and cancel to the same representable total. Check cancellation
 within one glyph separately so clipping at each lookup is observable.
@@ -109,6 +112,10 @@ a second substitution to show when the parent matched. For outline
 variation, make the affected point an observable bound of the outline.
 For composite glyphs, give each component a distinct metric contribution
 and reverse their order to observe which component supplies the metrics.
+For point attachment, use a varied parent point from the second
+preceding component and a donor whose transform changes its anchor.
+Make the attached donor define an outline bound so incorrect alignment
+changes the public extents.
 For font collections, give each face a distinct character map and distinct
 private metrics. Reorder the face directory references and share one
 metrics table across faces on either side of its storage location.
@@ -131,6 +138,10 @@ For a many-to-one character map, split and rejoin adjacent groups for
 the same glyph. Leave a gap before the next group, and put an unusable
 glyph before a valid group at the Unicode ceiling. The lower-priority
 map can cover the gap so per-character fallback would be visible.
+For variation selectors, give a BMP base and a supplementary base the
+same low 16 bits. Move the default and non-default tables without
+changing selector order, keep the last table at the end of the subtable,
+and check both ends of the longest default range and its neighbors.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
