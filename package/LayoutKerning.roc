@@ -833,17 +833,34 @@ LayoutKerning := {
 	## limit.
 	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar, LayoutGdef -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
 	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv, gdef|
+		match LayoutKerning.gpos_source(bytes, tables, max_lookups)? {
+			Absent => Ok(Absent)
+			Present({ data, offset }) =>
+				match LayoutKerning.read_gpos(data, count_of_glyphs, lv, gdef) {
+					Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
+					Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
+				}
+		}
+
+	## Check the script and feature lists even on a face that cannot be prepared.
+	check_gpos_common : List(U8), List(Sfnt.Table), U64 -> Try({}, [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	check_gpos_common = |bytes, tables, max_lookups|
+		match LayoutKerning.gpos_source(bytes, tables, max_lookups)? {
+			Absent => Ok({})
+			Present({ data, offset }) =>
+				LayoutCommon.read(data).map_ok(|_| {}).map_err(|Bad(at)| Sfnt.bad("GPOS", offset + at))
+		}
+
+	gpos_source : List(U8), List(Sfnt.Table), U64 -> Try([Present({ data : List(U8), offset : U64 }), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	gpos_source = |bytes, tables, max_lookups|
 		match Sfnt.located(bytes, tables, "GPOS", 10) {
 			Missing => Ok(Absent)
 			Bad(at) => Err(Sfnt.bad("GPOS", at))
-			Found({ data, offset }) =>
-				if Bytes.u16(data, Bytes.u16(data, 8)) > max_lookups {
+			Found(found) =>
+				if Bytes.u16(found.data, Bytes.u16(found.data, 8)) > max_lookups {
 					Err(OverLimit("max_lookups"))
 				} else {
-					match LayoutKerning.read_gpos(data, count_of_glyphs, lv, gdef) {
-						Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
-						Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
-					}
+					Ok(Present(found))
 				}
 		}
 

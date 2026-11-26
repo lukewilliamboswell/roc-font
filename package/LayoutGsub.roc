@@ -1961,6 +1961,35 @@ LayoutGsub := {
 	## allowed (see `ots_check`).
 	OtsContext : { data : List(U8), glyphs : U64, lookups : U64, sets : [Present(U64), Absent], budget : U64 }
 
+	## Read the layout version and header without glyph or variation data.
+	ots_header : List(U8) -> Try({ script_list : U64, feature_list : U64, lookup_list : U64 }, [Bad(U64)])
+	ots_header = |data| {
+		size = data.len()
+		major = LayoutGsub.u16(data, 0)
+		minor = LayoutGsub.u16(data, 2)
+		# layout.cc 1656-1672: version 1.0 (10-byte header) or 1.1 (14).
+		if !LayoutGsub.fits(0, 10, size) or major != 1 or minor > 1 or (minor == 1 and !LayoutGsub.fits(0, 14, size)) {
+			return Err(Bad(0))
+		}
+		header = if (minor == 0) 10 else 14
+		script_list = LayoutGsub.u16(data, 4)
+		feature_list = LayoutGsub.u16(data, 6)
+		lookup_list = LayoutGsub.u16(data, 8)
+		# Each list may be absent; one present lies past the header and
+		# inside the table (1677-1708). Lookups first, whose count features
+		# use, then features, whose count language systems use.
+		if lookup_list != 0 and (lookup_list < header or lookup_list >= size) {
+			return Err(Bad(8))
+		}
+		if feature_list != 0 and (feature_list < header or feature_list >= size) {
+			return Err(Bad(6))
+		}
+		if script_list != 0 and (script_list < header or script_list >= size) {
+			return Err(Bad(4))
+		}
+		Ok({ script_list, feature_list, lookup_list })
+	}
+
 	## Check a `GSUB` table exactly as OTS 9.3.0 does (`ots/src/layout.cc`,
 	## `OpenTypeLayoutTable::Parse`, and `ots/src/gsub.cc`; line numbers
 	## below are those files'), so a font reads exactly when a browser
@@ -1991,32 +2020,10 @@ LayoutGsub := {
 	## wrong.
 	ots_check : List(U8), U64, [Present(U64), Absent] -> Try({}, [Bad(U64)])
 	ots_check = |data, glyphs, sets| {
+		{ script_list, feature_list, lookup_list } = LayoutGsub.ots_header(data)?
 		size = data.len()
-		major = LayoutGsub.u16(data, 0)
-		minor = LayoutGsub.u16(data, 2)
-		# layout.cc 1656-1672: version 1.0 (10-byte header) or 1.1 (14).
-		if !LayoutGsub.fits(0, 10, size) or major != 1 or minor > 1 or (minor == 1 and !LayoutGsub.fits(0, 14, size)) {
-			return Err(Bad(0))
-		}
-		header = if (minor == 0) 10 else 14
-		script_list = LayoutGsub.u16(data, 4)
-		feature_list = LayoutGsub.u16(data, 6)
-		lookup_list = LayoutGsub.u16(data, 8)
-		base = { data, glyphs, lookups: 0, sets, budget: 64 * size + 1048576 }
-		# Each list may be absent; one present lies past the header and
-		# inside the table (1677-1708). Lookups first, whose count features
-		# use, then features, whose count language systems use.
-		if lookup_list != 0 and (lookup_list < header or lookup_list >= size) {
-			return Err(Bad(8))
-		}
-		if feature_list != 0 and (feature_list < header or feature_list >= size) {
-			return Err(Bad(6))
-		}
-		if script_list != 0 and (script_list < header or script_list >= size) {
-			return Err(Bad(4))
-		}
 		lookups = if (lookup_list != 0 and LayoutGsub.fits(lookup_list, 2, size)) LayoutGsub.u16(data, lookup_list) else 0
-		ctx = { ..base, lookups }
+		ctx = { data, glyphs, lookups, sets, budget: 64 * size + 1048576 }
 		after_lookups = if (lookup_list != 0) LayoutGsub.ots_lookup_list(ctx, lookup_list, 0)? else 0
 		features = if (feature_list != 0) LayoutGsub.ots_feature_list(ctx, feature_list, after_lookups)? else { count: 0, steps: after_lookups }
 		if script_list != 0 {

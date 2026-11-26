@@ -626,9 +626,8 @@ expect {
 # Each required table missing on its own.
 expect ["head", "hhea", "maxp", "cmap"].all(|tag| kinds_of(FontBuild.without(FontBuild.basic, tag)) == ["MissingTable(${tag})"])
 
-# Without `head`, `hhea` or `maxp` the tables that depend on them are not
-# read, so only the missing table is reported.
-expect kinds_of(FontBuild.without(FontBuild.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == ["MissingTable(maxp)"]
+# The common GPOS lists can be checked even without a glyph count.
+expect kinds_of(FontBuild.without(FontBuild.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == ["MissingTable(maxp)", "BadTable(GPOS)"]
 
 # Tables too short for their fields, and empty counts.
 expect kinds_of(basic_with("head", FontBuild.head(1000, False).drop_last(1))) == ["BadTable(head)"]

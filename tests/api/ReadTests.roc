@@ -193,7 +193,7 @@ expect {
 		.concat([{ tag: "OS/2", data: [0] }, { tag: "GSUB", data: [0, 1] }])
 		.map(|t| if (t.tag == "head") { tag: t.tag, data: FontBuild.head(5, False) } else t)
 	bytes = FontBuild.file(tables)
-	rejects(lenient(bytes), [BadUnitsPerEm, bad("maxp", table_offset(bytes, "maxp") + 4), bad("OS/2", table_offset(bytes, "OS/2"))])
+	rejects(lenient(bytes), [BadUnitsPerEm, bad("maxp", table_offset(bytes, "maxp") + 4), bad("OS/2", table_offset(bytes, "OS/2")), bad("GSUB", table_offset(bytes, "GSUB"))])
 }
 
 # A failed header does not hide independent problems. With maxp

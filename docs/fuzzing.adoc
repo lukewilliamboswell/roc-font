@@ -32,7 +32,11 @@ Remove a prerequisite in one case and retain it in another, then check
 both read modes and the order of the returned problems. A supported
 table version can be checked before its contents are usable. Pair a bad
 MATH version with an invalid required header, and also try a valid MATH
-header to guard against false reports. For Unicode
+header to guard against false reports. The GSUB list offsets, GPOS list
+headers and version-specific GDEF header length can also be checked
+without the glyph count. Use a valid header with a glyph reference to
+check that the reader waits for the count before judging the reference.
+For Unicode
 composition, swapping two marks of equal combining class checks both
 stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
@@ -217,6 +221,10 @@ consumer.
 For legacy kerning across a GDEF mark, test the mark between two bases
 and at the start of a pair. Vary the feature range on each endpoint and
 check the unsafe break flags as well as the advances.
+For a mark after a nested ligature, arrange for a directly mapped
+intermediate to produce the same final glyph. Give each component a
+distinct anchor so the visible placement identifies which earlier
+input supplied the mark.
 For Thai preprocessing, pair an authored nikhahit with one produced by
 SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.

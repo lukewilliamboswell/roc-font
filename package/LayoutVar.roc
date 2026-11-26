@@ -202,6 +202,24 @@ LayoutVar := {
 
 	# ------------------------------------------------------------ GDEF structure
 
+	## Read the layout version and header without glyph or variation data.
+	check_gdef_header : List(U8) -> Try({ minor : U64, end : U64 }, Problem)
+	check_gdef_header = |gdef| {
+		bad = |at, reason| Err({ table: "GDEF", offset: at, reason })
+		if gdef.len() < 12 {
+			return bad(0, Truncated)
+		}
+		minor = TableVar.u16(gdef, 2)
+		if TableVar.u16(gdef, 0) != 1 or minor == 1 {
+			return bad(0, UnsupportedVersion)
+		}
+		header_end = 12 + (if (minor >= 2) 2 else 0) + (if (minor >= 3) 4 else 0)
+		if gdef.len() < header_end {
+			return bad(0, Truncated)
+		}
+		Ok({ minor, end: header_end })
+	}
+
 	## Check a whole `GDEF` table as OTS 9.3.0 checks it (`gdef.cc`), so
 	## lenient reading rejects exactly the `GDEF` tables browsers reject:
 	## the header (version 1.0, 1.2 or 1.3 and later; there is no 1.1), the
@@ -216,19 +234,8 @@ LayoutVar := {
 	## time.
 	check_gdef : List(U8), U64, [Present(U64), Absent] -> Try({}, Problem)
 	check_gdef = |gdef, glyph_count, axes| {
+		{ minor, end: header_end } = LayoutVar.check_gdef_header(gdef)?
 		size = gdef.len()
-		bad = |at, reason| Err({ table: "GDEF", offset: at, reason })
-		if size < 12 {
-			return bad(0, Truncated)
-		}
-		minor = TableVar.u16(gdef, 2)
-		if TableVar.u16(gdef, 0) != 1 or minor == 1 {
-			return bad(0, UnsupportedVersion)
-		}
-		header_end = 12 + (if (minor >= 2) 2 else 0) + (if (minor >= 3) 4 else 0)
-		if size < header_end {
-			return bad(0, Truncated)
-		}
 		# An offset to a part: inside the table and after the header.
 		part = |field, value|
 			if value == 0 {
@@ -276,7 +283,7 @@ LayoutVar := {
 				Present(at) => {
 					match TableVar.check_store_ots(gdef, at, axes) {
 						Ok(_) => {}
-						Err(offset) => return bad(offset, BadFormat)
+						Err(offset) => return Err({ table: "GDEF", offset, reason: BadFormat })
 					}
 				}
 				Absent => {}

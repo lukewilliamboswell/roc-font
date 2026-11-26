@@ -359,7 +359,7 @@ Face := {
 			_ => {
 				# These readers can still report problems when head or
 				# hhea prevents preparation. hmtx needs both counts,
-				# while post and GSUB need only the glyph count.
+				# while post and the GSUB body need only the glyph count.
 				match maxp {
 					Ok(glyph_count) => {
 						match hhea {
@@ -379,7 +379,42 @@ Face := {
 							Ok(_) => {}
 						}
 					}
-					Err(_) => {}
+					Err(_) =>
+						match Face.located_tag(bytes, tables, 0x47535542, 0) {
+							Bad(at) => {
+								$required = $required.append(Sfnt.bad("GSUB", at))
+							}
+							Found(found) =>
+								match LayoutGsub.ots_header(found.data) {
+									Err(Bad(at)) => {
+										$required = $required.append(Sfnt.bad("GSUB", found.offset + at))
+									}
+									Ok(_) => {}
+								}
+							Missing => {}
+						}
+				}
+				match Face.located_tag(bytes, tables, 0x47444546, 0) {
+					Bad(at) => {
+						$required = $required.append(Sfnt.bad("GDEF", at))
+					}
+					Found(found) =>
+						match LayoutVar.check_gdef_header(found.data) {
+							Err(p) => {
+								$required = $required.append(Sfnt.bad("GDEF", found.offset + p.offset))
+							}
+							Ok(_) => {}
+						}
+					Missing => {}
+				}
+				match LayoutKerning.check_gpos_common(bytes, tables, options.max_lookups) {
+					Err(OverLimit(which)) => {
+						$optional = $optional.append(OverLimit(which))
+					}
+					Err(BadTable(b)) => {
+						$required = $required.append(BadTable(b))
+					}
+					Ok(_) => {}
 				}
 				# Neither kern nor fvar needs the failed header tables.
 				match Face.read_kern(bytes, tables) {
