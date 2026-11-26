@@ -92,7 +92,10 @@ left by an unsupported selector. A positioning record that is present
 and all zeroes can change where the lookup resumes. Include an overlapping
 pair and a second lookup to observe that boundary. Compare each glyph's
 advance and offset when the same total width can come from different
-placements. For variation records, give each table a different preference
+placements. When a pair mixes hinting and variation devices, give a hint
+table's size fields the same numbers as a live variation index. At
+design size, only the variation fields should change across locations.
+For variation records, give each table a different preference
 at a shared inclusive endpoint and probe one normalized unit on each side.
 For optional variation tables, keep two independently observable deltas
 so a dropped axis map can be distinguished from a dropped variation group.
@@ -124,6 +127,10 @@ different deltas makes each segment's offset origin observable.
 For symbol aliases, include a direct mapping that wins, a zero entry
 that permits fallback, and two aliases for the same glyph. Check both
 nominal lookup and sorted, unique enumeration.
+For a many-to-one character map, split and rejoin adjacent groups for
+the same glyph. Leave a gap before the next group, and put an unusable
+glyph before a valid group at the Unicode ceiling. The lower-priority
+map can cover the gap so per-character fallback would be visible.
 For mirroring, map different characters to the same input glyph. Give
 only one of them a mapped Unicode mirror so the result shows whether
 shaping chose that mirror or the glyph alternate.
@@ -136,6 +143,9 @@ characters required fallback.
 For fallback mark placement, stack two differently sized marks of the
 same class, then switch classes on the same side of the base. That
 checks when positioning starts from the base's bounds again.
+For MATH glyph information, give the tables different coverages and
+place a shared glyph at a different row in each one. Use a zero value
+and an absent record to check that membership survives zero values.
 For varied MATH kerning, let formerly distinct heights meet at a
 three-way tie with different values in the tied slots. Move back by
 omitting one axis so the model also checks that the corner resets.
@@ -176,6 +186,9 @@ lookup flag. Use asymmetric signed anchors and compare which endpoint
 keeps its baseline. For point anchors at design size, make the stored
 anchor coordinates differ from the referenced contour points. Vary the
 outline and check its bounds alongside the unchanged attachment.
+For variable cursive anchors, give both anchors deltas near the limit
+of binary32 integer precision. Include anchors with opposite signs so
+the result depends on rounding the subtraction as well as its operands.
 For Arabic joining, vary context across the same first or last letter
 and model transparent marks, join controls and true line boundaries
 before applying the font's substitutions.

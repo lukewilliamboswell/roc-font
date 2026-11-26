@@ -12,6 +12,7 @@ import Budgets
 import ClassPairs
 import ClusterRanges
 import Cmap
+import CmapAliases
 import CmapSpan
 import Collection
 import Composite
@@ -31,6 +32,7 @@ import Indic
 import LegacyCmap
 import LookupFiltering
 import Math
+import MathGlyphInfo
 import MathLocations
 import MathVariants
 import MarkAttachment
@@ -40,6 +42,7 @@ import Metrics
 import NameScalars
 import Names
 import Outlines
+import PairDevices
 import PointCursive
 import PostNames
 import Reverse
@@ -61,6 +64,7 @@ expect AxisMapping.check({})
 expect Budgets.check({})
 expect ClassPairs.check({})
 expect ClusterRanges.check({})
+expect CmapAliases.check({})
 expect CmapSpan.check({})
 expect Collection.check({})
 expect Composite.check({})
@@ -77,6 +81,7 @@ expect Indic.check({})
 expect LegacyCmap.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
+expect MathGlyphInfo.check({})
 expect MathLocations.check({})
 expect MathVariants.check({})
 expect MarkAttachment.check({})
@@ -87,6 +92,7 @@ expect Metrics.check({})
 expect NameScalars.check({})
 expect Names.check({})
 expect Outlines.check({})
+expect PairDevices.check({})
 expect PointCursive.check({})
 expect PostNames.check({})
 expect Reverse.check({})
