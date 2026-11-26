@@ -230,6 +230,10 @@ For a mark after a nested ligature, arrange for a directly mapped
 intermediate to produce the same final glyph. Give each component a
 distinct anchor so the visible placement identifies which earlier
 input supplied the mark.
+For stacking across ligature components, give each component the same
+starting anchor and reuse one mark glyph. Compare histories that put the
+same marks on one component or several. Their offsets show where a
+stack restarts even when their glyphs and clusters agree.
 For mark filtering after substitution, compare a replacement with the
 same glyph reached directly. Give the source and replacement different
 attachment classes. Vary the filtering set independently of those
@@ -269,10 +273,11 @@ history when debugging.
 When an existing check appears to cover the rule, try the mutation there
 before building a new fixture. Skipping interpolation across the start of
 a contour, for example, already fails the outline model's exact bounds
-check. Stop a pass once the interaction has independent coverage and
-further cases would repeat the same evidence. Keep larger input spaces,
-resource scaling and reference implementation agreement in their existing
-checks.
+check, and sorting extension pair subtables by byte address already
+fails the Inter position checkpoint. Stop a pass once the interaction
+has independent coverage and further cases would repeat the same
+evidence. Keep larger input spaces, resource scaling and reference
+implementation agreement in their existing checks.
 The roc-pdf contributor guide describes the approach that inspired these
 passes. https://github.com/lukewilliamboswell/roc-pdf/blob/75a9b4880838dd7cab7a4a55d4a655bc890b8a74/docs/testing.adoc[Designing correctness oracles]
 

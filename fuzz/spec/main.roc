@@ -52,6 +52,7 @@ import MathLocations
 import MathVariants
 import MarkAttachment
 import MarkCertification
+import MarkComponents
 import MetricVariations
 import Metrics
 import MvarHeaderDiagnostics
@@ -125,6 +126,7 @@ expect MathLocations.check({})
 expect MathVariants.check({})
 expect MarkAttachment.check({})
 expect MarkCertification.check({})
+expect MarkComponents.check({})
 expect MetricVariations.check({})
 expect MetricVariations.wide_check({})
 expect Metrics.check({})
