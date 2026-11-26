@@ -989,7 +989,7 @@ curate from. `tests/cases/curated.jsonc` lists the cases in scope, each with:
 (fields stripped, whitespace collapsed). The importer uses `line` when the
 hash matches there, otherwise the nearest line with that hash (and asks for
 `line` to be updated); a hash found nowhere fails the import. `milestone` is
-the `TODO.md` milestone expected to make the case pass (`M1-now` passes
+the stage expected to make the case pass (`M1-now` passes
 today, `M1-next` lands with work in progress, `post-0.1` after 0.1.0).
 `fonts` pins every font used by SHA-256 and size; `font_size_cap` (65536)
 bounds committed fonts. The list is JSONC, but `--pin-fonts` rewrites it in

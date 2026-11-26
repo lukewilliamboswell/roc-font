@@ -3,8 +3,8 @@
 This package reads font files and turns text into positioned glyphs, in pure
 Roc. Preserve these principles when designing APIs, implementing tables and
 shaping, writing documentation, or adding tests. The architecture these
-principles produce, and why, is in `docs/architecture.adoc`; current status
-and plans live in `TODO.md`, not here.
+principles produce, and why, is in `docs/architecture.adoc`. Use GitHub
+issues for status and plans.
 
 ## Keep the boundary at the font
 
@@ -283,5 +283,4 @@ If a check cannot run, run the others and report which were skipped and why.
 - Keep APIs provisional until a consumer proves them end to end.
 - Let consumers, oracles and generated documentation correct the design.
 - When evidence changes a principle, update this file in the same change.
-- Preserve enduring constraints here; keep status and task lists in
-  `TODO.md`.
+- Preserve enduring constraints here. Track open work in GitHub issues.

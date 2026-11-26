@@ -6,12 +6,11 @@
 This document describes the architecture roc-font is moving towards and,
 above all, *why*. It is the enduring design: what a finished roc-font looks
 like and the reasons behind each choice. Day-to-day rules for contributors
-are in `AGENTS.md`; status, milestones and open questions are in `TODO.md`.
+are in `AGENTS.md`. Use GitHub issues for open work.
 When evidence changes a decision here, change this document in the same
 commit and say what the evidence was.
 
-Section numbers are stable references: `TODO.md` and commit messages cite
-them as "architecture §4.2".
+Section numbers are stable references. Cite them as "architecture §4.2".
 
 [#purpose]
 == 1 Purpose and boundary
@@ -244,13 +243,12 @@ and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
   the font for any problem lenient reading would drop a table for. It
   does not yet check table checksums, directory order, overlapping or
   duplicate tables or `fsType`; roc-pdf keeps those checks until strict
-  reading gains them (`TODO.md`). A zero-length table is refused in both
+  reading gains them. A zero-length table is refused in both
   modes, as OTS refuses it.
 
 Both modes report every independent problem in one result. A problem
 names the table by its tag and, where it helps, the byte offset in the file
-and what was wrong there, so a caller can act on it; the exact payload is
-settled with roc-pdf (`TODO.md`). Dropping a table
+and what was wrong there, so a caller can act on it. Dropping a table
 is not repair: data is never clamped, references are never redirected, and
 glyph 0 is never substituted for missing data. Either a table is used as the
 font defines it or it is not used at all.
@@ -344,8 +342,8 @@ run = Font.shape(font, "office -> home", Font.ShapeOptions.{})
 pdf_font = Font.from_bytes(bytes, Font.ReadOptions.{ strict: True })?
 ----
 
-The names above illustrate the pattern; the exact names are settled in
-`TODO.md` and proved by consumers before 0.1.0. Nested defaulted records
+The names above illustrate the pattern. Consumer integrations validate
+the API before 0.1.0. Nested defaulted records
 (`limits`) compile on the current nightly (checked 2026-10-24).
 
 roc-font does not detect scripts itself: that needs Unicode script data,

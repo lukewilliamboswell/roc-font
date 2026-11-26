@@ -574,7 +574,7 @@ finite extents, composite depth bounded).
 * Comparators: HarfBuzz's `hb_font_set_variations` plus advances, and
   rustybuzz/ttf-parser's `set_variation`.
 
-== 8 Milestones (proposal for `TODO.md`)
+== 8 Proposed milestones
 
 * *V1, with M3 (API)*: `TableVar` lands (this change); `Font.Variation`,
   `Font.Weight`, `Font.Width`, `Font.OpticalSize`, `Font.at`; reading keeps
