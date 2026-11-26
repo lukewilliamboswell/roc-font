@@ -1,0 +1,38 @@
+= roc-font 0.2.0
+
+Shape modern horizontal Arabic, Thai and Hindi in a caller-selected run.
+Arabic applies joining forms and accepts adjacent text through
+`Font.ShapeOptions.arabic_context` for runs that meet within a line. Thai
+preprocesses SARA AM, and Hindi applies syllable detection and reordering
+for modern Devanagari (`dev2`). Font-defined mark-to-base, mark-to-ligature,
+mark-to-mark and horizontal cursive attachment now position glyphs in
+these and other scripts, including Hebrew with vowel marks.
+
+Use `Font.shape_scalars_checked` or `Font.shape_scalars_traced` to shape
+caller-itemized scalars and keep their original text offsets. Both
+operations report invalid scalars and decreasing offsets. The traced
+operation also returns glyph origins. The new `arabic_context` field is
+defaulted, so callers can keep using existing `Font.ShapeOptions.{...}`
+constructors with empty context.
+
+The reader reports more independent table problems together, including
+when a required header invalidates the face. It also validates version 2
+collection headers and reads OpenType MATH major version 1 with compatible
+minor versions. A truncated MATH header and an unsupported major version
+receive distinct diagnostics.
+
+== Use this release
+
+[source,roc]
+----
+app [main!] {
+	cli: platform "https://github.com/roc-lang/basic-cli/releases/download/0.28.1/7brgwR8YUqfeGrkdfF1V4GPPN7DnP7ftqub9KcrTEZtr.tar.zst",
+	font: "{package-url}",
+}
+
+import font.Font
+----
+
+The release attaches the package bundle, `roc-font-examples-0.2.0.zip`, the
+API reference and the PDF manual. The Compilers section records the compiler
+used to build and test them.
