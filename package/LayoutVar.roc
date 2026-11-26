@@ -220,6 +220,35 @@ LayoutVar := {
 		Ok({ minor, end: header_end })
 	}
 
+	# An offset to a child is either null or points past the header and
+	# inside the table.
+	gdef_child_offset : U64, U64, U64, U64 -> Try([Present(U64), Absent], Problem)
+	gdef_child_offset = |size, header_end, field, offset|
+		if offset == 0 {
+			Ok(Absent)
+		} else if offset >= size or offset < header_end {
+			Err({ table: "GDEF", offset: field, reason: Truncated })
+		} else {
+			Ok(Present(offset))
+		}
+
+	## Check top-level offsets before the counts needed to read their children
+	## are available.
+	check_gdef_offsets : List(U8) -> Try({}, Problem)
+	check_gdef_offsets = |gdef| {
+		{ minor, end: header_end } = LayoutVar.check_gdef_header(gdef)?
+		size = gdef.len()
+		short_offsets = if (minor >= 2) 5 else 4
+		for i in 0..<short_offsets {
+			field = 4 + 2 * i
+			_ = LayoutVar.gdef_child_offset(size, header_end, field, TableVar.u16(gdef, field))?
+		}
+		if minor >= 3 {
+			_ = LayoutVar.gdef_child_offset(size, header_end, 14, TableVar.u32(gdef, 14))?
+		}
+		Ok({})
+	}
+
 	## Check a whole `GDEF` table as OTS 9.3.0 checks it (`gdef.cc`), so
 	## lenient reading rejects exactly the `GDEF` tables browsers reject:
 	## the header (version 1.0, 1.2 or 1.3 and later; there is no 1.1), the
@@ -236,15 +265,7 @@ LayoutVar := {
 	check_gdef = |gdef, glyph_count, axes| {
 		{ minor, end: header_end } = LayoutVar.check_gdef_header(gdef)?
 		size = gdef.len()
-		# An offset to a part: inside the table and after the header.
-		part = |field, value|
-			if value == 0 {
-				Ok(Absent)
-			} else if value >= size or value < header_end {
-				Err({ table: "GDEF", offset: field, reason: Truncated })
-			} else {
-				Ok(Present(value))
-			}
+		part = |field, value| LayoutVar.gdef_child_offset(size, header_end, field, value)
 		var $steps = 0
 		match part(4, TableVar.u16(gdef, 4))? {
 			Present(at) => {

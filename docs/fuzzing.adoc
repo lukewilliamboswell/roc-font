@@ -36,6 +36,9 @@ header to guard against false reports. The GSUB list offsets, GPOS list
 headers and version-specific GDEF header length can also be checked
 without the glyph count. Use a valid header with a glyph reference to
 check that the reader waits for the count before judging the reference.
+For top-level GDEF offsets, keep the child bytes fixed and point into
+the header, to the exact end of the table, or past it. Include a
+32-bit offset whose low 16 bits name the valid child.
 For variation tables, hold the store bytes fixed and change the
 axis count in `fvar`. Remove `maxp` separately so an `avar` fault
 survives while an implicit `HVAR` row-count judgment is deferred.
@@ -219,6 +222,10 @@ disabling the feature at one cluster leaves the other clusters active.
 When feature variations select the lookup, assert the face's normalized
 coordinates. Loading a font can apply CSS Regular to a weight axis whose
 design default differs.
+For required features with alternates, put GSUB and GPOS changes at
+different thresholds. Disable both feature tags globally and on disjoint
+ranges. Distinct glyphs and advances identify which alternate was used
+before, between and after the thresholds.
 For a flat `avar` segment, check both knots, an interior point and one
 encoded step on either side. A custom axis avoids CSS defaults, and a
 metric driven by that axis shows that the mapped coordinate reaches its
@@ -242,6 +249,9 @@ For glyph deletion, put the same multibyte character on either side of a
 survivor and set a feature range that covers just one of its original
 byte positions. Check the merged cluster and whether the later
 positioning uses the survivor's feature mask.
+For RTL feature ranges, distinguish a character's logical UTF-8 start
+from its continuation byte. Use asymmetric pair adjustments on both
+glyphs so the run exposes which pair was eligible after reversal.
 For default-ignorables, make a font map and substitute a soft hyphen.
 Give the replacement distinct kerning on each side. Mask the
 substitution to check that kerning can instead reach across the

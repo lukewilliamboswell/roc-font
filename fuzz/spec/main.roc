@@ -31,6 +31,7 @@ import Features
 import Fractions
 import FvarDiagnostics
 import GdefHeaderDiagnostics
+import GdefOffsetDiagnostics
 import Gpos
 import GposHeaderDiagnostics
 import Gsub
@@ -66,7 +67,9 @@ import PointComposites
 import PointCursive
 import PostNames
 import PostSubstitutionFiltering
+import RequiredFeatureVariations
 import Reverse
+import RtlPairRanges
 import ScalarBreaks
 import ScalarShaping
 import SpaceWidths
@@ -107,6 +110,7 @@ expect Features.check({})
 expect Fractions.check({})
 expect FvarDiagnostics.check({})
 expect GdefHeaderDiagnostics.check({})
+expect GdefOffsetDiagnostics.check({})
 expect GposHeaderDiagnostics.check({})
 expect GsubHeaderDiagnostics.check({})
 expect HeaderDiagnostics.check({})
@@ -141,7 +145,9 @@ expect PointComposites.check({})
 expect PointCursive.check({})
 expect PostNames.check({})
 expect PostSubstitutionFiltering.check({})
+expect RequiredFeatureVariations.check({})
 expect Reverse.check({})
+expect RtlPairRanges.check({})
 expect ScalarBreaks.check({})
 expect ScalarShaping.check({})
 expect SpaceWidths.check({})

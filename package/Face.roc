@@ -405,7 +405,7 @@ Face := {
 						$required = $required.append(Sfnt.bad("GDEF", at))
 					}
 					Found(found) =>
-						match LayoutVar.check_gdef_header(found.data) {
+						match LayoutVar.check_gdef_offsets(found.data) {
 							Err(p) => {
 								$required = $required.append(Sfnt.bad("GDEF", found.offset + p.offset))
 							}
