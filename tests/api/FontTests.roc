@@ -607,9 +607,9 @@ expect {
 	}
 }
 expect {
-	# A collection signature on a font's header reads as a collection of no
-	# faces.
-	match Font.from_bytes(FontBuild.u32(0x74746366).concat(FontBuild.file(FontBuild.basic).drop_first(4)), Font.ReadOptions.{}) {
+	# A complete version 1 collection header with zero faces.
+	empty = FontBuild.pack([U32(0x74746366), U32(0x00010000), U32(0)])
+	match Font.from_bytes(empty, Font.ReadOptions.{}) {
 		Err(found) => found == [NoSuchFace({ face: 0, count: 0 })]
 		Ok(_) => False
 	}
