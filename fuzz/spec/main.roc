@@ -7,6 +7,7 @@ app [target] {
 import fuzz.Fuzz
 import AlternateRanges
 import Arabic
+import AvarPlateau
 import AxisMapping
 import Budgets
 import ClassPairs
@@ -30,12 +31,15 @@ import Fractions
 import FvarDiagnostics
 import Gpos
 import Gsub
+import HeaderDiagnostics
 import Indic
 import LanguageSelection
 import LegacyCmap
+import LegacyKern
 import LookupFiltering
 import Math
 import MathGlyphInfo
+import MathHeaderDiagnostics
 import MathLocations
 import MathVariants
 import MarkAttachment
@@ -69,6 +73,7 @@ target = Fuzz.suite([Cmap.target, Context.target, Gpos.target, Gsub.target, Curs
 
 expect AlternateRanges.check({})
 expect Arabic.check({})
+expect AvarPlateau.check({})
 expect AxisMapping.check({})
 expect Budgets.check({})
 expect ClassPairs.check({})
@@ -88,12 +93,15 @@ expect FeatureVariations.check({})
 expect Features.check({})
 expect Fractions.check({})
 expect FvarDiagnostics.check({})
+expect HeaderDiagnostics.check({})
 expect Indic.check({})
 expect LanguageSelection.check({})
 expect LegacyCmap.check({})
+expect LegacyKern.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
 expect MathGlyphInfo.check({})
+expect MathHeaderDiagnostics.check({})
 expect MathLocations.check({})
 expect MathVariants.check({})
 expect MarkAttachment.check({})

@@ -3,7 +3,7 @@ import font.Font
 
 # Checking the MATH version needs only the table header. The enclosing
 # face reports this independent optional-table diagnostic alongside a
-# broken head or missing hhea, at the same file offset as on a sound face.
+# broken head or missing hhea, at the file offset given by the directory.
 # https://learn.microsoft.com/en-us/typography/opentype/spec/math
 MathHeaderDiagnostics := {}.{
 	check : {} -> Bool

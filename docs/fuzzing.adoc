@@ -29,7 +29,10 @@ choosing the bytes or reading the production implementation.
 Use a small matrix when each case starts from the same input and exercises
 one distinct boundary. For diagnostics, list the facts each reader needs.
 Remove a prerequisite in one case and retain it in another, then check
-both read modes and the order of the returned problems. For Unicode
+both read modes and the order of the returned problems. A supported
+table version can be checked before its contents are usable. Pair a bad
+MATH version with an invalid required header, and also try a valid MATH
+header to guard against false reports. For Unicode
 composition, swapping two marks of equal combining class checks both
 stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
@@ -207,6 +210,13 @@ disabling the feature at one cluster leaves the other clusters active.
 When feature variations select the lookup, assert the face's normalized
 coordinates. Loading a font can apply CSS Regular to a weight axis whose
 design default differs.
+For a flat `avar` segment, check both knots, an interior point and one
+encoded step on either side. A custom axis avoids CSS defaults, and a
+metric driven by that axis shows that the mapped coordinate reaches its
+consumer.
+For legacy kerning across a GDEF mark, test the mark between two bases
+and at the start of a pair. Vary the feature range on each endpoint and
+check the unsafe break flags as well as the advances.
 For Thai preprocessing, pair an authored nikhahit with one produced by
 SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.
