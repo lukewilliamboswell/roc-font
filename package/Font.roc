@@ -372,6 +372,8 @@ Font :: { face : Face }.{
 	MathKernTable : { heights : List(I64), values : List(I64) }
 
 	## Whether the font supplies mathematical typesetting data (`MATH`).
+	## An unrecognized MATH major version is treated as absent. Newer
+	## minor revisions of major version 1 can supply the known data.
 	## A damaged optional MATH table is left out and reported by `dropped`
 	## in lenient reading, and rejects the font in strict reading.
 	has_math : Font -> Bool

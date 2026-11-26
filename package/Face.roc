@@ -441,8 +441,8 @@ Face := {
 					Bad(at) => {
 						$optional = $optional.append(Sfnt.bad("MATH", at))
 					}
-					Found(found) if !TableMath.valid_header(found.data) => {
-						$optional = $optional.append(Sfnt.bad("MATH", found.offset))
+					Found(found) => {
+						$optional = $optional.concat(TableMath.header_problems(found.data).map(|at| Sfnt.bad("MATH", found.offset + at)))
 					}
 					_ => {}
 				}

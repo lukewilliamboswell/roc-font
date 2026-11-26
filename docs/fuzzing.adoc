@@ -30,9 +30,10 @@ Use a small matrix when each case starts from the same input and exercises
 one distinct boundary. For diagnostics, list the facts each reader needs.
 Remove a prerequisite in one case and retain it in another, then check
 both read modes and the order of the returned problems. A supported
-table version can be checked before its contents are usable. Pair a bad
-MATH version with an invalid required header, and also try a valid MATH
-header to guard against false reports. The GSUB list offsets, GPOS list
+table version can be checked before its contents are usable. For MATH,
+pair a truncated header with an invalid required table and check both
+diagnostics. Use an unrecognized major version and a compatible newer
+minor version to check the two versioning rules. The GSUB list offsets, GPOS list
 headers and version-specific GDEF header length can also be checked
 without the glyph count. Use a valid header with a glyph reference to
 check that the reader waits for the count before judging the reference.

@@ -145,7 +145,16 @@ broken = |table| {
 }
 
 expect [1.U64, 9, 10, 100, 223].all(|n| broken(math_bytes.take_first(n)))
-expect broken(FontBuild.patch(math_bytes, 0, [0, 2]))
+expect {
+	table = FontBuild.patch(math_bytes, 0, [0, 2])
+	bytes = FontBuild.parity_font([{ tag: "MATH", data: table }])
+	[False, True].all(
+		|strict| match Font.from_bytes(bytes, Font.ReadOptions.{ strict }) {
+			Ok(font) => !Font.has_math(font) and Font.dropped(font).is_empty()
+			Err(_) => False
+		},
+	)
+}
 expect broken(FontBuild.patch(math_bytes, 4, [255, 255]))
 expect broken(FontBuild.patch(math_bytes, 6, [255, 255]))
 expect broken(FontBuild.patch(math_bytes, 8, [255, 255]))
