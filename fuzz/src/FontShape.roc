@@ -1,13 +1,7 @@
-app [target] {
-	build: "../tests/support/main.roc",
-	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.8.0/BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
-}
-
 import fuzz.Fuzz
 import font.Font
 import build.FontBuild
-import "../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
+import "../../tests/fonts/Inter-Regular-metrics.ttf" as inter_file : List(U8)
 
 ## The shaping contract on arbitrary text. The input is the text's bytes
 ## (read as UTF-8, invalid sequences replaced), then optionally a 0xFF byte
@@ -192,10 +186,12 @@ scaling! = |font, small, large| {
 	}
 }
 
-target = Fuzz.target_with!({
-	examples: [],
-	name: "font-shape",
-	generator: Fuzz.raw_bytes,
-	test!,
-	show: |bytes| Str.inspect(Str.from_utf8_lossy(split_at_marker(bytes).text)),
-})
+FontShape := {}.{
+	target = Fuzz.target_with!({
+		examples: [],
+		name: "font-shape",
+		generator: Fuzz.raw_bytes,
+		test!,
+		show: |bytes| Str.inspect(Str.from_utf8_lossy(split_at_marker(bytes).text)),
+	})
+}

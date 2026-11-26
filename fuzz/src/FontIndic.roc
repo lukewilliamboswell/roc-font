@@ -1,9 +1,3 @@
-app [target] {
-	build: "../tests/support/main.roc",
-	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.8.0/BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
-}
-
 import build.FontBuild
 import font.Font
 import fuzz.Fuzz
@@ -93,10 +87,12 @@ fixture = |_| {
 	Font.from_bytes(FontBuild.glyphs_font(List.repeat(500, 7), cmap, [{ tag: "GSUB", data: gsub }]), Font.ReadOptions.{ strict: True }) ?? crash "Hindi shaping fixture did not read strictly"
 }
 
-target = Fuzz.target_with!({
-	name: "font-indic",
-	generator: Fuzz.raw_bytes,
-	test!: run!,
-	show: |bytes| Str.inspect(bytes.take_first(64)),
-	examples: [Fuzz.saved({ name: "broken and joined syllables", revision: "1", bytes: "ि। कि र्कि र्\u(200C)क".to_utf8().append(0xFF) })],
-})
+FontIndic := {}.{
+	target = Fuzz.target_with!({
+		name: "font-indic",
+		generator: Fuzz.raw_bytes,
+		test!: run!,
+		show: |bytes| Str.inspect(bytes.take_first(64)),
+		examples: [Fuzz.saved({ name: "broken and joined syllables", revision: "1", bytes: "ि। कि र्कि र्\u(200C)क".to_utf8().append(0xFF) })],
+	})
+}

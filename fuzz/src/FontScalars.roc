@@ -1,8 +1,3 @@
-app [target] {
-	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.8.0/BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
-}
-
 import font.Font
 import fuzz.Fuzz
 
@@ -57,28 +52,30 @@ aligned = |run, origins, scalars, rtl| {
 		and (run.clusters.drop_first(1).map2(run.clusters, |after, before| if (rtl) after <= before else before <= after)).all(|ordered| ordered)
 }
 
-target = Fuzz.target_with!({
-	name: "font-scalars",
-	examples: [],
-	generator: Fuzz.raw_bytes,
-	test!: |bytes| {
-		font = Font.sans
-		rtl = (bytes.first() ?? 0) % 2 == 1
-		plan = Font.plan(font, Font.ShapeOptions.{ direction: if (rtl) RightToLeft else LeftToRight })
-		scalars = input(bytes)
-		checked = Font.shape_scalars_checked(font, plan, scalars)
-		traced = Font.shape_scalars_traced(font, plan, scalars)
-		good = match (first_problem(scalars), checked, traced) {
-			(Err(want), Err(InvalidInput(a)), Err(InvalidInput(b))) => a == want and b == want
-			(Ok(_), Ok(run), Ok(trace)) => run == trace.run and run == Font.shape_scalars(font, plan, scalars) and aligned(run, trace.origins, scalars, rtl)
-			(Ok(_), Err(OverBudget({ run, budgets })), Err(OverBudget(trace))) =>
-				budgets == trace.budgets and run == trace.run and run == Font.shape_scalars(font, plan, scalars) and aligned(run, trace.origins, scalars, rtl)
-			_ => False
-		}
-		if !good {
-			crash "scalar shaping disagreed for ${Str.inspect(scalars)}"
-		}
-		Fuzz.keep
-	},
-	show: Str.inspect,
-})
+FontScalars := {}.{
+	target = Fuzz.target_with!({
+		name: "font-scalars",
+		examples: [],
+		generator: Fuzz.raw_bytes,
+		test!: |bytes| {
+			font = Font.sans
+			rtl = (bytes.first() ?? 0) % 2 == 1
+			plan = Font.plan(font, Font.ShapeOptions.{ direction: if (rtl) RightToLeft else LeftToRight })
+			scalars = input(bytes)
+			checked = Font.shape_scalars_checked(font, plan, scalars)
+			traced = Font.shape_scalars_traced(font, plan, scalars)
+			good = match (first_problem(scalars), checked, traced) {
+				(Err(want), Err(InvalidInput(a)), Err(InvalidInput(b))) => a == want and b == want
+				(Ok(_), Ok(run), Ok(trace)) => run == trace.run and run == Font.shape_scalars(font, plan, scalars) and aligned(run, trace.origins, scalars, rtl)
+				(Ok(_), Err(OverBudget({ run, budgets })), Err(OverBudget(trace))) =>
+					budgets == trace.budgets and run == trace.run and run == Font.shape_scalars(font, plan, scalars) and aligned(run, trace.origins, scalars, rtl)
+				_ => False
+			}
+			if !good {
+				crash "scalar shaping disagreed for ${Str.inspect(scalars)}"
+			}
+			Fuzz.keep
+		},
+		show: Str.inspect,
+	})
+}

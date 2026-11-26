@@ -1,9 +1,3 @@
-app [target] {
-	build: "../tests/support/main.roc",
-	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.8.0/BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
-}
-
 import fuzz.Fuzz
 import font.Font
 import build.FontBuild
@@ -537,10 +531,12 @@ check! = |built, places, glyphs, text| {
 	font
 }
 
-target = Fuzz.target_with!({
-	examples: [],
-	name: "font-layout-var",
-	generator: Fuzz.raw_bytes,
-	test!,
-	show: |bytes| Str.inspect(bytes.take_first(49)),
-})
+FontLayoutVar := {}.{
+	target = Fuzz.target_with!({
+		examples: [],
+		name: "font-layout-var",
+		generator: Fuzz.raw_bytes,
+		test!,
+		show: |bytes| Str.inspect(bytes.take_first(49)),
+	})
+}

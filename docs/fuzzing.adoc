@@ -505,8 +505,9 @@ not finished until its target exists, is seeded and is registered in
 
 == Layout
 
-The targets live in `fuzz/` as `<target>.roc`. They name the package as
-`../package/main.roc`, but `run_fuzz.py` always builds them against the
+Target modules live in `fuzz/src/`. The reader, shaping and variation
+apps in `fuzz/` collect them with `Fuzz.suite`. The apps name the package
+as `../package/main.roc`, and `run_fuzz.py` builds them against the
 `roc bundle` output, exactly what ships: it bundles the package, serves
 the bundle from a loopback address (`scripts/flight.py`) and passes
 `--replace-dep ./package/main.roc <url>` to `roc build --fuzz`, so they
@@ -523,8 +524,11 @@ app [target] {
 	fuzz: platform "<pinned roc-fuzz URL>",
 }
 
-import build.FontBuild
-import font.Font
+import fuzz.Fuzz
+import src/FontRead
+import src/FontCmap
+
+target = Fuzz.suite([FontRead.target, FontCmap.target])
 ----
 
 `package/main.roc` never reaches `tests/support/`, so `roc bundle` and
@@ -536,7 +540,8 @@ Everything else lives in `fuzz/`:
 
 ----
 fuzz/
-  <target>.roc              roc-fuzz targets
+  *_suite.roc               suite apps
+  src/Font*.roc             individual targets
   seeds/<target>.json       reviewed starting inputs, each with a reason
   dictionaries/font.dict    tags, signatures and edge values
   dictionaries/narrow.dict  choice bytes for the narrow targets
@@ -571,13 +576,14 @@ roc-fuzz 0.8.0 bounds framed inputs to 1 MiB. The seed builder reports
 files above that bound instead of silently including unusable inputs; larger
 real fonts remain covered by conformance and benchmarks.
 
-Each run uses the target binary's supervised `run` command, which records
+The runner builds each selected suite once, checks its target inventory,
+and passes `--target=<name>` to its supervised `run` command. Each run records
 provenance (commit, compiler version, roc-fuzz release and bundle digest)
 and keeps evidence even when the target crashes. Working state goes under
 the ignored `.roc-font-tmp/fuzz/` (or `$ROC_FONT_TMPDIR/fuzz/`):
 
 ----
-bin/<target>              built binaries
+bin/<suite>               built suite binaries
 corpus/<target>/          campaign corpus
 smoke-corpus/<target>/    recreated for each smoke run
 runs/<target>/<mode>/     report.json, summary.md, run.log, failures/
@@ -586,10 +592,10 @@ crashes/<target>/<sha256> harvested failure inputs
 ----
 
 The roc-fuzz platform is pinned by release, bundle hash and asset SHA-256
-in `ROC_FUZZ_RELEASE` in `scripts/run_fuzz.py`. Every target must declare
+in `ROC_FUZZ_RELEASE` in `scripts/run_fuzz.py`. Every suite app must declare
 exactly that platform URL; `check-pin` (and every run) verifies it, and
 verifies the cached download's digest when it is present. To upgrade,
-change the URL in every target and the record in the script together.
+change the URL in every app and the record in the script together.
 
 == Seeds and corpus
 
@@ -669,12 +675,13 @@ crash may be added to `fuzz/seeds/` with its reason.
 
 == Adding a target
 
-. Write the target app with a doc comment stating its input format and its
-  contract, and make every broken promise `crash` with a specific message.
+. Write a module in `fuzz/src/` with a doc comment stating its input format
+  and contract. Expose its `target` on the module's namesake type, add it
+  to the suite, and make every broken promise `crash` with a specific message.
 . Include an allocation check at two sizes and `Fuzz.expect_no_leaks!` when
   the stage allocates in proportion to its input.
 . Add `fuzz/seeds/<target>.json` and, if useful, a dictionary.
-. Register it in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
+. Register it and its suite in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
   timeout and a one-line contract; a narrow target, whose input is choices
   rather than a font file, sets `font_files=False`.
 . Run `python3 scripts/run_fuzz.py smoke <target>` and a short campaign

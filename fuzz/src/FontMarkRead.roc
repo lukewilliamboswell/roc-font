@@ -1,13 +1,7 @@
-app [target] {
-	build: "../tests/support/main.roc",
-	font: "../package/main.roc",
-	fuzz: platform "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/0.8.0/BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
-}
-
 import font.Font
 import fuzz.Fuzz
-import src/MarkFixture
-import "../tests/fonts/mark-attachment/DavidLibre-Regular.ttf" as david : List(U8)
+import MarkFixture
+import "../../tests/fonts/mark-attachment/DavidLibre-Regular.ttf" as david : List(U8)
 
 ## Mark subtables with a class beyond the anchor matrix, a coverage
 ## count mismatch, an unknown anchor format, or a truncated anchor.
@@ -53,10 +47,12 @@ read = |bytes| match Font.from_bytes(bytes, Font.ReadOptions.{ strict: True }) {
 	Err(problems) => crash "a valid attachment font failed to read: ${Str.inspect(problems)}"
 }
 
-target = Fuzz.target_with!({
-	examples: [],
-	name: "font-mark-read",
-	generator: Fuzz.raw_bytes,
-	test!,
-	show: |bytes| Str.inspect(bytes.take_first(32)),
-})
+FontMarkRead := {}.{
+	target = Fuzz.target_with!({
+		examples: [],
+		name: "font-mark-read",
+		generator: Fuzz.raw_bytes,
+		test!,
+		show: |bytes| Str.inspect(bytes.take_first(32)),
+	})
+}
