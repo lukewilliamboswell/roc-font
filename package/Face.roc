@@ -416,7 +416,7 @@ Face := {
 					}
 					Ok(_) => {}
 				}
-				# Neither kern nor fvar needs the failed header tables.
+				# Kern and axis-level variation checks need no outline data.
 				match Face.read_kern(bytes, tables) {
 					Err(Drop(problem)) => {
 						$optional = $optional.append(problem)
@@ -426,12 +426,11 @@ Face := {
 					}
 					Ok(_) => {}
 				}
-				match Face.read_fvar(bytes, tables) {
-					Err({ problems, axes: _, validation_axes: _ }) => {
-						$optional = $optional.concat(problems)
-					}
-					Ok(_) => {}
+				glyphs = match maxp {
+					Ok(glyph_count) => Present(glyph_count)
+					Err(_) => Absent
 				}
+				$optional = $optional.concat(Face.rejected_variation_problems(bytes, tables, glyphs))
 				match Face.located_tag(bytes, tables, 0x4D415448, 0) {
 					Bad(at) => {
 						$optional = $optional.append(Sfnt.bad("MATH", at))
@@ -566,6 +565,62 @@ Face := {
 				}
 		}
 
+	## Keep checking variation tables whose prerequisites survived. A
+	## rejected face needs only their problems. Preparation still uses
+	## the checked glyph count and outline inputs directly.
+	rejected_variation_problems : List(U8), List(Sfnt.Table), [Present(U64), Absent] -> List(Problem)
+	rejected_variation_problems = |bytes, tables, glyphs| {
+		(known_axes, fvar_problems) = match Face.read_fvar(bytes, tables) {
+			Ok(Absent) => return []
+			Ok(Present(space)) => (Present(TableVar.axis_total(space)), [])
+			Err(err) => (err.validation_axes, err.problems)
+		}
+		axes = match known_axes {
+			Present(n) => n
+			Absent => return fvar_problems
+		}
+		located = |tag| Sfnt.located(bytes, tables, tag, 0)
+		placed = |base, result| match result {
+			Ok(_) => []
+			Err(found) => found.map(|p| Sfnt.bad(p.table, base + p.offset))
+		}
+		var $problems = match located("avar") {
+			Bad(at) => [Sfnt.bad("avar", at)].concat(fvar_problems)
+			Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => fvar_problems.append(Sfnt.bad("avar", found.offset))
+			Found(found) => placed(found.offset, TableVar.read_avar(found.data, axes)).concat(fvar_problems)
+			Missing => fvar_problems
+		}
+		match located("VVAR") {
+			Found(found) =>
+				match TableVar.check_vvar_ots(found.data, axes) {
+					Err(at) => {
+						$problems = $problems.append(Sfnt.bad("VVAR", found.offset + at))
+					}
+					Ok(_) => {}
+				}
+			_ => {}
+		}
+		match (located("HVAR"), glyphs) {
+			(Bad(at), _) => {
+				$problems = $problems.append(Sfnt.bad("HVAR", at))
+			}
+			(Found(found), Present(count)) => {
+				$problems = $problems.concat(placed(found.offset, TableVar.read_hvar(found.data, axes, count)))
+			}
+			_ => {}
+		}
+		match located("MVAR") {
+			Bad(at) => {
+				$problems = $problems.append(Sfnt.bad("MVAR", at))
+			}
+			Found(found) => {
+				$problems = $problems.concat(placed(found.offset, TableVar.read_mvar(found.data, axes)))
+			}
+			Missing => {}
+		}
+		$problems
+	}
+
 	## The variation tables: `fvar`, then `avar`, `HVAR`, `MVAR` and `gvar`
 	## (with the outline points it moves) once the `fvar` axis count is
 	## checked. A bad `avar`
@@ -619,15 +674,23 @@ Face := {
 			Bad(at) => Err([Sfnt.bad("MVAR", at)])
 			Found(found) => TableVar.read_mvar(found.data, axes).map_ok(|value| Present(value)).map_err(placed)
 		}
-		outlines = match (Sfnt.located(bytes, tables, "gvar", 0), Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
-			(Found(gvar), Found(glyf), Found(loca), Found(hmtx)) => {
+		outlines = match Sfnt.located(bytes, tables, "gvar", 0) {
+			Found(gvar) => {
+				# Read already establishes that all three outline tables
+				# were found. Only the unchecked path needs to locate them.
 				checked = match points_read {
-					Read(already) => already
-					Unread => TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count)
+					Read(already) => already.map_ok(|p| Present(p))
+					Unread =>
+						match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
+							(Found(glyf), Found(loca), Found(hmtx)) =>
+								TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count).map_ok(|p| Present(p))
+							_ => Ok(Absent)
+						}
 				}
 				match checked {
 					Err(problems) => Err(placed(problems))
-					Ok(points) =>
+					Ok(Absent) => Ok(Absent)
+					Ok(Present(points)) =>
 						match TableGvar.read(gvar.data, axes, points) {
 							Err(problems) => Err(placed(problems))
 							Ok(moves) => Ok(Present({ points, gvar: moves }))

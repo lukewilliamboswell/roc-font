@@ -22,6 +22,7 @@ import Context
 import ContextEncodings
 import CssAxes
 import Cursive
+import DeletionClusters
 import DeltaMap
 import Direction
 import FallbackMarks
@@ -42,6 +43,7 @@ import LegacyKern
 import LigatureProvenance
 import LookupFiltering
 import Math
+import MathConstructionSizes
 import MathGlyphInfo
 import MathHeaderDiagnostics
 import MathLocations
@@ -50,6 +52,7 @@ import MarkAttachment
 import MarkCertification
 import MetricVariations
 import Metrics
+import MvarHeaderDiagnostics
 import NameScalars
 import Names
 import NoVariation
@@ -69,6 +72,7 @@ import Tracing
 import TrimmedCmap
 import TypoMetrics
 import VariedAnchors
+import VariationHeaderAggregation
 import VariationReading
 import VariationSequences
 import WidthBounds
@@ -90,6 +94,7 @@ expect Composite.check({})
 expect ContextEncodings.check({})
 expect CssAxes.check({})
 expect Cursive.check({})
+expect DeletionClusters.check({})
 expect DeltaMap.check({})
 expect Direction.check({})
 expect FallbackMarks.check({})
@@ -108,6 +113,7 @@ expect LegacyKern.check({})
 expect LigatureProvenance.check({})
 expect LookupFiltering.check({})
 expect Math.check({})
+expect MathConstructionSizes.check({})
 expect MathGlyphInfo.check({})
 expect MathHeaderDiagnostics.check({})
 expect MathLocations.check({})
@@ -117,6 +123,7 @@ expect MarkCertification.check({})
 expect MetricVariations.check({})
 expect MetricVariations.wide_check({})
 expect Metrics.check({})
+expect MvarHeaderDiagnostics.check({})
 expect NameScalars.check({})
 expect Names.check({})
 expect NoVariation.check({})
@@ -136,6 +143,7 @@ expect Tracing.check({})
 expect TrimmedCmap.check({})
 expect TypoMetrics.check({})
 expect VariedAnchors.check({})
+expect VariationHeaderAggregation.check({})
 expect VariationReading.check({})
 expect VariationSequences.check({})
 expect WidthBounds.check({})

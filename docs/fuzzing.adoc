@@ -36,9 +36,11 @@ header to guard against false reports. The GSUB list offsets, GPOS list
 headers and version-specific GDEF header length can also be checked
 without the glyph count. Use a valid header with a glyph reference to
 check that the reader waits for the count before judging the reference.
-For Unicode
-composition, swapping two marks of equal combining class checks both
-stable ordering and the rule for blocking a composition. For shaping
+For variation tables, hold the store bytes fixed and change the
+axis count in `fvar`. Remove `maxp` separately so an `avar` fault
+survives while an implicit `HVAR` row-count judgment is deferred.
+For Unicode composition, swapping two marks of equal combining class
+checks stable ordering and the rule for blocking a composition. For shaping
 budgets, check the final allowed operation, the first refused operation,
 and a case where several limits are reported together.
 For table directories, move the same record between early and late
@@ -225,6 +227,13 @@ For a mark after a nested ligature, arrange for a directly mapped
 intermediate to produce the same final glyph. Give each component a
 distinct anchor so the visible placement identifies which earlier
 input supplied the mark.
+For glyph deletion, put the same multibyte character on either side of a
+survivor and set a feature range that covers just one of its original
+byte positions. Check the merged cluster and whether the later
+positioning uses the survivor's feature mask.
+For MATH constructions, give tied advances distinct glyphs in an order
+that differs from glyph-ID order. Use measurements on both sides of the
+signed 16-bit boundary to catch a signed read of an unsigned field.
 For Thai preprocessing, pair an authored nikhahit with one produced by
 SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.
