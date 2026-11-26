@@ -467,10 +467,12 @@ and the byte offset in it. Independent problems are reported together
 Lenient reading (architecture §4.4) drops all variations together for
 an `avar` declared as version 2, a bad `fvar`, or a problem in `HVAR`,
 `MVAR`, `gvar`, the `GDEF` variation store, or layout variation records.
-Queries then use the font's default values. Other unreadable `avar`
-tables are dropped alone, with coordinates normalized directly from
-`fvar`. `Font.dropped` names the problems. Strict reading rejects the
-font.
+Queries then use the font's stored design values. Valid MATH facts
+remain available, and their variation deltas no longer apply, including
+deltas from neutral regions. Independent table problems are still
+reported. Other unreadable `avar` tables are dropped alone, with
+coordinates normalized directly from `fvar`. `Font.dropped` names the
+problems. Strict reading rejects the font.
 
 Work bounds: every loop runs over a count checked against the data. The
 location state costs regions × axes per store (bounded by the table size);

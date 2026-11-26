@@ -387,6 +387,11 @@ one. Callers that shape many strings with the same settings (every
 consumer) plan once. This is HarfBuzz's `hb_shape_plan`, and it is the
 second level of "prepare once, use many times".
 
+GSUB and GPOS feature variations select lookups when the plan is made.
+If the same prepared font moves to another location, a saved plan keeps
+those lookups. Shaping applies their positioning values and the glyph
+advances at the new location. Planning again also selects new lookups.
+
 A plan must still be cheap, because `shape` and `width` make one per
 call and short labels are where callers notice. Everything a plan needs
 that does not depend on the font or the options (the default feature

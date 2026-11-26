@@ -100,8 +100,14 @@ table's size fields the same numbers as a live variation index. At
 design size, only the variation fields should change across locations.
 For variation records, give each table a different preference
 at a shared inclusive endpoint and probe one normalized unit on each side.
+For saved shaping plans, vary the planning and execution locations
+independently. Make substitutions and lookup selection identify the
+planning location, and vary advances and adjustments at execution.
 For optional variation tables, keep two independently observable deltas
 so a dropped axis map can be distinguished from a dropped variation group.
+Use a neutral region to make a delta observable at the default location
+too. Put bad indices in two independent tables and check both diagnostics
+alongside the surviving base values.
 For feature selection,
 use a shared lookup that changes its own output on a second application,
 and scope the once-only rule to one shaping stage. For nested
@@ -138,6 +144,9 @@ For a many-to-one character map, split and rejoin adjacent groups for
 the same glyph. Leave a gap before the next group, and put an unusable
 glyph before a valid group at the Unicode ceiling. The lower-priority
 map can cover the gap so per-character fallback would be visible.
+For a trimmed 32-bit character map, exercise the exact Unicode endpoint,
+one code point past it, and a start plus count that would wrap in 32
+bits. Keep the glyph payload complete in all three cases.
 For variation selectors, give a BMP base and a supplementary base the
 same low 16 bits. Move the default and non-default tables without
 changing selector order, keep the last table at the end of the subtable,

@@ -683,9 +683,13 @@ Font :: { face : Face }.{
 	Budget : [Growth, Operations, Depth]
 
 	## The choices `ShapeOptions` make for one font, worked out once. Plan
-	## once and shape many times with `shape_planned`. A plan belongs to the
-	## font it was made for; with another font the run is defined but
-	## meaningless.
+	## once and shape many times with `shape_planned`.
+	##
+	## A plan keeps the feature lookups selected at the font's location
+	## when you make it. Shaping at another location of that font uses
+	## those lookups with advances and positioning values from the new
+	## location. Make a new plan to select lookups at the new location.
+	## With a different font file, the run is defined but meaningless.
 	ShapePlan :: { plan : Shaper.Plan }
 
 	## Work out a plan for shaping with these options, to shape or measure

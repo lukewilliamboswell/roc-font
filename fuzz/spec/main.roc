@@ -41,8 +41,10 @@ import MetricVariations
 import Metrics
 import NameScalars
 import Names
+import NoVariation
 import Outlines
 import PairDevices
+import PlanLocations
 import PointComposites
 import PointCursive
 import PostNames
@@ -53,6 +55,7 @@ import SpaceWidths
 import TableDirectory
 import Thai
 import Tracing
+import TrimmedCmap
 import TypoMetrics
 import VariedAnchors
 import VariationReading
@@ -94,8 +97,10 @@ expect MetricVariations.wide_check({})
 expect Metrics.check({})
 expect NameScalars.check({})
 expect Names.check({})
+expect NoVariation.check({})
 expect Outlines.check({})
 expect PairDevices.check({})
+expect PlanLocations.check({})
 expect PointComposites.check({})
 expect PointCursive.check({})
 expect PostNames.check({})
@@ -106,6 +111,7 @@ expect SpaceWidths.check({})
 expect TableDirectory.check({})
 expect Thai.check({})
 expect Tracing.check({})
+expect TrimmedCmap.check({})
 expect TypoMetrics.check({})
 expect VariedAnchors.check({})
 expect VariationReading.check({})
