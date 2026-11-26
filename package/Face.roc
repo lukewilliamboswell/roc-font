@@ -397,6 +397,15 @@ Face := {
 					}
 					Ok(_) => {}
 				}
+				match Face.located_tag(bytes, tables, 0x4D415448, 0) {
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("MATH", at))
+					}
+					Found(found) if !TableMath.valid_header(found.data) => {
+						$optional = $optional.append(Sfnt.bad("MATH", found.offset))
+					}
+					_ => {}
+				}
 				required = Face.unique($required)
 				Err(required.concat(Face.unique($optional).drop_if(|p| required.contains(p))))
 			}

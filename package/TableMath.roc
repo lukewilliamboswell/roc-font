@@ -343,16 +343,17 @@ TableMath := {
 	min_connector_overlap : TableMath -> I32
 	min_connector_overlap = |math| if (TableMath.has_data(math)) Bytes.u16(math.bytes, math.variants_at).to_i32_wrap() else 0
 
+	## Header validity needs neither the glyph count nor a variation store.
+	valid_header : List(U8) -> Bool
+	valid_header = |data| Bytes.fits(0, 10, data.len()) and Bytes.u16(data, 0) == 1 and Bytes.u16(data, 2) == 0
+
 	## Read one complete MATH table. Problems are offsets relative to it.
 	## Independent constants, glyph-info children and variant directions are
 	## checked even when another fails. Each validation branch has a budget
 	## of eight visits per byte plus 16384, bounding malicious shared offsets.
 	read : List(U8), U64, LayoutVar -> Try(TableMath, List(U64))
 	read = |data, glyph_count, lv| {
-		if !Bytes.fits(0, 10, data.len()) {
-			return Err([0])
-		}
-		if Bytes.u16(data, 0) != 1 or Bytes.u16(data, 2) != 0 {
+		if !TableMath.valid_header(data) {
 			return Err([0])
 		}
 		c = Bytes.u16(data, 4)
