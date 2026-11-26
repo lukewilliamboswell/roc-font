@@ -108,11 +108,17 @@ so a dropped axis map can be distinguished from a dropped variation group.
 Use a neutral region to make a delta observable at the default location
 too. Put bad indices in two independent tables and check both diagnostics
 alongside the surviving base values.
+For a broken axis definition, preserve the header and both record arrays
+while placing the default outside its range. This lets the reader check
+other tables against a known axis count and retain their valid base data.
 For feature selection,
 use a shared lookup that changes its own output on a second application,
-and scope the once-only rule to one shaping stage. For nested
-substitutions, address a position while the child has changed the length
-so a later edit cannot conceal a stale parent match. To check lookup
+and scope the once-only rule to one shaping stage.
+For language fallback, offer the preferred language in just one of
+GSUB and GPOS. Give each language a distinct substitution or positioning
+result, then swap which table has to fall back.
+For nested substitutions, address a position after the child changes the
+length so a later edit cannot conceal a stale parent match. To check lookup
 filters, let a nested lookup consume a glyph the parent skipped, and use
 a second substitution to show when the parent matched. For outline
 variation, make the affected point an observable bound of the outline.
@@ -125,6 +131,9 @@ changes the public extents.
 For font collections, give each face a distinct character map and distinct
 private metrics. Reorder the face directory references and share one
 metrics table across faces on either side of its storage location.
+For TTC version 2, include the full signature descriptor after the face
+offsets. Truncate the descriptor and the last face directory separately
+to distinguish an invalid collection header from an unreadable face.
 For reverse chaining, give adjacent context positions distinct coverages
 and use a substitution that enables the next candidate in scan order.
 Compare direct and extension encodings of the same lookup.

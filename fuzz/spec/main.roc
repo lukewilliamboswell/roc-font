@@ -15,6 +15,7 @@ import Cmap
 import CmapAliases
 import CmapSpan
 import Collection
+import CollectionVersion
 import Composite
 import Context
 import ContextEncodings
@@ -26,9 +27,11 @@ import FallbackMarks
 import FeatureVariations
 import Features
 import Fractions
+import FvarDiagnostics
 import Gpos
 import Gsub
 import Indic
+import LanguageSelection
 import LegacyCmap
 import LookupFiltering
 import Math
@@ -73,6 +76,7 @@ expect ClusterRanges.check({})
 expect CmapAliases.check({})
 expect CmapSpan.check({})
 expect Collection.check({})
+expect CollectionVersion.check({})
 expect Composite.check({})
 expect ContextEncodings.check({})
 expect CssAxes.check({})
@@ -83,7 +87,9 @@ expect FallbackMarks.check({})
 expect FeatureVariations.check({})
 expect Features.check({})
 expect Fractions.check({})
+expect FvarDiagnostics.check({})
 expect Indic.check({})
+expect LanguageSelection.check({})
 expect LegacyCmap.check({})
 expect LookupFiltering.check({})
 expect Math.check({})

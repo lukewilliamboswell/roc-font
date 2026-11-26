@@ -134,8 +134,8 @@ Font :: { face : Face }.{
 		}
 	}
 
-	## How many fonts a file holds: 1 for a single font file, the face count
-	## of a collection.
+	## How many faces a file holds. A single font file has one face.
+	## Collections use a complete version 1.0 or 2.0 TTC header.
 	face_count : List(U8) -> Try(U32, [NotAFont])
 	face_count = |bytes|
 		match Face.face_count(bytes) {

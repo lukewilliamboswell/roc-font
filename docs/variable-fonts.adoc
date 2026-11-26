@@ -470,7 +470,9 @@ an `avar` declared as version 2, a bad `fvar`, or a problem in `HVAR`,
 Queries then use the font's stored design values. Valid MATH facts
 remain available, and their variation deltas no longer apply, including
 deltas from neutral regions. Independent table problems are still
-reported. Other unreadable `avar` tables are dropped alone, with
+reported. A structurally checked `fvar` axis count still supports those
+checks when an invalid axis default prevents normalisation. Other
+unreadable `avar` tables are dropped alone, with
 coordinates normalized directly from `fvar`. `Font.dropped` names the
 problems. Strict reading rejects the font.
 
