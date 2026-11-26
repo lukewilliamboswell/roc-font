@@ -41,6 +41,10 @@ that both diagnostics survive, including their file offsets.
 For localized names, use distinct records that share a priority rank.
 Give each instance a different name identifier so a lookup by position
 would return a visibly different result.
+For UTF-16 names, put distinct BMP characters around the endpoint pairs
+so the query also checks where decoding resumes. Give the preferred
+record a valid pair followed by a lone surrogate and check that a
+lower-priority record supplies the whole name.
 For font-wide metric variation, give each fallback source distinct
 values. Include signed half-unit ties so the result shows whether
 rounding happened after the regional contributions were added.
@@ -163,9 +167,12 @@ SARA AM. Give them the same glyph and different expected orders so the
 model detects reordering even when output glyphs and counts still agree.
 For cursive attachment, hold the text direction fixed and change only the
 lookup flag. Use asymmetric signed anchors and compare which endpoint
-keeps its baseline. For Arabic joining, vary context across the same
-first or last letter and model transparent marks, join controls and true
-line boundaries before applying the font's substitutions.
+keeps its baseline. For point anchors at design size, make the stored
+anchor coordinates differ from the referenced contour points. Vary the
+outline and check its bounds alongside the unchanged attachment.
+For Arabic joining, vary context across the same first or last letter
+and model transparent marks, join controls and true line boundaries
+before applying the font's substitutions.
 For Indic stage boundaries, use one lookup that detects the pre-base
 matra in an early stage and a second lookup that detects the reph after
 final reordering. Use distinct glyphs for both observations and check

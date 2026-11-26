@@ -36,8 +36,10 @@ import MarkAttachment
 import MarkCertification
 import MetricVariations
 import Metrics
+import NameScalars
 import Names
 import Outlines
+import PointCursive
 import Reverse
 import ScalarBreaks
 import ScalarShaping
@@ -79,8 +81,10 @@ expect MarkCertification.check({})
 expect MetricVariations.check({})
 expect MetricVariations.wide_check({})
 expect Metrics.check({})
+expect NameScalars.check({})
 expect Names.check({})
 expect Outlines.check({})
+expect PointCursive.check({})
 expect Reverse.check({})
 expect ScalarBreaks.check({})
 expect ScalarShaping.check({})

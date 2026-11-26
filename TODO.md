@@ -71,8 +71,8 @@ Chrome widths agree on package-mermaid's oracle texts.
    and `hhea` values and left side bearings; ligature origins with lookup
    and input glyphs; a feature-free (kerning-only) shaping switch; a lower
    per-call shaping floor (15-17 allocations however short the text).
-3. GPOS single and contextual positioning. Add evidence for variation
-   and point-based cursive anchors before expanding that scope.
+3. GPOS single and contextual positioning. Add evidence for variable
+   cursive anchors before expanding that scope.
 4. Outlines as a listing; CFF and CFF2.
 5. Expand the script support matrix beyond the documented Arabic, Thai
    and modern Devanagari Hindi cases. Add further Indic configurations,
