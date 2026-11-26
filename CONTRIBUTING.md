@@ -32,7 +32,7 @@ in `docs/conformance.adoc`. CI smoke and cached conformance need no oracle
 libraries.
 
 The check and example orchestration is executable Roc under `scripts/`, run
-by `roc-stable`, pinned to `nightly-2026-11-18-a520eed` in Blueprint and each
+by `roc-stable`, pinned to `nightly-2026-11-24-ff5e544` in Blueprint and each
 script header. Product code and consumers use bare `roc` on PATH. Blueprint
 keeps its configuration compiler separate; do not set `ROC` when invoking
 Blueprint to select a different product compiler. Direct harness commands
@@ -210,10 +210,5 @@ on every directory the checks format; when the allocation ratchet reports
 - Avoid until fixed on the nightly: wrapping a record field in a tag and
   reading the record again (`Tag(v.value)` then `v.value.id`) segfaults the
   ARC pass; `Dict(k, {})` hangs native builds.
-- The November 18 compiler needs basic-cli 0.28.1. Script-direction selection
-  and feature-credit ranking use equivalent early returns to avoid its
-  optimized specialization crash on nested conditionals. Explicit equality
-  predicates also avoid a `List.contains` specialization crash in focused
-  fuzz builds; their membership behavior is unchanged.
 - A local debug `roc` on `PATH` may panic on this code; use the latest
   nightly first on `PATH`.

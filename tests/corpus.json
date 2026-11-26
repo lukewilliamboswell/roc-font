@@ -318,9 +318,25 @@
         "arabic",
         "glyf",
         "marks",
-        "cursive",
         "rtl"
       ],
+      "verified": true
+    },
+    {
+      "id": "amiri-1.003",
+      "kind": "archive",
+      "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
+      "sha256": "81af0aff7d2086d8af24cea7202f7546130997982534691373485cd96744d05e",
+      "size": 1033533,
+      "members": {
+        "Amiri-1.003/Amiri-Regular.ttf": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0"
+      },
+      "licence": {
+        "url": "https://raw.githubusercontent.com/aliftype/amiri/1.003/OFL.txt",
+        "sha256": "72de68e5954f4fdd24702292ef5a32f003ca960ec9330dc86e5eefb5dffb9b22"
+      },
+      "tags": ["arabic", "glyf", "gpos", "cursive", "rtl"],
+      "notes": "Static Amiri Regular with a cursive attachment lookup used by joined Arabic text.",
       "verified": true
     },
     {

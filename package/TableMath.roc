@@ -92,6 +92,9 @@ TableMath := {
 	at_location : TableMath, LayoutVar.Location -> TableMath
 	at_location = |math, loc| { ..math, loc }
 
+	without_variations : TableMath -> TableMath
+	without_variations = |math| { ..math, lv: LayoutVar.none(0), loc: LayoutVar.default_location }
+
 	constants : TableMath -> [Present(Constants), Absent]
 	constants = |math| {
 		if !TableMath.has_data(math) {
@@ -340,17 +343,44 @@ TableMath := {
 	min_connector_overlap : TableMath -> I32
 	min_connector_overlap = |math| if (TableMath.has_data(math)) Bytes.u16(math.bytes, math.variants_at).to_i32_wrap() else 0
 
+	## Read the version prefix before interpreting version-specific fields.
+	## Minor revisions extend the known major-version layout.
+	header : List(U8) -> [Malformed, Supported, Unsupported]
+	header = |data| {
+		if data.len() < 4 {
+			Malformed
+		} else if Bytes.u16(data, 0) != 1 {
+			Unsupported
+		} else if data.len() < 10 {
+			Malformed
+		} else {
+			Supported
+		}
+	}
+
+	subtable_fits : List(U8), U64, U64 -> Bool
+	subtable_fits = |data, offset, minimum| offset >= 10 and Bytes.fits(offset, minimum, data.len())
+
+	## Header problems that can be reported without preparing the face.
+	header_problems : List(U8) -> List(U64)
+	header_problems = |data| match TableMath.header(data) {
+		Malformed => [0]
+		Unsupported => []
+		Supported => [(4, 214), (6, 8), (8, 10)]
+			.keep_if(|(field, minimum)| !TableMath.subtable_fits(data, Bytes.u16(data, field), minimum))
+			.map(|(field, _)| field)
+	}
+
 	## Read one complete MATH table. Problems are offsets relative to it.
 	## Independent constants, glyph-info children and variant directions are
 	## checked even when another fails. Each validation branch has a budget
 	## of eight visits per byte plus 16384, bounding malicious shared offsets.
 	read : List(U8), U64, LayoutVar -> Try(TableMath, List(U64))
 	read = |data, glyph_count, lv| {
-		if !Bytes.fits(0, 10, data.len()) {
-			return Err([0])
-		}
-		if Bytes.u16(data, 0) != 1 or Bytes.u16(data, 2) != 0 {
-			return Err([0])
+		match TableMath.header(data) {
+			Malformed => return Err([0])
+			Unsupported => return Ok(TableMath.none)
+			Supported => {}
 		}
 		c = Bytes.u16(data, 4)
 		g = Bytes.u16(data, 6)
@@ -362,7 +392,7 @@ TableMath := {
 				$problems = $problems.append(at)
 			}
 		}
-		if g == 0 or !Bytes.fits(g, 8, data.len()) {
+		if !TableMath.subtable_fits(data, g, 8) {
 			$problems = $problems.append(6)
 		} else {
 			for field in [0.U64, 2, 4, 6] {
@@ -391,7 +421,7 @@ TableMath := {
 				}
 			}
 		}
-		if v == 0 or !Bytes.fits(v, 10, data.len()) {
+		if !TableMath.subtable_fits(data, v, 10) {
 			$problems = $problems.append(8)
 		} else {
 			for axis in [Vertical, Horizontal] {
@@ -445,7 +475,7 @@ TableMath := {
 
 	check_constants : List(U8), U64, LayoutVar -> Try({}, [Bad(U64)])
 	check_constants = |data, at, lv| {
-		if at == 0 or !Bytes.fits(at, 214, data.len()) {
+		if !TableMath.subtable_fits(data, at, 214) {
 			return Err(Bad(4))
 		}
 		for i in 0..<51 {

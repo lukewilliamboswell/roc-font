@@ -4,6 +4,11 @@ import LayoutCommon
 import LayoutGsub
 import LayoutVar
 import LayoutGdef
+import LayoutCoverage
+import LayoutMark
+import LayoutAnchor
+import LayoutAttachment
+import LayoutCursive
 
 ## Pair positioning: the pair adjustment lookups of `GPOS` (lookup type
 ## 2, directly or through an extension) that a shaping plan lists, and the
@@ -77,7 +82,7 @@ LayoutKerning := {
 
 	## Adjustments per glyph, index-aligned with the run, and the run with
 	## unsafe-to-break flags set.
-	Positions : { items : List(LayoutGsub.Item), dx : List(I64), dy : List(I64), ax : List(I64) }
+	Positions : { items : List(LayoutGsub.Item), dx : List(I64), dy : List(I64), ax : List(I64), parents : List(U64) }
 
 	## No positioning.
 	none : LayoutKerning
@@ -125,22 +130,41 @@ LayoutKerning := {
 
 	## Position a run: the plan's `GPOS` pair lookups in order, each where
 	## both glyphs' masks share a bit with its mask, then, when `legacy` is
-	## `Kern(mask)`, each `kern` subtable in turn. Values add up. Glyphs
+	## `Kern(mask)`, each `kern` subtable in turn. Advance adjustments are
+	## added to the supplied base advance for each item. Glyphs
 	## at or past `glyph_count` are never a first glyph of `GPOS` pair
 	## formats; as a second glyph they are in class 0.
-	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), U64 -> Positions
-	position = |kerning, plan, legacy, items, glyph_count| {
+	position : LayoutKerning, List({ index : U64, mask : U64 }), [Kern(U64), NoKern], List(LayoutGsub.Item), List(I64), U64, Bool -> Positions
+	position = |kerning, plan, legacy, items, advances, glyph_count, backward| {
 		count = items.len()
-		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: List.repeat(0, count) }
+		var $out = { items, dx: List.repeat(0, count), dy: List.repeat(0, count), ax: advances, parents: [] }
+		var $run_marks = Unchecked
 		for entry in plan {
-			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end
+			start = if (entry.index == 0) 0 else (kerning.ends.get(entry.index - 1) ?? { end: 0, props: 0 }).end.bitwise_and(0xFFFFFFFF)
 			lookup = kerning.ends.get(entry.index) ?? { end: 0, props: 0 }
-			end = lookup.end
-			if end > start {
+			end = lookup.end.bitwise_and(0xFFFFFFFF)
+			# Non-pair lookups keep their checked raw address in the high half.
+			locator = lookup.end.shr_zf_wrap(32)
+			if locator != 0 or end > start {
 				# A mark filtering set the font lacks is turned off (HarfBuzz's
 				# `sanitize_lookup_props`).
-				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props)
-				$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
+				props = LayoutGdef.sanitize_props(kerning.gdef, lookup.props.bitwise_and(0xFFFFFFFF))
+				if locator != 0 {
+					kind = lookup.props.shr_zf_wrap(32).bitwise_and(0x0F)
+					if kind == 3 {
+						$out = LayoutKerning.apply_cursive_lookup(kerning, locator, { mask: entry.mask, props, backward }, $out)
+					} else {
+						marks_only = lookup.props.bitwise_and(LayoutKerning.mark_coverage_class) != 0
+						if marks_only and $run_marks == Unchecked {
+							$run_marks = if ($out.items.any(LayoutGsub.is_mark_item)) Present else Absent
+						}
+						if !marks_only or $run_marks == Present {
+							$out = LayoutKerning.apply_mark_lookup(kerning, locator, { mask: entry.mask, props, kind, marks_only }, $out)
+						}
+					}
+				} else {
+					$out = LayoutKerning.apply_lookup(kerning, kerning.data, kerning.subtables, kerning.digests, start, end, { mask: entry.mask, props }, $out, glyph_count, False)
+				}
 			}
 		}
 		match legacy {
@@ -153,6 +177,10 @@ LayoutKerning := {
 		}
 		$out
 	}
+
+	## Lookup metadata above the raw flags and four-bit dispatch kind.
+	mark_coverage_class : U64
+	mark_coverage_class = 0x1000000000
 
 	## The lookup flag HarfBuzz applies a `kern` table with.
 	ignore_marks : U64
@@ -172,7 +200,7 @@ LayoutKerning := {
 	# around, so each stays unique and is changed in place.
 	apply_lookup : LayoutKerning, List(U8), List(Pair), List({ a : U64, b : U64, c : U64 }), U64, U64, { mask : U64, props : U64 }, Positions, U64, Bool -> Positions
 	apply_lookup = |kerning, data, subtables, digests, start, end, ctx, positions, glyph_count, legacy| {
-		{ items, dx, dy, ax } = positions
+		{ items, dx, dy, ax, parents } = positions
 		count = items.len()
 		mask = ctx.mask
 		props = ctx.props
@@ -229,7 +257,240 @@ LayoutKerning := {
 				}
 			}
 		}
-		{ items: $items, dx: $dx, dy: $dy, ax: $ax }
+		{ items: $items, dx: $dx, dy: $dy, ax: $ax, parents }
+	}
+
+	# A direct subtable or a checked extension of the dispatched type.
+	position_subtable : List(U8), U64, Bool, U64, U64 -> Try(U64, [Skipped])
+	position_subtable = |data, lookup, extended, kind, i| {
+		at = lookup + Bytes.u16(data, lookup + 6 + 2 * i)
+		if !extended {
+			Ok(at)
+		} else if Bytes.fits(at, 8, data.len()) and Bytes.u16(data, at + 2) == kind {
+			Ok(at + Bytes.u32(data, at + 4))
+		} else {
+			Err(Skipped)
+		}
+	}
+
+	# Cursive positioning finds the previous visible glyph, regardless of
+	# coverage. A glyph that lacks an exit anchor can therefore end a
+	# chain. Keep that previous index so skipped spans are visited once.
+	apply_cursive_lookup : LayoutKerning, U64, { mask : U64, props : U64, backward : Bool }, Positions -> Positions
+	apply_cursive_lookup = |kerning, lookup, ctx, positions| {
+		{ items, dx, dy, ax, parents } = positions
+		count = items.len()
+		end = Bytes.u16(kerning.data, lookup + 4)
+		extended = Bytes.u16(kerning.data, lookup) == 9
+		var $items = items
+		var $dx = dx
+		var $dy = dy
+		var $ax = ax
+		var $parents = parents
+		var $previous = LayoutAttachment.none
+		var $span_start = 0
+		var $span_end = 0
+		for i in 0..<count {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			if LayoutKerning.sees(kerning.gdef, item, ctx.props) {
+				masked = LayoutGsub.applies(item.mask, ctx.mask)
+				if masked and $previous < i {
+					prior = $items.get($previous) ?? LayoutGsub.no_item
+					var $subtable = 0
+					while $subtable < end {
+						match LayoutKerning.position_subtable(kerning.data, lookup, extended, 3, $subtable) {
+							Ok(table) => match LayoutCursive.pair(kerning.data, table, prior.glyph, item.glyph) {
+								Ok({ entry, exit }) => {
+									if $previous >= $span_end {
+										$items = LayoutKerning.flag_attachment_span($items, $span_start, $span_end)
+										$span_start = $previous
+									}
+									$span_end = i + 1
+									if ctx.backward {
+										delta = exit.x + ($dx.get($previous) ?? 0)
+										$ax = $ax.set($previous, ($ax.get($previous) ?? 0) - delta) ?? []
+										$dx = $dx.set($previous, -exit.x) ?? []
+										$ax = $ax.set(i, entry.x + ($dx.get(i) ?? 0)) ?? []
+									} else {
+										$ax = $ax.set($previous, exit.x + ($dx.get($previous) ?? 0)) ?? []
+										delta = entry.x + ($dx.get(i) ?? 0)
+										$ax = $ax.set(i, ($ax.get(i) ?? 0) - delta) ?? []
+										$dx = $dx.set(i, -entry.x) ?? []
+									}
+									if $parents.is_empty() {
+										$parents = List.repeat(LayoutAttachment.none, count)
+									}
+									# The lookup flag chooses which glyph stays on the
+									# baseline, independently of the run direction.
+									(child, parent, y) = if (ctx.props.bitwise_and(1) != 0) ($previous, i, entry.y - exit.y) else (i, $previous, exit.y - entry.y)
+									linked = LayoutAttachment.link($parents, $dy, child, parent, y)
+									$parents = linked.parents
+									$dy = linked.dy
+									$subtable = end
+								}
+								Err(_) => {
+									$subtable = $subtable + 1
+								}
+							}
+							_ => {
+								$subtable = $subtable + 1
+							}
+						}
+					}
+				}
+				if !LayoutGsub.is_default_ignorable(item) {
+					$previous = if (masked) i else LayoutAttachment.none
+				}
+			}
+		}
+		{ items: LayoutKerning.flag_attachment_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax: $ax, parents: $parents }
+	}
+
+	# Every mark lookup scans forward. Types 4 and 5 cache the target and the
+	# start of the next backward search, so each item is visited at most
+	# once by the target search. Type 6 keeps the previous visible mark.
+	apply_mark_lookup : LayoutKerning, U64, { mask : U64, props : U64, kind : U64, marks_only : Bool }, Positions -> Positions
+	apply_mark_lookup = |kerning, lookup, ctx, positions| {
+		{ items, dx, dy, ax, parents } = positions
+		end = Bytes.u16(kerning.data, lookup + 4)
+		extended = Bytes.u16(kerning.data, lookup) == 9
+		no_parent = LayoutAttachment.none
+		count = items.len()
+		var $items = items
+		var $dx = dx
+		var $dy = dy
+		var $parents = parents
+		var $last_base = no_parent
+		var $base_until = 0
+		var $last_mark = no_parent
+		var $span_start = 0
+		var $span_end = 0
+		for i in 0..<count {
+			item = $items.get(i) ?? LayoutGsub.no_item
+			masked = LayoutGsub.applies(item.mask, ctx.mask)
+			if masked and (!ctx.marks_only or LayoutGsub.is_mark_item(item)) and LayoutKerning.sees(kerning.gdef, item, ctx.props) {
+				var $k = 0
+				while $k < end {
+					match LayoutKerning.position_subtable(kerning.data, lookup, extended, ctx.kind, $k) {
+						Ok(at) => {
+							match LayoutMark.mark_index(kerning.data, at, item.glyph) {
+								Err(_) => {}
+								Ok(mark_index) => {
+									table = LayoutMark.table_at(kerning.data, at)
+									if ctx.kind != 6 and $base_until < i {
+										$last_base = LayoutKerning.mark_base(kerning.data, table, $items, i, $base_until, $last_base, ctx.mask, ctx.kind == 5)
+										$base_until = i
+									}
+									parent = if (ctx.kind == 6) $last_mark else $last_base
+									if parent < i {
+										target = $items.get(parent) ?? LayoutGsub.no_item
+										if ctx.kind != 6 or LayoutKerning.same_mark_base(item, target) {
+											rows = if ctx.kind == 5 {
+												id = LayoutGsub.lig_id(target)
+												component = if (id != 0 and id == LayoutGsub.lig_id(item)) LayoutGsub.lig_comp(item) else 0
+												Ligature(component)
+											} else {
+												Flat
+											}
+											match LayoutMark.anchors(table, kerning.data, mark_index, target.glyph, rows) {
+												Err(_) => {}
+												Ok(anchors) => {
+													# Targets and applications advance through the run.
+													# With monotone clusters, overlapping spans flag the
+													# same boundaries as their union. Finish each span
+													# once, even if many marks attach to the same target.
+													if parent >= $span_end {
+														$items = LayoutKerning.flag_attachment_span($items, $span_start, $span_end)
+														$span_start = parent
+													}
+													$span_end = i + 1
+													if $parents.is_empty() {
+														$parents = List.repeat(no_parent, count)
+													}
+													# HarfBuzz stores the relative attachment index as signed 16-bit.
+													if i - parent <= 32768 {
+														delta = LayoutAnchor.displacement(kerning.data, anchors.target, anchors.mark, kerning.lv, kerning.loc)
+														parent_y = LayoutAttachment.cross_at($parents, $dy, parent)
+														$dx = $dx.set(i, delta.x) ?? []
+														$dy = $dy.set(i, delta.y + parent_y) ?? []
+														$parents = $parents.set(i, parent) ?? []
+													} else {
+														$parents = $parents.set(i, no_parent) ?? []
+													}
+													$k = end
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						_ => {}
+					}
+					if $k < end {
+						$k = $k + 1
+					}
+				}
+			}
+			if ctx.kind == 6 and !LayoutGsub.is_default_ignorable(item) and LayoutKerning.sees(kerning.gdef, item, ctx.props.bitwise_and(0xFFFFFFFFFFFFFFF1)) {
+				$last_mark = if (masked and LayoutGsub.is_mark_item(item)) i else no_parent
+			}
+		}
+		{ items: LayoutKerning.flag_attachment_span($items, $span_start, $span_end), dx: $dx, dy: $dy, ax, parents: $parents }
+	}
+
+	flag_attachment_span : List(LayoutGsub.Item), U64, U64 -> List(LayoutGsub.Item)
+	flag_attachment_span = |items, first, last| {
+		cluster = LayoutGsub.end_cluster(items, first, last, 0xFFFFFFFFFFFFFFFF)
+		LayoutGsub.flag_range(items, first, last, cluster)
+	}
+
+	# A mark-to-base lookup skips marks and default-ignorables. For the
+	# output of a multiple substitution, noninitial pieces count as
+	# targets only when the subtable explicitly covers them.
+	mark_base : List(U8), LayoutMark, List(LayoutGsub.Item), U64, U64, U64, U64, Bool -> U64
+	mark_base = |data, table, items, i, from, previous, mask, ligatures| {
+		var $j = i
+		while $j > from {
+			$j = $j - 1
+			item = items.get($j) ?? LayoutGsub.no_item
+			if LayoutGsub.applies(item.mask, mask) and !LayoutGsub.is_mark_item(item) and !LayoutGsub.is_default_ignorable(item) {
+				accept = if ligatures {
+					LayoutGsub.gprops(item).bitwise_and(LayoutGsub.multiplied) == 0 or LayoutGsub.lig_comp(item) == 0
+				} else {
+					LayoutKerning.first_multiple_piece(items, $j, item)
+				}
+				if accept or LayoutMark.covers_target(table, data, item.glyph) {
+					return $j
+				}
+			}
+		}
+		previous
+	}
+
+	first_multiple_piece : List(LayoutGsub.Item), U64, LayoutGsub.Item -> Bool
+	first_multiple_piece = |items, i, item| {
+		comp = LayoutGsub.lig_comp(item)
+		if i == 0 or comp == 0 or LayoutGsub.gprops(item).bitwise_and(LayoutGsub.multiplied) == 0 {
+			return True
+		}
+		before = items.get(i - 1) ?? LayoutGsub.no_item
+		LayoutGsub.is_mark_item(before) or LayoutGsub.gprops(before).bitwise_and(LayoutGsub.multiplied) == 0
+			or LayoutGsub.lig_id(before) != LayoutGsub.lig_id(item)
+			or LayoutGsub.lig_comp(before) + 1 != comp
+	}
+
+	same_mark_base : LayoutGsub.Item, LayoutGsub.Item -> Bool
+	same_mark_base = |mark, target| {
+		id = LayoutGsub.lig_id(mark)
+		other = LayoutGsub.lig_id(target)
+		component = LayoutGsub.lig_comp(mark)
+		other_component = LayoutGsub.lig_comp(target)
+		if id == other {
+			id == 0 or component == other_component
+		} else {
+			(id != 0 and component == 0) or (other != 0 and other_component == 0)
+		}
 	}
 
 	# Whether lookup properties let a lookup see a glyph. Most lookups have
@@ -352,7 +613,7 @@ LayoutKerning := {
 	# which the second glyph is looked up.
 	set_pair : LayoutKerning, List(U8), { at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64 -> [Applied(Found), NotApplied]
 	set_pair = |kerning, data, s, left, right|
-		match LayoutKerning.covered(data, s.coverage, left) {
+		match LayoutCoverage.index(data, s.coverage, left) {
 			Ok(index) if index < s.set_count => {
 				set = s.at + Bytes.u16(data, s.at + 10 + 2 * index)
 				record = 2 + s.size1 + s.size2
@@ -381,7 +642,7 @@ LayoutKerning := {
 	# the grid matches nothing.
 	class_pair : LayoutKerning, List(U8), { at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }, U64, U64, U64 -> [Applied(Found), NotApplied]
 	class_pair = |kerning, data, c, left, right, glyph_count|
-		if LayoutKerning.covered(data, c.coverage, left).is_err() {
+		if LayoutCoverage.index(data, c.coverage, left).is_err() {
 			NotApplied
 		} else {
 			row = LayoutKerning.class_of(data, c.rows, left)
@@ -404,46 +665,6 @@ LayoutKerning := {
 		second = if (varied) LayoutKerning.varied_value(kerning, data, base, second_at, format2) else LayoutKerning.read_value(data, second_at, format2)
 		nonzero = first.dx != 0 or first.dy != 0 or first.ax != 0 or second.dx != 0 or second.dy != 0 or second.ax != 0
 		{ first, second, skips: format2 != 0, nonzero }
-	}
-
-	## The coverage index of a glyph in a checked coverage table: a sorted
-	## glyph array (format 1) or ranges with their first index (format 2).
-	## Ranges are searched as stored; one whose last glyph comes before its
-	## first matches nothing.
-	covered : List(U8), U64, U64 -> Try(U64, [NotCovered])
-	covered = |data, at, glyph| {
-		count = Bytes.u16(data, at + 2)
-		var $low = 0
-		var $high = count
-		var $result = Err(NotCovered)
-		if Bytes.u16(data, at) == 1 {
-			while $low < $high {
-				mid = ($low + $high) // 2
-				probe = Bytes.u16(data, at + 4 + 2 * mid)
-				if glyph < probe {
-					$high = mid
-				} else if glyph > probe {
-					$low = mid + 1
-				} else {
-					$result = Ok(mid)
-					$low = $high
-				}
-			}
-		} else {
-			while $low < $high {
-				mid = ($low + $high) // 2
-				r = at + 4 + 6 * mid
-				if glyph < Bytes.u16(data, r) {
-					$high = mid
-				} else if glyph > Bytes.u16(data, r + 2) {
-					$low = mid + 1
-				} else {
-					$result = Ok(Bytes.u16(data, r + 4) + glyph - Bytes.u16(data, r))
-					$low = $high
-				}
-			}
-		}
-		$result
 	}
 
 	## A glyph's class in a checked class definition: an array of classes
@@ -506,7 +727,7 @@ LayoutKerning := {
 	## may be covered and is searched. Built in one pass over each coverage
 	## table (or `kern` pair list) when reading. On Inter's kerning bench this
 	## skips most coverage searches (see `scripts/bench.py --ops kerning`).
-	read_digests : List(U8), List([Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })]) -> List({ a : U64, b : U64, c : U64 })
+	read_digests : List(U8), List(Pair) -> List({ a : U64, b : U64, c : U64 })
 	read_digests = |data, subtables| {
 		var $out = List.with_capacity(subtables.len())
 		for subtable in subtables {
@@ -610,19 +831,36 @@ LayoutKerning := {
 	## The pair adjustment lookups of a font file's `GPOS` that features
 	## reach. A table listing more than `max_lookups` lookups is over the
 	## limit.
-	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
-	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv|
+	from_gpos : List(U8), List(Sfnt.Table), U64, U64, LayoutVar, LayoutGdef -> Try([Present(Gpos), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	from_gpos = |bytes, tables, count_of_glyphs, max_lookups, lv, gdef|
+		match LayoutKerning.gpos_source(bytes, tables, max_lookups)? {
+			Absent => Ok(Absent)
+			Present({ data, offset }) =>
+				match LayoutKerning.read_gpos(data, count_of_glyphs, lv, gdef) {
+					Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
+					Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
+				}
+		}
+
+	## Check the script and feature lists even on a face that cannot be prepared.
+	check_gpos_common : List(U8), List(Sfnt.Table), U64 -> Try({}, [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	check_gpos_common = |bytes, tables, max_lookups|
+		match LayoutKerning.gpos_source(bytes, tables, max_lookups)? {
+			Absent => Ok({})
+			Present({ data, offset }) =>
+				LayoutCommon.read(data).map_ok(|_| {}).map_err(|Bad(at)| Sfnt.bad("GPOS", offset + at))
+		}
+
+	gpos_source : List(U8), List(Sfnt.Table), U64 -> Try([Present({ data : List(U8), offset : U64 }), Absent], [BadTable({ table : Str, offset : U32 }), OverLimit(Str)])
+	gpos_source = |bytes, tables, max_lookups|
 		match Sfnt.located(bytes, tables, "GPOS", 10) {
 			Missing => Ok(Absent)
 			Bad(at) => Err(Sfnt.bad("GPOS", at))
-			Found({ data, offset }) =>
-				if Bytes.u16(data, Bytes.u16(data, 8)) > max_lookups {
+			Found(found) =>
+				if Bytes.u16(found.data, Bytes.u16(found.data, 8)) > max_lookups {
 					Err(OverLimit("max_lookups"))
 				} else {
-					match LayoutKerning.read_gpos(data, count_of_glyphs, lv) {
-						Ok(gpos) => Ok(Present({ ..gpos, deltas: gpos.deltas.map(|at| offset + at) }))
-						Err(Bad(at)) => Err(Sfnt.bad("GPOS", offset + at))
-					}
+					Ok(Present(found))
 				}
 		}
 
@@ -652,8 +890,8 @@ LayoutKerning := {
 	## table. A device outside the table or of an unknown
 	## format breaks the table (OTS rejects it); a variation index outside
 	## the store is listed in `deltas`.
-	read_gpos : List(U8), U64, LayoutVar -> Try(Gpos, [Bad(U64)])
-	read_gpos = |gpos, glyph_count, lv| {
+	read_gpos : List(U8), U64, LayoutVar, LayoutGdef -> Try(Gpos, [Bad(U64)])
+	read_gpos = |gpos, glyph_count, lv, gdef| {
 		size = gpos.len()
 		read_common = LayoutCommon.read(gpos)?
 		common = read_common.common
@@ -665,6 +903,7 @@ LayoutKerning := {
 		var $ends = List.with_capacity(common.lookup_count)
 		for index in 0..<common.lookup_count {
 			var $props = 0
+			var $locator = 0
 			if used.get(index) ?? False {
 				lookup = lookups + Bytes.u16(gpos, lookups + 2 + 2 * index)
 				kind = Bytes.u16(gpos, lookup)
@@ -675,44 +914,70 @@ LayoutKerning := {
 					return Err(Bad(lookup))
 				}
 				$props = if (filtering) flag + Bytes.u16(gpos, lookup + 6 + 2 * count) * 65536 else flag
-				if kind == 2 or kind == 9 {
+				if kind == 2 or kind == 3 or kind == 4 or kind == 5 or kind == 6 or kind == 9 {
 					$steps = LayoutKerning.spend(gpos, $steps, count)?
+					var $supported_kind = 0
+					var $marks_only = True
 					for s in 0..<count {
 						at = lookup + Bytes.u16(gpos, lookup + 6 + 2 * s)
-						# An extension subtable points at the real one; one of
-						# another lookup type is not pair positioning.
-						target = if kind == 9 and Bytes.fits(at, 8, size) and Bytes.u16(gpos, at + 2) == 2 {
-							Some(at + Bytes.u32(gpos, at + 4))
-						} else if kind == 2 {
-							Some(at)
-						} else {
-							None
-						}
-						match target {
-							Some(start) => {
-								done = LayoutKerning.read_pair(gpos, start, glyph_count, $steps)?
-								$steps = match LayoutVar.check_pair(lv, gpos, start, glyph_count, done.steps) {
-									Ok(checked) => checked.steps
-									Err(BadAt(problem)) if problem.reason == DeltaIndex => {
-										$deltas = $deltas.append(problem.offset)
-										done.steps
-									}
-									Err(BadAt(problem)) => return Err(Bad(problem.offset))
-									Err(Exhausted(problem)) => return Err(Bad(problem.offset))
-								}
-								$subtables = $subtables.append(done.value)
+						extended = kind == 9 and Bytes.fits(at, 8, size)
+						subkind = if (extended) Bytes.u16(gpos, at + 2) else kind
+						target = if (extended) at + Bytes.u32(gpos, at + 4) else at
+						if subkind == 2 or subkind == 3 or subkind == 4 or subkind == 5 or subkind == 6 {
+							if $supported_kind != 0 and $supported_kind != subkind {
+								return Err(Bad(at))
 							}
-							None => {}
+							$supported_kind = subkind
+						}
+						if subkind == 2 {
+							start = target
+							done = LayoutKerning.read_pair(gpos, start, glyph_count, $steps)?
+							$steps = match LayoutVar.check_pair(lv, gpos, start, glyph_count, done.steps) {
+								Ok(checked) => checked.steps
+								Err(BadAt(problem)) if problem.reason == DeltaIndex => {
+									$deltas = $deltas.append(problem.offset)
+									done.steps
+								}
+								Err(BadAt(problem)) => return Err(Bad(problem.offset))
+								Err(Exhausted(problem)) => return Err(Bad(problem.offset))
+							}
+							$subtables = $subtables.append(done.value)
+						} else if subkind == 3 {
+							if extended and (Bytes.u16(gpos, at) != 1 or Bytes.u32(gpos, at + 4) == 0) {
+								return Err(Bad(at))
+							}
+							done = LayoutCursive.read(gpos, target, glyph_count, $steps, lv, $deltas)?
+							$deltas = done.deltas
+							$steps = done.steps
+							$locator = lookup
+						} else if subkind == 4 or subkind == 5 or subkind == 6 {
+							if extended and (Bytes.u16(gpos, at) != 1 or Bytes.u32(gpos, at + 4) == 0) {
+								return Err(Bad(at))
+							}
+							done = LayoutMark.read(gpos, target, glyph_count, $steps, subkind == 5, lv, $deltas)?
+							$deltas = done.deltas
+							$steps = done.steps
+							$locator = lookup
+							if $marks_only {
+								$marks_only = LayoutMark.gdef_marks(gpos, target, gdef)
+							}
+						}
+					}
+					# Bits 32 and above are unused by flags and filtering set IDs.
+					if $locator != 0 {
+						$props = $props.bitwise_or($supported_kind.shl_wrap(32))
+						if $supported_kind != 3 and $marks_only {
+							$props = $props.bitwise_or(LayoutKerning.mark_coverage_class)
 						}
 					}
 				}
 			}
-			$ends = $ends.append({ end: $subtables.len(), props: $props })
+			$ends = $ends.append({ end: $subtables.len().bitwise_or($locator.shl_wrap(32)), props: $props })
 		}
 		Ok({ data: gpos, common, subtables: $subtables, ends: $ends, digests: LayoutKerning.read_digests(gpos, $subtables), deltas: $deltas })
 	}
 
-	read_pair : List(U8), U64, U64, U64 -> Try({ value : [Kern({ at : U64, count : U64 }), Sets({ at : U64, coverage : U64, set_count : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 }), Classes({ at : U64, coverage : U64, rows : U64, columns : U64, width : U64, height : U64, format1 : U64, format2 : U64, size1 : U64, size2 : U64 })], steps : U64 }, [Bad(U64)])
+	read_pair : List(U8), U64, U64, U64 -> Try({ value : Pair, steps : U64 }, [Bad(U64)])
 	read_pair = |data, at, glyph_count, steps| {
 		size = data.len()
 		if !Bytes.fits(at, 10, size) {
@@ -955,11 +1220,11 @@ expect {
 		$set = $set.concat(be16(g)).concat(be16(65535))
 	}
 	gpos = header.concat(scripts).concat(language).concat(features).concat(lookups).concat(fields).concat(offsets).concat(coverage).concat($set)
-	match LayoutKerning.read_gpos(gpos, n, LayoutVar.none(0)) {
+	match LayoutKerning.read_gpos(gpos, n, LayoutVar.none(0), LayoutGdef.none) {
 		Ok(read) => {
 			kerning = LayoutKerning.combine(Present(read), Absent, LayoutVar.none(0), LayoutGdef.none)
 			items = [5, 7, 299, 0].map_with_index(|glyph, i| { glyph, cluster: i, mask: 1, props: 0 })
-			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, n)
+			done = LayoutKerning.position(kerning, [{ index: 0, mask: 1 }], NoKern, items, List.repeat(0, items.len()), n, False)
 			LayoutKerning.stored_size(kerning) == 1 and done.ax == [-1, -1, -1, 0]
 		}
 		Err(_) => False

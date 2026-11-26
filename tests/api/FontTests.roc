@@ -607,9 +607,9 @@ expect {
 	}
 }
 expect {
-	# A collection signature on a font's header reads as a collection of no
-	# faces.
-	match Font.from_bytes(FontBuild.u32(0x74746366).concat(FontBuild.file(FontBuild.basic).drop_first(4)), Font.ReadOptions.{}) {
+	# A complete version 1 collection header with zero faces.
+	empty = FontBuild.pack([U32(0x74746366), U32(0x00010000), U32(0)])
+	match Font.from_bytes(empty, Font.ReadOptions.{}) {
 		Err(found) => found == [NoSuchFace({ face: 0, count: 0 })]
 		Ok(_) => False
 	}
@@ -626,9 +626,8 @@ expect {
 # Each required table missing on its own.
 expect ["head", "hhea", "maxp", "cmap"].all(|tag| kinds_of(FontBuild.without(FontBuild.basic, tag)) == ["MissingTable(${tag})"])
 
-# Without `head`, `hhea` or `maxp` the tables that depend on them are not
-# read, so only the missing table is reported.
-expect kinds_of(FontBuild.without(FontBuild.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == ["MissingTable(maxp)"]
+# The common GPOS lists can be checked even without a glyph count.
+expect kinds_of(FontBuild.without(FontBuild.basic.append({ tag: "GPOS", data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }), "maxp")) == ["MissingTable(maxp)", "BadTable(GPOS)"]
 
 # Tables too short for their fields, and empty counts.
 expect kinds_of(basic_with("head", FontBuild.head(1000, False).drop_last(1))) == ["BadTable(head)"]
@@ -868,7 +867,7 @@ expect kerning_of(basic_with("GPOS", gpos([{ kind: 9, subtables: [FontBuild.exte
 # positioning. Pair lookups of any default feature apply, as in HarfBuzz
 # (here `mark`); those of other features do not (here `cpsp`, capital
 # spacing, which is off by default).
-expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontBuild.extension(4, simple_pairs)] }])), [1, 2]) == [0, 0]
+expect kerning_of(basic_with("GPOS", gpos([{ kind: 1, subtables: [simple_pairs] }, { kind: 9, subtables: [FontBuild.extension(7, simple_pairs)] }])), [1, 2]) == [0, 0]
 expect kerning_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "mark", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [-50, 0]
 expect kerning_of(basic_with("GPOS", FontBuild.layout("DFLT", [{ tag: "cpsp", lookups: [0] }], [{ kind: 2, subtables: [simple_pairs] }])), [1, 2]) == [0, 0]
 
@@ -972,6 +971,40 @@ expect {
 		{ coverage: 1, pairs: [{ left: 1, right: 2, value: 7 }] },
 	])
 	kerning_of(basic_with("kern", kern), [1, 2]) == [-22, -21]
+}
+
+# Two odd adjustments on A+B each split before they add. Splitting
+# their sum would preserve width while moving one unit to the second
+# glyph. Overlapping pairs, a feature range, and a GPOS lookup that
+# misses A+B also make the per-glyph positions observable.
+# HarfBuzz 14.6.0 agrees on glyphs, offsets and advances.
+expect {
+	kern = FontBuild.kern([
+		{ coverage: 1, pairs: [{ left: 1, right: 2, value: -5 }, { left: 2, right: 1, value: 3 }] },
+		{ coverage: 1, pairs: [{ left: 1, right: 2, value: 3 }, { left: 2, right: 3, value: -1 }] },
+	])
+	cmap = FontBuild.cmap([{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 'A', last: 'C', delta: 65536 - 64, glyphs: [] }]) }])
+	pair = FontBuild.pair1(4, 0, [{ glyph: 2, pairs: [{ second: 3, values: [9] }] }])
+	positioning_table = |tag| { tag: "GPOS", data: FontBuild.layout("DFLT", [{ tag, lookups: [0] }], [{ kind: 2, subtables: [pair] }]) }
+	font_with = |extra| Font.from_bytes(
+		FontBuild.glyphs_font(List.repeat(500, 4), cmap, [{ tag: "kern", data: kern }].concat(extra)),
+		Font.ReadOptions.{ strict: True },
+	) ?? crash "the legacy kerning fixture did not read strictly"
+	legacy = font_with([])
+	other_gpos = font_with([positioning_table("dlig")])
+	gpos_kern = font_with([positioning_table("kern")])
+	plain = Font.ShapeOptions.{}
+	masked = Font.ShapeOptions.{ features: [Font.Feature.{ tag: "kern", value: 0, start: 1, end: 2 }] }
+	check = |font, options, advances, offsets| {
+		run = Font.shape(font, "ABABC", options)
+		run.glyphs == [1, 2, 1, 2, 3] and run.clusters == [0, 1, 2, 3, 4]
+			and run.advances == advances.map(|x| { x, y: 0 })
+			and run.offsets == offsets.map(|x| { x, y: 0 })
+	}
+	check(legacy, plain, [498, 501, 500, 499, 500], [0, 0, 2, 0, 0])
+		and check(legacy, masked, [500, 500, 498, 499, 500], [0, 0, 0, 0, 0])
+		and check(other_gpos, plain, [498, 501, 500, 499, 500], [0, 0, 2, 0, 0])
+		and check(gpos_kern, plain, [500, 500, 500, 509, 500], [0, 0, 0, 0, 0])
 }
 
 expect kinds_of(basic_with("kern", FontBuild.kern([{ coverage: 1, pairs: [{ left: 1, right: 2, value: -50 }] }]).drop_last(1))) == ["BadTable(kern)"]

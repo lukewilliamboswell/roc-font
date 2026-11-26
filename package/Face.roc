@@ -118,6 +118,7 @@ Face := {
 		problems : List(Problem),
 		avar_problems : List(Problem),
 		fvar_axes : [Present(U64), Absent],
+		validation_axes : [Present(U64), Absent],
 	}
 
 	# ------------------------------------------------------------ reading
@@ -210,10 +211,7 @@ Face := {
 				}
 				variations = Face.read_variations(bytes, tables, glyph_count, h.long_offsets, hh.metric_count, points)
 				var $var_problems = variations.problems
-				axes = match variations.space {
-					Present(space) => Present(TableVar.axis_total(space))
-					Absent => Absent
-				}
+				axes = variations.validation_axes
 				axis_count = match axes {
 					Present(n) => n
 					Absent => 0
@@ -250,7 +248,11 @@ Face := {
 						LayoutVar.none(axis_count)
 					}
 				}
-				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count, options.max_lookups, lv)
+				gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
+					Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
+					_ => LayoutGdef.none
+				}
+				gpos = LayoutKerning.from_gpos(bytes, tables, glyph_count, options.max_lookups, lv, gdef)
 				match gpos {
 					Err(OverLimit(which)) => {
 						$optional = $optional.append(OverLimit(which))
@@ -263,15 +265,7 @@ Face := {
 					}
 					Ok(_) => {}
 				}
-				# OTS drops a `kern` table from a font without `glyf` ("not for
-				# CFF fonts"). It rejects fonts with no outlines at all, which
-				# roc-font reads, so only CFF fonts lose `kern` here.
-				# Tags as numbers: `glyf`, `CFF ` and `CFF2`.
-				cff_only = !tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x43464620 or t.tag == 0x43464632)
-				kern = match LayoutKerning.from_kern(bytes, tables) {
-					Ok(Present(_)) if cff_only => Err(Drop(Sfnt.bad("kern", Face.table_offset(tables, "kern"))))
-					read => read
-				}
+				kern = Face.read_kern(bytes, tables)
 				match kern {
 					Err(Drop(problem)) => {
 						$optional = $optional.append(problem)
@@ -330,10 +324,6 @@ Face := {
 					match (advances, boxes, cmap) {
 						(Ok(a), Ok(b), Ok(c)) => {
 							no_lv = LayoutVar.none(0)
-							gdef = match Face.located_tag(bytes, tables, 0x47444546, 12) {
-								Found(found) => LayoutGdef.read(found.data) ?? LayoutGdef.none
-								_ => LayoutGdef.none
-							}
 							Ok({
 								units_per_em: h.units_per_em,
 								glyph_count,
@@ -353,7 +343,7 @@ Face := {
 								mvar: if (keep_variations) variations.mvar else Absent,
 								outlines: if (keep_variations) variations.outlines else Absent,
 								layout_var: if (keep_variations) lv else no_lv,
-								math,
+								math: if (keep_variations) math else TableMath.without_variations(math),
 								gsub_variations: if (keep_variations) gsub_fv else LayoutVar.no_feature_variations,
 								gpos_variations: if (keep_variations) gpos_fv else LayoutVar.no_feature_variations,
 								location: Face.default_location,
@@ -367,6 +357,95 @@ Face := {
 				}
 			}
 			_ => {
+				# These readers can still report problems when head or
+				# hhea prevents preparation. hmtx needs both counts,
+				# while post and the GSUB body need only the glyph count.
+				match maxp {
+					Ok(glyph_count) => {
+						match hhea {
+							Ok(hh) => {
+								$required = Face.collect($required, TableHmtx.from_tables(bytes, tables, hh.metric_count, glyph_count))
+							}
+							Err(_) => {}
+						}
+						match head {
+							Ok(h) => {
+								$required = Face.collect($required, TableGlyf.check_locations(bytes, tables, h.long_offsets, glyph_count))
+							}
+							Err(_) => {}
+						}
+						$required = Face.collect_all($required, TablePost.from_tables(bytes, tables, glyph_count))
+						match LayoutGsub.from_tables(bytes, tables, options.max_lookups) {
+							Err(OverLimit(which)) => {
+								$optional = $optional.append(OverLimit(which))
+							}
+							Err(BadTable(b)) => {
+								$required = $required.append(BadTable(b))
+							}
+							Ok(_) => {}
+						}
+					}
+					Err(_) =>
+						match Face.located_tag(bytes, tables, 0x47535542, 0) {
+							Bad(at) => {
+								$required = $required.append(Sfnt.bad("GSUB", at))
+							}
+							Found(found) =>
+								match LayoutGsub.ots_header(found.data) {
+									Err(Bad(at)) => {
+										$required = $required.append(Sfnt.bad("GSUB", found.offset + at))
+									}
+									Ok(_) => {}
+								}
+							Missing => {}
+						}
+				}
+				match Face.located_tag(bytes, tables, 0x47444546, 0) {
+					Bad(at) => {
+						$required = $required.append(Sfnt.bad("GDEF", at))
+					}
+					Found(found) =>
+						match LayoutVar.check_gdef_offsets(found.data) {
+							Err(p) => {
+								$required = $required.append(Sfnt.bad("GDEF", found.offset + p.offset))
+							}
+							Ok(_) => {}
+						}
+					Missing => {}
+				}
+				match LayoutKerning.check_gpos_common(bytes, tables, options.max_lookups) {
+					Err(OverLimit(which)) => {
+						$optional = $optional.append(OverLimit(which))
+					}
+					Err(BadTable(b)) => {
+						$required = $required.append(BadTable(b))
+					}
+					Ok(_) => {}
+				}
+				# Kern and axis-level variation checks need no outline data.
+				match Face.read_kern(bytes, tables) {
+					Err(Drop(problem)) => {
+						$optional = $optional.append(problem)
+					}
+					Err(Reject(problem)) => {
+						$required = $required.append(problem)
+					}
+					Ok(_) => {}
+				}
+				glyphs = match maxp {
+					Ok(glyph_count) => Present(glyph_count)
+					Err(_) => Absent
+				}
+				$optional = $optional.concat(Face.rejected_variation_problems(bytes, tables, glyphs))
+				match Face.located_tag(bytes, tables, 0x4D415448, 0) {
+					Bad(at) => {
+						$optional = $optional.append(Sfnt.bad("MATH", at))
+					}
+					Found(found) => {
+						$optional = $optional.concat(TableMath.header_problems(found.data).map(|at| Sfnt.bad("MATH", found.offset + at)))
+					}
+					_ => {}
+				}
 				required = Face.unique($required)
 				Err(required.concat(Face.unique($optional).drop_if(|p| required.contains(p))))
 			}
@@ -428,7 +507,7 @@ Face := {
 	unique = |problems| {
 		var $out = []
 		for p in problems {
-			if !$out.any(|known| known == p) {
+			if !$out.contains(p) {
 				$out = $out.append(p)
 			}
 		}
@@ -457,8 +536,100 @@ Face := {
 			Err(found) => problems.concat(found)
 		}
 
+	# OTS drops legacy kerning for CFF fonts. It rejects fonts with no
+	# outlines at all, which roc-font reads, so only CFF fonts lose it here.
+	read_kern : List(U8), List(Sfnt.Table) -> Try([Present(LayoutKerning.Legacy), Absent], [Drop([BadTable({ table : Str, offset : U32 })]), Reject([BadTable({ table : Str, offset : U32 })])])
+	read_kern = |bytes, tables| {
+		# Tags as numbers: glyf, CFF and CFF2.
+		cff_only = !tables.any(|t| t.tag == 0x676C7966) and tables.any(|t| t.tag == 0x43464620 or t.tag == 0x43464632)
+		match LayoutKerning.from_kern(bytes, tables) {
+			Ok(Present(_)) if cff_only => Err(Drop(Sfnt.bad("kern", Face.table_offset(tables, "kern"))))
+			read => read
+		}
+	}
+
+	read_fvar : List(U8), List(Sfnt.Table) -> Try([Present(TableVar), Absent], { problems : List(Problem), axes : [Present(U64), Absent], validation_axes : [Present(U64), Absent] })
+	read_fvar = |bytes, tables|
+		match Sfnt.located(bytes, tables, "fvar", 0) {
+			Missing => Ok(Absent)
+			Bad(at) => Err({ problems: [Sfnt.bad("fvar", at)], axes: Absent, validation_axes: Absent })
+			Found(fvar) =>
+				match TableVar.read_fvar(fvar.data) {
+					Ok(axes) => Ok(Present(axes))
+					Err(problems) => {
+						# OTS checks GDEF against this count even if fvar drops.
+						axes = if (fvar.data.len() >= 10) Present(Bytes.u16(fvar.data, 8)) else Absent
+						# Axis record errors are reported after the header and
+						# both record arrays pass their structural checks.
+						records_valid = problems.all(|p| p.reason == AxisOrder or p.reason == AxisTag)
+						Err({
+							problems: problems.map(|p| Sfnt.bad("fvar", fvar.offset + p.offset)),
+							axes,
+							validation_axes: if (records_valid) axes else Absent,
+						})
+					}
+				}
+		}
+
+	## Keep checking variation tables whose prerequisites survived. A
+	## rejected face needs only their problems. Preparation still uses
+	## the checked glyph count and outline inputs directly.
+	rejected_variation_problems : List(U8), List(Sfnt.Table), [Present(U64), Absent] -> List(Problem)
+	rejected_variation_problems = |bytes, tables, glyphs| {
+		(known_axes, fvar_problems) = match Face.read_fvar(bytes, tables) {
+			Ok(Absent) => return []
+			Ok(Present(space)) => (Present(TableVar.axis_total(space)), [])
+			Err(err) => (err.validation_axes, err.problems)
+		}
+		axes = match known_axes {
+			Present(n) => n
+			Absent => return fvar_problems
+		}
+		located = |tag| Sfnt.located(bytes, tables, tag, 0)
+		placed = |base, result| match result {
+			Ok(_) => []
+			Err(found) => found.map(|p| Sfnt.bad(p.table, base + p.offset))
+		}
+		var $problems = match located("avar") {
+			Bad(at) => [Sfnt.bad("avar", at)].concat(fvar_problems)
+			Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => fvar_problems.append(Sfnt.bad("avar", found.offset))
+			Found(found) => placed(found.offset, TableVar.read_avar(found.data, axes)).concat(fvar_problems)
+			Missing => fvar_problems
+		}
+		match located("VVAR") {
+			Found(found) =>
+				match TableVar.check_vvar_ots(found.data, axes) {
+					Err(at) => {
+						$problems = $problems.append(Sfnt.bad("VVAR", found.offset + at))
+					}
+					Ok(_) => {}
+				}
+			_ => {}
+		}
+		match (located("HVAR"), glyphs) {
+			(Bad(at), _) => {
+				$problems = $problems.append(Sfnt.bad("HVAR", at))
+			}
+			(Found(found), Present(count)) => {
+				$problems = $problems.concat(placed(found.offset, TableVar.read_hvar(found.data, axes, count)))
+			}
+			_ => {}
+		}
+		match located("MVAR") {
+			Bad(at) => {
+				$problems = $problems.append(Sfnt.bad("MVAR", at))
+			}
+			Found(found) => {
+				$problems = $problems.concat(placed(found.offset, TableVar.read_mvar(found.data, axes)))
+			}
+			Missing => {}
+		}
+		$problems
+	}
+
 	## The variation tables: `fvar`, then `avar`, `HVAR`, `MVAR` and `gvar`
-	## (with the outline points it moves) when `fvar` reads. A bad `avar`
+	## (with the outline points it moves) once the `fvar` axis count is
+	## checked. A bad `avar`
 	## drops itself (`avar_problems`); every other problem drops them all.
 	## Without `fvar` the others mean nothing and are not read. Problems
 	## name each table and the byte offset in the file. `points_read` is the
@@ -466,84 +637,92 @@ Face := {
 	## here, or `Unread` when they were not.
 	read_variations : List(U8), List(Sfnt.Table), U64, Bool, U64, [Read(Try(TableGlyfPoints, List(TableGlyfPoints.Problem))), Unread] -> Variations
 	read_variations = |bytes, tables, glyph_count, long_offsets, metric_count, points_read| {
-		nothing = { space: Absent, hvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent }
+		nothing = { space: Absent, hvar: Absent, mvar: Absent, outlines: Absent, problems: [], avar_problems: [], fvar_axes: Absent, validation_axes: Absent }
 		# Each problem in the file: its table's offset plus its own.
 		placed = |ps| ps.map(|p| Sfnt.bad(p.table, Face.table_offset(tables, p.table) + p.offset))
-		match Sfnt.located(bytes, tables, "fvar", 0) {
-			Missing => nothing
-			Bad(at) => { ..nothing, problems: [Sfnt.bad("fvar", at)] }
-			Found(fvar) =>
-			# The axis count OTS checks other tables against, even when
-			# `fvar` itself is dropped.
-				match TableVar.read_fvar(fvar.data) {
-					Err(problems) => { ..nothing, problems: placed(problems), fvar_axes: if (fvar.data.len() >= 10) Present(Bytes.u16(fvar.data, 8)) else Absent }
-					Ok(axes_only) => {
-						axes = TableVar.axis_total(axes_only)
-						avar = match Sfnt.located(bytes, tables, "avar", 0) {
-							Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => Unusable(Sfnt.bad("avar", found.offset))
-							Found(found) =>
-								match TableVar.read_avar(found.data, axes) {
-									Ok(maps) => Maps(maps)
-									Err(problems) => Dropped(placed(problems))
-								}
-							Bad(at) => Dropped([Sfnt.bad("avar", at)])
-							Missing => Identity
-						}
-						space = match avar {
-							Maps(maps) => { ..axes_only, map_starts: maps.starts, map_from: maps.from, map_to: maps.to }
-							_ => axes_only
-						}
-						avar_problems = match avar {
-							Dropped(ps) => ps
-							_ => []
-						}
-						hvar = match Sfnt.located(bytes, tables, "HVAR", 0) {
-							Missing => Ok(Absent)
-							Bad(at) => Err([Sfnt.bad("HVAR", at)])
-							Found(found) => TableVar.read_hvar(found.data, axes, glyph_count).map_ok(|value| Present(value)).map_err(placed)
-						}
-						mvar = match Sfnt.located(bytes, tables, "MVAR", 0) {
-							Missing => Ok(Absent)
-							Bad(at) => Err([Sfnt.bad("MVAR", at)])
-							Found(found) => TableVar.read_mvar(found.data, axes).map_ok(|value| Present(value)).map_err(placed)
-						}
-						outlines = match (Sfnt.located(bytes, tables, "gvar", 0), Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
-							(Found(gvar), Found(glyf), Found(loca), Found(hmtx)) => {
-								checked = match points_read {
-									Read(already) => already
-									Unread => TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count)
-								}
-								match checked {
-									Err(problems) => Err(placed(problems))
-									Ok(points) =>
-										match TableGvar.read(gvar.data, axes, points) {
-											Err(problems) => Err(placed(problems))
-											Ok(moves) => Ok(Present({ points, gvar: moves }))
-										}
-								}
-							}
+		fvar = match Face.read_fvar(bytes, tables) {
+			Ok(Absent) => return nothing
+			Err(err) => { ..nothing, problems: err.problems, fvar_axes: err.axes, validation_axes: err.validation_axes }
+			Ok(Present(space)) => {
+				axes = Present(TableVar.axis_total(space))
+				{ ..nothing, space: Present(space), fvar_axes: axes, validation_axes: axes }
+			}
+		}
+		axes = match fvar.validation_axes {
+			Present(n) => n
+			Absent => return fvar
+		}
+		avar = match Sfnt.located(bytes, tables, "avar", 0) {
+			Found(found) if found.data.len() >= 2 and Bytes.u16(found.data, 0) == 2 => Unusable(Sfnt.bad("avar", found.offset))
+			Found(found) =>
+				match TableVar.read_avar(found.data, axes) {
+					Ok(maps) => Maps(maps)
+					Err(problems) => Dropped(placed(problems))
+				}
+			Bad(at) => Dropped([Sfnt.bad("avar", at)])
+			Missing => Identity
+		}
+		space = match (fvar.space, avar) {
+			(Present(axes_only), Maps(maps)) => Present({ ..axes_only, map_starts: maps.starts, map_from: maps.from, map_to: maps.to })
+			_ => fvar.space
+		}
+		avar_problems = match avar {
+			Dropped(ps) => ps
+			_ => []
+		}
+		hvar = match Sfnt.located(bytes, tables, "HVAR", 0) {
+			Missing => Ok(Absent)
+			Bad(at) => Err([Sfnt.bad("HVAR", at)])
+			Found(found) => TableVar.read_hvar(found.data, axes, glyph_count).map_ok(|value| Present(value)).map_err(placed)
+		}
+		mvar = match Sfnt.located(bytes, tables, "MVAR", 0) {
+			Missing => Ok(Absent)
+			Bad(at) => Err([Sfnt.bad("MVAR", at)])
+			Found(found) => TableVar.read_mvar(found.data, axes).map_ok(|value| Present(value)).map_err(placed)
+		}
+		outlines = match Sfnt.located(bytes, tables, "gvar", 0) {
+			Found(gvar) => {
+				# Read already establishes that all three outline tables
+				# were found. Only the unchecked path needs to locate them.
+				checked = match points_read {
+					Read(already) => already.map_ok(|p| Present(p))
+					Unread =>
+						match (Sfnt.located(bytes, tables, "glyf", 0), Sfnt.located(bytes, tables, "loca", 0), Sfnt.located(bytes, tables, "hmtx", 0)) {
+							(Found(glyf), Found(loca), Found(hmtx)) =>
+								TableGlyfPoints.read(glyf.data, loca.data, long_offsets, glyph_count, hmtx.data, metric_count).map_ok(|p| Present(p))
 							_ => Ok(Absent)
 						}
-						unusable = match avar {
-							Unusable(p) => [p]
-							_ => []
-						}
-						vvar = match Sfnt.located(bytes, tables, "VVAR", 0) {
-							Found(found) =>
-								match TableVar.check_vvar_ots(found.data, axes) {
-									Ok(_) => []
-									Err(at) => [Sfnt.bad("VVAR", found.offset + at)]
-								}
-							_ => []
-						}
-						problems = unusable.concat(vvar).concat(Face.collect_all(Face.collect_all(Face.collect_all([], hvar), mvar), outlines))
-						if problems.is_empty() {
-							{ space: Present(space), hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, problems: [], avar_problems, fvar_axes: Present(axes) }
-						} else {
-							{ ..nothing, problems: problems, avar_problems, fvar_axes: Present(axes) }
-						}
-					}
 				}
+				match checked {
+					Err(problems) => Err(placed(problems))
+					Ok(Absent) => Ok(Absent)
+					Ok(Present(points)) =>
+						match TableGvar.read(gvar.data, axes, points) {
+							Err(problems) => Err(placed(problems))
+							Ok(moves) => Ok(Present({ points, gvar: moves }))
+						}
+				}
+			}
+			_ => Ok(Absent)
+		}
+		unusable = match avar {
+			Unusable(p) => [p]
+			_ => []
+		}
+		vvar = match Sfnt.located(bytes, tables, "VVAR", 0) {
+			Found(found) =>
+				match TableVar.check_vvar_ots(found.data, axes) {
+					Ok(_) => []
+					Err(at) => [Sfnt.bad("VVAR", found.offset + at)]
+				}
+			_ => []
+		}
+		problems = Face.collect_all(Face.collect_all(Face.collect_all(fvar.problems.concat(unusable).concat(vvar), hvar), mvar), outlines)
+		if problems.is_empty() {
+			{ ..fvar, space, hvar: hvar ?? Absent, mvar: mvar ?? Absent, outlines: outlines ?? Absent, avar_problems }
+		} else {
+			# Other tables still need the axis count for their validation.
+			{ ..fvar, space: Absent, problems, avar_problems }
 		}
 	}
 
@@ -814,22 +993,30 @@ Face := {
 
 	# A metric at a location: `MVAR`'s delta for `tag` added to the stored
 	# value, rounded as HarfBuzz rounds it.
-	varied_value : Face, Location, Str, I32 -> I32
-	varied_value = |face, loc, name, value|
+	varied_value : Face, Location, Str, I32, Bool -> I32
+	varied_value = |face, loc, name, value, invert|
 		match face.mvar {
-			Present(mvar) if loc.varied => TableVar.metric(mvar, loc.mvar, Face.tag_from_name(name), value.to_i64()).to_i32_wrap()
-			_ => value
+			Present(mvar) if loc.varied => {
+				rounded = TableVar.metric(mvar, loc.mvar, Face.tag_from_name(name), value.to_i64())
+				# Convert the stored descender to depth in I64
+				# before applying the public signed bound.
+				signed = if (invert) -rounded else rounded
+				signed.max(-2147483648).min(2147483647).to_i32_wrap()
+			}
+			# Base metrics come from 16-bit fields.
+			_ => if (invert) -value else value
 		}
 
 	metrics : Face, Location -> Metrics
 	metrics = |face, loc| {
-		v = |name, value| Face.varied_value(face, loc, name, value)
+		v = |name, value| Face.varied_value(face, loc, name, value, False)
+		depth = |value| Face.varied_value(face, loc, "hdsc", value, True)
 		hh = face.hhea
 		upem = face.units_per_em.to_i32()
 		vertical = match face.os2 {
-			Present(o) if o.use_typo => { ascent: v("hasc", o.typo_ascent), descent: -v("hdsc", o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
-			_ if hh.ascent != 0 or hh.descent != 0 => { ascent: v("hasc", hh.ascent), descent: -v("hdsc", hh.descent), line_gap: v("hlgp", hh.line_gap) }
-			Present(o) if o.typo_ascent != 0 or o.typo_descent != 0 => { ascent: v("hasc", o.typo_ascent), descent: -v("hdsc", o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
+			Present(o) if o.use_typo => { ascent: v("hasc", o.typo_ascent), descent: depth(o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
+			_ if hh.ascent != 0 or hh.descent != 0 => { ascent: v("hasc", hh.ascent), descent: depth(hh.descent), line_gap: v("hlgp", hh.line_gap) }
+			Present(o) if o.typo_ascent != 0 or o.typo_descent != 0 => { ascent: v("hasc", o.typo_ascent), descent: depth(o.typo_descent), line_gap: v("hlgp", o.typo_line_gap) }
 			Present(o) => { ascent: v("hcla", o.win_ascent), descent: v("hcld", o.win_descent), line_gap: 0 }
 			Absent => { ascent: 0, descent: 0, line_gap: 0 }
 		}

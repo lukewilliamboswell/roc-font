@@ -127,10 +127,12 @@ TableGlyfPoints := {
 		var $starts = List.with_capacity(glyph_count + 1)
 		var $kinds = List.with_capacity(glyph_count)
 		var $counts = List.with_capacity(glyph_count)
-		$starts = $starts.append(offset(0))
+		var $next_start = offset(0)
+		$starts = $starts.append($next_start)
 		for g in 0..<glyph_count {
-			start = offset(g)
+			start = $next_start
 			end = offset(g + 1)
+			$next_start = end
 			$starts = $starts.append(end)
 			if end < start {
 				$problems = $problems.append({ table: "loca", offset: size * (g + 1), reason: OffsetOrder })

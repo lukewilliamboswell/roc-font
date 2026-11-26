@@ -101,9 +101,8 @@ Font :: { face : Face }.{
 	##   the part that is wrong (a count, an offset or a record that does not
 	##   fit, or a value the format does not allow).
 	## - `BadUnitsPerEm`: units per em outside 16 to 16384.
-	## - `NoUnicodeMapping`: no character map this reader can use (one for
-	##   Unicode, a Windows symbol map or a Macintosh map, in format 0, 4, 6,
-	##   10, 12 or 13).
+	## - `NoUnicodeMapping`: no usable Unicode or Windows symbol character map
+	##   that passes validation.
 	##
 	## `describe_problem` puts any of them into words.
 	Problem : [
@@ -135,8 +134,8 @@ Font :: { face : Face }.{
 		}
 	}
 
-	## How many fonts a file holds: 1 for a single font file, the face count
-	## of a collection.
+	## How many faces a file holds. A single font file has one face.
+	## Collections use a complete version 1.0 or 2.0 TTC header.
 	face_count : List(U8) -> Try(U32, [NotAFont])
 	face_count = |bytes|
 		match Face.face_count(bytes) {
@@ -208,7 +207,8 @@ Font :: { face : Face }.{
 	units_per_em = |font| Face.units_per_em(font.face)
 
 	## The font's vertical measures; see `Metrics`. In a variable font they
-	## follow the font's location.
+	## follow the font's location. Variation-adjusted values outside the
+	## range of `I32` are held at the corresponding limit.
 	metrics : Font -> Metrics
 	metrics = |font| Face.metrics(font.face, Face.current(font.face))
 
@@ -216,9 +216,8 @@ Font :: { face : Face }.{
 	glyph_count : Font -> U32
 	glyph_count = |font| Face.glyph_total(font.face).min(0xFFFFFFFF).to_u32_wrap()
 
-	## The glyph that draws a Unicode code point, if the font has one. Fonts
-	## whose character map is not in Unicode (old symbol fonts and Macintosh
-	## fonts) are translated to Unicode the way HarfBuzz does.
+	## The glyph that draws a Unicode code point, if the font has one. Windows
+	## symbol maps also resolve their translated Unicode aliases.
 	glyph : Font, U32 -> Try(U32, [Missing])
 	glyph = |font, code_point|
 		match Face.glyph(font.face, code_point) {
@@ -226,8 +225,9 @@ Font :: { face : Face }.{
 			Err(Missing) => Err(Missing)
 		}
 
-	## A glyph's advance width, at the font's location. A glyph id past the
-	## font has an advance of 0, as in HarfBuzz.
+	## A glyph's advance width at the font's location. Advances above
+	## the range of `I32` are held at its upper limit. A glyph id past
+	## the font has an advance of 0.
 	advance : Font, U32 -> I32
 	advance = |font, id| Face.advance(font.face, Face.current(font.face), id.to_u64())
 
@@ -372,6 +372,8 @@ Font :: { face : Face }.{
 	MathKernTable : { heights : List(I64), values : List(I64) }
 
 	## Whether the font supplies mathematical typesetting data (`MATH`).
+	## An unrecognized MATH major version is treated as absent. Newer
+	## minor revisions of major version 1 can supply the known data.
 	## A damaged optional MATH table is left out and reported by `dropped`
 	## in lenient reading, and rejects the font in strict reading.
 	has_math : Font -> Bool
@@ -560,6 +562,16 @@ Font :: { face : Face }.{
 	## and `shape_checked` says so (see `Budget`).
 	ShapeLimits := { growth : U32 ?? 64, operations : U32 ?? 1024 }
 
+	## Adjacent logical text used when shaping an Arabic item inside a
+	## line. `before` ends immediately before the item and `after`
+	## begins immediately after it. The five nearest scalars on each
+	## side can affect joining. These characters do not contribute
+	## glyphs, clusters or substitutions to the item.
+	##
+	## Leave a side empty at a line edge. Supply the adjacent text
+	## across a style or font boundary within the same line.
+	ArabicContext := { before : Str ?? "", after : Str ?? "" }
+
 	## How to shape.
 	##
 	## - `script`: the text's ISO 15924 script code, such as `Latn`, `Grek`,
@@ -570,19 +582,20 @@ Font :: { face : Face }.{
 	##   which can select the font's language-specific forms. Empty is none.
 	##   `-x-hbot` and `-x-hbsc` private-use subtags give raw OpenType
 	##   language and script tags, as in HarfBuzz.
-	## - `direction`, `features`, `clusters` and `limits`: see their types.
+	## - `direction`, `features`, `clusters`, `limits` and
+	##   `arabic_context`: see their types.
 	##   The browser defaults for the direction always apply (ligatures,
 	##   contextual forms and kerning, among others) unless a `Feature`
 	##   turns one off; `features` lists only the changes.
 	##
-	## Text is shaped as HarfBuzz's default shaper shapes it (and its Hebrew
-	## shaper for Hebrew): characters compose or decompose to what the font
-	## maps, brackets mirror in right-to-left text, default-ignorable
-	## characters draw with no width, and spaces the font lacks take widths
-	## from its space. Scripts that need their own shaper (Arabic joining,
-	## Indic, Khmer, Myanmar, the Universal Shaping Engine, Thai, Hangul)
-	## shape as the default shaper shapes them.
-	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{} }
+	## HarfBuzz's default shaping rules select canonical forms the font
+	## maps, mirror brackets in right-to-left text, usually hide
+	## default-ignorable characters and derive missing space widths. Hebrew,
+	## modern horizontal Arabic, horizontal Thai and modern Devanagari Hindi
+	## use script-specific shaping. For Hindi select `Deva` and `hi` with
+	## a font that has OpenType `dev2` layout. In Thai, SARA AM can split into a spacing
+	## vowel and a mark before the font's positioning rules apply.
+	ShapeOptions := { script : Str ?? "", language : Str ?? "", direction : Direction ?? FromScript, features : List(Feature) ?? [], clusters : ClusterLevel ?? Graphemes, limits : ShapeLimits ?? ShapeLimits.{}, arabic_context : ArabicContext ?? ArabicContext.{} }
 
 	## A shaped run, one entry per glyph in each list, in visual order (left
 	## to right, also for right-to-left text):
@@ -613,14 +626,14 @@ Font :: { face : Face }.{
 	## - Every cluster is the offset of a character of the text. A character
 	##   with no glyph of its own (joined into a ligature, or removed by a
 	##   substitution) is drawn by the cluster it was merged into.
-	## - A character the font does not map is drawn with glyph 0, never left
-	##   out, and the glyph is missing (`is_missing`); only a substitution in the font
-	##   may replace that glyph. The exceptions are default-ignorable
-	##   characters (such as a zero-width joiner, a soft hyphen or a
-	##   variation selector), which draw nothing visible: the font's space
-	##   glyph with no advance, or no glyph when the font has no space. A
-	##   glyph 0 the font itself gives (by its character map or a
-	##   substitution) is not missing.
+	## - An ordinary character the font does not map is drawn with glyph 0
+	##   and marked missing (`is_missing`). A font substitution can replace
+	##   that glyph. Default-ignorable characters such as the soft hyphen
+	##   usually produce a zero-advance space glyph, or no glyph when the
+	##   font has no space. A font substitution for a mapped
+	##   default-ignorable character can produce a visible glyph that
+	##   participates in positioning. A glyph 0 supplied by the font's
+	##   character map or a substitution is treated as present.
 	## - Empty text gives a run of empty lists; glyph ids past the font have
 	##   an advance of 0.
 	Run : { glyphs : List(U32), advances : List({ x : I32, y : I32 }), offsets : List({ x : I32, y : I32 }), clusters : List(U64), flags : List(U8) }
@@ -672,9 +685,13 @@ Font :: { face : Face }.{
 	Budget : [Growth, Operations, Depth]
 
 	## The choices `ShapeOptions` make for one font, worked out once. Plan
-	## once and shape many times with `shape_planned`. A plan belongs to the
-	## font it was made for; with another font the run is defined but
-	## meaningless.
+	## once and shape many times with `shape_planned`.
+	##
+	## A plan keeps the feature lookups selected at the font's location
+	## when you make it. Shaping at another location of that font uses
+	## those lookups with advances and positioning values from the new
+	## location. Make a new plan to select lookups at the new location.
+	## With a different font file, the run is defined but meaningless.
 	ShapePlan :: { plan : Shaper.Plan }
 
 	## Work out a plan for shaping with these options, to shape or measure
@@ -689,7 +706,8 @@ Font :: { face : Face }.{
 	plan = |font, options| {
 		limits = options.limits
 		chosen = options.features.map(|f| { tag: f.tag, value: f.value, start: f.start, end: f.end })
-		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64() }, options.clusters) }
+		context = options.arabic_context
+		{ plan: Shaper.plan_with_clusters(font.face, { script: options.script, language: options.language, direction: options.direction, features: chosen, growth: limits.growth.to_u64(), operations: limits.operations.to_u64(), arabic_context: { before: context.before, after: context.after } }, options.clusters) }
 	}
 
 	## Shape text: the glyphs that draw it, where, and which part of the
@@ -739,10 +757,64 @@ Font :: { face : Face }.{
 	## paragraph), so runs of one paragraph report offsets into it. It also
 	## shapes text a caller decoded itself, such as UTF-8 bytes that may be
 	## invalid, with clusters pointing into the bytes.
-	## Scalars sharing an offset form one cluster. Clusters in the run are
-	## these offsets, unchanged.
+	## Sharing an offset puts scalars in one cluster. Shaping can coalesce
+	## clusters at a supplied start. For input validation and budget status,
+	## use `shape_scalars_checked`.
 	shape_scalars : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Run
 	shape_scalars = |font, shape_plan, scalars| Shaper.shape(font.face, Face.current(font.face), shape_plan.plan, scalars)
+
+	## Why a scalar entry was rejected. `InvalidScalar` gives the value
+	## outside Unicode scalar space, such as a surrogate. `DecreasingOffset`
+	## gives the preceding and current starts in the caller's coordinates.
+	ScalarInputProblem : [InvalidScalar(U32), DecreasingOffset({ previous : U64, offset : U64 })]
+
+	## Shape a caller-itemized run and report whether shaping finished.
+	## Pass Unicode scalar values in logical order with nondecreasing `U64`
+	## starts. Starts can be shared and can be absolute paragraph byte
+	## offsets. Shaping may coalesce clusters at a supplied start.
+	## `InvalidInput` identifies the first bad entry by its zero-based list
+	## index, checking its scalar before its offset. Empty input is valid.
+	##
+	## The caller chooses the script, direction, font and feature ranges.
+	## Use the same coordinates for feature ranges and scalar starts.
+	## Pass original characters even when the paragraph analysis provides
+	## mirror facts. Shaping applies right-to-left mirroring for the plan.
+	##
+	## `Ok` holds the run, including missing-glyph and unsafe-break flags.
+	## `OverBudget` holds the partial run and the bounds that stopped it.
+	## For absolute starts, pass the absolute exclusive end of this run to
+	## `cluster_ranges`, including when the glyphs are in right-to-left order.
+	shape_scalars_checked : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try(Run, [InvalidInput({ index : U64, reason : ScalarInputProblem }), OverBudget({ run : Run, budgets : List(Budget) })])
+	shape_scalars_checked = |font, shape_plan, scalars| {
+		match Shaper.check_scalars(scalars) {
+			Err(problem) => return Err(InvalidInput(problem))
+			Ok(_) => {}
+		}
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+		if shaped.stopped == 0 {
+			Ok(shaped.run)
+		} else {
+			Err(OverBudget({ run: shaped.run, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
+
+	## Shape a caller-itemized run as `shape_scalars_checked` does and
+	## report each glyph's substitution origin as `shape_traced` does.
+	## Origins align with the run's glyphs in `Ok` and `OverBudget`.
+	shape_scalars_traced : Font, ShapePlan, List({ scalar : U32, offset : U64 }) -> Try({ run : Run, origins : List(GlyphOrigin) }, [InvalidInput({ index : U64, reason : ScalarInputProblem }), OverBudget({ run : Run, origins : List(GlyphOrigin), budgets : List(Budget) })])
+	shape_scalars_traced = |font, shape_plan, scalars| {
+		match Shaper.check_scalars(scalars) {
+			Err(problem) => return Err(InvalidInput(problem))
+			Ok(_) => {}
+		}
+		shaped = Shaper.shape_items(font.face, Face.current(font.face), shape_plan.plan, scalars)
+		origins = Shaper.origins(font.face, shape_plan.plan, shaped.items)
+		if shaped.stopped == 0 {
+			Ok({ run: shaped.run, origins })
+		} else {
+			Err(OverBudget({ run: shaped.run, origins, budgets: Shaper.budgets(shaped.stopped) }))
+		}
+	}
 
 	## Shape text as `shape_planned` does, and also say which substitution
 	## produced each glyph (see `GlyphOrigin`) and whether shaping
@@ -779,8 +851,7 @@ Font :: { face : Face }.{
 	## units = Font.width(Font.sans, "Hello, world!") # 12111, at 2048 units to the em
 	## ```
 	##
-	## A total beyond the range of `I32` (only possible for text of tens of
-	## thousands of glyphs at the largest advances) is held at its limit.
+	## A total beyond the range of `I32` is held at its limit.
 	width : Font, Str -> I32
 	width = |font, text| Font.width_planned(font, Font.plan(font, ShapeOptions.{}), text)
 
@@ -824,7 +895,9 @@ Font :: { face : Face }.{
 	## The part of the text each glyph of a run draws, as UTF-8 byte ranges
 	## `start ..< end`, one per glyph in the run's order (so in
 	## right-to-left text, too, entry `i` is glyph `i`'s). `length` is the
-	## text's length in bytes (`text.count_utf8_bytes()`).
+	## text's length in bytes (`text.count_utf8_bytes()`) for text shaped
+	## from a string. For absolute scalar offsets, use the run's absolute
+	## exclusive end, in the same coordinates as the supplied starts.
 	##
 	## ```
 	## bytes = text.to_utf8()

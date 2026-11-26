@@ -1,0 +1,45 @@
+{
+  "about": "The first byte selects mark lookup types 4 through 6 by remainder modulo 3. Bit 2 wraps the lookup. Bits 3 and 4 pick a class, coverage-count, anchor-format, or anchor-bounds problem beside the equivalent valid layout. ff reads the real David Libre fixture.",
+  "seeds": [
+    {
+      "why": "Class beyond the mark-to-base matrix",
+      "parts": [
+        {
+          "hex": "00 20 30"
+        }
+      ]
+    },
+    {
+      "why": "Mark-to-ligature coverage count mismatch",
+      "parts": [
+        {
+          "hex": "0d 20 30"
+        }
+      ]
+    },
+    {
+      "why": "Unknown mark-to-ligature anchor format",
+      "parts": [
+        {
+          "hex": "10 70 80"
+        }
+      ]
+    },
+    {
+      "why": "Truncated mark-to-mark anchor through an extension",
+      "parts": [
+        {
+          "hex": "1d 70 80"
+        }
+      ]
+    },
+    {
+      "why": "Unmodified David Libre Regular",
+      "parts": [
+        {
+          "hex": "ff"
+        }
+      ]
+    }
+  ]
+}

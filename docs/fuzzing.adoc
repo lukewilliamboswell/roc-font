@@ -17,6 +17,296 @@ that recurse, runs that grow. A successfully read font must make every
 later query and shaping call total (architecture §3), and only generated
 input tests that claim at scale.
 
+== Start from the format contract
+
+Start with the applicable specification clause, format and version. State
+what a font is allowed to encode and what the affected public operation must
+return. Record any roc-font policy the specification leaves open. Exercise
+that operation on a font built through `FontBuild` and loaded from bytes by
+the public API. Write the expected answer from the recipe's meaning before
+choosing the bytes or reading the production implementation.
+
+Use a small matrix when each case starts from the same input and exercises
+one distinct boundary. For diagnostics, list the facts each reader needs.
+Remove a prerequisite in one case and retain it in another, then check
+both read modes and the order of the returned problems. A supported
+table version can be checked before its contents are usable. For MATH,
+pair a truncated header with an invalid required table and check both
+diagnostics. Use an unrecognized major version and a compatible newer
+minor version to check the two versioning rules. The GSUB list offsets, GPOS list
+headers and version-specific GDEF header length can also be checked
+without the glyph count. Use a valid header with a glyph reference to
+check that the reader waits for the count before judging the reference.
+For top-level GDEF offsets, keep the child bytes fixed and point into
+the header, to the exact end of the table, or past it. Include a
+32-bit offset whose low 16 bits name the valid child.
+For variation tables, hold the store bytes fixed and change the
+axis count in `fvar`. Remove `maxp` separately so an `avar` fault
+survives while an implicit `HVAR` row-count judgment is deferred.
+For outline locations, remove the offset width and glyph count
+prerequisites separately from the metrics header. Check both offset
+widths and distinguish a reversed entry from a missing final entry.
+For Unicode composition, swapping two marks of equal combining class
+checks stable ordering and the rule for blocking a composition. For shaping
+budgets, check the final allowed operation, the first refused operation,
+and a case where several limits are reported together.
+For table directories, move the same record between early and late
+positions while keeping the advertised byte range fixed. Combine its
+one-byte overrun with an independently damaged required table to check
+that both diagnostics survive, including their file offsets.
+For localized names, use distinct records that share a priority rank.
+Give each instance a different name identifier so a lookup by position
+would return a visibly different result.
+For UTF-16 names, put distinct BMP characters around the endpoint pairs
+so the query also checks where decoding resumes. Give the preferred
+record a valid pair followed by a lone surrogate and check that a
+lower-priority record supplies the whole name.
+For glyph names in `post`, place a custom Pascal string beyond byte
+65,535 and reference it twice with a standard name between the two
+references. Include the final standard index and the first custom index.
+For font-wide metric variation, give each fallback source distinct
+values. Include signed half-unit ties so the result shows whether
+rounding happened after the regional contributions were added.
+For font-wide metric selection, give each source a distinct ascent,
+descent and gap. Set only one extent to zero so the result shows whether
+the whole tuple was selected. Check both extents zero separately.
+For signed width bounds, use runs with prefixes that exceed opposite
+limits and cancel to the same representable total. Check cancellation
+within one glyph separately so clipping at each lookup is observable.
+
+* Use `Model` when action order or interactions between choices matter.
+  State the action alphabet, bounds and facts that distinguish states.
+  Require exhaustion for the declared small domain and name goals that
+  exercise the interactions under test. If two histories share a key,
+  all subsequent actions and observations must agree. Use
+  `Model.walk_target` for wider histories when they add coverage. Prefer a
+  key made from the choices and input history. An immutable prepared font
+  can be held alongside the key if those choices determine it completely.
+  Use `EveryStep` when different histories reach the same key and each
+  arrival needs checking, as with repeated changes to a font's location.
+* Use `Solve` for fixed-width integer laws. State the width, valid domain
+  and the preconditions a caller establishes. Tie the proof to production
+  with concrete public API checks at the relevant boundary. For horizontal
+  metrics, the proof covers the full valid uint16 count domain. The concrete
+  fonts exercise all splits of a four-glyph table with distinct bearings
+  and an advance stored past byte 65,535. Keep proof budgets small by
+  proving one law at a time and choosing the narrowest width that holds
+  every intermediate in the declared domain. Check that the assumptions
+  admit real inputs and that the property fails when the decision it
+  protects is deliberately changed. For a packed subtable, put the last
+  required word at the enclosing table's end. Extra bytes can hide an
+  off-by-one calculation in a fixture with trailing data.
+* Use a scratch worktree for a small, plausible production mutation.
+  Compare the new model or proof with the existing tests on the same
+  mutation and discard the change after the check. If an existing test
+  already detects it, explain what additional contract the new check
+  covers. Keep a small regression witness for a real defect.
+
+Choose fixtures that make the difference visible through the public API.
+For competing ligatures, encode both preference orders and compare glyphs
+and clusters. For a default variation sequence, the selected glyph may be
+identical to the nominal fallback. A fixture with a space glyph lets the
+check distinguish a consumed selector from the zero-width placeholder
+left by an unsupported selector. A positioning record that is present
+and all zeroes can change where the lookup resumes. Include an overlapping
+pair and a second lookup to observe that boundary. Compare each glyph's
+advance and offset when the same total width can come from different
+placements. When a pair mixes hinting and variation devices, give a hint
+table's size fields the same numbers as a live variation index. At
+design size, only the variation fields should change across locations.
+For variation records, give each table a different preference
+at a shared inclusive endpoint and probe one normalized unit on each side.
+For saved shaping plans, vary the planning and execution locations
+independently. Make substitutions and lookup selection identify the
+planning location, and vary advances and adjustments at execution.
+For optional variation tables, keep two independently observable deltas
+so a dropped axis map can be distinguished from a dropped variation group.
+Use a neutral region to make a delta observable at the default location
+too. Put bad indices in two independent tables and check both diagnostics
+alongside the surviving base values.
+For a broken axis definition, preserve the header and both record arrays
+while placing the default outside its range. This lets the reader check
+other tables against a known axis count and retain their valid base data.
+For feature selection,
+use a shared lookup that changes its own output on a second application,
+and scope the once-only rule to one shaping stage.
+For language fallback, offer the preferred language in just one of
+GSUB and GPOS. Give each language a distinct substitution or positioning
+result, then swap which table has to fall back.
+For nested substitutions, address a position after the child changes the
+length so a later edit cannot conceal a stale parent match. To check lookup
+filters, let a nested lookup consume a glyph the parent skipped, and use
+a second substitution to show when the parent matched. For outline
+variation, make the affected point an observable bound of the outline.
+For composite glyphs, give each component a distinct metric contribution
+and reverse their order to observe which component supplies the metrics.
+For point attachment, use a varied parent point from the second
+preceding component and a donor whose transform changes its anchor.
+Make the attached donor define an outline bound so incorrect alignment
+changes the public extents.
+For font collections, give each face a distinct character map and distinct
+private metrics. Reorder the face directory references and share one
+metrics table across faces on either side of its storage location.
+For TTC version 2, include the full signature descriptor after the face
+offsets. Truncate the descriptor and the last face directory separately
+to distinguish an invalid collection header from an unreadable face.
+For reverse chaining, give adjacent context positions distinct coverages
+and use a substitution that enables the next candidate in scan order.
+Compare direct and extension encodings of the same lookup.
+For alternate substitutions, put a shorter alternate set before a longer
+one for the same glyph. Request a choice only the longer set can supply,
+and use multibyte text to check the feature's byte range in both directions.
+When several formats can encode the same rule, write one expected run
+from the rule and compare every encoding with it. For class zero, include
+both covered and uncovered glyphs to check the coverage gate.
+For relative offsets, place the same glyph words near the start and at
+the last valid position. Sharing those words across segments with
+different deltas makes each segment's offset origin observable.
+For symbol aliases, include a direct mapping that wins, a zero entry
+that permits fallback, and two aliases for the same glyph. Check both
+nominal lookup and sorted, unique enumeration.
+For a many-to-one character map, split and rejoin adjacent groups for
+the same glyph. Leave a gap before the next group, and put an unusable
+glyph before a valid group at the Unicode ceiling. The lower-priority
+map can cover the gap so per-character fallback would be visible.
+For a trimmed 32-bit character map, exercise the exact Unicode endpoint,
+one code point past it, and a start plus count that would wrap in 32
+bits. Keep the glyph payload complete in all three cases.
+For variation selectors, give a BMP base and a supplementary base the
+same low 16 bits. Move the default and non-default tables without
+changing selector order, keep the last table at the end of the subtable,
+and check both ends of the longest default range and its neighbors.
+For mirroring, map different characters to the same input glyph. Give
+only one of them a mapped Unicode mirror so the result shows whether
+shaping chose that mirror or the glyph alternate.
+For automatic fractions, map a decimal digit and a superscript to the
+same glyph. Use a separate form for a digit between two fraction slashes
+so the result exposes both sets of feature masks.
+For fallback spaces, let an explicit mapping share the space glyph
+with a fallback. Vary the donor's advance so the widths expose which
+characters required fallback.
+For fallback mark placement, stack two differently sized marks of the
+same class, then switch classes on the same side of the base. That
+checks when positioning starts from the base's bounds again.
+For MATH glyph information, give the tables different coverages and
+place a shared glyph at a different row in each one. Use a zero value
+and an absent record to check that membership survives zero values.
+For varied MATH kerning, let formerly distinct heights meet at a
+three-way tie with different values in the tied slots. Move back by
+omitting one axis so the model also checks that the corner resets.
+For coordinate remapping, bend two axes differently and give each axis
+its own observable advance. Put CSS Regular at a different point from
+the font's declared weight so an omitted setting identifies the default
+the caller actually gets.
+For explicit axis settings, assign distinct advances to legal tags that
+differ only by case. Give an omitted axis a nonzero default so the run
+reveals whether omission restored that default.
+For traced shaping, compare each glyph with its cluster and origin.
+Repeat a phrase in different feature ranges so reordering exposes any
+origin that changed its position or lost its structural kind.
+For cluster ranges, slice the original UTF-8 bytes and compare the exact
+text. Two valid slices can still split glyphs that share one cluster.
+For cluster flags, include a boundary that normalization merges and
+one that survives. Compare the flags together with glyph IDs and byte
+offsets so stale flags are visible even when the glyphs are correct.
+For mark attachment, calculate the final pen and anchor coordinates from
+signed advances and independent anchors. Give each ligature component a
+distinct anchor, and keep the placement of a stacked mark sensitive to
+its parent's displacement.
+For variable mark anchors, vary the source and target independently and
+include positive and negative half-unit deltas. Reverse the order of
+static and variable writers so the final coordinates identify the last
+lookup. Check axis replacement, then reset the same prepared face.
+For mark lookup coverage, put a nonmark at the end of a later subtable's
+range and give shared glyphs distinct anchors in each subtable. Check that
+disabling the feature at one cluster leaves the other clusters active.
+When feature variations select the lookup, assert the face's normalized
+coordinates. Loading a font can apply CSS Regular to a weight axis whose
+design default differs.
+For required features with alternates, put GSUB and GPOS changes at
+different thresholds. Disable both feature tags globally and on disjoint
+ranges. Distinct glyphs and advances identify which alternate was used
+before, between and after the thresholds.
+For a flat `avar` segment, check both knots, an interior point and one
+encoded step on either side. A custom axis avoids CSS defaults, and a
+metric driven by that axis shows that the mapped coordinate reaches its
+consumer.
+For legacy kerning across a GDEF mark, test the mark between two bases
+and at the start of a pair. Vary the feature range on each endpoint and
+check the unsafe break flags as well as the advances.
+For a mark after a nested ligature, arrange for a directly mapped
+intermediate to produce the same final glyph. Give each component a
+distinct anchor so the visible placement identifies which earlier
+input supplied the mark.
+For stacking across ligature components, give each component the same
+starting anchor and reuse one mark glyph. Compare histories that put the
+same marks on one component or several. Their offsets show where a
+stack restarts even when their glyphs and clusters agree.
+For mark filtering after substitution, compare a replacement with the
+same glyph reached directly. Give the source and replacement different
+attachment classes. Vary the filtering set independently of those
+classes to check which lookup flag controls positioning.
+For glyph deletion, put the same multibyte character on either side of a
+survivor and set a feature range that covers just one of its original
+byte positions. Check the merged cluster and whether the later
+positioning uses the survivor's feature mask.
+For RTL feature ranges, distinguish a character's logical UTF-8 start
+from its continuation byte. Use asymmetric pair adjustments on both
+glyphs so the run exposes which pair was eligible after reversal.
+For default-ignorables, make a font map and substitute a soft hyphen.
+Give the replacement distinct kerning on each side. Mask the
+substitution to check that kerning can instead reach across the
+unchanged soft hyphen.
+For MATH constructions, give tied advances distinct glyphs in an order
+that differs from glyph-ID order. Use measurements on both sides of the
+signed 16-bit boundary to catch a signed read of an unsigned field.
+For Thai preprocessing, pair an authored nikhahit with one produced by
+SARA AM. Give them the same glyph and different expected orders so the
+model detects reordering even when output glyphs and counts still agree.
+For cursive attachment, hold the text direction fixed and change only the
+lookup flag. Use asymmetric signed anchors and compare which endpoint
+keeps its baseline. For point anchors at design size, make the stored
+anchor coordinates differ from the referenced contour points. Vary the
+outline and check its bounds alongside the unchanged attachment.
+For variable cursive anchors, give both anchors deltas near the limit
+of binary32 integer precision. Include anchors with opposite signs so
+the result depends on rounding the subtraction as well as its operands.
+For Arabic joining, vary context across the same first or last letter
+and model transparent marks, join controls and true line boundaries
+before applying the font's substitutions.
+For Indic stage boundaries, use one lookup that detects the pre-base
+matra in an early stage and a second lookup that detects the reph after
+final reordering. Use distinct glyphs for both observations and check
+what changes when a join control keeps a visible halant.
+Use `Model.witness` or `Model.explain` to inspect a shortest failing
+history when debugging.
+
+When an existing check appears to cover the rule, try the mutation there
+before building a new fixture. Skipping interpolation across the start of
+a contour, for example, already fails the outline model's exact bounds
+check, and sorting extension pair subtables by byte address already
+fails the Inter position checkpoint. Stop a pass once the interaction
+has independent coverage and further cases would repeat the same
+evidence. Keep larger input spaces, resource scaling and reference
+implementation agreement in their existing checks.
+The roc-pdf contributor guide describes the approach that inspired these
+passes. https://github.com/lukewilliamboswell/roc-pdf/blob/75a9b4880838dd7cab7a4a55d4a655bc890b8a74/docs/testing.adoc[Designing correctness oracles]
+
+[source,sh]
+----
+blueprint run test
+blueprint run spec-smoke
+----
+
+The first command runs deterministic models and proofs in
+`fuzz/spec/main.roc` through the served package bundle. The second builds
+that app with `roc build --fuzz --opt=speed`, checks each model's declared
+examples and runs a short bounded search. Give each required goal a named
+example that reaches it. The smoke runner verifies these witnesses in the
+native report even when exploration reaches the same goals. Both commands
+also run as part of `blueprint run check`. To diagnose a native failure,
+use the replay command printed by the runner.
+
 == Targets and their contracts
 
 Each target is a roc-fuzz app built natively with `roc build --fuzz`. Its
@@ -215,8 +505,9 @@ not finished until its target exists, is seeded and is registered in
 
 == Layout
 
-The targets live in `fuzz/` as `<target>.roc`. They name the package as
-`../package/main.roc`, but `run_fuzz.py` always builds them against the
+Target modules live in `fuzz/src/`. The reader, shaping and variation
+apps in `fuzz/` collect them with `Fuzz.suite`. The apps name the package
+as `../package/main.roc`, and `run_fuzz.py` builds them against the
 `roc bundle` output, exactly what ships: it bundles the package, serves
 the bundle from a loopback address (`scripts/flight.py`) and passes
 `--replace-dep ./package/main.roc <url>` to `roc build --fuzz`, so they
@@ -233,8 +524,11 @@ app [target] {
 	fuzz: platform "<pinned roc-fuzz URL>",
 }
 
-import build.FontBuild
-import font.Font
+import fuzz.Fuzz
+import src/FontRead
+import src/FontCmap
+
+target = Fuzz.suite([FontRead.target, FontCmap.target])
 ----
 
 `package/main.roc` never reaches `tests/support/`, so `roc bundle` and
@@ -246,7 +540,8 @@ Everything else lives in `fuzz/`:
 
 ----
 fuzz/
-  <target>.roc              roc-fuzz targets
+  *_suite.roc               suite apps
+  src/Font*.roc             individual targets
   seeds/<target>.json       reviewed starting inputs, each with a reason
   dictionaries/font.dict    tags, signatures and edge values
   dictionaries/narrow.dict  choice bytes for the narrow targets
@@ -277,28 +572,30 @@ seeds, fonts present and compiler. It is the CI check and runs as a step of
 `scripts/check.roc`. `campaign` and `nightly` grow one persistent corpus
 per target and are for finding new failures.
 
-roc-fuzz 0.6.2 bounds framed inputs to 1 MiB. The seed builder reports
+roc-fuzz 0.8.0 bounds framed inputs to 1 MiB. The seed builder reports
 files above that bound instead of silently including unusable inputs; larger
 real fonts remain covered by conformance and benchmarks.
 
-Each run uses the target binary's supervised `run` command, which records
+The runner builds each selected suite once, checks its target inventory,
+and passes `--target=<name>` to its supervised `run` command. Each run records
 provenance (commit, compiler version, roc-fuzz release and bundle digest)
 and keeps evidence even when the target crashes. Working state goes under
 the ignored `.roc-font-tmp/fuzz/` (or `$ROC_FONT_TMPDIR/fuzz/`):
 
 ----
-bin/<target>              built binaries
+bin/<suite>               built suite binaries
 corpus/<target>/          campaign corpus
 smoke-corpus/<target>/    recreated for each smoke run
 runs/<target>/<mode>/     report.json, summary.md, run.log, failures/
+runs/spec/<target>/       native reports for spec model targets
 crashes/<target>/<sha256> harvested failure inputs
 ----
 
 The roc-fuzz platform is pinned by release, bundle hash and asset SHA-256
-in `ROC_FUZZ_RELEASE` in `scripts/run_fuzz.py`. Every target must declare
+in `ROC_FUZZ_RELEASE` in `scripts/run_fuzz.py`. Every suite app must declare
 exactly that platform URL; `check-pin` (and every run) verifies it, and
 verifies the cached download's digest when it is present. To upgrade,
-change the URL in every target and the record in the script together.
+change the URL in every app and the record in the script together.
 
 == Seeds and corpus
 
@@ -378,12 +675,13 @@ crash may be added to `fuzz/seeds/` with its reason.
 
 == Adding a target
 
-. Write the target app with a doc comment stating its input format and its
-  contract, and make every broken promise `crash` with a specific message.
+. Write a module in `fuzz/src/` with a doc comment stating its input format
+  and contract. Expose its `target` on the module's namesake type, add it
+  to the suite, and make every broken promise `crash` with a specific message.
 . Include an allocation check at two sizes and `Fuzz.expect_no_leaks!` when
   the stage allocates in proportion to its input.
 . Add `fuzz/seeds/<target>.json` and, if useful, a dictionary.
-. Register it in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
+. Register it and its suite in `TARGETS` in `scripts/run_fuzz.py` with its input bound,
   timeout and a one-line contract; a narrow target, whose input is choices
   rather than a font file, sets `font_files=False`.
 . Run `python3 scripts/run_fuzz.py smoke <target>` and a short campaign

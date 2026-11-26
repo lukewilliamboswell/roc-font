@@ -16,6 +16,12 @@ import VariationTests
 import FuzzRegressionTests
 import GposFlagTests
 import TraceTests
+import ScalarShapingTests
+import ArabicShapeTests
+import IndicShapeTests
+import ThaiShapeTests
+import MarkAttachmentTests
+import MarkLigatureTests
 import QueryTests
 import ParityTests
 

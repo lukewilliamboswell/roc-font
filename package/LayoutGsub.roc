@@ -122,6 +122,7 @@ LayoutGsub := {
 
 	## One lookup of a plan: its index, its feature mask, whether ZWJ and
 	## ZWNJ are skipped automatically, and whether it is the `rand` feature's.
+	## The mask can carry `per_syllable` in addition to its feature bits.
 	Step : { index : U64, mask : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool }
 
 	## The bounds of one application: a run never grows past `limit`
@@ -134,11 +135,19 @@ LayoutGsub := {
 	## when none did, so the run is complete).
 	Applied : { items : List(Item), stopped : U64 }
 
+	## State shared by the lookup ranges on either side of a script's
+	## reordering pass. A pause keeps consumed budget, ligature identity
+	## and the random sequence, along with recyclable lookup buffers.
+	Progress : { serial : U64, random : U64, ops : U64, stopped : U64, spare : List(Item), work : Work }
+
+	initial_progress : Progress
+	initial_progress = { serial: 0, random: 1, ops: 0, stopped: 0, spare: [], work: { scratch: [], frames: [], positions: [] } }
+
 	## What a lookup is applied with: its mask and properties, the joiner
 	## rules, `rand`, and the index in the plan of the step being applied
 	## (recorded in the origin of every glyph it substitutes, also through
 	## nested lookups).
-	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, step : U64 }
+	Ctx : { mask : U64, props : U64, auto_zwnj : Bool, auto_zwj : Bool, random : Bool, per_syllable : Bool, step : U64 }
 
 	## HarfBuzz's buffer while a lookup applies: the input `info` read from
 	## `idx`, and, when `output`, the output written so far. `serial`
@@ -172,6 +181,25 @@ LayoutGsub := {
 	## The unsafe-to-break flag in an item's mask. Lookup masks never hold it.
 	unsafe : U64
 	unsafe = 0x8000000000000000
+
+	## A lookup step's input and context matches stay within its Indic
+	## syllable. This flag is only set on a step, outside the feature bits.
+	per_syllable : U64
+	per_syllable = 0x4000000000000000
+
+	## Indic syllable identity and kind, packed in item mask bits 42–49.
+	## Zero means there is no syllable restriction.
+	syllable : Item -> U64
+	syllable = |item| item.mask.shr_zf_wrap(42).bitwise_and(0xFF)
+
+	with_syllable : Item, U64 -> Item
+	with_syllable = |item, identity| {
+		mask = item.mask.bitwise_and(0xFFFC03FFFFFFFFFF).bitwise_or(identity.bitwise_and(0xFF).shl_wrap(42))
+		{ ..item, mask }
+	}
+
+	match_syllable : Ctx, Item -> U64
+	match_syllable = |ctx, item| if (ctx.per_syllable) LayoutGsub.syllable(item) else 0
 
 	## The bounds that can stop work, as bits of `stopped`: a substitution
 	## not made because the run would outgrow `Limits.limit`, a rule's
@@ -319,12 +347,11 @@ LayoutGsub := {
 
 	## Which substitution produced a glyph, for `Font.shape_traced`. Kept
 	## in bits no other part of an item uses: the kind in props bits 41-43,
-	## the plan step that made the substitution in props bits 44-60, and a
-	## ligature's component count in mask bits 32-38. A plan has fewer
-	## than 2^17 steps (two stages of at most 65535 lookups, the format's
-	## count), and a ligature at most `max_context` (64) components.
-	## Writing the bits costs no allocation, so untraced shaping pays
-	## nothing measurable for them.
+	## the plan step that made the substitution in props bits 44-60
+	## (low 17 bits) and mask bits 39-41 (high 3 bits), and a ligature's
+	## component count in mask bits 32-38. This holds 16 stages of up to
+	## 65535 lookups each, and a ligature of at most `max_context` (64)
+	## components, without extra allocations.
 	##
 	## Kinds: `origin_mapped` (0, from the character map, never
 	## substituted), `origin_substituted` (one glyph for one), and the
@@ -353,7 +380,7 @@ LayoutGsub := {
 	origin_kind = |item| item.props.shr_zf_wrap(41).bitwise_and(0x7)
 
 	origin_step : Item -> U64
-	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0x1FFFF)
+	origin_step = |item| item.props.shr_zf_wrap(44).bitwise_and(0x1FFFF).bitwise_or(item.mask.shr_zf_wrap(22).bitwise_and(0xE0000))
 
 	origin_components : Item -> U64
 	origin_components = |item| item.mask.shr_zf_wrap(32).bitwise_and(0x7F)
@@ -362,7 +389,7 @@ LayoutGsub := {
 	with_origin : Item, U64, U64, U64 -> Item
 	with_origin = |item, kind, step, components| {
 		props = item.props.bitwise_and(0xE00001FFFFFFFFFF).bitwise_or(kind.bitwise_and(0x7).shl_wrap(41)).bitwise_or(step.bitwise_and(0x1FFFF).shl_wrap(44))
-		mask = item.mask.bitwise_and(0xFFFFFF80FFFFFFFF).bitwise_or(components.bitwise_and(0x7F).shl_wrap(32))
+		mask = item.mask.bitwise_and(0xFFFFFC00FFFFFFFF).bitwise_or(components.bitwise_and(0x7F).shl_wrap(32)).bitwise_or(step.bitwise_and(0xE0000).shl_wrap(22))
 		{ ..item, props, mask }
 	}
 
@@ -387,24 +414,36 @@ LayoutGsub := {
 	## lookups; the run stays total and finite.
 	apply : LayoutGsub, List(Step), List(Item), Limits -> Applied
 	apply = |shape, plan, items, limits| {
+		result = LayoutGsub.apply_steps(shape, plan, 0, plan.len(), items, limits, LayoutGsub.initial_progress)
+		{ items: result.items, stopped: result.progress.stopped }
+	}
+
+	## Apply the planned steps in [first, end). Script stages use adjacent
+	## ranges of the same plan so every origin still names a unique step.
+	apply_steps : LayoutGsub, List(Step), U64, U64, List(Item), Limits, Progress -> { items : List(Item), progress : Progress }
+	apply_steps = |shape, plan, first, end, items, limits, progress| {
+		if first == end {
+			return { items, progress }
+		}
 		var $run = items
 		# The previous run of a general lookup, whose allocation the next one
 		# writes into.
-		var $spare = []
-		var $serial = 0
-		var $random = 1
-		var $ops = 0
-		var $stopped = 0
-		var $work = { scratch: [], frames: [], positions: [] }
+		var $spare = progress.spare
+		var $serial = progress.serial
+		var $random = progress.random
+		var $ops = progress.ops
+		var $stopped = progress.stopped
+		var $work = progress.work
 		# A digest of the run's glyphs, made again after each lookup that
 		# runs: a lookup whose digest misses it cannot start anywhere, so
 		# it is passed over without visiting the run.
 		var $digest = LayoutGsub.run_digest($run)
-		for step_index in 0..<plan.len() {
+		for step_index in first..<end {
 			step = plan.get(step_index) ?? { index: 0, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }
 			lookup = shape.lookups.get(step.index) ?? LayoutGsub.no_lookup
-			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, step.mask) {
-				ctx = { mask: step.mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, step: step_index }
+			feature_mask = step.mask.bitwise_and(0xFFFFFFFF)
+			if lookup.count > 0 and LayoutGsub.digests_meet(lookup, $digest) and LayoutGsub.any_start(lookup, $run, feature_mask) {
+				ctx = { mask: feature_mask, props: LayoutGsub.sanitize_props(shape, lookup.props), auto_zwnj: step.auto_zwnj, auto_zwj: step.auto_zwj, random: step.random, per_syllable: step.mask.bitwise_and(LayoutGsub.per_syllable) != 0, step: step_index }
 				if lookup.reverse {
 					{ buf, work } = LayoutGsub.apply_backward(shape, lookup, ctx, { info: $run, out: [], idx: 0, output: False, serial: $serial, random: $random, ops: $ops, stopped: $stopped, aliased: False }, limits, $work)
 					{ info, out: _, idx: _, output: _, serial, random, ops, stopped, aliased: _ } = buf
@@ -431,7 +470,7 @@ LayoutGsub := {
 				$digest = LayoutGsub.run_digest($run)
 			}
 		}
-		{ items: $run, stopped: $stopped }
+		{ items: $run, progress: { serial: $serial, random: $random, ops: $ops, stopped: $stopped, spare: $spare, work: $work } }
 	}
 
 	## The digest of every glyph of a run, in the form of a lookup's (see
@@ -734,6 +773,35 @@ LayoutGsub := {
 			}
 			$n
 		}
+
+	## Test the exact two-glyph input of a direct ligature lookup. Modern
+	## Devanagari uses this during planning, before actual substitutions.
+	would_ligate : LayoutGsub, List(Step), U64, U64, U64, U64 -> Bool
+	would_ligate = |shape, steps, start, end, left, right| {
+		for i in start..<end {
+			lookup = shape.lookups.get((steps.get(i) ?? { index: U64.highest, mask: 0, auto_zwnj: False, auto_zwj: False, random: False }).index) ?? LayoutGsub.no_lookup
+			for j in lookup.start..<(lookup.start + lookup.count) {
+				sub = shape.subtables.get(j) ?? LayoutGsub.no_sub
+				if sub.kind == 4 {
+					match LayoutGsub.covered_in(shape.ranges, sub.coverage, sub.coverage_len, left) {
+						Ok(at) if at < sub.data_len => {
+							last = shape.values.get(sub.data + at + 1) ?? 0
+							var $p = shape.values.get(sub.data + at) ?? 0
+							while $p < last {
+								count = shape.values.get($p + 1) ?? 0
+								if count == 1 and (shape.values.get($p + 2) ?? U64.highest) == right {
+									return True
+								}
+								$p = $p + 2 + count
+							}
+						}
+						_ => {}
+					}
+				}
+			}
+		}
+		False
+	}
 
 	# Ligature substitution (HarfBuzz's `LigatureSet::apply`): the first
 	# ligature of the set whose components match, skipping what the lookup
@@ -1056,14 +1124,14 @@ LayoutGsub := {
 	## HarfBuzz's skipping iterator deciding about one item: `Skip` it,
 	## it is a `Match`, or `NoMatch` (stop). `context` for backtrack and
 	## lookahead, which ignore masks and skip ZWJ always.
-	step_item : LayoutGsub, Ctx, Item, Bool, Bool -> [Match, NoMatch, Skip]
-	step_item = |shape, ctx, item, context, matched| {
+	step_item : LayoutGsub, Ctx, Item, Bool, U64, Bool -> [Match, NoMatch, Skip]
+	step_item = |shape, ctx, item, context, expected_syllable, matched| {
 		skip = LayoutGsub.skip_of(shape, ctx, item, context)
 		match skip {
 			SkipYes => Skip
 			_ => {
 				masked = context or LayoutGsub.applies(item.mask, ctx.mask)
-				if masked and matched {
+				if masked and matched and (expected_syllable == 0 or LayoutGsub.syllable(item) == expected_syllable) {
 					Match
 				} else {
 					match skip {
@@ -1153,6 +1221,7 @@ LayoutGsub := {
 		} else {
 			first_id = LayoutGsub.lig_id(cur)
 			first_comp = LayoutGsub.lig_comp(cur)
+			expected_syllable = LayoutGsub.match_syllable(ctx, cur)
 			n = info.len()
 			var $total = 0
 			var $at = idx
@@ -1172,7 +1241,7 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, False, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, False, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i - 1, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1238,6 +1307,7 @@ LayoutGsub := {
 		if count == 0 {
 			{ ok: True, start: len }
 		} else {
+			expected_syllable = LayoutGsub.match_syllable(ctx, buf.info.get(buf.idx) ?? LayoutGsub.no_item)
 			var $at = len
 			var $ok = True
 			var $start = len
@@ -1252,7 +1322,7 @@ LayoutGsub := {
 					} else {
 						$at = $at - 1
 						item = before.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, True, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1280,6 +1350,7 @@ LayoutGsub := {
 		} else {
 			info = buf.info
 			n = info.len()
+			expected_syllable = LayoutGsub.match_syllable(ctx, info.get(buf.idx) ?? LayoutGsub.no_item)
 			var $at = start - 1
 			var $ok = True
 			var $end = start
@@ -1294,7 +1365,7 @@ LayoutGsub := {
 					} else {
 						$at = $at + 1
 						item = info.get($at) ?? LayoutGsub.no_item
-						match LayoutGsub.step_item(shape, ctx, item, True, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
+						match LayoutGsub.step_item(shape, ctx, item, True, expected_syllable, LayoutGsub.seq_matches(shape, seq, $i, item.glyph)) {
 							Match => {
 								$searching = False
 							}
@@ -1890,6 +1961,35 @@ LayoutGsub := {
 	## allowed (see `ots_check`).
 	OtsContext : { data : List(U8), glyphs : U64, lookups : U64, sets : [Present(U64), Absent], budget : U64 }
 
+	## Read the layout version and header without glyph or variation data.
+	ots_header : List(U8) -> Try({ script_list : U64, feature_list : U64, lookup_list : U64 }, [Bad(U64)])
+	ots_header = |data| {
+		size = data.len()
+		major = LayoutGsub.u16(data, 0)
+		minor = LayoutGsub.u16(data, 2)
+		# layout.cc 1656-1672: version 1.0 (10-byte header) or 1.1 (14).
+		if !LayoutGsub.fits(0, 10, size) or major != 1 or minor > 1 or (minor == 1 and !LayoutGsub.fits(0, 14, size)) {
+			return Err(Bad(0))
+		}
+		header = if (minor == 0) 10 else 14
+		script_list = LayoutGsub.u16(data, 4)
+		feature_list = LayoutGsub.u16(data, 6)
+		lookup_list = LayoutGsub.u16(data, 8)
+		# Each list may be absent; one present lies past the header and
+		# inside the table (1677-1708). Lookups first, whose count features
+		# use, then features, whose count language systems use.
+		if lookup_list != 0 and (lookup_list < header or lookup_list >= size) {
+			return Err(Bad(8))
+		}
+		if feature_list != 0 and (feature_list < header or feature_list >= size) {
+			return Err(Bad(6))
+		}
+		if script_list != 0 and (script_list < header or script_list >= size) {
+			return Err(Bad(4))
+		}
+		Ok({ script_list, feature_list, lookup_list })
+	}
+
 	## Check a `GSUB` table exactly as OTS 9.3.0 does (`ots/src/layout.cc`,
 	## `OpenTypeLayoutTable::Parse`, and `ots/src/gsub.cc`; line numbers
 	## below are those files'), so a font reads exactly when a browser
@@ -1920,32 +2020,10 @@ LayoutGsub := {
 	## wrong.
 	ots_check : List(U8), U64, [Present(U64), Absent] -> Try({}, [Bad(U64)])
 	ots_check = |data, glyphs, sets| {
+		{ script_list, feature_list, lookup_list } = LayoutGsub.ots_header(data)?
 		size = data.len()
-		major = LayoutGsub.u16(data, 0)
-		minor = LayoutGsub.u16(data, 2)
-		# layout.cc 1656-1672: version 1.0 (10-byte header) or 1.1 (14).
-		if !LayoutGsub.fits(0, 10, size) or major != 1 or minor > 1 or (minor == 1 and !LayoutGsub.fits(0, 14, size)) {
-			return Err(Bad(0))
-		}
-		header = if (minor == 0) 10 else 14
-		script_list = LayoutGsub.u16(data, 4)
-		feature_list = LayoutGsub.u16(data, 6)
-		lookup_list = LayoutGsub.u16(data, 8)
-		base = { data, glyphs, lookups: 0, sets, budget: 64 * size + 1048576 }
-		# Each list may be absent; one present lies past the header and
-		# inside the table (1677-1708). Lookups first, whose count features
-		# use, then features, whose count language systems use.
-		if lookup_list != 0 and (lookup_list < header or lookup_list >= size) {
-			return Err(Bad(8))
-		}
-		if feature_list != 0 and (feature_list < header or feature_list >= size) {
-			return Err(Bad(6))
-		}
-		if script_list != 0 and (script_list < header or script_list >= size) {
-			return Err(Bad(4))
-		}
 		lookups = if (lookup_list != 0 and LayoutGsub.fits(lookup_list, 2, size)) LayoutGsub.u16(data, lookup_list) else 0
-		ctx = { ..base, lookups }
+		ctx = { data, glyphs, lookups, sets, budget: 64 * size + 1048576 }
 		after_lookups = if (lookup_list != 0) LayoutGsub.ots_lookup_list(ctx, lookup_list, 0)? else 0
 		features = if (feature_list != 0) LayoutGsub.ots_feature_list(ctx, feature_list, after_lookups)? else { count: 0, steps: after_lookups }
 		if script_list != 0 {
@@ -3199,11 +3277,37 @@ expect test_ligated(0, True, letters([10, 11, 11])) == { glyphs: [101], clusters
 expect test_ligated(0, True, letters([10, 12, 11])) == { glyphs: [100, 11], clusters: [0, 2] }
 expect test_ligated(0, True, letters([10, 11, 10, 12])) == { glyphs: [102, 100], clusters: [0, 2] }
 
+# A reordering pause keeps ligature numbering and credits each result to
+# its absolute plan step, including steps beyond the first two stages.
+expect {
+	gsub = LayoutGsub.read(liga_gsub(0))?
+	items = [10, 11, 10, 12].map_with_index(|glyph, i| { glyph, cluster: i, mask: if (i < 2) 1 else 2, props: 0 })
+	step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+	last = 0x20000
+	plan = [step].concat(List.repeat({ ..step, mask: 0 }, last - 1)).append({ ..step, mask: 2 })
+	limits = { limit: 64, budget: 64, depth: 8 }
+	first = LayoutGsub.apply_steps(gsub, plan, 0, 1, items, limits, LayoutGsub.initial_progress)
+	second = LayoutGsub.apply_steps(gsub, plan, last, last + 1, first.items, limits, first.progress)
+	second.items.map(|item| item.glyph) == [102, 100]
+		and second.items.map(LayoutGsub.lig_id) == [1, 2]
+		and second.items.map(LayoutGsub.origin_step) == [0, last]
+}
+
 # At the end of the run, or before a glyph no ligature continues with, only
 # the one-glyph ligature applies.
 expect test_ligated(0, True, letters([10])) == { glyphs: [103], clusters: [0] }
 expect test_ligated(0, True, letters([11, 10])) == { glyphs: [11, 103], clusters: [0, 1] }
 expect test_ligated(0, True, letters([10, 13])) == { glyphs: [103, 13], clusters: [0, 1] }
+
+expect {
+	gsub = LayoutGsub.read(liga_gsub(0))?
+	items = [10, 11].map_with_index(|glyph, i| LayoutGsub.with_syllable({ glyph, cluster: i, mask: 1, props: 0 }, i + 1))
+	step = { index: 0, mask: 1, auto_zwnj: True, auto_zwj: True, random: False }
+	limits = { limit: 64, budget: 64, depth: 8 }
+	limited = LayoutGsub.apply(gsub, [{ ..step, mask: step.mask.bitwise_or(LayoutGsub.per_syllable) }], items, limits)
+	unrestricted = LayoutGsub.apply(gsub, [step], items, limits)
+	limited.items.map(|item| item.glyph) == [103, 11] and unrestricted.items.map(|item| item.glyph) == [102]
+}
 
 # A mark the lookup flag ignores is passed over, and stays after the
 # ligature; a mark it does not ignore stops the match.

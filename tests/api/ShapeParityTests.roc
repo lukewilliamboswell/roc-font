@@ -55,6 +55,18 @@ expect shaped(inter, "\u(1EC7)", latin).glyphs == [640]
 # Marks out of canonical order are reordered first.
 expect shaped(inter, "a\u(323)\u(302)", latin) == { glyphs: [518], clusters: [0], advances: [1150], flags: [0] }
 
+# Ring above and acute both have canonical combining class 230. A
+# leading ring blocks the following acute from composing with e. In
+# the reverse order, the acute composes before the ring is considered.
+# Unicode 17.0, §3.11.6 (D115–D117).
+expect {
+	options = Font.ShapeOptions.{ script: "Latn", clusters: Characters }
+	blocked = shaped(inter, "e\u(30A)\u(301)", options)
+	unblocked = shaped(inter, "e\u(301)\u(30A)", options)
+	blocked.glyphs == [614, 2709, 1770] and blocked.clusters == [0, 1, 3]
+		and unblocked.glyphs == [618, 2709] and unblocked.clusters == [0, 3]
+}
+
 # Default-ignorable characters are drawn with the space glyph and no width;
 # a ZWJ continues the cluster before it.
 expect shaped(inter, "a\u(AD)b", latin) == { glyphs: [507, 1777, 578], clusters: [0, 1, 3], advances: [1150, 0, 1254], flags: [0, 0, 0] }

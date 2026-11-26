@@ -1,0 +1,44 @@
+= Mark attachment in horizontal shaping
+
+`Font.shape` and `Font.shape_planned` apply GPOS mark-to-base (4),
+mark-to-ligature (5) and mark-to-mark (6) format 1 lookups. GPOS
+extension positioning (9) can wrap each of these types. The font's
+selected script, language and features decide which lookups run.
+A null target anchor lets the same lookup try its next subtable.
+
+The mark coverage selects a mark record and attachment class. The
+target coverage selects the base, ligature or mark row. A mark skipped
+during ligature substitution retains its original component when that
+ligature is the target. A mark without matching ligature provenance
+uses the last component. Mark-to-mark checks that the two marks belong
+to the same base or component, with the OpenType glyph properties for
+ligated marks and the lookup's GDEF filtering applied.
+
+Anchor formats 1 and 2 use their stored design coordinates. A format 2
+point index is intended for grid fitting. The font-unit API uses no
+fitted contour. A format 3 variation index changes the coordinates at
+the selected location. Pixel-size device corrections have no effect
+in the font-unit API. Reading checks coverage, count, class, anchor and
+device references before shaping. Broken GPOS structure is a
+`BadTable` error in both read modes. In a variable font, invalid
+variation indices follow the variation-data policy in
+`Font.ReadOptions`.
+
+Mark attachment replaces the mark's offsets at its lookup. The
+vertical offset includes the target's vertical position at that step.
+The horizontal offset is resolved from the final advances and the
+target's final horizontal offset before the run is put in visual
+order. Attachment links have the signed 16-bit distance limit used
+by HarfBuzz. Each lookup flags overlapping unsplittable spans together
+so a long stack of marks can share one base with linear work.
+
+The public checkpoint uses David Libre Regular with script `Hebr`,
+language `he` and right-to-left direction. Hebrew vowels show `mark`
+placement and a pair of combining accents shows `mkmk` placement in
+the same run. The mark-to-ligature checkpoint uses separate first and
+last component anchors. The bounded model adds a missing class anchor,
+a filtered intervening mark and repeated stacking in both directions.
+The focused native fuzz targets check parser diagnostics and positioning
+independently.
+
+See the https://learn.microsoft.com/en-us/typography/opentype/spec/gpos[OpenType GPOS specification].

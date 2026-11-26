@@ -1,4 +1,5 @@
 import font.Font
+import build.FontBuild
 import "../../tests/fonts/variable-layout/kern-var.ttf" as kern_file : List(U8)
 import "../../tests/fonts/variable-layout/feature-var.ttf" as feature_file : List(U8)
 import "../../tests/fonts/variable/var-outlines.ttf" as outlines_file : List(U8)
@@ -9,7 +10,7 @@ import "../../tests/fonts/variable/var-format1.ttf" as format1_file : List(U8)
 ## The tests of variable fonts away from their default design (kerning
 ## that varies, glyph boxes of moved outlines, named instances and
 ## normalised coordinates) and of the built-in fonts, through the public
-## `Font` API. Every expected value is HarfBuzz 14.6.0's (uharfbuzz
+## `Font` API. Unless noted, expected values are HarfBuzz 14.6.0's (uharfbuzz
 ## 0.56.3), printed by `tests/api/oracle_variations.py`; family names are
 ## fontTools 4.61.1's. Run with `roc test tests/api/main.roc`.
 VariationTests :: {}.{}
@@ -569,6 +570,47 @@ expect located(format1, 5, [{ tag: "opsz", value: 48 }]) == ([0, 16384], [500, 1
 expect located(format1, 5, [{ tag: "wght", value: 800 }, { tag: "opsz", value: 48 }]) == ([16384, 16384], [500, 1087, 519, 530, 543])
 expect located(format1, 5, [{ tag: "wght", value: 600 }, { tag: "opsz", value: 30 }]) == ([8192, 8192], [500, 779, 520, 530, 541])
 expect located(format1, 5, [{ tag: "wght", value: 300 }, { tag: "opsz", value: 10 }]) == ([-8192, -8192], [500, 510, 520, 530, 540])
+
+# The HVAR delta 2^31 - 1024 is exact in single precision. When added
+# to the base advances, it takes A, B and C just below, at and just above
+# I32.highest. D takes a negative total. The public advance and the shaped
+# base advance hold these totals in 0..=I32.highest. The HarfBuzz 14.6.0
+# reference run rounded all three positive sums to 2^31 in single
+# precision and returned I32.lowest.
+wide_advance_bytes : List(U8)
+wide_advance_bytes = {
+	delta = 2147482624.I64
+	deltas = [0, delta, delta, delta, -2048]
+	rows = FontBuild.pack([U16(deltas.len()), U16(0x8001), U16(1), U16(0)].concat(deltas.map(|value| U32(value.to_u32_wrap().to_u64()))))
+	regions = FontBuild.pack([U16(1), U16(1), I16(0), I16(16384), I16(16384)])
+	store = FontBuild.pack([U16(1), Ref32(regions), U16(1), Ref32(rows)])
+	cmap = FontBuild.cmap([{ system: 3, encoding: 1, subtable: FontBuild.cmap4([{ first: 'A', last: 'D', delta: 65536 - 64, glyphs: [] }]) }])
+	FontBuild.glyphs_font(
+		[500, 1022, 1023, 1024, 1024],
+		cmap,
+		[
+			{ tag: "fvar", data: FontBuild.fvar([{ tag: "wght", min: 100, default: 400, max: 900 }]) },
+			{ tag: "HVAR", data: FontBuild.hvar(store, []) },
+		],
+	)
+}
+
+expect {
+	font = match Font.from_bytes(wide_advance_bytes, Font.ReadOptions.{ strict: True }) {
+		Ok(value) => value
+		Err(problems) => crash "valid wide HVAR fixture rejected: ${Str.inspect(problems)}"
+	}
+	heavy = Font.at(font, Font.Variation.{ weight: Black })
+	glyphs = [1, 2, 3, 4]
+	direct = glyphs.map(|glyph| Font.advance(heavy, glyph))
+	run = Font.shape(heavy, "ABCD", Font.ShapeOptions.{})
+	shaped = run.advances.map(|advance| advance.x)
+	expected = [2147483646, I32.highest, I32.highest, 0]
+	if direct != expected or shaped != expected {
+		crash "wide HVAR returned direct ${Str.inspect(direct)} and shaped ${Str.inspect(shaped)}. Expected ${Str.inspect(expected)}"
+	}
+	run.glyphs == glyphs
+}
 
 # `MVAR`: the x height (default 500) and the underline position (default 0).
 expect {

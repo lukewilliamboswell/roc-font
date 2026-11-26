@@ -926,10 +926,19 @@ TableVar := {
 	}
 
 	## A glyph's advance at a location: the default advance plus its rounded
-	## delta, never below zero (as HarfBuzz; `hmtx` advances are unsigned).
+	## delta, bounded by the nonnegative part of the public I32 range.
 	advance : Hvar, List(U32), U64, I64 -> I64
-	advance = |hvar, scalars, glyph, default_advance|
-		(default_advance + TableVar.advance_delta(hvar, scalars, glyph)).max(0)
+	advance = |hvar, scalars, glyph, default_advance| {
+		total = default_advance + TableVar.advance_delta(hvar, scalars, glyph)
+		# One unsigned comparison handles both limits before narrowing.
+		if total.to_u64_wrap() <= 2147483647 {
+			total
+		} else if total < 0 {
+			0
+		} else {
+			2147483647
+		}
+	}
 
 	## Read `MVAR` for a font with `axis_count` axes.
 	read_mvar : List(U8), U64 -> Try(Mvar, List(Problem))
@@ -1048,12 +1057,40 @@ TableVar := {
 	bit_length : U128 -> I64
 	bit_length = |x| 128 - x.count_leading_zero_bits().to_i64()
 
-	# Round sig * 2^exp to the nearest single-precision value. The lowest bit
-	# of sig may stand for any nonzero remainder below it (a sticky bit), as
-	# long as sig has at least two bits below the rounding position; the
-	# widening below guarantees that.
+	# Round sig * 2^exp to the nearest single-precision value. Callers
+	# may use a sticky low bit for a nonzero remainder when at least two
+	# bits lie below the rounding position.
 	f32_pack : Bool, U128, I64 -> U32
 	f32_pack = |negative, sig_in, exp_in| {
+		if sig_in > 0 and sig_in <= 0xFFFFFFFFFFFFFFFF {
+			sig = sig_in.to_u64_wrap()
+			n = 64 - sig.count_leading_zero_bits().to_i64()
+			top = exp_in + n - 1
+			if top >= -126 {
+				sign = if (negative) 0x80000000.U32 else 0
+				if top > 127 {
+					return sign.bitwise_or(0x7F800000)
+				}
+				rounded =
+					if n <= 24 {
+						sig.shl_wrap((24 - n).to_u8_wrap())
+					} else {
+						drop = (n - 24).to_u8_wrap()
+						kept = sig.shr_zf_wrap(drop)
+						rest = sig - kept.shl_wrap(drop)
+						half = (1.U64).shl_wrap(drop - 1)
+						if (rest > half or (rest == half and kept.bitwise_and(1) != 0)) kept + 1 else kept
+					}
+				# A rounding carry adds directly to the encoded exponent.
+				exponent = (top + 127).to_u32_wrap().shl_wrap(23)
+				return sign.bitwise_or(exponent + (rounded.to_u32_wrap() - 0x800000))
+			}
+		}
+		TableVar.f32_pack_wide(negative, sig_in, exp_in)
+	}
+
+	f32_pack_wide : Bool, U128, I64 -> U32
+	f32_pack_wide = |negative, sig_in, exp_in| {
 		sign = if (negative) 0x80000000 else 0
 		if sig_in == 0 {
 			return sign
@@ -1344,6 +1381,25 @@ mapped_hvar = [
 	[0x80, 0x00, 0x00, 0x11, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x05],
 	[0x00, 0x03],
 ].join_map(|row| row)
+
+# Compare both packers at exact integers, even and odd ties, the
+# significand carry, and the normal and infinity boundaries.
+expect {
+	magnitudes : List(U64)
+	magnitudes = [1, 0x7FFFFF, 0x800000, 0x1000000, 0x1000001, 0x1000002, 0x1000003, 0x1FFFFFE, 0x1FFFFFF, 0x123456789ABC, 0xFFFFFFFFFFFFFFFF]
+	tops : List(I64)
+	tops = [-150, -149, -127, -126, -1, 0, 1, 126, 127, 128]
+	magnitudes.all(
+		|sig| tops.all(
+			|top| [False, True].all(
+				|negative| {
+					exp = top - (63 - sig.count_leading_zero_bits().to_i64())
+					TableVar.f32_pack(negative, sig.to_u128(), exp) == TableVar.f32_pack_wide(negative, sig.to_u128(), exp)
+				},
+			),
+		),
+	)
+}
 
 # ------------------------------------------------------------ the fixture's instances
 

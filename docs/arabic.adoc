@@ -1,0 +1,29 @@
+= Horizontal Arabic shaping
+
+Select `Arab` and supply one logical run of text to `Font.shape` or
+`Font.shape_planned`. At style or font boundaries within a line, pass
+adjacent logical text with `Font.ArabicContext`. The five nearest scalars
+on each side can affect joining forms. Only the item contributes glyphs,
+clusters and positions. Leave the context empty at a true line edge.
+
+Joining uses Unicode 18.0.0 joining types. Transparent marks preserve the
+connection between letters, U+200D ZERO WIDTH JOINER participates in
+joining, and U+200C ZERO WIDTH NON-JOINER interrupts it. The plan applies
+`ccmp` and `locl`, then `isol`, `fina`, `medi`, and `init` in order, then
+`rlig` and the remaining contextual and ligature features. Font-defined
+positioning subsequently attaches marks and cursive glyphs where the
+font provides those lookups.
+
+The reference is HarfBuzz 14.6.0 for modern horizontal Arabic and the
+pinned Noto Sans Arabic 2.013 face. This slice excludes legacy Arabic
+presentation-form fallback, `stch` elongation, Arabic mark reordering for
+modifier combining marks, and joining shapers for other scripts.
+
+The `Arabic` model checks glyph IDs, explicit clusters and unsafe break
+flags independently of positioning and ligature substitution. The API
+fixture checks staged features, joining controls and the growth budget.
+The cached reference cases compare real-font glyphs, byte clusters,
+advances, offsets and unsafe break flags.
+
+Regenerate the compact joining table with
+`python3 tools/ucd/generate_arabic.py` and verify it with `--check`.

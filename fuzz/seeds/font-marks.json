@@ -1,0 +1,40 @@
+{
+  "about": "The first byte selects mark lookup type 4 through 6 by remainder modulo 3. Bit 2 wraps the lookup in an extension. The next bytes select signed anchor coordinates and repeat count. ff selects the real David Libre font with a feature setting and UTF-8 text.",
+  "seeds": [
+    {
+      "why": "Type 4 with a signed offset",
+      "parts": [
+        {
+          "hex": "00 15 e0 10"
+        }
+      ]
+    },
+    {
+      "why": "Type 5 with a default last component",
+      "parts": [
+        {
+          "hex": "01 80 90 02"
+        }
+      ]
+    },
+    {
+      "why": "Type 6 stack wrapped in an extension",
+      "parts": [
+        {
+          "hex": "05 f0 01 20"
+        }
+      ]
+    },
+    {
+      "why": "RTL Hebrew with a mark-to-mark accent stack",
+      "parts": [
+        {
+          "hex": "ff 00"
+        },
+        {
+          "text": "הֲבֵל א̀́"
+        }
+      ]
+    }
+  ]
+}

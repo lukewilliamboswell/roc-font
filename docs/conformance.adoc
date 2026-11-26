@@ -836,6 +836,14 @@ id. The policy, as in roc-parser:
 * An entry names one case. There are no patterns.
 * Scored cases are never listed; promote a case to gating first.
 
+At non-default variation locations, Roc follows HarfBuzz 14.6 when a
+point-attached composite is itself nested after a sibling. The parent
+point is indexed in the accumulated outline. FontTools indexes within
+the enclosing composite, as the `glyf` specification describes, so the
+same input can yield different extents.
+https://github.com/harfbuzz/harfbuzz/blob/14.6.0/src/OT/glyf/Glyph.hh#L449-L458[HarfBuzz point placement]
+https://learn.microsoft.com/en-us/typography/opentype/spec/glyf#composite-glyph-description[OpenType composite glyphs]
+
 == Fonts
 
 === Committed fixtures
@@ -981,7 +989,7 @@ curate from. `tests/cases/curated.jsonc` lists the cases in scope, each with:
 (fields stripped, whitespace collapsed). The importer uses `line` when the
 hash matches there, otherwise the nearest line with that hash (and asks for
 `line` to be updated); a hash found nowhere fails the import. `milestone` is
-the `TODO.md` milestone expected to make the case pass (`M1-now` passes
+the stage expected to make the case pass (`M1-now` passes
 today, `M1-next` lands with work in progress, `post-0.1` after 0.1.0).
 `fonts` pins every font used by SHA-256 and size; `font_size_cap` (65536)
 bounds committed fonts. The list is JSONC, but `--pin-fonts` rewrites it in

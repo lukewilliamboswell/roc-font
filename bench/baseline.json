@@ -20,31 +20,31 @@
       "requested_bytes": 2400616
     },
     "adv-many-kern-pairs/kerning/cjk-large": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "bece3414fe525792172fcdc5be0e184aac3430670fc697365503b0a56bb112bf",
       "font_sha256": "643e507f05476ce01b99c4d003fff9546003bc224a291997cb867409d42be7aa",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 1498591,
-      "requested_bytes": 2152066
+      "requested_bytes": 1977298
     },
     "adv-many-kern-pairs/kerning/cjk-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "88944e4229f2907915f19089e240b81da61986b3ad843b35eeec22585bf47627",
       "font_sha256": "643e507f05476ce01b99c4d003fff9546003bc224a291997cb867409d42be7aa",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 514220,
-      "requested_bytes": 269337
+      "requested_bytes": 247481
     },
     "adv-many-kern-pairs/kerning/cjk-small": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "d5db0a8a050cb7742c9f089d1ec78d802217a68e3d6faa0a42c3fea3fa63e011",
       "font_sha256": "643e507f05476ce01b99c4d003fff9546003bc224a291997cb867409d42be7aa",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 392159,
-      "requested_bytes": 33922
+      "requested_bytes": 31186
     },
     "adv-many-kern-pairs/read": {
       "allocations": 35,
@@ -56,13 +56,13 @@
       "requested_bytes": 22589
     },
     "adv-many-kern-pairs/shape/cjk-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "c3c2fba8a905e93197023be51db49f683426480e3fc8a5841f69a76fabbfb5d9",
       "font_sha256": "643e507f05476ce01b99c4d003fff9546003bc224a291997cb867409d42be7aa",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 557898,
-      "requested_bytes": 313017
+      "requested_bytes": 291161
     },
     "adv-many-ligature-lookups/read": {
       "allocations": 165,
@@ -74,31 +74,58 @@
       "requested_bytes": 9451780
     },
     "adv-many-ligature-lookups/shape/letters-large": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "f8aa80401c6ce828f36560918a65b1f85c9c283a378c96ee3004e64002f6f502",
       "font_sha256": "f6dc072d0f45da2d7550c94cd51b9515df5d09e6b016e6f0ae4f766b679dd5fb",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 7827433,
-      "requested_bytes": 6353050
+      "requested_bytes": 6095722
     },
     "adv-many-ligature-lookups/shape/letters-medium": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "0e775d67dac4d181c2158cce326f2e1fc2b0cef26f39fb90cbc56eb6f1f4dba5",
       "font_sha256": "f6dc072d0f45da2d7550c94cd51b9515df5d09e6b016e6f0ae4f766b679dd5fb",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 5046249,
-      "requested_bytes": 794562
+      "requested_bytes": 762386
     },
     "adv-many-ligature-lookups/shape/letters-small": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "82aa52326f4433ace61056a8a8cb550525f618bb0ab170862f4904dbfc60b6a3",
       "font_sha256": "f6dc072d0f45da2d7550c94cd51b9515df5d09e6b016e6f0ae4f766b679dd5fb",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 4698601,
-      "requested_bytes": 99682
+      "requested_bytes": 95666
+    },
+    "corpus-amiri-1.003/cmap/bmp-sweep": {
+      "allocations": 0,
+      "case_sha256": "60dc20b310d151bccba59647d8d8abffaec492afa66d6697cf394b27a76b2112",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 957719,
+      "requested_bytes": 0
+    },
+    "corpus-amiri-1.003/read": {
+      "allocations": 141,
+      "case_sha256": "0f010c380114857a0557f11d4fc05725bfa094b551bd66fa68c1ec8f0abea7bf",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 1055321,
+      "requested_bytes": 1408952
+    },
+    "corpus-amiri-1.003/shape/words-medium": {
+      "allocations": 14,
+      "case_sha256": "6c8caf28016e5150b102e6cd305474fcf4843080f204aa6ce10e8558cea73f63",
+      "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0",
+      "leaked": 0,
+      "optional": true,
+      "peak_live_bytes": 1206733,
+      "requested_bytes": 812679
     },
     "corpus-fira-code-6.2/cmap/bmp-sweep": {
       "allocations": 0,
@@ -110,31 +137,31 @@
       "requested_bytes": 0
     },
     "corpus-fira-code-6.2/read": {
-      "allocations": 275,
+      "allocations": 272,
       "case_sha256": "58abf4297f36df23914a90ad31a8d60ada3de4dddd01648e22d3c7b19eeabfed",
       "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 711224,
-      "requested_bytes": 924506
+      "requested_bytes": 924470
     },
     "corpus-fira-code-6.2/shape/words-medium": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "fd1c591bcb6b67ee2964899d7914c678713b44aeed4c9d8427ad045b159a14d3",
       "font_sha256": "04149681350f161aca538858b88d17443c586cacca83c165939a13423fe91a26",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1022807,
-      "requested_bytes": 887247
+      "requested_bytes": 825615
     },
     "corpus-hb-fuzzing-037322204d9b/read": {
-      "allocations": 76,
+      "allocations": 73,
       "case_sha256": "318d613618c9325129fd42351b7de728fd1a2c513d7c056f4e112ce45204a1dd",
       "font_sha256": "865c672ed7e45d3ec694ba7a5defd28f6fdaa345b0a26151c2c1c3d7ed6c36c3",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 14430,
-      "requested_bytes": 3148
+      "requested_bytes": 3112
     },
     "corpus-hb-in-house-jellee-kern/cmap/bmp-sweep": {
       "allocations": 0,
@@ -155,13 +182,13 @@
       "requested_bytes": 18476
     },
     "corpus-hb-in-house-jellee-kern/shape/words-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "00c4113aacb2fd4418d5ab9aa236116a34d14b6826246d74d28306b4c5c19716",
       "font_sha256": "299d0f1c7a297724cc5eec72a89fd6857532a983ac649130fd0ac128b6500b8b",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 432650,
-      "requested_bytes": 762871
+      "requested_bytes": 701239
     },
     "corpus-hb-in-house-trak/cmap/bmp-sweep": {
       "allocations": 0,
@@ -182,13 +209,13 @@
       "requested_bytes": 1352
     },
     "corpus-hb-in-house-trak/shape/words-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "5532482b709afb1afdf724ab7f0f2a6184e93326a09c074122d4ec2cf5ae6250",
       "font_sha256": "cf3fdeb89ad8e723633fa7f364d0c0097448236884a8299a41a106904c50b7be",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 395831,
-      "requested_bytes": 762871
+      "requested_bytes": 701239
     },
     "corpus-inter-4.1/cmap/bmp-sweep": {
       "allocations": 0,
@@ -209,13 +236,13 @@
       "requested_bytes": 900042
     },
     "corpus-inter-4.1/shape/words-medium": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "f0fd274e9d869faf4fbf8c59c0718e96ec9ab9b6967490b52aa14b8fe0033aa9",
       "font_sha256": "40d692fce188e4471e2b3cba937be967878f631ad3ebbbdcd587687c7ebe0c82",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1098235,
-      "requested_bytes": 882279
+      "requested_bytes": 821799
     },
     "corpus-inter-variable-4.1/cmap/bmp-sweep": {
       "allocations": 0,
@@ -227,22 +254,22 @@
       "requested_bytes": 0
     },
     "corpus-inter-variable-4.1/read": {
-      "allocations": 182,
+      "allocations": 179,
       "case_sha256": "a54ca40f5ec88c3bd02f4822c0b85f9ab9748edc091209b493c43a30e1e7c4ae",
       "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1366486,
-      "requested_bytes": 1023277
+      "requested_bytes": 1023241
     },
     "corpus-inter-variable-4.1/shape/words-medium": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "21f6fdc3c5e1ae8a21ca6966b6c75bede31dee89bd822b8662aa65ca4139a4b5",
       "font_sha256": "4989b125924991b90d05b2d16e0e388c48f7d5bb8b30539bbf9c755278d0ccaf",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1641019,
-      "requested_bytes": 882279
+      "requested_bytes": 821799
     },
     "corpus-merriweather-4.009/cmap/bmp-sweep": {
       "allocations": 0,
@@ -254,22 +281,22 @@
       "requested_bytes": 0
     },
     "corpus-merriweather-4.009/read": {
-      "allocations": 187,
+      "allocations": 184,
       "case_sha256": "df716b4666d21cfe4eaa11e1db63ab833b4b2337d58374da19145552b1ee916a",
       "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 4945356,
-      "requested_bytes": 663109
+      "requested_bytes": 663073
     },
     "corpus-merriweather-4.009/shape/words-medium": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "bc10120af92cbbeb5f92f518b0b891b3fe49f0fb75f5f34a4fbb78175b10da6e",
       "font_sha256": "22e924e4ea00ef19a5b30dd2c5c32674009badb39bb4611336960eb32ad7a422",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 5263801,
-      "requested_bytes": 878524
+      "requested_bytes": 818668
     },
     "corpus-noto-emoji-3.002/cmap/bmp-sweep": {
       "allocations": 0,
@@ -281,22 +308,22 @@
       "requested_bytes": 0
     },
     "corpus-noto-emoji-3.002/read": {
-      "allocations": 106,
+      "allocations": 103,
       "case_sha256": "931f28edc9bac9720cbc1b12ec2341f3514a611ae585676ceba411a01297d268",
       "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 2490132,
-      "requested_bytes": 932059
+      "requested_bytes": 932023
     },
     "corpus-noto-emoji-3.002/shape/words-medium": {
-      "allocations": 15,
+      "allocations": 13,
       "case_sha256": "31576b944d3cd29204333a5d2d4de0fd02e9ff3cd72124c0f9a5a8b786cd21da",
       "font_sha256": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 2742246,
-      "requested_bytes": 886111
+      "requested_bytes": 824479
     },
     "corpus-noto-sans-2.015/cmap/bmp-sweep": {
       "allocations": 0,
@@ -317,13 +344,13 @@
       "requested_bytes": 491988
     },
     "corpus-noto-sans-2.015/shape/words-medium": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "326bbae13d985dc64a65729baf080543f489aa88b2df446e738fb71f0761df59",
       "font_sha256": "f3961a9cde016d41a4879aecda1474d3a36d6bf54fa0e4643de029cc2248b0e8",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 970233,
-      "requested_bytes": 871555
+      "requested_bytes": 813315
     },
     "corpus-noto-sans-arabic-2.013/cmap/bmp-sweep": {
       "allocations": 0,
@@ -344,13 +371,13 @@
       "requested_bytes": 215632
     },
     "corpus-noto-sans-arabic-2.013/shape/words-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "1f8b69e39090b2185777f1a242a9e66770965f6032d0ffb1da1826fdfd68b22b",
       "font_sha256": "bd86ca02f087d7f3c3788ba458fb6b73744c7639ed276b8d870dba6def6c40d0",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 607863,
-      "requested_bytes": 762871
+      "requested_bytes": 701239
     },
     "corpus-noto-sans-devanagari-2.007/cmap/bmp-sweep": {
       "allocations": 0,
@@ -371,13 +398,13 @@
       "requested_bytes": 1958346
     },
     "corpus-noto-sans-devanagari-2.007/shape/words-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "1ec8f9965a5d1c556a468a9dbf0e231192a1f693b0079e3a12dc5d77948dc3be",
       "font_sha256": "9c7d935139ea6a1e6ad9dbac4f6d27ece1e04bca8123c8888d00a0f9df4724cd",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1288915,
-      "requested_bytes": 762871
+      "requested_bytes": 701239
     },
     "corpus-noto-serif-2.015/cmap/bmp-sweep": {
       "allocations": 0,
@@ -398,13 +425,13 @@
       "requested_bytes": 465579
     },
     "corpus-noto-serif-2.015/shape/words-medium": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "d573e75041fd87db04359e5733e08fa3816770656c07c85c3bc2f49522d7ec96",
       "font_sha256": "a15cfbbc1539d707115111d672d590a3d70d4f74b4c0a315956da20ae19a14e1",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 1011997,
-      "requested_bytes": 871555
+      "requested_bytes": 813315
     },
     "corpus-ots-bad-0014256514b2/read": {
       "allocations": 24,
@@ -434,13 +461,13 @@
       "requested_bytes": 560573
     },
     "corpus-source-sans-3.052/shape/words-medium": {
-      "allocations": 16,
+      "allocations": 14,
       "case_sha256": "5e1adad662b35e01afc57c238f02c296fde0aa5997472750b9673f28b7099390",
       "font_sha256": "08df266400933d3178d081a45f94a08814c3e55b4b7dd2e0ff69cb1329f13ab6",
       "leaked": 0,
       "optional": true,
       "peak_live_bytes": 956909,
-      "requested_bytes": 879214
+      "requested_bytes": 819198
     },
     "inter/advance/words-medium": {
       "allocations": 0,
@@ -461,85 +488,85 @@
       "requested_bytes": 0
     },
     "inter/kerning/words-large": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "fda20a8ac00349255bf958263394570e59b9cacbfffba179d0b121c7220b42f5",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 3590242,
-      "requested_bytes": 6098370
+      "requested_bytes": 5603090
     },
     "inter/kerning/words-medium": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "2addeffba5c823c8616330a642624da4589c9bb7d9e1059aa7629c995abe0cc9",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 851269,
-      "requested_bytes": 759079
+      "requested_bytes": 697447
     },
     "inter/kerning/words-small": {
-      "allocations": 14,
+      "allocations": 12,
       "case_sha256": "8197f5d85307e5926494e8ebd1acd8edf552690d901b3834fece2adf07371446",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 511826,
-      "requested_bytes": 96962
+      "requested_bytes": 89106
     },
     "inter/labels/labels-large": {
-      "allocations": 15671,
+      "allocations": 13623,
       "case_sha256": "b3f6f87956d210c4db1c74ebd63aa7ece2a93077e1b81de6d528ce8dec683062",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 592500,
-      "requested_bytes": 2877681
+      "requested_bytes": 2693281
     },
     "inter/labels/labels-medium": {
-      "allocations": 1966,
+      "allocations": 1710,
       "case_sha256": "617ffc67f809d6653413883a1fcbf97d37bfee9744133a4c70aa350040f60e95",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 480852,
-      "requested_bytes": 375881
+      "requested_bytes": 351737
     },
     "inter/labels/labels-small": {
-      "allocations": 245,
+      "allocations": 213,
       "case_sha256": "165b9aa0cd405330f939bd225ddd8b13bc9f684275784cc0a6c77690edcafc1c",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 466933,
-      "requested_bytes": 47246
+      "requested_bytes": 44206
     },
     "inter/plan-labels/labels-large": {
-      "allocations": 23863,
+      "allocations": 21815,
       "case_sha256": "c4e92340463402e880ea2387b87d354342efa68e882481ef85c4852fe748d1fc",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 590337,
-      "requested_bytes": 7325937
+      "requested_bytes": 7141537
     },
     "inter/plan-labels/labels-medium": {
-      "allocations": 2990,
+      "allocations": 2734,
       "case_sha256": "908d598f0dc4b5df0c82b36792eb61e3573c563916cf348391d829b53242292a",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 478689,
-      "requested_bytes": 931913
+      "requested_bytes": 907769
     },
     "inter/plan-labels/labels-small": {
-      "allocations": 373,
+      "allocations": 341,
       "case_sha256": "dd07072fb7ca624a78974587fd0a746489004f3569fda7cd37b8556b321b5223",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 466938,
-      "requested_bytes": 116750
+      "requested_bytes": 113710
     },
     "inter/read": {
       "allocations": 106,
@@ -551,37 +578,37 @@
       "requested_bytes": 830826
     },
     "inter/shape/words-large": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "c0cc1271cc9139862c960a5d20ea8a6325fc770194bcc9fd914978850c2c2bd8",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 3590292,
-      "requested_bytes": 7080659
+      "requested_bytes": 6594259
     },
     "inter/shape/words-medium": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "9867e5b43308628c209e546283c590d3706188afcee5f9f70dbc14a5e60d6969",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 851315,
-      "requested_bytes": 882279
+      "requested_bytes": 821799
     },
     "inter/shape/words-small": {
-      "allocations": 21,
+      "allocations": 19,
       "case_sha256": "96e2df2aac5f6cfc701a4ad32b94f080e3905a4ebcf5338fee65678f39e55147",
       "font_sha256": "aee1d667e8df7bce848c20eec4d5fb266a7994c8ac010829a5fc900d681c675c",
       "leaked": 0,
       "optional": false,
       "peak_live_bytes": 512304,
-      "requested_bytes": 113336
+      "requested_bytes": 105640
     }
   },
   "compiler": {
     "build": "roc build --fuzz --opt=speed bench/roc/alloc.roc",
-    "roc_fuzz": "0.6.2",
-    "version": "Roc compiler version nightly-2026-11-18-a520eed"
+    "roc_fuzz": "0.8.0",
+    "version": "Roc compiler version nightly-2026-11-25-d5a4f1e"
   },
   "generator": {
     "fonttools": "4.61.1"

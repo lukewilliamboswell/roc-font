@@ -124,19 +124,19 @@ ShaperTags :: {}.{
 	## A script's natural horizontal direction: `Rtl`, `Ltr`, or `Either`
 	## for scripts written both ways and for an empty code.
 	script_direction : Str -> [Ltr, Rtl, Either]
-	script_direction = |code| {
+	script_direction = |code|
 		if code.is_empty() {
-			return Either
+			Either
+		} else {
+			script = ShaperTags.script_of(code)
+			if ShaperTags.rtl_scripts.contains(script) {
+				Rtl
+			} else if ShaperTags.either_scripts.contains(script) {
+				Either
+			} else {
+				Ltr
+			}
 		}
-		script = ShaperTags.script_of(code)
-		if ShaperTags.rtl_scripts.any(|known| known == script) {
-			return Rtl
-		}
-		if ShaperTags.either_scripts.any(|known| known == script) {
-			return Either
-		}
-		Ltr
-	}
 
 	## A language tag in lower case with `_` as `-`, as HarfBuzz keeps one.
 	normalize : Str -> List(U8)

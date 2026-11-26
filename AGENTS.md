@@ -3,8 +3,8 @@
 This package reads font files and turns text into positioned glyphs, in pure
 Roc. Preserve these principles when designing APIs, implementing tables and
 shaping, writing documentation, or adding tests. The architecture these
-principles produce, and why, is in `docs/architecture.adoc`; current status
-and plans live in `TODO.md`, not here.
+principles produce, and why, is in `docs/architecture.adoc`. Use GitHub
+issues for status and plans.
 
 ## Keep the boundary at the font
 
@@ -253,6 +253,11 @@ shaping stage:
   oracle installed; cases are JSONC data run by the Python driver through
   the Roc harness, never generated `.roc` files; list every deliberate
   divergence with its reason;
+- where ordering, interacting choices or integer boundaries leave a gap in
+  those checks, derive an independent expectation from the format contract.
+  Use roc-fuzz `Model` for bounded histories and `Solve` for integer laws.
+  Check a plausible decision mutation in a scratch worktree. See
+  `docs/fuzzing.adoc` for the suite and contributor workflow;
 - test aggregated problems, truncated and corrupted files, and empty and
   degenerate inputs;
 - generate `roc docs` and confirm internal helpers do not appear;
@@ -269,11 +274,13 @@ If a check cannot run, run the others and report which were skipped and why.
   is the isolation boundary between workers.
 - Land shared contracts (types, module APIs) before fanning out consumers;
   the integrator alone edits shared manifests.
+- Give each worker its own worktree and build outputs. For simultaneous
+  bundle checks, share a served bundle or use independent Roc package
+  caches so one check cannot prune an entry another check still uses.
 
 ## Evolve from evidence
 
 - Keep APIs provisional until a consumer proves them end to end.
 - Let consumers, oracles and generated documentation correct the design.
 - When evidence changes a principle, update this file in the same change.
-- Preserve enduring constraints here; keep status and task lists in
-  `TODO.md`.
+- Preserve enduring constraints here. Track open work in GitHub issues.

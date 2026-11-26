@@ -10,7 +10,7 @@
 ## comma-separated: code points for `shape` and `width` (empty for empty
 ## text), glyph ids or the word `all` for `advances` and `extents`, empty
 ## for the other kinds. Flags are comma-separated, from `no-clusters`,
-## `no-positions`, `no-advances`, `utf8-clusters` and `font-size=<n>`, and
+## `no-positions`, `no-advances`, `show-flags`, `utf8-clusters` and `font-size=<n>`, and
 ## (protocol 2) `face=<n>`, `instance=<n>`, `weight=<w>`, `width=<w>`,
 ## `optical-size=<s>` and repeatable `axis=<tag>:<decimal>`, and (protocol
 ## 3) the shaping options `direction=ltr|rtl`, `script=<ISO 15924>`,
@@ -29,7 +29,7 @@ Case :: {}.{
 
 	## The output settings of a shaping request. `font_size` is 0 when not
 	## given.
-	Settings : { clusters : Bool, positions : Bool, advances : Bool, utf8 : Bool, font_size : U64 }
+	Settings : { clusters : Bool, positions : Bool, advances : Bool, show_flags : Bool, utf8 : Bool, font_size : U64 }
 
 	## Where to measure, mirroring `Font.Variation` (whose field types these
 	## are, structurally) and named instances.
@@ -65,7 +65,7 @@ Case :: {}.{
 	default_shaping = { script: "", language: "", direction: FromScript, features: [], clusters: Graphemes }
 
 	## One positioned output glyph, in font units.
-	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64 }
+	Glyph : { glyph : U64, cluster : U64, dx : I64, dy : I64, ax : I64, ay : I64, unsafe_to_break : Bool }
 
 	## Parse one request line. A malformed line yields its tag (the text
 	## before the first tab, or the whole line) and what was wrong.
@@ -101,7 +101,7 @@ Case :: {}.{
 	## the other location flags.
 	flags : Str -> Try(Flags, Str)
 	flags = |field| {
-		var $s = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+		var $s = { clusters: True, positions: True, advances: True, show_flags: False, utf8: False, font_size: 0 }
 		var $face = 0.U32
 		var $instance = 0.U32
 		var $has_instance = False
@@ -126,6 +126,8 @@ Case :: {}.{
 					$s = { ..$s, positions: False }
 				} else if flag == "no-advances" {
 					$s = { ..$s, advances: False }
+				} else if flag == "show-flags" {
+					$s = { ..$s, show_flags: True }
 				} else if flag == "utf8-clusters" {
 					$s = { ..$s, utf8: True }
 				} else if flag.starts_with("font-size=") {
@@ -450,7 +452,8 @@ Case :: {}.{
 				$x = $x + g.ax
 				$y = $y + g.ay
 			}
-			$parts = $parts.append("${g.glyph.to_str()}${cluster}${offset}${advance}")
+			suffix = if (s.show_flags and g.unsafe_to_break) "#1" else ""
+			$parts = $parts.append("${g.glyph.to_str()}${cluster}${offset}${advance}${suffix}")
 		}
 		"[${Str.join_with($parts, "|")}]"
 	}
@@ -503,12 +506,12 @@ Case :: {}.{
 }
 
 plain : Case.Settings
-plain = { clusters: True, positions: True, advances: True, utf8: False, font_size: 0 }
+plain = { clusters: True, positions: True, advances: True, show_flags: False, utf8: False, font_size: 0 }
 
 expect Case.request("inter/a\tf.ttf\tshape\t41,1f600\tutf8-clusters") == Ok({ tag: "inter/a", font: "f.ttf", kind: Shape, scalars: [0x41, 0x1F600], settings: { ..plain, utf8: True }, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("reading/x\tf.ttf\tread\t\t") == Ok({ tag: "reading/x", font: "f.ttf", kind: Read, scalars: [], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("w\tf.ttf\twidth\t48,49\t") == Ok({ tag: "w", font: "f.ttf", kind: Width, scalars: [0x48, 0x49], settings: plain, face: 0, location: Regular, shaping: Case.default_shaping })
-expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, font_size: 1000 }, face: 0, location: Regular, shaping: Case.default_shaping })
+expect Case.request("t\tf.ttf\tshape\t41\tno-clusters,no-advances,show-flags,font-size=1000") == Ok({ tag: "t", font: "f.ttf", kind: Shape, scalars: [0x41], settings: { ..plain, clusters: False, advances: False, show_flags: True, font_size: 1000 }, face: 0, location: Regular, shaping: Case.default_shaping })
 expect Case.request("t\tf.ttf\tshape\t41") == Err(Malformed({ tag: "t", why: "fields" }))
 expect Case.request("t\tf.ttf\tdraw\t41\t") == Err(Malformed({ tag: "t", why: "kind" }))
 expect Case.request("t\tf.ttf\tshape\td800\t") == Err(Malformed({ tag: "t", why: "code-points" }))
@@ -555,7 +558,9 @@ expect Case.extents([{ glyph: 0, box: Box({ x_min: 80, y_min: -104, x_max: 1120,
 expect Case.utf8_offsets([0x41, 0xE9, 0x20AC, 0x1F600]) == [0, 1, 3, 6, 10]
 
 expect {
-	Case.serialize(plain, [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0 }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7 }]) == "[2=0+1273|456=1@-5,10+1273,7]"
+	glyphs = [{ glyph: 2, cluster: 0, dx: 0, dy: 0, ax: 1273, ay: 0, unsafe_to_break: False }, { glyph: 456, cluster: 1, dx: -5, dy: 10, ax: 1273, ay: 7, unsafe_to_break: True }]
+	Case.serialize(plain, glyphs) == "[2=0+1273|456=1@-5,10+1273,7]"
+		and Case.serialize({ ..plain, show_flags: True }, glyphs) == "[2=0+1273|456=1@-5,10+1273,7#1]"
 }
 
 expect Case.serialize(plain, []) == "[]"
@@ -564,10 +569,10 @@ expect {
 	# With no-clusters and no-advances (hb-shape --ned), offsets accumulate
 	# the advances, as hb_buffer_serialize does.
 	s = { ..plain, clusters: False, advances: False }
-	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0 }]) == "[1|2@100,0]"
+	Case.serialize(s, [{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0, unsafe_to_break: False }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: 50, ay: 0, unsafe_to_break: False }]) == "[1|2@100,0]"
 }
 
-expect Case.glyph_width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0 }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0 }]) == "width:70"
+expect Case.glyph_width([{ glyph: 1, cluster: 0, dx: 0, dy: 0, ax: 100, ay: 0, unsafe_to_break: False }, { glyph: 2, cluster: 1, dx: 0, dy: 0, ax: -30, ay: 0, unsafe_to_break: False }]) == "width:70"
 expect Case.glyph_width([]) == "width:0"
 
 expect {

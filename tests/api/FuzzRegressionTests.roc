@@ -1,9 +1,9 @@
 import font.Font
 import build.FontBuild
 
-## Failures found by the narrow fuzz targets (`fuzz/font-cmap.roc`,
-## `font-coverage.roc`, `font-gsub.roc`, `font-gpos.roc`, `font-var.roc`,
-## `font-gvar.roc`, `font-layout-var.roc`, `font-ots.roc`),
+## Failures found by the narrow fuzz targets (`font-cmap`,
+## `font-coverage`, `font-gsub`, `font-gpos`, `font-var`,
+## `font-gvar`, `font-layout-var`, `font-ots`),
 ## each distilled into the smallest font that shows it, through the public
 ## `Font` API exactly as the package ships it. Run with
 ## `roc test tests/api/main.roc`.

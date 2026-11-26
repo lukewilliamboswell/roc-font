@@ -6,12 +6,11 @@
 This document describes the architecture roc-font is moving towards and,
 above all, *why*. It is the enduring design: what a finished roc-font looks
 like and the reasons behind each choice. Day-to-day rules for contributors
-are in `AGENTS.md`; status, milestones and open questions are in `TODO.md`.
+are in `AGENTS.md`. Use GitHub issues for open work.
 When evidence changes a decision here, change this document in the same
 commit and say what the evidence was.
 
-Section numbers are stable references: `TODO.md` and commit messages cite
-them as "architecture §4.2".
+Section numbers are stable references. Cite them as "architecture §4.2".
 
 [#purpose]
 == 1 Purpose and boundary
@@ -244,13 +243,12 @@ and `glyf`, or `CFF`/`CFF2`) or *optional* (`GSUB`, `GPOS`, `GDEF`, `kern`,
   the font for any problem lenient reading would drop a table for. It
   does not yet check table checksums, directory order, overlapping or
   duplicate tables or `fsType`; roc-pdf keeps those checks until strict
-  reading gains them (`TODO.md`). A zero-length table is refused in both
+  reading gains them. A zero-length table is refused in both
   modes, as OTS refuses it.
 
 Both modes report every independent problem in one result. A problem
 names the table by its tag and, where it helps, the byte offset in the file
-and what was wrong there, so a caller can act on it; the exact payload is
-settled with roc-pdf (`TODO.md`). Dropping a table
+and what was wrong there, so a caller can act on it. Dropping a table
 is not repair: data is never clamped, references are never redirected, and
 glyph 0 is never substituted for missing data. Either a table is used as the
 font defines it or it is not used at all.
@@ -344,8 +342,8 @@ run = Font.shape(font, "office -> home", Font.ShapeOptions.{})
 pdf_font = Font.from_bytes(bytes, Font.ReadOptions.{ strict: True })?
 ----
 
-The names above illustrate the pattern; the exact names are settled in
-`TODO.md` and proved by consumers before 0.1.0. Nested defaulted records
+The names above illustrate the pattern. Consumer integrations validate
+the API before 0.1.0. Nested defaulted records
 (`limits`) compile on the current nightly (checked 2026-10-24).
 
 roc-font does not detect scripts itself: that needs Unicode script data,
@@ -386,6 +384,11 @@ reusable `ShapePlan`; `Font.shape` builds one internally when not given
 one. Callers that shape many strings with the same settings (every
 consumer) plan once. This is HarfBuzz's `hb_shape_plan`, and it is the
 second level of "prepare once, use many times".
+
+GSUB and GPOS feature variations select lookups when the plan is made.
+If the same prepared font moves to another location, a saved plan keeps
+those lookups. Shaping applies their positioning values and the glyph
+advances at the new location. Planning again also selects new lookups.
 
 A plan must still be cheap, because `shape` and `width` make one per
 call and short labels are where callers notice. Everything a plan needs
@@ -484,8 +487,10 @@ that axis; `axes` entries apply last and override them, like CSS
 Axis values are `Dec` because valid locations are fractional (`wdth` 87.5
 is CSS semi-condensed). Malformed variation data the reference silently
 accepts (an empty delta-set map, out-of-range indices, an axis default
-outside its range) is a reading problem here; under lenient reading a bad
-`fvar` or `avar` drops the whole variation space.
+outside its range) is a reading problem here. A version 2 `avar` or a
+problem elsewhere in the variation data drops the whole variation space
+under lenient reading. Other unreadable `avar` tables are dropped alone,
+with coordinates normalized directly from `fvar`.
 
 Reading
 validates `fvar`, `avar`, `HVAR`, `MVAR`, `gvar`, the `GDEF` item variation
@@ -630,9 +635,10 @@ with the glyphs in either direction and total for any cluster order.
 `describe_problem` words a `Problem` for messages and logs; programs that
 act on a problem match on it.
 
-The seed's low-level `substitute` and `kerning` are removed: `shape`
-covers them with clusters and positions, and `shape_scalars` serves callers
-that do their own itemisation.
+The public `shape` operation returns clusters and positions.
+`shape_scalars_checked` serves callers that do their own itemisation.
+See xref:scalar-shaping.adoc#shape-a-run-with-paragraph-offsets[shaping a run with paragraph offsets] for
+input validation, cluster ranges and per-glyph tracing.
 
 [#shaping]
 == 6 Shaping
@@ -644,11 +650,16 @@ bound:
 
 . *Map*: decode the text to scalars with byte offsets; map each to a glyph
   through the cmap (formats 4, 12, 14 and the rest), with the fallbacks in
-  §6.2.
+  §6.2. Horizontal Thai preprocesses SARA AM before glyph selection.
 . *Substitute*: apply GSUB lookups chosen by the plan, honouring lookup flags
-  and mark filtering sets from `GDEF`.
-. *Position*: take advances from `hmtx` (and later `HVAR`); apply GPOS
-  lookups, or the `kern` table when the font has no GPOS kerning.
+  and mark filtering sets from `GDEF`. The Arabic shaper assigns joining
+  masks and orders the stages for contextual forms and required ligatures.
+  The modern Devanagari Hindi shaper identifies syllables and pauses
+  between feature stages to reorder matras and reph. Pauses preserve
+  the substitution budget, lookup origin indices and ligature identity.
+. *Position*: take advances from `hmtx` and `HVAR`; apply GPOS pair
+  adjustments, cursive and mark attachments, with the `kern` table as a kerning
+  fallback.
 . *Finish*: merge clusters at the configured level, compute unsafe-to-break
   flags, reverse for right-to-left output order.
 
@@ -664,7 +675,8 @@ them results disagree with Chrome. They are in scope for the default path:
 * compose or decompose a character depending on what the cmap maps
   (`é` absent: `e` plus combining acute, and the reverse);
 * hide default-ignorable characters (ZWJ, ZWNJ, soft hyphen, variation
-  selectors) as zero-width;
+  selectors) as zero-width by default. A font substitution can make a
+  mapped default-ignorable character visible to positioning and output.
 * give U+2000–U+200A and other spaces widths derived from the space glyph
   when the font lacks them;
 * apply variation sequences through cmap format 14;

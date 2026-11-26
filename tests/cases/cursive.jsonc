@@ -1,0 +1,9 @@
+// Amiri Regular 1.003, from the pinned corpus. The original Arabic text
+// reaches the cursive lookup after forming the joined glyphs.
+{
+  "schema": 1,
+  "cases": [
+    {"id": "amiri-cursive", "font": "../corpus/amiri-1.003/Amiri-1.003/Amiri-Regular.ttf", "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0", "text": "سج", "options": {"script": "Arab", "language": "ar", "direction": "rtl", "utf8_clusters": true, "output": ["show-flags"]}, "expected": "[3847=2+104#1|2675=0@0,2+671]"},
+    {"id": "amiri-no-cursive", "font": "../corpus/amiri-1.003/Amiri-1.003/Amiri-Regular.ttf", "font_sha256": "cd2550c0f4c05eb341bf97958211aaa39382bca96577ba3a67d4a3b4912c43c0", "text": "سج", "options": {"script": "Arab", "language": "ar", "direction": "rtl", "utf8_clusters": true, "output": ["show-flags"], "features": ["curs=0"]}, "expected": "[3847=2+104#1|2675=0+671]"}
+  ]
+}

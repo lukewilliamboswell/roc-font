@@ -25,15 +25,21 @@ Sfnt :: {}.{
 	is_signature = |version| version == 0x00010000 or version == 0x74727565 or version == 0x4F54544F
 
 	## How many faces a file holds: 1 for a single font, the count of a
-	## collection (`ttcf`) whose offset array fits in the file.
+	## collection (`ttcf`) whose version and complete header are valid.
 	face_count : List(U8) -> Try(U64, [NotAFont])
 	face_count = |bytes| {
 		version = Bytes.u32(bytes, 0)
 		if bytes.len() >= 12 and Sfnt.is_signature(version) {
 			Ok(1)
 		} else if bytes.len() >= 12 and version == 0x74746366 {
+			trailer = match Bytes.u32(bytes, 4) {
+				0x00010000 => 0
+				# Like OTS, require the descriptor but ignore its signature data.
+				0x00020000 => 12
+				_ => return Err(NotAFont)
+			}
 			count = Bytes.u32(bytes, 8)
-			if (Bytes.fits(12, 4 * count, bytes.len())) Ok(count) else Err(NotAFont)
+			if (Bytes.fits(12, 4 * count + trailer, bytes.len())) Ok(count) else Err(NotAFont)
 		} else {
 			Err(NotAFont)
 		}

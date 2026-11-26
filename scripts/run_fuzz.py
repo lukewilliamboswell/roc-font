@@ -15,6 +15,7 @@ reproducing failure inputs. Working state lives under `.roc-font-tmp/fuzz/`
 Typical use:
 
     python3 scripts/run_fuzz.py smoke              # every target, short, seeded
+    python3 scripts/run_fuzz.py spec-smoke         # optimized model histories
     python3 scripts/run_fuzz.py campaign font-read --seconds=1800
     python3 scripts/run_fuzz.py show font-read .roc-font-tmp/fuzz/crashes/font-read/<sha>
     python3 scripts/run_fuzz.py minimize font-read <input> <output>
@@ -42,6 +43,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
@@ -52,18 +54,22 @@ import flight  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 FUZZ_ROOT = ROOT / "fuzz"
+SPEC_APP = FUZZ_ROOT / "spec" / "main.roc"
+READER_SUITE = FUZZ_ROOT / "reader_suite.roc"
+SHAPING_SUITE = FUZZ_ROOT / "shaping_suite.roc"
+VARIATION_SUITE = FUZZ_ROOT / "variation_suite.roc"
 TMP_ROOT = Path(os.environ.get("ROC_FONT_TMPDIR", ROOT / ".roc-font-tmp")).resolve()
 WORK_ROOT = TMP_ROOT / "fuzz"
 
 # The roc-fuzz platform every target must declare. The bundle name is the
 # content hash roc checks on download; sha256 is the release asset's digest
-# (verified against `gh release view 0.6.2 --repo lukewilliamboswell/roc-fuzz`
+# (verified against `gh release view 0.8.0 --repo lukewilliamboswell/roc-fuzz`
 # and the cached download), and commit is the tag's commit.
 ROC_FUZZ_RELEASE = {
-    "version": "0.6.2",
-    "commit": "b4505e2cdc19a74a2abf271f506c14478abdb7c2",
-    "bundle": "3kyiehxxzwAsjM23uCQGJ3Hx7dAAdzSGtK3k9Jq7Egtu.tar.zst",
-    "sha256": "89fc0b22cd1f30c01208a29eea55dbbdcdbac2a37d059e80b3a18c62bc2f275c",
+    "version": "0.8.0",
+    "commit": "f06ab8dbfd9a49604cb9d612b0a6fc7205af09a0",
+    "bundle": "BUNcJDHxCd7xLVSe3WBioyXqR6tm1MqXwzwGgtnmqK43.tar.zst",
+    "sha256": "8d7a2df0c33658e33968e774f9b62669a290fbbf05d477982458a382b89fa664",
 }
 ROC_FUZZ_URL = (
     "https://github.com/lukewilliamboswell/roc-fuzz/releases/download/"
@@ -82,10 +88,7 @@ SMOKE_RUNS = 4000
 
 @dataclass(frozen=True)
 class TargetConfig:
-    # Candidate sources, first existing wins. Targets import the package
-    # through package/main.roc, as consumers do, and the test-only builders
-    # through tests/support/main.roc (see docs/fuzzing.adoc, "Layout").
-    sources: tuple[Path, ...]
+    suite: Path
     seeds: Path
     dictionary: Path
     # Bytes put before each real font file to make a seed (font-shape reads
@@ -102,19 +105,10 @@ class TargetConfig:
     # so that smoke stays a few seconds per target.
     smoke_runs: int = SMOKE_RUNS
 
-    def source(self) -> Path:
-        for candidate in self.sources:
-            if candidate.is_file():
-                return candidate
-        raise ValueError(
-            "no source for target; looked for "
-            + ", ".join(str(path.relative_to(ROOT)) for path in self.sources)
-        )
-
 
 TARGETS: dict[str, TargetConfig] = {
     "font-read": TargetConfig(
-        sources=(FUZZ_ROOT / "font-read.roc",),
+        suite=READER_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-read.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix=b"",
@@ -128,7 +122,7 @@ TARGETS: dict[str, TargetConfig] = {
         ),
     ),
     "font-shape": TargetConfig(
-        sources=(FUZZ_ROOT / "font-shape.roc",),
+        suite=SHAPING_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-shape.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
         font_prefix="office -> A*B fi".encode("utf-8") + b"\xff",
@@ -141,11 +135,37 @@ TARGETS: dict[str, TargetConfig] = {
             "cost grows linearly (2 vs 16 copies) and leaks nothing"
         ),
     ),
+    "font-scalars": TargetConfig(
+        suite=SHAPING_SUITE,
+        seeds=FUZZ_ROOT / "seeds" / "font-scalars.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=65,
+        timeout=10,
+        contract=(
+            "checked and traced scalar shaping agree; invalid scalars and "
+            "decreasing offsets identify the first error; valid offsets stay "
+            "aligned and ordered, including repeated and wide offsets"
+        ),
+        font_files=False,
+    ),
+    "font-indic": TargetConfig(
+        suite=SHAPING_SUITE,
+        seeds=FUZZ_ROOT / "seeds" / "font-indic.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "font.dict",
+        font_prefix="र्कि क्ति र्‍क र्‌क ि।".encode("utf-8") + b"\xff",
+        max_input_size=1048576,
+        timeout=10,
+        contract=(
+            "Hindi dev2 shaping is deterministic, keeps UTF-8 cluster "
+            "boundaries aligned, and shares growth limits across its stages"
+        ),
+    ),
     # Narrow targets (architecture §7.3): the input chooses the contents of
     # a font exercising one feature, built at two sizes. Real fonts are not
     # seeds (font_files=False): their bytes would only be read as choices.
     "font-cmap": TargetConfig(
-        sources=(FUZZ_ROOT / "font-cmap.roc",),
+        suite=READER_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-cmap.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -159,7 +179,7 @@ TARGETS: dict[str, TargetConfig] = {
         font_files=False,
     ),
     "font-coverage": TargetConfig(
-        sources=(FUZZ_ROOT / "font-coverage.roc",),
+        suite=READER_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-coverage.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -174,7 +194,7 @@ TARGETS: dict[str, TargetConfig] = {
         font_files=False,
     ),
     "font-gsub": TargetConfig(
-        sources=(FUZZ_ROOT / "font-gsub.roc",),
+        suite=SHAPING_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-gsub.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -189,7 +209,7 @@ TARGETS: dict[str, TargetConfig] = {
         font_files=False,
     ),
     "font-gpos": TargetConfig(
-        sources=(FUZZ_ROOT / "font-gpos.roc",),
+        suite=SHAPING_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-gpos.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -202,8 +222,31 @@ TARGETS: dict[str, TargetConfig] = {
         ),
         font_files=False,
     ),
+    "font-mark-read": TargetConfig(
+        suite=READER_SUITE,
+        seeds=FUZZ_ROOT / "seeds" / "font-mark-read.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=32,
+        timeout=10,
+        contract="valid mark tables read strictly; damaged offsets, counts and classes identify GPOS",
+        font_files=False,
+    ),
+    "font-marks": TargetConfig(
+        suite=SHAPING_SUITE,
+        seeds=FUZZ_ROOT / "seeds" / "font-marks.json",
+        dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
+        font_prefix=b"",
+        max_input_size=512,
+        timeout=10,
+        contract=(
+            "mark-to-base, mark-to-ligature and mark-to-mark agree with "
+            "the generated anchors; work grows with the run"
+        ),
+        font_files=False,
+    ),
     "font-var": TargetConfig(
-        sources=(FUZZ_ROOT / "font-var.roc",),
+        suite=VARIATION_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-var.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -218,7 +261,7 @@ TARGETS: dict[str, TargetConfig] = {
         font_files=False,
     ),
     "font-gvar": TargetConfig(
-        sources=(FUZZ_ROOT / "font-gvar.roc",),
+        suite=VARIATION_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-gvar.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -235,7 +278,7 @@ TARGETS: dict[str, TargetConfig] = {
         smoke_runs=1500,
     ),
     "font-layout-var": TargetConfig(
-        sources=(FUZZ_ROOT / "font-layout-var.roc",),
+        suite=VARIATION_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-layout-var.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -252,7 +295,7 @@ TARGETS: dict[str, TargetConfig] = {
         smoke_runs=1500,
     ),
     "font-ots": TargetConfig(
-        sources=(FUZZ_ROOT / "font-ots.roc",),
+        suite=READER_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-ots.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -269,7 +312,7 @@ TARGETS: dict[str, TargetConfig] = {
         smoke_runs=1500,
     ),
     "font-math": TargetConfig(
-        sources=(FUZZ_ROOT / "font-math.roc",),
+        suite=VARIATION_SUITE,
         seeds=FUZZ_ROOT / "seeds" / "font-math.json",
         dictionary=FUZZ_ROOT / "dictionaries" / "narrow.dict",
         font_prefix=b"",
@@ -357,14 +400,14 @@ def roc_cache_dir() -> Path:
 
 
 def check_pin(quiet: bool = False) -> list[str]:
-    """Problems with the roc-fuzz pin: a target declaring another platform,
+    """Problems with the roc-fuzz pin: an app declaring another platform,
     or a cached download whose digest differs from the release's."""
     problems: list[str] = []
-    for name in TARGET_ORDER:
-        try:
-            source = TARGETS[name].source()
-        except ValueError as problem:
-            problems.append(f"{name}: {problem}")
+    suites = dict.fromkeys(config.suite for config in TARGETS.values())
+    sources = [SPEC_APP, ROOT / "bench" / "roc" / "alloc.roc", *suites]
+    for source in sources:
+        if not source.is_file():
+            problems.append(f"missing {display(source)}")
             continue
         urls = PLATFORM_RE.findall(source.read_text(encoding="utf-8"))
         if urls != [ROC_FUZZ_URL]:
@@ -477,15 +520,42 @@ def binary_path(name: str) -> Path:
     return WORK_ROOT / "bin" / name
 
 
-def build_target(name: str, args: argparse.Namespace) -> int:
-    output = binary_path(name)
+def build_suite(suite: Path, args: argparse.Namespace) -> int:
+    binary = binary_path(suite.stem)
+    status = build_app(suite, binary, args)
+    if status != 0:
+        return status
+    expected = sorted(name for name, config in TARGETS.items() if config.suite == suite)
+    try:
+        inventory = subprocess.run([str(binary), "--list-targets"], cwd=ROOT, capture_output=True, text=True)
+    except OSError as problem:
+        print(f"error: could not list targets in {display(binary)}: {problem}", file=sys.stderr)
+        return 2
+    if inventory.returncode:
+        print(inventory.stderr, file=sys.stderr)
+        return inventory.returncode
+    actual = sorted(inventory.stdout.splitlines())
+    if actual != expected:
+        print(f"error: {display(binary)} lists {actual}, expected {expected}", file=sys.stderr)
+        return 2
+    return 0
+
+
+def target_command(name: str) -> list[str]:
+    return [str(binary_path(TARGETS[name].suite.stem)), f"--target={name}"]
+
+
+def build_app(source: Path, output: Path, args: argparse.Namespace, *, speed: bool = False) -> int:
     if args.no_build:
         if not output.is_file():
             print(f"error: --no-build given but {display(output)} does not exist", file=sys.stderr)
             return 2
         return 0
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = [args.roc, "build", "--fuzz", display(TARGETS[name].source()), f"--output={output}", *args.dep]
+    command = [args.roc, "build", "--fuzz"]
+    if speed:
+        command.append("--opt=speed")
+    command += [display(source), f"--output={output}", *args.dep]
     print(f"+ {shlex.join(command)}", flush=True)
     try:
         return subprocess.run(command, cwd=ROOT, check=False).returncode
@@ -542,17 +612,12 @@ def run_target(name: str, mode: str, args: argparse.Namespace) -> dict[str, obje
     if not config.dictionary.is_file():
         raise ValueError(f"missing fuzz dictionary: {display(config.dictionary)}")
     corpus = prepare_corpus(name, max_input_size, fresh=mode == "smoke")
-    status = build_target(name, args)
-    if status != 0:
-        result["outcome"] = "build failed"
-        return result
-
     report_dir = WORK_ROOT / "runs" / name / mode
     if report_dir.exists():
         shutil.rmtree(report_dir)
     report_dir.parent.mkdir(parents=True, exist_ok=True)
     command = [
-        str(binary_path(name)),
+        *target_command(name),
         "run",
         f"--report-dir={report_dir}",
         str(corpus),
@@ -611,7 +676,16 @@ def run_mode(args: argparse.Namespace) -> int:
         for problem in problems:
             print(f"error: {problem}", file=sys.stderr)
         return 2
-    results = [run_target(name, args.command, args) for name in resolve_targets(args.targets)]
+    results = []
+    suite_status: dict[Path, int] = {}
+    for name in resolve_targets(args.targets):
+        suite = TARGETS[name].suite
+        if suite not in suite_status:
+            suite_status[suite] = build_suite(suite, args)
+        if suite_status[suite] == 0:
+            results.append(run_target(name, args.command, args))
+        else:
+            results.append({"target": name, "outcome": "suite unavailable"})
     print(f"\nfuzz {args.command} summary (roc-fuzz {ROC_FUZZ_RELEASE['version']}, work dir {display(WORK_ROOT)}):")
     for result in results:
         print(
@@ -621,6 +695,61 @@ def run_mode(args: argparse.Namespace) -> int:
             + (f" report={result.get('report')}" if result.get("report") else "")
         )
     return 0 if all(result["outcome"] == "passed" for result in results) else 1
+
+
+def spec_smoke(args: argparse.Namespace) -> int:
+    problems = check_pin(quiet=True)
+    for problem in problems:
+        print(f"error: {problem}", file=sys.stderr)
+    if problems:
+        return 2
+
+    binary = binary_path("spec")
+    if status := build_app(SPEC_APP, binary, args, speed=True):
+        return status
+
+    inventory = subprocess.run([str(binary), "--list-targets"], cwd=ROOT, check=False,
+                               capture_output=True, text=True)
+    if inventory.returncode:
+        print(inventory.stderr, file=sys.stderr)
+        return inventory.returncode
+
+    provenance = [f"--source-revision={git_revision()}",
+                  f"--roc-version={command_output([args.roc, 'version'])}",
+                  f"--platform-release={ROC_FUZZ_RELEASE['version']}",
+                  f"--platform-sha256={ROC_FUZZ_RELEASE['sha256']}"]
+    status = 0
+    for name in inventory.stdout.splitlines():
+        report_dir = WORK_ROOT / "runs" / "spec" / name
+        if report_dir.exists():
+            shutil.rmtree(report_dir)
+        report_dir.parent.mkdir(parents=True, exist_ok=True)
+        # roc-fuzz seeds this fresh corpus from the target's named examples.
+        with tempfile.TemporaryDirectory(prefix="corpus-", dir=report_dir.parent) as corpus:
+            command = [str(binary), f"--target={name}", "run", corpus, f"--report-dir={report_dir}",
+                       f"--runs={args.runs}", f"--seed={args.seed}", *provenance]
+            print(f"+ {shlex.join(command)}", flush=True)
+            result = subprocess.run(command, cwd=report_dir.parent, check=False)
+        if result.returncode:
+            status = 1
+            for crash in harvest(name, report_dir):
+                replay = [str(binary), f"--target={name}", "replay", str(crash)]
+                print(f"Reproduce with {shlex.join(replay)}", file=sys.stderr)
+            continue
+        report_path = report_dir / "report.json"
+        if not report_path.is_file():
+            print(f"{name}: missing native report at {display(report_path)}", file=sys.stderr)
+            status = 1
+            continue
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        goals = report.get("goals") or {}
+        if goals.get("required"):
+            for goal in goals["inventory"]:
+                witness = goal.get("first") or {}
+                if witness.get("source") != "example":
+                    print(f"{name}: goal {goal['name']!r} needs a named example", file=sys.stderr)
+                    status = 1
+    return status
 
 
 def run_artifact_command(args: argparse.Namespace) -> int:
@@ -634,10 +763,10 @@ def run_artifact_command(args: argparse.Namespace) -> int:
             raise ValueError(f"refusing to overwrite {output_path}")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         arguments.append(str(output_path))
-    status = build_target(args.target, args)
+    status = build_suite(TARGETS[args.target].suite, args)
     if status != 0:
         return status
-    command = [str(binary_path(args.target)), *arguments]
+    command = [*target_command(args.target), *arguments]
     print(f"+ {shlex.join(command)}", flush=True)
     cwd = WORK_ROOT / "runs" / args.target
     cwd.mkdir(parents=True, exist_ok=True)
@@ -647,11 +776,7 @@ def run_artifact_command(args: argparse.Namespace) -> int:
 def list_targets(_args: argparse.Namespace) -> int:
     for name in TARGET_ORDER:
         config = TARGETS[name]
-        try:
-            source = display(config.source())
-        except ValueError as problem:
-            source = f"missing ({problem})"
-        print(f"{name}\n  source: {source}\n  seeds: {display(config.seeds)}\n"
+        print(f"{name}\n  suite: {display(config.suite)}\n  seeds: {display(config.seeds)}\n"
               f"  dictionary: {display(config.dictionary)}\n"
               f"  max input: {config.max_input_size} bytes, timeout: {config.timeout} s\n"
               f"  contract: {config.contract}")
@@ -698,6 +823,11 @@ def make_parser() -> argparse.ArgumentParser:
                        help=f"inputs per target (default: the target's smoke_runs, {SMOKE_RUNS} for most)")
     smoke.add_argument("--seed", type=int, default=SMOKE_SEED, help=f"libFuzzer seed (default {SMOKE_SEED})")
 
+    spec = sub.add_parser("spec-smoke", help="build and run the optimized spec model targets")
+    add_build_options(spec)
+    spec.add_argument("--runs", type=positive_int, default=200)
+    spec.add_argument("--seed", type=int, default=SMOKE_SEED)
+
     campaign = sub.add_parser("campaign", help="time-bounded run (default 600 s per target)")
     add_run_options(campaign)
     campaign.add_argument("--seconds", type=positive_int, default=600)
@@ -727,6 +857,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = make_parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "spec-smoke":
+            with flight.flight(args.roc, source=args.source or args.no_build) as args.dep:
+                return spec_smoke(args)
         if args.command in ("smoke", "campaign", "nightly", "show", "replay", "minimize"):
             command = run_mode if args.command in ("smoke", "campaign", "nightly") else run_artifact_command
             # No bundle is needed to reuse binaries already built.

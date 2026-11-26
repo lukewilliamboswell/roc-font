@@ -77,7 +77,7 @@ SENTINEL = (
 # or session state. Of package/ it keeps only data files (the default fonts
 # and licences, which conformance cases read as plain files); every .roc
 # file is left out and main.roc becomes the sentinel.
-MIRROR_SKIP = {".git", ".claude", ".blueprint", ".docs-out", ".roc-fuzz", "dist",
+MIRROR_SKIP = {".git", ".claude", ".blueprint", ".docs-out", ".roc-fuzz", ".roc-font-tmp", "dist",
                "generated-docs", "__pycache__"}
 
 

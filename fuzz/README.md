@@ -8,18 +8,16 @@ narrow targets. `scripts/run_fuzz.py` adds every real font found in
 `tests/fonts/` and `tests/corpus/` as a further seed of the targets that read
 whole fonts.
 
-The whole-pipeline targets are `font-read.roc` and `font-shape.roc`. The
-narrow targets each build fonts exercising one feature at two sizes and
-check its contract and allocation growth: `font-cmap.roc` (character map
-formats), `font-coverage.roc` (coverage and class definitions),
-`font-gsub.roc` (one substitution lookup type at a time), `font-gpos.roc`
-(pair kerning formats and `kern`), `font-var.roc` (variable fonts and
-`Font.at`), `font-gvar.roc` (glyph variations and `Font.extents`) and
-`font-layout-var.roc` (kerning device deltas and feature variations) and
-`font-ots.roc` (the checks reading shares with OTS, one damaged table at a
-time). All of them import the package through `package/main.roc`, exactly what ships, and the test-only
-byte builders (`FontBuild`) through `tests/support/main.roc`, which
-`package/main.roc` never reaches.
+The reader, shaping and variation targets share three executables built
+from `reader_suite.roc`, `shaping_suite.roc` and `variation_suite.roc`.
+Each suite builds once per run. Targets keep their individual names,
+corpora and reports. Run `python3 scripts/run_fuzz.py list` to see the
+suites and target contracts.
+
+`font-read` and `font-shape` exercise the whole pipeline. Narrow targets
+exercise one feature and check allocation growth where it applies.
+Suites import the shipped bundle and share the test-only byte builders in
+`tests/support/main.roc`. The spec models have their own suite in `spec/`.
 
 Run every target briefly with the latest Roc nightly:
 

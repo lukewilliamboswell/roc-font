@@ -1,0 +1,32 @@
+= Horizontal Thai shaping
+
+Pass an already selected Thai run with `Font.ShapeOptions.{ script: "Thai", language: "th" }`.
+The caller supplies the direction, script and language of each run and decides where to break lines.
+
+In the Thai shaper, U+0E33 SARA AM becomes U+0E4D NIKHAHIT and U+0E32
+SARA AA before glyph substitution. The derived NIKHAHIT moves across
+consecutive Thai above-base marks. For example, U+0E14 U+0E4B U+0E33
+becomes U+0E14 U+0E4D U+0E4B U+0E32. An explicitly authored NIKHAHIT
+keeps its order relative to the neighbouring marks. The moved
+glyphs share the source cluster, and the grapheme cluster level also
+joins the preceding cluster. This phase produces at most two scalars
+per input scalar and preserves the supplied byte offsets as cluster
+labels. The positioning tables then select and stack the mark anchors.
+When a caller sets a smaller growth budget, further SARA AM characters
+stay intact and checked shaping reports `Growth` alongside the partial run.
+
+This slice covers modern OpenType Thai. Marks without a base are shaped
+as supplied and remain zero width when the font or inferred glyph class
+identifies them as marks. The shaper leaves dotted-circle insertion
+to the caller. Thai has no heuristic mark positioning where the font
+provides no applicable positioning. Lao and legacy private-use Thai
+font positioning are outside this slice.
+
+The short model derives glyph order and clusters independently with
+both cluster levels. Native growth checks exercise repeated source
+offsets, a long prefix of above-base marks and real Thai text at three
+sizes. The `thai.jsonc` conformance cases use HarfBuzz 14.6.0. The
+in-house `sara-am.tests` sample covers an above-base vowel, a tone mark,
+the upper edge of the above-base range and an explicitly authored
+NIKHAHIT. Noto Sans Thai Regular v2.002 supplies names and addresses
+with mark placement on the same pinned TrueType bytes.

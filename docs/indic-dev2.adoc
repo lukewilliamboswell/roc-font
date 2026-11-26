@@ -1,0 +1,49 @@
+= Horizontal Hindi shaping
+
+Use `Font.ShapeOptions.{ script: "Deva", language: "hi" }` for a
+left-to-right Hindi run. The Indic pipeline applies when the selected
+substitution script is modern Devanagari (`dev2`). The reference face
+is Noto Sans Devanagari Regular 2.007, tracked in `tests/corpus.json`.
+That font uses the default language system for Hindi.
+
+Shaping assigns Indic roles from the pinned Unicode 18.0.0 syllabic and
+positional categories. The Devanagari exceptions give Ra its reph role,
+give avagraha a symbol role, and recognize the block's Vedic accents
+and placeholder digits. U+00A0 and U+25CC serve as standalone bases.
+The syllable scanner treats a halant as a link to the next consonant.
+ZWJ after a halant can request a half form. ZWNJ blocks the link
+and inhibits half forms. Sign groups and independent vowels are also
+recognized.
+
+After syllables are marked, localization and composition (`locl`,
+`ccmp`) run within them. Initial reordering finds the main consonant
+from the right, taking below-base Ra forms into account. The left
+matras move before the consonants, with initial Ra and halant still
+available to `rphf`. Basic forms follow in feature order through `cjct`.
+Final reordering places successfully formed reph and decides where
+the left matra sits relative to any remaining visible halant.
+Presentation substitutions then run, followed by positioning such as
+`dist`, `abvm` and `blwm`. Syllable identities restrict declared
+syllabic substitutions. Moved glyphs carry or merge their original
+UTF-8 clusters so they remain aligned with the input text.
+
+A broken syllable takes the face's dotted-circle glyph when available.
+For an isolated short-i sign the sign draws before the circle and
+both report byte 0. The circle shares the original broken cluster.
+An exhausted growth budget preserves the original broken syllable
+and reports `Growth` through checked shaping.
+
+The HarfBuzz 14.6.0 checkpoints include the short-i placement in
+`किताब`, half forms, reph, both join controls, dotted-circle placement
+and feature-disabled controls. They compare glyphs, advances,
+signed offsets, UTF-8 clusters and break flags. The short independent
+model covers the same ordering rules with distinguishable early and
+late substitutions.
+
+Legacy Devanagari and other language configurations still use the
+generic layout path. The modern path covers the selected face's
+basic and presentation features exercised here. Other Indic scripts,
+the broader Indic invalid-vowel constraints and newer `dev3` layout
+are further script contracts.
+
+See the https://learn.microsoft.com/en-us/typography/script-development/devanagari[OpenType Devanagari specification] and the https://www.unicode.org/reports/tr44/[Unicode Character Database].

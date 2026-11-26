@@ -5,6 +5,12 @@ roc-font itself is under the Universal Permissive License 1.0
 others made, under which licence, and whether it reaches the published
 package.
 
+## Unicode properties
+
+The shaping tables use Unicode Character Database 18.0.0 data under
+the [Unicode License v3](tools/ucd/UNICODE-LICENSE.txt).
+The full notice also ships in the generated `ShaperUnicodeData.roc` module.
+
 ## Fonts in the package source
 
 Ten unmodified upstream static faces live in `package/fonts/`, each beside its
@@ -38,6 +44,8 @@ bundle.
 | Path | Origin | Licence |
 | --- | --- | --- |
 | `tests/fonts/Inter-Regular-metrics.ttf` | a metrics-only copy of Inter written by `tools/font_subset.mjs` | SIL Open Font License 1.1, `tests/fonts/Inter-OFL.txt` |
+| `tests/fonts/mark-attachment/DavidLibre-Regular.ttf` | unmodified David Libre Regular 1.100 | SIL Open Font License 1.1, `tests/fonts/mark-attachment/OFL.txt` |
+| `tests/fonts/thai/NotoSansThai-Regular.ttf` | unmodified Noto Sans Thai Regular 2.002 | SIL Open Font License 1.1, `tests/fonts/thai/OFL.txt` |
 | `tests/cases/hb-fonts/in-house/` | fonts from HarfBuzz 14.6.0's in-house shaping tests | HarfBuzz's "Old MIT" licence, `tests/cases/hb-fonts/in-house/COPYING` |
 | `tests/cases/hb-fonts/text-rendering-tests/` | fonts from Unicode's text-rendering-tests, as shipped in HarfBuzz 14.6.0 | Apache License 2.0, Copyright 2016 Unicode Inc., `tests/cases/hb-fonts/text-rendering-tests/COPYING` |
 | `tests/cases/hb-curated/`, `tests/cases/hb-pending/` | test cases converted from HarfBuzz 14.6.0's shaping test files; each case's `source` names its upstream line | the licence of the suite the case came from: in-house and text-rendering-tests as above; AOTS (Adobe's OpenType test suite, fonts fetched into `tests/corpus/`) under Apache License 2.0 |
